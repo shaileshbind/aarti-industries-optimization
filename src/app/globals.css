@@ -1,0 +1,371 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1E1E1E;
+  --grey-60: #404040;
+  --grey-40: #747474;
+  --grey-20: #999999;
+  --grey-10: #EEEEEE;
+  --grey-5: #F8F8F8;
+
+  --red-100: #A31400;
+  --red-50: #E73B23;
+  --red-5: #FFF4F3;
+
+  --violet-100: #3C204C;
+  --violet-80: #500977;
+  --violet-40: #6D52AD;
+  --violet-20: #B7A2D2;
+  --violet-10: #B7A2D2;
+  --violet-5: #F3EDF8;
+
+  --text-h1-size: 62px;
+  --text-h1-italic-size: 62px;
+  --text-h2-l-size: 48px;
+  --text-h2-l-italic-size: 48px;
+  --text-h2-m-size: 40px;
+  --text-h2-s-size: 14px;
+  --text-h3-size: 32px;
+  --text-body-size: 24px;
+  --text-body-xl-size: 24px;
+  --text-body-l-size: 20px;
+  --text-body-m-size: 16px;
+  --text-body-s-size: 14px;
+  --text-button-m-size: 16px;
+  --text-button-s-size: 14px;
+  --text-nav-item: 15px;
+  --text-stat-number-size: 76px;
+  --text-stat-label-size: 20px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-workSans: var(--font-work-sans);
+  --font-ptSerif: var(--font-pt-serif);
+  --font-inter: var(--font-inter);
+
+  --color-grey-60: var(--grey-60);
+  --color-grey-40: var(--grey-40);
+  --color-grey-20: var(--grey-20);
+  --color-grey-10: var(--grey-10);
+  --color-grey-5: var(--grey-5);
+
+  --color-red-100: var(--red-100);
+  --color-red-50: var(--red-50);
+  --color-red-5: var(--red-5);
+
+  --color-violet-100: var(--violet-100);
+  --color-violet-80: var(--violet-80);
+  --color-violet-40: var(--violet-40);
+  --color-violet-20: var(--violet-20);
+  --color-violet-10: var(--violet-10);
+  --color-violet-5: var(--violet-5);
+
+  /* Typography sizes */
+  --fontSize-h1: var(--text-h1-size);
+  --fontSize-h1-italic: var(--text-h1-italic-size);
+  --fontSize-h2-l: var(--text-h2-l-size);
+  --fontSize-h2-l-italic: var(--text-h2-l-italic-size);
+  --fontSize-h2-m: var(--text-h2-m-size);
+  --fontSize-h2-s: var(--text-h2-s-size);
+  --fontSize-h3: var(--text-h3-size);
+  --fontSize-body: var(--text-body-size);
+  --fontSize-body-xl: var(--text-body-xl-size);
+  --fontSize-body-l: var(--text-body-l-size);
+  --fontSize-body-m: var(--text-body-m-size);
+  --fontSize-body-s: var(--text-body-s-size);
+  --fontSize-button-m: var(--text-button-m-size);
+  --fontSize-button-s: var(--text-button-s-size);
+  --fontSize-caption: var(--text-nav-item);
+  --fontSize-stat-number: var(--text-stat-number-size);
+  --fontSize-stat-label: var(--text-stat-label-size);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-work-sans);
+}
+
+/* ================================
+   Button Animation Classes
+   ================================ */
+
+.dot-animation::before {
+  content: '';
+  @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
+}
+
+.dot-animation:hover::before {
+  transform: scale(40);
+  transition: 0.5s all ease-in-out;
+  @apply rounded-none bg-[var(--color-violet-40)];
+}
+
+.white-dot-animation::before {
+  content: '';
+  @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
+}
+
+.white-dot-animation:hover::before {
+  transform: scale(40);
+  transition: 0.5s all ease-in-out;
+  @apply rounded-none bg-[var(--color-violet-5)] absolute;
+}
+
+.underline-link::before,
+.underline-link.is--alt::before,
+.underline-link.is--alt::after {
+  content: "";
+  position: absolute;
+  bottom: 0em;
+  left: 0;
+  width: 100%;
+  height: 0.0625em;
+  background-color: var(--color-violet-40);
+  transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+}
+
+.underline-link.is--alt::before {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
+.underline-link.is--alt:hover::before {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+.underline-link.is--alt::after {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+.underline-link.is--alt:hover::after {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
+/* ================================
+   TYPOGRAPHY UTILITY CLASSES
+   ================================ */
+
+/* Headings */
+.text-h1 {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-h1-size);
+  font-weight: 400;
+  line-height: 110%;
+  letter-spacing: -2%;
+}
+
+.text-h1 i {
+  font-family: var(--font-pt-serif);
+  font-size: var(--text-h1-italic-size);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 110%;
+  letter-spacing: 0%;
+}
+
+.text-h1-italic {
+  font-family: var(--font-pt-serif);
+  font-size: var(--text-h1-italic-size);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 110%;
+  letter-spacing: 0%;
+}
+
+.text-h2-l {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-h2-l-size);
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -2%;
+}
+
+.text-h2-l-italic {
+  font-family: var(--font-pt-serif);
+  font-size: var(--text-h2-l-italic-size);
+  font-weight: 400;
+  /* Regular */
+  font-style: italic;
+  line-height: 140%;
+  letter-spacing: -2%;
+}
+
+.text-h2-m {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-h2-m-size);
+  font-weight: 400;
+  /* Regular */
+  line-height: 140%;
+  letter-spacing: -1%;
+}
+
+.text-h2-s {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-h2-s-size);
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: 14%;
+  text-transform: uppercase;
+}
+
+.text-h3 {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-h3-size);
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -2%;
+}
+
+/* Body Text */
+.text-body-xl {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-body-xl-size);
+  font-weight: 400;
+  line-height: 170%;
+  letter-spacing: -2%;
+}
+
+.text-body-l {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-body-l-size);
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0%;
+}
+
+.text-body-m {
+  font-family: var(--font-inter);
+  font-size: var(--text-body-m-size);
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0%;
+}
+
+.text-body-s {
+  font-family: var(--font-inter);
+  font-size: var(--text-body-s-size);
+  font-weight: 400;
+  line-height: 170%;
+  letter-spacing: 0%;
+}
+
+/* UI Elements */
+.text-button-m {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-button-m-size);
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: 0%;
+}
+
+.text-button-s {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-button-s-size);
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: 14%;
+}
+
+.text-nav-item {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-nav-item);
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0%;
+}
+
+/* Statistics */
+.text-stat-number {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-stat-number-size);
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: -5%;
+}
+
+.text-stat-label {
+  font-family: var(--font-work-sans);
+  font-size: var(--text-stat-label-size);
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: 0%;
+}
+
+/* Custom Container */
+.custom-container {
+  width: 100%;
+  padding: 0 80px;
+}
+
+/* Mobile Responsive Typography adjustments */
+@media (max-width: 768px) {
+  .custom-container {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  :root {
+    --text-h1-size: 36px;
+    --text-h1-italic-size: 36px;
+    --text-h2-l-size: 28px;
+    --text-h2-l-italic-size: 28px;
+    --text-h2-m-size: 24px;
+    --text-h2-s-size: 14px;
+    --text-h3-size: 22px;
+    --text-body-size: 20px;
+    --text-body-xl-size: 20px;
+    --text-body-l-size: 16px;
+    --text-body-m-size: 16px;
+    --text-body-s-size: 14px;
+    --text-button-m-size: 16px;
+    --text-button-s-size: 14px;
+    --text-nav-item: 15px;
+    --text-stat-number-size: 40px;
+    --text-stat-label-size: 16px;
+  }
+}
+
+@keyframes marquee-smooth {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.animate-marquee-smooth {
+  animation: marquee-smooth 40s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+ 
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+ 
