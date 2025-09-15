@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Dhamecha",
+  title: "Aarti Industries",
   description: "",
 };
 

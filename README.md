@@ -1,6 +1,6 @@
-# Dhamecha Frontend
+# Aarti Industries Frontend
 
-A modern, responsive frontend application for Dhamecha Group built with Next.js 15, featuring advanced GSAP animations and a comprehensive component library.
+
 
 ## 🚀 Features
 
@@ -112,7 +112,7 @@ function MyComponent() {
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd dhamecha-fe
+   cd aartiindustries
    ```
 
 2. **Install dependencies**
@@ -186,4 +186,4 @@ The project includes a complete GSAP setup with:
 
 ## 🚀 Deployment
 
-Built with ❤️ by the Dhamecha Development Team
+Built with ❤️ by the Schbang Development Team
