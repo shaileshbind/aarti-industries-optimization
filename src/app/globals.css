@@ -369,3 +369,61 @@ body {
   }
 }
  
+
+
+/* Character Stagger Animation Styles */
+.btn-animate-chars {
+  color: currentColor;
+  cursor: pointer;
+  border-radius: 0.25em;
+  text-decoration: none;
+  position: relative;
+  overflow: visible;
+  display: flex;
+}
+
+.btn-animate-chars__text {
+  white-space: nowrap;
+}
+
+/* Characters */
+.btn-animate-chars [data-button-animate-chars] {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+
+.btn-animate-chars [data-button-animate-chars] span {
+  display: inline-block;
+  position: relative;
+  text-shadow: 0px 1.3em currentColor;
+  transform: translateY(0em) rotate(0.001deg);
+  transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.btn-animate-chars:hover [data-button-animate-chars] span {
+  transform: translateY(-1.3em) rotate(0.001deg);
+  color: #7c3aed;
+}
+
+/* Background */
+.btn-animate-chars__bg {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(124, 58, 237, 0.1) 100%);
+  border-radius: 0.25em;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+  transform: scale(0.95);
+}
+
+.btn-animate-chars:hover .btn-animate-chars__bg {
+  opacity: 1;
+  transform: scale(1);
+  inset: -0.125em;
+}
+
+/* Active state styling */
+.btn-animate-chars.active [data-button-animate-chars] span {
+  color: #7c3aed;
+}

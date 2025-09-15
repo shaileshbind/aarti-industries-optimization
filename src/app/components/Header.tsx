@@ -23,12 +23,10 @@ const Header = () => {
   const isActive = (href: string) => {
     return pathname === href;
   };
- 
   return (
     <>
       {/* Fixed Header Container */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white">
-        {/* Top Banner with Marquee */}
 
         {/* Main Header */}
         <header className="bg-background border-b border-grey-10">
@@ -47,7 +45,7 @@ const Header = () => {
               </Link>
 
               {/* Desktop Navigation - Hidden on tablets and below */}
-              <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+              <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 ml-auto">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
@@ -70,26 +68,9 @@ const Header = () => {
 
               {/* Desktop Search and Login - Hidden on tablets and below */}
               <div className="hidden lg:flex items-center space-x-4">
-                {/* Desktop Search Bar */}
 
                 {/* Login Button - Desktop only */}
-                <Link
-                  href="/login"
-                  className="flex items-center space-x-2 text-foreground hover:text-violet-80 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M5.9812 18.6909C6.54549 17.5795 7.40654 16.6459 8.4689 15.9939C9.53126 15.3418 10.7534 14.9966 12 14.9966C13.2465 14.9966 14.4686 15.3418 15.531 15.9939C16.5934 16.6459 17.4544 17.5795 18.0187 18.6909" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 15C14.0711 15 15.75 13.3211 15.75 11.25C15.75 9.17893 14.0711 7.5 12 7.5C9.92893 7.5 8.25 9.17893 8.25 11.25C8.25 13.3211 9.92893 15 12 15Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <AnimateTextOnHover
-                    staggered
-                    activeHover={isActive("/login")}
-                    className="text-inherit text-button-m" // Pass the typography classes here
-                  >
-                    Login
-                  </AnimateTextOnHover>
-                </Link>
+                 <a href="">button</a>
               </div>
 
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
@@ -134,7 +115,6 @@ const Header = () => {
           }`}
         style={{ top: 'var(--header-height, 104px)' }} // Adjust based on your header + marquee height
       >
-       
 
         {/* Mobile/Tablet Navigation Links */}
         <nav className="py-2">
