@@ -3,8 +3,8 @@
 
 export default function Home() {
   return (
-    <div className="min-h-screen mt-[105px] lg:mt-[120px]">
-      
+    <div className="mt-[150px] min-h-screen text-black font-alte-hans">
+      Home page
     </div>
   );
 }

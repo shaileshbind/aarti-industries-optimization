@@ -1,24 +1,27 @@
 @import "tailwindcss";
 
+
+@font-face {
+  font-family: "Alte Hans Grotesk";
+  src: url("/fonts/AlteHaasGroteskBold.woff2") format("woff2"),
+       url("/fonts/AlteHaasGroteskRegular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #1E1E1E;
-  --grey-60: #404040;
-  --grey-40: #747474;
-  --grey-20: #999999;
-  --grey-10: #EEEEEE;
-  --grey-5: #F8F8F8;
+  --orange-100: #f36633;
+  --orange-200: #dc4c03;
 
-  --red-100: #A31400;
-  --red-50: #E73B23;
-  --red-5: #FFF4F3;
+  --blue-90: #10456a;
+  --blue-100: #002f50;
 
-  --violet-100: #3C204C;
-  --violet-80: #500977;
-  --violet-40: #6D52AD;
-  --violet-20: #B7A2D2;
-  --violet-10: #B7A2D2;
-  --violet-5: #F3EDF8;
+  --grey-10: #f7f9fa;
+  --grey-20: #e1e1e1;
+  --grey-30: #9997a2;
+  --grey-40: #4c5861;
 
   --text-h1-size: 62px;
   --text-h1-italic-size: 62px;
@@ -37,31 +40,26 @@
   --text-nav-item: 15px;
   --text-stat-number-size: 76px;
   --text-stat-label-size: 20px;
+
 }
 
 @theme inline {
+
+  --font-alte-hans: "Alte Hans Grotesk", sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-workSans: var(--font-work-sans);
-  --font-ptSerif: var(--font-pt-serif);
-  --font-inter: var(--font-inter);
 
-  --color-grey-60: var(--grey-60);
-  --color-grey-40: var(--grey-40);
-  --color-grey-20: var(--grey-20);
+  --color-orange-100: var(--orange-100);
+  --color-orange-200: var(--orange-200);
+
+  --color-blue-90: var(--blue-90);
+  --color-blue-100: var(--blue-100);
+
   --color-grey-10: var(--grey-10);
-  --color-grey-5: var(--grey-5);
-
-  --color-red-100: var(--red-100);
-  --color-red-50: var(--red-50);
-  --color-red-5: var(--red-5);
-
-  --color-violet-100: var(--violet-100);
-  --color-violet-80: var(--violet-80);
-  --color-violet-40: var(--violet-40);
-  --color-violet-20: var(--violet-20);
-  --color-violet-10: var(--violet-10);
-  --color-violet-5: var(--violet-5);
+  --color-grey-20: var(--grey-20);
+  --color-grey-30: var(--grey-30);
+  --color-grey-40: var(--grey-40);
 
   /* Typography sizes */
   --fontSize-h1: var(--text-h1-size);
@@ -87,7 +85,8 @@ html,
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-work-sans);
+  font-family: "Alte Hans Grotesk", sans-serif;
+  
 }
 
 /* ================================
@@ -95,7 +94,7 @@ body {
    ================================ */
 
 .dot-animation::before {
-  content: '';
+  content: "";
   @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
 }
 
@@ -106,7 +105,7 @@ body {
 }
 
 .white-dot-animation::before {
-  content: '';
+  content: "";
   @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
 }
 
@@ -355,7 +354,6 @@ body {
   backface-visibility: hidden;
   perspective: 1000px;
 }
- 
 
 @keyframes slideIn {
   from {
@@ -368,8 +366,6 @@ body {
     transform: translateX(0);
   }
 }
- 
-
 
 /* Character Stagger Animation Styles */
 .btn-animate-chars {
@@ -408,7 +404,11 @@ body {
 
 /* Background */
 .btn-animate-chars__bg {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(124, 58, 237, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.05) 0%,
+    rgba(124, 58, 237, 0.1) 100%
+  );
   border-radius: 0.25em;
   position: absolute;
   inset: 0;
