@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Roboto } from "next/font/google";
 import Header from "@/app/components/Header";
 import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-roboto",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Aarti Industries",
@@ -16,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={roboto.variable}>
         <GSAPProvider>
           <Header />
           <main>{children}</main>
