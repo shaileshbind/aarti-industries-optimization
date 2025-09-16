@@ -1,84 +1,58 @@
 @import "tailwindcss";
 
-
+/* Fonts */
 @font-face {
   font-family: "Alte Hans Grotesk";
-  src: url("/fonts/AlteHaasGroteskBold.woff2") format("woff2"),
-       url("/fonts/AlteHaasGroteskRegular.woff2") format("woff2");
-  font-weight: normal;
+  src: url("/fonts/AlteHaasGroteskRegular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Alte Hans Grotesk";
+  src: url("/fonts/AlteHaasGroteskBold.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
 }
 
 :root {
+  /* Base colors */
   --background: #ffffff;
-  --foreground: #1E1E1E;
+  --foreground: #1e1e1e;
+
+  /* Brand colors */
   --orange-100: #f36633;
   --orange-200: #dc4c03;
 
-  --blue-90: #10456a;
-  --blue-100: #002f50;
+  --blue-100: #10456a;
+  --blue-200: #002f50;
 
-  --grey-10: #f7f9fa;
-  --grey-20: #e1e1e1;
-  --grey-30: #9997a2;
-  --grey-40: #4c5861;
+  --grey-100: #f7f9fa;
+  --grey-200: #e1e1e1;
+  --grey-300: #9997a2;
+  --grey-400: #4c5861;
 
-  --text-h1-size: 62px;
-  --text-h1-italic-size: 62px;
-  --text-h2-l-size: 48px;
-  --text-h2-l-italic-size: 48px;
-  --text-h2-m-size: 40px;
-  --text-h2-s-size: 14px;
-  --text-h3-size: 32px;
-  --text-body-size: 24px;
-  --text-body-xl-size: 24px;
-  --text-body-l-size: 20px;
-  --text-body-m-size: 16px;
-  --text-body-s-size: 14px;
-  --text-button-m-size: 16px;
-  --text-button-s-size: 14px;
-  --text-nav-item: 15px;
-  --text-stat-number-size: 76px;
-  --text-stat-label-size: 20px;
-
+  /* Font families */
+  --font-alte-hans: "Alte Hans Grotesk", sans-serif;
 }
 
 @theme inline {
+  /* Fonts */
+  --font-alte-hans: var(--font-alte-hans);
 
-  --font-alte-hans: "Alte Hans Grotesk", sans-serif;
-
+  /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
   --color-orange-100: var(--orange-100);
   --color-orange-200: var(--orange-200);
 
-  --color-blue-90: var(--blue-90);
   --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
 
-  --color-grey-10: var(--grey-10);
-  --color-grey-20: var(--grey-20);
-  --color-grey-30: var(--grey-30);
-  --color-grey-40: var(--grey-40);
-
-  /* Typography sizes */
-  --fontSize-h1: var(--text-h1-size);
-  --fontSize-h1-italic: var(--text-h1-italic-size);
-  --fontSize-h2-l: var(--text-h2-l-size);
-  --fontSize-h2-l-italic: var(--text-h2-l-italic-size);
-  --fontSize-h2-m: var(--text-h2-m-size);
-  --fontSize-h2-s: var(--text-h2-s-size);
-  --fontSize-h3: var(--text-h3-size);
-  --fontSize-body: var(--text-body-size);
-  --fontSize-body-xl: var(--text-body-xl-size);
-  --fontSize-body-l: var(--text-body-l-size);
-  --fontSize-body-m: var(--text-body-m-size);
-  --fontSize-body-s: var(--text-body-s-size);
-  --fontSize-button-m: var(--text-button-m-size);
-  --fontSize-button-s: var(--text-button-s-size);
-  --fontSize-caption: var(--text-nav-item);
-  --fontSize-stat-number: var(--text-stat-number-size);
-  --fontSize-stat-label: var(--text-stat-label-size);
+  --color-grey-100: var(--grey-100);
+  --color-grey-200: var(--grey-200);
+  --color-grey-300: var(--grey-300);
+  --color-grey-400: var(--grey-400);
 }
 
 html,
@@ -86,344 +60,5 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Alte Hans Grotesk", sans-serif;
-  
 }
 
-/* ================================
-   Button Animation Classes
-   ================================ */
-
-.dot-animation::before {
-  content: "";
-  @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
-}
-
-.dot-animation:hover::before {
-  transform: scale(40);
-  transition: 0.5s all ease-in-out;
-  @apply rounded-none bg-[var(--color-violet-40)];
-}
-
-.white-dot-animation::before {
-  content: "";
-  @apply absolute left-[20px] w-2.5 h-2.5 bg-[var(--color-violet-10)] rounded-full -z-[1] transition-all duration-500 ease-in-out;
-}
-
-.white-dot-animation:hover::before {
-  transform: scale(40);
-  transition: 0.5s all ease-in-out;
-  @apply rounded-none bg-[var(--color-violet-5)] absolute;
-}
-
-.underline-link::before,
-.underline-link.is--alt::before,
-.underline-link.is--alt::after {
-  content: "";
-  position: absolute;
-  bottom: 0em;
-  left: 0;
-  width: 100%;
-  height: 0.0625em;
-  background-color: var(--color-violet-40);
-  transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
-  transform-origin: right;
-  transform: scaleX(0) rotate(0.001deg);
-}
-
-.underline-link.is--alt::before {
-  transform-origin: left;
-  transform: scaleX(1) rotate(0.001deg);
-  transition-delay: 0.3s;
-}
-
-.underline-link.is--alt:hover::before {
-  transform-origin: right;
-  transform: scaleX(0) rotate(0.001deg);
-  transition-delay: 0s;
-}
-
-.underline-link.is--alt::after {
-  transform-origin: right;
-  transform: scaleX(0) rotate(0.001deg);
-  transition-delay: 0s;
-}
-
-.underline-link.is--alt:hover::after {
-  transform-origin: left;
-  transform: scaleX(1) rotate(0.001deg);
-  transition-delay: 0.3s;
-}
-
-/* ================================
-   TYPOGRAPHY UTILITY CLASSES
-   ================================ */
-
-/* Headings */
-.text-h1 {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-h1-size);
-  font-weight: 400;
-  line-height: 110%;
-  letter-spacing: -2%;
-}
-
-.text-h1 i {
-  font-family: var(--font-pt-serif);
-  font-size: var(--text-h1-italic-size);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 110%;
-  letter-spacing: 0%;
-}
-
-.text-h1-italic {
-  font-family: var(--font-pt-serif);
-  font-size: var(--text-h1-italic-size);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 110%;
-  letter-spacing: 0%;
-}
-
-.text-h2-l {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-h2-l-size);
-  font-weight: 400;
-  line-height: 140%;
-  letter-spacing: -2%;
-}
-
-.text-h2-l-italic {
-  font-family: var(--font-pt-serif);
-  font-size: var(--text-h2-l-italic-size);
-  font-weight: 400;
-  /* Regular */
-  font-style: italic;
-  line-height: 140%;
-  letter-spacing: -2%;
-}
-
-.text-h2-m {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-h2-m-size);
-  font-weight: 400;
-  /* Regular */
-  line-height: 140%;
-  letter-spacing: -1%;
-}
-
-.text-h2-s {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-h2-s-size);
-  font-weight: 500;
-  line-height: 140%;
-  letter-spacing: 14%;
-  text-transform: uppercase;
-}
-
-.text-h3 {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-h3-size);
-  font-weight: 400;
-  line-height: 160%;
-  letter-spacing: -2%;
-}
-
-/* Body Text */
-.text-body-xl {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-body-xl-size);
-  font-weight: 400;
-  line-height: 170%;
-  letter-spacing: -2%;
-}
-
-.text-body-l {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-body-l-size);
-  font-weight: 400;
-  line-height: 160%;
-  letter-spacing: 0%;
-}
-
-.text-body-m {
-  font-family: var(--font-inter);
-  font-size: var(--text-body-m-size);
-  font-weight: 400;
-  line-height: 160%;
-  letter-spacing: 0%;
-}
-
-.text-body-s {
-  font-family: var(--font-inter);
-  font-size: var(--text-body-s-size);
-  font-weight: 400;
-  line-height: 170%;
-  letter-spacing: 0%;
-}
-
-/* UI Elements */
-.text-button-m {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-button-m-size);
-  font-weight: 500;
-  line-height: 120%;
-  letter-spacing: 0%;
-}
-
-.text-button-s {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-button-s-size);
-  font-weight: 500;
-  line-height: 140%;
-  letter-spacing: 14%;
-}
-
-.text-nav-item {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-nav-item);
-  font-weight: 400;
-  line-height: 120%;
-  letter-spacing: 0%;
-}
-
-/* Statistics */
-.text-stat-number {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-stat-number-size);
-  font-weight: 400;
-  line-height: 120%;
-  letter-spacing: -5%;
-}
-
-.text-stat-label {
-  font-family: var(--font-work-sans);
-  font-size: var(--text-stat-label-size);
-  font-weight: 500;
-  line-height: 160%;
-  letter-spacing: 0%;
-}
-
-/* Custom Container */
-.custom-container {
-  width: 100%;
-  padding: 0 80px;
-}
-
-/* Mobile Responsive Typography adjustments */
-@media (max-width: 768px) {
-  .custom-container {
-    width: 100%;
-    padding: 0 20px;
-  }
-
-  :root {
-    --text-h1-size: 36px;
-    --text-h1-italic-size: 36px;
-    --text-h2-l-size: 28px;
-    --text-h2-l-italic-size: 28px;
-    --text-h2-m-size: 24px;
-    --text-h2-s-size: 14px;
-    --text-h3-size: 22px;
-    --text-body-size: 20px;
-    --text-body-xl-size: 20px;
-    --text-body-l-size: 16px;
-    --text-body-m-size: 16px;
-    --text-body-s-size: 14px;
-    --text-button-m-size: 16px;
-    --text-button-s-size: 14px;
-    --text-nav-item: 15px;
-    --text-stat-number-size: 40px;
-    --text-stat-label-size: 16px;
-  }
-}
-
-@keyframes marquee-smooth {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-
-.animate-marquee-smooth {
-  animation: marquee-smooth 40s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Character Stagger Animation Styles */
-.btn-animate-chars {
-  color: currentColor;
-  cursor: pointer;
-  border-radius: 0.25em;
-  text-decoration: none;
-  position: relative;
-  overflow: visible;
-  display: flex;
-}
-
-.btn-animate-chars__text {
-  white-space: nowrap;
-}
-
-/* Characters */
-.btn-animate-chars [data-button-animate-chars] {
-  overflow: hidden;
-  position: relative;
-  display: inline-block;
-}
-
-.btn-animate-chars [data-button-animate-chars] span {
-  display: inline-block;
-  position: relative;
-  text-shadow: 0px 1.3em currentColor;
-  transform: translateY(0em) rotate(0.001deg);
-  transition: transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
-}
-
-.btn-animate-chars:hover [data-button-animate-chars] span {
-  transform: translateY(-1.3em) rotate(0.001deg);
-  color: #7c3aed;
-}
-
-/* Background */
-.btn-animate-chars__bg {
-  background: linear-gradient(
-    135deg,
-    rgba(124, 58, 237, 0.05) 0%,
-    rgba(124, 58, 237, 0.1) 100%
-  );
-  border-radius: 0.25em;
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.625, 0.05, 0, 1);
-  transform: scale(0.95);
-}
-
-.btn-animate-chars:hover .btn-animate-chars__bg {
-  opacity: 1;
-  transform: scale(1);
-  inset: -0.125em;
-}
-
-/* Active state styling */
-.btn-animate-chars.active [data-button-animate-chars] span {
-  color: #7c3aed;
-}
