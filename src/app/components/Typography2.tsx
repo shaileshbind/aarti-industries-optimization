@@ -20,7 +20,7 @@ export const H1 = ({ className, children }: TypographyProps) => (
 export const H2 = ({ className, children }: TypographyProps) => (
   <h2
     className={clsxN(
-      "font-normal text-[28px] md:text-[44px] leading-[124%] text-blue-200 font-alte-hans",
+      "font-normal text-[28px] md:text-[44px] leading-[124%] !text-[#10456A] font-alte-hans",
       className
     )}
   >
@@ -92,7 +92,7 @@ export const SubH2 = ({ className, children }: TypographyProps) => (
 export const BodyText1 = ({ className, children }: TypographyProps) => (
   <p
     className={clsxN(
-      "font-normal text-[14px] md:text-[18px] leading-[154%] lg:leading-[160%] text-grey-400 font-roboto",
+      "font-normal text-[#646464] text-[14px] md:text-[18px] leading-[154%] lg:leading-[160%] font-roboto",
       className
     )}
   >
