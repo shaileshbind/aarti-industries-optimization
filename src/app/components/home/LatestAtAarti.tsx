@@ -4,12 +4,11 @@ import Image from "next/image";
 import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar } from "swiper/modules";
-
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
 const LatestAtAarti = () => {
   const [active, setActive] = useState(0);
-
   const sliderData = [
     {
       title: "Blogs",
@@ -177,15 +176,15 @@ const LatestAtAarti = () => {
   ];
 
   return (
-    <div>
+    <div className="w-full my-[50px] lg:my-[100px]">
       <div className="mx-[20px] lg:container lg:mx-auto">
         <H2 className="text-blue-200">The Latest at Aarti</H2>
       </div>
-      <div className="mt-[18px] md:mt-[28px]">
+      <div className="mt-[18px] md:mt-[30px]">
         {/* Tabs */}
         <div className="lg:container lg:mx-auto w-full overflow-scroll !px-[20px] lg:!px-[unset]">
           <div className="bg-grey-100 rounded-[40px] p-[4px]  flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">
-            {sliderData?.map((items: any, index: number) => (
+            {sliderData.map((items, index) => (
               <div
                 key={index}
                 onClick={() => setActive(index)}
@@ -198,17 +197,19 @@ const LatestAtAarti = () => {
             ))}
           </div>
         </div>
-
         <div className="mt-[52px] container mx-[unset] lg:mx-auto">
           <Swiper
+            key={active}
             spaceBetween={24}
             slidesPerView={1.5}
             breakpoints={{
               1024: { slidesPerView: 4 },
             }}
-            modules={[Scrollbar]}
-            scrollbar={{ draggable: true }}
-            className="home-latest-at-swiper !px-[20px] lg:!px-[unset]"
+            modules={[Pagination]}
+            pagination={{
+              type: "progressbar",
+            }}
+            className="home-latest-at-swiper"
           >
             {sliderData[active]?.content?.map((item, index) => (
               <SwiperSlide key={index}>

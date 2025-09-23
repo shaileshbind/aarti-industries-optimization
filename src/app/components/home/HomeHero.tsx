@@ -1,22 +1,146 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import Image from "next/image";
 import "swiper/css";
+import "swiper/css/effect-fade";
+import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
+import gsap from "gsap";
+import { FadeInReveal } from "../ScrollReveal";
+
 const HomeHero = () => {
-  const [active, setActive] = useState(0);
-  const swiperRef = useRef<any>(null);
-  const [isManualClick, setIsManualClick] = useState(false);
-  const progressIntervalRef = useRef<any>(null);
+  // const [active, setActive] = useState(0);
+  const [, setActive] = useState(0);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef(0);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const starRef = useRef<HTMLDivElement>(null);
+  const starRef2 = useRef<HTMLDivElement>(null);
+  const starRef3 = useRef<HTMLDivElement>(null);
+  const lineVertical = useRef<HTMLDivElement>(null);
+  const lineHorizontal = useRef<HTMLDivElement>(null);
+  const orangeScroll = useRef<HTMLDivElement>(null);
+  const navTitles = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (
+      !wrapperRef.current ||
+      !starRef.current ||
+      !starRef2.current ||
+      !starRef3.current ||
+      !lineVertical.current ||
+      !lineHorizontal.current ||
+      !orangeScroll.current ||
+      !navTitles.current
+    )
+      return;
+
+    const star = starRef.current;
+    const star2 = starRef2.current;
+    const star3 = starRef3.current;
+    const stars = [star, star2, star3];
+    const vLine = lineVertical.current;
+    const hLine = lineHorizontal.current;
+    const orangeBar = orangeScroll.current;
+    const navTitle = navTitles.current;
+
+    // Set initial state - all stars are completely hidden
+    gsap.set(stars, {
+      opacity: 0,
+      scale: 0,
+    });
+    // Set initial state for lines - hidden by scaling
+    gsap.set(vLine, {
+      scaleY: 0,
+      transformOrigin: "top center",
+    });
+    gsap.set(hLine, {
+      scaleX: 0,
+      transformOrigin: "left center",
+    });
+    // Set initial state for orange progress bar - hidden
+    gsap.set(orangeBar, {
+      opacity: 0,
+    });
+    gsap.set(navTitle, {
+      opacity: 0,
+      y: 20,
+    });
+    // Set initial state for background
+    gsap.set(wrapperRef.current, {
+      opacity: 0,
+      scale: 0.95,
+    });
+    const tl = gsap.timeline();
+    // Step 1: Background fades in
+    tl.to(wrapperRef.current, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.5,
+      ease: "power3.out",
+    })
+      // Step 2: Lines draw in
+      .to(
+        vLine,
+        {
+          scaleY: 1,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.1"
+      )
+      .to(
+        hLine,
+        {
+          scaleX: 1,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        orangeBar,
+        {
+          opacity: 1,
+          duration: 0.1,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        stars,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "sine.out",
+          stagger: 0.2,
+        },
+        "<"
+      )
+      .to(
+        navTitle,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "<"
+      );
+  }, []);
 
   const sliderData = [
     {
       id: 0,
       title: "Sustainability",
       src: "/images/home/hero-banner1.png",
+      mobSrc: "/images/home/mob-hero-banner1.png",
       alt: "img",
       heading: "Sustainable, Responsible, Value Driven",
       desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
@@ -27,6 +151,7 @@ const HomeHero = () => {
       id: 1,
       title: "Products",
       src: "/images/home/hero-banner2.png",
+      mobSrc: "/images/home/mob-hero-banner1.png",
       alt: "img",
       heading: "Sustainable, Responsible, Value Driven",
       desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
@@ -37,6 +162,7 @@ const HomeHero = () => {
       id: 2,
       title: "Innovation",
       src: "/images/home/hero-banner1.png",
+      mobSrc: "/images/home/mob-hero-banner1.png",
       alt: "img",
       heading: "Sustainable, Responsible, Value Driven",
       desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
@@ -47,6 +173,7 @@ const HomeHero = () => {
       id: 3,
       title: "People",
       src: "/images/home/hero-banner2.png",
+      mobSrc: "/images/home/mob-hero-banner1.png",
       alt: "img",
       heading: "Sustainable, Responsible, Value Driven",
       desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
@@ -57,6 +184,7 @@ const HomeHero = () => {
       id: 4,
       title: "Transformation",
       src: "/images/home/hero-banner1.png",
+      mobSrc: "/images/home/mob-hero-banner1.png",
       alt: "img",
       heading: "Sustainable, Responsible, Value Driven",
       desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
@@ -65,183 +193,228 @@ const HomeHero = () => {
     },
   ];
 
-  // Clear progress interval
-  const clearProgressInterval = () => {
-    if (progressIntervalRef.current) {
-      clearInterval(progressIntervalRef.current);
-      progressIntervalRef.current = null;
-    }
-  };
-  // Start progress bar animation manually
-  const startProgressBar = () => {
-    clearProgressInterval();
-
-    const bar = document.querySelector<HTMLElement>(".hero-progress-bar");
-    if (bar) {
-      // Reset the bar
-      bar.style.transition = "none";
-      bar.style.transform = "scaleX(0)";
-      void bar.offsetWidth;
-
-      // Start smooth animation
-      let startTime = Date.now();
-      const duration = 5000; // 5 seconds
-
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        if (bar) {
-          bar.style.transition = "none";
-          bar.style.transform = `scaleX(${progress})`;
-        }
-
-        if (progress < 1) {
-          progressIntervalRef.current = requestAnimationFrame(animate);
-        }
-      };
-
-      requestAnimationFrame(animate);
-    }
-  };
-  // Handle manual slide navigation
-  const handleSlideClick = (index: number) => {
+  // Handle manual tab click
+  const handleTabClick = (index: number) => {
     if (swiperRef.current) {
-      setIsManualClick(true);
-      setActive(index);
-      clearProgressInterval();
-
-      // Use slideToLoop for proper loop handling
-      swiperRef.current.slideToLoop(index);
       swiperRef.current.autoplay.stop();
+
+      // Update both ref and state immediately
+      activeIndexRef.current = index;
+      setActive(index);
+      resetProgressBar();
+
+      swiperRef.current.slideToLoop(index);
 
       setTimeout(() => {
         if (swiperRef.current) {
           swiperRef.current.autoplay.start();
           startProgressBar();
-          setIsManualClick(false);
         }
       }, 100);
     }
   };
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      clearProgressInterval();
-    };
-  }, []);
+  // Reset progress bar
+  const resetProgressBar = () => {
+    const bar = progressBarRef.current;
+    if (!bar) return;
+
+    bar.style.transition = "none";
+    bar.style.transform = "scaleX(0)";
+    void bar.offsetWidth;
+  };
+  // Start progress bar
+  const startProgressBar = () => {
+    const bar = progressBarRef.current;
+    if (!bar) return;
+
+    bar.style.transition = "transform 5s linear";
+    bar.style.transform = "scaleX(1)";
+  };
 
   return (
-    <div className="min-h-screen w-full relative">
+    <div
+      ref={wrapperRef}
+      className="min-h-screen w-full relative overflow-hidden"
+    >
       <Swiper
-        onSwiper={(swiper) => (swiperRef.current = swiper)}
-        onSlideChange={(swiper) => {
-          // Get the real index (accounts for loop duplicates)
-          const realIndex = swiper.realIndex;
+        onSwiper={(swiper: SwiperType) => {
+          swiperRef.current = swiper;
+          setTimeout(() => startProgressBar(), 100);
+        }}
+        onSlideChangeTransitionStart={(swiper) => {
+          const realIndex =
+            swiper.realIndex !== undefined
+              ? swiper.realIndex
+              : swiper.activeIndex % sliderData.length;
+          activeIndexRef.current = realIndex;
           setActive(realIndex);
-          if (!isManualClick) {
-            startProgressBar();
-          }
+          resetProgressBar();
+        }}
+        // onSlideChangeTransitionEnd={(swiper) => {
+        //   startProgressBar();
+        // }}
+        onSlideChangeTransitionEnd={() => {
+          startProgressBar();
+        }}
+        // onTransitionStart={(swiper: SwiperType) => {
+        //   const realIndex =
+        //     swiper.realIndex !== undefined
+        //       ? swiper.realIndex
+        //       : swiper.activeIndex % sliderData.length;
+
+        //   activeIndexRef.current = realIndex;
+        //   setActive(realIndex);
+        // }}
+        on={{
+          transitionStart: (swiper: SwiperType) => {
+            const realIndex =
+              swiper.realIndex !== undefined
+                ? swiper.realIndex
+                : swiper.activeIndex % sliderData.length;
+
+            activeIndexRef.current = realIndex;
+            setActive(realIndex);
+          },
         }}
         slidesPerView={1}
-        modules={[Autoplay]}
+        modules={[Autoplay, EffectFade]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
         loop={true}
+        speed={800}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
           pauseOnMouseEnter: false,
-        }}
-        onAutoplayStart={() => {
-          if (!isManualClick) {
-            startProgressBar();
-          }
+          waitForTransition: true,
         }}
       >
         {sliderData.map((items, index) => (
           <SwiperSlide key={index}>
             <div className="w-full min-h-screen relative overflow-hidden">
-              <Image src={items?.src} alt={items?.alt} fill priority />
+              <Image
+                src={items?.src}
+                alt={items?.alt}
+                fill
+                priority
+                className="hidden lg:block object-cover"
+              />
+              <Image
+                src={items?.mobSrc}
+                alt={items?.alt}
+                fill
+                priority
+                className="block lg:hidden object-cover"
+              />
               {/* Content box */}
-              <div className="absolute mt-[200px] w-full z-10">
-                <div className="container mx-auto">
-                  <H1 className="text-white max-w-[276px] md:max-w-[650px]">
-                    {items?.heading}
-                  </H1>
-                  <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
-                    {items?.desc}
-                  </BodyText2>
-                  <Button href={items?.btnLink} title={items?.btnTitle} />
+              <FadeInReveal delay={0.2}>
+                <div className="absolute mt-[200px] w-full z-10">
+                  <div className="container mx-auto">
+                    <H1 className="text-white max-w-[276px] md:max-w-[650px]">
+                      {items?.heading}
+                    </H1>
+                    <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
+                      {items?.desc}
+                    </BodyText2>
+                    <Button href={items?.btnLink} title={items?.btnTitle} />
+                  </div>
                 </div>
-              </div>
-              {/* White lines */}
-              <div className="absolute min-h-screen bg-white w-[1px] right-[88px] lg:right-[212.5px]" />
-              <div className="absolute w-full bg-white bottom-[105px] lg:bottom-[119px] h-[1px]" />
-              {/* stars */}
-              <Image
-                src="/images/home/star-white.svg"
-                alt="img"
-                width={72}
-                height={72}
-                className="absolute bottom-[84px] z-10 right-[68px] lg:right-[177px] w-[42px] lg:w-[72px]"
-              />
-              <Image
-                src="/images/home/star-white.svg"
-                alt="img"
-                width={72}
-                height={72}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px]"
-              />
-              <Image
-                src="/images/home/star-white.svg"
-                alt="img"
-                width={72}
-                height={72}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px] w-[42px] lg:w-[72px]"
-              />
+              </FadeInReveal>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
+      {/* stars + lines */}
+      <div
+        ref={lineVertical}
+        className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5"
+      />
+      <div
+        ref={lineHorizontal}
+        className="absolute w-full bg-white bottom-[105px] lg:bottom-[119px] h-[1px] z-5"
+      />
+      <div
+        ref={starRef}
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 "
+      >
+        <Image
+          src="/images/home/star-white.svg"
+          alt="star"
+          width={72}
+          height={72}
+        />
+      </div>
+      <div
+        ref={starRef2}
+        className="absolute bottom-[-22px] lg:bottom-[-36px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 "
+      >
+        <Image
+          src="/images/home/star-white.svg"
+          alt="img"
+          width={72}
+          height={72}
+        />
+      </div>
+      <div
+        ref={starRef3}
+        className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px] w-[42px] lg:w-[72px] z-5"
+      >
+        <Image
+          src="/images/home/star-white.svg"
+          alt="img"
+          width={72}
+          height={72}
+        />
+      </div>
+
       {/* Single Global Progress Bar */}
-      <div className="absolute z-8 bottom-[105px] lg:bottom-[119px] w-[calc(100%-106px)] md:w-[calc(100%-240px)] h-[2px]">
+      <div
+        ref={orangeScroll}
+        className="absolute z-8 bottom-[105px] lg:bottom-[119px] w-[calc(100%-106px)] md:w-[calc(100%-240px)] h-[2px]"
+      >
         <div className="relative h-[2px]">
           <div
+            ref={progressBarRef}
             className="hero-progress-bar absolute left-0 top-0 h-[2px] bg-[#F36633] origin-left"
             style={{
               width: "100%",
               transform: "scaleX(0)",
-              transition: "transform 5s linear",
+              // transition: "transform 5s linear",
             }}
           />
         </div>
       </div>
       {/* Bottom nav titles */}
-      <div className="absolute z-10 bottom-[40px] md:bottom-[80px] w-full">
+      <div
+        ref={navTitles}
+        className="absolute z-10 bottom-[40px] md:bottom-[80px] w-full "
+      >
         {/* desktop */}
-        <div className="hidden md:flex container w-full mx-auto  gap-x-[36px]">
-          {sliderData.map((items: any, index: number) => (
+        <div className="hidden md:flex container w-full mx-auto  gap-x-[36px] ">
+          {sliderData.map((items, index: number) => (
             <div
               key={index}
-              onClick={() => handleSlideClick(index)}
-              className={`cursor-pointer text-white transition-opacity duration-200 font-alte-hans font-normal ${
-                active === index ? "opacity-100" : "opacity-40"
-              }`}
+              onClick={() => handleTabClick(index)}
+              className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${activeIndexRef.current === index
+                  ? "opacity-100"
+                  : "opacity-40 hover:opacity-100"
+                }`}
             >
               {items?.title}
             </div>
           ))}
         </div>
         {/* mobile */}
-        <div className="block lg:hidden">
+        <div className="block lg:hidden container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
-            {active + 1}/
+            {activeIndexRef.current + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">
               {sliderData?.length}
             </span>
           </p>
           <p className="text-white font-alte-hans font-normal">
-            {sliderData[active]?.title}
+            {sliderData[activeIndexRef.current]?.title}
           </p>
         </div>
       </div>

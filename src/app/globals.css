@@ -78,7 +78,7 @@ body {
   font-family: "Alte Hans Grotesk", sans-serif;
 }
 
-/* container */
+/* [ Container ] */
 .container {
   width: 96%;
   max-width: 1280px;
@@ -87,7 +87,6 @@ body {
   margin-right: auto;
   padding: unset;
 }
-
 @media screen and (min-width: 787px) and (max-width: 1024px) {
   .container {
     width: 100%;
@@ -95,7 +94,6 @@ body {
     padding: 0px 20px;
   }
 }
-
 @media screen and (min-width: 1025px) and (max-width: 1279px) {
   .container {
     width: 100%;
@@ -111,7 +109,7 @@ body {
   }
 }
 
-
+/* [ Bg Gradients ] */
 .bg-gradient-orange-1 {
   background: var(--gradient-orange-1);
 }
@@ -122,39 +120,71 @@ body {
   background: var(--gradient-orange-3);
 }
 
-/* Show scrollbar on mobile */
-.home-latest-at-swiper .swiper-scrollbar {
+/* Latest At Aarti Section [Progress Bar] */
+.home-latest-at-swiper {
+  position: relative;
+  padding-bottom: 40px !important;
+}
+.home-latest-at-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.home-latest-at-swiper .swiper-pagination-progressbar {
+  background: #e6e6e6 !important;
+  height: 2px !important;
+  border-radius: 10px;
+  top: auto !important;
+  bottom: 0 !important;
+}
+@media (min-width: 1024px) {
+  /* Hide progress bar on desktop */
+  .home-latest-at-swiper .swiper-pagination-progressbar {
+    display: none !important;
+  }
+  .home-latest-at-swiper {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* By Use Section [Progress Bar] */
+.home-by-use-section-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.home-by-use-section-swiper {
+  --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
+  --swiper-theme-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+  top: unset !important;
+}
+.home-by-use-section-swiper .swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color) !important;
+  height: 2px !important;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-inline: 20px !important;
+}
+
+/* Framework Forged Section [ Scrollbar ]  */
+.framework-forged-swiper .swiper-scrollbar {
   display: block !important;
   height: 2px;
   border-radius: 10px;
   margin-top: 30px;
-  margin-inline: 20px !important;
+  /* margin-inline: 20px !important; */
   background-color: #e6e6e6;
 }
-.home-latest-at-swiper .swiper-scrollbar-drag {
+.framework-forged-swiper .swiper-scrollbar-drag {
   background-color: #f36633;
   border-radius: 10px;
   height: 2px;
 }
-
 @media (min-width: 1024px) {
   /* Hide scrollbar on desktop */
-  .home-latest-at-swiper .swiper-scrollbar {
+  .framework-forged-swiper .swiper-scrollbar {
     display: none !important;
   }
-}
-
-/* By use section scrollbar */
-.home-by-use-section-swiper .swiper-scrollbar {
-  display: block !important;
-  height: 2px;
-  border-radius: 10px;
-  margin-top: 30px;
-  margin-inline: 20px !important;
-  background-color: 9997A2 !important;
-}
-.home-by-use-section-swiper .swiper-scrollbar-drag {
-  background-color: #f36633 !important;
-  border-radius: 10px;
-  height: 2px;
 }

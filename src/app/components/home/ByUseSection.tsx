@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1, SubH2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Scrollbar } from "swiper/modules";
+import "swiper/css/pagination";
+import { Navigation, Pagination } from "swiper/modules";
 import Button from "../Button";
+import gsap from "gsap";
 
 const ByUseSection = () => {
   const [active, setActive] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const contentRef = useRef(null);
+  const swiperRef = useRef(null);
 
   const sliderData = [
     {
@@ -127,29 +133,55 @@ const ByUseSection = () => {
     },
   ];
 
+  const handleTabClick = (index: number) => {
+    // Prevent multiple clicks during transition
+    if (index === active || isTransitioning) return;
+
+    setIsTransitioning(true);
+
+    if (contentRef.current) {
+      const tl = gsap.timeline();
+      tl.to(contentRef.current, {
+        duration: 0.3,
+        opacity: 0,
+        ease: "power2.in",
+      })
+        .call(() => {
+          // Update state in the middle of animation
+          setActive(index);
+          setActiveIndex(0);
+        })
+        .to(contentRef.current, {
+          duration: 0.3,
+          opacity: 1,
+          ease: "power2.out",
+          onComplete: () => {
+            setIsTransitioning(false);
+          },
+        });
+    }
+  };
+
   return (
     <div className="overflow-hidden">
       {/* Tabs */}
       <div className="lg:container lg:mx-auto w-full overflow-x-auto px-5 lg:px-0">
-        <div className="flex overflow-x-auto whitespace-nowrap gap-x-6  lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
+        <div className="flex overflow-x-auto whitespace-nowrap gap-x-6 lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
           {sliderData?.map((items, index) => (
             <div
               key={items?.id}
-              onClick={() => {
-                setActive(index), setActiveIndex(0);
-              }}
-              className={`text-grey-300 font-alte-hans leading-[136%] text-[32px] lg:text-[44px] cursor-pointer flex-shrink-0 transition-colors ${
+              onClick={() => handleTabClick(index)}
+              className={`text-grey-300 font-alte-hans leading-[136%] text-[32px] lg:text-[44px] cursor-pointer flex-shrink-0 transition-all duration-300 ease-out ${
                 active === index ? "text-orange-200" : ""
-              }`}
+              } ${isTransitioning ? "pointer-events-none" : ""}`}
             >
               {items?.title}
             </div>
           ))}
         </div>
       </div>
-
       {/* Content Section */}
-      <div className="mt-[40px] lg:mt-[62px]">
+      <div ref={contentRef} className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
           {/* Left Content - Contained */}
           <div className="px-5 lg:pl-[5rem] lg:pr-8 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0">
@@ -165,12 +197,12 @@ const ByUseSection = () => {
               title={sliderData[active]?.btn}
             />
           </div>
-
           {/* Right Swiper - Full Width to Edge */}
-          <div className="flex-1 min-w-0 mt-[42px] lg:mt-[0px]">
+          <div className="flex-1 min-w-0 mt-[42px] lg:mt-[0px] pl-[20px] lg:pl-[unset]">
             <div className="relative">
               <Swiper
-                key={active}
+                key={`swiper-${active}`}
+                ref={swiperRef}
                 spaceBetween={14}
                 slidesPerView={1.2}
                 breakpoints={{
@@ -179,20 +211,22 @@ const ByUseSection = () => {
                     spaceBetween: 24,
                   },
                 }}
-                modules={[Scrollbar, Navigation]}
+                modules={[Pagination, Navigation]}
                 navigation={{
                   prevEl: ".swiper-button-prev-useBySection",
                   nextEl: ".swiper-button-next-useBySection",
                 }}
-                scrollbar={{
+                pagination={{
                   el: ".home-by-use-section-swiper",
-                  draggable: true,
+                  type: "progressbar",
                 }}
                 className="w-full !pr-5 lg:!pr-0"
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                observer={true}
+                observeParents={true}
               >
                 {sliderData[active]?.content?.map((item, index) => (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={`${active}-${index}`}>
                     <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[355px] bg-[#EFF3F5] mr-5 lg:mr-0">
                       <SubH2 className="text-blue-200 py-[24px] px-[26px]">
                         {item?.title}
@@ -214,7 +248,7 @@ const ByUseSection = () => {
               <div className="relative py-[30px]">
                 <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                   <button
-                    className={` swiper-button-prev-useBySection transition-opacity ${
+                    className={`swiper-button-prev-useBySection transition-opacity ${
                       activeIndex > 0
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
