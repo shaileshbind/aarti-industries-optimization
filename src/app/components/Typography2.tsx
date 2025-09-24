@@ -121,13 +121,13 @@ export const BodyText3 = ({ className, children }: TypographyProps) => (
   </p>
 );
 
-// export const Tag = ({ className, children }: TypographyProps) => (
-//   <p
-//     className={clsxN(
-//       "text-[14px] tracking-widest uppercase text-white",
-//       className
-//     )}
-//   >
-//     {children}
-//   </p>
-// );
+export const Cta = ({ className, children }: TypographyProps) => (
+  <p
+    className={clsxN(
+      "text-[16px] font-normal font-alte-hans leading-[120%] bg-white",
+      className
+    )}
+  >
+    {children}
+  </p>
+);
