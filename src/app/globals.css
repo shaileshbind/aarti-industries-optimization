@@ -35,6 +35,15 @@
 
   /* Font families */
   --font-alte-hans: "Alte Hans Grotesk", sans-serif;
+
+  /* Gradients */
+  --gradient-orange-1: linear-gradient(
+    202deg,
+    #fa8129 -22.05%,
+    #dc4c03 114.72%
+  );
+  --gradient-orange-2: linear-gradient(201deg, #fa8129 -42.93%, #dc4c03 95.27%);
+  --gradient-orange-3: linear-gradient(142deg, #fa8129 22.06%, #dc4c03 147.93%);
 }
 
 @theme inline {
@@ -56,6 +65,10 @@
   --color-grey-200: var(--grey-200);
   --color-grey-300: var(--grey-300);
   --color-grey-400: var(--grey-400);
+
+  --gradient-orange-1: var(--gradient-orange-1);
+  --gradient-orange-2: var(--gradient-orange-2);
+  --gradient-orange-3: var(--gradient-orange-3);
 }
 
 html,
@@ -65,3 +78,113 @@ body {
   font-family: "Alte Hans Grotesk", sans-serif;
 }
 
+/* [ Container ] */
+.container {
+  width: 96%;
+  max-width: 1280px;
+  /* max-width: 90%; */
+  margin-left: auto;
+  margin-right: auto;
+  padding: unset;
+}
+@media screen and (min-width: 787px) and (max-width: 1024px) {
+  .container {
+    width: 100%;
+    max-width: 960px;
+    padding: 0px 20px;
+  }
+}
+@media screen and (min-width: 1025px) and (max-width: 1279px) {
+  .container {
+    width: 100%;
+    max-width: 1140px;
+    padding: 0px 30px;
+  }
+}
+@media screen and (max-width: 786px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0px 15px;
+  }
+}
+
+/* [ Bg Gradients ] */
+.bg-gradient-orange-1 {
+  background: var(--gradient-orange-1);
+}
+.bg-gradient-orange-2 {
+  background: var(--gradient-orange-2);
+}
+.bg-gradient-orange-3 {
+  background: var(--gradient-orange-3);
+}
+
+/* Latest At Aarti Section [Progress Bar] */
+.home-latest-at-swiper {
+  position: relative;
+  padding-bottom: 40px !important;
+}
+.home-latest-at-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.home-latest-at-swiper .swiper-pagination-progressbar {
+  background: #e6e6e6 !important;
+  height: 2px !important;
+  border-radius: 10px;
+  top: auto !important;
+  bottom: 0 !important;
+}
+@media (min-width: 1024px) {
+  /* Hide progress bar on desktop */
+  .home-latest-at-swiper .swiper-pagination-progressbar {
+    display: none !important;
+  }
+  .home-latest-at-swiper {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* By Use Section [Progress Bar] */
+.home-by-use-section-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.home-by-use-section-swiper {
+  --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
+  --swiper-theme-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+  top: unset !important;
+}
+.home-by-use-section-swiper .swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color) !important;
+  height: 2px !important;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-inline: 20px !important;
+}
+
+/* Framework Forged Section [ Scrollbar ]  */
+.framework-forged-swiper .swiper-scrollbar {
+  display: block !important;
+  height: 2px;
+  border-radius: 10px;
+  margin-top: 30px;
+  /* margin-inline: 20px !important; */
+  background-color: #e6e6e6;
+}
+.framework-forged-swiper .swiper-scrollbar-drag {
+  background-color: #f36633;
+  border-radius: 10px;
+  height: 2px;
+}
+@media (min-width: 1024px) {
+  /* Hide scrollbar on desktop */
+  .framework-forged-swiper .swiper-scrollbar {
+    display: none !important;
+  }
+}
