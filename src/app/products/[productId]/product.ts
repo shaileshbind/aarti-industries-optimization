@@ -98,7 +98,7 @@ export interface ProductListApiResponse {
 export interface ProductError {
   code: 'NOT_FOUND' | 'INVALID_ID' | 'SERVER_ERROR' | 'NETWORK_ERROR';
   message: string;
-  details?: any;
+  details?: string;
 }
 
 // Loading state types

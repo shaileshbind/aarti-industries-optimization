@@ -6,7 +6,6 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import ProductTabs from "../products/ProductTabs";
 import Tabs from "../Tabs";
 
 const LatestAtAarti = () => {

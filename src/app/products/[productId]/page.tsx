@@ -1,6 +1,6 @@
 import { ProductPageProps, ProductData } from '@/app/products/[productId]/product';
 import Breadcrumb from '@/app/components/BreadCrumb';
-import { BodyText1, BodyText2, H2, H3, SubH2, SubH3 } from '@/app/components/Typography2';
+import { BodyText1, BodyText2, H3, SubH2, SubH3 } from '@/app/components/Typography2';
 
 const mockProductData: Record<string, ProductData> = {
   'para-dichloro-benzene': {
