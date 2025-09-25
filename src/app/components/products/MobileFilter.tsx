@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { BodyText2, SubH2 } from "../Typography2";
+import Image from "next/image";
 
 interface MobileFilterProps {
   subCategories: { id: string; name: string }[];
@@ -37,16 +38,18 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
     onClear();
   };
 
-
-
   return (
-    <div className={`fixed inset-0 top-[30%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${showMobileFilter ? 'translate-y-0' : 'translate-y-full'}`}>
+    <div
+      className={`fixed inset-0 top-[30%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${
+        showMobileFilter ? "translate-y-0" : "translate-y-full"
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-start p-4">
         <button onClick={onClose} className="text-gray-500 mr-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="#4C5861" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <div className="w-[16px] h-[16px] relative">
+            <Image src="/images/chevron-left.svg" alt="icon" fill />
+          </div>
         </button>
         <SubH2>Filter by</SubH2>
       </div>

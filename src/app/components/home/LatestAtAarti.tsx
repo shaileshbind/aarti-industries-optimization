@@ -183,28 +183,11 @@ const LatestAtAarti = () => {
 
   return (
     <div className="w-full my-[50px] lg:my-[100px]">
-      <div className="mx-[20px] lg:container lg:mx-auto">
+      <div className="container mx-auto">
         <H2 className="text-blue-200">The Latest at Aarti</H2>
       </div>
-      <div className="mt-[18px] md:mt-[30px]">
-        {/* Tabs */}
-        {/* <div className="lg:container lg:mx-auto w-full overflow-scroll !px-[20px] lg:!px-[unset]">
-          <div className="bg-grey-100 rounded-[40px] p-[4px]  flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">
-            {sliderData.map((items, index) => (
-              <div
-                key={index}
-                onClick={() => setActive(index)}
-                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] ${
-                  active === index ? "text-white bg-gradient-orange-3" : ""
-                }`}
-              >
-                {items?.label}
-              </div>
-            ))}
-          </div>
-        </div> */}
-        <div className="lg:container lg:mx-auto w-full">
-          <div className="max-w-[100%] md:max-w-fit"> 
+      <div className="mt-[18px] md:mt-[30px] w-full container">
+        <div className="max-w-[100%] md:max-w-fit">
           <Tabs
             tabs={sliderData}
             activeId={active}
@@ -212,10 +195,9 @@ const LatestAtAarti = () => {
               setActive(id);
             }}
           />
-          </div>
         </div>
 
-        <div className="mt-[52px] container mx-[unset] lg:mx-auto">
+        <div className="mt-[52px]">
           <Swiper
             key={active}
             spaceBetween={24}
