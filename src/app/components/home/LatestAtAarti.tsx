@@ -6,12 +6,14 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import Tabs from "../Tabs";
 
 const LatestAtAarti = () => {
   const [active, setActive] = useState(0);
   const sliderData = [
     {
-      title: "Blogs",
+      label: "Blogs",
+      id: 0,
       content: [
         {
           img: "/images/home/blog1.png",
@@ -29,146 +31,150 @@ const LatestAtAarti = () => {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 21, 2025",
-          title: "Lorem ipsum dolor sit amet consectetur.",
+          label: "Lorem ipsum dolor sit amet consectetur.",
           desc: "Sit feugiat vel dictumst consectetur turpis.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 21, 2025",
-          title: "Lorem ipsum dolor sit amet consectetur.",
+          label: "Lorem ipsum dolor sit amet consectetur.",
           desc: "Neque cras quis sit mattis fringilla.",
         },
       ],
     },
     {
-      title: "Thought Leadership",
+      label: "Thought Leadership",
+      id: 1,
       content: [
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 25, 2025",
-          title: "Driving innovation in speciality chemicals.",
+          label: "Driving innovation in speciality chemicals.",
           desc: "Exploring sustainable practices for future-ready industries.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 25, 2025",
-          title: "Leadership perspectives in research & development.",
+          label: "Leadership perspectives in research & development.",
           desc: "How R&D leaders shape the path to global competitiveness.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "May 25, 2025",
-          title: "The role of collaboration in science & technology.",
+          label: "The role of collaboration in science & technology.",
           desc: "Building stronger partnerships across industries.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "May 25, 2025",
-          title: "Sustainability in manufacturing.",
+          label: "Sustainability in manufacturing.",
           desc: "Balancing growth with environmental responsibility.",
         },
       ],
     },
     {
-      title: "News & Media",
+      label: "News & Media",
+      id: 2,
       content: [
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "May 28, 2025",
-          title: "Company announces new sustainability targets.",
+          label: "Company announces new sustainability targets.",
           desc: "Commitment to reduce carbon emissions by 30% by 2030.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "May 28, 2025",
-          title: "Expansion of manufacturing facilities in Asia.",
+          label: "Expansion of manufacturing facilities in Asia.",
           desc: "Boosting capacity to meet growing global demand.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 28, 2025",
-          title: "Featured in international trade magazine.",
+          label: "Featured in international trade magazine.",
           desc: "Recognition for leadership in speciality chemicals.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 28, 2025",
-          title: "Community engagement initiatives.",
+          label: "Community engagement initiatives.",
           desc: "Partnering with local schools and universities.",
         },
       ],
     },
     {
-      title: "Reports & Publications",
+      label: "Reports & Publications",
+      id: 3,
       content: [
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "June 01, 2025",
-          title: "Annual Sustainability Report 2025.",
+          label: "Annual Sustainability Report 2025.",
           desc: "Detailed insights on progress towards global goals.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "June 01, 2025",
-          title: "Market Trends in Chemical Innovation.",
+          label: "Market Trends in Chemical Innovation.",
           desc: "Analysis of emerging technologies and applications.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "June 01, 2025",
-          title: "Global Partnerships Report.",
+          label: "Global Partnerships Report.",
           desc: "Strengthening collaborations across continents.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "June 01, 2025",
-          title: "Research & Development Highlights.",
+          label: "Research & Development Highlights.",
           desc: "Key projects and outcomes from the last year.",
         },
       ],
     },
     {
-      title: "Stories from AIL",
+      label: "Stories from AIL",
+      id: 4,
       content: [
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "June 05, 2025",
-          title: "Employee spotlight: 20 years of dedication.",
+          label: "Employee spotlight: 20 years of dedication.",
           desc: "Celebrating the journey of our long-standing team members.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "June 05, 2025",
-          title: "Innovation from within.",
+          label: "Innovation from within.",
           desc: "How our employees contribute breakthrough ideas daily.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "June 05, 2025",
-          title: "Community outreach in rural areas.",
+          label: "Community outreach in rural areas.",
           desc: "Providing resources and support for local development.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "June 05, 2025",
-          title: "Diversity and inclusion at AIL.",
+          label: "Diversity and inclusion at AIL.",
           desc: "Fostering a culture of belonging across all teams.",
         },
       ],
@@ -182,7 +188,7 @@ const LatestAtAarti = () => {
       </div>
       <div className="mt-[18px] md:mt-[30px]">
         {/* Tabs */}
-        <div className="lg:container lg:mx-auto w-full overflow-scroll !px-[20px] lg:!px-[unset]">
+        {/* <div className="lg:container lg:mx-auto w-full overflow-scroll !px-[20px] lg:!px-[unset]">
           <div className="bg-grey-100 rounded-[40px] p-[4px]  flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">
             {sliderData.map((items, index) => (
               <div
@@ -192,11 +198,23 @@ const LatestAtAarti = () => {
                   active === index ? "text-white bg-gradient-orange-3" : ""
                 }`}
               >
-                {items?.title}
+                {items?.label}
               </div>
             ))}
           </div>
+        </div> */}
+        <div className="lg:container lg:mx-auto w-full">
+          <div className="max-w-[100%] md:max-w-fit"> 
+          <Tabs
+            tabs={sliderData}
+            activeId={active}
+            onChange={(id) => {
+              setActive(id);
+            }}
+          />
+          </div>
         </div>
+
         <div className="mt-[52px] container mx-[unset] lg:mx-auto">
           <Swiper
             key={active}
