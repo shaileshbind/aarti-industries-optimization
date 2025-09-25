@@ -28,8 +28,8 @@ const Header = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-white">
         {/* Main Header */}
         <header className="bg-background border-b border-grey-100 flex justify-between">
-          <div className="container w-full h-auto ">
-            <div className="flex items-center justify-between lg:justify-between h-16 lg:h-20 pr-[24px] ">
+          <div className="mx-[60px] w-full h-auto ">
+            <div className="flex items-center justify-between lg:justify-between h-16 lg:h-20 pr-[24px] relative">
               {/* Logo desktop*/}
               <Link
                 href="/"
@@ -46,16 +46,15 @@ const Header = () => {
               </Link>
 
               {/* Desktop Navigation - Hidden on tablets and below */}
-              <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 ml-auto ">
+              <nav className="hidden lg:flex space-x-6 xl:space-x-8 absolute right-[200px]">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`transition-colors hover:text-violet-80 ${
-                      isActive(item.href)
+                    className={`transition-colors hover:text-violet-80 ${isActive(item.href)
                         ? "text-violet-80 font-medium"
                         : "text-foreground"
-                    }`}
+                      }`}
                   >
                     <AnimateTextOnHover
                       staggered
@@ -66,17 +65,15 @@ const Header = () => {
                     </AnimateTextOnHover>
                   </Link>
                 ))}
+              {/* Desktop Search and Login - Hidden on tablets and below */}
+              <div className="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#102533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M20.9984 21.0004L16.6484 16.6504" stroke="#102533" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
               </nav>
 
-              {/* Desktop Search and Login - Hidden on tablets and below */}
-              <div className="hidden lg:flex items-center space-x-4">
-                {/* Login Button - Desktop only */}
-                {/* <a href="/" className="w-fit">
-                  <div className="cursor-pointer bg-gradient-orange-1">
-                    Get in touch
-                  </div>
-                </a> */}
-              </div>
 
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
@@ -88,23 +85,20 @@ const Header = () => {
                 <div className="w-6 h-3.5 relative flex flex-col justify-between">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen
+                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen
                         ? "rotate-43 translate-y-2 bg-violet-80"
                         : "translate-y-0"
-                    }`}
+                      }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-current transition-all duration-200 ease-in-out ${
-                      isMenuOpen ? "opacity-0 bg-violet-80" : "opacity-100"
-                    }`}
+                    className={`block h-0.5 w-full bg-current transition-all duration-200 ease-in-out ${isMenuOpen ? "opacity-0 bg-violet-80" : "opacity-100"
+                      }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen
+                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${isMenuOpen
                         ? "-rotate-43 -translate-y-1 bg-violet-80"
                         : "translate-y-0"
-                    }`}
+                      }`}
                   />
                 </div>
               </button>
@@ -135,7 +129,7 @@ const Header = () => {
               </div>
             </a>
           </div> */}
-          <div className="absolute top-0 right-0 w-[88px] lg:w-[212px] bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-20">
+          <div className="absolute top-0 right-0 w-[88px] md:w-[212px] bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-20">
             <Link href="/" className="w-fit">
               <div className="cursor-pointer text-[16px] text-white font-normal font-alte-hans">
                 Contact
@@ -147,11 +141,10 @@ const Header = () => {
 
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
-        className={`lg:hidden fixed inset-x-0 bg-white border-t border-grey-10 h-full shadow-lg transition-all duration-300 ease-in-out z-40 ${
-          isMenuOpen
+        className={`lg:hidden fixed inset-x-0 bg-white border-t border-grey-10 h-full shadow-lg transition-all duration-300 ease-in-out z-40 ${isMenuOpen
             ? "max-h-screen opacity-100 visible"
             : "max-h-0 opacity-0 invisible overflow-hidden"
-        }`}
+          }`}
         style={{ paddingTop: "var(--header-height, 104px)" }} // Adjust based on your header + marquee height
       >
         {/* Mobile/Tablet Navigation Links */}
@@ -160,11 +153,10 @@ const Header = () => {
             <Link
               key={item.name}
               href={item.href}
-              className={`block px-6 py-3 hover:bg-grey-5 transition-all duration-200 transform ${
-                isActive(item.href)
+              className={`block px-6 py-3 hover:bg-grey-5 transition-all duration-200 transform ${isActive(item.href)
                   ? "text-[#102533] font-medium "
                   : "text-foreground hover:translate-x-1"
-              }`}
+                }`}
               onClick={() => setIsMenuOpen(false)}
               style={{
                 animationDelay: isMenuOpen ? `${index * 50}ms` : "0ms",
