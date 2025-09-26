@@ -165,7 +165,7 @@ const ByUseSection = () => {
   return (
     <div className="overflow-hidden">
       {/* Tabs */}
-      <div className="lg:container lg:mx-auto w-full overflow-x-auto px-5 lg:px-0">
+      <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         <div className="flex overflow-x-auto whitespace-nowrap gap-x-6 lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
           {sliderData?.map((items, index) => (
             <div
@@ -184,7 +184,7 @@ const ByUseSection = () => {
       <div ref={contentRef} className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
           {/* Left Content - Contained */}
-          <div className="px-5 lg:pl-[5rem] lg:pr-8 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0">
+          <div className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0">
             <SubH1 className="text-blue-200">
               {sliderData[active]?.heading}
             </SubH1>

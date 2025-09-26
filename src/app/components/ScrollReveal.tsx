@@ -57,6 +57,7 @@ interface ScrollGroupProps extends ScrollRevealConfig {
   as?: React.ElementType;
   disabled?: boolean;
   groupSelector?: string;
+  y?: number;
 }
 
 export const ScrollGroup = ({
@@ -208,9 +209,9 @@ export const BounceInReveal = ({ children, className = '', delay = 0, duration =
 );
 
 // Group animations
-export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, y = 50,...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
   <ScrollGroup
-    from={{ autoAlpha: 0, y: 50 }}
+    from={{ autoAlpha: 0, y: y }}
     to={{ autoAlpha: 1, y: 0 }}
     duration={duration}
     delay={delay}

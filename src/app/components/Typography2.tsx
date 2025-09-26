@@ -72,11 +72,12 @@ export const SubH2 = ({ className, children }: TypographyProps) => (
     {children}
   </h6>
 );
-// export const SubH3 = ({ className, children }: TypographyProps) => (
-//   <p className={clsxN("font-normal  text-[18px] md:text-[20px] leading-[140%] text-blue-200", className)}>
-//     {children}
-//   </p>
-// );
+
+export const SubH3 = ({ className, children }: TypographyProps) => (
+  <p className={clsxN("font-normal text-[16px] md:text-[20px] leading-[140%] text-blue-200 font-alte-hans", className)}>
+    {children}
+  </p>
+);
 
 // export const SubH4 = ({ className, children }: TypographyProps) => (
 //   <p className={clsxN("text-[16px] md:text-[18px] font-semibold leading-[140%] lg:leading-[150%] ", className)}>

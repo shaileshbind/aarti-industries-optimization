@@ -309,7 +309,7 @@ const HomeHero = () => {
               {/* Content box */}
               <FadeInReveal delay={0.2}>
                 <div className="absolute mt-[200px] w-full z-10">
-                  <div className="container mx-auto">
+                  <div className="fluid-container">
                     <H1 className="text-white max-w-[276px] md:max-w-[650px]">
                       {items?.heading}
                     </H1>
@@ -391,7 +391,7 @@ const HomeHero = () => {
         className="absolute z-10 bottom-[40px] md:bottom-[80px] w-full "
       >
         {/* desktop */}
-        <div className="hidden md:flex container w-full mx-auto  gap-x-[36px] ">
+        <div className="hidden md:flex fluid-container w-full mx-auto  gap-x-[36px] ">
           {sliderData.map((items, index: number) => (
             <div
               key={index}
@@ -406,7 +406,7 @@ const HomeHero = () => {
           ))}
         </div>
         {/* mobile */}
-        <div className="block lg:hidden container w-full mx-auto">
+        <div className="block lg:hidden fluid-container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
             {activeIndexRef.current + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">

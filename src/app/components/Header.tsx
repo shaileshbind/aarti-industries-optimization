@@ -8,76 +8,196 @@ import AnimateTextOnHover from "./ui/AnimateTextOnHover";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const pathname = usePathname();
 
   const navigation = [
-    { name: "Products", href: "/products" },
-    { name: "Business", href: "/" },
-    { name: "Sustainability", href: "/" },
-    { name: "Investors", href: "/" },
-    { name: "Careers", href: "/" },
-    { name: "Resources", href: "/" },
+    {
+      name: "Products",
+      href: "/products",
+      hasDropdown: true,
+      dropdownItems: [
+        {
+          name: "Para Dichloro Benzene",
+          href: "/products/para-dichloro-benzene",
+        },
+      ],
+    },
+    {
+      name: "Business",
+      href: "/business",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Pharmaceuticals", href: "/business/pharmaceuticals" },
+        { name: "Agrochemicals", href: "/business/agrochemicals" },
+        { name: "Specialty Chemicals", href: "/business/specialty-chemicals" },
+        {
+          name: "Performance Materials",
+          href: "/business/performance-materials",
+        },
+      ],
+    },
+    {
+      name: "Sustainability",
+      href: "/sustainability",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "ESG Initiatives", href: "/sustainability/esg" },
+        { name: "Environmental", href: "/sustainability/environmental" },
+        { name: "Social", href: "/sustainability/social" },
+        { name: "Governance", href: "/sustainability/governance" },
+      ],
+    },
+    {
+      name: "Investors",
+      href: "/investors",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Financial Reports", href: "/investors/reports" },
+        { name: "Stock Information", href: "/investors/stock" },
+        { name: "Investor Presentations", href: "/investors/presentations" },
+        { name: "Corporate Announcements", href: "/investors/announcements" },
+      ],
+    },
+    {
+      name: "Careers",
+      href: "/careers",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Job Openings", href: "/careers/jobs" },
+        { name: "Campus Recruitment", href: "/careers/campus" },
+        { name: "Life at Aarti", href: "/careers/life" },
+        { name: "Benefits", href: "/careers/benefits" },
+      ],
+    },
+    {
+      name: "Resources",
+      href: "/resources",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Downloads", href: "/resources/downloads" },
+        { name: "Media Center", href: "/resources/media" },
+        { name: "Events", href: "/resources/events" },
+        { name: "Contact", href: "/resources/contact" },
+      ],
+    },
   ];
 
   const isActive = (href: string) => {
-    return pathname === href;
+    return pathname === href || pathname.startsWith(href + "/");
   };
+
+  const handleDropdownToggle = (index:number) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
+
+  const closeAllDropdowns = () => {
+    setOpenDropdown(null);
+  };
+
   return (
     <>
       {/* Fixed Header Container */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white">
         {/* Main Header */}
-        <header className="bg-background border-b border-grey-100 flex justify-between">
-          <div className="container w-full h-auto ">
-            <div className="flex items-center justify-between lg:justify-between h-16 lg:h-20 pr-[24px] ">
-              {/* Logo desktop*/}
+        <header className="bg-white border-b border-grey-100 flex justify-between">
+          <div className="ml-[20px] lg:ml-[60px] w-full h-auto">
+            <div className="flex items-center justify-between lg:justify-between h-16 lg:h-18 pr-[24px] relative">
+              {/* Logo desktop */}
               <Link
                 href="/"
-                className="hidden lg:flex items-center space-x-2 z-50 "
+                className="hidden lg:flex items-center space-x-2 z-50"
               >
                 <Image
                   src="/images/logo.png"
-                  alt="logo"
+                  alt="Aarti Industries Logo"
                   width={112}
                   height={46}
-                  className="w-[112px] "
+                  className="w-[112px]"
                   objectPosition="center"
                 />
               </Link>
-
               {/* Desktop Navigation - Hidden on tablets and below */}
-              <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 ml-auto ">
-                {navigation.map((item) => (
-                  <Link
+              <nav
+                className="hidden lg:flex space-x-8 xl:space-x-10 absolute right-[212px] pr-[24px]"
+                onMouseLeave={closeAllDropdowns}
+              >
+                {navigation.map((item, index) => (
+                  <div
                     key={item.name}
-                    href={item.href}
-                    className={`transition-colors hover:text-violet-80 ${
-                      isActive(item.href)
-                        ? "text-violet-80 font-medium"
-                        : "text-foreground"
-                    }`}
+                    className="relative group"
+                    onMouseEnter={() =>
+                      item.hasDropdown && setOpenDropdown(index)
+                    }
+                    onMouseLeave={() =>
+                      item.hasDropdown && setOpenDropdown(null)
+                    }
                   >
-                    <AnimateTextOnHover
-                      staggered
-                      activeHover={isActive(item.href)}
-                      className="nav text-nav-item" // Pass the typography classes here
+                    <Link
+                      href={item.href}
+                      className={`flex items-center transition-colors hover:text-orange-500 ${
+                        isActive(item.href)
+                          ? "text-orange-500 font-medium"
+                          : "text-gray-700"
+                      }`}
                     >
-                      {item.name}
-                    </AnimateTextOnHover>
-                  </Link>
-                ))}
-              </nav>
+                      <AnimateTextOnHover
+                        staggered
+                        activeHover={isActive(item.href)}
+                        className="text-sm font-medium"
+                      >
+                        {item.name}
+                      </AnimateTextOnHover>
+                      {item.hasDropdown && (
+                        <svg
+                          className={`ml-1 h-4 w-4 transition-transform duration-200 ${
+                            openDropdown === index ? "rotate-180" : ""
+                          }`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      )}
+                    </Link>
 
-              {/* Desktop Search and Login - Hidden on tablets and below */}
-              <div className="hidden lg:flex items-center space-x-4">
-                {/* Login Button - Desktop only */}
-                {/* <a href="/" className="w-fit">
-                  <div className="cursor-pointer bg-gradient-orange-1">
-                    Get in touch
+                    {item.hasDropdown && (
+                      <div
+                        className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-100 transition-all duration-200 z-[60] ${
+                          openDropdown === index
+                            ? "opacity-100 visible transform translate-y-0"
+                            : "opacity-0 invisible transform -translate-y-2"
+                        }`}
+                      >
+                        <div className="py-2">
+                          {item.dropdownItems?.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.name}
+                              href={dropdownItem.href}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              {dropdownItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </a> */}
-              </div>
-
+                ))}
+                {/* Desktop Search Icon */}
+                <div className="flex items-start">
+                  <div className="w-[20px] h-[20px] relative">
+                    <Image src="/images/search.svg" alt="icon" fill className="cursor-pointer" />
+                  </div>
+                </div>
+              </nav>
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
                 className="lg:hidden relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
@@ -85,135 +205,126 @@ const Header = () => {
                 aria-label="Toggle menu"
                 aria-expanded={isMenuOpen}
               >
-                <div className="w-6 h-3.5 relative flex flex-col justify-between">
+                <div className="w-6 h-4 relative flex flex-col justify-between">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen
-                        ? "rotate-43 translate-y-2 bg-violet-80"
-                        : "translate-y-0"
+                    className={`block h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
+                      isMenuOpen ? "rotate-45 translate-y-1.5" : "translate-y-0"
                     }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-current transition-all duration-200 ease-in-out ${
-                      isMenuOpen ? "opacity-0 bg-violet-80" : "opacity-100"
+                    className={`block h-0.5 w-full bg-blue-900 transition-all duration-200 ease-in-out ${
+                      isMenuOpen ? "opacity-0" : "opacity-100"
                     }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-current transform transition-all duration-300 ease-in-out ${
+                    className={`block h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
                       isMenuOpen
-                        ? "-rotate-43 -translate-y-1 bg-violet-80"
+                        ? "-rotate-45 -translate-y-1.5"
                         : "translate-y-0"
                     }`}
                   />
                 </div>
               </button>
-
-              {/* Logo desktop*/}
+              {/* Logo mobile center */}
               <Link
                 href="/"
-                className="block lg:hidden items-center space-x-2 z-50 "
+                className="block lg:hidden items-center space-x-2 z-50"
               >
                 <Image
                   src="/images/logo.png"
-                  alt="logo"
+                  alt="Aarti Industries Logo"
                   width={112}
                   height={46}
-                  className="w-[112px] "
+                  className="w-[112px]"
                   objectPosition="center"
                 />
               </Link>
-              {/* extra div only for mobile */}
+              {/* Extra div only for mobile */}
               <div className="block lg:hidden w-[50px]" />
             </div>
           </div>
-          {/* get in touch btn */}
-          {/* <div className="right-0 w-[calc(100vw-200px)] ml-0 bg-gradient-orange-1 grid place-items-center rounded-tl-[10px]">
-            <a href="/" className="w-fit">
-              <div className="cursor-pointer text-[16px] text-white font-normal font-alte-hans">
+          {/* Contact Button - Fixed on right */}
+          <Link href="/contact" className="w-fit">
+            <div className="absolute top-0 right-0 w-[88px] lg:w-[212px] bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18">
+              <div className="cursor-pointer text-[14px] lg:text-[16px] text-white font-medium">
                 Get in touch
               </div>
-            </a>
-          </div> */}
-          <div className="absolute top-0 right-0 w-[88px] lg:w-[212px] bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-20">
-            <Link href="/" className="w-fit">
-              <div className="cursor-pointer text-[16px] text-white font-normal font-alte-hans">
-                Contact
-              </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
         </header>
       </div>
 
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
-        className={`lg:hidden fixed inset-x-0 bg-white border-t border-grey-10 h-full shadow-lg transition-all duration-300 ease-in-out z-40 ${
+        className={`lg:hidden fixed inset-x-0 bg-white border-t border-gray-100 h-full shadow-lg transition-all duration-300 ease-in-out z-40 ${
           isMenuOpen
             ? "max-h-screen opacity-100 visible"
             : "max-h-0 opacity-0 invisible overflow-hidden"
         }`}
-        style={{ paddingTop: "var(--header-height, 104px)" }} // Adjust based on your header + marquee height
+        style={{ paddingTop: "var(--header-height, 80px)" }}
       >
         {/* Mobile/Tablet Navigation Links */}
-        <nav className="py-2 ">
+        <nav className="py-2">
           {navigation.map((item, index) => (
-            <Link
+            <div
               key={item.name}
-              href={item.href}
-              className={`block px-6 py-3 hover:bg-grey-5 transition-all duration-200 transform ${
-                isActive(item.href)
-                  ? "text-[#102533] font-medium "
-                  : "text-foreground hover:translate-x-1"
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-              style={{
-                animationDelay: isMenuOpen ? `${index * 50}ms` : "0ms",
-              }}
+              className="border-b border-gray-100 last:border-b-0"
             >
-              <Typography variant="body-l">{item.name}</Typography>
-            </Link>
+              <div className="flex items-center justify-between px-6 py-3">
+                <Link
+                  href={item.href}
+                  className={`flex-1 transition-all duration-200 ${
+                    isActive(item.href)
+                      ? "text-orange-500 font-medium"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => !item.hasDropdown && setIsMenuOpen(false)}
+                >
+                  <Typography variant="body-l">{item.name}</Typography>
+                </Link>
+                {item.hasDropdown && (
+                  <button
+                    onClick={() => handleDropdownToggle(index)}
+                    className="p-2 ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <svg
+                      className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
+                        openDropdown === index ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile Dropdown Items */}
+              {item.hasDropdown && openDropdown === index && (
+                <div className="bg-gray-50 border-t border-gray-100">
+                  {item.dropdownItems?.map((dropdownItem) => (
+                    <Link
+                      key={dropdownItem.name}
+                      href={dropdownItem.href}
+                      className="block px-10 py-3 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {dropdownItem.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
-
-        {/* Mobile/Tablet Footer Actions */}
-        <div className="p-4 border-t border-grey-10 space-y-3 hidden">
-          {/* Login Link for Mobile/Tablet */}
-          <Link
-            href="/login"
-            className="flex items-center justify-center space-x-2 w-full px-4 py-3 bg-violet-80 text-white rounded-lg hover:bg-violet-100 transition-colors"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M5.9812 18.6909C6.54549 17.5795 7.40654 16.6459 8.4689 15.9939C9.53126 15.3418 10.7534 14.9966 12 14.9966C13.2465 14.9966 14.4686 15.3418 15.531 15.9939C16.5934 16.6459 17.4544 17.5795 18.0187 18.6909"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12 15C14.0711 15 15.75 13.3211 15.75 11.25C15.75 9.17893 14.0711 7.5 12 7.5C9.92893 7.5 8.25 9.17893 8.25 11.25C8.25 13.3211 9.92893 15 12 15Z"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <Typography variant="button-m" className="text-white">
-              Login / Register
-            </Typography>
-          </Link>
-        </div>
       </div>
 
       {/* Overlay for mobile menu */}
@@ -222,17 +333,23 @@ const Header = () => {
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"
           onClick={() => setIsMenuOpen(false)}
           aria-hidden="true"
-          style={{ top: "var(--header-height, 104px)" }}
+          style={{ top: "var(--header-height, 80px)" }}
         />
       )}
 
       {/* Spacer to prevent content from hiding under fixed header */}
-      <div className=""></div>
+      <div className="h-16 lg:h-18 block lg:hidden"></div>
 
       {/* Add CSS for menu item animations and header height variable */}
       <style jsx>{`
         :root {
-          --header-height: 136px; /* Adjust this based on your actual header height */
+          --header-height: 80px;
+        }
+
+        @media (min-width: 1024px) {
+          :root {
+            --header-height: 80px;
+          }
         }
 
         @keyframes slideIn {

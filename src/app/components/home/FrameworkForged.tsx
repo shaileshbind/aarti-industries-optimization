@@ -63,7 +63,7 @@ const FrameworkForged = () => {
         Framework Forged in Science, Strategy, and Scale
       </H2>
       <div className="relative w-full grid grid-cols-1 lg:grid-cols-[55%_45%] px-[20px] lg:px-[unset]">
-        <div className="lg:ml-[5rem] order-2 lg:order-1">
+        <div className="lg:ml-[60px] order-2 lg:order-1">
           <H2 className="hidden lg:block text-blue-200 max-w-[460px]">
             Framework Forged in Science, Strategy, and Scale
           </H2>

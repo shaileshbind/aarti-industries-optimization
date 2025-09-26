@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Banner from "../components/products/Banner";
+import ProductFilterList from "../components/products/ProductFilterList";
 
-const page = () => {
+function page() {
   return (
-    <div className='min-h-screen'>
-      Product Page
-    </div>
-  )
+    <>
+      <Banner />
+      <ProductFilterList />
+    </>
+  );
 }
 
-export default page
+export default page;
