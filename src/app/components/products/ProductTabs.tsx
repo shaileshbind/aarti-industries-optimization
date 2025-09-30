@@ -1,13 +1,13 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { BodyText3 } from "../Typography2";
 
-type SubCategory = { id: string; name: string; };
-type Tab = { id: string; label: string; subCategories?: SubCategory[]; };
+type SubCategory = { id: number; name: string; };
+type Tab = { id: number; label: string; subCategories?: SubCategory[]; };
 
 type Props = {
   tabs: Tab[];
-  activeId: string;
-  onChange: (id: string) => void;
+  activeId: number;
+  onChange: (id: number) => void;
   className?: string;
   indicatorColor?: string;
   transition?: string;

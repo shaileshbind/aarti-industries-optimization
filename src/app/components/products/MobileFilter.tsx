@@ -4,10 +4,10 @@ import { BodyText2, SubH2 } from "../Typography2";
 import Image from "next/image";
 
 interface MobileFilterProps {
-  subCategories: { id: string; name: string }[];
-  selected: string[];
+  subCategories: { id: number; name: string }[];
+  selected: number[];
   onClose: () => void;
-  onApply: (selected: string[]) => void;
+  onApply: (selected: number[]) => void;
   onClear: () => void;
   showMobileFilter: boolean;
 }
@@ -20,9 +20,9 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
   onClear,
   showMobileFilter = false,
 }) => {
-  const [localSelected, setLocalSelected] = useState<string[]>(selected);
+  const [localSelected, setLocalSelected] = useState<number[]>(selected);
 
-  const toggleSubCategory = (id: string) => {
+  const toggleSubCategory = (id: number) => {
     setLocalSelected((prev) =>
       prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
     );
