@@ -97,7 +97,7 @@ const Tabs: React.FC<TabsProps> = ({
   };
 
   return (
-    <div className="overflow-scroll md:overflow-hidden mb-[42px]">
+    <div className="overflow-scroll lg:overflow-hidden mb-[42px]">
 
       <div className={`relative flex justify-center mb-2 ${containerClassName} ${className}`}>
         <div

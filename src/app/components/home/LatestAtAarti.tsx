@@ -5,7 +5,7 @@ import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import { Mousewheel, Pagination } from "swiper/modules";
 import Tabs from "../Tabs";
 
 const LatestAtAarti = () => {
@@ -205,9 +205,15 @@ const LatestAtAarti = () => {
             breakpoints={{
               1024: { slidesPerView: 4 },
             }}
-            modules={[Pagination]}
+            modules={[Pagination, Mousewheel]}
             pagination={{
               type: "progressbar",
+            }}
+            direction="horizontal"
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
             }}
             className="home-latest-at-swiper"
           >

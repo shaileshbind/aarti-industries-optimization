@@ -5,14 +5,13 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade } from "swiper/modules";
+import { Autoplay, EffectFade, Mousewheel } from "swiper/modules";
 import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 
 const HomeHero = () => {
-  // const [active, setActive] = useState(0);
   const [, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -277,7 +276,7 @@ const HomeHero = () => {
           },
         }}
         slidesPerView={1}
-        modules={[Autoplay, EffectFade]}
+        modules={[Autoplay, EffectFade, Mousewheel]}
         effect="fade"
         fadeEffect={{ crossFade: true }}
         loop={true}
@@ -287,6 +286,12 @@ const HomeHero = () => {
           disableOnInteraction: false,
           pauseOnMouseEnter: false,
           waitForTransition: true,
+        }}
+        direction="horizontal"
+        mousewheel={{
+          forceToAxis: true,
+          sensitivity: 1,
+          releaseOnEdges: true,
         }}
       >
         {sliderData.map((items, index) => (
@@ -396,17 +401,18 @@ const HomeHero = () => {
             <div
               key={index}
               onClick={() => handleTabClick(index)}
-              className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${activeIndexRef.current === index
+              className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${
+                activeIndexRef.current === index
                   ? "opacity-100"
                   : "opacity-40 hover:opacity-100"
-                }`}
+              }`}
             >
               {items?.title}
             </div>
           ))}
         </div>
         {/* mobile */}
-        <div className="block lg:hidden fluid-container w-full mx-auto">
+        <div className="block md:hidden fluid-container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
             {activeIndexRef.current + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">

@@ -119,13 +119,13 @@ const Header = () => {
               </Link>
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
-                className="hidden lg:flex space-x-8 xl:space-x-10 absolute right-[212px] pr-[24px]"
+                className="hidden lg:flex space-x-8 xl:space-x-10 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
                 {navigation.map((item, index) => (
                   <div
                     key={item.name}
-                    className="relative group"
+                    className="relative group h-[100%] grid "
                     onMouseEnter={() =>
                       item.hasDropdown && setOpenDropdown(index)
                     }
@@ -192,9 +192,9 @@ const Header = () => {
                   </div>
                 ))}
                 {/* Desktop Search Icon */}
-                <div className="flex items-start">
+                <div className="flex items-center cursor-pointer h-[100%] px-2">
                   <div className="w-[20px] h-[20px] relative">
-                    <Image src="/images/search.svg" alt="icon" fill className="cursor-pointer" />
+                    <Image src="/images/search.svg" alt="icon" fill />
                   </div>
                 </div>
               </nav>

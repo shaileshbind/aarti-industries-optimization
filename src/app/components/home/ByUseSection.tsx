@@ -4,7 +4,7 @@ import { BodyText2, SubH1, SubH2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
 
@@ -211,7 +211,7 @@ const ByUseSection = () => {
                     spaceBetween: 24,
                   },
                 }}
-                modules={[Pagination, Navigation]}
+                modules={[Pagination, Navigation, Mousewheel]}
                 navigation={{
                   prevEl: ".swiper-button-prev-useBySection",
                   nextEl: ".swiper-button-next-useBySection",
@@ -224,6 +224,12 @@ const ByUseSection = () => {
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 observer={true}
                 observeParents={true}
+                direction="horizontal"
+                mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
               >
                 {sliderData[active]?.content?.map((item, index) => (
                   <SwiperSlide key={`${active}-${index}`}>

@@ -11,15 +11,15 @@ type ProductListProps = {
   pdfTitle?: string;
 };
 
-const ProductList = ({ title, link, pdfLink, pdfTitle }: ProductListProps) => {
+const ProductList = ({ title, link, pdfLink }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
       className={clsxN(
-        "flex items-center justify-between border-b-2 p-4 border-transparent transition-all min-w-full lg:min-w-[628px] w-full md:w-auto",
+        "button-subtle-scale duration-800 flex items-center justify-between border-b-2 p-4 border-transparent min-w-full lg:min-w-[628px] w-full md:w-auto",
         isHovered
-          ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg"
+          ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg "
           : "bg-white border-gray-200"
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -29,7 +29,7 @@ const ProductList = ({ title, link, pdfLink, pdfTitle }: ProductListProps) => {
       <div className="flex flex-col">
         <BodyText1
           className={clsxN(
-            "text-lg font-medium transition-colors",
+            "text-lg font-medium  ",
             isHovered ? "text-white" : "text-gray-800"
           )}
         >
@@ -41,12 +41,12 @@ const ProductList = ({ title, link, pdfLink, pdfTitle }: ProductListProps) => {
             href={pdfLink}
             download
             className={clsxN(
-              "flex items-center space-x-1 text-sm md:hidden mt-1 transition-colors",
-              isHovered ? "text-white" : "text-gray-700"
+              "flex items-center space-x-1 text-sm md:hidden mt-1 ",
+              isHovered ? "text-white" : "text-gray-800"
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            {pdfTitle || "View TDS"}
+            {"View TDS"}
           </a>
         )}
       </div>
@@ -58,12 +58,12 @@ const ProductList = ({ title, link, pdfLink, pdfTitle }: ProductListProps) => {
             href={pdfLink}
             download
             className={clsxN(
-              "hidden md:flex items-center space-x-1 text-sm transition-colors cursor-pointer",
-              isHovered ? "text-white" : "text-gray-700"
+              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer ",
+              isHovered ? "text-white" : "text-gray-800"
             )}
           >
-            <span>{pdfTitle || "View TDS"}</span>
-            <div className="w-[20px] h-[20px] relative">
+            <span>{"View TDS"}</span>
+            <div className="w-[20px] h-[20px] relative ">
               <Image
                 src={
                   isHovered
@@ -79,12 +79,12 @@ const ProductList = ({ title, link, pdfLink, pdfTitle }: ProductListProps) => {
         {/* Redirect link */}
         {link && (
           <Link
-            href={"/products/" + link}
+            href={"/products" + link}
             className={clsxN(
-              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer transition-all",
+              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer",
               isHovered
                 ? "border-white text-white hover:text-orange-600"
-                : "border-orange-500 text-orange-500 hover:bg-orange-500"
+                : "border-orange-800 text-orange-800 hover:bg-orange-800"
             )}
           >
             <div className="w-[20px] h-[20px] relative">
