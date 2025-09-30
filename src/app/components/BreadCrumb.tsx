@@ -15,7 +15,7 @@ const BreadCrumb = ({ breadcrumbArr }: BreadCrumbProps) => {
   if (!breadcrumbArr) return null;
 
   return (
-    <div className="flex overflow-x-auto py-[37px]">
+    <div className="flex overflow-x-auto pb-[37px]">
       {breadcrumbArr.map((item, index, arr) => (
         <React.Fragment key={"breadcrumb_" + index}>
           <div

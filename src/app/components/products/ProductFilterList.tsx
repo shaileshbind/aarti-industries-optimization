@@ -6,128 +6,191 @@ import { BodyText1 } from "../Typography2";
 import ProductTabs from "./ProductTabs";
 import MobileFilter from "./MobileFilter";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 type SubCategory = {
-  id: string;
+  id: number;
   name: string;
+  products: Product[];
 };
-
 type Tab = {
-  id: string;
+  id: number;
   label: string;
   subCategories?: SubCategory[];
 };
-
 type Product = {
-  id: string;
+  id: number;
   title: string;
-  tdsLink: string;
-  redirectLink: string;
+  link: string;
+  pdfTitle: string;
+  pdfLink: string;
 };
 
-// Dummy Data
-const tabs: Tab[] = [
-  { id: "all", label: "All" },
-  {
-    id: "chemistry",
-    label: "By Chemistry",
-    subCategories: [
-      { id: "chlorination", name: "Chlorination" },
-      { id: "nitration", name: "Nitration" },
-      { id: "hydrogenation", name: "Hydrogenation" },
-      { id: "esterification", name: "Esterification" },
-    ],
-  },
-  {
-    id: "enduse",
-    label: "By End Use",
-    subCategories: [
-      { id: "pharma", name: "Pharmaceuticals" },
-      { id: "agro", name: "Agrochemicals" },
-    ],
-  },
-  {
-    id: "valuechain",
-    label: "By Value Chain",
-    subCategories: [
-      { id: "pharma", name: "Pharmaceuticals" },
-      { id: "agro", name: "Agrochemicals" },
-      { id: "polymers", name: "Polymers" },
-      { id: "dyes", name: "Dyes & Pigments" },
-      { id: "speciality", name: "Speciality Chemicals" },
-      { id: "others", name: "Others" },
-      { id: "intermediates", name: "Intermediates" },
-      { id: "solvents", name: "Solvents" },
-      { id: "aromatics", name: "Aromatics" },
-    ],
-  },
-];
+const sampleJsonData = {
+  categories: [
+    {
+      id: 1,
+      category: "All",
+      subcategories: [
+        {
+          id: 1,
+          subCategory: "Nitration",
+          products: [],
+        },
+      ],
+    },
+    {
+      id: 2,
+      category: "By chemistry",
+      subcategories: [
+        {
+          id: 2,
+          subCategory: "Chlorination",
+          products: [
+            {
+              id: 1,
+              title: "chem-C-Para Dichloro Benzene",
+              link: "/para-dichloro-benzene",
+              pdfTitle: "PDCB Datasheet",
+              pdfLink: "/pdfs/pdcb-datasheet.pdf",
+            },
+          ],
+        },
+        {
+          id: 3,
+          subCategory: "Nitration",
+          products: [
+            {
+              id: 2,
+              title: "chem-N-Nitro Benzene",
+              link: "/nitro-benzene",
+              pdfTitle: "NB Technical Sheet",
+              pdfLink: "/pdfs/nitro-benzene.pdf",
+            },
+          ],
+        },
+        {
+          id: 4,
+          subCategory: "Oxidation",
+          products: [
+            {
+              id: 3,
+              title: "chem-O-Maleic Anhydride",
+              link: "/maleic-anhydride",
+              pdfTitle: "MA Safety Sheet",
+              pdfLink: "/pdfs/maleic-anhydride.pdf",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 3,
+      category: "By End-Use",
+      subcategories: [
+        {
+          id: 5,
+          subCategory: "Agrochemicals",
+          products: [
+            {
+              id: 4,
+              title: "end-A-Herbicide Intermediate",
+              link: "/herbicide-intermediate",
+              pdfTitle: "Herbicide Tech Doc",
+              pdfLink: "/pdfs/herbicide-intermediate.pdf",
+            },
+          ],
+        },
+        {
+          id: 6,
+          subCategory: "Polymers",
+          products: [
+            {
+              id: 5,
+              title: "end-P-Styrene Monomer",
+              link: "/styrene-monomer",
+              pdfTitle: "Styrene Datasheet",
+              pdfLink: "/pdfs/styrene-monomer.pdf",
+            },
+          ],
+        },
+        {
+          id: 7,
+          subCategory: "Dyes",
+          products: [
+            {
+              id: 6,
+              title: "end-D-Azo Dye Intermediate",
+              link: "/azo-dye-intermediate",
+              pdfTitle: "Azo Dye Product Sheet",
+              pdfLink: "/pdfs/azo-dye.pdf",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 4,
+      category: "By Value Chain",
+      subcategories: [
+        {
+          id: 8,
+          subCategory: "Benzene Derivatives",
+          products: [
+            {
+              id: 7,
+              title: "value-B-Aniline",
+              link: "/aniline",
+              pdfTitle: "Aniline Datasheet",
+              pdfLink: "/pdfs/aniline.pdf",
+            },
+          ],
+        },
+        {
+          id: 9,
+          subCategory: "Di Chloro Benzene",
+          products: [
+            {
+              id: 8,
+              title: "value-D-1,2-Dichlorobenzene",
+              link: "/12-dichlorobenzene",
+              pdfTitle: "1,2-DCB Tech Sheet",
+              pdfLink: "/pdfs/12-dcb.pdf",
+            },
+          ],
+        },
+        {
+          id: 10,
+          subCategory: "Phenol Chain",
+          products: [
+            {
+              id: 9,
+              title: "value-P-Phenol",
+              link: "/phenol",
+              pdfTitle: "Phenol Datasheet",
+              pdfLink: "/pdfs/phenol.pdf",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
-const products: Product[] = [
-  {
-    id: "p1",
-    title: "Para Dichloro Benzene",
-    tdsLink: "#",
-    redirectLink: "para-dichloro-benzene",
-  },
-  {
-    id: "p2",
-    title: "1,2,3 Tri Chloro Benzene",
-    tdsLink: "#",
-    redirectLink: "para-dichloro-benzene",
-  },
-  {
-    id: "p3",
-    title: "6-Chloro-2,4-dinitroaniline",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p4",
-    title: "Ortho Dichloro Benzene",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p5",
-    title: "1,3,5 Tri Chloro Benzene",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p6",
-    title: "4-Chloro-2-methylphenol",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p7",
-    title: "4-Chloro-2-nitroaniline",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p8",
-    title: "1,3,5 Tri Chloro Benzene",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p9",
-    title: "4-Chloro-2-methylphenol",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-  {
-    id: "p10",
-    title: "4-Chloro-2-nitroaniline",
-    tdsLink: "#",
-    redirectLink: "#",
-  },
-];
+const categoryTabs: Tab[] = sampleJsonData.categories.map((item) => ({
+  id: item.id,
+  label: item.category,
+  subCategories: item.subcategories.map((sub) => ({
+    id: sub.id,
+    name: sub.subCategory,
+    products: sub.products,
+  })),
+}));
 
 const ProductFilterList: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
+
+  const [activeTab, setActiveTab] = useState<number>(categoryTabs[0].id);
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [desktop, setDesktop] = useState<boolean>(true);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
@@ -138,38 +201,49 @@ const ProductFilterList: React.FC = () => {
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
-
-  // store multi-selected subcategory ids for filtering
-  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
+  const [selectedSubCategories, setSelectedSubCategories] = useState<number[]>(
     []
   );
-  const toggleSubCategory = (id: string) => {
+  const toggleSubCategory = (id: number) => {
     setSelectedSubCategories((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const filteredProducts = categoryTabs.flatMap((tab) => {
+    if (activeTab === 1) {
+      return tab.subCategories?.flatMap((sub) => sub.products) || [];
+    }
+    if (tab.id === activeTab) {
+      return (
+        tab.subCategories?.flatMap((sub) => {
+          if (selectedSubCategories.length === 0) return sub.products;
+          return selectedSubCategories.includes(sub.id) ? sub.products : [];
+        }) || []
+      );
+    }
+    return [];
+  });
 
   return (
     <div className="w-full max-w-[85rem] mx-auto my-[60px] px-4">
       {/* Tabs */}
       <ProductTabs
-        tabs={tabs}
+        tabs={categoryTabs}
         activeId={activeTab}
         onChange={(id) => {
           setActiveTab(id);
-          setShowSubCategories(id !== "all");
+          setShowSubCategories(id !== 1);
+          setSelectedSubCategories([]);
         }}
       />
-
       {/* Subcategories */}
       <SmoothCollapseGSAP
         className="hidden md:block"
         isOpen={showSubCategories}
       >
         <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
-          {tabs
+          {categoryTabs
             .find((t) => t.id === activeTab)
             ?.subCategories?.map((sub) => {
               const selected = selectedSubCategories.includes(sub.id);
@@ -202,12 +276,9 @@ const ProductFilterList: React.FC = () => {
             })}
         </div>
       </SmoothCollapseGSAP>
-
       {/* Product List */}
-
       <div className="flex items-center justify-between mb-6 md:mt-10">
-        <BodyText1>All Results (345)</BodyText1>
-
+        <BodyText1>All Results ({filteredProducts.length})</BodyText1>
         {!desktop && showSubCategories && (
           <button
             className="flex gap-2 items-center"
@@ -219,11 +290,10 @@ const ProductFilterList: React.FC = () => {
             </div>
           </button>
         )}
-
         {!desktop && showMobileFilter && (
           <MobileFilter
             subCategories={
-              tabs.find((t) => t.id === activeTab)?.subCategories || []
+              categoryTabs.find((t) => t.id === activeTab)?.subCategories || []
             }
             selected={selectedSubCategories}
             onClose={() => setShowMobileFilter(false)}
@@ -233,106 +303,17 @@ const ProductFilterList: React.FC = () => {
           />
         )}
       </div>
-      <div className="flex flex-wrap gap-4 items-center justify-between">
-        {products.map((product, index) => {
-          const isHighlighted =
-            hoveredIndex === index || (hoveredIndex === null && index === 0);
-          return (
-            <div
-              key={product.id}
-              onMouseEnter={() => setHoveredIndex(index)}
-              className={clsx(
-                "flex items-center justify-between border-b-2 py-4 md:p-4 transition-colors duration-500 cursor-pointer lg:min-w-[628px] w-full md:w-auto",
-                isHighlighted && desktop
-                  ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] rounded-lg text-white border-transparent"
-                  : "bg-white hover:bg-orange-50 border-gray-200"
-              )}
-            >
-              <div className="flex flex-col">
-                {/* Title */}
-                <BodyText1
-                  className={clsx(
-                    "text-lg font-medium",
-                    isHighlighted && desktop ? "text-white" : "text-gray-800"
-                  )}
-                >
-                  {product.title}
-                </BodyText1>
-
-                <a
-                  href={product.tdsLink}
-                  download
-                  className={clsx(
-                    " items-center space-x-1 text-sm md:hidden flex mt-1",
-                    isHighlighted && desktop ? "text-white" : "text-gray-700"
-                  )}
-                >
-                  <span>View TDS</span>
-                </a>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center space-x-4">
-                <a
-                  href={product.tdsLink}
-                  download
-                  className={clsx(
-                    " items-center space-x-1 text-sm md:flex hidden",
-                    isHighlighted && desktop ? "text-white" : "text-gray-700"
-                  )}
-                >
-                  <span>View TDS</span>
-
-                  <div className="w-[20px] h-[20px] relative">
-                    {isHighlighted && desktop ? (
-                      <Image
-                        src="/images/download-icon-white.svg"
-                        alt="icon"
-                        fill
-                        className="w-[20px] h-[20px] "
-                      />
-                    ) : (
-                      <Image
-                        src="/images/download-icon-grey.svg"
-                        alt="icon"
-                        fill
-                        className="w-[20px] h-[20px] "
-                      />
-                    )}
-                  </div>
-                </a>
-
-                <a
-                  href={"/products/" + product.redirectLink}
-                  className={clsx(
-                    "w-8 h-8 flex items-center justify-center border rounded-[18px] transition",
-                    isHighlighted && desktop
-                      ? "border-white text-white hover:text-orange-600"
-                      : "border-orange-500 text-orange-500 hover:bg-orange-500"
-                  )}
-                >
-                  <div className="w-[20px] h-[20px] relative">
-                    {isHighlighted && desktop ? (
-                      <Image
-                        src="/images/arrow-up-right-w.svg"
-                        alt="icon"
-                        fill
-                        className="w-[20px] h-[20px] "
-                      />
-                    ) : (
-                      <Image
-                        src="/images/arrow-up-right-o.svg"
-                        alt="icon"
-                        fill
-                        className="w-[20px] h-[20px] "
-                      />
-                    )}
-                  </div>
-                </a>
-              </div>
-            </div>
-          );
-        })}
+      <div className="grid lg:grid-cols-2 gap-x-[64px] gap-y-[20px]">
+        {filteredProducts.map((product) => (
+          <div key={product.id} className="w-full">
+            <ProductList
+              title={product.title}
+              link={product.link}
+              pdfLink={product.pdfLink}
+              pdfTitle={product.pdfTitle}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

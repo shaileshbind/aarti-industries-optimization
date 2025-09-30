@@ -87,7 +87,7 @@ const Header = () => {
     return pathname === href || pathname.startsWith(href + "/");
   };
 
-  const handleDropdownToggle = (index:number) => {
+  const handleDropdownToggle = (index: number) => {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
@@ -205,23 +205,21 @@ const Header = () => {
                 aria-label="Toggle menu"
                 aria-expanded={isMenuOpen}
               >
-                <div className="w-6 h-4 relative flex flex-col justify-between">
+                <div className="w-6 h-6 relative">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`block h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen ? "rotate-45 translate-y-1.5" : "translate-y-0"
+                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
+                      isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
                     }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-blue-900 transition-all duration-200 ease-in-out ${
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-full bg-blue-900 transition-all duration-200 ease-in-out ${
                       isMenuOpen ? "opacity-0" : "opacity-100"
                     }`}
                   />
                   <span
-                    className={`block h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen
-                        ? "-rotate-45 -translate-y-1.5"
-                        : "translate-y-0"
+                    className={`absolute left-0 bottom-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
+                      isMenuOpen ? "-rotate-45 bottom-1/2 translate-y-1/2" : ""
                     }`}
                   />
                 </div>

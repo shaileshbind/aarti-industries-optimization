@@ -11,6 +11,7 @@ import {
   SubH3,
 } from "@/app/components/Typography2";
 import Image from "next/image";
+import Link from "next/link";
 
 const mockProductData: Record<string, ProductData> = {
   "para-dichloro-benzene": {
@@ -105,7 +106,7 @@ export default function ProductInnerPage({ params }: ProductPageProps) {
                 <SubH2 className="text-white pb-[18px]">Documents</SubH2>
                 <div className="grid grid-cols-3 gap-4 pb-[36px]">
                   {product.documents.tds && (
-                    <a
+                    <Link
                       href={product.documents.tds}
                       download
                       className="flex gap-4 items-center"
@@ -118,11 +119,11 @@ export default function ProductInnerPage({ params }: ProductPageProps) {
                           fill
                         />
                       </div>
-                    </a>
+                    </Link>
                   )}
 
                   {product.documents.sds && (
-                    <a
+                    <Link
                       href={product.documents.sds}
                       download
                       className="flex gap-4 items-center"
@@ -135,11 +136,11 @@ export default function ProductInnerPage({ params }: ProductPageProps) {
                           fill
                         />
                       </div>
-                    </a>
+                    </Link>
                   )}
 
                   {product.documents.rds && (
-                    <a
+                    <Link
                       href={product.documents.rds}
                       download
                       className="flex gap-4 items-center"
@@ -152,7 +153,7 @@ export default function ProductInnerPage({ params }: ProductPageProps) {
                           fill
                         />
                       </div>
-                    </a>
+                    </Link>
                   )}
                 </div>
                 <button className="py-[14px] px-[22px] bg-white text-center w-full rounded-[6px]">

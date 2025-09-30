@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import Tags from "./Tags";
+import Link from "next/link";
 
 // Static JSON data
 const footerData = {
@@ -249,7 +250,6 @@ const footerData = {
 };
 
 const Footer = () => {
- 
   return (
     <>
       {/* Desktop Footer */}
@@ -371,7 +371,7 @@ const Footer = () => {
                   <a
                     key={item.id}
                     href={item.link}
-                    className="block text-[14px] py-[5px] font-roboto font-normal text-[#585858]"
+                    className="block text-[14px] py-[5px] font-roboto font-normal text-[#585858] cursor-pointer"
                   >
                     {item.title}
                   </a>
@@ -389,7 +389,11 @@ const Footer = () => {
                 key={item.id}
                 className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-[50%] overflow-hidden"
               >
-                <a href={item.link} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src={item.image_desktop}
                     alt="icon"
@@ -397,7 +401,7 @@ const Footer = () => {
                     height={24}
                     className="w-[24px] h-[24px] rounded-[50%] object-contain"
                   />
-                </a>
+                </Link>
               </div>
             )
           )}
