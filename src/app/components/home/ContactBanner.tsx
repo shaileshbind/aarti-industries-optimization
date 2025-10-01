@@ -25,8 +25,8 @@ const ContactBanner = () => {
           </FadeInReveal>
           <FadeInReveal delay={0.2}>
             <Link href="#" target="_blank">
-              <div className="bg-white rounded-[6px] py-[14px] px-[22px] h-[47px] max-w-[125px] cursor-pointer relative z-10">
-                <Cta className="text-orange-200">Contact Us </Cta>
+              <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px] max-w-[125px] cursor-pointer relative z-10">
+                <Cta className="text-orange-200 ">Contact Us </Cta>
               </div>
             </Link>
           </FadeInReveal>

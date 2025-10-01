@@ -4,7 +4,7 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Scrollbar } from "swiper/modules";
+import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 
 const FrameworkForged = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -102,7 +102,7 @@ const FrameworkForged = () => {
 
           <div ref={containerRef} className="w-full">
             <Swiper
-              modules={[Navigation, Scrollbar]}
+              modules={[Navigation, Scrollbar, Mousewheel]}
               navigation={{
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
@@ -122,6 +122,12 @@ const FrameworkForged = () => {
                 },
               }}
               scrollbar={{ draggable: true }}
+              direction="horizontal"
+              mousewheel={{
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              }}
               className="framework-forged-swiper"
             >
               {frameworkData?.map((items, index) => {
@@ -144,7 +150,6 @@ const FrameworkForged = () => {
           <div className="mt-[40px]">
             <Button href="#" title="Partner With Us" />
           </div>
-          {/* <div className="framework-forged-swiper">d</div> */}
         </div>
         <div className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">
           <div
