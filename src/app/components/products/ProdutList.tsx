@@ -9,18 +9,19 @@ type ProductListProps = {
   link: string;
   pdfLink?: string;
   pdfTitle?: string;
+  secondary?: boolean;
 };
 
-const ProductList = ({ title, link, pdfLink }: ProductListProps) => {
+const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
       className={clsxN(
-        "button-subtle-scale duration-800 flex items-center justify-between border-b-2 p-4 border-transparent min-w-full lg:min-w-[628px] w-full md:w-auto",
+        "button-subtle-scale duration-800 flex items-center justify-between border-b-2 p-4 border-transparent min-w-full w-full md:w-auto",
         isHovered
-          ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg "
-          : "bg-white border-gray-200"
+          ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `
+          : `${secondary ? " border-gray-200" : "bg-white border-gray-200"} `
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -30,7 +31,7 @@ const ProductList = ({ title, link, pdfLink }: ProductListProps) => {
         <BodyText1
           className={clsxN(
             "text-lg font-medium  ",
-            isHovered ? "text-white" : "text-gray-800"
+            isHovered ? "text-white" : "text-blue-200"
           )}
         >
           {title}
@@ -62,7 +63,11 @@ const ProductList = ({ title, link, pdfLink }: ProductListProps) => {
               isHovered ? "text-white" : "text-gray-800"
             )}
           >
-            <span>{"View TDS"}</span>
+            <span
+              className={clsxN(isHovered ? "text-white" : "text-[#4d5861]")}
+            >
+              {"View TDS"}
+            </span>
             <div className="w-[20px] h-[20px] relative ">
               <Image
                 src={
