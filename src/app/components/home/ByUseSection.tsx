@@ -163,7 +163,7 @@ const ByUseSection = () => {
   };
 
   return (
-    <div className="overflow-hidden">
+    <div className="pt-[100px] lg:pt-[150px]  overflow-hidden ">
       {/* Tabs */}
       <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         <div className="flex overflow-x-auto whitespace-nowrap gap-x-6 lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
