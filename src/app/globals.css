@@ -24,6 +24,7 @@
   /* Brand colors */
   --orange-100: #f36633;
   --orange-200: #dc4c03;
+  --orange-300: #F77618;
 
   --blue-100: #10456a;
   --blue-200: #002f50;
@@ -57,6 +58,7 @@
 
   --color-orange-100: var(--orange-100);
   --color-orange-200: var(--orange-200);
+  --color-orange-300: var(--orange-300);
 
   --color-blue-100: var(--blue-100);
   --color-blue-200: var(--blue-200);
