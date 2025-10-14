@@ -232,6 +232,55 @@ body {
   margin-inline: 20px !important;
 }
 
+@layer utilities {
+
+  .scrollbar-style {
+    overflow-y: auto;  /* vertical scroll only */
+    overflow-x: hidden; /* hide horizontal scroll */
+  }
+
+  .scrollbar-style::-webkit-scrollbar {
+    width: 4px;        /* vertical scrollbar width */
+  }
+
+  .scrollbar-style::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-style::-webkit-scrollbar-thumb {
+    background-color: var(--grey-100);
+    border-radius: 9999px; /* rounded thumb */
+  }
+
+  .scrollbar-style:hover::-webkit-scrollbar-thumb {
+    background-color: var(--grey-200);
+  }
+}
+
+
+/* Simplified Swiper Section [Progress Bar] */
+.simplified-swiper-pagination .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+
+.simplified-swiper-pagination {
+  --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
+  --swiper-theme-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+  top: unset !important;
+}
+
+.simplified-swiper-pagination .swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color) !important;
+  height: 2px !important;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-inline: 20px !important;
+}
+
 /* Framework Forged Section [ Scrollbar ]  */
 .framework-forged-swiper .swiper-scrollbar {
   display: block !important;

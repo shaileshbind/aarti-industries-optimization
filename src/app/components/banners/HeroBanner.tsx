@@ -103,7 +103,7 @@ const HeroBanner = ({
 
   return (
     <div className="h-full lg:h-screen w-full relative overflow-hidden grid lg:grid-cols-[40%_1fr] gap-y-[40px] gap-x-[80px]">
-      <div className="px-[20px] lg:pl-[60px] lg:pr-[unset] pt-[80px] lg:pt-[unset] self-center">
+      <div className="px-[20px] lg:pl-[60px] lg:pr-[unset] pt-[50px] lg:pt-[unset] self-center">
         {tag && (
           <FadeInRevealBlur delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
