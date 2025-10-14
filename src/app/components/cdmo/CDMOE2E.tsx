@@ -9,6 +9,7 @@ import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import gsap from "gsap";
 import SwipeImage from "./SwipeImage";
 import { WordReveal } from "../ScrollReveal";
+import type { SwiperRef } from 'swiper/react';
 
 const CDMOE2E = () => {
   const [active, setActive] = useState(0);
@@ -17,7 +18,7 @@ const CDMOE2E = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
-  const swiperRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperRef | null>(null);
 
   const sliderData = [
     {
@@ -164,7 +165,7 @@ const CDMOE2E = () => {
   useEffect(() => {
     const currentImg = sliderData?.[active]?.content?.[activeIndex]?.img;
     if (currentImg) setActiveImg(currentImg);
-  }, [active, activeIndex]);
+  }, [active, activeIndex, sliderData]);
 
   const handleTabClick = (index: number) => {
     if (index === active || isTransitioning) return;
@@ -205,7 +206,7 @@ const CDMOE2E = () => {
               </H2>
             </WordReveal>
             <BodyText2 className="mt-4">
-              Whether it's a complex new molecule or optimising an existing
+              Whether it&apos;s a complex new molecule or optimising an existing
               process, our Contract Manufacturing and Research services
               (CDMO/CRAM) deliver speed, reliability and global compliance at
               every stage.
@@ -351,26 +352,6 @@ const CDMOE2E = () => {
         </div>
 
         {/* RIGHT SIDE – DYNAMIC IMAGE SECTION */}
-        {/* <div className="relative w-full h-[566px] lg:h-[566px] overflow-hidden rounded-[1rem] items-center justify-center hidden lg:flex">
-          {activeImg && <div className="absolute inset-0 overflow-hidden">
-            <Image
-              src={activeImg}
-              alt="active-img"
-              fill
-              className="object-cover scale-110"
-            />
-            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-            <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
-              <Image
-                src={activeImg}
-                alt="active-img"
-                fill
-                className="object-cover scale-110"
-              />
-            </span>
-          </div>
-          }
-        </div> */}
         <SwipeImage activeImg={activeImg} />
       </div>
     </div>
@@ -378,4 +359,3 @@ const CDMOE2E = () => {
 };
 
 export default CDMOE2E;
-

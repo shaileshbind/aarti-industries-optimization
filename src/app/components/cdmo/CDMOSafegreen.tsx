@@ -7,8 +7,8 @@ const CDMOSafegreen = () => {
     <section className='flex lg:flex-row flex-col justify-between lg:py-[100px] py-[50px] pl-[20px] lg:pl-[60px]'>
       <div className='w-full lg:w-[43%] flex flex-col items-start justify-center pr-[20px] lg:pr-0'>
         <H2>Safe. Green. Responsible.</H2>
-        <BodyText1 className='pt-3 pb-3'>At AIL, safety and sustainability aren't just commitments, but they're built into our DNA. Through Green Chemistry, ZLD-ready operations, and circular waste management, we protect our environment while delivering global standards.</BodyText1>
-        <BodyText1>Safety remains the foundation of everything we do. Our Besafe (full form) program, combined with HAZOP Protocols, behaviour safety training, huddles, and continuous monitoring, ensures the well-being of our people and communities.</BodyText1>
+        <BodyText1 className='pt-3 pb-3'>At AIL, safety and sustainability aren not just commitments, but they are built into our DNA. Through Green Chemistry, ZLD-ready operations, and circular waste management, we protect our environment while delivering global standards.</BodyText1>
+        <BodyText1>Safety remains the foundation of everything we do. Our Besafe full form program, combined with HAZOP Protocols, behaviour safety training, huddles, and continuous monitoring, ensures the well-being of our people and communities.</BodyText1>
       </div>
       <div className='w-full lg:w-1/2 pr-[20px] lg:pr-0 mt-10 lg:mt-0'>
         <div className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">

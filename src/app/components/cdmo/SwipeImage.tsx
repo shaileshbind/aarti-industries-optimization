@@ -57,7 +57,16 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             className="object-cover scale-110"
             priority
           />
-          {/* <div className="absolute inset-0 backdrop-blur-md" /> */}
+          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+          <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
+            <Image
+              src={prevImg}
+              alt="previous"
+              fill
+              className="object-cover scale-110"
+              priority
+            />
+          </span>
         </div>
       )}
 
@@ -71,7 +80,16 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             className="object-cover scale-110"
             priority
           />
-          {/* <div className="absolute inset-0 backdrop-blur-md" /> */}
+          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+             <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
+            <Image
+              src={activeImg}
+              alt="previous"
+              fill
+              className="object-cover scale-110"
+              priority
+            />
+          </span>
         </div>
       )}
     </div>
