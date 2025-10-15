@@ -5,6 +5,7 @@ import { BodyText1, BodyText2, H2, H3 } from "../Typography2";
 import Chip from "../cards/Chip";
 import FaqAccordion from "../FaqAccordian";
 import Image from "next/image";
+import { FadeInRevealBlur } from "../ScrollReveal";
 
 const RDDiverseChem = () => {
   const chemData = [
@@ -89,6 +90,7 @@ const RDDiverseChem = () => {
 
   return (
     <div className="pt-[150px] pb-[50px] lg:py-[100px] mx-[20px] lg:mx-[60px]">
+       <FadeInRevealBlur>
       <div className="w-full grid lg:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
         <div>
           <H2>Diverse Chemistries, Distinctive Solutions</H2>
@@ -103,6 +105,7 @@ const RDDiverseChem = () => {
           </BodyText1>
         </div>
       </div>
+      </FadeInRevealBlur>
       <div className="hidden lg:block">
         <div
           ref={gridRef}

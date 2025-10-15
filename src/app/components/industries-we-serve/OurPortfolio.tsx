@@ -1,6 +1,7 @@
 import React from "react";
 import { H2 } from "../Typography2";
 import TabsAutoplaySection from "../sections/TabsAutoplaySection";
+import { FadeInRevealBlur } from "../ScrollReveal";
 
 const OurPortfolio = () => {
   const rdSafetyData = [
@@ -89,7 +90,8 @@ const OurPortfolio = () => {
 
   return (
     <div className="my-[50px] lg:my-[100px]">
-      <H2 className="mx-[20px] lg:mx-[60px]">Our Diverse Industry Portfolio</H2>
+      <FadeInRevealBlur>
+      <H2 className="mx-[20px] lg:mx-[60px]">Our Diverse Industry Portfolio</H2></FadeInRevealBlur>
       <div className="mt-[50px]">
         <TabsAutoplaySection data={rdSafetyData} tabClass="!text-[16px]" starImgEffect />
       </div>

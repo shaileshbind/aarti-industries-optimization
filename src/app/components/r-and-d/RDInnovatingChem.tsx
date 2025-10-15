@@ -5,6 +5,7 @@ import Image from "next/image";
 import Tags from "../Tags";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FadeInRevealBlur } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 const RDInnovatingChem = () => {
@@ -73,10 +74,12 @@ const RDInnovatingChem = () => {
   }, []);
 
   return (
-    <div className="">
-      <H2 className="max-w-[600px] mx-[20px] lg:mx-[60px]">
-        Innovating Chemistry, Empowering Tomorrow
-      </H2>
+    <div>
+      <FadeInRevealBlur>
+        <H2 className="max-w-[600px] mx-[20px] lg:mx-[60px]">
+          Innovating Chemistry, Empowering Tomorrow
+        </H2>
+      </FadeInRevealBlur>
       <div className="mt-[50px] container mx-auto relative">
         {chemData?.map((items, index) => {
           return (
