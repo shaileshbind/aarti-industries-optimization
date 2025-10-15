@@ -194,7 +194,7 @@ useEffect(() => {
             className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[1fr_312px] gap-[6px]"
           >
             <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
-              <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
+              <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
                 <div className="rounded-[20px] overflow-hidden relative stat-box">
                   <Image
                     src="/images/home/chemical.png"
@@ -212,7 +212,7 @@ useEffect(() => {
                   <BodyText2>state-of-the-art R&D facilities</BodyText2>
                 </div>
               </div>
-              <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
+              <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
                 <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
                   <H2 className="text-orange-200">100+</H2>
                   <BodyText2>products</BodyText2>
@@ -231,7 +231,7 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-            <div className="relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
+            <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
               <Image
                 src="/images/rd/rd-info-banner.png"
                 alt="img"

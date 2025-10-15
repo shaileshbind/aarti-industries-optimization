@@ -12,13 +12,11 @@ const page = () => {
   return (
     <div>
       <RDHeroBanner />
-
       <RDInfo />
       <RDInnovatingChem />
       <RDAnalyticalExc />
       <RDDiverseChem />
       <RDSafety />
-
       <GloballyCertified
         title="Globally Certified"
         itemsData={[
