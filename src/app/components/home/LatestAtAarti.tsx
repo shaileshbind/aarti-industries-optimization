@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Pagination } from "swiper/modules";
 import Tabs from "../Tabs";
+import DateCard from "../cards/DateCard";
 
 const LatestAtAarti = () => {
   const [active, setActive] = useState(0);
@@ -31,14 +30,12 @@ const LatestAtAarti = () => {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 21, 2025",
-          label: "Lorem ipsum dolor sit amet consectetur.",
           desc: "Sit feugiat vel dictumst consectetur turpis.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 21, 2025",
-          label: "Lorem ipsum dolor sit amet consectetur.",
           desc: "Neque cras quis sit mattis fringilla.",
         },
       ],
@@ -51,28 +48,24 @@ const LatestAtAarti = () => {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 25, 2025",
-          label: "Driving innovation in speciality chemicals.",
           desc: "Exploring sustainable practices for future-ready industries.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 25, 2025",
-          label: "Leadership perspectives in research & development.",
           desc: "How R&D leaders shape the path to global competitiveness.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "May 25, 2025",
-          label: "The role of collaboration in science & technology.",
           desc: "Building stronger partnerships across industries.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "May 25, 2025",
-          label: "Sustainability in manufacturing.",
           desc: "Balancing growth with environmental responsibility.",
         },
       ],
@@ -85,28 +78,24 @@ const LatestAtAarti = () => {
           img: "/images/home/blog2.png",
           link: "#",
           date: "May 28, 2025",
-          label: "Company announces new sustainability targets.",
           desc: "Commitment to reduce carbon emissions by 30% by 2030.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "May 28, 2025",
-          label: "Expansion of manufacturing facilities in Asia.",
           desc: "Boosting capacity to meet growing global demand.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "May 28, 2025",
-          label: "Featured in international trade magazine.",
           desc: "Recognition for leadership in speciality chemicals.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "May 28, 2025",
-          label: "Community engagement initiatives.",
           desc: "Partnering with local schools and universities.",
         },
       ],
@@ -119,28 +108,24 @@ const LatestAtAarti = () => {
           img: "/images/home/blog4.png",
           link: "#",
           date: "June 01, 2025",
-          label: "Annual Sustainability Report 2025.",
           desc: "Detailed insights on progress towards global goals.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "June 01, 2025",
-          label: "Market Trends in Chemical Innovation.",
           desc: "Analysis of emerging technologies and applications.",
         },
         {
           img: "/images/home/blog4.png",
           link: "#",
           date: "June 01, 2025",
-          label: "Global Partnerships Report.",
           desc: "Strengthening collaborations across continents.",
         },
         {
           img: "/images/home/blog2.png",
           link: "#",
           date: "June 01, 2025",
-          label: "Research & Development Highlights.",
           desc: "Key projects and outcomes from the last year.",
         },
       ],
@@ -153,28 +138,24 @@ const LatestAtAarti = () => {
           img: "/images/home/blog3.png",
           link: "#",
           date: "June 05, 2025",
-          label: "Employee spotlight: 20 years of dedication.",
           desc: "Celebrating the journey of our long-standing team members.",
         },
         {
           img: "/images/home/blog3.png",
           link: "#",
           date: "June 05, 2025",
-          label: "Innovation from within.",
           desc: "How our employees contribute breakthrough ideas daily.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "June 05, 2025",
-          label: "Community outreach in rural areas.",
           desc: "Providing resources and support for local development.",
         },
         {
           img: "/images/home/blog1.png",
           link: "#",
           date: "June 05, 2025",
-          label: "Diversity and inclusion at AIL.",
           desc: "Fostering a culture of belonging across all teams.",
         },
       ],
@@ -219,22 +200,12 @@ const LatestAtAarti = () => {
           >
             {sliderData[active]?.content?.map((item, index) => (
               <SwiperSlide key={index}>
-                <Link href={item?.link} target="_blank">
-                  <div className="relative rounded-[10px] w-full h-[230px] overflow-hidden">
-                    <Image
-                      src={item?.img}
-                      alt="img"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="mt-[16px] font-roboto text-[14px] leading-[140%] font-normal text-orange-200">
-                    {item?.date}
-                  </div>
-                  <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
-                    {item?.desc}
-                  </div>
-                </Link>
+                <DateCard
+                  imageSrc={item?.img}
+                  date={item?.date}
+                  desc={item?.desc}
+                  link={item?.link}
+                />
               </SwiperSlide>
             ))}
           </Swiper>

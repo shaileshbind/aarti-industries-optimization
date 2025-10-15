@@ -4,9 +4,7 @@ import Accordion from "@mui/material/Accordion";
 import { SxProps, Theme } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
+import Image from "next/image";
 
 type FaqProps = {
   faqTitle: React.ReactNode;
@@ -15,8 +13,10 @@ type FaqProps = {
   handleChange: (event: React.SyntheticEvent, isExpanded: boolean) => void;
   showIcon?: boolean;
   className?: string;
+  classNameTitle?: string;
   plusMinusVariant?: boolean;
-  sx?:SxProps<Theme>;
+  sx?: SxProps<Theme>;
+  iconProp?:React.ReactNode;
 };
 
 const FaqAccordion = ({
@@ -26,7 +26,8 @@ const FaqAccordion = ({
   handleChange,
   showIcon = false,
   className,
-  plusMinusVariant,
+  iconProp,
+  classNameTitle,
   sx,
 }: FaqProps) => {
   return (
@@ -37,18 +38,23 @@ const FaqAccordion = ({
       sx={sx}
     >
       <AccordionSummary
-       expandIcon={
+        expandIcon={
           showIcon ? (
-            plusMinusVariant ? (
-              expanded ? <RemoveRoundedIcon htmlColor="#1152AD" /> : <AddRoundedIcon htmlColor="#1152AD" />
+            iconProp ? (
+              iconProp
             ) : (
-              <ExpandMoreIcon />
+              <Image
+                src="/images/accordian-down.svg"
+                alt="img"
+                width={28}
+                height={28}
+              />
             )
           ) : null
         }
         aria-controls="faq-content"
         id="faq-header"
-        className="!p-[0px]"
+        className={clsxN("!p-[0px]", classNameTitle)}
       >
         {faqTitle}
       </AccordionSummary>

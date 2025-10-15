@@ -30,13 +30,13 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ children, className }) => {
 
       gsap.from(splitText.words, {
         opacity: 0.2,
-        duration: 0.5,
+        duration: 1,
         stagger: 0.1,
         ease: "power2.in",
         scrollTrigger: {
           trigger: element,
-          start: "top 90%",
-          end: "bottom 90%",
+          start: "top 80%",
+          end: "bottom 80%",
           scrub: true,
         },
       });

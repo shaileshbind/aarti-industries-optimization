@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { BodyText2, SubH1, SubH2 } from "../Typography2";
+import { BodyText2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
+import TitleCard from "../cards/TitleCard";
 
 const ByUseSection = () => {
   const [active, setActive] = useState(0);
@@ -210,6 +211,14 @@ const ByUseSection = () => {
                     slidesPerView: 2.2,
                     spaceBetween: 24,
                   },
+                  1440: {
+                    slidesPerView: 2.6,
+                    spaceBetween: 24,
+                  },
+                  1740: {
+                    slidesPerView: 3.2,
+                    spaceBetween: 24,
+                  },
                 }}
                 modules={[Pagination, Navigation, Mousewheel]}
                 navigation={{
@@ -233,20 +242,7 @@ const ByUseSection = () => {
               >
                 {sliderData[active]?.content?.map((item, index) => (
                   <SwiperSlide key={`${active}-${index}`}>
-                    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[355px] bg-[#EFF3F5] mr-5 lg:mr-0">
-                      <SubH2 className="text-blue-200 py-[24px] px-[26px]">
-                        {item?.title}
-                      </SubH2>
-                      <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px]">
-                        <Image
-                          src={item?.img}
-                          alt={item?.title}
-                          fill
-                          className="rounded-b-[20px] object-cover object-top"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                      </div>
-                    </div>
+                    <TitleCard imageSrc={item?.img} title={item?.title} />
                   </SwiperSlide>
                 ))}
               </Swiper>
