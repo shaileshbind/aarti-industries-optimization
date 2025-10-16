@@ -1,6 +1,6 @@
 import React from 'react'
 import { FadeInRevealBlur } from '../ScrollReveal'
-import { BodyText2, Cta, H3 } from '../Typography2'
+import { BodyText2, H3 } from '../Typography2'
 import AnimatedText from '../AnimatedText'
 import Button from '../Button'
 

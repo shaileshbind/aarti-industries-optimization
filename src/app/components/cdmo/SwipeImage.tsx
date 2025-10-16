@@ -45,7 +45,7 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[566px] overflow-hidden rounded-[1rem]"
+      className="relative w-full h-[566px] overflow-hidden rounded-[1rem] hidden lg:block"
     >
       {/* Previous Image */}
       {prevImg && (
