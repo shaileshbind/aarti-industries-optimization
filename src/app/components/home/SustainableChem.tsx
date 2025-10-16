@@ -468,7 +468,7 @@ const SustainableChem = () => {
             >
               <i ref={susLogotl} className="absolute top-0 left-0">
                 <Image
-                  src="/images/home/sustainableIconTl.png"
+                  src="/images/home/sustainableIconTl.svg"
                   alt="logo"
                   width={99}
                   height={101}
@@ -477,7 +477,7 @@ const SustainableChem = () => {
               </i>
               <i ref={susLogotr} className="absolute top-0 right-0">
                 <Image
-                  src="/images/home/sustainableIconTr.png"
+                  src="/images/home/sustainableIconTr.svg"
                   alt="logo"
                   width={99}
                   height={101}
@@ -487,7 +487,7 @@ const SustainableChem = () => {
               </i>
               <i ref={susLogobl} className="absolute bottom-0 left-0">
                 <Image
-                  src="/images/home/sustainableIconBl.png"
+                  src="/images/home/sustainableIconBl.svg"
                   alt="logo"
                   width={99}
                   height={101}

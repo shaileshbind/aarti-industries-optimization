@@ -34,8 +34,8 @@ const FourtyYears = () => {
       const starLineTl = gsap.timeline({
         scrollTrigger: {
           trigger: bottomLineRef.current,
-          start: "top 85%",
-          end: "bottom 80%",
+          start: "top 80%",
+          end: "bottom 50%",
           scrub: true,
         },
       });

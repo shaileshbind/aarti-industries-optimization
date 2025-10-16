@@ -34,32 +34,26 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
           return (
             <div key={item?.id} className="flex gap-x-[12px] items-center">
               {item?.ctaTitle && (
-                <Cta className="hidden lg:block bg-transparent text-white">
+                <Cta className="bg-transparent text-white">
                   {item?.ctaTitle}
                 </Cta>
               )}
-              {item?.ctaLink && item?.ctaTitle && (
-                <Link
-                  href={item?.ctaLink}
-                  target="_blank"
-                  className="block lg:hidden"
-                >
-                  <Cta className="bg-transparent text-white underline underline-offset-[1px] [text-underline-position:under]">
-                    {item?.ctaTitle}
-                  </Cta>
-                </Link>
-              )}
+
               {item?.ctaLink && (
-                <Link
-                  href={item?.ctaLink}
-                  target="_blank"
-                  className="hidden lg:block"
-                >
+                <Link href={item?.ctaLink} target="_blank">
                   <Image
                     src="/images/arrow-white-top-r.svg"
                     alt="icon"
                     width={30}
                     height={30}
+                    className="hidden lg:block"
+                  />
+                  <Image
+                    src="/images/arrow-white-top-r.svg"
+                    alt="icon"
+                    width={24}
+                    height={24}
+                    className="block lg:hidden"
                   />
                 </Link>
               )}

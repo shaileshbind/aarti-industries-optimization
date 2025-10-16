@@ -130,69 +130,7 @@ const FosteringSafe = () => {
     }, []);
     return { isDesktop, mounted };
   };
-
-  // const { isDesktop, mounted } = useIsDesktop();
   const { isDesktop } = useIsDesktop();
-
-  // const generateMobileSwiperSlides = (imageArray: typeof images): Slide[] => {
-  //   const pattern = [2, 2, 2];
-  //   const slides: Slide[] = [];
-  //   let imageIndex = 0;
-  //   let patternIndex = 0;
-
-  //   const slideConfigs: SlideConfig[] = [
-  //     {
-  //       images: [
-  //         { marginTop: "mt-0", height: "h-[154px]" },
-  //         { marginTop: "mt-[4px]", height: "h-[135px]" },
-  //       ],
-  //     },
-  //     {
-  //       images: [
-  //         { marginTop: "mt-[32px]", height: "h-[122px]" },
-  //         { marginTop: "mt-[4px]", height: "h-[160px]" },
-  //       ],
-  //     },
-  //     {
-  //       images: [
-  //         { marginTop: "mt-0", height: "h-[136px]" },
-  //         { marginTop: "mt-[4px]", height: "h-[139px]" },
-  //       ],
-  //     },
-  //   ];
-  //   while (imageIndex < imageArray.length) {
-  //     const imagesInThisSlide = pattern[patternIndex];
-  //     const slideConfig = slideConfigs[patternIndex];
-  //     const slideImages: SlideImageData[] = [];
-
-  //     for (
-  //       let i = 0;
-  //       i < imagesInThisSlide && imageIndex < imageArray.length;
-  //       i++
-  //     ) {
-  //       slideImages.push({
-  //         src: imageArray[imageIndex].src,
-  //         alt: imageArray[imageIndex].alt,
-  //         config: slideConfig.images[i],
-  //         index: imageIndex,
-  //       });
-  //       imageIndex++;
-  //     }
-
-  //     if (slideImages.length > 0) {
-  //       slides.push({
-  //         id: slides.length,
-  //         images: slideImages,
-  //         patternIndex: patternIndex,
-  //       });
-  //     }
-
-  //     patternIndex = (patternIndex + 1) % pattern.length;
-  //   }
-  //   return slides;
-  // };
-
-  // if not enough images on mobile add one -
   const generateMobileSwiperSlides = (imageArray: typeof images): Slide[] => {
     const pattern = [2, 2, 2];
     const slides: Slide[] = [];
@@ -259,9 +197,7 @@ const FosteringSafe = () => {
 
     return slides;
   };
-
   const generateSwiperSlides = (imageArray: typeof images): Slide[] => {
-    // const pattern = [1, 2, 2, 2, 1];
     const pattern = [1, 2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -288,9 +224,6 @@ const FosteringSafe = () => {
           { marginTop: "mt-[6px]", height: "h-[193px]" },
         ],
       },
-      // {
-      //   images: [{ marginTop: "mt-[116px]", height: "h-[234px]" }],
-      // },
     ];
     while (imageIndex < imageArray.length) {
       const imagesInThisSlide = pattern[patternIndex];
@@ -323,7 +256,6 @@ const FosteringSafe = () => {
     }
     return slides;
   };
-
   const slidesToRender = isDesktop
     ? generateSwiperSlides(images)
     : generateMobileSwiperSlides(images);
@@ -341,7 +273,7 @@ const FosteringSafe = () => {
               alt={imageData.alt}
               className="swiper-lazy w-full h-full object-cover"
             />
-          </div>    
+          </div>
         ))}
       </SwiperSlide>
     );

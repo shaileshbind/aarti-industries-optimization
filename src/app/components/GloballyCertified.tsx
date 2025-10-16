@@ -15,11 +15,6 @@ type GloballyCertifiedProps = {
 };
 
 const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
-  // const globalData = [
-  //   { id: 0, title: "Ecovadis Gold Rating", src: "/images/award1.png" },
-  //   { id: 1, title: "CDP A rating", src: "/images/award2.png" },
-  //   { id: 2, title: "ISO 27001:2022", src: "/images/award3.png" },
-  // ];
   const containerRef = useRef<HTMLDivElement>(null);
   const [marqueeItems, setMarqueeItems] = useState(itemsData);
 
