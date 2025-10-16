@@ -3,11 +3,30 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BodyText2, H2, H3 } from "../Typography2";
+import { H3 } from "../Typography2";
+import NumberCard from "../cards/NumberCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const GlobalPartner: React.FC = () => {
+  const globalData = [
+    {
+      id: 0,
+      title: "40+",
+      desc: "years of speciality chemical expertise",
+    },
+    { id: 1, imageSrc: "/images/home/chemical.png" },
+    { id: 2, title: "20+", desc: "sectors being served" },
+    { id: 3, title: "2", desc: "state-of-the-art R&D facilities" },
+    {
+      id: 4,
+      title: "60+",
+      desc: "years of speciality chemical expertise",
+    },
+    { id: 5, title: "100+", desc: "products" },
+    { id: 6, imageSrc: "/images/home/blog1.png" },
+    { id: 7, title: "16", desc: "manufacturing facilities across India" },
+  ];
   const wrapperRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
 
@@ -72,7 +91,7 @@ const GlobalPartner: React.FC = () => {
         animationRef.current = null;
       }
     };
-  }, []); // Empty dependency array ensures this runs on every mount
+  }, []);
 
   return (
     <div className="container mx-auto my-[100px]">
@@ -94,50 +113,30 @@ const GlobalPartner: React.FC = () => {
         </div>
         <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
           <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">40+</H2>
-              <BodyText2>years of speciality chemical expertise</BodyText2>
-            </div>
-            <div className="rounded-[20px] overflow-hidden relative stat-box">
-              <Image
-                src="/images/home/chemical.png"
-                alt="img"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">20+</H2>
-              <BodyText2>sectors being served</BodyText2>
-            </div>
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">2</H2>
-              <BodyText2>state-of-the-art R&D facilities</BodyText2>
-            </div>
+            {globalData?.slice(0, 4)?.map((items) => {
+              return (
+                <NumberCard
+                  key={items?.id}
+                  title={items?.title}
+                  desc={items?.desc}
+                  imageSrc={items?.imageSrc}
+                  className="stat-box"
+                />
+              );
+            })}
           </div>
           <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">60+</H2>
-              <BodyText2>
-                countries served with a growing export footprint
-              </BodyText2>
-            </div>
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">100+</H2>
-              <BodyText2>products</BodyText2>
-            </div>
-            <div className="rounded-[20px] overflow-hidden relative stat-box">
-              <Image
-                src="/images/home/test-lab.png"
-                alt="img"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box">
-              <H2 className="text-orange-200">16</H2>
-              <BodyText2>manufacturing facilities across India</BodyText2>
-            </div>
+            {globalData?.slice(4, 8)?.map((items) => {
+              return (
+                <NumberCard
+                  key={items?.id}
+                  title={items?.title}
+                  desc={items?.desc}
+                  imageSrc={items?.imageSrc}
+                  className="stat-box"
+                />
+              );
+            })}
           </div>
         </div>
       </div>

@@ -9,22 +9,22 @@ import NumberCard from "../cards/NumberCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const RDInfo = () => {
+const GRInfo = () => {
   const RDInfoData = [
     {
       id: 0,
-      title: "2",
-      desc: "Advanced R&D Centres",
+      title: "3",
+      desc: "Globally, for >75% of the product portfolio",
     },
-    { id: 1, title: "250+", desc: "Scientists" },
-    { id: 2, title: "17", desc: "Patents Filed" },
-    {
-      id: 3,
-      title: "60+",
-      desc: "products in development",
-    },
+    { id: 1, title: "6", desc: "Manufacturing facilities" },
+    { id: 2, imageSrc: "/images/home/chemical.png" },
+    { id: 3, title: "5", desc: "star export house" },
     { id: 4, imageSrc: "/images/home/chemical.png" },
-    { id: 5, title: "60+", desc: "products in development" },
+    {
+      id: 5,
+      title: "2",
+      desc: "State-of-the-art R&D Centres",
+    },
   ];
   const wrapperRef = useRef(null);
   const topLineRef = useRef(null);
@@ -108,16 +108,18 @@ const RDInfo = () => {
         <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">
           <AnimatedText>
             <H3>
-              Aarti Industries innovative ecosystem is driven by two advanced
-              research centres in Navi Mumbai and Vapi, where scientists work at
-              the intersection of innovation, scale, and sustainability.
+              We supply world-class speciality chemicals to over 60 countries,
+              backed by strategically located manufacturing facilities and
+              advanced R&D capabilities. As part of a sector expected to grow to
+              over USD 1 trillion by 2030, our expanding global operations
+              position us at the heart of the specialty chemicals boom.
             </H3>
           </AnimatedText>
         </div>
         <div className="mt-[40px] lg:mt-[60px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
           <div
             ref={wrapperRefBox}
-            className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[1fr_312px] gap-[6px]"
+            className="w-full max-w-[750px] h-auto mx-auto"
           >
             <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
               <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
@@ -147,14 +149,6 @@ const RDInfo = () => {
                 })}
               </div>
             </div>
-            <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
-              <Image
-                src="/images/rd/rd-info-banner.png"
-                alt="img"
-                fill
-                className="object-cover"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -162,4 +156,4 @@ const RDInfo = () => {
   );
 };
 
-export default RDInfo;
+export default GRInfo;
