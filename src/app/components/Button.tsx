@@ -5,22 +5,23 @@ interface ButtonProps {
   title: string;
   href: string;
   secondary?: boolean;
+  className?: string;
 }
 
-const Button = ({ href, title, secondary }: ButtonProps) => {
+const Button = ({ href, title, secondary, className }: ButtonProps) => {
   return (
     <>
       {secondary ? (
         <>
           <Link href={href} target="_blank" className="w-fit">
-            <button className="animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]">
+            <button className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under] ${className}`}>
               {title}
             </button>
           </Link>
         </>
       ) : (
         <Link href={href} target="_blank" className="w-fit">
-          <button className="button-subtle-scale w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100% font-alte-hans">
+          <button className={`button-subtle-scale w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100% font-alte-hans ${className}`}>
             {title}
           </button>
         </Link>

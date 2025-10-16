@@ -12,6 +12,7 @@ import Button from "@/app/components/Button";
 import Link from "next/link";
 import ProductList from "@/app/components/products/ProdutList";
 import GloballyCertified from "@/app/components/GloballyCertified";
+import { FadeInReveal } from "@/app/components/ScrollReveal";
 
 const sampleData = {
   mainProduct: {
@@ -107,6 +108,7 @@ export default function ProductInnerPage() {
             },
           ]}
         />
+        <FadeInReveal>
         <div className="w-full grid lg:grid-cols-[40%_1fr] gap-x-[60px] gap-y-[40px]">
           <div>
             <H3>{sampleData?.mainProduct?.name}</H3>
@@ -214,6 +216,8 @@ export default function ProductInnerPage() {
             </div>
           </div>
         </div>
+        </FadeInReveal>
+        <FadeInReveal>
         <div className="mt-[70px] lg:mt-[120px] bg-grey-100  rounded-[14px] lg:rounded-[20px] p-5 lg:p-10 w-full">
           <SubH1 className="text-blue-100">Related Products</SubH1>
           <div className="mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] gap-y-[20px]">
@@ -231,8 +235,20 @@ export default function ProductInnerPage() {
             })}
           </div>
         </div>
+        </FadeInReveal>
       </div>
-      <GloballyCertified />
+      <GloballyCertified
+        title="Globally Certified"
+        itemsData={[
+          {
+            id: 0,
+            title: "Ecovadis Gold Rating",
+            imgSrc: "/images/award1.png",
+          },
+          { id: 1, title: "CDP A rating", imgSrc: "/images/award2.png" },
+          { id: 2, title: "ISO 27001:2022", imgSrc: "/images/award3.png" },
+        ]}
+      />
     </div>
   );
 }

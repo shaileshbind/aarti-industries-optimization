@@ -1,0 +1,175 @@
+'use client';
+import React, { useState, useRef } from "react";
+import Image from "next/image";
+import { H2, SubH2 } from "../Typography2";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css/pagination";
+import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import { WordReveal } from "../ScrollReveal";
+
+const SimplifiedSwiperSection = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
+
+  // Single data object without tabs
+  const sectionData = {
+    heading: "Speciality Chemicals That Powers Diverse Industry",
+    desc: "lorem ipsum",
+    btn: "Check Industries",
+    link: "#",
+    content: [
+      {
+        img: "/images/home/blog1.png",
+        link: "#",
+        date: "May 21, 2025",
+        title: "Pigments",
+        desc: "Tristique nulla sed hac donec nulla habitant facilisi.",
+      },
+      {
+        img: "/images/home/blog2.png",
+        link: "#",
+        date: "May 21, 2025",
+        title: "Dyes",
+        desc: "Urna at mi nunc sit cursus eu diam congue.",
+      },
+      {
+        img: "/images/home/blog3.png",
+        link: "#",
+        date: "May 21, 2025",
+        title: "Dyes & Pigments",
+        desc: "Sit feugiat vel dictumst consectetur turpis.",
+      },
+      {
+        img: "/images/home/blog4.png",
+        link: "#",
+        date: "May 21, 2025",
+        title: "Lorem ipsum",
+        desc: "Neque cras quis sit mattis fringilla.",
+      },
+      {
+        img: "/images/home/blog2.png",
+        link: "#",
+        date: "May 25, 2025",
+        title: "Leadership",
+        desc: "How R&D leaders shape the path to global competitiveness.",
+      },
+      {
+        img: "/images/home/blog3.png",
+        link: "#",
+        date: "May 25, 2025",
+        title: "The role",
+        desc: "Building stronger partnerships across industries.",
+      },
+    ],
+  };
+
+  return (
+    <div className="py-[50px] lg:py-[100px] overflow-hidden">
+      {/* Content Section */}
+      <div className="mt-[40px] lg:mt-[62px]">
+        <div className="flex flex-col w-full">
+          {/* Left Content - Contained */}
+          <WordReveal stagger={0.1} fromY={10} duration={3} className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[40%] w-full flex-shrink-0 mb-0 lg:mb-4">
+            <H2 className="text-blue-200">{sectionData.heading}</H2>
+          </WordReveal>
+          
+          {/* Right Swiper - Full Width to Edge */}
+          <div className="flex-1 min-w-0 mt-[22px] lg:mt-[0px] pl-[20px] lg:pl-[unset]">
+            <div className="relative">
+              <Swiper
+                ref={swiperRef}
+                spaceBetween={14}
+                slidesPerView={1.2}
+                breakpoints={{
+                  1024: {
+                    slidesPerView: 4.2,
+                    spaceBetween: 24,
+                    slidesOffsetBefore : 55,
+                  },
+                }}
+                modules={[Pagination, Navigation, Mousewheel]}
+                navigation={{
+                  prevEl: ".swiper-button-prev-simplified",
+                  nextEl: ".swiper-button-next-simplified",
+                }}
+                pagination={{
+                  el: ".simplified-swiper-pagination",
+                  type: "progressbar",
+                }}
+                className="w-full !pr-5 lg:!pr-0"
+                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                observer={true}
+                observeParents={true}
+                direction="horizontal"
+                mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
+              >
+                {sectionData.content?.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[355px] bg-[#EFF3F5] mr-5 lg:mr-0">
+                      <SubH2 className="text-blue-200 py-[24px] px-[26px]">
+                        {item?.title}
+                      </SubH2>
+                      <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px]">
+                        <Image
+                          src={item?.img}
+                          alt={item?.title}
+                          fill
+                          className="rounded-b-[20px] object-cover object-top"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              <div className="relative py-[30px]">
+                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                  <button
+                    className={`swiper-button-prev-simplified transition-opacity ${
+                      activeIndex > 0
+                        ? "cursor-pointer opacity-100"
+                        : "pointer-events-none opacity-30"
+                    }`}
+                    aria-label="Previous slide"
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Previous"
+                      width={34}
+                      height={34}
+                      className="rotate-180"
+                    />
+                  </button>
+                  <button
+                    className={`swiper-button-next-simplified transition-opacity ${
+                      activeIndex < sectionData.content?.length - 2
+                        ? "cursor-pointer opacity-100"
+                        : "pointer-events-none opacity-30"
+                    }`}
+                    aria-label="Next slide"
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Next"
+                      width={34}
+                      height={34}
+                    />
+                  </button>
+                </div>
+                <div className="simplified-swiper-pagination lg:!ml-14 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[75%]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SimplifiedSwiperSection;
