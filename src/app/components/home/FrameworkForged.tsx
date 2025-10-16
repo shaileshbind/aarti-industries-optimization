@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";

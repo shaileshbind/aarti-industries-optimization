@@ -1,4 +1,4 @@
-"use client";
+import { getPageData } from "@/_lib/pageData.fetch";
 import ByUseSection from "./components/home/ByUseSection";
 import ContactBanner from "./components/home/ContactBanner";
 import FosteringSafe from "./components/home/FosteringSafe";
@@ -9,18 +9,43 @@ import HomeHero from "./components/home/HomeHero";
 import LatestAtAarti from "./components/home/LatestAtAarti";
 import SustainableChem from "./components/home/SustainableChem";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getPageData("/pages/by-slug/home-page");
+
+  const {
+    sectionOne,
+    sectionTwo,
+    sectionThree,
+    sectionFour,
+    sectionFive,
+    sectionSix,
+    sectionSeven,
+    sectionEight,
+    sectionNine,
+    sectionTen,
+  } = data;
+
   return (
     <div>
-      <HomeHero />
-      <FourtyYears />
-      <GlobalPartner />
-      <SustainableChem/>
-      <ByUseSection />
-      <FosteringSafe />
-      <FrameworkForged />
-      <LatestAtAarti />
-      <ContactBanner />
+      {sectionOne && <HomeHero data={sectionOne} />}
+
+      {sectionTwo && <FourtyYears data={sectionTwo} />}
+
+      {sectionThree && <GlobalPartner data={sectionThree} />}
+
+      {sectionFour && <SustainableChem data={sectionFour} />}
+
+      {sectionFive && <ByUseSection data={sectionFive} />}
+
+      {sectionSix && <FosteringSafe data={sectionSix} />}
+
+      {sectionSeven && <FrameworkForged data={sectionSeven} />}
+
+      {sectionEight && <LatestAtAarti data={sectionEight} />}
+
+      {sectionNine && <ContactBanner data={sectionNine} />}
+
+      {sectionTen && <ContactBanner data={sectionTen} />}
     </div>
   );
 }

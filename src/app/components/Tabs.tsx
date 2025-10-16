@@ -1,3 +1,4 @@
+"use client"
 import React, { useLayoutEffect, useRef, useState } from "react";
 
 // Generic types with numeric IDs

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { BodyText1, H2 } from "../Typography2";
 import Button from "../Button";

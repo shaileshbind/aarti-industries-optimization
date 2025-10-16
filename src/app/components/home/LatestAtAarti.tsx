@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { H2 } from "../Typography2";
 import "swiper/css";
