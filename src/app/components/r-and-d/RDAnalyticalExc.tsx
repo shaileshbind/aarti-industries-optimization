@@ -143,7 +143,6 @@ const RDAnalyticalExc = () => {
           .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 1 })
           .fromTo(
             headinRight.current,
-            // { x: 100, y: 0 },
             { x: 0, y: 0 },
             { y: 150, duration: 1 },
             "<"
@@ -282,7 +281,6 @@ const RDAnalyticalExc = () => {
               height: "205px",
               left: "52%",
               top: "50%",
-
               y: "-50%",
               x: "-50%",
             },
@@ -397,7 +395,6 @@ const RDAnalyticalExc = () => {
                           : "pointer-events-none opacity-30"
                       }`}
                     />
-
                     <Image
                       src="/images/home/chevron-right-orange.svg"
                       alt="next"
@@ -412,13 +409,18 @@ const RDAnalyticalExc = () => {
                   </div>
                 </div>
               </div>
+              {/* Swiper section */}
               <Swiper
-                slidesPerView={1.2}
+                slidesPerView={
+                  typeof window !== "undefined" && window.innerWidth < 1024
+                    ? 1
+                    : 1.2
+                }
                 loop={false}
                 onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                 speed={800}
                 modules={[Navigation, Mousewheel]}
-                className="w-full "
+                className="w-full relative"
                 navigation={{
                   nextEl: ".swiper-button-next-analytical",
                   prevEl: ".swiper-button-prev-analytical",
@@ -431,7 +433,13 @@ const RDAnalyticalExc = () => {
               >
                 {slidesData?.map((slide) => (
                   <SwiperSlide key={slide?.id}>
-                    <div className="grid gap-12 items-center flex-shrink-0 rounded-lg">
+                    <div
+                      className={`grid gap-12 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                        active !== slide.id
+                          ? "lg:blur-sm lg:opacity-70"
+                          : "lg:blur-0 lg:opacity-100"
+                      }`}
+                    >
                       <div>
                         <SubH1 className="mt-[unset] lg:mt-[40px]">
                           {slide?.title}
@@ -469,6 +477,15 @@ const RDAnalyticalExc = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
+              {/* Mobile progress bar */}
+              <div className="block lg:hidden mt-9 w-full h-[2px] bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-orange-200 transition-all duration-500"
+                  style={{
+                    width: `${((active + 1) / slidesData.length) * 100}%`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
