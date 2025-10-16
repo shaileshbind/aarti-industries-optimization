@@ -68,23 +68,14 @@ const GlobalPartner: React.FC = () => {
         scrollTrigger: {
           trigger: wrapper,
           start: "top 85%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-          onRefresh: () => {
-            // Ensure elements are in correct state on refresh
-            const isInView = ScrollTrigger.isInViewport(wrapper, 0.15);
-
-            if (!isInView) {
-              gsap.set(statBoxes, { y: 80, opacity: 0 });
-            }
-          },
+          end: "top -50%",
+          toggleActions: "play none none reset",
         },
       });
     }, 100);
 
     return () => {
       clearTimeout(timer);
-      // Kill the specific animation and its ScrollTrigger
       if (animationRef.current) {
         animationRef.current.scrollTrigger?.kill();
         animationRef.current.kill();

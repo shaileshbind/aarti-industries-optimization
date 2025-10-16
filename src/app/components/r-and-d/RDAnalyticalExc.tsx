@@ -143,7 +143,6 @@ const RDAnalyticalExc = () => {
           .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 1 })
           .fromTo(
             headinRight.current,
-            // { x: 100, y: 0 },
             { x: 0, y: 0 },
             { y: 150, duration: 1 },
             "<"
@@ -282,7 +281,6 @@ const RDAnalyticalExc = () => {
               height: "205px",
               left: "52%",
               top: "50%",
-
               y: "-50%",
               x: "-50%",
             },
@@ -342,7 +340,7 @@ const RDAnalyticalExc = () => {
               className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%] "
             >
               <Image
-                src="/images/rd/ana-2.png"
+                src="/images/rd/ana-2.svg"
                 alt="img"
                 fill
                 className="object-cover"
@@ -356,7 +354,7 @@ const RDAnalyticalExc = () => {
       </div>
       <div
         ref={envSlider}
-        className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0"
+        className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
       >
         <div className="flex w-full h-screen relative flex-col justify-center">
           <div className="mx-[20px] lg:mx-[unset] mb-[70px] lg:mb-[unset] grid lg:grid-cols-[600px_1fr] lg:gap-x-[100px]">
@@ -397,7 +395,6 @@ const RDAnalyticalExc = () => {
                           : "pointer-events-none opacity-30"
                       }`}
                     />
-
                     <Image
                       src="/images/home/chevron-right-orange.svg"
                       alt="next"
@@ -412,13 +409,18 @@ const RDAnalyticalExc = () => {
                   </div>
                 </div>
               </div>
+              {/* Swiper section */}
               <Swiper
-                slidesPerView={1.2}
+                slidesPerView={
+                  typeof window !== "undefined" && window.innerWidth < 1024
+                    ? 1
+                    : 1.2
+                }
                 loop={false}
                 onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                 speed={800}
                 modules={[Navigation, Mousewheel]}
-                className="w-full "
+                className="w-full relative"
                 navigation={{
                   nextEl: ".swiper-button-next-analytical",
                   prevEl: ".swiper-button-prev-analytical",
@@ -431,9 +433,17 @@ const RDAnalyticalExc = () => {
               >
                 {slidesData?.map((slide) => (
                   <SwiperSlide key={slide?.id}>
-                    <div className="grid gap-12 items-center flex-shrink-0 rounded-lg">
+                    <div
+                      className={`grid gap-12 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                        active !== slide.id
+                          ? "lg:blur-sm lg:opacity-70"
+                          : "lg:blur-0 lg:opacity-100"
+                      }`}
+                    >
                       <div>
-                        <SubH1 className="mt-[40px]">{slide?.title}</SubH1>
+                        <SubH1 className="mt-[unset] lg:mt-[40px]">
+                          {slide?.title}
+                        </SubH1>
                         <BodyText2 className="mt-[8px]">
                           {slide?.description}
                         </BodyText2>
@@ -467,6 +477,15 @@ const RDAnalyticalExc = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
+              {/* Mobile progress bar */}
+              <div className="block lg:hidden mt-9 w-full h-[2px] bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-orange-200 transition-all duration-500"
+                  style={{
+                    width: `${((active + 1) / slidesData.length) * 100}%`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
