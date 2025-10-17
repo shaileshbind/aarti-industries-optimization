@@ -95,7 +95,10 @@ const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
 
             {ctaButton?.title && (
               <div className="my-[36px]">
-                <Button title={ctaButton?.title} href={ctaButton?.link} />
+                <Button
+                  title={ctaButton?.title}
+                  href={ctaButton?.link || "#"}
+                />
                 {/* </FadeInReveal> */}
               </div>
             )}

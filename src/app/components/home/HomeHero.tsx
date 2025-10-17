@@ -278,7 +278,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
 
                       {items?.card?.[0]?.ctaButton?.title && (
                         <Button
-                          href={items?.card?.[0]?.ctaButton?.link}
+                          href={items?.card?.[0]?.ctaButton?.link || "#"}
                           title={items?.card?.[0]?.ctaButton?.title}
                         />
                       )}

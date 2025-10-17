@@ -23,7 +23,7 @@ export async function getPageData(slug: string) {
   } catch (error: unknown) {
     // Handle fetch error
     if (error instanceof Error) {
-      throw new Error(`Failed to fetch page data: ${error.message}`);
+      throw new Error(`Failed to fetch page data: ${error?.message}`);
     }
   }
 }

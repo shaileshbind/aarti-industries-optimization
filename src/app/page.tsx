@@ -37,13 +37,11 @@ export default async function Home() {
 
       {sectionFive && <ByUseSection data={sectionFive} />}
 
-      {sectionSix && <FosteringSafe data={sectionSix} />}
+      {sectionSix && <FosteringSafe data={sectionSix} imgArr={sectionSeven} />}
 
-      {sectionSeven && <FrameworkForged data={sectionSeven} />}
+      {sectionEight && <FrameworkForged data={sectionEight} />}
 
-      {sectionEight && <LatestAtAarti data={sectionEight} />}
-
-      {sectionNine && <ContactBanner data={sectionNine} />}
+      {sectionNine && <LatestAtAarti data={sectionNine} />}
 
       {sectionTen && <ContactBanner data={sectionTen} />}
     </div>
