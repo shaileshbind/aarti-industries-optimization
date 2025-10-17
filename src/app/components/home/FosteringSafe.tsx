@@ -47,8 +47,6 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
     }, []);
     return { isDesktop, mounted };
   };
-
-  // const { isDesktop, mounted } = useIsDesktop();
   const { isDesktop } = useIsDesktop();
 
   // if not enough images on mobile add one -
@@ -118,9 +116,7 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
 
     return slides;
   };
-
   const generateSwiperSlides = (imageArray: typeof images): Slide[] => {
-    // const pattern = [1, 2, 2, 2, 1];
     const pattern = [1, 2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -147,9 +143,6 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
           { marginTop: "mt-[6px]", height: "h-[193px]" },
         ],
       },
-      // {
-      //   images: [{ marginTop: "mt-[116px]", height: "h-[234px]" }],
-      // },
     ];
     while (imageIndex < imageArray?.length) {
       const imagesInThisSlide = pattern[patternIndex];
@@ -182,7 +175,6 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
     }
     return slides;
   };
-
   const slidesToRender = isDesktop
     ? generateSwiperSlides(imgArr?.images)
     : generateMobileSwiperSlides(imgArr?.images);

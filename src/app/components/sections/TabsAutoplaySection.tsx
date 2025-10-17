@@ -42,7 +42,7 @@ const TabsAutoplaySection = ({
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     setProgress(0);
 
-    const duration = 5000;
+    const duration = 8000;
     const startTime = performance.now();
 
     const animate = (time: number) => {
@@ -55,6 +55,7 @@ const TabsAutoplaySection = ({
       } else {
         const nextIndex = (index + 1) % data.length;
         setActive(nextIndex);
+        setExpanded(`panel${nextIndex}`);
         if (swiperRef.current) swiperRef.current.slideToLoop(nextIndex);
         startProgress(nextIndex);
       }
@@ -87,7 +88,12 @@ const TabsAutoplaySection = ({
 
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
+      const panelIndex = parseInt(panel.replace('panel', ''));
+      if (isExpanded) {
+        setActive(panelIndex);
+        setExpanded(panel);
+        startProgress(panelIndex);
+      }
     };
 
   return (
@@ -201,70 +207,80 @@ const TabsAutoplaySection = ({
       {/* Mobile Accordion */}
       <div className="block lg:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
         {data.map((item, index) => (
-          <FaqAccordion
-            key={index}
-            faqTitle={
-              <SubH1
-                className={
-                  expanded === `panel${index}`
-                    ? "text-orange-100"
-                    : "text-gray-300"
-                }
-              >
-                {item.title}
-              </SubH1>
-            }
-            faqContent={
-              <div className="mt-[20px] mb-[30px]">
-                <div className="relative w-full h-[200px] rounded-[14px] overflow-hidden">
-                  {item.src && (
-                    <>
-                      {starImgEffect ? (
-                        <div
-                          className={`absolute right-0 top-0 w-full h-[200px] rounded-[14px] overflow-hidden `}
-                        >
+          <div key={index} className="relative">
+            <FaqAccordion
+              faqTitle={
+                <SubH1
+                  className={
+                    expanded === `panel${index}`
+                      ? "text-orange-100"
+                      : "text-gray-300"
+                  }
+                >
+                  {item.title}
+                </SubH1>
+              }
+              faqContent={
+                <div className="mt-[20px] mb-[30px]">
+                  <div className="relative w-full h-[200px] rounded-[14px] overflow-hidden">
+                    {item.src && (
+                      <>
+                        {starImgEffect ? (
+                          <div
+                            className={`absolute right-0 top-0 w-full h-[200px] rounded-[14px] overflow-hidden `}
+                          >
+                            <Image
+                              src={item?.src}
+                              alt="img"
+                              fill
+                              className="absolute object-cover opacity-40 "
+                            />
+                            <Image
+                              src={item?.src}
+                              alt="img"
+                              width={500}
+                              height={200}
+                              className="absolute object-cover h-[calc(100%-39px)] w-[calc(100%-66px)]"
+                            />
+                            <Image
+                              src="/images/home/star-white.svg"
+                              alt="img"
+                              width={36}
+                              height={36}
+                              className="absolute bottom-[22px] z-10 right-[48px] w-[36px] "
+                            />
+                            <div className="absolute min-h-screen bg-white w-[1px] right-[66px]" />
+                            <div className="absolute w-full bg-white bottom-[39px] h-[1px]" />
+                          </div>
+                        ) : (
                           <Image
                             src={item?.src}
                             alt="img"
                             fill
-                            className="absolute object-cover opacity-40 "
+                            className="object-cover object-top"
                           />
-                          <Image
-                            src={item?.src}
-                            alt="img"
-                            width={500}
-                            height={200}
-                            className="absolute object-cover h-[calc(100%-39px)] w-[calc(100%-66px)]"
-                          />
-                          <Image
-                            src="/images/home/star-white.svg"
-                            alt="img"
-                            width={36}
-                            height={36}
-                            className="absolute bottom-[22px] z-10 right-[48px] w-[36px] "
-                          />
-                          <div className="absolute min-h-screen bg-white w-[1px] right-[66px]" />
-                          <div className="absolute w-full bg-white bottom-[39px] h-[1px]" />
-                        </div>
-                      ) : (
-                        <Image
-                          src={item?.src}
-                          alt="img"
-                          fill
-                          className="object-cover object-top"
-                        />
-                      )}
-                    </>
-                  )}
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <SubH2 className="mt-[14px]">{item.heading}</SubH2>
+                  <BodyText2 className="mt-[10px]">{item?.desc}</BodyText2>
                 </div>
-                <SubH2 className="mt-[14px]">{item.heading}</SubH2>
-                <BodyText2 className="mt-[10px]">{item?.desc}</BodyText2>
-              </div>
-            }
-            showIcon
-            expanded={expanded === `panel${index}`}
-            handleChange={handleChange(`panel${index}`)}
-          />
+              }
+              showIcon
+              expanded={expanded === `panel${index}`}
+              handleChange={handleChange(`panel${index}`)}
+            />
+            {/* Grey line */}
+            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />          
+            {/* Orange progress bar only for active accordion */}
+            {index === active && (
+              <div
+                className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                style={{ width: `${progress}%` }}
+              />
+            )}
+          </div>
         ))}
       </div>
     </>
