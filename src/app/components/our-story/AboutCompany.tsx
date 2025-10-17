@@ -6,14 +6,14 @@ import Button from '../Button'
 
 function AboutCompany() {
     return (
-        <section className='fluid-container flex justify-between my-[50px] lg:my-[100px]'>
+        <section className='fluid-container flex flex-col lg:flex-row justify-between my-[50px] lg:my-[100px]'>
             <FadeInRevealBlur delay={0.1}>
                 <BodyText2 className="font-alte-hans capitalize">
                     About Company
                 </BodyText2>
             </FadeInRevealBlur>
 
-            <div className='w-[65%]'>
+            <div className='w-full lg:w-[65%] mt-5 lg:mt-0'>
                 <AnimatedText>
                     <H3>Aarti Industries (AIL) has built a 40-year legacy of innovation, partnerships, and global reach. We have grown into a strategic partner of choice for global leaders in speciality chemicals, agrochemicals, pharmaceuticals, polymers, plasticisers, additives, and energy, highlighting the growth of India speciality chemical industry.</H3>
                 </AnimatedText>
