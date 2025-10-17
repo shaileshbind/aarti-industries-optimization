@@ -62,9 +62,9 @@ export default function MainTimeline({
   useEffect(() => {
     dotRefs.current.forEach((dot, year) => {
       if (year === activeYear) {
-        gsap.to(dot, { scale: 1.2, backgroundColor: "#F36633", duration: 0.3 });
+        gsap.to(dot, { scale: 1.2, duration: 0.3 });
       } else {
-        gsap.to(dot, { scale: 1, backgroundColor: "#94a3b8", duration: 0.3 });
+        gsap.to(dot, { scale: 1, duration: 0.3 });
       }
     });
   }, [activeYear]);
@@ -143,8 +143,14 @@ export default function MainTimeline({
                   if (el) dotRefs.current.set(year, el);
                 }}
                 onClick={() => handleYearClick(year)}
-                className="relative z-10 w-3 h-3 rounded-full bg-slate-400 cursor-pointer"
+                className={`relative transition-all duration-300 z-10 w-1.5 h-1.5 rounded-full cursor-pointer bg-gray-200 `}
               >
+                <div
+                      className={`absolute inset-0 h-3 w-3 top-[-10] !z-50 left-[-9] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
+                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
+                    `}
+                      style={{ backgroundImage: "url('/images/star-orange.svg')" }}
+                    ></div>
                 <BodyText3
                   className={`absolute top-6 left-1/2 transform -translate-x-1/2 text-xs whitespace-nowrap ${activeYear === year ? "text-orange-600 font-medium" : "text-gray-600"
                     }`}
@@ -168,7 +174,7 @@ export default function MainTimeline({
                 if (el) phaseRefs.current[i] = el;
               }}
               onClick={() => handlePhaseClick(i)}
-              className={`flex flex-col items-center justify-center relative cursor-pointer transition-all duration-500 ${activePhase === i ? " text-gray-900" : " text-gray-400"
+              className={`flex flex-col items-center ml-1 justify-center relative cursor-pointer transition-all duration-500 ${activePhase === i ? " text-gray-900" : " text-gray-400"
                 }`}
             >
               <BodyText3
@@ -181,13 +187,16 @@ export default function MainTimeline({
               <div
                 className={`relative w-full flex justify-between items-center 
                 ${i === 0
-                    ? "pr-7"
-                    : i === phases.length - 1
-                      ? "pl-7"
-                      : "px-7"
-                  }`}
+                    ? "pr-0"
+                    // : i === phases.length - 1
+                    //   ? "pl-7"
+                    : "pl-14"
+                  } ${activePhase === i ? "!pl-0" : "z-10"}
+                    ${activePhase > 0 && activePhase === i + 1 ? "!pr-14" : "z-10"}
+                  `}
               >
-                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300 -translate-y-1/2" />
+                <div className={`absolute top-1/2 left-0 right-0 h-[1px] -translate-y-1/2 ${activePhase === i ? " bg-slate-400/80" : " bg-gray-200"
+                  } `} />
 
                 {phase.years.map((year) => (
                   <div
@@ -200,8 +209,17 @@ export default function MainTimeline({
                       handlePhaseClick(i);
                       handleYearClick(year);
                     }}
-                    className="relative z-10 w-2.5 h-2.5 rounded-full bg-slate-400 cursor-pointer"
+                    className={`relative z-30 w-1.5 h-1.5 bg-amber-500 rounded-full cursor-pointer transition-all duration-300
+                      ${activePhase === i ? activeYear === year?"!bg-transparent":"bg-gray-400" : "bg-gray-200/80"}
+                    `}
                   >
+                    
+                    <div
+                      className={`absolute inset-0 h-3 w-3 top-[-10] !z-50 left-[-9] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
+                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
+                    `}
+                      style={{ backgroundImage: "url('/images/star-orange.svg')" }}
+                    ></div>
                     {/* YEAR LABEL: smooth fade */}
                     <BodyText3
                       className={
@@ -210,10 +228,11 @@ export default function MainTimeline({
                         (activePhase === i
                           ? "opacity-100 translate-y-0 pointer-events-auto"
                           : "opacity-0 translate-y-2 pointer-events-none") +
-                        (activeYear === year ? " text-orange-100" : " text-[##8B97AF")
+                        (activeYear === year ? " text-orange-100" : " text-[#8B97AF")
                       }
                     >
                       {year}
+                      <span className="absolute left-0 bottom-0  w-full h-[50px] cursor-pointer "></span>
                     </BodyText3>
                   </div>
                 ))}
