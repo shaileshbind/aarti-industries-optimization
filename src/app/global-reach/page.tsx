@@ -3,12 +3,14 @@ import GRBanner from "../components/global-reach/GRBanner";
 import GRInfo from "../components/global-reach/GRInfo";
 import GloballyCertified from "../components/GloballyCertified";
 import GRExplore from "../components/global-reach/GRExp";
+import GRMaps from "../components/global-reach/GRMaps";
 
 const page = () => {
   return (
     <div>
       <GRBanner />
       <GRInfo />
+      <GRMaps/>
       <GloballyCertified
         title="Globally Certified"
         itemsData={[
