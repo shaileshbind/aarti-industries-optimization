@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { H2, SubH2 } from "../Typography2";
@@ -7,62 +7,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { WordReveal } from "../ScrollReveal";
+import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 
-const SimplifiedSwiperSection = () => {
+const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
+  const { sectionTitle, cards } = data;
+
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
-
-  // Single data object without tabs
-  const sectionData = {
-    heading: "Speciality Chemicals That Powers Diverse Industry",
-    desc: "lorem ipsum",
-    btn: "Check Industries",
-    link: "#",
-    content: [
-      {
-        img: "/images/home/blog1.png",
-        link: "#",
-        date: "May 21, 2025",
-        title: "Pigments",
-        desc: "Tristique nulla sed hac donec nulla habitant facilisi.",
-      },
-      {
-        img: "/images/home/blog2.png",
-        link: "#",
-        date: "May 21, 2025",
-        title: "Dyes",
-        desc: "Urna at mi nunc sit cursus eu diam congue.",
-      },
-      {
-        img: "/images/home/blog3.png",
-        link: "#",
-        date: "May 21, 2025",
-        title: "Dyes & Pigments",
-        desc: "Sit feugiat vel dictumst consectetur turpis.",
-      },
-      {
-        img: "/images/home/blog4.png",
-        link: "#",
-        date: "May 21, 2025",
-        title: "Lorem ipsum",
-        desc: "Neque cras quis sit mattis fringilla.",
-      },
-      {
-        img: "/images/home/blog2.png",
-        link: "#",
-        date: "May 25, 2025",
-        title: "Leadership",
-        desc: "How R&D leaders shape the path to global competitiveness.",
-      },
-      {
-        img: "/images/home/blog3.png",
-        link: "#",
-        date: "May 25, 2025",
-        title: "The role",
-        desc: "Building stronger partnerships across industries.",
-      },
-    ],
-  };
 
   return (
     <div className="py-[50px] lg:py-[100px] overflow-hidden">
@@ -70,10 +21,17 @@ const SimplifiedSwiperSection = () => {
       <div className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col w-full">
           {/* Left Content - Contained */}
-          <WordReveal stagger={0.1} fromY={10} duration={3} className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[40%] w-full flex-shrink-0 mb-0 lg:mb-4">
-            <H2 className="text-blue-200">{sectionData.heading}</H2>
-          </WordReveal>
-          
+          {sectionTitle && (
+            <WordReveal
+              stagger={0.1}
+              fromY={10}
+              duration={3}
+              className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[40%] w-full flex-shrink-0 mb-0 lg:mb-4"
+            >
+              <H2 className="text-blue-200">{sectionTitle}</H2>
+            </WordReveal>
+          )}
+
           {/* Right Swiper - Full Width to Edge */}
           <div className="flex-1 min-w-0 mt-[22px] lg:mt-[0px] pl-[20px] lg:pl-[unset]">
             <div className="relative">
@@ -85,7 +43,7 @@ const SimplifiedSwiperSection = () => {
                   1024: {
                     slidesPerView: 4.2,
                     spaceBetween: 24,
-                    slidesOffsetBefore : 55,
+                    slidesOffsetBefore: 55,
                   },
                 }}
                 modules={[Pagination, Navigation, Mousewheel]}
@@ -108,24 +66,28 @@ const SimplifiedSwiperSection = () => {
                   releaseOnEdges: true,
                 }}
               >
-                {sectionData.content?.map((item, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[355px] bg-[#EFF3F5] mr-5 lg:mr-0">
-                      <SubH2 className="text-blue-200 py-[24px] px-[26px]">
-                        {item?.title}
-                      </SubH2>
-                      <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px]">
-                        <Image
-                          src={item?.img}
-                          alt={item?.title}
-                          fill
-                          className="rounded-b-[20px] object-cover object-top"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
+                {cards?.length > 0 &&
+                  cards?.map((item, index) => (
+                    <SwiperSlide key={index}>
+                      <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
+                        <SubH2 className="text-blue-200 py-[24px] px-[26px]">
+                          {item?.title}
+                        </SubH2>
+
+                        {item?.image?.url && (
+                          <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px]">
+                            <Image
+                              src={item?.image?.url}
+                              alt={item?.image?.alternativeText || item?.title}
+                              fill
+                              className="rounded-b-[20px] object-cover object-top"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
+                    </SwiperSlide>
+                  ))}
               </Swiper>
 
               <div className="relative py-[30px]">
@@ -148,7 +110,7 @@ const SimplifiedSwiperSection = () => {
                   </button>
                   <button
                     className={`swiper-button-next-simplified transition-opacity ${
-                      activeIndex < sectionData.content?.length - 2
+                      activeIndex < cards?.length - 2
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
                     }`}
