@@ -319,3 +319,54 @@ body {
   background-color: #e6e6e6;
   border-radius: 10px;
 }
+
+
+/* Who we are - chem creates  [Progress Bar] */
+.whoweare-chem-creates-swiper {
+  position: relative;
+  padding-bottom: 40px !important;
+}
+.whoweare-chem-creates-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.whoweare-chem-creates-swiper .swiper-pagination-progressbar {
+  background: #e6e6e6 !important;
+  height: 2px !important;
+  border-radius: 10px;
+  top: auto !important;
+  bottom: 0 !important;
+}
+@media (min-width: 1024px) {
+  /* Hide progress bar on desktop */
+  .whoweare-chem-creates-swiper .swiper-pagination-progressbar {
+    display: none !important;
+  }
+  .whoweare-chem-creates-swiper {
+    padding-bottom: 0 !important;
+  }
+}
+
+
+
+/* Who we are - awards section [Progress Bar] */
+.awards-section-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.awards-section-swiper {
+  --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
+  --swiper-theme-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+  top: unset !important;
+}
+.awards-section-swiper .swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color) !important;
+  height: 2px !important;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-inline: 20px !important;
+}
