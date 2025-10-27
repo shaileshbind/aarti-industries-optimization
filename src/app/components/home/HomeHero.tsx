@@ -10,8 +10,9 @@ import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
+import { HomeHeroProps } from "@/app/types/home.type";
 
-const HomeHero = () => {
+const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const [, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -134,64 +135,6 @@ const HomeHero = () => {
       );
   }, []);
 
-  const sliderData = [
-    {
-      id: 0,
-      title: "Sustainability",
-      src: "/images/home/hero-banner1.png",
-      mobSrc: "/images/home/mob-hero-banner1.png",
-      alt: "img",
-      heading: "Sustainable, Responsible, Value Driven",
-      desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
-      btnTitle: "Sustainability in Action",
-      btnLink: "#",
-    },
-    {
-      id: 1,
-      title: "Products",
-      src: "/images/home/hero-banner2.png",
-      mobSrc: "/images/home/mob-hero-banner1.png",
-      alt: "img",
-      heading: "Sustainable, Responsible, Value Driven",
-      desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
-      btnTitle: "Explore Products",
-      btnLink: "#",
-    },
-    {
-      id: 2,
-      title: "Innovation",
-      src: "/images/home/hero-banner1.png",
-      mobSrc: "/images/home/mob-hero-banner1.png",
-      alt: "img",
-      heading: "Sustainable, Responsible, Value Driven",
-      desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
-      btnTitle: "Discover Innovation",
-      btnLink: "#",
-    },
-    {
-      id: 3,
-      title: "People",
-      src: "/images/home/hero-banner2.png",
-      mobSrc: "/images/home/mob-hero-banner1.png",
-      alt: "img",
-      heading: "Sustainable, Responsible, Value Driven",
-      desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
-      btnTitle: "Meet Our People",
-      btnLink: "#",
-    },
-    {
-      id: 4,
-      title: "Transformation",
-      src: "/images/home/hero-banner1.png",
-      mobSrc: "/images/home/mob-hero-banner1.png",
-      alt: "img",
-      heading: "Sustainable, Responsible, Value Driven",
-      desc: "For 40 years, AIL's people-first culture has shaped sustainable success",
-      btnTitle: "See Transformation",
-      btnLink: "#",
-    },
-  ];
-
   // Handle manual tab click
   const handleTabClick = (index: number) => {
     if (swiperRef.current) {
@@ -235,100 +178,118 @@ const HomeHero = () => {
       ref={wrapperRef}
       className="min-h-screen w-full relative overflow-hidden"
     >
-      <Swiper
-        onSwiper={(swiper: SwiperType) => {
-          swiperRef.current = swiper;
-          setTimeout(() => startProgressBar(), 100);
-        }}
-        onSlideChangeTransitionStart={(swiper) => {
-          const realIndex =
-            swiper.realIndex !== undefined
-              ? swiper.realIndex
-              : swiper.activeIndex % sliderData.length;
-          activeIndexRef.current = realIndex;
-          setActive(realIndex);
-          resetProgressBar();
-        }}
-        // onSlideChangeTransitionEnd={(swiper) => {
-        //   startProgressBar();
-        // }}
-        onSlideChangeTransitionEnd={() => {
-          startProgressBar();
-        }}
-        // onTransitionStart={(swiper: SwiperType) => {
-        //   const realIndex =
-        //     swiper.realIndex !== undefined
-        //       ? swiper.realIndex
-        //       : swiper.activeIndex % sliderData.length;
-
-        //   activeIndexRef.current = realIndex;
-        //   setActive(realIndex);
-        // }}
-        on={{
-          transitionStart: (swiper: SwiperType) => {
+      {data?.banner?.length > 0 && (
+        <Swiper
+          onSwiper={(swiper: SwiperType) => {
+            swiperRef.current = swiper;
+            setTimeout(() => startProgressBar(), 100);
+          }}
+          onSlideChangeTransitionStart={(swiper) => {
             const realIndex =
               swiper.realIndex !== undefined
                 ? swiper.realIndex
-                : swiper.activeIndex % sliderData.length;
-
+                : swiper.activeIndex % data?.banner?.length;
             activeIndexRef.current = realIndex;
             setActive(realIndex);
-          },
-        }}
-        slidesPerView={1}
-        modules={[Autoplay, EffectFade, Mousewheel]}
-        effect="fade"
-        fadeEffect={{ crossFade: true }}
-        loop={true}
-        speed={800}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: false,
-          waitForTransition: true,
-        }}
-        direction="horizontal"
-        mousewheel={{
-          forceToAxis: true,
-          sensitivity: 1,
-          releaseOnEdges: true,
-        }}
-      >
-        {sliderData.map((items, index) => (
-          <SwiperSlide key={index}>
-            <div className="w-full min-h-screen relative overflow-hidden">
-              <Image
-                src={items?.src}
-                alt={items?.alt}
-                fill
-                priority
-                className="hidden lg:block object-cover"
-              />
-              <Image
-                src={items?.mobSrc}
-                alt={items?.alt}
-                fill
-                priority
-                className="block lg:hidden object-cover"
-              />
-              {/* Content box */}
-              <FadeInReveal delay={0.2}>
-                <div className="absolute mt-[200px] w-full z-10">
-                  <div className="fluid-container">
-                    <H1 className="text-white max-w-[276px] md:max-w-[650px]">
-                      {items?.heading}
-                    </H1>
-                    <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
-                      {items?.desc}
-                    </BodyText2>
-                    <Button href={items?.btnLink} title={items?.btnTitle} />
+            resetProgressBar();
+          }}
+          // onSlideChangeTransitionEnd={(swiper) => {
+          //   startProgressBar();
+          // }}
+          onSlideChangeTransitionEnd={() => {
+            startProgressBar();
+          }}
+          // onTransitionStart={(swiper: SwiperType) => {
+          //   const realIndex =
+          //     swiper.realIndex !== undefined
+          //       ? swiper.realIndex
+          //       : swiper.activeIndex % sliderData.length;
+
+          //   activeIndexRef.current = realIndex;
+          //   setActive(realIndex);
+          // }}
+          on={{
+            transitionStart: (swiper: SwiperType) => {
+              const realIndex =
+                swiper.realIndex !== undefined
+                  ? swiper.realIndex
+                  : swiper.activeIndex % data?.banner?.length;
+
+              activeIndexRef.current = realIndex;
+              setActive(realIndex);
+            },
+          }}
+          slidesPerView={1}
+          modules={[Autoplay, EffectFade, Mousewheel]}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          loop={true}
+          speed={800}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: false,
+            waitForTransition: true,
+          }}
+          direction="horizontal"
+          mousewheel={{
+            forceToAxis: true,
+            sensitivity: 1,
+            releaseOnEdges: true,
+          }}
+        >
+          {data?.banner?.map((items, index) => (
+            <SwiperSlide key={index}>
+              <div className="w-full min-h-screen relative overflow-hidden">
+                {items?.card?.[0]?.image?.url && (
+                  <Image
+                    src={items?.card?.[0]?.image?.url}
+                    alt={items?.card?.[0]?.image?.alternativeText || "banner"}
+                    fill
+                    priority
+                    className="hidden lg:block object-cover"
+                  />
+                )}
+
+                {items?.card?.[0]?.image?.url && (
+                  <Image
+                    src={items?.card?.[0]?.image?.url}
+                    alt={items?.card?.[0]?.image?.alternativeText || "banner"}
+                    fill
+                    priority
+                    className="block lg:hidden object-cover"
+                  />
+                )}
+                {/* Content box */}
+                <FadeInReveal delay={0.2}>
+                  <div className="absolute mt-[200px] w-full z-10">
+                    <div className="fluid-container">
+                      {items?.card?.[0]?.title && (
+                        <H1 className="text-white max-w-[276px] md:max-w-[650px]">
+                          {items?.card?.[0]?.title}
+                        </H1>
+                      )}
+
+                      {items?.card?.[0]?.description && (
+                        <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
+                          {items?.card?.[0]?.description}
+                        </BodyText2>
+                      )}
+
+                      {items?.card?.[0]?.ctaButton?.title && (
+                        <Button
+                          href={items?.card?.[0]?.ctaButton?.link || "#"}
+                          title={items?.card?.[0]?.ctaButton?.title}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-              </FadeInReveal>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+                </FadeInReveal>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
 
       {/* stars + lines */}
       <div
@@ -396,32 +357,38 @@ const HomeHero = () => {
         className="absolute z-10 bottom-[40px] md:bottom-[80px] w-full "
       >
         {/* desktop */}
-        <div className="hidden md:flex fluid-container w-full mx-auto  gap-x-[36px] ">
-          {sliderData.map((items, index: number) => (
-            <div
-              key={index}
-              onClick={() => handleTabClick(index)}
-              className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${
-                activeIndexRef.current === index
-                  ? "opacity-100"
-                  : "opacity-40 hover:opacity-100"
-              }`}
-            >
-              {items?.title}
-            </div>
-          ))}
-        </div>
+        {data?.banner?.length > 0 && (
+          <div className="hidden md:flex fluid-container w-full mx-auto  gap-x-[36px] ">
+            {data?.banner?.map((items, index: number) => (
+              <div
+                key={index}
+                onClick={() => handleTabClick(index)}
+                className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${
+                  activeIndexRef.current === index
+                    ? "opacity-100"
+                    : "opacity-40 hover:opacity-100"
+                }`}
+              >
+                {items?.category}
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* mobile */}
         <div className="block md:hidden fluid-container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
             {activeIndexRef.current + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">
-              {sliderData?.length}
+              {data?.banner?.length}
             </span>
           </p>
-          <p className="text-white font-alte-hans font-normal">
-            {sliderData[activeIndexRef.current]?.title}
-          </p>
+
+          {data?.banner[activeIndexRef.current]?.category && (
+            <p className="text-white font-alte-hans font-normal">
+              {data?.banner[activeIndexRef.current]?.category}
+            </p>
+          )}
         </div>
       </div>
     </div>

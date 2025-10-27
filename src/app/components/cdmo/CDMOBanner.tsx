@@ -1,15 +1,18 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { CDMOBannerProps } from "@/app/types/cdmo.type";
 
-const CDMOBanner = () => {
+const CDMOBanner: React.FC<CDMOBannerProps> = ({ data }) => {
+  const { title, sectionTitle, ctaButton, description, image } = data;
+
   return (
     <HeroBanner
-      tag="CDMO"
-      title="Your Trusted Global Partner for CDMO"
-      desc="ELN-enabled labs, Process Intensification, and transforming complex chemistries to market-ready products"
-      image="/images/rd/rd-banner.png"
-      btnLink="#"
-      btnTitle="Talk to a CDMO Specialist"
+      tag={sectionTitle}
+      title={title}
+      desc={description}
+      btnLink={ctaButton?.link || "#"}
+      btnTitle={ctaButton?.title}
+      image={image?.url}
     />
   );
 };

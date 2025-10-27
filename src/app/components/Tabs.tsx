@@ -1,3 +1,4 @@
+"use client";
 import React, { useLayoutEffect, useRef, useState } from "react";
 
 // Generic types with numeric IDs
@@ -8,14 +9,15 @@ type SubCategory = {
 
 type Tab = {
   id: number;
-  label: string;
+  slug: string;
+  name: string;
   subCategories?: SubCategory[];
 };
 
 type TabsProps = {
   tabs: Tab[];
-  activeId: number;
-  onChange: (id: number) => void;
+  activeId: string;
+  onChange: (slug: string) => void;
   className?: string;
   containerClassName?: string;
   buttonClassName?: string;
@@ -23,12 +25,15 @@ type TabsProps = {
   inactiveButtonClassName?: string;
   indicatorColor?: string;
   indicatorTransition?: string;
-  textComponent?: React.ComponentType<{ className?: string; children: React.ReactNode }>;
+  textComponent?: React.ComponentType<{
+    className?: string;
+    children: React.ReactNode;
+  }>;
 };
 
 const Tabs: React.FC<TabsProps> = ({
   tabs,
-  activeId,
+  activeId = 0,
   onChange,
   className = "",
   containerClassName = "bg-gray-100 md:max-w-fit w-fit mx-auto p-1 rounded-full",
@@ -37,25 +42,25 @@ const Tabs: React.FC<TabsProps> = ({
   inactiveButtonClassName = "bg-transparent !text-[#4C5861]",
   indicatorColor = "#F97316",
   indicatorTransition = "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)",
-  textComponent: TextComponent
+  textComponent: TextComponent,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
-    visible: false
+    visible: false,
   });
 
   const measureIndicator = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    const activeIndex = tabs.findIndex(tab => tab.id === activeId);
+    const activeIndex = tabs.findIndex((tab) => tab.slug === activeId);
     const activeButton = tabRefs.current[activeIndex] ?? null;
 
     if (!activeButton) {
-      setIndicator(prev => ({ ...prev, visible: false }));
+      setIndicator((prev) => ({ ...prev, visible: false }));
       return;
     }
 
@@ -71,7 +76,7 @@ const Tabs: React.FC<TabsProps> = ({
 
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
-      tabRefs.current.forEach(button => {
+      tabRefs.current.forEach((button) => {
         if (button) resizeObserver.observe(button);
       });
     }
@@ -86,8 +91,9 @@ const Tabs: React.FC<TabsProps> = ({
   }, [activeId, tabs.length]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
-    const textClassName = `transition-colors duration-200 ${isActive ? activeButtonClassName : inactiveButtonClassName
-      }`;
+    const textClassName = `transition-colors duration-200 ${
+      isActive ? activeButtonClassName : inactiveButtonClassName
+    }`;
 
     if (TextComponent) {
       return <TextComponent className={textClassName}>{label}</TextComponent>;
@@ -98,8 +104,9 @@ const Tabs: React.FC<TabsProps> = ({
 
   return (
     <div className="overflow-scroll lg:overflow-hidden mb-[42px]">
-
-      <div className={`relative flex justify-center mb-2 ${containerClassName} ${className}`}>
+      <div
+        className={`relative flex justify-center mb-2 ${containerClassName} ${className}`}
+      >
         <div
           ref={containerRef}
           className="relative flex md:space-x-3 z-10 px-1 w-max"
@@ -117,13 +124,13 @@ const Tabs: React.FC<TabsProps> = ({
               width: indicator.visible ? indicator.width : 0,
               transition: indicatorTransition,
               zIndex: 0,
-              pointerEvents: "none"
+              pointerEvents: "none",
             }}
           />
 
           {/* Tab Buttons */}
-          {tabs.map((tab, index) => {
-            const isActive = activeId === tab.id;
+          {tabs?.map((tab, index) => {
+            const isActive = activeId === tab?.slug;
 
             return (
               <button
@@ -131,14 +138,15 @@ const Tabs: React.FC<TabsProps> = ({
                 ref={(element) => {
                   tabRefs.current[index] = element;
                 }}
-                onClick={() => onChange(tab.id)}
+                onClick={() => onChange(tab?.slug)}
                 type="button"
-                className={`${buttonClassName} ${isActive ? activeButtonClassName : inactiveButtonClassName
-                  }`}
+                className={`${buttonClassName} ${
+                  isActive ? activeButtonClassName : inactiveButtonClassName
+                } cursor-pointer`}
                 aria-selected={isActive}
                 role="tab"
               >
-                {renderTabContent(tab.label, isActive)}
+                {renderTabContent(tab.name, isActive)}
               </button>
             );
           })}
