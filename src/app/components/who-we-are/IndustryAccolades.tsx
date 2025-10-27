@@ -8,13 +8,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
 import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 
 const IndustryAccolades = () => {
   const [active, setActive] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-     const swiperRef = useRef<SwiperType | null>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
 
   const awardData = [
     {
@@ -198,7 +197,7 @@ const IndustryAccolades = () => {
   // ✅ Reset when changing tabs
   useEffect(() => {
     if (swiperRef.current) {
-      swiperRef.current.slideTo(0, 0); // go to first slide
+      swiperRef.current.slideTo(0, 0);
       setActiveIndex(0);
 
       // ✅ Force Swiper to update pagination so the progress bar shows fill immediately
@@ -309,7 +308,11 @@ const IndustryAccolades = () => {
               className={`swiper-button-next-awardsSection transition-opacity ${
                 activeIndex >=
                 (awardData[active]?.content?.length || 0) -
-                  Math.floor(swiperRef.current?.params.slidesPerView || 1)
+                  Math.floor(
+                    typeof swiperRef.current?.params.slidesPerView === "number"
+                      ? swiperRef.current.params.slidesPerView
+                      : 1
+                  )
                   ? "pointer-events-none opacity-30"
                   : "cursor-pointer opacity-100"
               }`}
