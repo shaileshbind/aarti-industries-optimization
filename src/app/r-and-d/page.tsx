@@ -7,10 +7,10 @@ import RDSafety from "../components/r-and-d/RDSafety";
 import RDAnalyticalExc from "../components/r-and-d/RDAnalyticalExc";
 import GloballyCertified from "../components/GloballyCertified";
 import RDExplore from "../components/r-and-d/RDExplore";
-import { getPageData } from "@/_lib/pageData.fetch";
+// import { getPageData } from "@/_lib/pageData.fetch";
 
 const page = async() => {
-  const data = await getPageData("/pages/by-slug/r-and-d");
+  // const data = await getPageData("/pages/by-slug/r-and-d");
   
     // const {
     //   sectionOne,

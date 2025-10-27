@@ -6,8 +6,7 @@ import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
 
 const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
-  const { image, leftSection, rightSection } = data;
-
+  const { image, leftSection } = data;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {

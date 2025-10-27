@@ -1,31 +1,31 @@
 import React from "react";
-import CDMOBanner from "../components/cdmo/CDMOBanner";
-import CDMOPartner from "../components/cdmo/CDMOPartner";
-import CDMODriving from "../components/cdmo/CDMODriving";
-import CDMOE2E from "../components/cdmo/CDMOE2E";
-import CDMOSplchem from "../components/cdmo/CDMOSplchem";
-import CDMOSafegreen from "../components/cdmo/CDMOSafegreen";
-import GloballyCertified from "../components/GloballyCertified";
-import CDMOExp from "../components/cdmo/CDMOExp";
-import { getPageData } from "@/_lib/pageData.fetch";
+// import CDMOBanner from "../components/cdmo/CDMOBanner";
+// import CDMOPartner from "../components/cdmo/CDMOPartner";
+// import CDMODriving from "../components/cdmo/CDMODriving";
+// import CDMOE2E from "../components/cdmo/CDMOE2E";
+// import CDMOSplchem from "../components/cdmo/CDMOSplchem";
+// import CDMOSafegreen from "../components/cdmo/CDMOSafegreen";
+// import GloballyCertified from "../components/GloballyCertified";
+// import CDMOExp from "../components/cdmo/CDMOExp";
+// import { getPageData } from "@/_lib/pageData.fetch";
 
 const Page = async () => {
-  const data = await getPageData("/pages/by-slug/cdmo");
+  // const data = await getPageData("/pages/by-slug/cdmo");
 
-  const {
-    section_one,
-    section_two,
-    section_three,
-    section_four,
-    section_five,
-    section_six,
-    section_seven,
-    section_eight,
-  } = data;
+  // const {
+  //   section_one,
+  //   section_two,
+  //   section_three,
+  //   section_four,
+  //   section_five,
+  //   section_six,
+  //   section_seven,
+  //   section_eight,
+  // } = data;
 
   return (
     <div>
-      {section_one && <CDMOBanner data={section_one} />}
+      {/* {section_one && <CDMOBanner data={section_one} />}
 
       {section_two && <CDMOPartner data={section_two} />}
 
@@ -52,7 +52,7 @@ const Page = async () => {
         />
       )}
 
-      {section_eight && <CDMOExp data={section_eight} />}
+      {section_eight && <CDMOExp data={section_eight} />} */}
     </div>
   );
 };

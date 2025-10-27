@@ -75,10 +75,10 @@ export type CDMOSafegreenProps = {
   }[];
 };
 
-export type GloballyCertifiedProps = {
-  data: {};
-};
+// export type GloballyCertifiedProps = {
+//   data: {};
+// };
 
-export type CDMOExpProps = {
-  data: {};
-};
+// export type CDMOExpProps = {
+//   data: {};
+// };

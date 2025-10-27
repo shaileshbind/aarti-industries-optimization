@@ -9,6 +9,8 @@ import HomeHero from "./components/home/HomeHero";
 import LatestAtAarti from "./components/home/LatestAtAarti";
 import SustainableChem from "./components/home/SustainableChem";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const data = await getPageData("/pages/by-slug/home-page");
 
