@@ -9,24 +9,10 @@ import Button from "../Button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
+import { SustainableChemProps } from "@/app/types/home.type";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-interface Stat {
-  value: string;
-  label: string;
-}
-
-interface Slide {
-  id: string;
-  title: string;
-  tabLabel: string;
-  image: string;
-  description: string;
-  stats: Stat[];
-  link: string;
-}
 
 interface ScrollTriggerInstance {
   start: number | { value: number };
@@ -34,7 +20,9 @@ interface ScrollTriggerInstance {
   progress: number;
 }
 
-const SustainableChem = () => {
+const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
+  const { leftText, rightText, images, mainSection } = data;
+
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
@@ -56,61 +44,6 @@ const SustainableChem = () => {
 
   const isScrollingProgrammatically = useRef<boolean>(false);
 
-  const slides: Slide[] = [
-    {
-      id: "environment",
-      title: "Environment",
-      tabLabel: "Environment",
-      image: "/images/home/forest.png",
-      description:
-        "We enable sustainable supply chains through responsible manufacturing with renewable energy integration, waste recovery, and ZLD-ready plants. By embedding sustainable chemistry and circular economy practices, we help our customers and partners reduce their carbon footprints and meet their ESG goals.",
-      stats: [
-        { value: "24%", label: "renewable electrical\nenergy" },
-        { value: "94%", label: "waste\nrecovered" },
-      ],
-      link: "Our Environmental Initiatives",
-    },
-    {
-      id: "social",
-      title: "Social Impact",
-      tabLabel: "Social",
-      image: "/images/home/hero-banner2.png",
-      description:
-        "We prioritize community development and employee welfare through inclusive hiring practices, skill development programs, and local community support initiatives. Our commitment to social responsibility extends across all our operations.",
-      stats: [
-        { value: "89%", label: "employee\nsatisfaction" },
-        { value: "15K+", label: "jobs\ncreated" },
-      ],
-      link: "Our Social Initiatives",
-    },
-    {
-      id: "governance",
-      title: "Governance",
-      tabLabel: "Governance",
-      image: "/images/home/hero-banner1.png",
-      description:
-        "Strong governance practices drive our ethical business conduct, transparent reporting, and stakeholder engagement. We maintain the highest standards of corporate governance to ensure sustainable growth.",
-      stats: [
-        { value: "100%", label: "ethical\ncompliance" },
-        { value: "A+", label: "governance\nrating" },
-      ],
-      link: "Our Governance Framework",
-    },
-    {
-      id: "innovation",
-      title: "Innovation",
-      tabLabel: "Innovation",
-      image: "/images/home/safe-slide-1.png",
-      description:
-        "Driving breakthrough innovations in sustainable chemistry through R&D investments, strategic partnerships, and cutting-edge technologies. We develop solutions that revolutionize industries while protecting our planet.",
-      stats: [
-        { value: "12%", label: "R&D\ninvestment" },
-        { value: "50+", label: "patents\nfiled" },
-      ],
-      link: "Our Innovation Pipeline",
-    },
-  ];
-
   const getScrollPositionForSlide = useCallback(
     (slideIndex: number) => {
       const st = scrollTriggerRef.current;
@@ -127,11 +60,11 @@ const SustainableChem = () => {
       const slideStartProgress = 0.55;
       const slideEndProgress = 1.0;
       const slideRange = slideEndProgress - slideStartProgress;
-      const slideProgress = slideIndex / (slides.length - 1);
+      const slideProgress = slideIndex / (mainSection?.length - 1);
       const targetProgress = slideStartProgress + slideProgress * slideRange;
       return Number(start) + targetProgress * totalScrollDistance;
     },
-    [slides.length]
+    [mainSection?.length]
   );
 
   const handleTabClick = useCallback(
@@ -196,7 +129,7 @@ const SustainableChem = () => {
         0,
         (self.progress - animationPhaseEnd) / (1 - animationPhaseEnd)
       );
-      const exactSlideIndex = slidesProgress * (slides.length - 1);
+      const exactSlideIndex = slidesProgress * (mainSection.length - 1);
       const newActiveIndex = Math.round(exactSlideIndex);
 
       if (
@@ -220,7 +153,7 @@ const SustainableChem = () => {
 
       setActiveTab((prev) => (newActiveIndex !== prev ? newActiveIndex : prev));
     },
-    [animationComplete, isUserInteracting, slides.length]
+    [animationComplete, isUserInteracting, mainSection?.length]
   );
 
   useLayoutEffect(() => {
@@ -257,10 +190,14 @@ const SustainableChem = () => {
           invalidateOnRefresh: true,
           onUpdate: handleScrollUpdate,
           onEnter: () => {
-            scrollTriggerRef.current = ScrollTrigger.getById("mainTrigger") as ScrollTriggerInstance | null;
+            scrollTriggerRef.current = ScrollTrigger.getById(
+              "mainTrigger"
+            ) as ScrollTriggerInstance | null;
           },
           onRefresh: () => {
-            scrollTriggerRef.current = ScrollTrigger.getById("mainTrigger") as ScrollTriggerInstance | null;
+            scrollTriggerRef.current = ScrollTrigger.getById(
+              "mainTrigger"
+            ) as ScrollTriggerInstance | null;
           },
         },
       });
@@ -455,59 +392,78 @@ const SustainableChem = () => {
         className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
-          <span ref={headinLeft}>
-            <H2>Sustainable Chemistry</H2>
-          </span>
-          <div
-            ref={sustainbleLogo}
-            className="flex w-[200px] lg:w-[0px] h-0 lg:h-[200px] overflow-hidden absolute"
-          >
-            <span
-              ref={sustainInner}
-              className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%]"
-            >
-              <i ref={susLogotl} className="absolute top-0 left-0">
-                <Image
-                  src="/images/home/sustainableIconTl.svg"
-                  alt="logo"
-                  width={99}
-                  height={101}
-                  priority
-                />
-              </i>
-              <i ref={susLogotr} className="absolute top-0 right-0">
-                <Image
-                  src="/images/home/sustainableIconTr.svg"
-                  alt="logo"
-                  width={99}
-                  height={101}
-                  priority
-                  className="w-full h-full"
-                />
-              </i>
-              <i ref={susLogobl} className="absolute bottom-0 left-0">
-                <Image
-                  src="/images/home/sustainableIconBl.svg"
-                  alt="logo"
-                  width={99}
-                  height={101}
-                  priority
-                />
-              </i>
-              <i ref={susLogobr} className="absolute bottom-0 right-0">
-                <Image
-                  src="/images/home/sustainableIconBr.png"
-                  alt="logo"
-                  width={99}
-                  height={101}
-                  priority
-                />
-              </i>
+          {leftText && (
+            <span ref={headinLeft}>
+              <H2>{leftText}</H2>
             </span>
-          </div>
-          <span ref={headinRight}>
-            <H2>Responsible Supply</H2>
-          </span>
+          )}
+
+          {images?.length > 0 && (
+            <div
+              ref={sustainbleLogo}
+              className="flex w-[200px] lg:w-[0px] h-0 lg:h-[200px] overflow-hidden absolute"
+            >
+              <span
+                ref={sustainInner}
+                className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%]"
+              >
+                {images?.[2]?.url && (
+                  <i ref={susLogotl} className="absolute top-0 left-0">
+                    <Image
+                      src={images?.[2]?.url}
+                      alt={images?.[2]?.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+
+                {images?.[1]?.url && (
+                  <i ref={susLogotr} className="absolute top-0 right-0">
+                    <Image
+                      src={images?.[1]?.url}
+                      alt={images?.[1]?.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                      className="w-full h-full"
+                    />
+                  </i>
+                )}
+
+                {images?.[0]?.url && (
+                  <i ref={susLogobl} className="absolute bottom-0 left-0">
+                    <Image
+                      src={images?.[0]?.url}
+                      alt={images?.[0]?.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+
+                {images?.[3]?.url && (
+                  <i ref={susLogobr} className="absolute bottom-0 right-0">
+                    <Image
+                      src={images?.[3]?.url}
+                      alt={images?.[3]?.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+              </span>
+            </div>
+          )}
+
+          {rightText && (
+            <span ref={headinRight}>
+              <H2>{rightText}</H2>
+            </span>
+          )}
         </div>
       </div>
 
@@ -516,152 +472,206 @@ const SustainableChem = () => {
         className="w-full   bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
       >
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-          <div className="">
-            <Swiper
-              slidesPerView={1.2}
-              spaceBetween={32}
-              loop={false}
-              allowTouchMove={false}
-              speed={600}
-              watchSlidesProgress={true}
-              updateOnWindowResize={true}
-              className="w-full h-auto"
-              onSwiper={(swiper) => {
-                swiperRef.current = swiper;
-                swiper.on("resize", () => {
-                  swiper.updateSize();
-                  swiper.updateSlides();
-                  swiper.updateProgress();
-                  swiper.updateSlidesClasses();
-                });
-              }}
-            >
-              {slides.map((slide) => (
-                <SwiperSlide key={slide.id}>
-                  <div className="grid lg:grid-cols-2 gap-12 items-center flex-shrink-0 rounded-lg">
-                    <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-                      <div className="absolute inset-0 overflow-hidden">
-                        <Image
-                          src={slide.image}
-                          alt={slide.title}
-                          fill
-                          className="object-cover scale-110"
-                        />
-                        <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                        <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+          {mainSection?.length > 0 && (
+            <div className="">
+              <Swiper
+                slidesPerView={1.2}
+                spaceBetween={32}
+                loop={false}
+                allowTouchMove={false}
+                speed={600}
+                watchSlidesProgress={true}
+                updateOnWindowResize={true}
+                className="w-full h-auto"
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  swiper.on("resize", () => {
+                    swiper.updateSize();
+                    swiper.updateSlides();
+                    swiper.updateProgress();
+                    swiper.updateSlidesClasses();
+                  });
+                }}
+              >
+                {mainSection.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="grid lg:grid-cols-2 gap-12 items-center flex-shrink-0 rounded-lg">
+                      <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+                        <div className="absolute inset-0 overflow-hidden">
                           <Image
-                            src={slide.image}
-                            alt={slide.title}
+                            src={slide?.image?.url}
+                            alt={slide?.image?.alternativeText || "banner"}
                             fill
                             className="object-cover scale-110"
                           />
-                        </span>
+                          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                          <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+                            <Image
+                              src={slide?.image?.url}
+                              alt={slide?.image?.alternativeText || "banner"}
+                              fill
+                              className="object-cover scale-110"
+                            />
+                          </span>
+                        </div>
+                        {slide?.category && (
+                          <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
+                            {slide?.category}
+                          </h2>
+                        )}
                       </div>
-                      <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
-                        {slide.title}
-                      </h2>
-                    </div>
-                    <div>
-                      <BodyText1>{slide.description}</BodyText1>
-                      <div className="flex gap-12 my-8">
-                        {slide.stats?.map((stat, idx) => (
-                          <div key={idx}>
-                            <H2 className="text-orange-200">{stat.value}</H2>
-                            <BodyText2 className="text-grey-400 mt-[5px]">
-                              {stat.label}
-                            </BodyText2>
+
+                      <div>
+                        {slide?.description && (
+                          <BodyText1>{slide.description}</BodyText1>
+                        )}
+
+                        {slide?.values?.length > 0 && (
+                          <div className="flex gap-12 my-8">
+                            {slide?.values?.map((stat, idx) => (
+                              <div key={idx}>
+                                {stat?.value && (
+                                  <H2 className="text-orange-200">
+                                    {stat.value}
+                                  </H2>
+                                )}
+
+                                {stat?.description && (
+                                  <BodyText2 className="text-grey-400 mt-[5px]">
+                                    {stat?.description}
+                                  </BodyText2>
+                                )}
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
+
+                        {slide?.ctaButton?.title && (
+                          <Button
+                            title={slide?.ctaButton?.title}
+                            href={slide?.ctaButton?.link || "#"}
+                            secondary
+                          />
+                        )}
                       </div>
-                      <Button title={slide.link} href="#" secondary />
                     </div>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          )}
 
           <div className="absolute py-4 w-full bottom-0">
             <div className="w-fit mx-auto">
-              <div className="bg-grey-100 rounded-[40px] p-[4px] flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">
-                {slides.map((items, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleTabClick(index)}
-                    className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 ${
-                      activeTab === index
-                        ? "text-white bg-gradient-orange-3"
-                        : "hover:bg-grey-200"
-                    }`}
-                  >
-                    {items.title}
-                  </div>
-                ))}
-              </div>
+              {mainSection?.length > 0 && (
+                <div className="bg-grey-100 rounded-[40px] p-[4px] flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">
+                  {mainSection?.map(
+                    (items, index) =>
+                      items?.category && (
+                        <div
+                          key={index}
+                          onClick={() => handleTabClick(index)}
+                          className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 ${
+                            activeTab === index
+                              ? "text-white bg-gradient-orange-3"
+                              : "hover:bg-grey-200"
+                          }`}
+                        >
+                          {items?.category}
+                        </div>
+                      )
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="block lg:hidden container relative w-full h-auto">
           <div className="pt-[100px]">
-            <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
-              {slides.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => setActiveTabMob(index)}
-                  className={`text-grey-400 text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[12px] rounded-[40px] transition-all duration-300 ${
-                    activeTabMob === index
-                      ? "text-white bg-gradient-orange-3"
-                      : "hover:bg-grey-200"
-                  }`}
-                >
-                  {item.title}
-                </div>
-              ))}
-            </div>
+            {mainSection?.length > 0 && (
+              <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
+                {mainSection?.map(
+                  (item, index) =>
+                    item?.category && (
+                      <div
+                        key={index}
+                        onClick={() => setActiveTabMob(index)}
+                        className={`text-grey-400 text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[12px] rounded-[40px] transition-all duration-300 ${
+                          activeTabMob === index
+                            ? "text-white bg-gradient-orange-3"
+                            : "hover:bg-grey-200"
+                        }`}
+                      >
+                        {item?.category}
+                      </div>
+                    )
+                )}
+              </div>
+            )}
           </div>
           <div className="mt-[32px]">
             <div className="grid items-center">
-              {slides
+              {mainSection
                 .filter((_, index) => index === activeTabMob)
                 .map((slide, index) => (
                   <div key={index}>
                     <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                       <div className="absolute inset-0 overflow-hidden">
                         <Image
-                          src={slide.image}
-                          alt={slide.title}
+                          src={slide?.image?.url}
+                          alt={slide?.image?.alternativeText || "banner"}
                           fill
                           className="object-cover scale-110"
                         />
                         <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                         <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
                           <Image
-                            src={slide.image}
-                            alt={slide.title}
+                            src={slide?.image?.url}
+                            alt={slide?.image?.alternativeText || "banner"}
                             fill
                             className="object-cover scale-110"
                           />
                         </span>
                       </div>
-                      <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
-                        {slide.title}
-                      </h2>
+
+                      {slide?.category && (
+                        <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
+                          {slide?.category}
+                        </h2>
+                      )}
                     </div>
-                    <BodyText1 className="mt-[20px]">
-                      {slide.description}
-                    </BodyText1>
+
+                    {slide?.description && (
+                      <BodyText1 className="mt-[20px]">
+                        {slide?.description}
+                      </BodyText1>
+                    )}
+
                     <div className="flex gap-12 mt-6 mb-[36px]">
-                      {slide.stats?.map((stat, idx) => (
-                        <div key={idx}>
-                          <H2 className="text-orange-200">{stat.value}</H2>
-                          <BodyText2 className="text-grey-400 mt-[4px]">
-                            {stat.label}
-                          </BodyText2>
-                        </div>
-                      ))}
+                      {slide.values?.length > 0 &&
+                        slide.values?.map((stat, idx) => (
+                          <div key={idx}>
+                            {stat?.value && (
+                              <H2 className="text-orange-200">{stat?.value}</H2>
+                            )}
+
+                            {stat?.description && (
+                              <BodyText2 className="text-grey-400 mt-[4px]">
+                                {stat?.description}
+                              </BodyText2>
+                            )}
+                          </div>
+                        ))}
                     </div>
-                    <Button title={slide.link} href="#" secondary />
+
+                    {slide?.ctaButton?.title && (
+                      <Button
+                        title={slide?.ctaButton?.title}
+                        href={slide?.ctaButton?.link || "#"}
+                        secondary
+                      />
+                    )}
                   </div>
                 ))}
             </div>

@@ -5,28 +5,13 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { H3 } from "../Typography2";
 import NumberCard from "../cards/NumberCard";
+import { GlobalPartnerProps } from "@/app/types/home.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const GlobalPartner: React.FC = () => {
-  const globalData = [
-    {
-      id: 0,
-      title: "40+",
-      desc: "years of speciality chemical expertise",
-    },
-    { id: 1, imageSrc: "/images/home/chemical.png" },
-    { id: 2, title: "20+", desc: "sectors being served" },
-    { id: 3, title: "2", desc: "state-of-the-art R&D facilities" },
-    {
-      id: 4,
-      title: "60+",
-      desc: "years of speciality chemical expertise",
-    },
-    { id: 5, title: "100+", desc: "products" },
-    { id: 6, imageSrc: "/images/home/blog1.png" },
-    { id: 7, title: "16", desc: "manufacturing facilities across India" },
-  ];
+const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
+  const { leftTitle, righSection } = data;
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
 
@@ -91,9 +76,12 @@ const GlobalPartner: React.FC = () => {
         className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[312px_1fr] gap-[6px]"
       >
         <div className="bg-gradient-orange-1 relative rounded-[14px] lg:rounded-[20px] py-[38px] px-[24px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
-          <H3 className="text-white max-w-[230px] md:max-w-fit">
-            Global Partner of Choice
-          </H3>
+          {leftTitle && (
+            <H3 className="text-white max-w-[230px] md:max-w-fit">
+              {leftTitle}
+            </H3>
+          )}
+
           <Image
             src="/images/home/flower-t.svg"
             alt="img"
@@ -103,32 +91,39 @@ const GlobalPartner: React.FC = () => {
           />
         </div>
         <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
-          <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
-            {globalData?.slice(0, 4)?.map((items) => {
-              return (
-                <NumberCard
-                  key={items?.id}
-                  title={items?.title}
-                  desc={items?.desc}
-                  imageSrc={items?.imageSrc}
-                  className="stat-box"
-                />
-              );
-            })}
-          </div>
-          <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
-            {globalData?.slice(4, 8)?.map((items) => {
-              return (
-                <NumberCard
-                  key={items?.id}
-                  title={items?.title}
-                  desc={items?.desc}
-                  imageSrc={items?.imageSrc}
-                  className="stat-box"
-                />
-              );
-            })}
-          </div>
+          {righSection?.length > 0 && (
+            <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
+              {righSection?.slice(0, 4)?.map((items) => {
+                return (
+                  <NumberCard
+                    key={items?.id}
+                    title={items?.values?.[0]?.value}
+                    desc={items?.values?.[0]?.description}
+                    imageSrc={items?.image?.url}
+                    imageAlt={items?.image?.alternativeText}
+                    className="stat-box"
+                  />
+                );
+              })}
+            </div>
+          )}
+
+          {righSection?.length > 0 && (
+            <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px]">
+              {righSection?.slice(4, 8)?.map((items) => {
+                return (
+                  <NumberCard
+                    key={items?.id}
+                    title={items?.values?.[0]?.value}
+                    desc={items?.values?.[0]?.description}
+                    imageSrc={items?.image?.url}
+                    imageAlt={items?.image?.alternativeText}
+                    className="stat-box"
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

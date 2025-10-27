@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { BodyText1, H2 } from "../Typography2";
 import Button from "../Button";
@@ -5,95 +6,11 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
 import { FadeInRevealBlur } from "../ScrollReveal";
+import { FosteringSafeProps } from "@/app/types/home.type";
 
-const FosteringSafe = () => {
-  const images = [
-    {
-      id: 0,
-      src: "/images/home/safe-slide-1.png",
-      alt: "img",
-    },
-    {
-      id: 1,
-      src: "/images/home/safe-slide-2.png",
-      alt: "img",
-    },
-    {
-      id: 2,
-      src: "/images/home/safe-slide-3.png",
-      alt: "img",
-    },
-    {
-      id: 3,
-      src: "/images/home/safe-slide-4.png",
-      alt: "img",
-    },
-    {
-      id: 4,
-      src: "/images/home/safe-slide-5.png",
-      alt: "img",
-    },
-    {
-      id: 5,
-      src: "/images/home/safe-slide-6.png",
-      alt: "img",
-    },
-    {
-      id: 6,
-      src: "/images/home/safe-slide-7.png",
-      alt: "img",
-    },
-    {
-      id: 7,
-      src: "/images/home/safe-slide-8.png",
-      alt: "img",
-    },
-    {
-      id: 8,
-      src: "/images/home/safe-slide-4.png",
-      alt: "img",
-    },
-    {
-      id: 9,
-      src: "/images/home/safe-slide-5.png",
-      alt: "img",
-    },
-    {
-      id: 10,
-      src: "/images/home/safe-slide-6.png",
-      alt: "img",
-    },
-    {
-      id: 11,
-      src: "/images/home/safe-slide-7.png",
-      alt: "img",
-    },
-    {
-      id: 12,
-      src: "/images/home/safe-slide-8.png",
-      alt: "img",
-    },
-    {
-      id: 13,
-      src: "/images/home/safe-slide-1.png",
-      alt: "img",
-    },
-    {
-      id: 14,
-      src: "/images/home/safe-slide-2.png",
-      alt: "img",
-    },
-    {
-      id: 15,
-      src: "/images/home/safe-slide-3.png",
-      alt: "img",
-    },
-    {
-      id: 16,
-      src: "/images/home/safe-slide-3.png",
-      alt: "img",
-    },
-  ];
+const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
+  const { title, description, ctaButton } = data;
+  const { images } = imgArr;
 
   interface ImageConfig {
     marginTop: string;
@@ -131,6 +48,8 @@ const FosteringSafe = () => {
     return { isDesktop, mounted };
   };
   const { isDesktop } = useIsDesktop();
+
+  // if not enough images on mobile add one -
   const generateMobileSwiperSlides = (imageArray: typeof images): Slide[] => {
     const pattern = [2, 2, 2];
     const slides: Slide[] = [];
@@ -158,24 +77,24 @@ const FosteringSafe = () => {
       },
     ];
 
-    while (imageIndex < imageArray.length) {
+    while (imageIndex < imageArray?.length) {
       const imagesInThisSlide = pattern[patternIndex];
       const slideConfig = slideConfigs[patternIndex];
       const slideImages: SlideImageData[] = [];
 
       for (let i = 0; i < imagesInThisSlide; i++) {
         // If we've reached the end of images, start repeating from the beginning
-        const currentImageIndex = imageIndex % imageArray.length;
+        const currentImageIndex = imageIndex % imageArray?.length;
 
         slideImages.push({
-          src: imageArray[currentImageIndex].src,
-          alt: imageArray[currentImageIndex].alt,
+          src: imageArray?.[currentImageIndex]?.image?.url,
+          alt: imageArray?.[currentImageIndex]?.image?.alternativeText,
           config: slideConfig.images[i],
           index: currentImageIndex,
         });
 
         // Only increment imageIndex if we haven't processed all original images yet
-        if (imageIndex < imageArray.length) {
+        if (imageIndex < imageArray?.length) {
           imageIndex++;
         }
       }
@@ -190,7 +109,7 @@ const FosteringSafe = () => {
 
       // Break if we've created enough slides to avoid infinite loop
       // This ensures we don't create too many slides when repeating
-      if (slides.length >= Math.ceil(imageArray.length * 1.5)) {
+      if (slides.length >= Math.ceil(imageArray?.length * 1.5)) {
         break;
       }
     }
@@ -225,19 +144,19 @@ const FosteringSafe = () => {
         ],
       },
     ];
-    while (imageIndex < imageArray.length) {
+    while (imageIndex < imageArray?.length) {
       const imagesInThisSlide = pattern[patternIndex];
       const slideConfig = slideConfigs[patternIndex];
       const slideImages: SlideImageData[] = [];
 
       for (
         let i = 0;
-        i < imagesInThisSlide && imageIndex < imageArray.length;
+        i < imagesInThisSlide && imageIndex < imageArray?.length;
         i++
       ) {
         slideImages.push({
-          src: imageArray[imageIndex].src,
-          alt: imageArray[imageIndex].alt,
+          src: imageArray?.[imageIndex]?.image?.url,
+          alt: imageArray?.[imageIndex]?.image?.alternativeText,
           config: slideConfig.images[i],
           index: imageIndex,
         });
@@ -257,24 +176,25 @@ const FosteringSafe = () => {
     return slides;
   };
   const slidesToRender = isDesktop
-    ? generateSwiperSlides(images)
-    : generateMobileSwiperSlides(images);
+    ? generateSwiperSlides(imgArr?.images)
+    : generateMobileSwiperSlides(imgArr?.images);
 
   const renderSwiperSlide = (slide: Slide): React.ReactElement => {
     return (
       <SwiperSlide key={slide.id}>
-        {slide.images.map((imageData, index) => (
-          <div
-            key={index}
-            className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
-          >
-            <img
-              src={imageData.src}
-              alt={imageData.alt}
-              className="swiper-lazy w-full h-full object-cover"
-            />
-          </div>
-        ))}
+        {slide?.images?.length > 0 &&
+          slide?.images?.map((imageData, index) => (
+            <div
+              key={index}
+              className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
+            >
+              <img
+                src={imageData?.src}
+                alt={imageData?.alt || ""}
+                className="swiper-lazy w-full h-full object-cover"
+              />
+            </div>
+          ))}
       </SwiperSlide>
     );
   };
@@ -282,24 +202,29 @@ const FosteringSafe = () => {
   return (
     <div className="w-full my-[100px]">
       <div className="w-full container mx-auto">
-        <FadeInRevealBlur>
-          <H2 className="text-blue-200 max-w-[unset] lg:max-w-[560px] mx-auto text-center">
-            Fostering a Safe, Inclusive and Empowering Workplace
-          </H2>
-        </FadeInRevealBlur>
-        <FadeInRevealBlur delay={0.3}>
-          <BodyText1 className="mt-[20px] text-grey-400  max-w-[unset] lg:max-w-[640px] mx-auto text-center font-roboto">
-            We nurture a culture of open dialogue and holistic support through
-            structured forums, regular feedback cycles, and focused well-being
-            programmes. Our well-being framework spans the physical, social,
-            career, financial, and community dimensions.
-          </BodyText1>
-        </FadeInRevealBlur>
-        <FadeInRevealBlur delay={0.3}>
-          <div className="mt-[36px] w-fit mx-auto">
-            <Button href="#" title="Join Our Team" />
-          </div>
-        </FadeInRevealBlur>
+        {title && (
+          <FadeInRevealBlur>
+            <H2 className="text-blue-200 max-w-[unset] lg:max-w-[560px] mx-auto text-center">
+              {title}
+            </H2>
+          </FadeInRevealBlur>
+        )}
+
+        {description && (
+          <FadeInRevealBlur delay={0.3}>
+            <BodyText1 className="mt-[20px] text-grey-400  max-w-[unset] lg:max-w-[640px] mx-auto text-center font-roboto">
+              {description}
+            </BodyText1>
+          </FadeInRevealBlur>
+        )}
+
+        {ctaButton?.title && (
+          <FadeInRevealBlur delay={0.3}>
+            <div className="mt-[36px] w-fit mx-auto">
+              <Button href={ctaButton?.link || "#"} title={ctaButton?.title} />
+            </div>
+          </FadeInRevealBlur>
+        )}
       </div>
       <div className="mt-[100px] relative">
         <Swiper
@@ -318,7 +243,7 @@ const FosteringSafe = () => {
           modules={[Autoplay, FreeMode]}
           centeredSlides={!isDesktop}
         >
-          {slidesToRender.map((slide) => renderSwiperSlide(slide))}
+          {slidesToRender?.map((slide) => renderSwiperSlide(slide))}
         </Swiper>
       </div>
     </div>

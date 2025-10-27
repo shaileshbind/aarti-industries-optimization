@@ -6,10 +6,13 @@ import Image from "next/image";
 import { H2, BodyText1 } from "../Typography2";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import Button from "../Button";
+import { FourtyYearsProps } from "@/app/types/home.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FourtyYears = () => {
+const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
+  const { sectionTitle, description, title, ctaButton } = data;
+
   const wrapperRef = useRef(null);
   const topLineRef = useRef(null);
   const starRef = useRef(null);
@@ -71,25 +74,34 @@ const FourtyYears = () => {
         </div>
         {/* Text content */}
         <div className="max-w-[unset] lg:max-w-[780px] mx-auto text-center mt-4">
+          {sectionTitle && (
+            <FadeInRevealBlur>
+              {<H2 className="text-orange-100">{sectionTitle}</H2>}
+            </FadeInRevealBlur>
+          )}
+
+          {title && (
+            <FadeInRevealBlur delay={0.1}>
+              <H2 className="text-blue-100">{title}</H2>
+            </FadeInRevealBlur>
+          )}
+
           <FadeInRevealBlur>
-            <H2 className="text-orange-100">40 Years of Trusted</H2>
-          </FadeInRevealBlur>
-          <FadeInRevealBlur delay={0.1}>
-            <H2 className="text-blue-100">Speciality Chemical Excellence</H2>
-          </FadeInRevealBlur>
-          <FadeInRevealBlur>
-            <BodyText1 className="mt-[16px] md:mt-[20px] text-grey-400">
-              From our labs to your applications, we bring together 40 years of
-              speciality chemical expertise, with a sustainable, people-first
-              approach. Combining process chemistry expertise with scale-up
-              engineering, we deliver advanced intermediates for a wide range of
-              applications, including agrochemicals, pharmaceuticals, polymers,
-              dyes, and more.
-            </BodyText1>
-            <div className="my-[36px]">
-              <Button title="Our Journey Through The Years" href="#" />
-              {/* </FadeInReveal> */}
-            </div>
+            {description && (
+              <BodyText1 className="mt-[16px] md:mt-[20px] text-grey-400">
+                {description}
+              </BodyText1>
+            )}
+
+            {ctaButton?.title && (
+              <div className="my-[36px]">
+                <Button
+                  title={ctaButton?.title}
+                  href={ctaButton?.link || "#"}
+                />
+                {/* </FadeInReveal> */}
+              </div>
+            )}
           </FadeInRevealBlur>
         </div>
         {/* Bottom Line */}
