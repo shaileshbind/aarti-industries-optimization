@@ -1,4 +1,4 @@
-import { ButtonProps, ImageProps } from "./global.type";
+import { ButtonProps, ImageProps, ValueProps } from "./global.type";
 
 export type CDMOBannerProps = {
   data: {
@@ -29,12 +29,13 @@ export type CDMODrivingProps = {
       title: string;
       ctaButton: ButtonProps;
       description: string;
+      accordion: {
+        title: string;
+        items: { title: string }[];
+      };
     };
     righSection: {
-      values: {
-        value: string;
-        description: string;
-      }[];
+      values: ValueProps[];
     };
   };
 };
@@ -75,10 +76,9 @@ export type CDMOSafegreenProps = {
   }[];
 };
 
-// export type GloballyCertifiedProps = {
-//   data: {};
-// };
-
-// export type CDMOExpProps = {
-//   data: {};
-// };
+export type CDMOExpProps = {
+  data: {
+    title: string;
+    ctaButton: ButtonProps[]
+  }[];
+};

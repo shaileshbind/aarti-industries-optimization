@@ -28,11 +28,19 @@ const page = () => {
         itemsData={[
           {
             id: 0,
-            title: "Ecovadis Gold Rating",
-            imgSrc: "/images/award1.png",
+            heading: "Ecovadis Gold Rating",
+            image: { url: "/images/award1.png", alternativeText: "" },
           },
-          { id: 1, title: "CDP A rating", imgSrc: "/images/award2.png" },
-          { id: 2, title: "ISO 27001:2022", imgSrc: "/images/award3.png" },
+          {
+            id: 1,
+            heading: "CDP A rating",
+            image: { url: "/images/award2.png", alternativeText: "" },
+          },
+          {
+            id: 2,
+            heading: "ISO 27001:2022",
+            image: { url: "/images/award3.png", alternativeText: "" },
+          },
         ]}
       />
       <WhoExp />

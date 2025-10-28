@@ -8,14 +8,14 @@ const IndustryExp = () => {
         <ExploreCard
           title="Ready to Partner Across Industries?"
           items={[
-            { id: 0, ctaTitle: "Corporate Brochure PDF", ctaLink: "#" },
-            { id: 1, ctaTitle: "Product List PDF", ctaLink: "#" },
+            { id: 0, title: "Corporate Brochure PDF", link: "#" },
+            { id: 1, title: "Product List PDF", link: "#" },
           ]}
         />
         <ExploreCard
           lightVariant
           title="Keep Exploring"
-          items={[{ id: 0, ctaTitle: "Aarti Advantage", ctaLink: "#" }]}
+          items={[{ id: 0, title: "Aarti Advantage", link: "#" }]}
         />
       </div>
     </div>

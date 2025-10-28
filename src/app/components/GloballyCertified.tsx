@@ -3,14 +3,14 @@ import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { BodyText2, H3 } from "./Typography2";
 import { FadeInRevealBlur } from "./ScrollReveal";
+import { ImageProps } from "../types/global.type";
 
 type GloballyCertifiedProps = {
   title?: string;
   itemsData: {
     id?: number;
-    title?: string;
-    imgSrc?: string;
-    imgAlt?: string;
+    heading?: string;
+    image?: ImageProps;
   }[];
 };
 
@@ -29,9 +29,9 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
       const totalItemWidth = itemWidth + gap;
 
       const minItemsToFill = Math.ceil(containerWidth / totalItemWidth);
-      const repeats = Math.ceil((minItemsToFill / itemsData.length) * 2);
+      const repeats = Math.ceil((minItemsToFill / itemsData?.length) * 2);
 
-      const repeatedItems = Array(repeats).fill(itemsData).flat();
+      const repeatedItems = Array(repeats)?.fill(itemsData)?.flat();
       setMarqueeItems(repeatedItems);
     };
 
@@ -40,6 +40,9 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
 
     return () => window.removeEventListener("resize", calculateMarqueeItems);
   }, [itemsData]);
+
+  // Early return if no data
+  if (!itemsData?.length) return null;
 
   return (
     <div className="w-full pb-[100px]">
@@ -52,29 +55,31 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
         className="overflow-hidden relative mt-[24px] lg:mt-[35px]"
         ref={containerRef}
       >
-        <div className="flex gap-x-[24px] whitespace-nowrap animate-marquee">
-          {marqueeItems.map((item, index) => (
-            <div
-              key={`${item.id}-${index}`}
-              className="marquee-item inline-block flex-shrink-0 w-[132px] md:w-[200px] "
-            >
-              {item?.imgSrc && (
-                <div className="relative bg-grey-100 rounded-[10px] md:rounded-[12px] grid place-items-center h-[88px] md:h-[120px]">
-                  <Image
-                    src={item?.imgSrc}
-                    alt={item.imgAlt ? item?.imgAlt : "img"}
-                    height={80}
-                    width={160}
-                    className="object-contain h-[68px] md:h-[80px] w-[112px] md:w-[160px]"
-                  />
-                </div>
-              )}
-              {item?.title && (
-                <BodyText2 className="mt-4">{item?.title}</BodyText2>
-              )}
-            </div>
-          ))}
-        </div>
+        {marqueeItems?.length > 0 && (
+          <div className="flex gap-x-[24px] whitespace-nowrap animate-marquee">
+            {marqueeItems?.map((item, index) => (
+              <div
+                key={`${item.id}-${index}`}
+                className="marquee-item inline-block flex-shrink-0 w-[132px] md:w-[200px] "
+              >
+                {item?.image?.url && (
+                  <div className="relative bg-grey-100 rounded-[10px] md:rounded-[12px] grid place-items-center h-[88px] md:h-[120px]">
+                    <Image
+                      src={item?.image?.url}
+                      alt={item?.heading || "global certified"}
+                      height={80}
+                      width={160}
+                      className="object-contain h-[68px] md:h-[80px] w-[112px] md:w-[160px]"
+                    />
+                  </div>
+                )}
+                {item?.heading && (
+                  <BodyText2 className="mt-4">{item?.heading}</BodyText2>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
         <style jsx>{`
           @keyframes marquee {
             0% {

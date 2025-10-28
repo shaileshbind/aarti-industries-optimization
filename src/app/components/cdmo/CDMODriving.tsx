@@ -6,7 +6,7 @@ import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
 
 const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
-  const { image, leftSection } = data;
+  const { image, leftSection, righSection } = data;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -55,62 +55,57 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               }`}
             >
               {/* Accordion Header - Always Visible */}
-              <button
-                onClick={toggleAccordion}
-                className="w-full py-6 px-[42px] flex justify-between items-center cursor-pointer"
-              >
-                <SubH2 className="text-white">Capabilities</SubH2>
-                <span
-                  className={`text-white text-3xl font-light transition-transform duration-300 ${
-                    isOpen ? "rotate-45" : ""
-                  }`}
+              {leftSection?.accordion?.title && (
+                <button
+                  onClick={toggleAccordion}
+                  className="w-full py-6 px-[42px] flex justify-between items-center cursor-pointer"
                 >
-                  +
-                </span>
-              </button>
+                  <SubH2 className="text-white">
+                    {leftSection?.accordion?.title}
+                  </SubH2>
+                  <span
+                    className={`text-white text-3xl font-light transition-transform duration-300 ${
+                      isOpen ? "rotate-45" : ""
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+              )}
 
               {/* Accordion Content - Collapsible */}
-              <div
-                className={`transition-all duration-700 ease-in-out 
+              {leftSection?.accordion?.items?.length > 0 && (
+                <div
+                  className={`transition-all duration-700 ease-in-out 
                 ${isOpen ? "max-h-[332px] opacity-100" : "max-h-0 opacity-0"} 
                 overflow-scroll  
                 scrollbar-style
               `}
-              >
-                {/* Capabilities List */}
-                <div className="px-[42px] pb-9">
-                  <div className="space-y-4 ">
-                    {[
-                      "Process Innovation and Scale-up",
-                      "Setting up Recovery/Purification processes",
-                      "Analytical Method Development & Validation",
-                      "Compliance Support",
-                      "IP Generation",
-                      "IP Generation",
-                      "Product competency and stabilization",
-                      "Environmental Impact Studies",
-                      "Compliance Support",
-                      "IP Generation",
-                      "IP Generation",
-                      "Product competency and stabilization",
-                      "Environmental Impact Studies",
-                    ].map((capability, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <Image
-                          src="/images/star.png"
-                          alt="check-icon"
-                          width={20}
-                          height={20}
-                          className=""
-                        />
-                        <BodyText2 className="text-white">
-                          {capability}
-                        </BodyText2>
-                      </div>
-                    ))}
+                >
+                  {/* Capabilities List */}
+                  <div className="px-[42px] pb-9">
+                    <div className="space-y-4 ">
+                      {leftSection?.accordion?.items?.map(
+                        (capability, index) =>
+                          capability?.title && (
+                            <div key={index} className="flex items-start gap-3">
+                              <Image
+                                src="/images/star.png"
+                                alt="check-icon"
+                                width={20}
+                                height={20}
+                                className=""
+                              />
+                              <BodyText2 className="text-white">
+                                {capability?.title}
+                              </BodyText2>
+                            </div>
+                          )
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -119,85 +114,75 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           className={`block lg:hidden mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mb-9`}
         >
           {/* Accordion Header - Always Visible */}
-          <button
-            onClick={toggleAccordion}
-            className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
-          >
-            <SubH2 className="text-white">Capabilities</SubH2>
-            <span
-              className={`text-white text-3xl font-light transition-transform duration-300 ${
-                isOpen ? "rotate-45" : ""
-              }`}
+          {leftSection?.accordion?.title && (
+            <button
+              onClick={toggleAccordion}
+              className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
             >
-              +
-            </span>
-          </button>
+              <SubH2 className="text-white">
+                {leftSection?.accordion?.title}
+              </SubH2>
+              <span
+                className={`text-white text-3xl font-light transition-transform duration-300 ${
+                  isOpen ? "rotate-45" : ""
+                }`}
+              >
+                +
+              </span>
+            </button>
+          )}
 
           {/* Accordion Content - Collapsible */}
-          <div
-            className={`transition-all duration-700 ease-in-out 
+          {leftSection?.accordion?.items?.length > 0 && (
+            <div
+              className={`transition-all duration-700 ease-in-out 
                 ${isOpen ? "max-h-[332px] opacity-100" : "max-h-0 opacity-0"} 
                 overflow-scroll  
                 scrollbar-style
               `}
-          >
-            {/* Capabilities List */}
-            <div className="px-[22px] pb-9">
-              <div className="space-y-4 ">
-                {[
-                  "Process Innovation and Scale-up",
-                  "Setting up Recovery/Purification processes",
-                  "Analytical Method Development & Validation",
-                  "Compliance Support",
-                  "IP Generation",
-                  "IP Generation",
-                  "Product competency and stabilization",
-                  "Environmental Impact Studies",
-                  "Compliance Support",
-                  "IP Generation",
-                  "IP Generation",
-                  "Product competency and stabilization",
-                  "Environmental Impact Studies",
-                ].map((capability, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <Image
-                      src="/images/star.png"
-                      alt="check-icon"
-                      width={20}
-                      height={20}
-                      className=""
-                    />
-                    <BodyText2 className="text-white">{capability}</BodyText2>
-                  </div>
-                ))}
+            >
+              {/* Capabilities List */}
+              <div className="px-[22px] pb-9">
+                <div className="space-y-4 ">
+                  {leftSection?.accordion?.items?.map(
+                    (capability, index) =>
+                      capability?.title && (
+                        <div key={index} className="flex items-start gap-3">
+                          <Image
+                            src="/images/star.png"
+                            alt="check-icon"
+                            width={20}
+                            height={20}
+                            className=""
+                          />
+                          <BodyText2 className="text-white">
+                            {capability?.title}
+                          </BodyText2>
+                        </div>
+                      )
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-6">
-          <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]">
-            <H2 className="text-orange-200">40+</H2>
-            <BodyText2 className="lg:w-[80%] w-full">
-              Products in R&D Pipelines
-            </BodyText2>
-          </div>
-          <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]">
-            <H2 className="text-orange-200">40+</H2>
-            <BodyText2 className="lg:w-[80%] w-full">
-              years of special
-            </BodyText2>
-          </div>
-          <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]">
-            <H2 className="text-orange-200">40+</H2>
-            <BodyText2 className="lg:w-[80%] w-full">years expertise</BodyText2>
-          </div>
-          <div className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]">
-            <H2 className="text-orange-200">40+</H2>
-            <BodyText2 className="lg:w-[80%] w-full">
-              years of expertise
-            </BodyText2>
-          </div>
+          {righSection?.values?.map((item, index) => (
+            <div
+              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]"
+              key={"item_" + index}
+            >
+              {item?.value && (
+                <H2 className="text-orange-200">{item?.value}</H2>
+              )}
+              {item?.description && (
+                <BodyText2 className="lg:w-[80%] w-full">
+                  {item?.description}
+                </BodyText2>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>

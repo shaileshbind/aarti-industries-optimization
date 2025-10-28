@@ -9,7 +9,7 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
   return (
     <section className="flex lg:flex-row flex-col justify-between lg:py-[100px] py-[50px] pl-[20px] lg:pl-[60px]">
       <div className="w-full lg:w-[43%] flex flex-col items-start justify-center pr-[20px] lg:pr-0">
-        <H2>{title}</H2>
+        {title && <H2>{title}</H2>}
 
         {description && (
           <BodyText1 className="pt-3 pb-3">{description}</BodyText1>
