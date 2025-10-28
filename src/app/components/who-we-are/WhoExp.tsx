@@ -7,14 +7,12 @@ const WhoExp = () => {
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
           title="Innovating Whats Next"
-          items={[{ id: 0, ctaTitle: "Explore Our R&D", ctaLink: "/r-and-d" }]}
+          items={[{ id: 0, title: "Explore Our R&D", link: "/r-and-d" }]}
         />
         <ExploreCard
           lightVariant
           title="Building the Future, Together"
-          items={[
-            { id: 0, ctaTitle: "Partner with Us", ctaLink: "#" },
-          ]}
+          items={[{ id: 0, title: "Partner with Us", link: "#" }]}
         />
       </div>
     </div>

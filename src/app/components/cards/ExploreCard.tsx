@@ -7,8 +7,8 @@ type ExploreCardProps = {
   title?: string;
   items?: {
     id?: number;
-    ctaTitle?: string;
-    ctaLink?: string;
+    title?: string;
+    link?: string;
   }[];
   lightVariant?: boolean;
 };
@@ -28,39 +28,40 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
         className="absolute bottom-[35px] md:bottom-[40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
       />
       <SubH2 className="text-white">{title}</SubH2>
-      <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px]">
-        {items?.map((item) => {
-          if (!item?.ctaLink) return null;
-          return (
-            <div key={item?.id} className="flex gap-x-[12px] items-center">
-              {item?.ctaTitle && (
-                <Cta className="bg-transparent text-white">
-                  {item?.ctaTitle}
-                </Cta>
-              )}
+      {items && items?.length > 0 && (
+        <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px]">
+          {items?.map((item) => {
+            if (!item?.link) return null;
+            return (
+              <Link
+                href={item?.link || "#"}
+                target="_blank"
+                key={item?.id}
+                className="flex gap-x-[12px] items-center cursor-pointer"
+              >
+                {item?.title && (
+                  <Cta className="bg-transparent text-white">{item?.title}</Cta>
+                )}
 
-              {item?.ctaLink && (
-                <Link href={item?.ctaLink} target="_blank">
-                  <Image
-                    src="/images/arrow-white-top-r.svg"
-                    alt="icon"
-                    width={30}
-                    height={30}
-                    className="hidden lg:block"
-                  />
-                  <Image
-                    src="/images/arrow-white-top-r.svg"
-                    alt="icon"
-                    width={24}
-                    height={24}
-                    className="block lg:hidden"
-                  />
-                </Link>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                <Image
+                  src="/images/arrow-white-top-r.svg"
+                  alt="icon"
+                  width={30}
+                  height={30}
+                  className="hidden lg:block"
+                />
+                <Image
+                  src="/images/arrow-white-top-r.svg"
+                  alt="icon"
+                  width={24}
+                  height={24}
+                  className="block lg:hidden"
+                />
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

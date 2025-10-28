@@ -1,15 +1,18 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { RDHeroBannerProps } from "@/app/types/r-and-d.type";
 
-const RDHeroBanner = () => {
+const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
+  const { title, pageHeading, ctaButton, description, image } = data;
+
   return (
     <HeroBanner
-      tag="R&D"
-      title="Pioneering Speciality Chemistry- From Lab to Solutions"
-      desc="ELN-enabled labs, Process Intensification, and transforming complex chemistries to market-ready products"
-      image="/images/rd/rd-banner.png"
-      btnLink="#"
-      btnTitle="Request CDMO"
+      tag={pageHeading}
+      title={title}
+      desc={description}
+      btnLink={ctaButton?.link || "#"}
+      btnTitle={ctaButton?.title}
+      image={image?.url}
     />
   );
 };
