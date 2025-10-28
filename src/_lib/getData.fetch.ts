@@ -1,4 +1,4 @@
-export const getGloballyCertifiedData = async () => {
+export const getData = async () => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/globally-certified-datas?populate=*`,

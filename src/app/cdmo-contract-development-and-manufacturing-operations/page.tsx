@@ -8,13 +8,13 @@ import CDMOSafegreen from "../components/cdmo/CDMOSafegreen";
 import GloballyCertified from "../components/GloballyCertified";
 import CDMOExp from "../components/cdmo/CDMOExp";
 import { getPageData } from "@/_lib/pageData.fetch";
-import { getGloballyCertifiedData } from "@/_lib/globallyCertifiedData.fetch";
+import { getData } from "@/_lib/getData.fetch";
 
 export const dynamic = "force-dynamic";
 
 const Page = async () => {
   const data = await getPageData("/pages/by-slug/cdmo");
-  const globallyCertifiedData = await getGloballyCertifiedData();
+  const globallyCertifiedData = await getData();
 
   const {
     section_one,
