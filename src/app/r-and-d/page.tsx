@@ -10,13 +10,15 @@ import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 // import { getData } from "@/_lib/getData.fetch";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/research-and-development");
-  // const globallyCertifiedData = await getData();
+  // const globallyCertifiedData = await getData(
+  //   "/globally-certified-datas?populate=*"
+  // );
 
-   const {
+  const {
     section_one,
     // section_two,
     // section_three,
