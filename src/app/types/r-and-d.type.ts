@@ -1,47 +1,113 @@
-import { ButtonProps, ImageProps } from "./global.type";
+import { ButtonProps, ImageProps, ValueProps } from "./global.type";
 
 export type RDHeroBannerProps = {
   data: {
-     title: string;
-     pageHeading: string;
-     description: string;
-     ctaButton: ButtonProps;
-     image: ImageProps;
-   };
+    title: string;
+    pageHeading: string;
+    description: string;
+    ctaButton: ButtonProps;
+    image: ImageProps;
+  };
 };
 
-// export type RDInfoProps = {
-//   data: {
+export type RDInfoProps = {
+  data: {
+    description: string;
+    valuesCard: {
+      id: string;
+      image: ImageProps;
+      values: ValueProps[];
+    }[];
+  };
+};
 
-//   };
-// };
+export type RDInnovatingChemProps = {
+  data: {
+    heading: string;
+    cards: {
+      id: string;
+      title: string;
+      description: string;
+      image: ImageProps;
+    }[];
+  };
+};
 
-// export type RDInnovatingChemProps = {
-//   data: {
+export type RDAnalyticalExcProps = {
+  data: {
+    leftText: string;
+    rightText: string;
+    image: ImageProps;
+  };
+  sliderData: {
+    details: {
+      title: string;
+      id: string;
+      description: string;
+      ctaButton: ButtonProps;
+      image: ImageProps;
+      BulletPoints: {
+        title: string;
+        id: string;
+      }[];
+    }[];
+  };
+};
 
-//   };
-// };
+export type RDDiverseChemProps = {
+  data: {
+    title: string;
+    description: string;
+  };
+  data2: {
+    newChemistries: {
+      heading: string;
+      content: {
+        id: string;
+        heading: string;
+        cards: {
+          id: string;
+          title: string;
+        }[];
+      }[];
+    };
+    existingChemistries: {
+      heading: string;
+      content: {
+        id: string;
+        heading: string;
+        cards: {
+          id: string;
+          title: string;
+        }[];
+      }[];
+    };
+  };
+};
 
-// export type RDAnalyticalExcProps = {
-//   data: {
+export type RDCardProps = {
+  category: string;
+  id: string;
+  card: {
+    id: string;
+    title: string;
+    description: string;
+    ctaButton: ButtonProps;
+    image: ImageProps;
+  }[];
+};
 
-//   };
-// };
+export type RDSafetyProps = {
+  data: {
+    details: RDCardProps[];
+  };
+};
 
-// export type RDDiverseChemProps = {
-//   data: {
-
-//   };
-// };
-
-// export type RDSafetyProps = {
-//   data: {
-
-//   };
-// };
-
-// export type RDExploreProps = {
-//   data: {
-
-//   };
-// };
+export type RDExploreProps = {
+  data: {
+    exploreMore: {
+      title: string;
+      ctaButton: ButtonProps[];
+    };
+  }[];
+};
