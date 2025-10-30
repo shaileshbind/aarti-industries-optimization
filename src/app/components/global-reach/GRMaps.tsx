@@ -1,25 +1,224 @@
 "use client";
 import React, { useState } from "react";
-import { BodyText2, H2, H3, SubH3 } from "../Typography2";
+import { BodyText2, BodyText3, H2, H3, SubH1, SubH3 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
+import DesktopMapSvg from "./DesktopMapSvg";
 
 const GRMaps = () => {
   const [active, setActive] = useState(3);
-
+  const [activeBlip, setActiveBlip] = useState(4);
+  console.log("active blip", activeBlip);
   return (
     <div>
       <div className="w-full h-auto lg:h-screen">
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
           Growing Across Markets and Beyond Borders
         </H2>
-        <div className="relative w-full h-[180px] lg:h-[550px]">
-          <Image
-            src="/images/global-reach/gr-map-d.svg"
-            alt="img"
-            fill
-            className="object-contain hidden lg:block"
-          />
+        <div className="relative w-full h-[180px] lg:h-[550px] ">
+          <div className="w-fit h-full mx-auto hidden lg:block relative ">         
+            <DesktopMapSvg
+              hoverRestWorld={() => setActiveBlip(0)}
+              hoverNorthAmerica={() => setActiveBlip(1)}
+              hoverEurope={() => setActiveBlip(2)}
+              hoverMiddleE={() => setActiveBlip(3)}
+              hoverIndia={() => setActiveBlip(4)}
+              hoverAsia={() => setActiveBlip(5)}
+            />
+            {/* Rest of the world */}
+            <div className="absolute top-[78%] left-[5.5%]">
+              <div
+                className={`${
+                  activeBlip === 0
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 0 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  6%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 0 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  Rest of the world
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 0
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+            {/* North America */}
+            <div className="absolute top-[21.5%] left-[12.5%]">
+              <div
+                className={`${
+                  activeBlip === 1
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 1 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  18%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 1 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  North America
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 1
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+            {/* Europe */}
+            <div className="absolute top-[20.5%] left-[43%]">
+              <div
+                className={`${
+                  activeBlip === 2
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 2 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  4%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 2 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  Europe
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 2
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+            {/* Middle East */}
+            <div className="absolute top-[33%] left-[53%]">
+              <div
+                className={`${
+                  activeBlip === 3
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 3 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  23%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 3 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  Middle East
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 3
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+            {/* India */}
+            <div className="absolute top-[36%] left-[64.5%]">
+              <div
+                className={`${
+                  activeBlip === 4
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 4 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  46%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 4 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  India
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 4
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+
+            {/* Rest of Asia */}
+            <div className="absolute top-[19%] left-[76.3%]">
+              <div
+                className={`${
+                  activeBlip === 5
+                    ? "bg-gradient-orange-1 border-[unset]"
+                    : "bg-white border-gray-200"
+                } w-[123px] h-[73px] rounded-[10px] border border-gray-200 grid content-center text-center relative`}
+              >
+                <SubH1
+                  className={`${
+                    activeBlip === 5 ? "text-white" : "text-orange-100"
+                  } !text-[28px]`}
+                >
+                  6%
+                </SubH1>
+                <BodyText3
+                  className={`${
+                    activeBlip === 5 ? "text-white" : "text-grey-400"
+                  } !text-[12px]`}
+                >
+                  Rest of Asia
+                </BodyText3>
+                <div
+                  className={`${
+                    activeBlip === 5
+                      ? "bg-[#e3590c] border-none"
+                      : "bg-white blip-border"
+                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
+                ></div>
+              </div>
+            </div>
+          </div>
           <Image
             src="/images/global-reach/gr-map-m.svg"
             alt="img"
@@ -28,7 +227,7 @@ const GRMaps = () => {
           />
         </div>
         <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
-          {[...Array(6)].map((_,index) => {
+          {[...Array(6)].map((_, index) => {
             return (
               <div
                 key={index}
@@ -42,7 +241,7 @@ const GRMaps = () => {
         </div>
       </div>
       <div className="my-[70px] lg:my-[100px] w-full container grid lg:grid-cols-[35%_1fr] gap-x-[100px] items-center">
-        <div >
+        <div>
           <div>
             <H3>Infrastructure That Delivers Globally</H3>
             <BodyText2 className="mt-[12px] lg:mt-[8px]">

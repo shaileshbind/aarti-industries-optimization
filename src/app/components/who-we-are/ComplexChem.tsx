@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { isMobile } from "react-device-detect";
 import { BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
@@ -96,8 +97,6 @@ const ComplexChem = () => {
     };
   }, []);
 
-
-
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
       const panelIndex = parseInt(panel.replace("panel", ""));
@@ -116,15 +115,32 @@ const ComplexChem = () => {
           <div key={index} className="relative ">
             <FaqAccordion
               faqTitle={
-                <div className="w-full flex gap-x-[48px] items-start justify-between">
-                  <div className="flex items-start gap-x-[48px]">
-                    <BodyText3 className="text-orange-200">
+                <div
+                  className={`w-full flex gap-x-[48px] justify-between ${
+                    expanded === `panel${index}`
+                      ? "my-[unset]"
+                      : "my-[18px] lg:my-[30px]"
+                  }`}
+                >
+                  <div className="flex items-start gap-x-[12px] lg:gap-x-[48px]">
+                    <BodyText3 className="text-orange-200 mt-[5px]">
                       0{index + 1}
                     </BodyText3>
-                    <SubH2>{item?.title}</SubH2>
+                    <div>
+                      <SubH2 className="max-w-[70%] lg:max-w-[unset]">
+                        {item?.title}
+                      </SubH2>
+                      {expanded === `panel${index}` && (
+                        <div className="relative not-last:mt-[20px] hidden lg:block ">
+                          <BodyText2 className="mt-[20px] max-w-[650px]">
+                            {item?.desc}
+                          </BodyText2>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {expanded === `panel${index}` && (
-                    <div className="relative w-[290px] h-[200px] rounded-[20px] overflow-hidden ">
+                    <div className="relative w-[290px] h-[200px] rounded-[20px] overflow-hidden hidden lg:block ">
                       {item?.src && (
                         <Image
                           src={item?.src}
@@ -138,13 +154,21 @@ const ComplexChem = () => {
                 </div>
               }
               faqContent={
-                <div className="relative not-last:mt-[20px] mb-[30px] mx-[66px]">
-                  <BodyText2 className="mt-[20px] max-w-[650px]">
-                    {item?.desc}
-                  </BodyText2>
+                <div className="block lg:hidden ml-[26px] mb-[30px]">
+                  <BodyText2>{item?.desc}</BodyText2>
+                  <div className="mt-[24px] relative  h-[170px] rounded-[10px] overflow-hidden">
+                    {item?.src && (
+                      <Image
+                        src={item?.src}
+                        alt="img"
+                        fill
+                        className="object-cover object-top"
+                      />
+                    )}
+                  </div>
                 </div>
               }
-              //  showIcon
+              showIcon={isMobile}
               expanded={expanded === `panel${index}`}
               handleChange={handleChange(`panel${index}`)}
             />
@@ -158,7 +182,6 @@ const ComplexChem = () => {
                 style={{ width: `${progress}%` }}
               />
             )}
-
             {/* Grey line */}
             <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
             {/* Orange progress bar only for active accordion */}
