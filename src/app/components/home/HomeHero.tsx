@@ -250,7 +250,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="hidden lg:block object-cover"
                   />
                 )}
-
                 {items?.card?.[0]?.image?.url && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -260,6 +259,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="block lg:hidden object-cover"
                   />
                 )}
+                <div className="absolute inset-0 bg-black/30 " />
                 {/* Content box */}
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[200px] w-full z-10">
