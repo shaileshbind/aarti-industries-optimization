@@ -1,23 +1,26 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState } from "react";
-
-// Generic types with numeric IDs
-type SubCategory = {
-  id: number;
-  name: string;
-};
+import { ImageProps } from "../types/global.type";
 
 type Tab = {
-  id: number;
-  slug: string;
-  name: string;
-  subCategories?: SubCategory[];
+  category: string;
+  post_category: {
+    id: string;
+    name: string;
+    slug: string;
+    posts: {
+      title: string;
+      slug: string;
+      image: ImageProps;
+      mobImage: ImageProps;
+    }[];
+  };
 };
 
 type TabsProps = {
   tabs: Tab[];
   activeId: string;
-  onChange: (slug: string) => void;
+  onChange: (slug: string, index: number) => void;
   className?: string;
   containerClassName?: string;
   buttonClassName?: string;
@@ -56,7 +59,9 @@ const Tabs: React.FC<TabsProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const activeIndex = tabs.findIndex((tab) => tab.slug === activeId);
+    const activeIndex = tabs.findIndex(
+      (tab) => tab?.post_category?.slug === activeId
+    );
     const activeButton = tabRefs.current[activeIndex] ?? null;
 
     if (!activeButton) {
@@ -130,15 +135,15 @@ const Tabs: React.FC<TabsProps> = ({
 
           {/* Tab Buttons */}
           {tabs?.map((tab, index) => {
-            const isActive = activeId === tab?.slug;
+            const isActive = activeId === tab?.post_category?.slug;
 
             return (
               <button
-                key={tab.id}
+                key={tab?.post_category?.id}
                 ref={(element) => {
                   tabRefs.current[index] = element;
                 }}
-                onClick={() => onChange(tab?.slug)}
+                onClick={() => onChange(tab?.post_category?.slug, index)}
                 type="button"
                 className={`${buttonClassName} ${
                   isActive ? activeButtonClassName : inactiveButtonClassName
@@ -146,7 +151,7 @@ const Tabs: React.FC<TabsProps> = ({
                 aria-selected={isActive}
                 role="tab"
               >
-                {renderTabContent(tab.name, isActive)}
+                {renderTabContent(tab?.post_category?.name, isActive)}
               </button>
             );
           })}
