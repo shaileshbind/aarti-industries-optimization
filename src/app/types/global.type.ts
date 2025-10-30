@@ -10,5 +10,7 @@ export type ButtonProps = {
 
 export type ValueProps = {
   value: string;
+  id?: string;
   description: string;
+  image: ImageProps;
 };

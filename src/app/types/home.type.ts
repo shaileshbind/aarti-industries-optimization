@@ -26,12 +26,7 @@ export type FourtyYearsProps = {
 export type GlobalPartnerProps = {
   data: {
     leftTitle: string;
-    righSection: {
-      id: string | number;
-      image: ImageProps;
-      mobImage: ImageProps;
-      values: ValueProps[];
-    }[];
+    righSection: ValueProps[];
   };
 };
 
@@ -98,6 +93,22 @@ export type FrameworkForgedProps = {
 export type LatestAtAartiProps = {
   data: {
     sectionTitle: string;
+    card: {
+      category: string;
+      post_category: {
+        id: string;
+        name: string;
+        slug: string;
+        posts: {
+          id: string;
+          title: string;
+          slug: string;
+          description: string;
+          image: ImageProps;
+          mobImage: ImageProps;
+        }[];
+      };
+    }[];
   };
 };
 

@@ -13,11 +13,8 @@ export type RDHeroBannerProps = {
 export type RDInfoProps = {
   data: {
     description: string;
-    valuesCard: {
-      id: string;
-      image: ImageProps;
-      values: ValueProps[];
-    }[];
+    valuesCard: ValueProps[];
+    rightSectionImage: ImageProps;
   };
 };
 

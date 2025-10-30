@@ -3,26 +3,12 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import NumberCard from "../cards/NumberCard";
+import { WhoCardsProps } from "@/app/types/who-we-are.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const WhoCards = () => {
-  const RDInfoData = [
-    {
-      id: 0,
-      title: "3",
-      desc: "Globally, for >75% of the product portfolio",
-    },
-    { id: 1, title: "6", desc: "Manufacturing facilities" },
-    { id: 2, imageSrc: "/images/home/chemical.png" },
-    { id: 3, title: "5", desc: "star export house" },
-    { id: 4, imageSrc: "/images/home/chemical.png" },
-    {
-      id: 5,
-      title: "2",
-      desc: "State-of-the-art R&D Centres",
-    },
-  ];
+const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
+  const { cards } = data;
   const wrapperRef = useRef(null);
   const wrapperRefBox = useRef<HTMLDivElement>(null);
 
@@ -70,43 +56,42 @@ const WhoCards = () => {
   }, []);
 
   return (
-      <div ref={wrapperRef} className="container mx-auto">
-        <div className="mt-[40px] lg:mt-[60px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
-          <div
-            ref={wrapperRefBox}
-            className="w-full max-w-[750px] h-auto mx-auto"
-          >
-            <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
-              <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                {RDInfoData?.slice(0, 3)?.map((items) => {
+    <div ref={wrapperRef} className="container mx-auto">
+      <div className="mt-[40px] lg:mt-[60px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
+        <div ref={wrapperRefBox} className="w-full h-auto mx-auto">
+          {cards?.length > 0 && (
+            <div className="grid grid-cols-[1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-[6px]">
+                {cards?.slice(0, 4)?.map((items) => {
                   return (
                     <NumberCard
                       key={items?.id}
-                      title={items?.title}
-                      desc={items?.desc}
-                      imageSrc={items?.imageSrc}
+                      title={items?.value}
+                      desc={items?.description}
+                      imageSrc={items?.image?.url}
                       className="stat-box"
                     />
                   );
                 })}
               </div>
-              <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                {RDInfoData?.slice(3, 6)?.map((items) => {
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-[6px]">
+                {cards?.slice(4, 8)?.map((items) => {
                   return (
                     <NumberCard
                       key={items?.id}
-                      title={items?.title}
-                      desc={items?.desc}
-                      imageSrc={items?.imageSrc}
+                      title={items?.value}
+                      desc={items?.description}
+                      imageSrc={items?.image?.url}
                       className="stat-box"
                     />
                   );
                 })}
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
+    </div>
   );
 };
 

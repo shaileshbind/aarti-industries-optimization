@@ -46,11 +46,11 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
 
   return (
     <div className="w-full pb-[100px]">
-      {title && (
-        <FadeInRevealBlur delay={0.1}>
-          <H3 className="text-blue-100 mx-auto w-fit">{title}</H3>
-        </FadeInRevealBlur>
-      )}
+      <FadeInRevealBlur delay={0.1}>
+        <H3 className="text-blue-100 mx-auto w-fit">
+          {title || "Globally Certified"}
+        </H3>
+      </FadeInRevealBlur>
       <div
         className="overflow-hidden relative mt-[24px] lg:mt-[35px]"
         ref={containerRef}

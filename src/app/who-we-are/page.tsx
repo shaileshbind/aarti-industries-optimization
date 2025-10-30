@@ -10,40 +10,55 @@ import IndustryAccolades from "../components/who-we-are/IndustryAccolades";
 import ChemCreates from "../components/who-we-are/ChemCreates";
 import GloballyCertified from "../components/GloballyCertified";
 import WhoExp from "../components/who-we-are/WhoExp";
+import { getPageData } from "@/_lib/pageData.fetch";
+import { getData } from "@/_lib/getData.fetch";
 
-const page = () => {
+export const dynamic = "force-dynamic";
+
+const page = async () => {
+  const data = await getPageData("/pages/by-slug/who-we-are");
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*"
+  );
+
+  const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+    section_five,
+    section_six,
+    section_seven,
+    section_eight,
+    section_nine,
+    section_ten,
+  } = data;
+
   return (
     <div>
-      <WhoBanner />
-      <WhoInfo />
-      <WhoCards />
-      <WhoPrinciples />
-      <MeetMinds />
-      <ComplexChem />
-      <ShapedBy />
-      <IndustryAccolades />
-      <ChemCreates />
-      <GloballyCertified
-        title="Globally Certified"
-        itemsData={[
-          {
-            id: 0,
-            heading: "Ecovadis Gold Rating",
-            image: { url: "/images/award1.png", alternativeText: "" },
-          },
-          {
-            id: 1,
-            heading: "CDP A rating",
-            image: { url: "/images/award2.png", alternativeText: "" },
-          },
-          {
-            id: 2,
-            heading: "ISO 27001:2022",
-            image: { url: "/images/award3.png", alternativeText: "" },
-          },
-        ]}
-      />
-      <WhoExp />
+      {section_one && <WhoBanner data={section_one} />}
+
+      {section_two && <WhoInfo data={section_two} />}
+
+      {section_three && <WhoCards data={section_three} />}
+
+      {section_four && <WhoPrinciples data={section_four} />}
+
+      {section_five && <MeetMinds data={section_five} />}
+
+      {section_six && <ComplexChem data={section_six} />}
+
+      {section_seven && <ShapedBy data={section_seven} />}
+
+      {section_eight && <IndustryAccolades data={section_eight} />}
+
+      {section_nine && <ChemCreates data={section_nine} />}
+
+      {globallyCertifiedData && (
+        <GloballyCertified itemsData={globallyCertifiedData} />
+      )}
+
+      {section_ten && <WhoExp data={section_ten} />}
     </div>
   );
 };

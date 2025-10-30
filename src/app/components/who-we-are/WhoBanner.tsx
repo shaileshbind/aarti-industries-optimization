@@ -1,14 +1,12 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { WhoBannerProps } from "@/app/types/who-we-are.type";
 
-const WhoBanner = () => {
+const WhoBanner: React.FC<WhoBannerProps> = ({ data }) => {
+  const { title, description, image } = data;
+
   return (
-    <HeroBanner
-      tag="Who We Are"
-      title="Crafting Chemistries Building Trust Since 1984"
-      image="/images/global-reach/gr-banner.png"
-      fullBg
-    />
+    <HeroBanner tag={title} title={description} image={image?.url} fullBg />
   );
 };
 

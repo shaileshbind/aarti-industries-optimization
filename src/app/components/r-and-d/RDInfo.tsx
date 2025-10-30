@@ -11,7 +11,7 @@ import { RDInfoProps } from "@/app/types/r-and-d.type";
 gsap.registerPlugin(ScrollTrigger);
 
 const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
-  const { description, valuesCard } = data;
+  const { description, valuesCard, rightSectionImage } = data;
   const wrapperRef = useRef(null);
   const topLineRef = useRef(null);
   const wrapperRefBox = useRef<HTMLDivElement>(null);
@@ -105,14 +105,16 @@ const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
             className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[1fr_312px] gap-[6px]"
           >
             <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
-              {valuesCard?.[0]?.values?.length > 0 && (
+              {valuesCard?.length > 0 && (
                 <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                  {valuesCard?.[0]?.values?.slice(0, 3)?.map((items, index) => {
+                  {valuesCard?.slice(0, 3)?.map((items, index) => {
                     return (
                       <NumberCard
                         key={"value_" + index}
                         title={items?.value}
                         desc={items?.description}
+                        imageSrc={items?.image?.url}
+                        imageAlt={items?.image?.alternativeText}
                         className="stat-box"
                       />
                     );
@@ -121,35 +123,25 @@ const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
               )}
 
               <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                {valuesCard?.[0]?.values?.[3]?.value && (
-                  <NumberCard
-                    title={valuesCard?.[0]?.values?.[3]?.value}
-                    desc={valuesCard?.[0]?.values?.[3]?.description}
-                    className="stat-box"
-                  />
-                )}
-                {valuesCard?.[0]?.image?.url && (
-                  <Image
-                    src={valuesCard?.[0]?.image?.url}
-                    width={250}
-                    height={180}
-                    alt={valuesCard?.[0]?.image?.alternativeText || "banner"}
-                  />
-                )}
-                {valuesCard?.[0]?.values?.[4]?.value && (
-                  <NumberCard
-                    title={valuesCard?.[0]?.values?.[4]?.value}
-                    desc={valuesCard?.[0]?.values?.[4]?.description}
-                    className="stat-box"
-                  />
-                )}
+                {valuesCard?.slice(3, 6)?.map((items, index) => {
+                  return (
+                    <NumberCard
+                      key={"value_" + index}
+                      title={items?.value}
+                      desc={items?.description}
+                      imageSrc={items?.image?.url}
+                      imageAlt={items?.image?.alternativeText}
+                      className="stat-box"
+                    />
+                  );
+                })}
               </div>
             </div>
-            {valuesCard?.[1]?.image?.url && (
+            {rightSectionImage?.url && (
               <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
                 <Image
-                  src={valuesCard?.[1]?.image?.url}
-                  alt={valuesCard?.[1]?.image?.alternativeText || "img"}
+                  src={rightSectionImage?.url}
+                  alt={rightSectionImage?.alternativeText || "img"}
                   fill
                   className="object-cover"
                 />
