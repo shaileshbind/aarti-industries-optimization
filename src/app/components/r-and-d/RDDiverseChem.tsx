@@ -5,7 +5,6 @@ import { BodyText1, BodyText2, H2, H3 } from "../Typography2";
 import Chip from "../cards/Chip";
 import FaqAccordion from "../FaqAccordian";
 import Image from "next/image";
-import { FadeInRevealBlur } from "../ScrollReveal";
 import { RDDiverseChemProps } from "@/app/types/r-and-d.type";
 
 const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
@@ -19,11 +18,42 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
   useLayoutEffect(() => {
     if (!gridRef.current) return;
 
-    gsap.to(gridRef.current, {
-      gridTemplateColumns: swapped ? "375px 1fr" : "1fr 375px",
-      duration: 0.9,
-      ease: "power2.inOut",
-    });
+    const children = gridRef.current.children;
+    const leftCard = children[0] as HTMLElement;
+    const rightCard = children[1] as HTMLElement;
+    const containerWidth = gridRef.current.offsetWidth;
+    const gap = 20;
+    if (swapped) {
+      const newLeftWidth = 375;
+      const newRightWidth = containerWidth - newLeftWidth - gap;
+
+      gsap.to(leftCard, {
+        width: newLeftWidth,
+        duration: 0.9,
+        ease: "power2.inOut",
+      });
+
+      gsap.to(rightCard, {
+        width: newRightWidth,
+        duration: 0.9,
+        ease: "power2.inOut",
+      });
+    } else {
+      const newRightWidth = 375;
+      const newLeftWidth = containerWidth - newRightWidth - gap;
+
+      gsap.to(leftCard, {
+        width: newLeftWidth,
+        duration: 0.9,
+        ease: "power2.inOut",
+      });
+
+      gsap.to(rightCard, {
+        width: newRightWidth,
+        duration: 0.9,
+        ease: "power2.inOut",
+      });
+    }
   }, [swapped]);
 
   const handleChange =
@@ -33,21 +63,18 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
 
   return (
     <div className="pt-[50px] lg:pt-[150px] pb-[50px] lg:py-[100px] mx-[20px] lg:mx-[60px]">
-      <FadeInRevealBlur>
-        <div className="w-full grid lg:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
-          {title && (
-            <div>
-              <H2>{title}</H2>
-            </div>
-          )}
-          <div>{description && <BodyText1>{description}</BodyText1>}</div>
-        </div>
-      </FadeInRevealBlur>
-
+      <div className="w-full grid lg:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
+        {title && (
+          <div>
+            <H2>{title}</H2>
+          </div>
+        )}
+        <div>{description && <BodyText1>{description}</BodyText1>}</div>
+      </div>
       <div className="hidden lg:block">
         <div
           ref={gridRef}
-          className="mt-[44px] h-[600px] grid grid-cols-[1fr_375px] gap-x-[20px] w-full overflow-hidden"
+          className="mt-[44px] h-[600px] flex gap-x-[20px] w-full overflow-hidden"
         >
           <div
             className={`w-full rounded-[20px] p-[40px] border border-orange-100 h-[600px] ${
@@ -135,7 +162,6 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
           </div>
         </div>
       </div>
-
       {/* Mobile */}
       <div className="mt-[30px] block lg:hidden">
         {Object?.values(data2)

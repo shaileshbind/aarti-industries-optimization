@@ -106,10 +106,10 @@ const HeroBanner = ({
     <>
       {fullBg ? (
         <>
-          <div className="h-full lg:h-screen w-full relative overflow-hidden">
+          <div className="h-[490px] lg:h-[640px] w-full relative overflow-hidden">
             <div
               ref={wrapperRef}
-              className="relative overflow-hidden h-screen w-full"
+              className="relative overflow-hidden h-[490px] lg:h-[640px] w-full"
             >
               {image && (
                 <Image

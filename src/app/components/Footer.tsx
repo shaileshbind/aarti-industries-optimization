@@ -353,7 +353,7 @@ const Footer = () => {
                         <a
                           key={items.id}
                           href={items?.link}
-                          className="text-[14px] py-[5px] font-roboto font-normal text-[#585858]"
+                          className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                         >
                           {items?.title}
                         </a>
@@ -371,7 +371,7 @@ const Footer = () => {
                         <a
                           key={items.id}
                           href={items?.link}
-                          className="text-[14px] py-[5px] font-roboto font-normal text-[#585858]"
+                          className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                         >
                           {items?.title}
                         </a>
@@ -401,7 +401,7 @@ const Footer = () => {
                                 <a
                                   key={items.id}
                                   href={items?.link}
-                                  className="text-[14px] py-[5px] font-roboto font-normal text-[#585858]"
+                                  className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                                 >
                                   {items?.title}
                                 </a>
@@ -452,18 +452,30 @@ const Footer = () => {
           {footerData?.copy_rights}
         </p>
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1">
-          <p className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434]">
+          <a
+            href="#"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434] my-[0.5px] footer-animated-underline"
+          >
             Legal Disclaimer
-          </p>
-          <p className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434]">
+          </a>
+          <a
+            href="#"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434]  my-[0.5px] footer-animated-underline"
+          >
             Privacy Policy
-          </p>
-          <p className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]">
+          </a>
+          <a
+            href="#"
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]   my-[0.5px] footer-animated-underline"
+          >
             Sitemap
-          </p>
-          <p className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]">
+          </a>
+          <a
+            href="#"
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]  my-[0.5px] footer-animated-underline "
+          >
             Job Fraud Alert
-          </p>
+          </a>
         </div>
       </div>
     </footer>

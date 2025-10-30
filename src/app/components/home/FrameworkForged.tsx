@@ -13,6 +13,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
+  const [isImageAnimating, setIsImageAnimating] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Holds the index of the image being displayed
 
   const slidesPerView = 1.5;
   const spaceBetween = 80;
@@ -44,6 +46,28 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
     return () => window.removeEventListener("resize", computeOffset);
   }, [slidesPerView, spaceBetween]);
 
+  // EFFECT TO HANDLE IMAGE ANIMATION (Zoom/Fade)
+  useEffect(() => {
+    setIsImageAnimating(false);
+    setCurrentImageIndex(activeIndex);
+    const timer = setTimeout(() => {
+      setIsImageAnimating(true);
+    }, 50);
+    return () => clearTimeout(timer); 
+  }, [activeIndex]);
+  const baseImageClasses = "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
+  const secondaryImageClasses = "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+  const imageTransitionClasses = "transition-all duration-700 ease-out"; 
+  const imageInitialClasses = "transform scale-[0.99] opacity-0"; 
+  const imageFinalScaleClasses = "transform scale-[1.01]";
+  const backgroundFinalOpacityClass = "opacity-40"; 
+  const mainFinalOpacityClass = "opacity-100";
+  const backgroundAnimationClasses = isImageAnimating 
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}` 
+    : `${imageTransitionClasses} ${imageInitialClasses}`;
+  const mainAnimationClasses = isImageAnimating 
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}` 
+    : `${imageTransitionClasses} ${imageInitialClasses}`;
   return (
     <div>
       {title && (
@@ -155,24 +179,25 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
         </div>
         <div className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">
           <div
-            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
           >
-            {card?.[activeIndex]?.image?.url && (
+            {card?.[currentImageIndex]?.image?.url && (
               <Image
-                src={card?.[activeIndex]?.image?.url}
-                alt={card?.[activeIndex]?.image?.alternativeText || "banner"}
+                key={`outer-${currentImageIndex}`} 
+                src={card?.[currentImageIndex]?.image?.url}
+                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                 fill
-                className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] "
+                className={`${baseImageClasses} ${backgroundAnimationClasses}`} // Applied background classes
               />
             )}
-
-            {card?.[activeIndex]?.image?.url && (
+            {card?.[currentImageIndex]?.image?.url && (
               <Image
-                src={card?.[activeIndex]?.image?.url}
-                alt={card?.[activeIndex]?.image?.alternativeText || "banner"}
+                key={`main-${currentImageIndex}`} 
+                src={card?.[currentImageIndex]?.image?.url}
+                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                 width={500}
                 height={548}
-                className="absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px]  h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]"
+                className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
               />
             )}
 
@@ -181,17 +206,17 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
               alt="img"
               width={72}
               height={72}
-              className="absolute top-[-36px] z-10 right-[50px] lg:right-[174px] w-[42px] lg:w-[72px]"
+              className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
             />
             <Image
               src="/images/home/star-white.svg"
               alt="img"
               width={72}
               height={72}
-              className="absolute bottom-[50px] lg:bottom-[57px] z-10 right-[50px] lg:right-[174px] w-[42px] lg:w-[72px]"
+              className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
             />
-            <div className="absolute min-h-screen bg-white w-[1px] right-[71px] lg:right-[209.5px]" />
-            <div className="absolute w-full bg-white bottom-[71px] lg:bottom-[92.5px] h-[1px]" />
+            <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
+            <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
           </div>
         </div>
       </div>
