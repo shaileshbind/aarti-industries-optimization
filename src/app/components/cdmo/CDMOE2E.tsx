@@ -225,7 +225,9 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
         </div>
 
         {/* RIGHT SIDE – DYNAMIC IMAGE SECTION */}
-        <SwipeImage activeImg={activeImg} />
+        <div className="w-1/2">
+          <SwipeImage activeImg={activeImg} />
+        </div>
       </div>
     </div>
   );
