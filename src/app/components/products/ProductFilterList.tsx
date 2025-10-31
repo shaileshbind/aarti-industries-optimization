@@ -7,6 +7,7 @@ import ProductTabs from "./ProductTabs";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { ProductFilterProps } from "@/app/types/product.listing.type";
+import { ProductData } from "@/app/types/product.inner.type";
 
 interface ProductFilterListProps extends ProductFilterProps {
   searchQuery?: string; //  new optional prop
@@ -21,7 +22,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const [activeTab, setActiveTab] = useState<string>("all");
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +42,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       setLoading(false);
     }
   };
+
+  console.log(filteredProducts, "filterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
   //  Fetch based on search query
   const fetchSearchResults = async (query: string) => {
@@ -142,9 +145,9 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
           {filteredProducts.map((product) => (
             <div key={product.id} className="w-full">
               <ProductList
-                title={product.productName}
+                title={product.productName ?? ""}
                 link={`/${product.slug}`}
-                pdfLink={product?.productDetails?.documentSection || ""}
+                pdfLink={typeof product?.productDetails?.documentSection === 'string' ? product.productDetails.documentSection : ''}
                 pdfTitle={product?.productDetails?.abbreviation || ""}
               />
             </div>

@@ -3,6 +3,8 @@ import Banner from "../components/products/Banner";
 import ProductFilterList from "../components/products/ProductFilterList";
 import { getPageData } from "@/_lib/pageData.fetch";
 
+export const dynamic = "force-dynamic";
+
 export default async function Product() {
 
   const data = await getPageData("/pages/by-slug/product-listing");

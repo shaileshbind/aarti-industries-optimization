@@ -1,8 +1,11 @@
+
 import React from "react";
 import MainComponent from "@/app/components/product-inner/MainComponent";
 import GloballyCertified from "@/app/components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import { ProductPageProps } from "../../types/product.type";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProductInner({ params }: ProductPageProps) {
   const { productId } = params;

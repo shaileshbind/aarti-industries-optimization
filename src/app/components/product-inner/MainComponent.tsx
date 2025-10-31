@@ -13,6 +13,7 @@ import Link from "next/link";
 import ProductList from "@/app/components/products/ProdutList";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
 import { ProductData, RelatedProduct } from "@/app/types/product.inner.type";
+import { appDetails } from "@/app/types/product.type";
 
 interface ProductInnerPageProps {
   data?: ProductData;
@@ -73,7 +74,7 @@ export default function ProductInnerPage({ data, relatedData }: ProductInnerPage
                 <div className="mt-9">
                   <BodyText1>Applications :</BodyText1>
                   <div className="flex flex-wrap mt-3 gap-2">
-                    {(productDetails?.application ?? []).map((app: any) => (
+                    {(productDetails?.application ?? []).map((app: appDetails) => (
                       <div
                         key={app?.id}
                         className="bg-[#ffece2] rounded-[20px] py-[6px] px-4 w-fit h-auto"
@@ -135,7 +136,7 @@ export default function ProductInnerPage({ data, relatedData }: ProductInnerPage
                  productDetails?.documentSection && productDetails?.documentSection?.documents?.length !== 0 &&
                   <div className="bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5">
                     <BodyText1 className="mb-2">Documents :</BodyText1>
-                    {productDetails?.documentSection?.documents?.map((doc: any) => (
+                    {productDetails?.documentSection?.documents?.map((doc) => (
                       <div
                         key={doc?.id}
                         className="w-full flex gap-x-[6px] justify-between mb-2"
