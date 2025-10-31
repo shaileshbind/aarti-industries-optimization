@@ -320,13 +320,17 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <div className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-[50%] overflow-hidden">
+                    <div
+                      className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
+             transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] 
+             hover:scale-110  hover:shadow-lg hover:shadow-[#E55E2C]/30"
+                    >
                       <Image
                         src={item.image_desktop}
                         alt="icon"
                         width={24}
                         height={24}
-                        className="w-[24px] h-[24px] rounded-[50%] object-contain"
+                        className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
                       />
                     </div>
                   </a>
@@ -432,13 +436,17 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <div className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-[50%] overflow-hidden">
+                <div
+                  className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
+             transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] 
+             hover:scale-110  hover:shadow-xl hover:shadow-[#E55E2C]/30"
+                >
                   <Image
                     src={item.image_desktop}
                     alt="icon"
                     width={24}
                     height={24}
-                    className="w-[24px] h-[24px] rounded-[50%] object-contain"
+                    className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
                   />
                 </div>
               </Link>

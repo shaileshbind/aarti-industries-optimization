@@ -119,7 +119,8 @@ const HeroBanner = ({
                   className="object-cover"
                 />
               )}
-              <div className="w-full h-full absolute pt-[150px] ">
+              <div className="absolute inset-0 bg-black/20 z-[1]" />
+              <div className="w-full h-full absolute pt-[150px] z-[3] ">
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container">

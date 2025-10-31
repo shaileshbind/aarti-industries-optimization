@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1 } from "../Typography2";
 import "swiper/css";
@@ -9,18 +9,27 @@ import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
 import TitleCard from "../cards/TitleCard";
+import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
 
 const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   const [active, setActive] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
 
   const contentRef = useRef(null);
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (swiper) {
+      setIsBeginning(swiper.isBeginning);
+      setIsEnd(swiper.isEnd);
+    }
+  }, [active]);
 
   const handleTabClick = (index: number) => {
-    // Prevent multiple clicks during transition
     if (index === active || isTransitioning) return;
 
     setIsTransitioning(true);
@@ -33,9 +42,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
         ease: "power2.in",
       })
         .call(() => {
-          // Update state in the middle of animation
           setActive(index);
-          setActiveIndex(0);
         })
         .to(contentRef.current, {
           duration: 0.3,
@@ -49,7 +56,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   };
 
   return (
-    <div className="pt-[100px] lg:pt-[150px]  overflow-hidden ">
+    <div className="pt-[100px] lg:pt-[150px] overflow-hidden">
       {/* Tabs */}
       <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
@@ -74,7 +81,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
       {/* Content Section */}
       <div ref={contentRef} className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
-          {/* Left Content - Contained */}
+          {/* Left Content */}
           <div className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0">
             {data?.[active]?.title && (
               <SubH1 className="text-blue-200">{data?.[active]?.title}</SubH1>
@@ -94,13 +101,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
               />
             )}
           </div>
-          {/* Right Swiper - Full Width to Edge */}
-          <div className="flex-1 min-w-0 mt-[42px] lg:mt-[0px] pl-[20px] lg:pl-[unset]">
+          {/* Right Swiper */}
+          <div className="flex-1 min-w-0 mt-[42px] lg:mt-[0px]">
             <div className="relative">
               {data?.[active]?.card?.length > 0 && (
                 <Swiper
                   key={`swiper-${active}`}
-                  ref={swiperRef}
                   spaceBetween={14}
                   slidesPerView={1.2}
                   breakpoints={{
@@ -126,16 +132,32 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     el: ".home-by-use-section-swiper",
                     type: "progressbar",
                   }}
-                  className="w-full !pr-5 lg:!pr-0"
-                  onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-                  observer={true}
-                  observeParents={true}
+                  onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    setIsBeginning(swiper.isBeginning);
+                    setIsEnd(swiper.isEnd);
+                  }}
+                  onSlideChange={(swiper) => {
+                    setIsBeginning(swiper.isBeginning);
+                    setIsEnd(swiper.isEnd);
+                  }}
+                  onReachBeginning={() => {
+                    setIsBeginning(true);
+                  }}
+                  onReachEnd={() => {
+                    setIsEnd(true);
+                  }}
+                  onFromEdge={(swiper) => {
+                    setIsBeginning(swiper.isBeginning);
+                    setIsEnd(swiper.isEnd);
+                  }}
                   direction="horizontal"
                   mousewheel={{
                     forceToAxis: true,
                     sensitivity: 1,
                     releaseOnEdges: true,
                   }}
+                  className="w-full !pr-5 lg:!pr-5 !pl-5 lg:pl-[unset]"
                 >
                   {data?.[active]?.card?.map((item, index) => (
                     <SwiperSlide key={`${active}-${index}`}>
@@ -148,15 +170,17 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                 </Swiper>
               )}
 
-              <div className="relative py-[30px]">
+              {/* Navigation Buttons */}
+              <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
                 <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                   <button
                     className={`swiper-button-prev-useBySection transition-opacity ${
-                      activeIndex > 0
-                        ? "cursor-pointer opacity-100"
-                        : "pointer-events-none opacity-30"
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
                     }`}
                     aria-label="Previous slide"
+                    aria-disabled={isBeginning}
                   >
                     <Image
                       src="/images/home/chevron-right-orange.svg"
@@ -168,11 +192,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                   </button>
                   <button
                     className={`swiper-button-next-useBySection transition-opacity ${
-                      activeIndex < data?.[active]?.card?.length - 2
-                        ? "cursor-pointer opacity-100"
-                        : "pointer-events-none opacity-30"
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
                     }`}
                     aria-label="Next slide"
+                    aria-disabled={isEnd}
                   >
                     <Image
                       src="/images/home/chevron-right-orange.svg"
@@ -182,7 +207,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     />
                   </button>
                 </div>
-                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[75%]" />
+                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[75%]" />
               </div>
             </div>
           </div>
