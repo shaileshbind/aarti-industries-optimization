@@ -22,16 +22,13 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
     setActive(index);
   };
 
-  // ✅ Reset when changing tabs
   useEffect(() => {
     if (swiperRef.current) {
       swiperRef.current.slideTo(0, 0);
       setActiveIndex(0);
-
-      // ✅ Force Swiper to update pagination so the progress bar shows fill immediately
       if (swiperRef.current.pagination && swiperRef.current.pagination.el) {
-        swiperRef.current.pagination.render(); // render the progressbar fill
-        swiperRef.current.pagination.update(); // update it
+        swiperRef.current.pagination.render(); 
+        swiperRef.current.pagination.update(); 
       }
     }
   }, [active]);
@@ -39,7 +36,6 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   return (
     <div className="py-[50px] lg:py-[100px]">
       {title && <H2 className="text-center container">{title}</H2>}
-
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
         <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto">
@@ -62,7 +58,6 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           ))}
         </div>
       )}
-
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
         <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
@@ -89,6 +84,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               nextEl: ".swiper-button-next-awardsSection",
               prevEl: ".swiper-button-prev-awardsSection",
             }}
+            className="!pr-[20px] !lg:pr-[60px]"
           >
             {awards?.[active]?.card?.map((item, idx) => (
               <SwiperSlide key={`${active}-${idx}`}>
@@ -119,48 +115,51 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           <div className="w-[100%] lg:w-[95%] relative">
             <div className="awards-section-swiper" />
           </div>
-          <div className="w-fit gap-x-[12px] hidden lg:flex">
-            <button
-              className={`swiper-button-prev-awardsSection transition-opacity ${
-                activeIndex === 0
-                  ? "pointer-events-none opacity-30"
-                  : "cursor-pointer opacity-100"
-              }`}
-              aria-label="Previous slide"
-              onClick={() => swiperRef.current?.slidePrev()}
-            >
-              <Image
-                src="/images/home/chevron-right-orange.svg"
-                alt="Previous"
-                width={34}
-                height={34}
-                className="rotate-180"
-              />
-            </button>
+          {(awards?.[active]?.card?.length || 0) > 4 && (
+            <div className="w-fit gap-x-[12px] hidden lg:flex">
+              <button
+                className={`swiper-button-prev-awardsSection transition-opacity ${
+                  activeIndex === 0
+                    ? "pointer-events-none opacity-30"
+                    : "cursor-pointer opacity-100"
+                }`}
+                aria-label="Previous slide"
+                onClick={() => swiperRef.current?.slidePrev()}
+              >
+                <Image
+                  src="/images/home/chevron-right-orange.svg"
+                  alt="Previous"
+                  width={34}
+                  height={34}
+                  className="rotate-180"
+                />
+              </button>
 
-            <button
-              className={`swiper-button-next-awardsSection transition-opacity ${
-                activeIndex >=
-                (awards?.[active]?.card?.length || 0) -
-                  Math.floor(
-                    typeof swiperRef.current?.params.slidesPerView === "number"
-                      ? swiperRef.current.params.slidesPerView
-                      : 1
-                  )
-                  ? "pointer-events-none opacity-30"
-                  : "cursor-pointer opacity-100"
-              }`}
-              aria-label="Next slide"
-              onClick={() => swiperRef.current?.slideNext()}
-            >
-              <Image
-                src="/images/home/chevron-right-orange.svg"
-                alt="Next"
-                width={34}
-                height={34}
-              />
-            </button>
-          </div>
+              <button
+                className={`swiper-button-next-awardsSection transition-opacity ${
+                  activeIndex >=
+                  (awards?.[active]?.card?.length || 0) -
+                    Math.floor(
+                      typeof swiperRef.current?.params.slidesPerView ===
+                        "number"
+                        ? swiperRef.current.params.slidesPerView
+                        : 1
+                    )
+                    ? "pointer-events-none opacity-30"
+                    : "cursor-pointer opacity-100"
+                }`}
+                aria-label="Next slide"
+                onClick={() => swiperRef.current?.slideNext()}
+              >
+                <Image
+                  src="/images/home/chevron-right-orange.svg"
+                  alt="Next"
+                  width={34}
+                  height={34}
+                />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

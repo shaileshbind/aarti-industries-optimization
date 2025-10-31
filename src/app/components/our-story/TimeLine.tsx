@@ -31,68 +31,72 @@ function TimeLine() {
       description: "Founded with a vision to become a leader in specialty chemicals, Aarti Organics began its journey with a small manufacturing unit in Vapi, Gujarat.",
     },
     1986: {
-      title: "First Major Export Order",
-      description: "Secured first international client, marking the beginning of global expansion. Started exporting benzene-based intermediates to European markets.",
+      title: "Commercialised First NCB Facility",
+      description: "Commercialised the first Nitro Chloro Benzenes (NCB) 1,200 TPA facility at Sarigram, marking a major step in the company’s manufacturing capabilities.",
     },
     1990: {
-      title: "ISO Certification Achievement",
-      description: "Became one of the first Indian chemical companies to receive ISO 9001 certification, establishing quality standards that continue to this day.",
+      title: "Expansion of NCB Operations",
+      description: "Expanded with a 4,500 TPA NCB plant, AIL’s first large-scale organic facility in Vapi, enhancing production capacity and market reach.",
     },
     1992: {
-      title: "IPO and Public Listing",
-      description: "Successfully listed on the Bombay Stock Exchange, raising capital for expansion and modernization of manufacturing facilities.",
+      title: "Listed on BSE and NSE",
+      description: "Between 1992 and 1995, Aarti Industries successfully listed on the Bombay Stock Exchange (BSE) and National Stock Exchange (NSE), broadening its investor base.",
     },
     1997: {
-      title: "Backward Integration Initiative",
-      description: "Implemented backward integration strategy, establishing in-house production of key raw materials to ensure supply chain stability.",
+      title: "Hydrogenation and Nitration Facilities",
+      description: "From 1997 to 2001, established pioneering hydrogenation and nitration facilities at Jhagadia, strengthening process excellence and operational efficiency.",
     },
     2004: {
-      title: "New Manufacturing Facility",
-      description: "Commissioned state-of-the-art manufacturing plant in Jhagadia, Gujarat, doubling production capacity for specialty chemicals.",
+      title: "Capacity Expansion and New Facilities",
+      description: "Between 2004 and 2008, expanded NCB and sulphuric acid capacities and established a new specialty chemical facility at Kutch, advancing production capabilities.",
     },
     2011: {
-      title: "Global Partnership Expansion",
-      description: "Formed strategic alliances with leading global chemical companies, strengthening position in international markets.",
+      title: "Process Upgrade and USFDA Approval",
+      description: "Between 2011 and 2012, upgraded the hydrogenation process to continuous, achieved USFDA approval for the Vapi Custom Synthesis unit, and began global bulk shipments.",
     },
     2013: {
-      title: "Green Chemistry Initiative",
-      description: "Launched comprehensive sustainability program, implementing eco-friendly manufacturing processes and waste reduction systems.",
+      title: "Sustained Growth and Strategic Merger",
+      description: "Merged the manufacturing division of Anushakti Chemicals and Drugs Ltd., surpassing the ₹2,000 crore revenue milestone, reinforcing growth momentum.",
     },
     2014: {
-      title: "R&D Center Inauguration",
-      description: "Opened advanced Research & Development center with 50+ scientists, focusing on innovation in specialty chemicals.",
+      title: "Process Modernization and Capacity Expansion",
+      description: "Between 2014 and 2016, upgraded batch nitration to continuous, expanded NCB capacity to 75 KTPA, and commissioned an ethylation facility at Dahej SEZ.",
     },
-    2015: {
-      title: "Capacity Expansion Program",
-      description: "Invested $100 million in capacity expansion, adding new production lines for high-value pharmaceutical intermediates.",
-    },
-    2016: {
-      title: "Industry Recognition",
-      description: "Received 'Chemical Company of the Year' award, recognizing excellence in manufacturing and sustainable practices.",
+    2017: {
+      title: "Energy and Sustainability Initiatives",
+      description: "Commissioned calcium chloride, cogeneration, and solar power plants, and started the Nitro Toluene plant, reflecting commitment to sustainability and diversification.",
     },
     2018: {
-      title: "Digital Transformation",
-      description: "Implemented Industry 4.0 technologies across manufacturing facilities, enhancing efficiency and quality control.",
+      title: "Strategic Global Partnerships",
+      description: "Signed two large multi-year contracts with global conglomerates, solidifying long-term partnerships and strengthening global market presence.",
     },
     2019: {
-      title: "Specialty Chemicals Focus",
-      description: "Strategically shifted focus to high-margin specialty chemicals, divesting from commodity chemical business.",
+      title: "Advancing Specialty Manufacturing",
+      description: "Commissioned the nitrotoluene hydrogenation facility at Jhagadia and signed another multi-year contract with a global partner, expanding specialty product offerings.",
     },
     2020: {
-      title: "Pandemic Response Excellence",
-      description: "Maintained uninterrupted supply chain during COVID-19, supporting global pharmaceutical industry with critical intermediates.",
+      title: "Research and Technology Expansion",
+      description: "Expanded agrochemical intermediates and specialty chemicals at Dahej SEZ, and launched the Aarti Research and Technology Centre in Navi Mumbai, enhancing R&D capabilities.",
     },
     2021: {
-      title: "Carbon Neutral Commitment",
-      description: "Announced ambitious target to achieve carbon neutrality by 2030, investing in renewable energy and green technologies.",
+      title: "Commercialisation of Chlorination Unit",
+      description: "Commercialised the new chlorination unit at Jhagadia, further broadening the company’s portfolio of chemical intermediates.",
+    },
+    2022: {
+      title: "Pharma Demerger and New Contract Facility",
+      description: "Demerged the Pharmaceutical business and commercialised the 2nd long-term contract facility, enhancing operational focus and growth in core segments.",
     },
     2023: {
-      title: "AI-Powered Operations",
-      description: "Integrated artificial intelligence in production planning and quality assurance, achieving 99.9% quality consistency.",
+      title: "Chlorination Expansion and New Supply Agreement",
+      description: "Commercialised a specialty chlorination facility and signed a raw material supply deal with DFPCL for the 3rd long-term contract, ensuring robust supply chain integration.",
+    },
+    2024: {
+      title: "Capacity Growth and Renewable Energy Milestones",
+      description: "Expanded NCB capacity from 75 KTPA to 108 KTPA, commercialised Phase 1 of the acid unit revamp, commissioned a 13.2 MW hybrid renewable power plant, and signed two new multi-year contracts with global partners.",
     },
     2025: {
-      title: "Future-Ready Infrastructure",
-      description: "Completed construction of next-generation manufacturing complex, positioning for leadership in advanced materials.",
+      title: "Strategic Joint Ventures and Major Expansions",
+      description: "Entered into a joint venture with UPL for manufacturing and marketing of specialty chemicals, another with ReSl for plastic recycling development, signed agreement for an additional 27.5 MW hybrid renewable power, commissioned a new pilot plant at Zone IV, Jhagadia, expanded ethylation value chain projects, increased Nitro Toluene capacity to 45 KTPA, and completed MMA expansion to 200 KTPA.",
     },
   };
 
@@ -183,7 +187,7 @@ function TimeLine() {
 
       <FadeInGroup stagger={0.2} className='absolute lg:right-[-170] right-[-10] top-11 z-0 pointer-events-none flex gap-0'>
         <h1 className='font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]' data-scroll>
-          {String(currentYear).slice(2,3)}
+          {String(currentYear).slice(2, 3)}
         </h1>
         <h1 className='font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]' data-scroll>
           {String(currentYear).slice(-1)}

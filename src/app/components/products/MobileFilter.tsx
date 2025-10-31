@@ -4,7 +4,7 @@ import { BodyText2, SubH2 } from "../Typography2";
 import Image from "next/image";
 
 interface MobileFilterProps {
-  subCategories: { id: number; name: string }[];
+  subCategories: { id: number; subCategory: string }[];
   selected: number[];
   onClose: () => void;
   onApply: (selected: number[]) => void;
@@ -63,7 +63,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
               key={sub.id}
               className="flex items-center justify-between gap-3 cursor-pointer select-none"
             >
-              <BodyText2 className="text-gray-800">{sub.name}</BodyText2>
+              <BodyText2 className="text-gray-800">{sub.subCategory}</BodyText2>
               <input
                 type="checkbox"
                 checked={isSelected}

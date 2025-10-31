@@ -10,6 +10,8 @@ import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
 import { MeetMindsProps } from "@/app/types/who-we-are.type";
+import CustomCursorTrigger from "../../CustomCursorTrigger";
+import Link from "next/link";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
   const { sectionTitle, profiles } = data;
@@ -48,9 +50,12 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
                 nextEl: ".swiper-button-next-leaderSection",
                 prevEl: ".swiper-button-prev-leaderSection",
               }}
+              className="!pr-[20px] !lg:pr-[unset]"
             >
               {profiles?.map((item) => (
                 <SwiperSlide key={item?.id}>
+                  <Link href="#" target="_blank">
+                  <CustomCursorTrigger title="Read Bio">
                   <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
                     <Image
                       src={item?.image?.url}
@@ -61,14 +66,19 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
                   </div>
                   {item?.name && (
                     <BodyText2 className="mt-[18px] text-blue-200">
-                      {item?.name}
+                        
+                      {item?.name} 
+                    
                     </BodyText2>
+
                   )}
                   {item?.designation && (
                     <BodyText1 className="mt-[4px] text-grey-300">
                       {item?.designation}
                     </BodyText1>
                   )}
+                  </CustomCursorTrigger>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>

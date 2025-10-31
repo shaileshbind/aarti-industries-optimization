@@ -84,9 +84,9 @@ export type RDDiverseChemProps = {
 
 export type RDCardProps = {
   category: string;
-  id: string;
+  id: string | number;
   card: {
-    id: string;
+    id: string | number;
     title: string;
     description: string;
     ctaButton: ButtonProps;
