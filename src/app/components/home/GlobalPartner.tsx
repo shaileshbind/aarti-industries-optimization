@@ -97,8 +97,8 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
                 return (
                   <NumberCard
                     key={items?.id}
-                    title={items?.values?.[0]?.value}
-                    desc={items?.values?.[0]?.description}
+                    title={items?.value}
+                    desc={items?.description}
                     imageSrc={items?.image?.url}
                     imageAlt={items?.image?.alternativeText}
                     className="stat-box"
@@ -114,8 +114,8 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
                 return (
                   <NumberCard
                     key={items?.id}
-                    title={items?.values?.[0]?.value}
-                    desc={items?.values?.[0]?.description}
+                    title={items?.value}
+                    desc={items?.description}
                     imageSrc={items?.image?.url}
                     imageAlt={items?.image?.alternativeText}
                     className="stat-box"

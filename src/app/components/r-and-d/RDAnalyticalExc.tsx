@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Button from "../Button";
 import { Navigation, Mousewheel } from "swiper/modules";
+import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -20,64 +21,14 @@ interface ScrollTriggerInstance {
   progress: number;
 }
 
-const RDAnalyticalExc = () => {
+const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
+  data,
+  sliderData,
+}) => {
+  const { leftText, rightText, image } = data;
+  const { details } = sliderData;
+
   const [active, setActive] = useState(0);
-  const slidesData = [
-    {
-      id: 0,
-      title: "Analytical Testing",
-      image: "/images/home/forest.png",
-      description:
-        "Our 8000 sq.ft state-of-the-art analytical laboratory, enables our speciality chemical R&D and custom manufacturing solutions with:",
-      stats: [
-        {
-          id: 0,
-          label: "Analytical method development, calibration & validation",
-        },
-        { id: 1, label: "Structural identification & elucidation" },
-        { id: 2, label: "Impurity, byproduct & metabolite isolation" },
-        { id: 3, label: "Analytical technology transfer & documentation" },
-      ],
-      ctaTitle: "Our Environmental Initiatives",
-      ctaLink: "#",
-    },
-    {
-      id: 1,
-      title: "Analytical Testing",
-      image: "/images/rd/analytical-1.png",
-      description:
-        "Our 8000 sq.ft state-of-the-art analytical laboratory, enables our speciality chemical R&D and custom manufacturing solutions with:",
-      stats: [
-        {
-          id: 0,
-          label: "Analytical method development, calibration & validation",
-        },
-        { id: 1, label: "Structural identification & elucidation" },
-        { id: 2, label: "Impurity, byproduct & metabolite isolation" },
-        { id: 3, label: "Analytical technology transfer & documentation" },
-      ],
-      ctaTitle: "Our Environmental Initiatives",
-      ctaLink: "#",
-    },
-    {
-      id: 2,
-      title: "Analytical Testing",
-      image: "/images/rd/inno-banner1.png",
-      description:
-        "Our 8000 sq.ft state-of-the-art analytical laboratory, enables our speciality chemical R&D and custom manufacturing solutions with:",
-      stats: [
-        {
-          id: 0,
-          label: "Analytical method development, calibration & validation",
-        },
-        { id: 1, label: "Structural identification & elucidation" },
-        { id: 2, label: "Impurity, byproduct & metabolite isolation" },
-        { id: 3, label: "Analytical technology transfer & documentation" },
-      ],
-      ctaTitle: "Our Environmental Initiatives",
-      ctaLink: "#",
-    },
-  ];
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
@@ -328,30 +279,38 @@ const RDAnalyticalExc = () => {
         className="absolute top-0 w-full flex justify-center items-center z-20 bg-white  "
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  pt-[100px] lg:pt-[unset] ">
-          <span ref={headinLeft}>
-            <H2>Analytical and Process </H2>
-          </span>
-          <div
-            ref={sustainbleLogo}
-            className="flex w-[200px] lg:w-[0px] h-0 lg:h-[200px] overflow-hidden absolute "
-          >
-            <span
-              ref={sustainInner}
-              className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%] "
-            >
-              <Image
-                src="/images/rd/ana-2.svg"
-                alt="img"
-                fill
-                className="object-cover"
-              />
+          {leftText && (
+            <span ref={headinLeft}>
+              <H2>{leftText}</H2>
             </span>
-          </div>
-          <span ref={headinRight}>
-            <H2>Safety Excellence</H2>
-          </span>
+          )}
+          {image?.url && (
+            <div
+              ref={sustainbleLogo}
+              className="flex w-[200px] lg:w-[0px] h-0 lg:h-[200px] overflow-hidden absolute "
+            >
+              <span
+                ref={sustainInner}
+                className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%] "
+              >
+                <Image
+                  src={image?.url}
+                  alt={image?.alternativeText}
+                  fill
+                  className="object-cover"
+                />
+              </span>
+            </div>
+          )}
+
+          {rightText && (
+            <span ref={headinRight}>
+              <H2>{rightText}</H2>
+            </span>
+          )}
         </div>
       </div>
+
       <div
         ref={envSlider}
         className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
@@ -359,28 +318,30 @@ const RDAnalyticalExc = () => {
         <div className="flex w-full h-screen relative flex-col justify-center">
           <div className="mx-[20px] lg:mx-[unset] mb-[70px] lg:mb-[unset] grid lg:grid-cols-[600px_1fr] lg:gap-x-[100px]">
             <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={slidesData[active]?.image}
-                  alt={slidesData[active]?.title}
-                  fill
-                  className="object-cover scale-110"
-                />
-                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+              {details[active]?.image?.url && (
+                <div className="absolute inset-0 overflow-hidden">
                   <Image
-                    src={slidesData[active]?.image}
-                    alt={slidesData[active]?.image}
+                    src={details[active]?.image?.url}
+                    alt={details[active]?.title}
                     fill
                     className="object-cover scale-110"
                   />
-                </span>
-              </div>
+                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                  <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+                    <Image
+                      src={details[active]?.image?.url}
+                      alt={details[active]?.image?.url}
+                      fill
+                      className="object-cover scale-110"
+                    />
+                  </span>
+                </div>
+              )}
             </div>
             <div className="w-full overflow-hidden">
               <div className="mt-[18px] mb-[18px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px] ">
                 <BodyText2 className="text-orange-200">
-                  0{active + 1}-<span>0{slidesData?.length}</span>
+                  0{active + 1}-<span>0{details?.length}</span>
                 </BodyText2>
                 <div className="hidden lg:block">
                   <div className="flex gap-3">
@@ -401,7 +362,7 @@ const RDAnalyticalExc = () => {
                       width={34}
                       height={34}
                       className={`swiper-button-next-analytical transition-opacity ${
-                        active < slidesData.length - 1
+                        active < details?.length - 1
                           ? "cursor-pointer opacity-100"
                           : "pointer-events-none opacity-30"
                       }`}
@@ -410,79 +371,91 @@ const RDAnalyticalExc = () => {
                 </div>
               </div>
               {/* Swiper section */}
-              <Swiper
-                slidesPerView={
-                  typeof window !== "undefined" && window.innerWidth < 1024
-                    ? 1
-                    : 1.2
-                }
-                loop={false}
-                onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-                speed={800}
-                modules={[Navigation, Mousewheel]}
-                className="w-full relative"
-                navigation={{
-                  nextEl: ".swiper-button-next-analytical",
-                  prevEl: ".swiper-button-prev-analytical",
-                }}
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
-              >
-                {slidesData?.map((slide) => (
-                  <SwiperSlide key={slide?.id}>
-                    <div
-                      className={`grid gap-12 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
-                        active !== slide.id
-                          ? "lg:blur-sm lg:opacity-70"
-                          : "lg:blur-0 lg:opacity-100"
-                      }`}
-                    >
-                      <div>
-                        <SubH1 className="mt-[unset] lg:mt-[40px]">
-                          {slide?.title}
-                        </SubH1>
-                        <BodyText2 className="mt-[8px]">
-                          {slide?.description}
-                        </BodyText2>
-                        <div className="mt-[20px]">
-                          {slide?.stats?.map((items) => (
-                            <div
-                              key={items?.id}
-                              className="flex gap-4 mb-4 items-center"
-                            >
-                              <Image
-                                src="/images/home/star.svg"
-                                alt="star"
-                                width={16}
-                                height={16}
-                              />
-                              <BodyText2 className="text-grey-400">
-                                {items?.label}
-                              </BodyText2>
+              {details?.length > 0 && (
+                <Swiper
+                  slidesPerView={
+                    typeof window !== "undefined" && window.innerWidth < 1024
+                      ? 1
+                      : 1.2
+                  }
+                  loop={false}
+                  onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+                  speed={800}
+                  modules={[Navigation, Mousewheel]}
+                  className="w-full relative"
+                  navigation={{
+                    nextEl: ".swiper-button-next-analytical",
+                    prevEl: ".swiper-button-prev-analytical",
+                  }}
+                  mousewheel={{
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  }}
+                >
+                  {details?.map((slide, index) => (
+                    <SwiperSlide key={slide?.id}>
+                      <div
+                        className={`grid gap-12 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                          active !== index
+                            ? "lg:blur-sm lg:opacity-70"
+                            : "lg:blur-0 lg:opacity-100"
+                        }`}
+                      >
+                        <div>
+                          {slide?.title && (
+                            <SubH1 className="mt-[unset] lg:mt-[40px]">
+                              {slide?.title}
+                            </SubH1>
+                          )}
+                          {slide?.description && (
+                            <BodyText2 className="mt-[8px]">
+                              {slide?.description}
+                            </BodyText2>
+                          )}
+                          {slide?.BulletPoints?.length > 0 && (
+                            <div className="mt-[20px]">
+                              {slide?.BulletPoints?.map((items) => (
+                                <div
+                                  key={items?.id}
+                                  className="flex gap-4 mb-4 items-center"
+                                >
+                                  <Image
+                                    src="/images/home/star.svg"
+                                    alt="star"
+                                    width={16}
+                                    height={16}
+                                  />
+                                  {items?.title && (
+                                    <BodyText2 className="text-grey-400">
+                                      {items?.title}
+                                    </BodyText2>
+                                  )}
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                        <div className="mt-[40px]">
-                          <Button
-                            title={slide?.ctaTitle}
-                            href={slide?.ctaLink}
-                            secondary
-                          />
+                          )}
+                          {slide?.ctaButton?.link && (
+                            <div className="mt-[40px]">
+                              <Button
+                                title={slide?.ctaButton?.title}
+                                href={slide?.ctaButton?.link || "#"}
+                                secondary
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
               {/* Mobile progress bar */}
               <div className="block lg:hidden mt-9 w-full h-[2px] bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-orange-200 transition-all duration-500"
                   style={{
-                    width: `${((active + 1) / slidesData.length) * 100}%`,
+                    width: `${((active + 1) / details?.length) * 100}%`,
                   }}
                 />
               </div>

@@ -34,6 +34,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const sustainInner = useRef<HTMLSpanElement>(null);
   const envSlider = useRef<HTMLDivElement>(null);
   const titleSection = useRef<HTMLDivElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -44,6 +45,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
   const isScrollingProgrammatically = useRef<boolean>(false);
 
+  const END_SCROLL_BUFFER = 1;
   const getScrollPositionForSlide = useCallback(
     (slideIndex: number) => {
       const st = scrollTriggerRef.current;
@@ -60,11 +62,20 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       const slideStartProgress = 0.55;
       const slideEndProgress = 1.0;
       const slideRange = slideEndProgress - slideStartProgress;
-      const slideProgress = slideIndex / (mainSection?.length - 1);
+      const totalSlides = mainSection.length;
+      const slideProgress =
+        totalSlides > 1 ? slideIndex / (totalSlides - 1) : 0;
       const targetProgress = slideStartProgress + slideProgress * slideRange;
+      if (slideIndex === totalSlides - 1 && totalSlides > 0) {
+        let targetScroll = Number(start) + targetProgress * totalScrollDistance;
+        if (targetScroll >= Number(end) - END_SCROLL_BUFFER) {
+          targetScroll = Number(end) - END_SCROLL_BUFFER;
+        }
+        return targetScroll;
+      }
       return Number(start) + targetProgress * totalScrollDistance;
     },
-    [mainSection?.length]
+    [mainSection.length]
   );
 
   const handleTabClick = useCallback(
@@ -74,8 +85,16 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       const targetScroll = getScrollPositionForSlide(index);
       if (typeof targetScroll !== "number" || Number.isNaN(targetScroll))
         return;
-
       isScrollingProgrammatically.current = true;
+      const isMobile = window.innerWidth < 1024;
+
+      if (tabsRef.current && !isMobile) {
+        gsap.to(tabsRef.current, {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      }
       gsap.to(window, {
         scrollTo: {
           y: targetScroll,
@@ -84,7 +103,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         duration: 0.8,
         ease: "power2.inOut",
         onComplete: () => {
-          setActiveTab((prev) => (prev === index ? prev : index));
           const swiper = swiperRef.current;
           if (swiper && !swiper.destroyed) {
             const slideWidth =
@@ -99,7 +117,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               console.error(e);
             }
           }
-
+          setActiveTab(index);
           requestAnimationFrame(() => {
             isScrollingProgrammatically.current = false;
           });
@@ -153,7 +171,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
       setActiveTab((prev) => (newActiveIndex !== prev ? newActiveIndex : prev));
     },
-    [animationComplete, isUserInteracting, mainSection?.length]
+    [animationComplete, isUserInteracting, mainSection.length]
   );
 
   useLayoutEffect(() => {
@@ -198,6 +216,29 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             scrollTriggerRef.current = ScrollTrigger.getById(
               "mainTrigger"
             ) as ScrollTriggerInstance | null;
+          },
+          onLeave: () => {
+            if (!isMobile && tabsRef.current) {
+              if (isScrollingProgrammatically.current) return;
+
+              gsap.to(tabsRef.current, {
+                opacity: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                delay: 0.2,
+              });
+            }
+          },
+          onEnterBack: () => {
+            if (!isMobile && tabsRef.current) {
+              if (isScrollingProgrammatically.current) return;
+
+              gsap.to(tabsRef.current, {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.in",
+              });
+            }
           },
         },
       });
@@ -381,7 +422,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
     return () => {
       ctx.revert();
-      isScrollingProgrammatically.current = false;
+      setTimeout(() => {
+        isScrollingProgrammatically.current = false;
+      }, 400);
     };
   }, [handleScrollUpdate]);
 
@@ -473,7 +516,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       >
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
           {mainSection?.length > 0 && (
-            <div className="">
+            <div>
               <Swiper
                 slidesPerView={1.2}
                 spaceBetween={32}
@@ -560,8 +603,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               </Swiper>
             </div>
           )}
-
-          <div className="absolute py-4 w-full bottom-0">
+          <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
             <div className="w-fit mx-auto">
               {mainSection?.length > 0 && (
                 <div className="bg-grey-100 rounded-[40px] p-[4px] flex overflow-x-auto whitespace-nowrap gap-x-[unset] lg:gap-x-[14px] w-fit">

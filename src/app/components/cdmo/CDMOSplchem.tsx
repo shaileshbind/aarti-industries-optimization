@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { H2, SubH2 } from "../Typography2";
 import "swiper/css";
@@ -7,20 +7,33 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { WordReveal } from "../ScrollReveal";
+import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 
 const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
   const { sectionTitle, cards } = data;
+  const [_activeIndex, setActiveIndex] = useState(0);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const swiperRef = useRef<SwiperType | null>(null);
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const swiperRef = useRef(null);
+  const updateNavState = (swiper: SwiperType) => {
+    setIsBeginning(swiper.isBeginning);
+    setIsEnd(swiper.isEnd);
+    setActiveIndex(swiper.activeIndex);
+  };
+
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (swiper) updateNavState(swiper);
+  }, []);
 
   return (
     <div className="py-[50px] lg:py-[100px] overflow-hidden">
       {/* Content Section */}
       <div className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col w-full">
-          {/* Left Content - Contained */}
+          {/* Left Content */}
           {sectionTitle && (
             <WordReveal
               stagger={0.1}
@@ -32,11 +45,10 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
             </WordReveal>
           )}
 
-          {/* Right Swiper - Full Width to Edge */}
-          <div className="flex-1 min-w-0 mt-[22px] lg:mt-[0px] pl-[20px] lg:pl-[unset]">
+          {/* Right Swiper */}
+          <div className="flex-1 min-w-0 mt-[22px] lg:mt-[0px]">
             <div className="relative">
               <Swiper
-                ref={swiperRef}
                 spaceBetween={14}
                 slidesPerView={1.2}
                 breakpoints={{
@@ -55,8 +67,12 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
                   el: ".simplified-swiper-pagination",
                   type: "progressbar",
                 }}
-                className="w-full !pr-5 lg:!pr-0"
-                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                className="w-full !px-5 lg:!px-5 "
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  updateNavState(swiper);
+                }}
+                onSlideChange={(swiper) => updateNavState(swiper)}
                 observer={true}
                 observeParents={true}
                 direction="horizontal"
@@ -90,13 +106,13 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px]">
+              <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
                 <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                   <button
                     className={`swiper-button-prev-simplified transition-opacity ${
-                      activeIndex > 0
-                        ? "cursor-pointer opacity-100"
-                        : "pointer-events-none opacity-30"
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
                     }`}
                     aria-label="Previous slide"
                   >
@@ -110,9 +126,9 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
                   </button>
                   <button
                     className={`swiper-button-next-simplified transition-opacity ${
-                      activeIndex < cards?.length - 2
-                        ? "cursor-pointer opacity-100"
-                        : "pointer-events-none opacity-30"
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
                     }`}
                     aria-label="Next slide"
                   >

@@ -303,6 +303,7 @@ const ProductFilterList: React.FC = () => {
           />
         )}
       </div>
+      <div className="min-h-[300px]">
       <div className="grid lg:grid-cols-2 gap-x-[64px] gap-y-[20px]">
         {filteredProducts.map((product) => (
           <div key={product.id} className="w-full">
@@ -314,6 +315,7 @@ const ProductFilterList: React.FC = () => {
             />
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

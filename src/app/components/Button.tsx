@@ -20,9 +20,16 @@ const Button = ({ href, title, secondary, className }: ButtonProps) => {
           </Link>
         </>
       ) : (
-        <Link href={href} target="_blank" className="w-fit">
-          <button className={`button-subtle-scale w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100% font-alte-hans ${className}`}>
-            {title}
+        <Link
+          href={href}
+          target="_blank"
+          className="w-fit group relative inline-block"
+        >
+          <button
+            className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300 ${className}`}
+          >
+            <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+            <span className="relative z-10 text-white">{title}</span>
           </button>
         </Link>
       )}

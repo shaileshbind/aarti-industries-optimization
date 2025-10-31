@@ -182,6 +182,38 @@ body {
   transition-delay: 0.3s;
 }
 
+/* Blip Border */
+.blip-border {
+  border: 1px solid transparent;
+  border-bottom-color: #e1e1e1; 
+  border-right-color: #e1e1e1;
+}
+
+/* [ Footer Menus Animation – underline matches text width ] */
+.footer-animated-underline {
+  position: relative;
+  text-decoration: none;
+  width: fit-content;
+  display: inline-block;
+}
+.footer-animated-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background-color: #585858;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.625, 0.05, 0, 1);
+}
+/* On hover: line slides in under text */
+.footer-animated-underline:hover::after {
+  transform: scaleX(1);
+}
+
+
 /* Latest At Aarti Section [Progress Bar] */
 .home-latest-at-swiper {
   position: relative;
