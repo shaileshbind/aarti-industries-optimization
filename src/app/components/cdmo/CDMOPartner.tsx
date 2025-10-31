@@ -96,7 +96,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
                   height={48}
                 />
               )}
-asdfasdf
+
               <div className="mt-8 space-y-3">
                 {title && <SubH2>{title}</SubH2>}
 
