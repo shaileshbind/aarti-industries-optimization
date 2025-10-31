@@ -259,7 +259,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="block lg:hidden object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-black/30 " />
+                <div className="absolute inset-0 bg-black/60 " />
                 {/* Content box */}
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[200px] w-full z-10">
