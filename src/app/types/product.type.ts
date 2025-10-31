@@ -13,10 +13,16 @@ export interface ProductSpecifications {
 }
 
 // Supporting interface for product documents
+// export interface ProductDocument {
+//   type: 'TDS' | 'SDS' | 'RDS';
+//   url?: string;
+//   available: boolean;
+// }
+
 export interface ProductDocument {
-  type: 'TDS' | 'SDS' | 'RDS';
-  url?: string;
-  available: boolean;
+  id: number,
+  documentName : string,
+  link : string,
 }
 
 // Collection of product documents
@@ -70,9 +76,13 @@ export interface ChemicalStructureProps {
   chemicalFormula: string;
 }
 
+export interface appDetails {
+  id: number,
+  application: string
+}
 export interface FeaturesApplicationsProps {
   features: string[];
-  applications: string[];
+  applications: appDetails[];
 }
 
 // API response types
