@@ -79,7 +79,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   );
 
   const handleTabClick = useCallback(
-    (index: number) => {
+    (index: number, e?: React.MouseEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
       if (index === activeTab || isScrollingProgrammatically.current) return;
 
       const targetScroll = getScrollPositionForSlide(index);
@@ -605,7 +607,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       items?.category && (
                         <div
                           key={index}
-                          onClick={() => handleTabClick(index)}
+                          onClick={(e) => handleTabClick(index, e)}
                           className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 ${
                             activeTab === index
                               ? "text-white bg-gradient-orange-3"
