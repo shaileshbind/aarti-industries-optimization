@@ -46,17 +46,17 @@ function GlobalInnovation() {
 
                     <div className='flex gap-[53px] border-b-[1px] border-b-[#E6EBEE] lg:pb-8 pb-4'>
                         <BodyText1 className='text-orange-100'>02</BodyText1>
-                        <BodyText1>Becoming a global strategic partner in contract research, development, and manufacturing</BodyText1>
+                        <BodyText1>Driving sustainability through renewable energy and circular economy initiatives</BodyText1>
                     </div>
 
                     <div className='flex gap-[53px] border-b-[1px] border-b-[#E6EBEE] lg:pb-8 pb-4'>
                         <BodyText1 className='text-orange-100'>03</BodyText1>
-                        <BodyText1>Becoming a global strategic partner in contract research, development, and manufacturing</BodyText1>
+                        <BodyText1>Expanding new value chains in agrochemicals, polymers, and new-age materials</BodyText1>
                     </div>
 
                     <div className='flex gap-[53px]'>
                         <BodyText1 className='text-orange-100'>04</BodyText1>
-                        <BodyText1>Becoming a global strategic partner in contract research, development, and manufacturing</BodyText1>
+                        <BodyText1>Investing in R&D and talent to fuel the next era of chemical innovation</BodyText1>
                     </div>
                 </div>
             </div>

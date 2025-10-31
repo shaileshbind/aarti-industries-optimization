@@ -1,21 +1,32 @@
+"use client";
+
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { BodyText3 } from "../Typography2";
 
-type SubCategory = { id: number; name: string; };
-type Tab = { id: number; label: string; subCategories?: SubCategory[]; };
+interface ProductSubCategory {
+  id: number;
+  subCategory: string;
+  slug: string;
+}
 
-type Props = {
-  tabs: Tab[];
-  activeId: number;
-  onChange: (id: number) => void;
+interface CatagoriesData {
+  productCategory: string;
+  slug: string;
+  product_sub_categories: ProductSubCategory[];
+}
+
+interface ProductTabsProps {
+  tabs: CatagoriesData[];
+  activeTab: string;
+  onChange: (productCategory: string) => void;
   className?: string;
   indicatorColor?: string;
   transition?: string;
-};
+}
 
-const ProductTabs: React.FC<Props> = ({
+const ProductTabs: React.FC<ProductTabsProps> = ({
   tabs,
-  activeId,
+  activeTab,
   onChange,
   className = "",
   indicatorColor = "#F97316",
@@ -28,8 +39,11 @@ const ProductTabs: React.FC<Props> = ({
   const measure = () => {
     const container = containerRef.current;
     if (!container) return;
-    const idx = tabs.findIndex(t => t.id === activeId);
+
+    // Adjust index because first tab is hardcoded "all"
+    const idx = activeTab === "all" ? 0 : tabs.findIndex(t => t.slug === activeTab) + 1;
     const btn = tabRefs.current[idx] ?? null;
+
     if (!btn) {
       setIndicator(s => ({ ...s, visible: false }));
       return;
@@ -53,12 +67,12 @@ const ProductTabs: React.FC<Props> = ({
       ro.disconnect();
       window.removeEventListener("resize", onResize);
     };
-
-  }, [activeId, tabs.length]);
+  }, [activeTab, tabs.length]);
 
   return (
     <div className={`relative flex justify-center mb-[42px] bg-gray-100 max-w-fit mx-auto p-1 rounded-full ${className}`}>
-      <div ref={containerRef} className="relative flex  md:space-x-3 z-10 px-1">
+      <div ref={containerRef} className="relative flex space-x-2 md:space-x-3 z-10 px-1">
+        {/* Indicator */}
         <div
           aria-hidden
           style={{
@@ -74,15 +88,43 @@ const ProductTabs: React.FC<Props> = ({
             pointerEvents: "none"
           }}
         />
+
+        {/* Hardcoded "all" tab */}
+        <button
+          ref={(el) => { tabRefs.current[0] = el; }}
+          onClick={() => onChange("all")}
+          type="button"
+          className={`p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
+            activeTab === "all" ? "!text-white" : "bg-transparent !text-[#4C5861]"
+          }`}
+        >
+          <BodyText3
+            className={`transition-colors duration-200 ${
+              activeTab === "all" ? "!text-white" : "!text-[#4C5861]"
+            }`}
+          >
+            All
+          </BodyText3>
+        </button>
+
+        {/* Dynamic tabs */}
         {tabs.map((tab, idx) => (
           <button
-            key={tab.id}
-            ref={(el) => { tabRefs.current[idx] = el; }}
-            onClick={() => onChange(tab.id)}
+            key={tab.slug}
+            ref={(el) => { tabRefs.current[idx + 1] = el; }}
+            onClick={() => onChange(tab.slug)}
             type="button"
-            className={`p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 md:p-1 ${activeId === tab.id ? "!text-white" : "bg-transparent !text-[#4C5861]"}`}
+            className={`p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
+              activeTab === tab.slug ? "!text-white" : "bg-transparent !text-[#4C5861]"
+            }`}
           >
-           <BodyText3 className={`transition-colors duration-200 ${activeId === tab.id ? "!text-white" : "bg-transparent !text-[#4C5861]"}`}>{tab.label}</BodyText3>
+            <BodyText3
+              className={`transition-colors duration-200 ${
+                activeTab === tab.slug ? "!text-white" : "!text-[#4C5861]"
+              }`}
+            >
+              {tab.productCategory}
+            </BodyText3>
           </button>
         ))}
       </div>
