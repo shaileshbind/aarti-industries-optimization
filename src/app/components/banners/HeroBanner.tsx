@@ -221,6 +221,17 @@ const HeroBanner = ({
                 height={72}
               />
             </div>
+            <div
+        // ref={starRef2}
+        className="absolute bottom-[-22px] lg:bottom-[-36px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 "
+      >
+        <Image
+          src="/images/home/star-white.svg"
+          alt="img"
+          width={72}
+          height={72}
+        />
+      </div>
           </div>
         </div>
       )}
