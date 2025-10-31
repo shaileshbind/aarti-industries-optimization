@@ -21,7 +21,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           alt={image?.alternativeText || "banner"}
           width={1440}
           height={849}
-          className="block lg:hidden w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
+          className="block lg:hidden lg:w-full h-full object-cover z-0 w-[calc(100%-40px)] mx-auto lg:px-0 rounded-[14px] lg:rounded-[0px]"
         />
       )}
 
@@ -34,9 +34,9 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
       )}
 
       <div className="lg:absolute bottom-9 lg:px-14 mb-0 lg:mb-24 z-10 w-full flex lg:flex-row flex-col justify-between">
-        <div className="w-full lg:w-[50%] bg-white rounded-3xl overflow-hidden">
+        <div className="w-full lg:w-[50%] bg-white rounded-3xl relative">
           {/* Main Content Section - Always Visible */}
-          <div className="lg:pt-[40px] lg:pb-[70px] pt-7">
+          <div className="lg:pt-[40px] lg:pb-[70px] pt-7  flex flex-col">
             {leftSection?.title && (
               <H2 className="lg:w-[85%] w-full pb-6 px-[20px] lg:px-[42px]">
                 {leftSection?.title}
@@ -50,7 +50,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
             )}
 
             <div
-              className={`hidden lg:block absolute bottom-0 lg:w-[46.40%] w-full transition-all duration-700 bg-gradient-orange-3 ${
+              className={`hidden lg:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 ${
                 isOpen ? "rounded-2xl" : "rounded-b-3xl"
               }`}
             >
@@ -167,10 +167,10 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           )}
         </div>
 
-        <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-6">
+        <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-[6px] lg:gap-6">
           {righSection?.values?.map((item, index) => (
             <div
-              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] lg:h-[185px] lg:w-[246px]"
+              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] max-w-[40%] lg:h-[185px] lg:w-[246px]"
               key={"item_" + index}
             >
               {item?.value && (

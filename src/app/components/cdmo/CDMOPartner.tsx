@@ -72,7 +72,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
 
       <ScaleInGroup
         delay={0.2}
-        className="lg:mt-16 mt-2 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 lg:w-[70%] justify-items-center"
+        className="lg:mt-16 mt-2 grid grid-cols-1 lg:grid-cols-3 gap-[6px] lg:gap-[6px] lg:w-[70%] justify-items-center"
       >
         {/* Empty placeholder for design spacing */}
         <div
@@ -85,7 +85,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
           card?.map(({ title, image, description }, i) => (
             <div
               key={i}
-              className="lg:max-h-[320px] lg:h-auto lg:max-w-[320px] w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
+              className="lg:max-h-[320px] lg:h-auto w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
               data-scroll
             >
               {image?.url && (
@@ -96,7 +96,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
                   height={48}
                 />
               )}
-
+asdfasdf
               <div className="mt-8 space-y-3">
                 {title && <SubH2>{title}</SubH2>}
 
