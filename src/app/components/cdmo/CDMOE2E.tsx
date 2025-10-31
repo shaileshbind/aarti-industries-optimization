@@ -97,9 +97,9 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
           </div>
 
           <div className="relative">
-            <BodyText2 className="text-orange-200 pb-4">
+            {/* <BodyText2 className="text-orange-200 pb-4">
               0{activeIndex + 1}-<span>0{content?.[active]?.card?.length}</span>
-            </BodyText2>
+            </BodyText2> */}
             <Swiper
               key={`swiper-${active}`}
               ref={swiperRef}
@@ -163,7 +163,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
             </Swiper>
 
             {/* Swiper Navigation */}
-            <div className="absolute top-0 right-0 py-2 z-10 hidden lg:block">
+            {/* <div className="absolute top-0 right-0 py-2 z-10 hidden lg:block">
               <div className="flex justify-end gap-3 px-5 lg:px-0">
                 <button
                   className={`swiper-button-prev-useBySection transition-opacity ${
@@ -195,7 +195,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                   />
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {/* Progress Bar */}
             <div className="home-by-use-section-swiper mt-10 h-[2px] w-[90%] mx-auto" />
