@@ -18,8 +18,8 @@ const Header = () => {
       hasDropdown: true,
       dropdownItems: [
         {
-          name: "Para Dichloro Benzene",
-          href: "/products/para-dichloro-benzene",
+          name: "2-ethyl-6-methylaniline",
+          href: "/products/2-ethyl-6-methylaniline",
         },
       ],
     },
