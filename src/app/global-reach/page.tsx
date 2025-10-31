@@ -5,6 +5,7 @@ import GloballyCertified from "../components/GloballyCertified";
 import GRExplore from "../components/global-reach/GRExp";
 import GRMaps from "../components/global-reach/GRMaps";
 
+
 const page = () => {
   return (
     <div>

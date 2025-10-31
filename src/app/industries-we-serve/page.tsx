@@ -7,6 +7,8 @@ import IndustryInfo from "../components/industries-we-serve/IndustryInfo";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 
+export const dynamic = 'force-dynamic';
+
 const page = async () => {
   const data = await getPageData("/pages/by-slug/industries-we-serve");
   const globallyCertifiedData = await getData(
