@@ -4,34 +4,30 @@ import IndustryExp from "../components/industries-we-serve/IndustryExp";
 import OurPortfolio from "../components/industries-we-serve/OurPortfolio";
 import IndustryBanner from "../components/industries-we-serve/IndustryBanner";
 import IndustryInfo from "../components/industries-we-serve/IndustryInfo";
+import { getPageData } from "@/_lib/pageData.fetch";
+import { getData } from "@/_lib/getData.fetch";
 
-const page = () => {
+const page = async () => {
+  const data = await getPageData("/pages/by-slug/industries-we-serve");
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*"
+  );
+
+  const { section_one, section_two, section_three, section_four } = data;
+
   return (
     <div>
-      <IndustryBanner />
-      <IndustryInfo />
-      <OurPortfolio />
-      <GloballyCertified
-        title="Globally Certified"
-        itemsData={[
-          {
-            id: 0,
-            heading: "Ecovadis Gold Rating",
-            image: { url: "/images/award1.png", alternativeText: "" },
-          },
-          {
-            id: 1,
-            heading: "CDP A rating",
-            image: { url: "/images/award2.png", alternativeText: "" },
-          },
-          {
-            id: 2,
-            heading: "ISO 27001:2022",
-            image: { url: "/images/award3.png", alternativeText: "" },
-          },
-        ]}
-      />
-      <IndustryExp />
+      {section_one && <IndustryBanner data={section_one} />}
+
+      {section_two && <IndustryInfo data={section_two} />}
+
+      {section_three && <OurPortfolio data={section_three} />}
+
+      {globallyCertifiedData && (
+        <GloballyCertified itemsData={globallyCertifiedData} />
+      )}
+
+      {section_four && <IndustryExp data={section_four} />}
     </div>
   );
 };

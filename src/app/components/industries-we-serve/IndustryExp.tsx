@@ -1,21 +1,20 @@
 import React from "react";
 import ExploreCard from "../cards/ExploreCard";
+import { IndustryExpProps } from "@/app/types/industries-we-serve.type";
 
-const IndustryExp = () => {
+const IndustryExp: React.FC<IndustryExpProps> = ({ data }) => {
   return (
     <div className="py-[50px] lg:py-[100px] container">
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
-          title="Ready to Partner Across Industries?"
-          items={[
-            { id: 0, title: "Corporate Brochure PDF", link: "#" },
-            { id: 1, title: "Product List PDF", link: "#" },
-          ]}
+          title={data?.exploreMore?.[0]?.title}
+          items={data?.exploreMore?.[0]?.ctaButton}
         />
+
         <ExploreCard
           lightVariant
-          title="Keep Exploring"
-          items={[{ id: 0, title: "Aarti Advantage", link: "#" }]}
+          title={data?.exploreMore?.[1]?.title}
+          items={data?.exploreMore?.[1]?.ctaButton}
         />
       </div>
     </div>
