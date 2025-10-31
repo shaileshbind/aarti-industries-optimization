@@ -95,6 +95,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           ease: "power2.out",
         });
       }
+
+      // Start the slide animation
+      const swiper = swiperRef.current;
+      if (swiper && !swiper.destroyed) {
+        swiper.slideTo(index, 800); // 800ms duration to match scroll animation
+      }
+
       gsap.to(window, {
         scrollTo: {
           y: targetScroll,
@@ -103,20 +110,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         duration: 0.8,
         ease: "power2.inOut",
         onComplete: () => {
-          const swiper = swiperRef.current;
-          if (swiper && !swiper.destroyed) {
-            const slideWidth =
-              swiper.slides?.[0]?.offsetWidth ?? swiper.width ?? 0;
-            const spaceBetween = Number(swiper.params?.spaceBetween) || 0;
-            const totalTranslate = -index * (slideWidth + spaceBetween);
-            try {
-              swiper.setTranslate(totalTranslate);
-              swiper.updateProgress();
-              swiper.updateSlidesClasses();
-            } catch (e) {
-              console.error(e);
-            }
-          }
           setActiveTab(index);
           requestAnimationFrame(() => {
             isScrollingProgrammatically.current = false;
