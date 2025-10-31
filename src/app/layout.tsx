@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import Header from "@/app/components/Header";
 import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
+import { GlobalCursor } from "./GlobalCursor";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.variable}>
         <GSAPProvider>
+           <GlobalCursor />
           <Header />
           <main>{children}</main>
           <Footer />
