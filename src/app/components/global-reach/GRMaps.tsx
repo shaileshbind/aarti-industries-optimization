@@ -345,7 +345,7 @@ const GRMaps = () => {
         {/* Part 2 - desktop only Circle Animation */}
         <div
           ref={revealCircle}
-          className="hidden lg:block fixed inset-0 bg-white transform scale-0 opacity-0 origin-center rounded-full z-20"
+          className="hidden lg:block fixed inset-0 bg-white transform scale-0 opacity-0 origin-center  z-20"
         >
           <div className="relative w-full container">
             <div
