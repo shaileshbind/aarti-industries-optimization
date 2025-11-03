@@ -8,6 +8,9 @@ const IndustryBanner = () => {
       title="Trusted Across Industries. Proven Across Applications."
       image="/images/industry/ind-banner.png"
       fullBg
+      mobImage="/images/industry/ind-banner.png"
+      alt="img"
+      mobAlt="img"
     />
   );
 };
