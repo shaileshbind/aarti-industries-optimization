@@ -3,7 +3,7 @@ import HeroBanner from "../banners/HeroBanner";
 import { RDHeroBannerProps } from "@/app/types/r-and-d.type";
 
 const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
-  const { title, pageHeading, ctaButton, description, image } = data;
+  const { title, pageHeading, ctaButton, description, image, mobImage } = data;
 
   return (
     <HeroBanner
@@ -13,6 +13,9 @@ const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
       btnLink={ctaButton?.link || "#"}
       btnTitle={ctaButton?.title}
       image={image?.url}
+      mobImage={mobImage?.url}
+      alt={image?.alternativeText}
+      mobAlt={mobImage?.alternativeText}
     />
   );
 };
