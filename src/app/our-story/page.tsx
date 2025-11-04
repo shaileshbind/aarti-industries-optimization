@@ -6,6 +6,7 @@ import GlobalInnovation from "../components/our-story/GlobalInnovation";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 
+export const dynamic = "force-dynamic";
 
 export default async function page() {
 

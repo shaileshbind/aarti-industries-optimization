@@ -6,7 +6,7 @@ import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
-  const { title, focusSectionTitle, focus_item, image, mobImage } = data;
+  const { title, focusSectionTitle, focus_item, image } = data;
 
   const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
   const displayAlt = image?.alternativeText || "innovation-banner";
