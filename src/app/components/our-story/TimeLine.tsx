@@ -196,7 +196,7 @@ function TimeLine() {
 
       <div className='flex justify-center flex-col-reverse lg:flex-row gap-16 items-end fluid-container'>
 
-        <div className='lg:w-[25%] h-fit'>
+        <div className='lg:w-[32%] h-fit'>
           <FadeInRevealBlur delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}
