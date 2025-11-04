@@ -4,10 +4,10 @@ import { BodyText2, SubH2 } from "../Typography2";
 import Image from "next/image";
 
 interface MobileFilterProps {
-  subCategories: { id: number; subCategory: string }[];
-  selected: number[];
+  subCategories: { id: number; subCategory: string; slug: string }[];
+  selected: string[];
   onClose: () => void;
-  onApply: (selected: number[]) => void;
+  onApply: (selected: string[]) => void;
   onClear: () => void;
   showMobileFilter: boolean;
 }
@@ -20,11 +20,12 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
   onClear,
   showMobileFilter = false,
 }) => {
-  const [localSelected, setLocalSelected] = useState<number[]>(selected);
+  const [localSelected, setLocalSelected] = useState<string[]>(selected);
 
-  const toggleSubCategory = (id: number) => {
+  const toggleSubCategory = (id: string) => {
+    const idString = id.toString();
     setLocalSelected((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(idString) ? prev.filter((s) => s !== idString) : [...prev, idString]
     );
   };
 
@@ -53,11 +54,10 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
         </button>
         <SubH2>Filter by</SubH2>
       </div>
-
       {/* Body */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F7F9FA]">
         {subCategories.map((sub) => {
-          const isSelected = localSelected.includes(sub.id);
+          const isSelected = localSelected.includes(sub.slug.toString());
           return (
             <label
               key={sub.id}
@@ -67,7 +67,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
               <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => toggleSubCategory(sub.id)}
+                onChange={() => toggleSubCategory(sub.slug)}
                 className="h-5 w-5 accent-[#E55E2C] cursor-pointer"
               />
             </label>

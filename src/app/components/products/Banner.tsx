@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import { H2, BodyText1 } from "../Typography2";
 import {BannerProps} from "@/app/types/product.listing.type";
 
-const Banner: React.FC<BannerProps> = ({ data }) => {
+const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({ data, onSearch }) => {
   const { title, description, image, mobImage } = data;
 
   return (
@@ -18,7 +18,7 @@ const Banner: React.FC<BannerProps> = ({ data }) => {
       </div>
 
       {/* Search */}
-      <SearchBar />
+      <SearchBar onSearch={onSearch} />
 
       {/* Background Images */}
       <div className="absolute top-0 h-full w-full z-0">

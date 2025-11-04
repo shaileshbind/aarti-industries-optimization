@@ -1,19 +1,21 @@
-// import React from 'react'
-// import Banner from './Banner'
-// import ProductFilterList from './ProductFilterList'
+'use client'
+import React, { useState } from 'react'
+import Banner from './Banner'
+import ProductFilterList from './ProductFilterList'
+import { ProductWrapperProps } from '@/app/types/product.listing.type'
 
-// interface ProductWrapperProps {
-//   section_one: any; // Replace 'any' with the actual type
-//   product_categories: any; // Replace 'any' with the actual type
-// }
+function ProductWrapper({ section_one, product_categories }: ProductWrapperProps) {
+  const [searchQuery, setSearchQuery] = useState("");
 
-// function ProductWrapper({ section_one, product_categories }: ProductWrapperProps) {
-//     return (
-//         <div>
-//             <Banner data={section_one} />
-//             <ProductFilterList catagoriesData={product_categories} />
-//         </div>
-//     )
-// }
+  return (
+    <div>
+      <Banner data={section_one} onSearch={setSearchQuery} />
+      <ProductFilterList 
+        catagoriesData={product_categories} 
+        searchQuery={searchQuery} 
+      />
+    </div>
+  );
+}
 
-// export default ProductWrapper
+export default ProductWrapper;

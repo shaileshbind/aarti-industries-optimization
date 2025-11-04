@@ -67,3 +67,12 @@ export interface ProductFilterProps{
   catagoriesData: CatagoriesData[];
 }
 
+export interface ProductWrapperProps{
+  section_one: BannerData;
+  product_categories: CatagoriesData[];
+}
+
+export interface ProductFilterListProps extends ProductFilterProps {
+  searchQuery?: string;
+}
+

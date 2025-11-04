@@ -1,7 +1,6 @@
 import React from "react";
-import Banner from "../components/products/Banner";
-import ProductFilterList from "../components/products/ProductFilterList";
 import { getPageData } from "@/_lib/pageData.fetch";
+import ProductWrapper from "../components/products/ProductWrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +15,9 @@ export default async function Product() {
 
   return (
     <>
-      <Banner data={section_one} />
-      <ProductFilterList catagoriesData={product_categories} />
+      {/* <Banner data={section_one} />
+      <ProductFilterList catagoriesData={product_categories} /> */}
+      <ProductWrapper section_one={section_one} product_categories={product_categories}/>
     </>
   );
 }
