@@ -5,6 +5,7 @@ export type WhoBannerProps = {
     title: string;
     description: string;
     image: ImageProps;
+    mobImage:ImageProps;
   };
 };
 

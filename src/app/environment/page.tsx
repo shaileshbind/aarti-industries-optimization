@@ -1,17 +1,22 @@
 import React from "react";
-import GRBanner from "../components/global-reach/GRBanner";
-import GRInfo from "../components/global-reach/GRInfo";
+import EnvBanner from "../components/environment/EnvBanner";
+import EnvInfo from "../components/environment/EnvInfo";
+import EnvCards from "../components/environment/EnvCards";
+import EnvStrong from "../components/environment/EnvStrong";
+import EnvLatest from "../components/environment/EnvLatest";
 import GloballyCertified from "../components/GloballyCertified";
-import GRExplore from "../components/global-reach/GRExp";
-import GRMaps from "../components/global-reach/GRMaps";
-
+import EnvExp from "../components/environment/EnvExp";
+import EnvResp from "../components/environment/EnvResp";
 
 const page = () => {
   return (
     <div>
-      <GRBanner />
-      <GRInfo />
-      <GRMaps />
+      <EnvBanner />
+      <EnvInfo />
+      <EnvCards />
+      <EnvResp/>
+      <EnvStrong />
+      <EnvLatest />
       <GloballyCertified
         title="Globally Certified"
         itemsData={[
@@ -32,7 +37,8 @@ const page = () => {
           },
         ]}
       />
-      <GRExplore />
+      <EnvExp/>
+
     </div>
   );
 };

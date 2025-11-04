@@ -4,12 +4,12 @@ import gsap from "gsap";
 import ScrollTriggerModule from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 import Image from "next/image";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
-import Button from "../Button";
+import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
+import SliderCard from "../cards/SliderCard";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -22,7 +22,6 @@ interface ScrollTriggerInstance {
 
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const { leftText, rightText, images, mainSection } = data;
-
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
@@ -35,16 +34,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const envSlider = useRef<HTMLDivElement>(null);
   const titleSection = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
-
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
   const [isUserInteracting] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const scrollTriggerRef = useRef<ScrollTriggerInstance | null>(null);
-
   const isScrollingProgrammatically = useRef<boolean>(false);
-
   const END_SCROLL_BUFFER = 1;
   const getScrollPositionForSlide = useCallback(
     (slideIndex: number) => {
@@ -77,9 +73,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     },
     [mainSection.length]
   );
-
   const handleTabClick = useCallback(
-    (index: number) => {
+    (index: number, e?: React.MouseEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
       if (index === activeTab || isScrollingProgrammatically.current) return;
 
       const targetScroll = getScrollPositionForSlide(index);
@@ -119,7 +116,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     },
     [activeTab, getScrollPositionForSlide]
   );
-
   const handleScrollUpdate = useCallback(
     (self: ScrollTriggerInstance) => {
       const animationPhaseEnd = 0.55;
@@ -194,7 +190,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           id: "mainTrigger",
           trigger: triggerRef.current,
           start: "top 50%",
-          end: isMobile ? "+=1400" : `+=${window.innerHeight * 4}`,
+          end: isMobile ? "bottom 50%" : `+=${window.innerHeight * 4}`,
           scrub: 1,
           pin: true,
           pinSpacing: true,
@@ -502,10 +498,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )}
         </div>
       </div>
-
       <div
         ref={envSlider}
-        className="w-full   bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
+        className="w-full bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
       >
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
           {mainSection?.length > 0 && (
@@ -531,66 +526,14 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               >
                 {mainSection.map((slide) => (
                   <SwiperSlide key={slide.id}>
-                    <div className="grid lg:grid-cols-2 gap-12 items-center flex-shrink-0 rounded-lg">
-                      <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-                        <div className="absolute inset-0 overflow-hidden">
-                          <Image
-                            src={slide?.image?.url}
-                            alt={slide?.image?.alternativeText || "banner"}
-                            fill
-                            className="object-cover scale-110"
-                          />
-                          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                          <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
-                            <Image
-                              src={slide?.image?.url}
-                              alt={slide?.image?.alternativeText || "banner"}
-                              fill
-                              className="object-cover scale-110"
-                            />
-                          </span>
-                        </div>
-                        {slide?.category && (
-                          <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
-                            {slide?.category}
-                          </h2>
-                        )}
-                      </div>
-
-                      <div>
-                        {slide?.description && (
-                          <BodyText1>{slide.description}</BodyText1>
-                        )}
-
-                        {slide?.values?.length > 0 && (
-                          <div className="flex gap-12 my-8">
-                            {slide?.values?.map((stat, idx) => (
-                              <div key={idx}>
-                                {stat?.value && (
-                                  <H2 className="text-orange-200">
-                                    {stat.value}
-                                  </H2>
-                                )}
-
-                                {stat?.description && (
-                                  <BodyText2 className="text-grey-400 mt-[5px]">
-                                    {stat?.description}
-                                  </BodyText2>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {slide?.ctaButton?.title && (
-                          <Button
-                            title={slide?.ctaButton?.title}
-                            href={slide?.ctaButton?.link || "#"}
-                            secondary
-                          />
-                        )}
-                      </div>
-                    </div>
+                    <SliderCard
+                      imgSrc={slide?.image?.url}
+                      imgAlt={slide?.image?.alternativeText || "banner"}
+                      title={slide?.category}
+                      description={slide?.description}
+                      values={slide?.values}
+                      ctaButton={slide?.ctaButton}
+                    />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -605,7 +548,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       items?.category && (
                         <div
                           key={index}
-                          onClick={() => handleTabClick(index)}
+                          onClick={(e) => handleTabClick(index, e)}
                           className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 ${
                             activeTab === index
                               ? "text-white bg-gradient-orange-3"
@@ -621,7 +564,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             </div>
           </div>
         </div>
-
         <div className="block lg:hidden container relative w-full h-auto">
           <div className="pt-[100px]">
             {mainSection?.length > 0 && (
@@ -651,62 +593,14 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 .filter((_, index) => index === activeTabMob)
                 .map((slide, index) => (
                   <div key={index}>
-                    <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-                      <div className="absolute inset-0 overflow-hidden">
-                        <Image
-                          src={slide?.image?.url}
-                          alt={slide?.image?.alternativeText || "banner"}
-                          fill
-                          className="object-cover scale-110"
-                        />
-                        <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                        <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
-                          <Image
-                            src={slide?.image?.url}
-                            alt={slide?.image?.alternativeText || "banner"}
-                            fill
-                            className="object-cover scale-110"
-                          />
-                        </span>
-                      </div>
-
-                      {slide?.category && (
-                        <h2 className="absolute text-3xl lg:text-4xl font-medium text-white z-10">
-                          {slide?.category}
-                        </h2>
-                      )}
-                    </div>
-
-                    {slide?.description && (
-                      <BodyText1 className="mt-[20px]">
-                        {slide?.description}
-                      </BodyText1>
-                    )}
-
-                    <div className="flex gap-12 mt-6 mb-[36px]">
-                      {slide.values?.length > 0 &&
-                        slide.values?.map((stat, idx) => (
-                          <div key={idx}>
-                            {stat?.value && (
-                              <H2 className="text-orange-200">{stat?.value}</H2>
-                            )}
-
-                            {stat?.description && (
-                              <BodyText2 className="text-grey-400 mt-[4px]">
-                                {stat?.description}
-                              </BodyText2>
-                            )}
-                          </div>
-                        ))}
-                    </div>
-
-                    {slide?.ctaButton?.title && (
-                      <Button
-                        title={slide?.ctaButton?.title}
-                        href={slide?.ctaButton?.link || "#"}
-                        secondary
-                      />
-                    )}
+                    <SliderCard
+                      imgSrc={slide?.image?.url}
+                      imgAlt={slide?.image?.alternativeText || "banner"}
+                      title={slide?.category}
+                      description={slide?.description}
+                      values={slide?.values}
+                      ctaButton={slide?.ctaButton}
+                    />
                   </div>
                 ))}
             </div>

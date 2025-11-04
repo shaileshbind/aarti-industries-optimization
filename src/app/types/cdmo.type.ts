@@ -7,6 +7,7 @@ export type CDMOBannerProps = {
     description: string;
     ctaButton: ButtonProps;
     image: ImageProps;
+    mobImage: ImageProps;
   };
 };
 
