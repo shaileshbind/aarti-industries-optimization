@@ -39,10 +39,10 @@ export type GlobalInnovationProps = {
 }
 
 export interface TimelineMilestone {
-        id: number;
-        year: string;
-        title: string;
-        description: string | null;
+    id: number;
+    year: string;
+    title: string;
+    description: string | null;
 }
 
 interface Milestone {
@@ -53,9 +53,9 @@ interface Milestone {
 }
 
 export interface TimelineData {
-   data: {
-     id: number;
-    sectionTitle: string;
-    milestone: Milestone[];
-   }
+    data: {
+        id: number;
+        sectionTitle: string;
+        milestone: Milestone[];
+    }
 }
