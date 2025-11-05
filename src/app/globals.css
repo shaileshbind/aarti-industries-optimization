@@ -445,3 +445,29 @@ body {
   margin-inline: 20px !important;
 }
 
+/* Phone Input */
+.phone_input .search-box {
+  width: 94%;
+  padding: 10px !important;
+}
+
+.phone_input .react-tel-input .selected-flag:hover,
+.react-tel-input .selected-flag:focus {
+  background-color: #f4f4f4;
+  border-radius: 10px 0 0 10px !important;
+  border-right: 1px solid rgb(213, 208, 208);
+}
+
+.phone_input .react-tel-input .selected-flag {
+  width: 60px;
+  padding: 0 0 0 18px !important;
+}
+
+.phone_input .react-tel-input .country-list {
+  width: 400px;
+}
+
+.phone_input .react-tel-input .flag-dropdown {
+  border-radius: 10px 0 0 10px !important;
+  background-color: #ffffff;
+}

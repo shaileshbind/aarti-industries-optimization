@@ -1,20 +1,12 @@
+"use client";
 import Breadcrumb from "@/app/components/BreadCrumb";
-import {
-  BodyText1,
-  BodyText2,
-  BodyText3,
-  Cta,
-  H3,
-  SubH1,
-  SubH2,
-} from "@/app/components/Typography2";
+import { BodyText1, BodyText2, H3, SubH1 } from "@/app/components/Typography2";
 import Image from "next/image";
-import Button from "@/app/components/Button";
-import Link from "next/link";
 import ProductList from "@/app/components/products/ProdutList";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
 import { ProductData, RelatedProduct } from "@/app/types/product.inner.type";
-import { appDetails } from "@/app/types/product.type";
+import MSDSPopup from "./MSDSPopup";
+import { useState } from "react";
 
 interface ProductInnerPageProps {
   data?: ProductData;
@@ -25,6 +17,9 @@ export default function ProductInnerPage({
   data,
   relatedData,
 }: ProductInnerPageProps) {
+  const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(true);
+  const [showNormalPopup, setshowNormalPopup] = useState<boolean>(false);
+
   const product = data;
   const productDetails = product?.productDetails;
   const relatedProducts = relatedData;
@@ -103,8 +98,13 @@ export default function ProductInnerPage({
                       (item, index) =>
                         item?.documentName && (
                           <div
-                            className="flex justify-between text-[#4C5861] text-sm md:text-base"
+                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
+                            onClick={() =>
+                              index === 0
+                                ? setshowMSDSPopup(true)
+                                : setshowNormalPopup(true)
+                            }
                           >
                             {item?.documentName}
 
@@ -249,6 +249,8 @@ export default function ProductInnerPage({
           </div>
         </FadeInReveal>
       </div>
+
+      {showMSDSPopup ? <MSDSPopup /> : null}
     </div>
   );
 }

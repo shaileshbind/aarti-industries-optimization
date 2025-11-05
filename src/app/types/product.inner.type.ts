@@ -2,7 +2,9 @@ interface DocumentItem {
   id: number;
   documentName: string;
   link: string | null;
-  file: string;
+  file: {
+    url: string;
+  };
 }
 
 interface ApplicationItem {
