@@ -1,15 +1,39 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Typography from "@/app/components/typography";
 import Image from "next/image";
 import AnimateTextOnHover from "./ui/AnimateTextOnHover";
+import gsap from "gsap";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const pathname = usePathname();
+  const mobileNavRef = useRef<HTMLDivElement>(null);
+  const mobileMenuToggle = () => {
+    console.log('isMenuOpen', isMenuOpen);
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      gsap.fromTo(mobileNavRef.current, {
+        top: '0%',
+      }, {
+        top: '-100%',
+        duration: 0.6,
+        ease: "power3.inOut",
+      })
+    } else {
+      setIsMenuOpen(true);
+      gsap.fromTo(mobileNavRef.current, {
+        top: '-100%',
+      }, {
+        top: '0%',
+        duration: 1.2,
+        ease: "power3.inOut",
+      })
+    }
+  }
 
   const navigation = [
     {
@@ -201,25 +225,24 @@ const Header = () => {
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
                 className="lg:hidden relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={mobileMenuToggle}
                 aria-label="Toggle menu"
-                aria-expanded={isMenuOpen}
               >
                 <div className="w-6 h-6 relative">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
+                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
                       isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
                     }`}
                   />
                   <span
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-full bg-blue-900 transition-all duration-200 ease-in-out ${
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${
                       isMenuOpen ? "opacity-0" : "opacity-100"
                     }`}
                   />
                   <span
-                    className={`absolute left-0 bottom-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out ${
-                      isMenuOpen ? "-rotate-45 bottom-1/2 translate-y-1/2" : ""
+                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
+                      isMenuOpen ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full" : ""
                     }`}
                   />
                 </div>
@@ -255,11 +278,8 @@ const Header = () => {
 
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
-        className={`lg:hidden fixed inset-x-0 bg-white border-t border-gray-100 h-full shadow-lg transition-all duration-300 ease-in-out z-40 ${
-          isMenuOpen
-            ? "max-h-screen opacity-100 visible"
-            : "max-h-0 opacity-0 invisible overflow-hidden"
-        }`}
+        ref={mobileNavRef}
+        className={`lg:hidden fixed inset-x-0 bg-white border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%]`}
         style={{ paddingTop: "var(--header-height, 80px)" }}
       >
         {/* Mobile/Tablet Navigation Links */}
@@ -306,8 +326,7 @@ const Header = () => {
               </div>
 
               {/* Mobile Dropdown Items */}
-              {item.hasDropdown && openDropdown === index && (
-                <div className="bg-gray-50 border-t border-gray-100">
+                <div className={`bg-gray-50 border-t border-gray-100 transition-all duration-400 overflow-hidden ${item.hasDropdown && openDropdown === index ? "max-h-[200px]" : "max-h-0"}`}>
                   {item.dropdownItems?.map((dropdownItem) => (
                     <Link
                       key={dropdownItem.name}
@@ -319,21 +338,10 @@ const Header = () => {
                     </Link>
                   ))}
                 </div>
-              )}
             </div>
           ))}
         </nav>
       </div>
-
-      {/* Overlay for mobile menu */}
-      {isMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"
-          onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
-          style={{ top: "var(--header-height, 80px)" }}
-        />
-      )}
 
       {/* Spacer to prevent content from hiding under fixed header */}
       <div className="h-16 lg:h-18 block lg:hidden"></div>
