@@ -71,7 +71,7 @@ const TabsAutoplaySection = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, data.length]);
+  }, [active, data.length, startProgress]);
 
   // Handle tab click
   const handleTabClick = (index: number) => {

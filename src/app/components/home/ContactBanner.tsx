@@ -21,7 +21,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
           />
 
           {title && (
-            <FadeInReveal delay={0.2} className="w-1/2">
+            <FadeInReveal delay={0.2} className="w-full lg:w-1/2">
               <SubH1 className="text-white">{title}</SubH1>
             </FadeInReveal>
           )}

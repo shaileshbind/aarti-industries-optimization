@@ -67,7 +67,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
       ro.disconnect();
       window.removeEventListener("resize", onResize);
     };
-  }, [activeTab, tabs.length]);
+  }, [activeTab, tabs.length, measure]);
 
   return (
     <div className={`relative flex justify-center mb-[42px] bg-gray-100 max-w-fit mx-auto p-1 rounded-full ${className}`}>
@@ -94,7 +94,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
           ref={(el) => { tabRefs.current[0] = el; }}
           onClick={() => onChange("all")}
           type="button"
-          className={`p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
+          className={`cursor-pointer p-2 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
             activeTab === "all" ? "!text-white" : "bg-transparent !text-[#4C5861]"
           }`}
         >
@@ -114,7 +114,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
             ref={(el) => { tabRefs.current[idx + 1] = el; }}
             onClick={() => onChange(tab.slug)}
             type="button"
-            className={`p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
+            className={`cursor-pointer p-2 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
               activeTab === tab.slug ? "!text-white" : "bg-transparent !text-[#4C5861]"
             }`}
           >

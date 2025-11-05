@@ -1,6 +1,7 @@
 import React from "react";
 import clsxN from "./../../../utils/clsxN";
 import Link from "next/link";
+import Image from "next/image";
 
 type BreadCrumbInnerProps = {
   href: string;
@@ -38,7 +39,7 @@ const BreadCrumb = ({ breadcrumbArr }: BreadCrumbProps) => {
           {/* Show divider only if not last item */}
           {arr.length !== index + 1 && (
             <div className="px-2 flex items-center">
-              <img
+              <Image
                 src="/images/breadcrumb-divider.svg"
                 alt=""
                 width={17}

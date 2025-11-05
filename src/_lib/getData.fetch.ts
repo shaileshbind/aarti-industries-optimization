@@ -20,5 +20,8 @@ export const getData = async (slug: string) => {
       console.log("%cGlobally Certified Data", "color : yellow", data?.data);
       return data?.data;
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
 };

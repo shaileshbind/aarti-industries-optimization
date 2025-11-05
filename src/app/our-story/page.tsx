@@ -4,21 +4,32 @@ import AboutCompany from "../components/our-story/AboutCompany";
 import TimeLine from "../components/our-story/TimeLine";
 import GlobalInnovation from "../components/our-story/GlobalInnovation";
 import GloballyCertified from "../components/GloballyCertified";
+import { getPageData } from "@/_lib/pageData.fetch";
 
-function page() {
+export const dynamic = "force-dynamic";
+
+export default async function page() {
+
+  const data = await getPageData("/pages/by-slug/our-story");
+
+    const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+  } = data;
+
+  console.log(data,"our story data")
+
   return (
     <>
-      <HeroBanner
-        tag="Our Story"
-        title="Rooted in Excellence, Driven By Chemistry"
-        image="/images/our-story/our-story-banner.png"
-      />
+      <HeroBanner data={section_one}/>
 
-      <AboutCompany />
+      <AboutCompany data={section_two} />
 
-      <TimeLine />
+      <TimeLine data={section_three} />
 
-      <GlobalInnovation />
+      <GlobalInnovation data={section_four} />
 
       <GloballyCertified
         title="Globally Certified"
@@ -43,5 +54,3 @@ function page() {
     </>
   );
 }
-
-export default page;

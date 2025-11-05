@@ -1,26 +1,46 @@
-import React from 'react'
-import { FadeInRevealBlur } from '../ScrollReveal'
-import { BodyText2, H3 } from '../Typography2'
-import AnimatedText from '../AnimatedText'
-import Button from '../Button'
+"use client";
+import React from "react";
+import { FadeInRevealBlur } from "../ScrollReveal";
+import { BodyText2, H3 } from "../Typography2";
+import AnimatedText from "../AnimatedText";
+import Button from "../Button";
+import { AboutCompanyProps } from "@/app/types/our.story.type";
 
-function AboutCompany() {
-    return (
-        <section className='fluid-container flex flex-col lg:flex-row justify-between my-[50px] lg:my-[100px]'>
-            <FadeInRevealBlur delay={0.1}>
-                <BodyText2 className="font-alte-hans capitalize">
-                    About Company
-                </BodyText2>
-            </FadeInRevealBlur>
+const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
+  if (!data) return null;
 
-            <div className='w-full lg:w-[65%] mt-5 lg:mt-0'>
-                <AnimatedText>
-                    <H3>Aarti Industries (AIL) has built a 40-year legacy of innovation, partnerships, and global reach. We have grown into a strategic partner of choice for global leaders in speciality chemicals, agrochemicals, pharmaceuticals, polymers, plasticisers, additives, and energy, highlighting the growth of India speciality chemical industry.</H3>
-                </AnimatedText>
-                <Button className='mt-12' title="Learn More About Who We Are" href="#" secondary />
-            </div>
-        </section>
-    )
-}
+  const { sectionTitle, description, ctaButton } = data;
 
-export default AboutCompany
+  return (
+    <section className="fluid-container flex flex-col lg:flex-row justify-between my-[50px] lg:my-[100px]">
+      {/* Left Section — Title */}
+      <FadeInRevealBlur delay={0.1}>
+        {sectionTitle && (
+          <BodyText2 className="font-alte-hans capitalize">
+            {sectionTitle}
+          </BodyText2>
+        )}
+      </FadeInRevealBlur>
+
+      {/* Right Section — Description & CTA */}
+      <div className="w-full lg:w-[75%] mt-5 lg:mt-0">
+        {description && (
+          <AnimatedText>
+            <H3 className="whitespace-pre-line">{description}</H3>
+          </AnimatedText>
+        )}
+
+        {ctaButton && (
+          <Button
+            className="mt-12"
+            title={ctaButton.title}
+            href={ctaButton.link}
+            secondary
+          />
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default AboutCompany;

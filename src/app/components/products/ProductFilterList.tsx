@@ -6,12 +6,10 @@ import { BodyText1 } from "../Typography2";
 import ProductTabs from "./ProductTabs";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { ProductFilterProps } from "@/app/types/product.listing.type";
+import { ProductFilterListProps } from "@/app/types/product.listing.type";
 import { ProductData } from "@/app/types/product.inner.type";
-
-interface ProductFilterListProps extends ProductFilterProps {
-  searchQuery?: string; //  new optional prop
-}
+import MobileFilter from "./MobileFilter";
+import Button from "../Button";
 
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
@@ -25,11 +23,26 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [loading, setLoading] = useState(false);
+  const [searchQueryState, setsearchQueryStateState] = useState("");
+  const [desktop, setDesktop] = useState<boolean>(true);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [activeTab, selectedSubCategories, searchQueryState]);
+
+  useEffect(() => {
+    setsearchQueryStateState(searchQuery);
+  }, [searchQuery])
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   //  Fetch products (normal)
   const fetchProducts = async () => {
+    setLoading(true);
+    setsearchQueryStateState("")
     try {
-      setLoading(true);
       const subSlugs = selectedSubCategories.join(",");
       const url = `/api/products?category=${activeTab}${subSlugs ? `&subcategory=${subSlugs}` : ""}`;
       const res = await fetch(url);
@@ -43,16 +56,16 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     }
   };
 
-  console.log(filteredProducts, "filterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-
   //  Fetch based on search query
   const fetchSearchResults = async (query: string) => {
+    if (!query || query == "") return
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await fetch(`/api/products/search?query=${encodeURIComponent(query)}`);
+      const url = `/api/product-search?q=${encodeURIComponent(query)}`;
+      const res = await fetch(url);
       const result = await res.json();
-      setFilteredProducts(result.data || []);
-      setTotalProducts(result.total || 0);
+      setFilteredProducts(result.products || []);
+      setTotalProducts(result.products.length || 0);
     } catch (error) {
       console.error("Error searching products:", error);
     } finally {
@@ -60,16 +73,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     }
   };
 
- useEffect(() => {
-  const fetchData = async () => {
-    if (searchQuery) {
-      await fetchSearchResults(searchQuery);
-    } else {
-      await fetchProducts();
-    }
-  };
-  fetchData();
-}, [searchQuery, activeTab, selectedSubCategories]);
+  useEffect(() => {
+    fetchProducts();
+  }, [activeTab, selectedSubCategories, fetchProducts]);
+
+  useEffect(() => {
+    fetchSearchResults(searchQueryState);
+  }, [searchQueryState]);
 
   //  Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
@@ -77,6 +87,15 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       prev.includes(slug) ? prev.filter((x) => x !== slug) : [...prev, slug]
     );
   };
+
+  useEffect(() => {
+    const update = () => setDesktop(window.innerWidth >= 720);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  console.log(selectedSubCategories)
 
   return (
     <div className="w-full max-w-[85rem] mx-auto my-[60px] px-4">
@@ -131,28 +150,68 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       {/*  Result Header */}
       <div className="flex items-center justify-between mb-6 md:mt-10">
         <BodyText1>
-          {searchQuery
-            ? `Search Results for "${searchQuery}" (${loading ? "..." : totalProducts})`
+          {searchQueryState && searchQueryState !== ""
+            ? `Search Results for "${searchQueryState}" (${loading ? "..." : totalProducts})`
             : `All Results (${loading ? "..." : totalProducts})`}
         </BodyText1>
+        {!desktop && showSubCategories && (
+          <button
+            className="flex gap-2 items-center"
+            onClick={() => setShowMobileFilter(true)}
+          >
+            <BodyText1>Filters</BodyText1>
+            <div className="w-[16px] h-[16px] relative">
+              <Image src="/images/filter.svg" alt="icon" fill />
+            </div>
+          </button>
+        )}
+        {!desktop && showMobileFilter && (
+          <MobileFilter
+            subCategories={
+              catagoriesData
+                .find((item) => item.slug === activeTab)
+                ?.product_sub_categories || []
+            }
+            selected={selectedSubCategories}
+            onClose={() => setShowMobileFilter(false)}
+            showMobileFilter={showMobileFilter}
+            onApply={(selected) => setSelectedSubCategories(selected)}
+            onClear={() => setSelectedSubCategories([])}
+          />
+        )}
       </div>
 
       {/*  Product List */}
       {loading ? (
         <div className="text-center py-8">Loading products...</div>
       ) : filteredProducts.length > 0 ? (
-        <div className="grid lg:grid-cols-2 gap-x-[64px] gap-y-[20px]">
-          {filteredProducts.map((product) => (
-            <div key={product.id} className="w-full">
-              <ProductList
-                title={product.productName ?? ""}
-                link={`/${product.slug}`}
-                pdfLink={typeof product?.productDetails?.documentSection === 'string' ? product.productDetails.documentSection : ''}
-                pdfTitle={product?.productDetails?.abbreviation || ""}
-              />
+        <>
+          <div className="grid lg:grid-cols-2 gap-x-[64px] gap-y-[20px]">
+            {visibleProducts.map((product) => (
+              <div key={product.id} className="w-full">
+                <ProductList
+                  title={product.productName ?? ""}
+                  link={`/${product.slug}`}
+                  pdfLink={typeof product?.productDetails?.documentSection === 'string' ? product.productDetails.documentSection : ''}
+                  pdfTitle={product?.productDetails?.abbreviation || ""}
+                />
+              </div>
+            ))}
+          </div>
+          {filteredProducts.length > visibleCount && (
+            <div className="flex justify-center mt-8">
+              <div
+                onClick={() => setVisibleCount((c) => c + 12)}
+                className="mt-8"
+              >
+                <Button 
+                secondary 
+                title="View More" 
+                href="#" />
+              </div>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       ) : (
         <div className="text-center py-8 text-gray-500">
           No products found.

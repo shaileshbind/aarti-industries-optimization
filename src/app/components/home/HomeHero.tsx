@@ -43,13 +43,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const star = starRef.current;
     const star2 = starRef2.current;
     const star3 = starRef3.current;
-    const stars = [star, star2, star3];
+    const stars = [ star2, star3];
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
     const orangeBar = orangeScroll.current;
     const navTitle = navTitles.current;
 
     // Set initial state - all stars are completely hidden
+    gsap.set(star, {
+      opacity: 1,
+      scale: 200,
+    });
     gsap.set(stars, {
       opacity: 0,
       scale: 0,
@@ -84,6 +88,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       duration: 0.5,
       ease: "power3.out",
     })
+      .to(
+        star,
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "sine.out",
+          stagger: 0.2,
+        },
+        
+      )
       // Step 2: Lines draw in
       .to(
         vLine,
@@ -176,7 +191,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   return (
     <div
       ref={wrapperRef}
-      className="min-h-screen w-full relative overflow-hidden"
+      className="h-[calc(100dvh-64px)] lg:min-h-screen w-full relative overflow-hidden"
     >
       {data?.banner?.length > 0 && (
         <Swiper
@@ -193,21 +208,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             setActive(realIndex);
             resetProgressBar();
           }}
-          // onSlideChangeTransitionEnd={(swiper) => {
-          //   startProgressBar();
-          // }}
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
           }}
-          // onTransitionStart={(swiper: SwiperType) => {
-          //   const realIndex =
-          //     swiper.realIndex !== undefined
-          //       ? swiper.realIndex
-          //       : swiper.activeIndex % sliderData.length;
-
-          //   activeIndexRef.current = realIndex;
-          //   setActive(realIndex);
-          // }}
+          
           on={{
             transitionStart: (swiper: SwiperType) => {
               const realIndex =
@@ -259,7 +263,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="block lg:hidden object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r  from-black/50 to-transparent " />
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
                 {/* Content box */}
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[200px] w-full z-10">
@@ -302,7 +306,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       />
       <div
         ref={starRef}
-        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 "
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60 scale-[200] "
       >
         <Image
           src="/images/home/star-white.svg"

@@ -310,7 +310,7 @@ const EnvResp = () => {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, envData?.length]);
+  }, [active, envData?.length, startProgress]);
 
   // Handle tab click
   const handleTabClick = (index: number) => {
