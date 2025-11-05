@@ -17,7 +17,7 @@ export async function getPageData(slug: string) {
     const data = await response.json();
 
     if (data?.layout?.[0]) {
-      console.log("%cFetched Data", "color : yellow", data?.layout?.[0]);
+      // console.log("%cFetched Data", "color : yellow", data?.layout?.[0]);
       return data?.layout?.[0];
     }
   } catch (error: unknown) {

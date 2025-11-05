@@ -52,21 +52,24 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const indicatorColor = "#F97316";
   const indicatorTransition = "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
   
-  const measureIndicator = () => {
+  const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const activeButton = tabRefs.current[activeTab] ?? null;
 
     if (!activeButton) {
-      setIndicator((prev) => ({ ...prev, visible: false }));
+      setIndicator((prev) => (prev.visible ? { ...prev, visible: false } : prev));
       return;
     }
 
     const left = activeButton.offsetLeft - (container.scrollLeft || 0);
     const width = activeButton.offsetWidth;
-    setIndicator({ left, width, visible: true });
-  };
+    setIndicator((prev) => {
+      if (prev.left === left && prev.width === width && prev.visible) return prev;
+      return { left, width, visible: true };
+    });
+  }, [activeTab]);
 
   const getScrollPositionForSlide = useCallback(
     (slideIndex: number) => {
