@@ -75,7 +75,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   useEffect(() => {
     fetchProducts();
-  }, [activeTab, selectedSubCategories]);
+  }, [activeTab, selectedSubCategories, fetchProducts]);
 
   useEffect(() => {
     fetchSearchResults(searchQueryState);

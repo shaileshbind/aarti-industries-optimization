@@ -12,7 +12,7 @@ import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 
 const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
   const { sectionTitle, cards } = data;
-  const [_activeIndex, setActiveIndex] = useState(0);
+  const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);

@@ -67,7 +67,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
       ro.disconnect();
       window.removeEventListener("resize", onResize);
     };
-  }, [activeTab, tabs.length]);
+  }, [activeTab, tabs.length, measure]);
 
   return (
     <div className={`relative flex justify-center mb-[42px] bg-gray-100 max-w-fit mx-auto p-1 rounded-full ${className}`}>

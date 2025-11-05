@@ -457,7 +457,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeTab, mainSection.length]);
+  }, [activeTab, mainSection.length, measureIndicator]);
 
   return (
     <div ref={triggerRef} className="w-full relative  min-h-[40vh] h-[100vh] mt-[200px] lg:mt-[unset]">

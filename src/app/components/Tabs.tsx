@@ -93,7 +93,7 @@ const Tabs: React.FC<TabsProps> = ({
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeId, tabs.length]);
+  }, [activeId, tabs.length, indicatorColor, indicatorTransition]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${

@@ -49,7 +49,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [active, startProgress]);
 
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
