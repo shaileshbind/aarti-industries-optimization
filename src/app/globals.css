@@ -241,6 +241,33 @@ body {
   }
 }
 
+/* Environmanet Latest Section [Progress Bar] */
+.env-latest-at-swiper {
+  position: relative;
+  padding-bottom: 40px !important;
+}
+.env-latest-at-swiper .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.env-latest-at-swiper .swiper-pagination-progressbar {
+  background: #e6e6e6 !important;
+  height: 2px !important;
+  border-radius: 10px;
+  top: auto !important;
+  bottom: 0 !important;
+}
+@media (min-width: 1024px) {
+  /* Hide progress bar on desktop */
+  .env-latest-at-swiper .swiper-pagination-progressbar {
+    display: none !important;
+  }
+  .env-latest-at-swiper {
+    padding-bottom: 0 !important;
+  }
+}
+
 /* By Use Section [Progress Bar] */
 .home-by-use-section-swiper .swiper-pagination-progressbar-fill {
   background-color: #f36633 !important;

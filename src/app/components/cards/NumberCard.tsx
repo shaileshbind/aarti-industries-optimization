@@ -21,7 +21,7 @@ const NumberCard = ({
   return (
     <div
       className={clsxN(
-        `bg-grey-100 py-[27px] px-[24px] rounded-[20px] overflow-hidden relative group`,
+        `bg-grey-100 py-[27px] px-[24px] rounded-[20px] overflow-hidden relative group h-[170px] lg:h-[174px]`,
         className
       )}
     >

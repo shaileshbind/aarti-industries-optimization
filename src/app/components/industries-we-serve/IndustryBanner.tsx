@@ -11,6 +11,9 @@ const IndustryBanner: React.FC<IndustryBannerProps> = ({ data }) => {
       title={title}
       image={image?.url}
       fullBg
+      mobImage="/images/industry/ind-banner.png"
+      alt="img"
+      mobAlt="img"
     />
   );
 };

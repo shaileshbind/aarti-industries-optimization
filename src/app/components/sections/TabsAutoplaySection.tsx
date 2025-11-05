@@ -155,7 +155,6 @@ const TabsAutoplaySection = ({
             ))}
           </div>
         )}
-
         {/* Content Slides */}
         <Swiper
           modules={[EffectFade]}
@@ -248,7 +247,6 @@ const TabsAutoplaySection = ({
           ))}
         </Swiper>
       </div>
-
       {/* Mobile Accordion */}
       {data?.length > 0 && (
         <div className="block lg:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">

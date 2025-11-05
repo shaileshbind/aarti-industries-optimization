@@ -8,6 +8,9 @@ const GRBanner = () => {
       title="Supplying Speciality Chemicals Globally"
       image="/images/global-reach/gr-banner.png"
       fullBg
+      mobImage="/images/global-reach/gr-banner.png"
+      alt="img"
+      mobAlt="img"
     />
   );
 };

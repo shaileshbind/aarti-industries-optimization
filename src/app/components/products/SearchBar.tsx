@@ -2,13 +2,12 @@
 import Image from "next/image";
 import React, { useState } from "react";
 
-const SearchBar: React.FC = () => {
+const SearchBar: React.FC<{ onSearch: (q: string) => void }> = ({ onSearch }) => {
   const [query, setQuery] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", query);
-    // 👉 Add your search logic here
+    onSearch(query);
   };
 
   return (
