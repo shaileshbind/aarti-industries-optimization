@@ -14,7 +14,7 @@ import { MeetMindsProps } from "@/app/types/who-we-are.type";
 // import Link from "next/link";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
-  const { sectionTitle, profiles } = data;
+  const { sectionTitle, management_boards } = data;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -25,7 +25,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
 
       <div className="mt-[44px]">
         {/* Swiper */}
-        {profiles?.length > 0 && (
+        {management_boards?.length > 0 && (
           <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
             <Swiper
               onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -52,30 +52,28 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               }}
               className="!pr-[20px] !lg:pr-[unset]"
             >
-              {profiles?.map((item) => (
+              {management_boards?.map((item) => (
                 <SwiperSlide key={item?.id}>
-                  {/* <Link href="#" target="_blank"> */}
-                    {/* <CustomCursorTrigger title="Read Bio"> */}
-                      <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
-                        <Image
-                          src={item?.image?.url}
-                          alt={item?.image?.alternativeText || "leader"}
-                          fill
-                          className="object-cover object-top"
-                        />
-                      </div>
-                      {item?.name && (
-                        <BodyText2 className="mt-[18px] text-blue-200">
-                          {item?.name}
-                        </BodyText2>
-                      )}
-                      {item?.designation && (
-                        <BodyText1 className="mt-[4px] text-grey-300">
-                          {item?.designation}
-                        </BodyText1>
-                      )}
-                    {/* </CustomCursorTrigger> */}
-                  {/* </Link> */}
+                  {/* <CustomCursorTrigger title="Read Bio"> */}
+                  <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
+                    <Image
+                      src={item?.image?.url}
+                      alt={item?.image?.alternativeText || "leader"}
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  {item?.name && (
+                    <BodyText2 className="mt-[18px] text-blue-200">
+                      {item?.name}
+                    </BodyText2>
+                  )}
+                  {item?.designation && (
+                    <BodyText1 className="mt-[4px] text-grey-300">
+                      {item?.designation}
+                    </BodyText1>
+                  )}
+                  {/* </CustomCursorTrigger> */}
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -111,7 +109,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               <button
                 className={`swiper-button-next-leaderSection transition-opacity ${
                   activeIndex >=
-                  (profiles?.length || 0) -
+                  (management_boards?.length || 0) -
                     Math.floor(
                       typeof swiperRef.current?.params.slidesPerView ===
                         "number"

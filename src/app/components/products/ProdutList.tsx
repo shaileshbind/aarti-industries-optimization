@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { BodyText1 } from "../Typography2";
 import Image from "next/image";
@@ -28,14 +29,16 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
     >
       {/* Left side */}
       <div className="flex flex-col">
-        <BodyText1
-          className={clsxN(
-            "text-lg font-medium  ",
-            isHovered ? "text-white" : "text-blue-200"
-          )}
-        >
-          {title}
-        </BodyText1>
+        {title && (
+          <BodyText1
+            className={clsxN(
+              "text-lg font-medium  ",
+              isHovered ? "text-white" : "text-blue-200"
+            )}
+          >
+            {title}
+          </BodyText1>
+        )}
         {/* Mobile PDF link */}
         {pdfLink && (
           <a
