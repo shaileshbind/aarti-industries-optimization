@@ -229,7 +229,7 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
       <div className="mt-[100px] relative">
         <Swiper
           key={isDesktop ? "desktop" : "mobile"}
-          slidesPerView={isDesktop ? 5 : 1.8}
+          slidesPerView={1.8}
           speed={2000}
           allowTouchMove={false}
           freeMode={{ enabled: true, momentum: false }}
@@ -242,6 +242,20 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
           loop={true}
           modules={[Autoplay, FreeMode]}
           centeredSlides={!isDesktop}
+          breakpoints={
+            {
+              600: {
+                slidesPerView: 2.2,
+              },
+              1024: {
+                slidesPerView: 5,
+              },
+            }
+          }
+          onSwiper={(s) => {
+            const wrapper = s.el.querySelector('.swiper-wrapper') as HTMLElement | null;
+            if (wrapper) wrapper.style.transitionTimingFunction = 'linear';
+          }}
         >
           {slidesToRender?.map((slide) => renderSwiperSlide(slide))}
         </Swiper>

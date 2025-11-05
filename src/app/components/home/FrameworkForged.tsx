@@ -7,6 +7,10 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
   const { title, card, partnerWithUsCta } = data;
@@ -18,7 +22,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
 
   const slidesPerView = 1.5;
   const spaceBetween = 80;
-
+  const frameworkForgedRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function computeOffset() {
       if (!containerRef.current) return;
@@ -68,8 +72,36 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
   const mainAnimationClasses = isImageAnimating 
     ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}` 
     : `${imageTransitionClasses} ${imageInitialClasses}`;
+
+    useEffect(() => {
+      let tabsAnim: gsap.core.Tween | undefined;
+      if (frameworkForgedRef.current) {
+        tabsAnim = gsap.fromTo(
+          frameworkForgedRef.current,
+          { opacity: 0, y: 30, filter: "blur(10px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: 0.8,
+            ease: "power2.out",
+            delay: 0.1,
+            scrollTrigger: {
+              trigger: frameworkForgedRef.current,
+              start: "top 87%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+      return () => {
+        if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
+        if (tabsAnim) tabsAnim.kill();
+      };
+    }, []);
+
   return (
-    <div>
+      <div ref={frameworkForgedRef}>
       {title && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {title}
@@ -187,7 +219,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
                 src={card?.[currentImageIndex]?.image?.url}
                 alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                 fill
-                className={`${baseImageClasses} ${backgroundAnimationClasses}`} // Applied background classes
+                sizes="(max-width: 768px) 768px, 
+                (max-width: 1200px) 1200px, 
+                1000px"
+                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
               />
             )}
             {card?.[currentImageIndex]?.image?.url && (
@@ -197,6 +232,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
                 alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                 width={500}
                 height={548}
+                sizes="(max-width: 768px) 768px, 
+                (max-width: 1200px) 1200px, 
+                1000px"
                 className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
               />
             )}
@@ -220,7 +258,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 
