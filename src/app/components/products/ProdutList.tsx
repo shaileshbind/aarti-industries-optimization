@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { BodyText1 } from "../Typography2";
 import Image from "next/image";
@@ -28,14 +29,16 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
     >
       {/* Left side */}
       <div className="flex flex-col">
-        <BodyText1
-          className={clsxN(
-            "text-lg font-medium  ",
-            isHovered ? "text-white" : "text-blue-200"
-          )}
-        >
-          {title}
-        </BodyText1>
+        {title && (
+          <BodyText1
+            className={clsxN(
+              "text-lg font-medium  ",
+              isHovered ? "text-white" : "text-blue-200"
+            )}
+          >
+            {title}
+          </BodyText1>
+        )}
         {/* Mobile PDF link */}
         {pdfLink && (
           <a
@@ -46,6 +49,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
               isHovered ? "text-white" : "text-gray-800"
             )}
             onClick={(e) => e.stopPropagation()}
+            target="_blank"
           >
             {"View TDS"}
           </a>
@@ -62,6 +66,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
               "hidden md:flex items-center space-x-1 text-sm  cursor-pointer ",
               isHovered ? "text-white" : "text-gray-800"
             )}
+            target="_blank"
           >
             <span
               className={clsxN(isHovered ? "text-white" : "text-[#4d5861]")}

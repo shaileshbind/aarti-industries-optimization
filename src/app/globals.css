@@ -185,7 +185,7 @@ body {
 /* Blip Border */
 .blip-border {
   border: 1px solid transparent;
-  border-bottom-color: #e1e1e1; 
+  border-bottom-color: #e1e1e1;
   border-right-color: #e1e1e1;
 }
 
@@ -212,7 +212,6 @@ body {
 .footer-animated-underline:hover::after {
   transform: scaleX(1);
 }
-
 
 /* Latest At Aarti Section [Progress Bar] */
 .home-latest-at-swiper {
@@ -290,14 +289,13 @@ body {
 }
 
 @layer utilities {
-
   .scrollbar-style {
-    overflow-y: auto;  /* vertical scroll only */
+    overflow-y: auto; /* vertical scroll only */
     overflow-x: hidden; /* hide horizontal scroll */
   }
 
   .scrollbar-style::-webkit-scrollbar {
-    width: 4px;        /* vertical scrollbar width */
+    width: 4px; /* vertical scrollbar width */
   }
 
   .scrollbar-style::-webkit-scrollbar-track {
@@ -313,7 +311,6 @@ body {
     background-color: var(--grey-200);
   }
 }
-
 
 /* Simplified Swiper Section [Progress Bar] */
 .simplified-swiper-pagination .swiper-pagination-progressbar-fill {
@@ -379,7 +376,6 @@ body {
   border-radius: 10px;
 }
 
-
 /* Who we are - chem creates  [Progress Bar] */
 .whoweare-chem-creates-swiper {
   position: relative;
@@ -407,8 +403,6 @@ body {
   }
 }
 
-
-
 /* Who we are - awards section [Progress Bar] */
 .awards-section-swiper .swiper-pagination-progressbar-fill {
   background-color: #f36633 !important;
@@ -430,7 +424,6 @@ body {
   margin-inline: 20px !important;
 }
 
-
 /* Who we are - leader section [Progress Bar] */
 .leader-section-swiper .swiper-pagination-progressbar-fill {
   background-color: #f36633 !important;
@@ -450,4 +443,46 @@ body {
   border-radius: 10px;
   margin-top: 30px;
   margin-inline: 20px !important;
+}
+
+/* Phone Input */
+.phone_input .search-box {
+  width: 94%;
+  padding: 10px !important;
+}
+
+.phone_input .react-tel-input .selected-flag:hover,
+.react-tel-input .selected-flag:focus {
+  background-color: #f4f4f4;
+  border-radius: 10px 0 0 10px !important;
+  border-right: 1px solid rgb(213, 208, 208);
+}
+
+.phone_input .react-tel-input .selected-flag {
+  width: 60px;
+  padding: 0 0 0 18px !important;
+}
+
+.phone_input .react-tel-input .country-list {
+  width: 400px;
+}
+
+.phone_input .react-tel-input .flag-dropdown {
+  border-radius: 10px 0 0 10px !important;
+  background-color: #ffffff;
+}
+
+/* Popup */
+.popup_container::-webkit-scrollbar {
+  width: 4px;
+}
+.popup_container::-webkit-scrollbar-button {
+  background: #ffffff;
+}
+.popup_container::-webkit-scrollbar-track-piece {
+  background: #dfdfdf;
+}
+.popup_container::-webkit-scrollbar-thumb {
+  background: #dc4c03;
+  border-radius: 20px;
 }
