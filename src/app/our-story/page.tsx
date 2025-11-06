@@ -5,52 +5,31 @@ import TimeLine from "../components/our-story/TimeLine";
 import GlobalInnovation from "../components/our-story/GlobalInnovation";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
+import { getData } from "@/_lib/getData.fetch";
 
 export const dynamic = "force-dynamic";
 
 export default async function page() {
-
   const data = await getPageData("/pages/by-slug/our-story");
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*"
+  );
 
-    const {
-    section_one,
-    section_two,
-    section_three,
-    section_four,
-  } = data;
-
-  console.log(data,"our story data")
+  const { section_one, section_two, section_three, section_four } = data;
 
   return (
     <>
-      <HeroBanner data={section_one}/>
+      {section_one && <HeroBanner data={section_one} />}
 
-      <AboutCompany data={section_two} />
+      {section_two && <AboutCompany data={section_two} />}
 
-      <TimeLine data={section_three} />
+      {section_three && <TimeLine data={section_three} />}
 
-      <GlobalInnovation data={section_four} />
+      {section_four && <GlobalInnovation data={section_four} />}
 
-      <GloballyCertified
-        title="Globally Certified"
-        itemsData={[
-          {
-            id: 0,
-            heading: "Ecovadis Gold Rating",
-            image: { url: "/images/award1.png", alternativeText: "" },
-          },
-          {
-            id: 1,
-            heading: "CDP A rating",
-            image: { url: "/images/award2.png", alternativeText: "" },
-          },
-          {
-            id: 2,
-            heading: "ISO 27001:2022",
-            image: { url: "/images/award3.png", alternativeText: "" },
-          },
-        ]}
-      />
+      {globallyCertifiedData && (
+        <GloballyCertified itemsData={globallyCertifiedData} />
+      )}
     </>
   );
 }

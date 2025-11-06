@@ -2,6 +2,9 @@ interface DocumentItem {
   id: number;
   documentName: string;
   link: string | null;
+  file: {
+    url: string;
+  };
 }
 
 interface ApplicationItem {
@@ -26,15 +29,15 @@ interface ProductDetails {
 }
 
 interface ProductImageProps {
-    id: number,
-    name: string;
-    alternativeText: string;
-    width: number,
-    height: number,
-    ext: string;
-    mime: string;
-    size: number;
-    url: string;
+  id: number;
+  name: string;
+  alternativeText: string;
+  width: number;
+  height: number;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
 }
 
 export interface ProductData {
@@ -52,4 +55,9 @@ export interface RelatedProduct {
   productName: string;
   pdfLink: string;
   slug: string;
+  tdsDocument: {
+    file: {
+      url: string;
+    };
+  };
 }
