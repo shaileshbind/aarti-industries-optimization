@@ -5,7 +5,7 @@ export type WhoBannerProps = {
     title: string;
     description: string;
     image: ImageProps;
-    mobImage:ImageProps;
+    mobImage: ImageProps;
   };
 };
 
@@ -33,11 +33,12 @@ export type WhoPrinciplesProps = {
 export type MeetMindsProps = {
   data: {
     sectionTitle: string;
-    profiles: {
+    management_boards: {
       id: string;
       name: string;
       image: ImageProps;
       designation: string;
+      bio: string;
     }[];
   };
 };

@@ -291,11 +291,11 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             >
               <span
                 ref={sustainInner}
-                className="flex flex-wrap w-full h-full min-w-[200px] absolute top-0 left-[50%] translate-x-[-50%] "
+                className="flex flex-wrap w-full h-full min-w-[200px] rounded-[20px] overflow-hidden absolute top-0 left-[50%] translate-x-[-50%] "
               >
                 <Image
                   src={image?.url}
-                  alt={image?.alternativeText}
+                  alt={image?.alternativeText ? image?.alternativeText : "img"}
                   fill
                   className="object-cover"
                 />

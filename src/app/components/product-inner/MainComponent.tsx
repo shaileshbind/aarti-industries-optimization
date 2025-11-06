@@ -1,49 +1,50 @@
 "use client";
 import Breadcrumb from "@/app/components/BreadCrumb";
-import {
-  BodyText1,
-  BodyText2,
-  BodyText3,
-  H3,
-  SubH1,
-} from "@/app/components/Typography2";
+import { BodyText1, BodyText2, H3, SubH1 } from "@/app/components/Typography2";
 import Image from "next/image";
-import Button from "@/app/components/Button";
-import Link from "next/link";
 import ProductList from "@/app/components/products/ProdutList";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
 import { ProductData, RelatedProduct } from "@/app/types/product.inner.type";
-import { appDetails } from "@/app/types/product.type";
+import MSDSPopup from "./MSDSPopup";
+import { useState } from "react";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 interface ProductInnerPageProps {
   data?: ProductData;
   relatedData?: RelatedProduct[];
 }
 
-export default function ProductInnerPage({ data, relatedData }: ProductInnerPageProps) {
+export default function ProductInnerPage({
+  data,
+  relatedData,
+}: ProductInnerPageProps) {
+  const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(false);
+  const [showNormalPopup, setshowNormalPopup] = useState<boolean>(false);
+  const [document, setdocument] = useState<string>("");
+
   const product = data;
   const productDetails = product?.productDetails;
-
-  // Hardcoded CTA and commonName
-  const cta = {
-    title: "Enquire now",
-    link: "#",
-  };
-  const commonName = "2,3 DCNB";
-
-  // Hardcoded related products (until API integration)
-  // const relatedProducts = [
-  //   {
-  //     id: 0,
-  //     name: "1,3,5 Tri Chloro Benzene",
-  //     pdfLink: "#",
-  //     url: "/1-3-5-trichloro-benzene",
-  //   },
-  // ];
-
   const relatedProducts = relatedData;
 
-  console.log(relatedProducts)
+  const productTable = [
+    { title: "Chemistries", desc: productDetails?.chemistries },
+    {
+      title: "Common Names",
+      desc: productDetails?.commonName,
+    },
+    { title: "Chemical Formula", desc: productDetails?.chemicalFormula },
+    { title: "Pack Size", desc: productDetails?.packSize },
+    { title: "Product Form", desc: productDetails?.productForm },
+  ];
+
+  const descriptionData = [
+    { title: "CAS No", desc: productDetails?.casNo },
+    {
+      title: "Abbreviation",
+      desc: productDetails?.abbreviation,
+    },
+    { title: "IUPAC Name", desc: productDetails?.iupacName },
+  ];
 
   return (
     <div className="w-full min-h-screen">
@@ -62,120 +63,169 @@ export default function ProductInnerPage({ data, relatedData }: ProductInnerPage
           <div className="w-full grid lg:grid-cols-[40%_1fr] gap-x-[60px] gap-y-[40px]">
             {/* LEFT COLUMN */}
             <div>
-              <H3>{product?.productName}</H3>
-              <BodyText1 className="mt-2">{product?.description}</BodyText1>
-
-              <div className="w-fit mt-[14px] lg:mt-[18px] cursor-pointer">
-                <Button title={cta.title} href={cta.link} secondary />
+              <div className="bg-[#FFF2E9] inline-flex gap-2 items-center px-4 py-2 rounded-full mb-[10px]">
+                <Image
+                  src="/images/products/world-orange.svg"
+                  alt="globe"
+                  width={16}
+                  height={16}
+                />
+                <p className="text-[#F36633] text-xs font-medium tracking-[0.48px]">
+                  EXPORT AVAILABLE
+                </p>
               </div>
 
-              {/* Applications */}
-              {(productDetails?.application ?? []).length > 0 && (
-                <div className="mt-9">
-                  <BodyText1>Applications :</BodyText1>
-                  <div className="flex flex-wrap mt-3 gap-2">
-                    {(productDetails?.application ?? []).map((app: appDetails) => (
-                      <div
-                        key={app?.id}
-                        className="bg-[#ffece2] rounded-[20px] py-[6px] px-4 w-fit h-auto"
-                      >
-                        <BodyText3>{app?.application}</BodyText3>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {product?.productName && <H3>{product?.productName}</H3>}
+
+              {product?.description && (
+                <BodyText1 className="mt-2">{product?.description}</BodyText1>
               )}
 
-              {/* Product Image */}
-              <div className="mt-10 grid place-items-center relative">
-                <Image
-                  src={product?.productImage?.url || "/images/products/chemical12.png"}
-                  alt={product?.productName || "Product Image"}
-                  height={product?.productImage?.height || 60}
-                  width={product?.productImage?.width || 60}
-                />
+              {/* Documents */}
+              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 mt-7">
+                {product?.productDetails?.documentSection?.sectionTitle && (
+                  <p className="text-[#002F50] text-base md:text-lg">
+                    {product?.productDetails?.documentSection?.sectionTitle}
+                  </p>
+                )}
+
+                {product?.productDetails?.documentSection?.documents
+                  ?.length && (
+                  <div className="flex flex-col gap-[10px] mt-[14px]">
+                    {product?.productDetails?.documentSection?.documents?.map(
+                      (item, index) =>
+                        item?.documentName && (
+                          <div
+                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                            key={"index_" + index}
+                            onClick={() => {
+                              index === 0
+                                ? setshowMSDSPopup(true)
+                                : setshowNormalPopup(true);
+
+                              setdocument(item?.file?.url);
+                            }}
+                          >
+                            {item?.documentName}
+
+                            <Image
+                              src="/images/download-icon-grey2.svg"
+                              alt="globe"
+                              width={20}
+                              height={20}
+                            />
+                          </div>
+                        )
+                    )}
+                  </div>
+                )}
+
+                <button
+                  className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
+                  onClick={() => setshowNormalPopup(true)}
+                >
+                  Enquire now
+                  <div className="w-[90px] h-[1px] mt-[0.4px] bg-[#DC4C03] transition-all duration-300 origin-left group-hover:w-0" />
+                </button>
               </div>
+
+              {/* Product Image */}
+              {product?.productImage?.url && (
+                <div className="mt-10 grid place-items-center relative">
+                  <Image
+                    src={
+                      product?.productImage?.url ||
+                      "/images/products/chemical12.png"
+                    }
+                    alt={product?.productName || "Product Image"}
+                    height={product?.productImage?.height || 60}
+                    width={product?.productImage?.width || 60}
+                  />
+                </div>
+              )}
             </div>
 
             {/* RIGHT COLUMN */}
             <div>
-              <div className="grid lg:grid-cols-[60%_1fr] gap-[24px]">
-                {/* Basic Info */}
-                <div className="bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5">
-                  {/* Example export badge */}
-                  <div className="mb-[14px] rounded-[20px] border border-orange-200 w-fit py-[6px] px-3 flex gap-x-[6px]">
-                    <Image
-                      src="/images/products/world-orange.svg"
-                      alt="icon"
-                      width={16}
-                      height={16}
-                    />
-                    <BodyText3 className="text-orange-200 uppercase">
-                      Export Available
-                    </BodyText3>
-                  </div>
+              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 xl:flex justify-between">
+                {/* Description */}
+                <div>
+                  {descriptionData?.length > 0 && (
+                    <div>
+                      <p className="pb-4 text-[#002F50] text-base md:text-lg">
+                        Description :
+                      </p>
 
-                  {/* Key Details */}
-                  {[
-                    { title: "CAS No", desc: productDetails?.casNo },
-                    { title: "Abbreviation", desc: productDetails?.abbreviation },
-                    { title: "IUPAC Name", desc: productDetails?.iupacName },
-                  ].map((item, i) => (
-                    <div
-                      key={i}
-                      className="w-full flex gap-x-[16px] mb-2"
-                    >
-                      <BodyText2>{item.title}</BodyText2>
-                      <BodyText2>{item.desc}</BodyText2>
+                      <div className="flex flex-col gap-[10px]">
+                        {descriptionData?.map((item, index) => (
+                          <div key={"desc_" + index} className="flex gap-4">
+                            <p className="text-sm md:text-base">
+                              {item?.title} :
+                            </p>
+                            <p className="text-sm md:text-base">{item?.desc}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </div>
 
-                {/* Documents */}
-                {
-                 productDetails?.documentSection && productDetails?.documentSection?.documents?.length !== 0 &&
-                  <div className="bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5">
-                    <BodyText1 className="mb-2">Documents :</BodyText1>
-                    {productDetails?.documentSection?.documents?.map((doc) => (
-                      <div
-                        key={doc?.id}
-                        className="w-full flex gap-x-[6px] justify-between mb-2"
-                      >
-                        <BodyText2>{doc?.documentName}</BodyText2>
-                        <div className="w-fit cursor-pointer">
-                          <Link href={doc?.link || "#"} target="_blank">
-                            <Image
-                              src="/images/download-icon-grey2.svg"
-                              alt="icon"
-                              width={18}
-                              height={18}
-                              className="w-[16px] h-[16px] lg:w-[18px] lg:h-[18px]"
-                            />
-                          </Link>
-                        </div>
+                <div className="w-[1px] h-[140px] bg-[#002F5047] hidden xl:block" />
+                <div className="w-full h-[1px] bg-[#002F5047] my-4 block xl:hidden" />
+
+                {/* Applications */}
+                <div>
+                  {product?.productDetails?.application?.length && (
+                    <div>
+                      <p className="pb-4 text-[#002F50] text-base md:text-lg">
+                        Applications :
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-[10px]">
+                        {product?.productDetails?.application?.map(
+                          (item, index) => (
+                            <div
+                              key={"application" + index}
+                              className="flex gap-2"
+                            >
+                              <Image
+                                src="/images/star-orange.svg"
+                                alt="star"
+                                width={16}
+                                height={16}
+                              />
+                              <p className="text-sm md:text-base">
+                                {item?.application}
+                              </p>
+                            </div>
+                          )
+                        )}
                       </div>
-                    ))}
-                  </div>
-                }
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Product Info Section */}
-              <div className="mt-[24px] border border-gray-200 rounded-[14px] lg:rounded-[20px] overflow-hidden">
-                {[
-                  { title: "Chemistries", desc: productDetails?.chemistries },
-                  { title: "Common Names", desc: productDetails?.commonName || commonName },
-                  { title: "Pack Size", desc: productDetails?.packSize },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`${index % 2 === 0 ? "" : "bg-[#F7F9FA]"
-                      } grid grid-cols-[40%_60%] border-b border-gray-200 px-[20px] py-5`}
-                  >
-                    <BodyText2>{item.title}</BodyText2>
-                    <BodyText2>{item.desc}</BodyText2>
-                  </div>
-                ))}
-              </div>
+              {productTable?.length > 0 && (
+                <div className="mt-[24px] border border-gray-200 rounded-[14px] lg:rounded-[20px] overflow-hidden">
+                  {productTable?.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`${
+                        index % 2 === 0 ? "" : "bg-[#F7F9FA]"
+                      } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
+                    >
+                      {item?.title && (
+                        <BodyText2 className="text-[#002F50]">
+                          {item?.title + " :"}
+                        </BodyText2>
+                      )}
+                      {item?.desc && <BodyText2>{item.desc}</BodyText2>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </FadeInReveal>
@@ -184,21 +234,38 @@ export default function ProductInnerPage({ data, relatedData }: ProductInnerPage
         <FadeInReveal>
           <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 lg:p-10 w-full">
             <SubH1 className="text-blue-100">Related Products</SubH1>
-            <div className="mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] gap-y-[20px]">
-              {relatedProducts?.map((item) => (
-                <ProductList
-                  key={item.id}
-                  secondary
-                  title={item.productName}
-                  link={"/"+item.slug}
-                  pdfLink={item.pdfLink}
-                  pdfTitle="View TDS"
-                />
-              ))}
-            </div>
+
+            {relatedProducts?.length && (
+              <div className="mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] gap-y-[20px]">
+                {relatedProducts?.map((item) => (
+                  <ProductList
+                    key={item?.id}
+                    secondary
+                    title={item?.productName}
+                    link={"/" + item?.slug}
+                    pdfLink={item?.tdsDocument?.file?.url}
+                    pdfTitle="View TDS"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </FadeInReveal>
       </div>
+
+      {showMSDSPopup ? (
+        <MSDSPopup
+          setshowMSDSPopup={setshowMSDSPopup}
+          isOpen={showMSDSPopup}
+          document={document}
+        />
+      ) : (
+        <GeneralPopup
+          isOpen={showNormalPopup}
+          setshowNormalPopup={setshowNormalPopup}
+          document={document}
+        />
+      )}
     </div>
   );
 }
