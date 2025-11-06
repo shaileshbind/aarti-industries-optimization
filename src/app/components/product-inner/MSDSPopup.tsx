@@ -26,11 +26,13 @@ type FormValues = {
 type MSDSPopupProps = {
   setshowMSDSPopup: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
+  document?: string;
 };
 
 export default function MSDSPopup({
   setshowMSDSPopup,
   isOpen,
+  document,
 }: MSDSPopupProps) {
   const {
     register,

@@ -29,16 +29,19 @@ type FormValues = {
 type GeneralPopupProps = {
   setshowNormalPopup: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
+  document?: string;
 };
 
 export default function GeneralPopup({
   setshowNormalPopup,
   isOpen,
+  document,
 }: GeneralPopupProps) {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -55,7 +58,6 @@ export default function GeneralPopup({
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Form Data:", data);
     const formattedData = {
       full_name: data.fullName,
       email: data.email,
@@ -78,15 +80,23 @@ export default function GeneralPopup({
       });
 
       if (response.ok) {
-        const result = await response.json();
-        console.log("Success:", result);
+        // const result = await response.json();
+        // console.log("Success:", result);
         setshowNormalPopup(false);
-        alert("Form submitted successfully!");
+        reset();
+        if (document) {
+          const link = window.document.createElement("a");
+          link.href = document;
+          link.download = "document.pdf";
+          link.target = "_blank";
+          window.document.body.appendChild(link);
+          link.click();
+          window.document.body.removeChild(link);
+        }
       } else {
         const error = await response.json();
         setshowNormalPopup(false);
         console.error("Error:", error);
-        alert("Submission failed.");
       }
     } catch (error) {
       setshowNormalPopup(false);

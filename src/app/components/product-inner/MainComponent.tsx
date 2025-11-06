@@ -20,6 +20,7 @@ export default function ProductInnerPage({
 }: ProductInnerPageProps) {
   const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(false);
   const [showNormalPopup, setshowNormalPopup] = useState<boolean>(false);
+  const [document, setdocument] = useState<string>("");
 
   const product = data;
   const productDetails = product?.productDetails;
@@ -101,11 +102,13 @@ export default function ProductInnerPage({
                           <div
                             className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
-                            onClick={() =>
+                            onClick={() => {
                               index === 0
                                 ? setshowMSDSPopup(true)
-                                : setshowNormalPopup(true)
-                            }
+                                : setshowNormalPopup(true);
+
+                              setdocument(item?.file?.url);
+                            }}
                           >
                             {item?.documentName}
 
@@ -255,11 +258,16 @@ export default function ProductInnerPage({
       </div>
 
       {showMSDSPopup ? (
-        <MSDSPopup setshowMSDSPopup={setshowMSDSPopup} isOpen={showMSDSPopup} />
+        <MSDSPopup
+          setshowMSDSPopup={setshowMSDSPopup}
+          isOpen={showMSDSPopup}
+          document={document}
+        />
       ) : (
         <GeneralPopup
           isOpen={showNormalPopup}
           setshowNormalPopup={setshowNormalPopup}
+          document={document}
         />
       )}
     </div>
