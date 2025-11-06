@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { isMobile } from "react-device-detect";
 import { BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
@@ -18,38 +18,41 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  const startProgress = (index: number) => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    setProgress(0);
+  const startProgress = useCallback(
+    (index: number) => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      setProgress(0);
 
-    const duration = 8000;
-    const startTime = performance.now();
+      const duration = 8000;
+      const startTime = performance.now();
 
-    const animate = (time: number) => {
-      const elapsed = time - startTime;
-      const progressPercent = Math.min((elapsed / duration) * 100, 100);
-      setProgress(progressPercent);
+      const animate = (time: number) => {
+        const elapsed = time - startTime;
+        const progressPercent = Math.min((elapsed / duration) * 100, 100);
+        setProgress(progressPercent);
 
-      if (progressPercent < 100) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else {
-        const nextIndex = (index + 1) % content?.length;
-        setActive(nextIndex);
-        setExpanded(`panel${nextIndex}`);
-        if (swiperRef.current) swiperRef.current.slideToLoop(nextIndex);
-        startProgress(nextIndex);
-      }
-    };
+        if (progressPercent < 100) {
+          rafRef.current = requestAnimationFrame(animate);
+        } else {
+          const nextIndex = (index + 1) % (content?.length || 1);
+          setActive(nextIndex);
+          setExpanded(`panel${nextIndex}`);
+          swiperRef.current?.slideToLoop(nextIndex);
+          startProgress(nextIndex);
+        }
+      };
 
-    rafRef.current = requestAnimationFrame(animate);
-  };
+      rafRef.current = requestAnimationFrame(animate);
+    },
+    [content]
+  );
 
   useEffect(() => {
     startProgress(active);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [active, startProgress]);
 
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -62,7 +65,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
     };
 
   return (
-    <div className="py-[50px] lg:py-[100px fluid-container">
+    <div className="py-[50px] lg:py-[100px] fluid-container">
       {sectionTitle && <H2>{sectionTitle}</H2>}
 
       {content?.length > 0 && (
@@ -134,17 +137,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
               />
               {/* Grey base line */}
               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
-
-              {/* Orange progress bar */}
-              {index === active && (
-                <div
-                  className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
-                  style={{ width: `${progress}%` }}
-                />
-              )}
-              {/* Grey line */}
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
-              {/* Orange progress bar only for active accordion */}
+              {/* Orange progress bar (fixed) */}
               {index === active && (
                 <div
                   className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"

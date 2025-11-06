@@ -40,7 +40,7 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
       setPrevImg(activeImg);
       isFirst.current = false;
     }
-  }, [activeImg]);
+  }, [activeImg, prevImg]);
 
   return (
     <div

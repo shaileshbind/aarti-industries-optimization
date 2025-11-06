@@ -12,14 +12,14 @@ type DateCardProps = {
 
 const DateCard = ({ link, imageAlt, imageSrc, date, desc }: DateCardProps) => {
   const CardContent = () => (
-    <>
-      <div className="relative rounded-[10px] w-full h-[230px] overflow-hidden group">
+    <div className="group">
+      <div className="relative rounded-[10px] w-full h-[230px] overflow-hidden ">
         {imageSrc && (
           <Image
             src={imageSrc}
             alt={imageAlt ? imageAlt : "img"}
             fill
-            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
+            className="object-cover object-top transition-transform duration-[6s] ease-out group-hover:scale-150"
           />
         )}
       </div>
@@ -29,7 +29,7 @@ const DateCard = ({ link, imageAlt, imageSrc, date, desc }: DateCardProps) => {
       <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
         {desc}
       </div>
-    </>
+    </div>
   );
 
   return link ? (
