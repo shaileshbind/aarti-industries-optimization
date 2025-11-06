@@ -46,10 +46,6 @@ export default function ProductInnerPage({
     { title: "IUPAC Name", desc: productDetails?.iupacName },
   ];
 
-  console.log("relatedProducts", relatedProducts);
-  console.log("product", product);
-  console.log("documents", product?.productDetails?.documentSection?.documents);
-
   return (
     <div className="w-full min-h-screen">
       <div className="w-full container my-[70px] lg:my-[100px]">

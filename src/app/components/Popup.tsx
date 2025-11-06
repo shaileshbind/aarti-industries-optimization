@@ -100,7 +100,7 @@ export default function Popup({
       />
       <div
         ref={popupRef}
-        className="bg-white w-[90%] lg:w-1/2 rounded-[20px] p-5 md:p-[30px] z-[60]"
+        className="bg-white w-[90%] lg:w-[70%] xl:w-1/2 rounded-[20px] p-5 md:p-[30px] z-[60]"
       >
         {children}
       </div>
