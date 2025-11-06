@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import SmoothCollapseGSAP from "./SmoothCollapse";
 import { BodyText1 } from "../Typography2";
@@ -19,75 +19,93 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   const [activeTab, setActiveTab] = useState<string>("all");
   const [showSubCategories, setShowSubCategories] = useState(false);
-  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
+    []
+  );
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [searchQueryState, setsearchQueryStateState] = useState("");
+  const [searchQueryState, setSearchQueryState] = useState("");
   const [desktop, setDesktop] = useState<boolean>(true);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
 
+  // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(12);
   }, [activeTab, selectedSubCategories, searchQueryState]);
 
+  // Sync search query from props
   useEffect(() => {
-    setsearchQueryStateState(searchQuery);
-  }, [searchQuery])
+    setSearchQueryState(searchQuery);
+  }, [searchQuery]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
-  //  Fetch products (normal)
-  const fetchProducts = async () => {
+  // Fetch products based on category and subcategory filters
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
-    setsearchQueryStateState("")
+    setSearchQueryState("");
     try {
       const subSlugs = selectedSubCategories.join(",");
-      const url = `/api/products?category=${activeTab}${subSlugs ? `&subcategory=${subSlugs}` : ""}`;
+      const url = `/api/products?category=${activeTab}${
+        subSlugs ? `&subcategory=${subSlugs}` : ""
+      }`;
       const res = await fetch(url);
       const result = await res.json();
       setFilteredProducts(result.data || []);
       setTotalProducts(result.total || 0);
     } catch (error) {
       console.error("Error fetching products:", error);
+      setFilteredProducts([]);
+      setTotalProducts(0);
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab, selectedSubCategories]);
 
-  //  Fetch based on search query
-  const fetchSearchResults = async (query: string) => {
-    if (!query || query == "") return
+  // Fetch based on search query
+  const fetchSearchResults = useCallback(async (query: string) => {
+    if (!query || query === "") return;
+
     setLoading(true);
     try {
       const url = `/api/product-search?q=${encodeURIComponent(query)}`;
       const res = await fetch(url);
       const result = await res.json();
       setFilteredProducts(result.products || []);
-      setTotalProducts(result.products.length || 0);
+      setTotalProducts(result.products?.length || 0);
     } catch (error) {
       console.error("Error searching products:", error);
+      setFilteredProducts([]);
+      setTotalProducts(0);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Fetch products when category or subcategory changes (only if not searching)
   useEffect(() => {
-    fetchProducts();
-  }, [activeTab, selectedSubCategories, fetchProducts]);
+    if (!searchQueryState) {
+      fetchProducts();
+    }
+  }, [activeTab, selectedSubCategories, searchQueryState, fetchProducts]);
 
+  // Fetch search results when search query changes
   useEffect(() => {
-    fetchSearchResults(searchQueryState);
-  }, [searchQueryState]);
+    if (searchQueryState && searchQueryState !== "") {
+      fetchSearchResults(searchQueryState);
+    }
+  }, [searchQueryState, fetchSearchResults]);
 
-  //  Toggle subcategory selection
+  // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
     setSelectedSubCategories((prev) =>
       prev.includes(slug) ? prev.filter((x) => x !== slug) : [...prev, slug]
     );
   };
 
+  // Handle responsive behavior
   useEffect(() => {
     const update = () => setDesktop(window.innerWidth >= 720);
     update();
@@ -95,23 +113,33 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  console.log(selectedSubCategories)
+  // Handle tab change
+  const handleTabChange = (id: string) => {
+    setActiveTab(id);
+    setShowSubCategories(id !== "all");
+    setSelectedSubCategories([]);
+  };
+
+  // Handle load more
+  const handleLoadMore = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setVisibleCount((c) => c + 12);
+  };
 
   return (
     <div className="w-full max-w-[85rem] mx-auto my-[60px] px-4">
-      {/*  Category Tabs */}
+      {/* Category Tabs */}
       <ProductTabs
         tabs={catagoriesData}
         activeTab={activeTab}
-        onChange={(id: string) => {
-          setActiveTab(id);
-          setShowSubCategories(id !== "all");
-          setSelectedSubCategories([]);
-        }}
+        onChange={handleTabChange}
       />
 
-      {/*  Subcategory Filter */}
-      <SmoothCollapseGSAP className="hidden md:block" isOpen={showSubCategories}>
+      {/* Subcategory Filter */}
+      <SmoothCollapseGSAP
+        className="hidden md:block"
+        isOpen={showSubCategories}
+      >
         <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
           {catagoriesData
             .find((item) => item.slug === activeTab)
@@ -147,11 +175,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         </div>
       </SmoothCollapseGSAP>
 
-      {/*  Result Header */}
+      {/* Result Header */}
       <div className="flex items-center justify-between mb-6 md:mt-10">
         <BodyText1>
           {searchQueryState && searchQueryState !== ""
-            ? `Search Results for "${searchQueryState}" (${loading ? "..." : totalProducts})`
+            ? `Search Results for "${searchQueryState}" (${
+                loading ? "..." : totalProducts
+              })`
             : `All Results (${loading ? "..." : totalProducts})`}
         </BodyText1>
         {!desktop && showSubCategories && (
@@ -165,23 +195,24 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
             </div>
           </button>
         )}
-        {!desktop && showMobileFilter && (
-          <MobileFilter
-            subCategories={
-              catagoriesData
-                .find((item) => item.slug === activeTab)
-                ?.product_sub_categories || []
-            }
-            selected={selectedSubCategories}
-            onClose={() => setShowMobileFilter(false)}
-            showMobileFilter={showMobileFilter}
-            onApply={(selected) => setSelectedSubCategories(selected)}
-            onClear={() => setSelectedSubCategories([])}
-          />
-        )}
       </div>
 
-      {/*  Product List */}
+      {/* Mobile Filter */}
+      {!desktop && showMobileFilter && (
+        <MobileFilter
+          subCategories={
+            catagoriesData.find((item) => item.slug === activeTab)
+              ?.product_sub_categories || []
+          }
+          selected={selectedSubCategories}
+          onClose={() => setShowMobileFilter(false)}
+          showMobileFilter={showMobileFilter}
+          onApply={(selected) => setSelectedSubCategories(selected)}
+          onClear={() => setSelectedSubCategories([])}
+        />
+      )}
+
+      {/* Product List */}
       {loading ? (
         <div className="text-center py-8">Loading products...</div>
       ) : filteredProducts.length > 0 ? (
@@ -192,7 +223,11 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                 <ProductList
                   title={product.productName ?? ""}
                   link={`/${product.slug}`}
-                  pdfLink={typeof product?.productDetails?.documentSection === 'string' ? product.productDetails.documentSection : ''}
+                  pdfLink={
+                    typeof product?.productDetails?.documentSection === "string"
+                      ? product.productDetails.documentSection
+                      : ""
+                  }
                   pdfTitle={product?.productDetails?.abbreviation || ""}
                 />
               </div>
@@ -200,22 +235,14 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
           </div>
           {filteredProducts.length > visibleCount && (
             <div className="flex justify-center mt-8">
-              <div
-                onClick={() => setVisibleCount((c) => c + 12)}
-                className="mt-8"
-              >
-                <Button 
-                secondary 
-                title="View More" 
-                href="#" />
+              <div onClick={handleLoadMore} className="mt-8">
+                <Button secondary title="View More" href="#" />
               </div>
             </div>
           )}
         </>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          No products found.
-        </div>
+        <div className="text-center py-8 text-gray-500">No products found.</div>
       )}
     </div>
   );
