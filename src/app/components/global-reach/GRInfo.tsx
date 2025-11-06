@@ -6,26 +6,12 @@ import Image from "next/image";
 import { H3 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import NumberCard from "../cards/NumberCard";
+import { GRInfoProps } from "@/app/types/global-reach.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const GRInfo = () => {
-  const RDInfoData = [
-    {
-      id: 0,
-      title: "3",
-      desc: "Globally, for >75% of the product portfolio",
-    },
-    { id: 1, title: "6", desc: "Manufacturing facilities" },
-    { id: 2, imageSrc: "/images/home/chemical.png" },
-    { id: 3, title: "5", desc: "star export house" },
-    { id: 4, imageSrc: "/images/home/chemical.png" },
-    {
-      id: 5,
-      title: "2",
-      desc: "State-of-the-art R&D Centres",
-    },
-  ];
+const GRInfo = ({ data }: GRInfoProps) => {
+  const { description, content } = data;
   const wrapperRef = useRef(null);
   const topLineRef = useRef(null);
   const wrapperRefBox = useRef<HTMLDivElement>(null);
@@ -106,15 +92,11 @@ const GRInfo = () => {
         </div>
         {/* Text content */}
         <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">
-          <AnimatedText>
-            <H3>
-              We supply world-class speciality chemicals to over 60 countries,
-              backed by strategically located manufacturing facilities and
-              advanced R&D capabilities. As part of a sector expected to grow to
-              over USD 1 trillion by 2030, our expanding global operations
-              position us at the heart of the specialty chemicals boom.
-            </H3>
-          </AnimatedText>
+          {description && (
+            <AnimatedText>
+              <H3>{description}</H3>
+            </AnimatedText>
+          )}
         </div>
         <div className="mt-[40px] lg:mt-[60px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
           <div
@@ -123,26 +105,26 @@ const GRInfo = () => {
           >
             <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
               <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                {RDInfoData?.slice(0, 3)?.map((items) => {
+                {content?.slice(0, 3)?.map((items) => {
                   return (
                     <NumberCard
                       key={items?.id}
-                      title={items?.title}
-                      desc={items?.desc}
-                      imageSrc={items?.imageSrc}
+                      title={items?.values[0]?.value}
+                      desc={items?.values[0]?.description}
+                      imageSrc={items?.image?.url}
                       className="stat-box"
                     />
                   );
                 })}
               </div>
               <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px]">
-                {RDInfoData?.slice(3, 6)?.map((items) => {
+                {content?.slice(3, 6)?.map((items) => {
                   return (
                     <NumberCard
                       key={items?.id}
-                      title={items?.title}
-                      desc={items?.desc}
-                      imageSrc={items?.imageSrc}
+                      title={items?.values[0]?.value}
+                      desc={items?.values[0]?.description}
+                      imageSrc={items?.image?.url}
                       className="stat-box"
                     />
                   );

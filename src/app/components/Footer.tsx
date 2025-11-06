@@ -49,22 +49,22 @@ const footerData = {
             {
               id: 1,
               title: "Who we are",
-              link: "#",
+              link: "/who-we-are",
             },
             {
               id: 2,
               title: "Our Story",
-              link: "#",
+              link: "/our-story",
             },
             {
               id: 3,
               title: "Industries we Serve",
-              link: "#",
+              link: "/industries-we-serve",
             },
             {
               id: 4,
               title: "Global Reach",
-              link: "#",
+              link: "/global-reach",
             },
           ],
           link: "#",
@@ -76,7 +76,7 @@ const footerData = {
             {
               id: 0,
               title: "R&D",
-              link: "#",
+              link: "/r-and-d",
             },
             {
               id: 1,
@@ -114,7 +114,7 @@ const footerData = {
             {
               id: 0,
               title: "CDMO",
-              link: "#",
+              link: "/cdmo-contract-development-and-manufacturing-operations",
             },
             {
               id: 1,
@@ -147,7 +147,7 @@ const footerData = {
             {
               id: 0,
               title: "Environment",
-              link: "#",
+              link: "/environment",
             },
             {
               id: 1,
@@ -374,7 +374,7 @@ const Footer = () => {
                       return (
                         <a
                           key={items.id}
-                          href={items?.link}
+                          href={items?.link ? items?.link : ""}
                           className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                         >
                           {items?.title}
@@ -462,25 +462,25 @@ const Footer = () => {
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1">
           <a
             href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434] my-[0.5px] footer-animated-underline"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#717171] my-[0.5px] footer-animated-underline text-center"
           >
             Legal Disclaimer
           </a>
           <a
             href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#343434]  my-[0.5px] footer-animated-underline"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#717171]  my-[0.5px] footer-animated-underline text-center"
           >
             Privacy Policy
           </a>
           <a
             href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]   my-[0.5px] footer-animated-underline"
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#717171]   my-[0.5px] footer-animated-underline text-center"
           >
             Sitemap
           </a>
           <a
             href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#343434]  my-[0.5px] footer-animated-underline "
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#717171]  my-[0.5px] footer-animated-underline text-center"
           >
             Job Fraud Alert
           </a>

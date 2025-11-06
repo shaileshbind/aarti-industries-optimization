@@ -38,14 +38,14 @@ const BlackInfoSection = ({
           <div className="absolute inset-0 bg-black/20 " />
         </div>
       )}
-      <div className="w-full relative lg:h-screen">
+      <div className="w-full relative lg:h-screen ">
         {image && (
           <div className="relative w-full h-full">
             <Image
               src={image}
               alt={alt ? alt : "banner"}
               fill
-              className="hidden lg:block"
+              className="hidden lg:block object-top object-cover"
             />
             <div className="absolute inset-0 bg-black/20  " />
           </div>
@@ -53,12 +53,12 @@ const BlackInfoSection = ({
         <div className="lg:absolute w-full lg:py-[80px] px-[20px] lg:px-[60px] top-0">
           {title && (
             <FadeInReveal>
-              <H2 className="text-blue-200 lg:text-white max-w-[unset] lg:max-w-[470px]">
+              <H2 className="text-blue-200 lg:text-white max-w-[unset] lg:max-w-[100%]">
                 {title}
               </H2>
             </FadeInReveal>
           )}
-          <div className="grid mt-[12px] lg:mt-[180px] justify-end">
+          <div className="grid mt-[12px] lg:mt-[90px] justify-end">
             <FadeInReveal>
               {description && (
                 <BodyText1 className="max-w-[620px] text-grey-400 lg:text-white">

@@ -3,8 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Cta, SubH1 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
+import { EnvExpProps } from "@/app/types/environment.type";
 
-const EnvExp = () => {
+const EnvExp = ({ data }: EnvExpProps) => {
+  const { title } = data;
   return (
     <div className="container">
       <FadeInReveal>
@@ -17,10 +19,7 @@ const EnvExp = () => {
             className="absolute bottom-[-48px] md:bottom-[20px] -right-[35px] -md:right-[50px] w-[155px] h-[155px] md:w-[217px] md:h-[217px]"
           />
           <FadeInReveal delay={0.2} className="lg:w-[60%]">
-            <SubH1 className="text-white">
-              Explore our sustainability efforts driving meaningful, positive
-              change
-            </SubH1>
+            <SubH1 className="text-white">{title}</SubH1>
           </FadeInReveal>
           <FadeInReveal delay={0.2}>
             <Link href="#" target="_blank">

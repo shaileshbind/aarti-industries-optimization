@@ -1,17 +1,19 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { EnvBannerProps } from "@/app/types/environment.type";
 
-const EnvBanner = () => {
+const EnvBanner = ({ data }: EnvBannerProps) => {
+  const { title, sectionTitle, image, mobImage } = data;
   return (
     <div>
       <HeroBanner
         fullBg
-        tag="Environment"
-        title="Creating Chemistry with Care for the Environment"
-        image="/images/environment/env-banner.png"
-        mobImage="/images/environment/env-banner.png"
-        alt="img"
-        mobAlt="img"
+        tag={sectionTitle}
+        title={title}
+        image={image?.url}
+        mobImage={mobImage?.url}
+        alt={image?.alternativeText}
+        mobAlt={mobImage?.alternativeText}
       />
     </div>
   );
