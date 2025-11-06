@@ -266,10 +266,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
                 {/* Content box */}
                 <FadeInReveal delay={0.2}>
-                  <div className="absolute mt-[200px] w-full z-10">
+                  <div className="absolute mt-[20vh] w-full z-10">
                     <div className="fluid-container">
                       {items?.card?.[0]?.title && (
-                        <H1 className="text-white max-w-[276px] md:max-w-[650px]">
+                        <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
                           {items?.card?.[0]?.title}
                         </H1>
                       )}

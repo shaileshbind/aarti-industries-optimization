@@ -14,27 +14,29 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
   };
 
   return (
-    <section className="h-auto lg:h-full relative lg:py-[100px] py-[50px]">
-      {image?.url && (
-        <Image
-          src={image?.url}
-          alt={image?.alternativeText || "banner"}
-          width={1440}
-          height={849}
-          className="block lg:hidden lg:w-full h-full object-cover z-0 w-[calc(100%-40px)] mx-auto lg:px-0 rounded-[14px] lg:rounded-[0px]"
-        />
-      )}
+    <section className="h-auto lg:h-full lg:py-[100px] py-[50px] relative">
+      <div className="lg:absolute top-0 left-0 w-full h-full">
+        {image?.url && (
+          <Image
+            src={image?.url}
+            alt={image?.alternativeText || "banner"}
+            width={1440}
+            height={849}
+            className="block lg:hidden lg:w-full h-full object-cover z-0 w-[calc(100%-40px)] mx-auto lg:px-0 rounded-[14px] lg:rounded-[0px]"
+          />
+        )}
 
-      {image?.url && (
-        <ParallaxImage
-          src={image?.url}
-          alt={image?.alternativeText || "banner"}
-          className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
-        />
-      )}
+        {image?.url && (
+          <ParallaxImage
+            src={image?.url}
+            alt={image?.alternativeText || "banner"}
+            className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
+          />
+        )}
+      </div>
 
-      <div className="lg:absolute bottom-9 lg:px-14 mb-0 lg:mb-24 z-10 w-full flex lg:flex-row flex-col justify-between">
-        <div className="w-full lg:w-[50%] bg-white rounded-3xl relative">
+      <div className="  lg:px-14 mb-0 lg:mt-60 z-10 w-full flex lg:flex-row flex-col justify-between container">
+        <div className="w-full lg:w-[63%] bg-white rounded-3xl relative ">
           {/* Main Content Section - Always Visible */}
           <div className="lg:pt-[40px] lg:pb-[70px] pt-7  flex flex-col">
             {leftSection?.title && (
@@ -50,9 +52,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
             )}
 
             <div
-              className={`hidden lg:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 ${
-                isOpen ? "rounded-2xl" : "rounded-b-3xl"
-              }`}
+              className={`hidden lg:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 overflow-hidden ${isOpen ? "rounded-2xl h-full" : "rounded-b-3xl h-[84px]"
+                }`}
             >
               {/* Accordion Header - Always Visible */}
               {leftSection?.accordion?.title && (
@@ -64,9 +65,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                     {leftSection?.accordion?.title}
                   </SubH2>
                   <span
-                    className={`text-white text-3xl font-light transition-transform duration-300 ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
+                    className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
+                      }`}
                   >
                     +
                   </span>
@@ -76,12 +76,15 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               {/* Accordion Content - Collapsible */}
               {leftSection?.accordion?.items?.length > 0 && (
                 <div
-                  className={`transition-all duration-700 ease-in-out 
-                ${isOpen ? "max-h-[332px] opacity-100" : "max-h-0 opacity-0"} 
-                overflow-scroll  
-                scrollbar-style
-              `}
+                  className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
                 >
+                  <Image
+                    src="/images/home/flower-t.svg"
+                    alt="img"
+                    width={245}
+                    height={245}
+                    className="absolute bottom-[-35px] md:bottom-[-40px] -right-[30px] md:-right-[50px] w-[245px] h-[245px]"
+                  />
                   {/* Capabilities List */}
                   <div className="px-[42px] pb-9">
                     <div className="space-y-4 ">
@@ -123,9 +126,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                 {leftSection?.accordion?.title}
               </SubH2>
               <span
-                className={`text-white text-3xl font-light transition-transform duration-300 ${
-                  isOpen ? "rotate-45" : ""
-                }`}
+                className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
+                  }`}
               >
                 +
               </span>
@@ -136,7 +138,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           {leftSection?.accordion?.items?.length > 0 && (
             <div
               className={`transition-all duration-700 ease-in-out 
-                ${isOpen ? "max-h-[332px] opacity-100" : "max-h-0 opacity-0"} 
+                ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"} 
                 overflow-scroll  
                 scrollbar-style
               `}
@@ -167,10 +169,11 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           )}
         </div>
 
-        <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-[6px] lg:gap-6">
+        {/* <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-[2%] lg:gap-6 z-[1]"> */}
+        <div className="grid grid-cols-2 grid-rows-2 gap-4 z-[1] relative lg:w-[35%] w-full">
           {righSection?.values?.map((item, index) => (
             <div
-              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box h-[150px] w-[164px] max-w-[40%] lg:h-[185px] lg:w-[246px]"
+              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box  "
               key={"item_" + index}
             >
               {item?.value && (

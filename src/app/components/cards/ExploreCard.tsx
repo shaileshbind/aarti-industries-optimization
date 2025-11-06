@@ -40,7 +40,7 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
                 className="flex gap-x-[12px] items-center cursor-pointer"
               >
                 {item?.title && (
-                  <Cta className="bg-transparent text-white">{item?.title}</Cta>
+                  <Cta className="bg-transparent text-white text-[14px] lg:text-[16px]">{item?.title}</Cta>
                 )}
 
                 <Image
