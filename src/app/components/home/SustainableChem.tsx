@@ -2,7 +2,6 @@
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import ScrollTriggerModule from "gsap/ScrollTrigger";
-import ScrollToPlugin from "gsap/ScrollToPlugin";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,13 +11,7 @@ import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-interface ScrollTriggerInstance {
-  start: number | { value: number };
-  end: number | { value: number };
-  progress: number;
-}
+gsap.registerPlugin(ScrollTrigger);
 
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const { leftText, rightText, images, mainSection } = data;
@@ -37,11 +30,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
-  const [isUserInteracting] = useState(false);
-  const [animationComplete, setAnimationComplete] = useState(false);
-  const scrollTriggerRef = useRef<ScrollTriggerInstance | null>(null);
-  const isScrollingProgrammatically = useRef<boolean>(false);
-  const END_SCROLL_BUFFER = 1;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [indicator, setIndicator] = useState({
@@ -71,125 +59,19 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     });
   }, [activeTab]);
 
-  const getScrollPositionForSlide = useCallback(
-    (slideIndex: number) => {
-      const st = scrollTriggerRef.current;
-      if (!st) return 0;
-      const start =
-        typeof st.start === "number"
-          ? st.start
-          : (st.start as { value: number })?.value ?? window.scrollY;
-      const end =
-        typeof st.end === "number"
-          ? st.end
-          : (st.end as { value: number })?.value ?? window.scrollY;
-      const totalScrollDistance = Number(end) - Number(start);
-      const slideStartProgress = 0.55;
-      const slideEndProgress = 1.0;
-      const slideRange = slideEndProgress - slideStartProgress;
-      const totalSlides = mainSection.length;
-      const slideProgress =
-        totalSlides > 1 ? slideIndex / (totalSlides - 1) : 0;
-      const targetProgress = slideStartProgress + slideProgress * slideRange;
-      if (slideIndex === totalSlides - 1 && totalSlides > 0) {
-        let targetScroll = Number(start) + targetProgress * totalScrollDistance;
-        if (targetScroll >= Number(end) - END_SCROLL_BUFFER) {
-          targetScroll = Number(end) - END_SCROLL_BUFFER;
-        }
-        return targetScroll;
-      }
-      return Number(start) + targetProgress * totalScrollDistance;
-    },
-    [mainSection.length]
-  );
   const handleTabClick = useCallback(
     (index: number, e?: React.MouseEvent) => {
       e?.preventDefault();
       e?.stopPropagation();
-      if (index === activeTab || isScrollingProgrammatically.current) return;
+      if (index === activeTab) return;
 
-      const targetScroll = getScrollPositionForSlide(index);
-      if (typeof targetScroll !== "number" || Number.isNaN(targetScroll))
-        return;
-      isScrollingProgrammatically.current = true;
-      const isMobile = window.innerWidth < 1024;
-
-      if (tabsRef.current && !isMobile) {
-        gsap.to(tabsRef.current, {
-          opacity: 1,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-
-      // Start the slide animation
       const swiper = swiperRef.current;
       if (swiper && !swiper.destroyed) {
-        swiper.slideTo(index, 800); // 800ms duration to match scroll animation
+        swiper.slideTo(index);
+        setActiveTab(index);
       }
-
-      gsap.to(window, {
-        scrollTo: {
-          y: targetScroll,
-          autoKill: false,
-        },
-        duration: 0.8,
-        ease: "power2.inOut",
-        onComplete: () => {
-          setActiveTab(index);
-          requestAnimationFrame(() => {
-            isScrollingProgrammatically.current = false;
-          });
-        },
-      });
     },
-    [activeTab, getScrollPositionForSlide]
-  );
-  const handleScrollUpdate = useCallback(
-    (self: ScrollTriggerInstance) => {
-      const animationPhaseEnd = 0.55;
-      const isAnimationDone = self.progress >= animationPhaseEnd;
-
-      if (isAnimationDone !== animationComplete) {
-        setAnimationComplete(isAnimationDone);
-      }
-      if (
-        !isAnimationDone ||
-        isUserInteracting ||
-        isScrollingProgrammatically.current
-      ) {
-        return;
-      }
-
-      const slidesProgress = Math.max(
-        0,
-        (self.progress - animationPhaseEnd) / (1 - animationPhaseEnd)
-      );
-      const exactSlideIndex = slidesProgress * (mainSection.length - 1);
-      const newActiveIndex = Math.round(exactSlideIndex);
-
-      if (
-        swiperRef.current &&
-        !swiperRef.current.destroyed &&
-        !isScrollingProgrammatically.current
-      ) {
-        const swiper = swiperRef.current;
-        const slideWidth = swiper.slides?.[0]?.offsetWidth ?? swiper.width ?? 0;
-        const spaceBetween = Number(swiper.params?.spaceBetween) || 0;
-        const totalTranslate = -exactSlideIndex * (slideWidth + spaceBetween);
-
-        try {
-          swiper.setTranslate(totalTranslate);
-          swiper.updateProgress();
-          swiper.updateSlidesClasses();
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      setActiveTab((prev) => (newActiveIndex !== prev ? newActiveIndex : prev));
-    },
-    [animationComplete, isUserInteracting, mainSection.length]
+    [activeTab]
   );
 
   useLayoutEffect(() => {
@@ -214,31 +96,37 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       }
       gsap.set(envSlider.current, { opacity: 0 });
 
+      // Animation timeline - handles the initial animations and slide sync
+      const animationEndProgress = 0.55;
+      const animationScrollDistance = isMobile ? window.innerHeight * 1.5 : window.innerHeight * 4;
+
       const mainTl = gsap.timeline({
         scrollTrigger: {
           id: "mainTrigger",
           trigger: triggerRef.current,
           start: "top 50%",
-          end: isMobile ? `+=${window.innerHeight * 1.5}` : `+=${window.innerHeight * 4}`,
+          end: `+=${animationScrollDistance}`,
           scrub: 1,
           pin: true,
           pinSpacing: false,
           invalidateOnRefresh: true,
-          onUpdate: handleScrollUpdate,
-          onEnter: () => {
-            scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
-            ) as ScrollTriggerInstance | null;
-          },
-          onRefresh: () => {
-            scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
-            ) as ScrollTriggerInstance | null;
+          onUpdate: (self) => {
+            // Sync slides after animation phase (55% progress) - similar to test slider logic
+            if (self.progress >= animationEndProgress && swiperRef.current && mainSection.length > 0) {
+              const slides = mainSection.length;
+              // Map progress from 0.55 to 1.0 to slide indices 0 to slides-1
+              const slideProgress = (self.progress - animationEndProgress) / (1 - animationEndProgress);
+              const progress = slideProgress * (slides - 1);
+              const index = Math.round(progress);
+              
+              if (swiperRef.current && !swiperRef.current.destroyed && index !== swiperRef.current.activeIndex) {
+                swiperRef.current.slideTo(index);
+                setActiveTab(index);
+              }
+            }
           },
           onLeave: () => {
             if (!isMobile && tabsRef.current) {
-              if (isScrollingProgrammatically.current) return;
-
               gsap.to(tabsRef.current, {
                 opacity: 0,
                 duration: 0.6,
@@ -249,8 +137,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           },
           onEnterBack: () => {
             if (!isMobile && tabsRef.current) {
-              if (isScrollingProgrammatically.current) return;
-
               gsap.to(tabsRef.current, {
                 opacity: 1,
                 duration: 0.6,
@@ -435,11 +321,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
     return () => {
       ctx.revert();
-      setTimeout(() => {
-        isScrollingProgrammatically.current = false;
-      }, 400);
     };
-  }, [handleScrollUpdate]);
+  }, [mainSection.length]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -567,6 +450,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                     swiper.updateProgress();
                     swiper.updateSlidesClasses();
                   });
+                }}
+                onSlideChange={(swiper) => {
+                  setActiveTab(swiper.activeIndex);
                 }}
               >
                 {mainSection.map((slide) => (
