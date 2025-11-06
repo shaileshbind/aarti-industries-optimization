@@ -471,3 +471,18 @@ body {
   border-radius: 10px 0 0 10px !important;
   background-color: #ffffff;
 }
+
+/* Popup */
+.popup_container::-webkit-scrollbar {
+  width: 4px;
+}
+.popup_container::-webkit-scrollbar-button {
+  background: #ffffff;
+}
+.popup_container::-webkit-scrollbar-track-piece {
+  background: #dfdfdf;
+}
+.popup_container::-webkit-scrollbar-thumb {
+  background: #dc4c03;
+  border-radius: 20px;
+}

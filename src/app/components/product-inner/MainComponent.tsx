@@ -7,6 +7,7 @@ import { FadeInReveal } from "@/app/components/ScrollReveal";
 import { ProductData, RelatedProduct } from "@/app/types/product.inner.type";
 import MSDSPopup from "./MSDSPopup";
 import { useState } from "react";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 interface ProductInnerPageProps {
   data?: ProductData;
@@ -17,7 +18,7 @@ export default function ProductInnerPage({
   data,
   relatedData,
 }: ProductInnerPageProps) {
-  const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(true);
+  const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(false);
   const [showNormalPopup, setshowNormalPopup] = useState<boolean>(false);
 
   const product = data;
@@ -120,7 +121,10 @@ export default function ProductInnerPage({
                   </div>
                 )}
 
-                <button className="text-[#DC4C03] text-base pt-6 group cursor-pointer">
+                <button
+                  className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
+                  onClick={() => setshowNormalPopup(true)}
+                >
                   Enquire now
                   <div className="w-[90px] h-[1px] mt-[0.4px] bg-[#DC4C03] transition-all duration-300 origin-left group-hover:w-0" />
                 </button>
@@ -236,11 +240,11 @@ export default function ProductInnerPage({
               <div className="mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] gap-y-[20px]">
                 {relatedProducts?.map((item) => (
                   <ProductList
-                    key={item.id}
+                    key={item?.id}
                     secondary
-                    title={item.productName}
-                    link={"/" + item.slug}
-                    pdfLink={item.pdfLink}
+                    title={item?.productName}
+                    link={"/" + item?.slug}
+                    pdfLink={item?.tdsDocument?.file?.url}
                     pdfTitle="View TDS"
                   />
                 ))}
@@ -250,7 +254,14 @@ export default function ProductInnerPage({
         </FadeInReveal>
       </div>
 
-      {showMSDSPopup ? <MSDSPopup /> : null}
+      {showMSDSPopup ? (
+        <MSDSPopup setshowMSDSPopup={setshowMSDSPopup} isOpen={showMSDSPopup} />
+      ) : (
+        <GeneralPopup
+          isOpen={showNormalPopup}
+          setshowNormalPopup={setshowNormalPopup}
+        />
+      )}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
+import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 
 type FormValues = {
   fullName: string;
@@ -22,7 +23,15 @@ type FormValues = {
   message: string;
 };
 
-export default function MSDSPopup() {
+type MSDSPopupProps = {
+  setshowMSDSPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+};
+
+export default function MSDSPopup({
+  setshowMSDSPopup,
+  isOpen,
+}: MSDSPopupProps) {
   const {
     register,
     handleSubmit,
@@ -33,33 +42,18 @@ export default function MSDSPopup() {
       fullName: "",
       email: "",
       phone: "+91",
-      country: null,
+      country: "",
       message: "",
     },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log("Form Data:", data);
   };
 
-  const inputStyle = (hasError: boolean = false) => ({
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "10px",
-      border: !hasError ? "2px solid #e8e6e6" : "1px solid #e8e6e6",
-      "& fieldset": { border: "none" },
-      "&:hover fieldset": { border: "none" },
-      "&.Mui-focused fieldset": { border: "none" },
-      borderColor: hasError ? "red" : "#e8e6e6",
-    },
-    "& .MuiInputLabel-root": { backgroundColor: "#fff", padding: "0 4px" },
-    "& .MuiInputLabel-shrink": { color: "#4C5861" },
-    "& .MuiInputLabel-asterisk": { color: "#DC4C03" },
-    "& .MuiInputLabel-root.Mui-focused": { color: "#DC4C03" },
-  });
-
   return (
     <div>
-      <Popup>
+      <Popup onOverlayClick={() => setshowMSDSPopup(false)} isOpen={isOpen}>
         <div className="w-full">
           <div>
             <p className="text-xl text-[#002F50]">Recipient Information</p>
@@ -67,13 +61,13 @@ export default function MSDSPopup() {
           </div>
 
           <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-            <div className=" flex flex-col gap-4 h-[70vh] overflow-y-auto pt-7">
+            <div className=" flex flex-col gap-4 h-[72vh] overflow-y-auto pt-7 popup_container pr-4">
               {/* Full Name */}
               <TextField
                 label="Full Name *"
                 variant="outlined"
                 className="w-full"
-                sx={inputStyle(!!errors.fullName)}
+                sx={MaterialInputStyle(!!errors.fullName)}
                 {...register("fullName", { required: "Full Name is required" })}
                 error={!!errors.fullName}
                 helperText={errors.fullName?.message}
@@ -84,7 +78,7 @@ export default function MSDSPopup() {
                 label="Email ID *"
                 variant="outlined"
                 className="w-full"
-                sx={inputStyle(!!errors.email)}
+                sx={MaterialInputStyle(!!errors.email)}
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -142,7 +136,7 @@ export default function MSDSPopup() {
               />
 
               {/* Country (no validation) */}
-              <FormControl fullWidth sx={inputStyle(false)}>
+              <FormControl fullWidth sx={MaterialInputStyle(false)}>
                 <InputLabel id="country">Country</InputLabel>
                 <Controller
                   name="country"
@@ -150,11 +144,12 @@ export default function MSDSPopup() {
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={field.value || ""}
                       labelId="country"
                       IconComponent={KeyboardArrowDownIcon}
                     >
                       {Countries.map((country) => (
-                        <MenuItem key={country.code} value={country.code}>
+                        <MenuItem key={country.code} value={country.name}>
                           {country.name}
                         </MenuItem>
                       ))}
@@ -170,7 +165,7 @@ export default function MSDSPopup() {
                 rows={5}
                 cols={40}
                 placeholder="Write your message here"
-                className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none"
+                className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
               ></textarea>
             </div>
 

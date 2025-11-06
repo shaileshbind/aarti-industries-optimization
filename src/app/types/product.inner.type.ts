@@ -55,4 +55,9 @@ export interface RelatedProduct {
   productName: string;
   pdfLink: string;
   slug: string;
+  tdsDocument: {
+    file: {
+      url: string;
+    };
+  };
 }

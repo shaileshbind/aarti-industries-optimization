@@ -49,6 +49,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
               isHovered ? "text-white" : "text-gray-800"
             )}
             onClick={(e) => e.stopPropagation()}
+            target="_blank"
           >
             {"View TDS"}
           </a>
@@ -65,6 +66,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
               "hidden md:flex items-center space-x-1 text-sm  cursor-pointer ",
               isHovered ? "text-white" : "text-gray-800"
             )}
+            target="_blank"
           >
             <span
               className={clsxN(isHovered ? "text-white" : "text-[#4d5861]")}
