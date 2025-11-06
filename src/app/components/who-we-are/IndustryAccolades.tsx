@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
+import gsap from "gsap";
 
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
@@ -17,9 +18,39 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const [active, setActive] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
+  const cardsWrapRef = useRef<HTMLDivElement | null>(null);
+  const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleTabClick = (index: number) => {
-    setActive(index);
+    if (index === active || isTransitioning) return;
+
+    setIsTransitioning(true);
+
+    const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
+
+    if (switchAnimRef.current) {
+      switchAnimRef.current.kill();
+      switchAnimRef.current = null;
+    }
+
+    if (!cards || cards.length === 0) {
+      setActive(index);
+      setIsTransitioning(false);
+      return;
+    }
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.in" },
+      onComplete: () => {
+        setActive(index);
+      },
+    });
+
+    gsap.set(cards, { transformOrigin: "50% 50%" });
+    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
+
+    switchAnimRef.current = tl;
   };
 
   useEffect(() => {
@@ -31,6 +62,18 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
         swiperRef.current.pagination.update(); 
       }
     }
+    const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    if (cards && cards.length > 0) {
+      gsap.set(cards, { scale: 0, transformOrigin: "50% 50%" });
+      tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 }, 0);
+    }
+    tl.eventCallback("onComplete", () => {
+      setIsTransitioning(false);
+    });
+    return () => {
+      tl.kill();
+    };
   }, [active]);
 
   return (
@@ -43,12 +86,12 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             <div
               key={items.id}
               onClick={() => handleTabClick(index)}
-              className={`border-b px-[13px] pb-[4px] cursor-pointer ${
+              className={`border-b px-[13px] pb-[4px] cursor-pointer transition-all duration-300 ${
                 active === index ? "border-orange-200" : "border-grey-200"
-              }`}
+              } ${isTransitioning ? "pointer-events-none" : ""}`}
             >
               <BodyText2
-                className={`${
+                className={`transition-all duration-300 ${
                   active === index ? "text-orange-200" : "text-grey-200"
                 }`}
               >
@@ -60,7 +103,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       )}
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
-        <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
+        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
           <Swiper
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1.5}
@@ -88,22 +131,24 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           >
             {awards?.[active]?.card?.map((item, idx) => (
               <SwiperSlide key={`${active}-${idx}`}>
-                {item?.image?.url && (
-                  <div className="bg-[#EFF3F5] rounded-[20px] p-[60px] grid place-items-center">
-                    <Image
-                      src={item?.image?.url}
-                      alt={item?.image?.alternativeText || "award"}
-                      width={70}
-                      height={190}
-                      className="object-contain w-[70px] h-[190px]"
-                    />
-                  </div>
-                )}
-                {item?.title && (
-                  <BodyText1 className="mt-[14px] text-blue-200">
-                    {item?.title}
-                  </BodyText1>
-                )}
+                <div className="award-card-anim">
+                  {item?.image?.url && (
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-[60px] grid place-items-center">
+                      <Image
+                        src={item?.image?.url}
+                        alt={item?.image?.alternativeText || "award"}
+                        width={70}
+                        height={190}
+                        className="object-contain w-[70px] h-[190px]"
+                      />
+                    </div>
+                  )}
+                  {item?.title && (
+                    <BodyText1 className="mt-[14px] text-blue-200">
+                      {item?.title}
+                    </BodyText1>
+                  )}
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
