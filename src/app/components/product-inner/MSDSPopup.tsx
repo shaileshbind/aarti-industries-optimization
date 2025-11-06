@@ -50,7 +50,7 @@ export default function MSDSPopup({
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Form Data:", data);
+    console.log("Form Data:", data, document);
   };
 
   return (
