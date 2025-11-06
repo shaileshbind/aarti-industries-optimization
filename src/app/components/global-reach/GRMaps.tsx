@@ -7,12 +7,14 @@ import DesktopMapSvg from "./DesktopMapSvg";
 import StateMapSvg from "./StateMapSvg";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GRMapsProps } from "@/app/types/global-reach.type";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const GRMaps = () => {
+const GRMaps = ({ data }: GRMapsProps) => {
+  const { sectionTitle, title, description, ctaButton } = data;
   const sectionOne = useRef<HTMLDivElement | null>(null);
   const sectionTwo = useRef<HTMLDivElement | null>(null);
   const revealCircle = useRef<HTMLDivElement | null>(null);
@@ -90,9 +92,11 @@ const GRMaps = () => {
         className="w-full lg:h-screen relative z-10 bg-white"
       >
         <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
-          <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
-            Growing Across Markets and Beyond Borders
-          </H2>
+          {sectionTitle && (
+            <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
+              {sectionTitle}
+            </H2>
+          )}
           <div className="relative w-full h-[180px] lg:h-[550px] ">
             <div className="w-fit h-full mx-auto hidden lg:block relative ">
               <DesktopMapSvg
@@ -354,19 +358,19 @@ const GRMaps = () => {
             >
               <div>
                 <div>
-                  <H3>Infrastructure That Delivers Globally</H3>
-                  <BodyText2 className="mt-[12px] lg:mt-[8px]">
-                    AIL plants are strategically located and export-ready,
-                    equipped with co-gen power, ZLD-ready, and integrated
-                    utilities - built to support seamless global supply.
-                  </BodyText2>
-                  <div className="mt-5">
-                    <Button
-                      title="View our Manufacturing Capabilities"
-                      href="#"
-                      secondary
-                    />
-                  </div>
+                  {title &&<H3>{title}</H3>}
+                {description &&  <BodyText2 className="mt-[12px] lg:mt-[8px]">
+                    {description}
+                  </BodyText2>}
+                  {ctaButton?.title && (
+                    <div className="mt-5">
+                      <Button
+                        title={ctaButton?.title}
+                        href={ctaButton?.link ? ctaButton?.link : "/"}
+                        secondary
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="mt-[62px] w-full grid lg:grid-cols-2 gap-y-[16px] gap-x-[5px] items-start lg:justify-between">
                   <div className="border-b lg:border-none border-grey-200 pb-[16px] lg:pb-[unset]">
@@ -439,18 +443,36 @@ const GRMaps = () => {
               </div>
               <div className="relative">
                 {/* desktop statemap */}
-                  <StateMapSvg
-                    width="737"
-                    height="569"
-                    hoverBachau={() => setActive(0)}
-                    hoverDahej={() => setActive(1)}
-                    hoverTarapur={() => setActive(2)}
-                    hoverNaviM={() => setActive(3)}
-                    hoverVapi={() => setActive(4)}
-                  />
-                  <div className="bg-blue-100 p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]">
-                    <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-                      <div className="absolute inset-0 overflow-hidden">
+                <StateMapSvg
+                  width="737"
+                  height="569"
+                  hoverBachau={() => setActive(0)}
+                  hoverDahej={() => setActive(1)}
+                  hoverTarapur={() => setActive(2)}
+                  hoverNaviM={() => setActive(3)}
+                  hoverVapi={() => setActive(4)}
+                />
+                <div className="bg-blue-100 p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]">
+                  <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+                    <div className="absolute inset-0 overflow-hidden">
+                      <Image
+                        src={
+                          active === 0
+                            ? "/images/global-reach/gr-banner.png"
+                            : active === 1
+                            ? "/images/rd/rd-banner.png"
+                            : active === 2
+                            ? "/images/cdmo/cdmo-driving-banner.png"
+                            : active === 3
+                            ? "/images/home/blog1.png"
+                            : "/images/home/framework-forged-1.png"
+                        }
+                        alt="img"
+                        fill
+                        className="object-cover scale-110"
+                      />
+                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                      <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
                         <Image
                           src={
                             active === 0
@@ -467,40 +489,21 @@ const GRMaps = () => {
                           fill
                           className="object-cover scale-110"
                         />
-                        <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                        <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
-                          <Image
-                            src={
-                              active === 0
-                                ? "/images/global-reach/gr-banner.png"
-                                : active === 1
-                                ? "/images/rd/rd-banner.png"
-                                : active === 2
-                                ? "/images/cdmo/cdmo-driving-banner.png"
-                                : active === 3
-                                ? "/images/home/blog1.png"
-                                : "/images/home/framework-forged-1.png"
-                            }
-                            alt="img"
-                            fill
-                            className="object-cover scale-110"
-                          />
-                        </span>
-                      </div>
+                      </span>
                     </div>
-                    <BodyText2 className="text-white mt-[14px] text-center">
-                      {active === 0
-                        ? "Bhachau"
-                        : active === 1
-                        ? "Dahej "
-                        : active === 2
-                        ? "Tarapur"
-                        : active === 3
-                        ? "Navi Mumbai"
-                        : "Vapi"}
-                    </BodyText2>
                   </div>
-                
+                  <BodyText2 className="text-white mt-[14px] text-center">
+                    {active === 0
+                      ? "Bhachau"
+                      : active === 1
+                      ? "Dahej "
+                      : active === 2
+                      ? "Tarapur"
+                      : active === 3
+                      ? "Navi Mumbai"
+                      : "Vapi"}
+                  </BodyText2>
+                </div>
               </div>
             </div>
           </div>
@@ -508,19 +511,19 @@ const GRMaps = () => {
         {/* Part 2 - Mobile only */}
         <div className="block lg:hidden">
           <div className="mt-[72px] mx-[20px]">
-            <H3>Infrastructure That Delivers Globally</H3>
-            <BodyText2 className="mt-[12px] lg:mt-[8px]">
-              AIL plants are strategically located and export-ready, equipped
-              with co-gen power, ZLD-ready, and integrated utilities - built to
-              support seamless global supply.
-            </BodyText2>
-            <div className="mt-5">
-              <Button
-                title="View our Manufacturing Capabilities"
-                href="#"
-                secondary
-              />
-            </div>
+           {title && <H3>{title}</H3>}
+           {description && <BodyText2 className="mt-[12px] lg:mt-[8px]">
+              {description}
+            </BodyText2>}
+            {ctaButton?.title && (
+              <div className="mt-5">
+                <Button
+                  title={ctaButton?.title}
+                  href={ctaButton?.link ? ctaButton?.link : "/"}
+                  secondary
+                />
+              </div>
+            )}
           </div>
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
