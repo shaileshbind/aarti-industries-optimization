@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from "swiper/modules";
@@ -30,8 +30,7 @@ const TabsAutoplaySection = ({
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
 
-  const startProgress = () => {
-    // Cancel any existing animation
+  const startProgress = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -60,9 +59,8 @@ const TabsAutoplaySection = ({
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  };
+  }, [active, data.length]);
 
-  // Start autoplay on mount and when active changes
   useEffect(() => {
     startProgress();
 
@@ -71,13 +69,11 @@ const TabsAutoplaySection = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, data.length, startProgress]);
+  }, [active, startProgress]);
 
-  // Handle tab click
   const handleTabClick = (index: number) => {
     if (index === active) return;
 
-    // Cancel current animation
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
@@ -87,10 +83,8 @@ const TabsAutoplaySection = ({
     if (swiperRef.current) {
       swiperRef.current.slideToLoop(index);
     }
-    // Progress will restart via useEffect
   };
 
-  // Sync with swiper slide change (for manual swipes if enabled later)
   const handleSlideChange = (swiper: SwiperType) => {
     const realIndex = swiper.realIndex;
     if (realIndex !== active) {
@@ -217,19 +211,17 @@ const TabsAutoplaySection = ({
                         </>
                       )}
                     </div>
-                    <div className="pointer-events-none select-none">
+                    <div>
                       {tabItem.card[0]?.title && (
                         <SubH2 className="mt-[24px]">
                           {tabItem.card[0].title}
                         </SubH2>
                       )}
-
                       {tabItem.card[0]?.description && (
                         <BodyText2 className="mt-[18px]">
                           {tabItem.card[0].description}
                         </BodyText2>
                       )}
-
                       {tabItem.card[0]?.ctaButton?.link && (
                         <div className="mt-[18px] pointer-events-auto">
                           <Button

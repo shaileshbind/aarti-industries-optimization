@@ -1,16 +1,18 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { GRBannerProps } from "@/app/types/global-reach.type";
 
-const GRBanner = () => {
+const GRBanner = ({ data }: GRBannerProps) => {
+  const { heading, sectionTitle, image, mobImage } = data;
   return (
     <HeroBanner
-      tag="Global Reach"
-      title="Supplying Speciality Chemicals Globally"
-      image="/images/global-reach/gr-banner.png"
+      tag={sectionTitle}
+      title={heading}
+      image={image?.url}
       fullBg
-      mobImage="/images/global-reach/gr-banner.png"
-      alt="img"
-      mobAlt="img"
+      mobImage={mobImage?.url}
+      alt={image?.alternativeText}
+      mobAlt={mobImage?.alternativeText}
     />
   );
 };

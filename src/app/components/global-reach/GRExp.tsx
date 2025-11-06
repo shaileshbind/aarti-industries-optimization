@@ -1,18 +1,20 @@
 import React from "react";
 import ExploreCard from "../cards/ExploreCard";
+import { GRExpProps } from "@/app/types/global-reach.type";
 
-const GRExplore = () => {
+const GRExplore = ({ data }: GRExpProps) => {
+  const { exploreMore } = data;
   return (
     <div className="py-[50px] lg:py-[100px] container">
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
-          title="Innovating Whats Next"
-          items={[{ id: 0, title: "Explore Our R&D", link: "/r-and-d" }]}
+          title={exploreMore[0]?.title}
+          items={exploreMore[0]?.ctaButton}
         />
         <ExploreCard
           lightVariant
-          title="Building the Future, Together"
-          items={[{ id: 0, title: "Partner with Us", link: "#" }]}
+          title={exploreMore[1]?.title}
+          items={exploreMore[1]?.ctaButton}
         />
       </div>
     </div>
