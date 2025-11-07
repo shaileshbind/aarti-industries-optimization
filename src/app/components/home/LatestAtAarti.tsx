@@ -20,6 +20,15 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     let tabsAnim: gsap.core.Tween | undefined;
     if (latestAtAartiRef.current) {
@@ -47,9 +56,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     };
   }, []);
 
-  // Handle tab change: animate current cards 1 -> 0, then switch data
   const handleTabChange = (slug: string, index: number) => {
-    // If no cards container yet, switch immediately
     if (!cardsWrapRef.current) {
       setActive(String(slug));
       setactiveIndex(index);
@@ -63,7 +70,6 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       return;
     }
 
-    // Kill previous switch animation if running
     if (switchAnimRef.current) {
       switchAnimRef.current.kill();
       switchAnimRef.current = null;
@@ -73,7 +79,6 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const tl = gsap.timeline({
       defaults: { ease: "power2.in" },
       onComplete: () => {
-        // After old cards collapse, change data
         setActive(String(slug));
         setactiveIndex(index);
       },
@@ -82,7 +87,6 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     switchAnimRef.current = tl;
   };
 
-  // Animate new DateCards 0 -> 1 when activeIndex changes
   useEffect(() => {
     if (!cardsWrapRef.current) return;
     const cards = cardsWrapRef.current.querySelectorAll(".date-card-anim");
@@ -96,6 +100,11 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       tl.kill();
     };
   }, [activeIndex]);
+
+  const postsCount = card[activeIndex]?.post_category?.posts?.length || 0;
+  // Determine if progress bar should be shown
+  const showProgressBar =
+    isMobile ? postsCount > 1 : postsCount > 4;
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
       {sectionTitle && (
@@ -104,8 +113,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         </div>
       )}
 
-      <div className="mt-[18px] md:mt-[30px] w-full container overflow-hidden">
-        <div className="max-w-[100%] md:max-w-fit">
+      <div className="mt-[18px] md:mt-[30px] w-full ">
+        <div className="max-w-[100%] md:max-w-fit fluid-container">
           <Tabs
             tabs={card}
             activeId={active}
@@ -115,42 +124,50 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           />
         </div>
 
-        {card[activeIndex]?.post_category?.posts?.length > 0 && (
-          <div className="mt-[52px]" ref={cardsWrapRef}>
-            <Swiper
-              key={active}
-              spaceBetween={24}
-              slidesPerView={1.5}
-              breakpoints={{
-                1024: { slidesPerView: 4 },
-                600: { slidesPerView: 2.2 },
-              }}
-              modules={[Pagination, Mousewheel]}
-              pagination={{
-                type: "progressbar",
-              }}
-              direction="horizontal"
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
-              className="home-latest-at-swiper !overflow-visible"
-            >
-              {card?.[activeIndex]?.post_category?.posts?.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <div className="date-card-anim">
-                    <DateCard
-                      imageSrc={item?.image?.url}
-                      date={item?.title}
-                      desc={item?.description}
-                      link={item?.slug}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+        {postsCount > 0 && (
+          <>
+            <div className="mt-[52px]" ref={cardsWrapRef}>
+              <Swiper
+                key={active}
+                spaceBetween={24}
+                slidesPerView={1.5}
+                breakpoints={{
+                  1024: { slidesPerView: 4 },
+                  600: { slidesPerView: 2.2 },
+                }}
+                modules={[Pagination, Mousewheel]}
+                direction="horizontal"
+                mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
+                pagination={showProgressBar ? {
+                  el: ".home-latest-at-swiper",
+                  type: "progressbar",
+                } : undefined}
+                className=" w-full !px-[20px] lg:!px-[60px]"
+              >
+                {card[activeIndex]?.post_category?.posts?.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="date-card-anim">
+                      <DateCard
+                        imageSrc={item?.image?.url}
+                        date={item?.title}
+                        desc={item?.description}
+                        link={item?.slug}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            {showProgressBar && (
+              <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
+                <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
