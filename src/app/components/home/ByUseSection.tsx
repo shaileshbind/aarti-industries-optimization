@@ -133,7 +133,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div ref={tabsRef} className="mt-[1000px] lg:mt-[3550px] overflow-hidden">
+    <div ref={tabsRef} className="mt-[50px] overflow-hidden">
       {/* Tabs */}
       <div  className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
@@ -292,7 +292,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     />
                   </button>
                 </div>
-                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[75%]" />
+                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[75%] relative" />
               </div>
             </div>
           </div>
