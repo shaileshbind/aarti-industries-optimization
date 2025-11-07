@@ -1,6 +1,7 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import CloseIcon from "@mui/icons-material/Close";
 
 type PopupProps = {
   children: React.ReactNode;
@@ -100,8 +101,12 @@ export default function Popup({
       />
       <div
         ref={popupRef}
-        className="bg-white w-[90%] lg:w-[70%] xl:w-1/2 rounded-[20px] p-5 md:p-[30px] z-[60]"
+        className="bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-5 md:p-[30px] z-[60] relative"
       >
+        <CloseIcon
+          className="absolute right-4 top-6 md:right-8 md:top-8 cursor-pointer"
+          onClick={onOverlayClick}
+        />
         {children}
       </div>
     </div>

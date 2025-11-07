@@ -38,6 +38,7 @@ export default function MSDSPopup({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -50,7 +51,49 @@ export default function MSDSPopup({
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Form Data:", data, document);
+    const formattedData = {
+      full_name: data.fullName,
+      email: data.email,
+      mobile: data.phone,
+      country: data.country,
+      message: data.message,
+    };
+
+    try {
+      const response = await fetch("/api/submitPopupData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: "/standard-form/submit",
+          data: formattedData,
+        }),
+      });
+
+      if (response.ok) {
+        // const result = await response.json();
+        // console.log("Success:", result);
+        setshowMSDSPopup(false);
+        reset();
+        if (document) {
+          const link = window.document.createElement("a");
+          link.href = document;
+          link.download = "document.pdf";
+          link.target = "_blank";
+          window.document.body.appendChild(link);
+          link.click();
+          window.document.body.removeChild(link);
+        }
+      } else {
+        const error = await response.json();
+        setshowMSDSPopup(false);
+        console.error("Error:", error);
+      }
+    } catch (error) {
+      setshowMSDSPopup(false);
+      console.error("Request failed:", error);
+    }
   };
 
   return (

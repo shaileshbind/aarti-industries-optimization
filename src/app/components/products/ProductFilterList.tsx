@@ -217,7 +217,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         <div className="text-center py-8">Loading products...</div>
       ) : filteredProducts.length > 0 ? (
         <>
-          <div className="grid lg:grid-cols-2 gap-x-[64px] gap-y-[20px]">
+          <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px]">
             {visibleProducts.map((product) => (
               <div key={product.id} className="w-full">
                 <ProductList

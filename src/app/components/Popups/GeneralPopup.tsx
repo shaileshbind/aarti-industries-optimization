@@ -27,13 +27,13 @@ type FormValues = {
 };
 
 type GeneralPopupProps = {
-  setshowNormalPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setshowGeneralPopup: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   document?: string;
 };
 
 export default function GeneralPopup({
-  setshowNormalPopup,
+  setshowGeneralPopup,
   isOpen,
   document,
 }: GeneralPopupProps) {
@@ -71,18 +71,21 @@ export default function GeneralPopup({
     };
 
     try {
-      const response = await fetch("/api/submitGeneralPopupData", {
+      const response = await fetch("/api/submitPopupData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formattedData),
+        body: JSON.stringify({
+          url: "/msds-form/submit",
+          data: formattedData,
+        }),
       });
 
       if (response.ok) {
         // const result = await response.json();
         // console.log("Success:", result);
-        setshowNormalPopup(false);
+        setshowGeneralPopup(false);
         reset();
         if (document) {
           const link = window.document.createElement("a");
@@ -95,18 +98,18 @@ export default function GeneralPopup({
         }
       } else {
         const error = await response.json();
-        setshowNormalPopup(false);
+        setshowGeneralPopup(false);
         console.error("Error:", error);
       }
     } catch (error) {
-      setshowNormalPopup(false);
+      setshowGeneralPopup(false);
       console.error("Request failed:", error);
     }
   };
 
   return (
     <div>
-      <Popup onOverlayClick={() => setshowNormalPopup(false)} isOpen={isOpen}>
+      <Popup onOverlayClick={() => setshowGeneralPopup(false)} isOpen={isOpen}>
         <div className="w-full">
           <div>
             <p className="text-xl text-[#002F50]">Recipient Information</p>
