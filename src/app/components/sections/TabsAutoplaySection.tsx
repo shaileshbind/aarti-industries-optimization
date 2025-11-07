@@ -111,7 +111,7 @@ const TabsAutoplaySection = ({
   return (
     <>
       {/* Desktop */}
-      <div className="mx-[20px] lg:mx-[60px] my-[70px] lg:my-[120px] hidden lg:grid grid-cols-[25%_1fr] gap-x-[60px]">
+      <div className="mx-[20px] lg:mx-[60px] my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
         {/* Tabs */}
         {data?.length > 0 && (
           <div className="mt-[14px]">
@@ -241,7 +241,7 @@ const TabsAutoplaySection = ({
       </div>
       {/* Mobile Accordion */}
       {data?.length > 0 && (
-        <div className="block lg:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
+        <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
           {data?.map((item, index) => (
             <div key={item.id} className="relative">
               <FaqAccordion
@@ -260,11 +260,11 @@ const TabsAutoplaySection = ({
                   <div className="mt-[20px] mb-[30px]">
                     {item?.card?.[0] && (
                       <>
-                        <div className="relative w-full h-[200px] rounded-[14px] overflow-hidden">
+                        <div className="relative w-full h-[400px] xl:h-[200px] rounded-[14px] overflow-hidden">
                           {item.card[0]?.image?.url && (
                             <>
                               {starImgEffect ? (
-                                <div className="absolute right-0 top-0 w-full h-[200px] rounded-[14px] overflow-hidden">
+                                <div className="absolute right-0 top-0 w-full h-[400px] xl:h-[200px] rounded-[14px] overflow-hidden">
                                   <Image
                                     src={item.card[0].image.url}
                                     alt={
