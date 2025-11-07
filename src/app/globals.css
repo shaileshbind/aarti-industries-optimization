@@ -478,3 +478,8 @@ body {
   background: #dc4c03;
   border-radius: 20px;
 }
+@media (max-width: 380px) {
+  .topMarginCsm{
+    margin-top: 200px !important;
+  }
+}
