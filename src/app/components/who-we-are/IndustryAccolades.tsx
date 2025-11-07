@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Image from "next/image";
 import "swiper/css/effect-fade";
@@ -21,38 +21,76 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement | null>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const progressRefs = useRef<HTMLDivElement[]>([]);
 
-  const handleTabClick = (index: number) => {
-    if (index === active || isTransitioning) return;
+  // Handle tab click (manual click or programmatic)
+  const handleTabClick = useCallback((index: number) => {
+    setActive((currentActive) => {
+      if (index === currentActive) return currentActive;  
+      setIsTransitioning(true);
+      // Kill the current progress animation when manually switching
+      progressRefs.current.forEach((el) => {
+        if (el) gsap.killTweensOf(el);
+      });
 
-    setIsTransitioning(true);
+      const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
+      if (switchAnimRef.current) {
+        switchAnimRef.current.kill();
+        switchAnimRef.current = null;
+      }
+      if (!cards || cards.length === 0) {
+        setIsTransitioning(false);
+        return index;
+      }
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.in" },
+        onComplete: () => {
+          // Animation complete, allow next transition
+        },
+      });
+      gsap.set(cards, { transformOrigin: "50% 50%" });
+      tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
 
-    const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
-
-    if (switchAnimRef.current) {
-      switchAnimRef.current.kill();
-      switchAnimRef.current = null;
-    }
-
-    if (!cards || cards.length === 0) {
-      setActive(index);
-      setIsTransitioning(false);
-      return;
-    }
-
-    const tl = gsap.timeline({
-      defaults: { ease: "power2.in" },
-      onComplete: () => {
-        setActive(index);
-      },
+      switchAnimRef.current = tl;
+      return index;
     });
+  }, []);
 
-    gsap.set(cards, { transformOrigin: "50% 50%" });
-    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
+  // Animate only the active tab's progress bar
+  useEffect(() => {
+    if (!awards || awards.length === 0) return;
+    // Kill all existing progress animations
+    progressRefs.current.forEach((el) => {
+      if (el) gsap.killTweensOf(el);
+    });
+    const activeProgress = progressRefs.current[active];
+    if (!activeProgress) return;
+    // Reset other bars
+    progressRefs.current.forEach((el, idx) => {
+      if (el && idx !== active) gsap.set(el, { width: "0%" });
+    });
+    // Animate the active tab's progress
+    gsap.fromTo(
+      activeProgress,
+      { width: "0%" },
+      {
+        width: "100%",
+        duration: 5,
+        ease: "linear",
+        onComplete: () => {
+          const nextIndex = (active + 1) % awards.length;
+          handleTabClick(nextIndex);
+        },
+      }
+    );
 
-    switchAnimRef.current = tl;
-  };
+    // Cleanup on unmount or when active changes
+    return () => {
+      if (activeProgress) gsap.killTweensOf(activeProgress);
+    };
+  }, [active, awards, handleTabClick]);
 
+  // Animate cards on tab change
   useEffect(() => {
     if (swiperRef.current) {
       swiperRef.current.slideTo(0, 0);
@@ -85,25 +123,35 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           {awards?.map((items, index) => (
             <div
               key={items.id}
-              onClick={() => handleTabClick(index)}
-              className={`border-b px-[13px] pb-[4px] cursor-pointer transition-all duration-300 ${
-                active === index ? "border-orange-200" : "border-grey-200"
+              onClick={() => !isTransitioning && handleTabClick(index)}
+              className={`relative border-b px-[13px] pb-[4px] cursor-pointer transition-all duration-300 ${
+                active === index ? "border-transparent" : "border-grey-200"
               } ${isTransitioning ? "pointer-events-none" : ""}`}
             >
               <BodyText2
-                className={`transition-all duration-300 ${
+                className={`transition-all duration-300 whitespace-nowrap ${
                   active === index ? "text-orange-200" : "text-grey-200"
                 }`}
               >
                 {items?.year}
               </BodyText2>
+              {/* Grey underline */}
+              <div className="absolute bottom-0 left-0 w-full h-[0.5px] bg-grey-200"></div>
+              {/* Orange progress underline */}
+              <div
+                className="absolute bottom-0 left-0 h-[2px] bg-orange-200"
+                style={{ width: "0%" }}
+                ref={(el) => {
+                  if (el) progressRefs.current[index] = el;
+                }}
+              ></div>
             </div>
           ))}
         </div>
       )}
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
-        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
+        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]">
           <Swiper
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1.5}
@@ -127,7 +175,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               nextEl: ".swiper-button-next-awardsSection",
               prevEl: ".swiper-button-prev-awardsSection",
             }}
-            className="!pr-[20px] !lg:pr-[60px]"
+            className="w-full !px-[20px] lg:!px-[60px]"
           >
             {awards?.[active]?.card?.map((item, idx) => (
               <SwiperSlide key={`${active}-${idx}`}>

@@ -257,15 +257,6 @@ body {
   top: auto !important;
   bottom: 0 !important;
 }
-@media (min-width: 1024px) {
-  /* Hide progress bar on desktop */
-  .env-latest-at-swiper .swiper-pagination-progressbar {
-    display: none !important;
-  }
-  .env-latest-at-swiper {
-    padding-bottom: 0 !important;
-  }
-}
 
 /* By Use Section [Progress Bar] */
 .home-by-use-section-swiper .swiper-pagination-progressbar-fill {
