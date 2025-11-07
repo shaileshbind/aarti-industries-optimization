@@ -39,7 +39,7 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
               stagger={0.1}
               fromY={10}
               duration={3}
-              className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[40%] w-full flex-shrink-0 mb-0 lg:mb-4"
+              className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4"
             >
               <H2 className="text-blue-200">{sectionTitle}</H2>
             </WordReveal>

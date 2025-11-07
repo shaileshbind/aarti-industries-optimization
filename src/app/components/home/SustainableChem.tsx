@@ -224,6 +224,12 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { opacity: 1, duration: 0.5, zIndex: 22 },
             "<"
           )
+          .fromTo(
+            ".sectionSpacing",
+            { opacity: 0 },
+            { opacity: 1, duration: 5 },
+            "<"
+          );
          
       } else {
         mainTl
@@ -521,8 +527,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className="block lg:hidden container relative w-full h-auto">
-          <div className="pt-[100px]">
+        <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
+          <div className="pt-[70px]">
             {mainSection?.length > 0 && (
               <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
                 {mainSection?.map(
@@ -557,6 +563,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
+                       
                     />
                   </div>
                 ))}
