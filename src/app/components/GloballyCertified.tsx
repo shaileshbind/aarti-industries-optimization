@@ -74,7 +74,7 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
                   </div>
                 )}
                 {item?.heading && (
-                  <BodyText2 className="mt-4 text-center">{item?.heading}</BodyText2>
+                  <BodyText2 className="mt-4 text-center whitespace-pre-wrap">{item?.heading}</BodyText2>
                 )}
               </div>
             ))}

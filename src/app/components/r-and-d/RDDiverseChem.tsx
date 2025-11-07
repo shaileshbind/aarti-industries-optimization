@@ -62,7 +62,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     };
 
   return (
-    <div className="pt-[50px] lg:pt-[150px] pb-[50px] lg:py-[100px] mx-[20px] lg:mx-[60px]">
+    <div className="pt-[100px] lg:pt-[150px] pb-[50px] lg:py-[100px] mx-[20px] lg:mx-[60px]">
       <div className="w-full grid lg:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
         {title && (
           <div>

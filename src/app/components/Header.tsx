@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Typography from "@/app/components/typography";
@@ -119,6 +119,22 @@ const Header = () => {
     setOpenDropdown(null);
   };
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    if (isMenuOpen && mobileNavRef.current) {
+      console.log('pathname close mobile menu', pathname);
+      setIsMenuOpen(false);
+      gsap.fromTo(mobileNavRef.current, {
+        top: '0%',
+      }, {
+        top: '-100%',
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
+    }
+  }, [pathname]);
+
+  
   return (
     <>
       {/* Fixed Header Container */}
