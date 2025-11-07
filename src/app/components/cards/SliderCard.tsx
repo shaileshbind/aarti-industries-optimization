@@ -1,7 +1,7 @@
 import React from "react";
 import type { FC } from "react";
 import Image from "next/image";
-import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
+import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
 import clsx from "clsx";
 
@@ -22,7 +22,6 @@ interface SliderCardProps {
   description?: string;
   values?: SliderValue[];
   ctaButton?: CTAButton;
-  imageHeight?: string;
 }
 
 const SliderCard: FC<SliderCardProps> = ({
@@ -32,7 +31,6 @@ const SliderCard: FC<SliderCardProps> = ({
   description,
   values,
   ctaButton,
-  imageHeight,
 }) => {
   return (
     <>
