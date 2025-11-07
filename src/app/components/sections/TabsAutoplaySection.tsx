@@ -324,6 +324,7 @@ const TabsAutoplaySection = ({
                 showIcon
                 expanded={expanded === `panel${index}`}
                 handleChange={handleChange(`panel${index}`)}
+                className="!mb-0"
               />
               {/* Grey line */}
               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />

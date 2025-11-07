@@ -55,14 +55,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               {management_boards?.map((item) => (
                 <SwiperSlide key={item?.id}>
                   {/* <CustomCursorTrigger title="Read Bio"> */}
-                  <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
-                    <Image
-                      src={item?.image?.url}
-                      alt={item?.image?.alternativeText || "leader"}
-                      fill
-                      className="object-cover object-top"
-                    />
-                  </div>
+                  {item?.image?.url && (
+                    <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
+                      <Image
+                        src={item?.image?.url}
+                        alt={item?.image?.alternativeText || "leader"}
+                        fill
+                        className="object-cover object-top"
+                      />
+                    </div>
+                  )}
                   {item?.name && (
                     <BodyText2 className="mt-[18px] text-blue-200">
                       {item?.name}
