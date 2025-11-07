@@ -23,7 +23,7 @@ const EnvExp = ({ data }: EnvExpProps) => {
           </FadeInReveal>
           <FadeInReveal delay={0.2}>
             <Link href="#" target="_blank">
-              <div className="w-fit bg-white button-subtle-scale rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] h-[47px] cursor-pointer relative z-10">
+              <div className="w-fit bg-white button-subtle-scale rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
                 <Cta className="text-orange-200 ">Download Our Reports</Cta>
                 <Image src="/images/download-icon-orange.svg" alt="icon" width={14} height={14} />
               </div>
