@@ -13,7 +13,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
       {description && (
         <div className="lg:w-[46%] static lg:absolute top-42 left-0 mb-8">
           <AnimatedText>
-            <H3 className="lg:text-[28px]">{description}</H3>
+            <H3 className="lg:!text-[28px]">{description}</H3>
           </AnimatedText>
         </div>
       )}
@@ -34,7 +34,7 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
           card?.map(({ title, image, description }, i) => (
             <div
               key={i}
-              className=" sm:h-auto w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
+              className=" sm:h-auto min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
               data-scroll
             >
               {image?.url && (
