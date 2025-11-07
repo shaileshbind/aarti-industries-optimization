@@ -310,12 +310,12 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { opacity: 1, duration: 0.5, zIndex: 22 },
             "<"
           )
-          // .fromTo(
-          //   ".sectionSpacing",
-          //   { opacity: 0 },
-          //   { opacity: 1, duration: 5 },
-          //   "<"
-          // );
+          .fromTo(
+            ".sectionSpacing",
+            { opacity: 0 },
+            { opacity: 1, duration: 5 },
+            "<"
+          );
       }
     });
 
