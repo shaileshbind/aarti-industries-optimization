@@ -108,7 +108,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           end: `+=${animationScrollDistance}`,
           scrub: 1,
           pin: true,
-          pinSpacing: false,
+          pinSpacing: true,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Sync slides after animation phase (55% progress) - similar to test slider logic
@@ -310,12 +310,12 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { opacity: 1, duration: 0.5, zIndex: 22 },
             "<"
           )
-          .fromTo(
-            ".sectionSpacing",
-            { opacity: 0 },
-            { opacity: 1, duration: 5 },
-            "<"
-          );
+          // .fromTo(
+          //   ".sectionSpacing",
+          //   { opacity: 0 },
+          //   { opacity: 1, duration: 5 },
+          //   "<"
+          // );
       }
     });
 
@@ -346,7 +346,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   }, [activeTab, mainSection.length, measureIndicator]);
 
   return (
-    <div ref={triggerRef} className="w-full relative  min-h-[40vh] h-[100vh] mt-[200px] lg:mt-[unset]">
+    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]">
       <div
         ref={titleSection}
         className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
