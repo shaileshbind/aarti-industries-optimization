@@ -95,7 +95,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     <div className="my-[50px] lg:my-[100px] container mx-[auto]">
       <H2 className="max-w-[760px] ">{title}</H2>
       {/* Desktop */}
-      <div className=" my-[70px] lg:my-[120px] hidden lg:grid grid-cols-[25%_1fr] gap-x-[60px]">
+      <div className="my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
         {/* Tabs */}
         {cardWithCategory?.length > 0 && (
           <div className="mt-[14px]">
@@ -270,7 +270,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       </div>
       {/* Mobile Accordion */}
       {cardWithCategory?.length > 0 && (
-        <div className="block lg:hidden w-full py-[30px]">
+        <div className="block xl:hidden w-full py-[30px]">
           {cardWithCategory?.map((item: any, index: number) => (
             <div key={item.id} className="relative">
               <FaqAccordion

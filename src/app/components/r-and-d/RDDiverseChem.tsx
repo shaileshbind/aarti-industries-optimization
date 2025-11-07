@@ -62,8 +62,8 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     };
 
   return (
-    <div className="pt-[100px] lg:pt-[150px] pb-[50px] lg:py-[100px] mx-[20px] lg:mx-[60px]">
-      <div className="w-full grid lg:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
+    <div className="pt-[100px] xl:pt-[150px] pb-[50px] xl:py-[100px] mx-[20px] lg:mx-[60px]">
+      <div className="w-full grid xl:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
         {title && (
           <div>
             <H2>{title}</H2>
@@ -71,7 +71,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
         )}
         <div>{description && <BodyText1>{description}</BodyText1>}</div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden xl:block">
         <div
           ref={gridRef}
           className="mt-[44px] h-[600px] flex gap-x-[20px] w-full overflow-hidden"
@@ -163,7 +163,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
         </div>
       </div>
       {/* Mobile */}
-      <div className="mt-[30px] block lg:hidden">
+      <div className="mt-[30px] block xl:hidden">
         {Object?.values(data2)
           ?.slice(1)
           ?.map((items, index) => (
