@@ -14,6 +14,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
+import Button from "../Button";
 
 type FormValues = {
   fullName: string;
@@ -214,16 +215,7 @@ export default function MSDSPopup({
               ></textarea>
             </div>
 
-            <button
-              type="submit"
-              className="py-[14px] w-full md:w-[124px] rounded-[6px] text-[#FFFFFF] mt-6 cursor-pointer"
-              style={{
-                background:
-                  "linear-gradient(201deg, #FA8129 -42.93%, #DC4C03 95.27%)",
-              }}
-            >
-              Submit
-            </button>
+            <Button title={"Submit"} className="mt-6" />
           </form>
         </div>
       </Popup>

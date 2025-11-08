@@ -13,15 +13,20 @@ import {
 import { ProductData } from "@/app/types/product.inner.type";
 import MobileFilter from "./MobileFilter";
 import Button from "../Button";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
   searchQuery = "",
   activeTab,
   setActiveTab,
-  clearSearch, // Updated prop
+  clearSearch,
 }) => {
   const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
 
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
@@ -33,6 +38,50 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const [desktop, setDesktop] = useState<boolean>(true);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
+
+  // Initialize from URL params on mount
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get("category");
+    const subcategoryFromUrl = searchParams.get("subcategory");
+
+    if (categoryFromUrl && categoryFromUrl !== activeTab) {
+      setActiveTab(categoryFromUrl);
+      setShowSubCategories(categoryFromUrl !== "all");
+    }
+
+    if (subcategoryFromUrl) {
+      const subCats = subcategoryFromUrl.split(",").filter(Boolean);
+      setSelectedSubCategories(subCats);
+    }
+  }, []); // Run only on mount
+
+  // Update URL when filters change
+  const updateURL = useCallback(
+    (category: string, subcategories: string[]) => {
+      const params = new URLSearchParams(searchParams);
+
+      // Update category
+      if (category && category !== "all") {
+        params.set("category", category);
+      } else {
+        params.delete("category");
+      }
+
+      // Update subcategory
+      if (subcategories.length > 0) {
+        params.set("subcategory", subcategories.join(","));
+      } else {
+        params.delete("subcategory");
+      }
+
+      // Navigate with new params
+      const newUrl = params.toString()
+        ? `${pathname}?${params.toString()}`
+        : pathname;
+      router.push(newUrl, { scroll: false });
+    },
+    [pathname, router, searchParams]
+  );
 
   // Reset visible count when filters change
   useEffect(() => {
@@ -101,9 +150,16 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
-    setSelectedSubCategories((prev) =>
-      prev.includes(slug) ? prev.filter((x) => x !== slug) : [slug]
-    );
+    setSelectedSubCategories((prev) => {
+      const newSelection = prev.includes(slug)
+        ? prev.filter((x) => x !== slug)
+        : [slug];
+
+      // Update URL with new subcategory selection
+      updateURL(activeTab, newSelection);
+
+      return newSelection;
+    });
   };
 
   // Handle responsive behavior
@@ -119,6 +175,10 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     setActiveTab(id);
     setShowSubCategories(id !== "all");
     setSelectedSubCategories([]);
+
+    // Update URL with new category
+    updateURL(id, []);
+
     // Clear both search query states (input + actual search)
     clearSearch();
   };
@@ -127,6 +187,12 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const handleLoadMore = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setVisibleCount((c) => c + 12);
+  };
+
+  // Handle mobile filter apply
+  const handleMobileFilterApply = (selected: string[]) => {
+    setSelectedSubCategories(selected);
+    updateURL(activeTab, selected);
   };
 
   return (
@@ -212,8 +278,11 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
           selected={selectedSubCategories}
           onClose={() => setShowMobileFilter(false)}
           showMobileFilter={showMobileFilter}
-          onApply={(selected) => setSelectedSubCategories(selected)}
-          onClear={() => setSelectedSubCategories([])}
+          onApply={handleMobileFilterApply}
+          onClear={() => {
+            setSelectedSubCategories([]);
+            updateURL(activeTab, []);
+          }}
         />
       )}
 
@@ -227,7 +296,9 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
               <div key={product.id} className="w-full">
                 <ProductList
                   title={product.productName ?? ""}
-                  link={`/${product.slug}`}
+                  link={`/${product.slug}${
+                    queryString ? `?${queryString}` : ""
+                  }`}
                   pdfLink={
                     typeof product?.productDetails?.documentSection === "string"
                       ? product.productDetails.documentSection

@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -18,6 +18,20 @@ export default function Popup({
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(isOpen);
   const isAnimatingRef = useRef(false);
+
+  // Handle body overflow when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      // Store the original overflow value
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      // Cleanup: restore original overflow
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   useLayoutEffect(() => {
     // Prevent multiple animations from running simultaneously

@@ -1,6 +1,6 @@
 import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
-import ProductWrapper from "../../components/products/ProductWrapper";
+import ProductWrapper from "../components/products/ProductWrapper";
 
 export const dynamic = "force-dynamic";
 
