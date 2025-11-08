@@ -14,10 +14,11 @@ import Button from "../Button";
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
   searchQuery = "",
+  activeTab,
+  setActiveTab,
 }) => {
   const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
 
-  const [activeTab, setActiveTab] = useState<string>("all");
   const [showSubCategories, setShowSubCategories] = useState(false);
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
     []
@@ -101,7 +102,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
     setSelectedSubCategories((prev) =>
-      prev.includes(slug) ? prev.filter((x) => x !== slug) : [...prev, slug]
+      prev.includes(slug) ? prev.filter((x) => x !== slug) : [slug]
     );
   };
 

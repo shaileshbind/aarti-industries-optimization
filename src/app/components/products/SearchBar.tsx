@@ -1,11 +1,13 @@
 "use client";
+import { SearchBarProps } from "@/app/types/product.listing.type";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const SearchBar: React.FC<{ onSearch: (q: string) => void }> = ({ onSearch }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, setActiveTab }) => {
   const [query, setQuery] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
+    setActiveTab("all");
     e.preventDefault();
     onSearch(query);
   };
