@@ -6,7 +6,10 @@ import { BodyText1 } from "../Typography2";
 import ProductTabs from "./ProductTabs";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { ProductFilterListProps } from "@/app/types/product.listing.type";
+import {
+  ProductFilterListProps,
+  SubCategory,
+} from "@/app/types/product.listing.type";
 import { ProductData } from "@/app/types/product.inner.type";
 import MobileFilter from "./MobileFilter";
 import Button from "../Button";
@@ -16,6 +19,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   searchQuery = "",
   activeTab,
   setActiveTab,
+  clearSearch, // Updated prop
 }) => {
   const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
 
@@ -26,7 +30,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [searchQueryState, setSearchQueryState] = useState("");
   const [desktop, setDesktop] = useState<boolean>(true);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
@@ -34,19 +37,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(12);
-  }, [activeTab, selectedSubCategories, searchQueryState]);
-
-  // Sync search query from props
-  useEffect(() => {
-    setSearchQueryState(searchQuery);
-  }, [searchQuery]);
+  }, [activeTab, selectedSubCategories, searchQuery]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   // Fetch products based on category and subcategory filters
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    setSearchQueryState("");
     try {
       const subSlugs = selectedSubCategories.join(",");
       const url = `/api/products?category=${activeTab}${
@@ -67,7 +64,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   // Fetch based on search query
   const fetchSearchResults = useCallback(async (query: string) => {
-    if (!query || query === "") return;
+    if (!query || query.trim() === "") return;
 
     setLoading(true);
     try {
@@ -85,19 +82,22 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     }
   }, []);
 
-  // Fetch products when category or subcategory changes (only if not searching)
+  // Main effect: Fetch products or search results
   useEffect(() => {
-    if (!searchQueryState) {
+    if (searchQuery && searchQuery.trim() !== "") {
+      // If there's a search query, perform search
+      fetchSearchResults(searchQuery);
+    } else {
+      // Otherwise, fetch products by category/subcategory
       fetchProducts();
     }
-  }, [activeTab, selectedSubCategories, searchQueryState, fetchProducts]);
-
-  // Fetch search results when search query changes
-  useEffect(() => {
-    if (searchQueryState && searchQueryState !== "") {
-      fetchSearchResults(searchQueryState);
-    }
-  }, [searchQueryState, fetchSearchResults]);
+  }, [
+    activeTab,
+    selectedSubCategories,
+    searchQuery,
+    fetchProducts,
+    fetchSearchResults,
+  ]);
 
   // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
@@ -114,11 +114,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Handle tab change
+  // Handle tab change - CLEAR SEARCH COMPLETELY
   const handleTabChange = (id: string) => {
     setActiveTab(id);
     setShowSubCategories(id !== "all");
     setSelectedSubCategories([]);
+    // Clear both search query states (input + actual search)
+    clearSearch();
   };
 
   // Handle load more
@@ -137,50 +139,52 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       />
 
       {/* Subcategory Filter */}
-      <SmoothCollapseGSAP
-        className="hidden md:block"
-        isOpen={showSubCategories}
-      >
-        <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
-          {catagoriesData
-            .find((item) => item.slug === activeTab)
-            ?.product_sub_categories?.map((sub) => {
-              const selected = selectedSubCategories.includes(sub.slug);
-              return (
-                <button
-                  key={sub.slug}
-                  type="button"
-                  onClick={() => toggleSubCategory(sub.slug)}
-                  className={clsx(
-                    "px-4 py-2 border rounded-[10px] transition inline-flex items-center",
-                    selected
-                      ? "border-[#DC4C03] text-[#DC4C03]"
-                      : "border-[#4C5861] hover:bg-gray-100"
-                  )}
-                >
-                  <span className="mr-2">{sub.subCategory}</span>
-                  {selected && (
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleSubCategory(sub.slug);
-                      }}
-                      className="w-[20px] h-[20px] relative"
-                    >
-                      <Image src="/images/cross-orange.svg" alt="icon" fill />
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-        </div>
-      </SmoothCollapseGSAP>
+      {activeTab !== "all" && (
+        <SmoothCollapseGSAP
+          className="hidden md:block"
+          isOpen={showSubCategories}
+        >
+          <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
+            {catagoriesData
+              .find((item) => item.slug === activeTab)
+              ?.product_sub_categories?.map((sub: SubCategory) => {
+                const selected = selectedSubCategories.includes(sub.slug);
+                return (
+                  <button
+                    key={sub.slug}
+                    type="button"
+                    onClick={() => toggleSubCategory(sub.slug)}
+                    className={clsx(
+                      "px-4 py-2 border rounded-[10px] transition inline-flex items-center",
+                      selected
+                        ? "border-[#DC4C03] text-[#DC4C03]"
+                        : "border-[#4C5861] hover:bg-gray-100"
+                    )}
+                  >
+                    <span className="mr-2">{sub.subCategory}</span>
+                    {selected && (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleSubCategory(sub.slug);
+                        }}
+                        className="w-[20px] h-[20px] relative"
+                      >
+                        <Image src="/images/cross-orange.svg" alt="icon" fill />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+        </SmoothCollapseGSAP>
+      )}
 
       {/* Result Header */}
       <div className="flex items-center justify-between mb-6 md:mt-10">
         <BodyText1>
-          {searchQueryState && searchQueryState !== ""
-            ? `Search Results for "${searchQueryState}" (${
+          {searchQuery && searchQuery.trim() !== ""
+            ? `Search Results for "${searchQuery}" (${
                 loading ? "..." : totalProducts
               })`
             : `All Results (${loading ? "..." : totalProducts})`}

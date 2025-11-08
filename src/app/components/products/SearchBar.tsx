@@ -1,15 +1,31 @@
 "use client";
 import { SearchBarProps } from "@/app/types/product.listing.type";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, setActiveTab }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  onSearch,
+  setActiveTab,
+  clearTrigger, // Add this prop
+}) => {
   const [query, setQuery] = useState("");
 
+  // Clear query when clearTrigger changes
+  useEffect(() => {
+    if (clearTrigger) {
+      setQuery("");
+    }
+  }, [clearTrigger]);
+
   const handleSearch = (e: React.FormEvent) => {
-    setActiveTab("all");
     e.preventDefault();
-    onSearch(query);
+
+    // Only search if there's a query
+    if (query.trim() === "") return;
+
+    // Set active tab to "all" and trigger search
+    setActiveTab("all");
+    onSearch(query.trim());
   };
 
   return (

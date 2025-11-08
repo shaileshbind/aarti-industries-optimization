@@ -6,10 +6,13 @@ import SearchBar from "./SearchBar";
 import { H2, BodyText1 } from "../Typography2";
 import { BannerProps } from "@/app/types/product.listing.type";
 
-const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({
+const Banner: React.FC<
+  BannerProps & { onSearch: (q: string) => void; clearTrigger: number }
+> = ({
   data,
   onSearch,
   setActiveTab,
+  clearTrigger, // Add this prop
 }) => {
   const { title, description, image, mobImage } = data;
 
@@ -22,7 +25,11 @@ const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({
       </div>
 
       {/* Search */}
-      <SearchBar onSearch={onSearch} setActiveTab={setActiveTab} />
+      <SearchBar
+        onSearch={onSearch}
+        setActiveTab={setActiveTab}
+        clearTrigger={clearTrigger}
+      />
 
       {/* Background Images */}
       <div className="absolute top-0 h-full w-full z-0">
