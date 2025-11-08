@@ -3,6 +3,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
+import clsx from "clsx";
 
 interface SliderValue {
   value?: string;
@@ -35,7 +36,7 @@ const SliderCard: FC<SliderCardProps> = ({
     <>
       {/* Mobile Version */}
       <div className="lg:hidden">
-        <div className="relative w-full h-[400px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+        <div className={clsx('relative w-full pt-[60%] ', 'overflow-hidden rounded-[1rem] flex items-center justify-center')}>
           <div className="absolute inset-0 overflow-hidden">
             <Image
               src={imgSrc}
@@ -54,7 +55,7 @@ const SliderCard: FC<SliderCardProps> = ({
             </span>
           </div>
           {title && (
-            <h2 className="absolute text-3xl font-medium text-white z-10">
+            <h2 className="absolute top-1/2 -translate-y-1/2 w-full text-center text-3xl font-medium text-white z-10">
               {title}
             </h2>
           )}
@@ -64,9 +65,9 @@ const SliderCard: FC<SliderCardProps> = ({
           <BodyText1 className="mt-[20px]">{description}</BodyText1>
         )}
 
-        <div className="flex gap-6 lg:gap-12 mt-6 mb-[36px]">
+        <div className="flex gap-[1%] mt-6 mb-[36px] flex-wrap text-[26px]">
           {values?.map((stat, idx) => (
-            <div key={idx}>
+            <div key={idx} className="w-[48%]">
               {stat?.value && <H2 className="text-orange-200">{stat.value}</H2>}
               {stat?.description && (
                 <BodyText2 className="text-grey-400 mt-[4px]">
@@ -87,8 +88,9 @@ const SliderCard: FC<SliderCardProps> = ({
       </div>
 
       {/* Desktop Version */}
-      <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center flex-shrink-0 rounded-lg">
-        <div className="relative w-full h-[500px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+      <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg">
+        <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
+          <div className="w-full pt-[100%] relative">
           <div className="absolute inset-0 overflow-hidden">
             <Image
               src={imgSrc}
@@ -106,21 +108,23 @@ const SliderCard: FC<SliderCardProps> = ({
               />
             </span>
           </div>
+          
           {title && (
-            <h2 className="absolute text-4xl font-medium text-white z-10">
+            <h2 className="absolute top-1/2 -translate-y-1/2 w-full text-center text-4xl font-medium text-white z-10">
               {title}
             </h2>
           )}
+          </div>
         </div>
 
-        <div>
+        <div className="w-[60%]">
           {description && <BodyText1>{description}</BodyText1>}
           {values?.length ? (
-            <div className="flex gap-6 lg:gap-12 my-8">
+            <div className="flex gap-6 lg:gap-5 my-8">
               {values.map((stat, idx) => (
-                <div key={idx}>
+                <div key={idx} className="w-1/3">
                   {stat?.value && (
-                    <H2 className="text-orange-200">{stat.value}</H2>
+                    <H2 className="text-orange-200 !text-[36px]">{stat.value}</H2> 
                   )}
                   {stat?.description && (
                     <BodyText2 className="text-grey-400 mt-[5px]">
