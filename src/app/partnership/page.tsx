@@ -1,5 +1,4 @@
 import React from "react";
-import CDMOPartner from "../components/cdmo/CDMOPartner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
@@ -76,13 +75,13 @@ const Page = async () => {
 
       <ParallaxCardSection />
 
-      {section_five && <CardsSlider data={section_five} />}
-
       {cardData && <GridCardsContainer data={cardData} />}
 
       <WhyAarti />
 
       <WorksWithPartners />
+
+      {section_five && <CardsSlider data={section_five} />}
 
       {<GloballyCertified itemsData={globallyCertifiedData} />}
 

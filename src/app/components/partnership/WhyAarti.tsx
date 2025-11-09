@@ -3,7 +3,6 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
-import { FadeInRevealBlur } from "../ScrollReveal";
 
 export default function WhyAarti() {
   const accordionData = [
@@ -150,7 +149,13 @@ export default function WhyAarti() {
                 showIcon={false}
                 onChange={() => handleAccordion(index)}
                 title={
-                  <h2 className="text-2xl text-[#002F50]">{item?.title}</h2>
+                  <h2
+                    className={`text-2xl text-[#002F50] opacity-40 ${
+                      expanded === index && "opacity-100"
+                    }`}
+                  >
+                    {item?.title}
+                  </h2>
                 }
               >
                 <div>

@@ -492,6 +492,20 @@ body {
   background: #dc4c03;
   border-radius: 20px;
 }
+
+.active-card {
+  animation: toggleWidth 5s ease-out;
+}
+
+@keyframes toggleWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 @media (max-width: 380px) {
   .topMarginCsm {
     margin-top: 200px !important;
