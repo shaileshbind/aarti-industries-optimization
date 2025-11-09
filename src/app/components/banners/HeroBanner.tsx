@@ -17,6 +17,10 @@ type HeroBannerProps = {
   mobAlt?: string;
   alt?: string;
   fullBg?: boolean;
+  secondaryBtnLeftTitle?: string;
+  secondaryBtnLeftLink?: string;
+  secondaryBtnRightTitle?: string;
+  secondaryBtnRightLink?: string;
 };
 const HeroBanner = ({
   title,
@@ -29,6 +33,10 @@ const HeroBanner = ({
   mobAlt,
   alt,
   fullBg,
+  secondaryBtnLeftTitle,
+  secondaryBtnLeftLink,
+  secondaryBtnRightTitle,
+  secondaryBtnRightLink,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -145,6 +153,29 @@ const HeroBanner = ({
                     <H2 className="text-white mt-[12px] max-w-[260px] lg:max-w-[560px] fluid-container">
                       {title}
                     </H2>
+                  </FadeInRevealBlur>
+                )}
+
+                {/* buttons */}
+                {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
+                  <FadeInRevealBlur delay={0.1} className="flex gap-9 fluid-container">
+                    {secondaryBtnLeftTitle && (
+                      <Button
+                        className="mt-12 text-white white-btn-underline"
+                        title={secondaryBtnLeftTitle}
+                        href={secondaryBtnLeftLink || "#"}
+                        secondary
+                      />
+                    )}
+
+                    {secondaryBtnRightTitle && (
+                      <Button
+                        className="mt-12 text-white white-btn-underline"
+                        title={secondaryBtnRightTitle}
+                        href={secondaryBtnRightLink || "#"}
+                        secondary
+                      />
+                    )}
                   </FadeInRevealBlur>
                 )}
               </div>

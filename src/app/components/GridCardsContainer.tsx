@@ -1,23 +1,32 @@
 import React from "react";
-import { BodyText2, H3, SubH2 } from "../Typography2";
 import Image from "next/image";
-import AnimatedText from "../AnimatedText";
-import { ScaleInGroup } from "../ScrollReveal";
 import { CDMOPartnerProps } from "@/app/types/cdmo.type";
+import AnimatedText from "./AnimatedText";
+import { BodyText2, H3, SubH2 } from "./Typography2";
+import { ScaleInGroup } from "./ScrollReveal";
 
-const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
-  const { description, card } = data;
+const GridCardsContainer: React.FC<CDMOPartnerProps> = ({ data }) => {
+  const { description, card, title } = data;
 
   return (
     <section className="fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative">
-      {description && (
-        <div className="lg:w-[46%] static lg:absolute top-42 left-0 mb-8">
-          <AnimatedText>
-            <H3 className="lg:!text-[28px]">{description}</H3>
-          </AnimatedText>
-        </div>
-      )}
- 
+      <div className="lg:w-[46%] static lg:absolute top-42 left-0 mb-8">
+        {title && (
+          <div className="w-full">
+            <AnimatedText>
+              <H3 className="lg:!text-[28px]">{title}</H3>
+            </AnimatedText>
+          </div>
+        )}
+
+        {description && (
+          <div className="lg:w-[70%] mt-[10px]">
+            <AnimatedText>
+              <BodyText2 className="text-base">{description}</BodyText2>
+            </AnimatedText>
+          </div>
+        )}
+      </div>
 
       <ScaleInGroup
         delay={0.2}
@@ -58,4 +67,4 @@ const CDMOPartner: React.FC<CDMOPartnerProps> = ({ data }) => {
   );
 };
 
-export default CDMOPartner;
+export default GridCardsContainer;
