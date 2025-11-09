@@ -126,81 +126,81 @@ export default function ParallaxCardSection() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Left image parallax
-      gsap.to(leftImageRef.current, {
-        y: -200,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
+      // Register ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // --- BASIC PARALLAX FOR STATIC IMAGES ---
+      const images = [
+        { ref: leftImageRef, y: -200 },
+        { ref: rightImageRef, y: -200 },
+        { ref: bottomLeftImageRef, y: -180 },
+      ];
+
+      images.forEach(({ ref, y }) => {
+        gsap.to(ref.current, {
+          y,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
       });
 
-      // Right image parallax
-      gsap.to(rightImageRef.current, {
-        y: -200,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-
-      // Bottom left image parallax
-      gsap.to(bottomLeftImageRef.current, {
-        y: -180,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-
-      // Calculate the distance between bottom image and sticky image
+      // --- DISTANCE CALCULATOR ---
       const calculateDistance = () => {
         if (bottomImageRef.current && stickyImageRef.current) {
           const bottomRect = bottomImageRef.current.getBoundingClientRect();
           const stickyRect = stickyImageRef.current.getBoundingClientRect();
-          return stickyRect.top - bottomRect.top + 120;
+          return stickyRect.top - bottomRect.top + 116;
         }
         return 600; // fallback
       };
 
-      // Use matchMedia for responsive scale values
-      let mm = gsap.matchMedia();
+      // --- RESPONSIVE MATCH MEDIA ---
+      const mm = gsap.matchMedia();
 
       mm.add(
         {
-          isDesktop: "(min-width: 1025px)",
-          isTablet: "(max-width: 1024px)",
+          isDesktop: "(min-width: 1281px)",
+          isMidScreen: "(min-width: 1025px) and (max-width: 1280px)",
+          is1024: "(max-width: 1024px)",
         },
         (context) => {
-          //   const { isDesktop, isTablet } = context.conditions as any;
+          const { isDesktop, isMidScreen, is1024 } = context.conditions as any;
 
-          // Bottom image moving to sticky position with crossfade
+          // Set responsive scale & x-offset
+          const scaleValue = isDesktop
+            ? 1.9 // large desktops
+            : isMidScreen
+            ? 1.55 // mid screens (like 1280px)
+            : is1024
+            ? 1.3 // small tablets / 1024px
+            : 1.9;
+
+          const xOffset = isDesktop ? 50 : isMidScreen ? 50 : is1024 ? 45 : 50;
+
+          // --- SCROLL TRIGGER ANIMATION ---
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: stickyImageRef.current,
-              start: "top bottom",
+              start: "top 80%",
               end: "top 24%",
               scrub: 1,
+              // markers: true, // uncomment for debugging
             },
           });
 
-          // Move bottom image DOWN to sticky position with responsive scale
+          // Move + scale + fade cross animation
           tl.to(
             bottomImageRef.current,
             {
               y: calculateDistance,
               ease: "none",
-              scale: 1.9,
-              x: 50,
+              scale: scaleValue,
+              x: xOffset,
             },
             0
           )
@@ -291,7 +291,7 @@ export default function ParallaxCardSection() {
       </div>
 
       {/* Accordion */}
-      <div className="grid grid-cols-2 gap-[86px] pt-[110px] pl-[60px]">
+      <div className="grid grid-cols-2 gap-[40px] xl:gap-[86px] pt-[110px] pl-[60px]">
         <div className="">
           <FadeInReveal>
             <H3>
@@ -354,7 +354,7 @@ export default function ParallaxCardSection() {
           <div className="order-1 lg:order-2  h-[317px] lg:h-[640px] w-full overflow-hidden sticky top-[100px]">
             <div
               ref={stickyImageRef}
-              className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-0`}
+              className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-0`}
             >
               <Image
                 src={"/images/partnership/stickyBanner.png"}

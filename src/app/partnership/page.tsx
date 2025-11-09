@@ -30,6 +30,7 @@ const Page = async () => {
         description: "Proven EHS, Responsible Care certified, EcoVadis Gold.",
         image: {
           url: "https://d2sslj1veyp2s3.cloudfront.net/fi_1320521_70628892db.png",
+          alternativeText: "Reduce Risk",
         },
       },
       {
@@ -38,6 +39,7 @@ const Page = async () => {
         description: "Multi-location plants, flexible MPP capacity.",
         image: {
           url: "https://d2sslj1veyp2s3.cloudfront.net/development_2_37ccefdad0.png",
+          alternativeText: "Scale With Confidence",
         },
       },
       {
@@ -46,6 +48,7 @@ const Page = async () => {
         description: "Deep R&D, pilot-to-commercial scale-up.",
         image: {
           url: "https://d2sslj1veyp2s3.cloudfront.net/fi_11538824_d6548e7961.png",
+          alternativeText: "Accelerate Innovation",
         },
       },
       {
@@ -54,6 +57,7 @@ const Page = async () => {
         description: "Long-term sourcing partnerships for critical RMs.",
         image: {
           url: "https://d2sslj1veyp2s3.cloudfront.net/fi_98741_1caa547923.png",
+          alternativeText: "Secure Supply Chains",
         },
       },
       {
@@ -62,6 +66,7 @@ const Page = async () => {
         description: "400+ customers, 60+ countries, 10+ year relationships.",
         image: {
           url: "https://d2sslj1veyp2s3.cloudfront.net/fi_98741_1caa547923.png",
+          alternativeText: "Global Trust",
         },
       },
     ],
