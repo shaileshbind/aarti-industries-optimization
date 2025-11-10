@@ -110,9 +110,9 @@ export default function WhyAarti() {
   }, []);
 
   return (
-    <div className="fluid-container grid grid-cols-2 gap-[100px] pb-[110px]">
+    <div className="fluid-container grid grid-cols-2 gap-[60px] xl:gap-[100px] pb-[110px]">
       <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden">
-        <div className="absolute right-0 top-0 min-h-[317px] lg:min-h-[600px] w-[100%] lg:w-full rounded-[20px]">
+        <div className="absolute right-0 top-0 min-h-[317px] lg:min-h-[500px] xl:min-h-[600px] w-[100%] lg:w-full rounded-[20px]">
           <Image
             src={activeImage}
             alt={"banner"}
@@ -138,10 +138,10 @@ export default function WhyAarti() {
         </div>
       </div>
 
-      <div className="w-[80%] relative">
+      <div className="xl:w-[80%] relative">
         <H2>Why India. Why Aarti Industries.</H2>
 
-        <div className="pt-[86px]">
+        <div className="pt-10 xl:pt-[86px]">
           {accordionData?.map((item, index) => (
             <div key={`accordion-${index}`} className="relative">
               <MainAccordion

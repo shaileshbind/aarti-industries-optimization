@@ -31,7 +31,7 @@ export default function WorksWithPartners() {
   useEffect(() => {
     const interval = setInterval(() => {
       setactiveCard((prev) => (prev + 1) % cardData.length);
-    }, 5000); // same as CSS animation duration
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [cardData.length]);
@@ -45,11 +45,23 @@ export default function WorksWithPartners() {
           <div key={"card_" + index} className="relative pr-[50px]">
             {index !== cardData?.length - 1 && (
               <>
+                {/* Background progress line */}
                 <div className="top-progress w-full h-[1px] bg-[#E1E1E1] absolute left-0 top-[10px]" />
+                
+                {/* Animated progress bar */}
                 {activeCard === index && (
                   <div
-                    className={`h-[2px] bg-[#DC4C03] absolute left-2 top-[10px] active-card`}
+                    key={`progress-${activeCard}`}
+                    className="h-[2px] bg-[#DC4C03] absolute left-4 top-[10px]"
+                    style={{
+                      animation: 'fillProgress 5s linear forwards'
+                    }}
                   />
+                )}
+                
+                {/* Completed progress bar for previous cards */}
+                {activeCard > index && (
+                  <div className="h-[2px] bg-[#DC4C03] absolute left-4 top-[10px] w-full" />
                 )}
               </>
             )}
@@ -64,7 +76,9 @@ export default function WorksWithPartners() {
 
             <div
               className={`transition-all duration-500 ${
-                activeCard === index ? "opacity-100" : "opacity-40"
+                activeCard >= index
+                  ? "opacity-100" 
+                  : "opacity-40"
               }`}
             >
               <SubH2 className="pt-7 pb-2">{item?.title}</SubH2>
@@ -74,6 +88,17 @@ export default function WorksWithPartners() {
           </div>
         ))}
       </div>
+
+      <style jsx>{`
+        @keyframes fillProgress {
+          from {
+            width: 0%;
+          }
+          to {
+            width: 100%;
+          }
+        }
+      `}</style>
     </div>
   );
 }

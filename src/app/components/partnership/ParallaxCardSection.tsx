@@ -131,9 +131,9 @@ export default function ParallaxCardSection() {
 
       // --- BASIC PARALLAX FOR STATIC IMAGES ---
       const images = [
-        { ref: leftImageRef, y: -200 },
-        { ref: rightImageRef, y: -200 },
-        { ref: bottomLeftImageRef, y: -180 },
+        { ref: leftImageRef, y: -400 },
+        { ref: rightImageRef, y: -400 },
+        { ref: bottomLeftImageRef, y: -300 },
       ];
 
       images.forEach(({ ref, y }) => {
@@ -306,7 +306,7 @@ export default function ParallaxCardSection() {
             </p>
           </FadeInReveal>
 
-          <FadeInReveal className="pt-18">
+          <FadeInReveal className="pt-6 xl:pt-18">
             {accordionData?.map((item, index) => (
               <MainAccordion
                 key={`accordion-${index}`}
