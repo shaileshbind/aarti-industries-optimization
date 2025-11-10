@@ -40,25 +40,26 @@ export default function WorksWithPartners() {
     <div className="fluid-container">
       <H2>How AIL works with Partners</H2>
 
-      <div className="grid grid-cols-4 mt-[50px]">
+      {/* Desktop */}
+      <div className="grid-cols-4 mt-[50px] hidden lg:grid">
         {cardData?.map((item, index) => (
           <div key={"card_" + index} className="relative pr-[50px]">
             {index !== cardData?.length - 1 && (
               <>
                 {/* Background progress line */}
                 <div className="top-progress w-full h-[1px] bg-[#E1E1E1] absolute left-0 top-[10px]" />
-                
+
                 {/* Animated progress bar */}
                 {activeCard === index && (
                   <div
                     key={`progress-${activeCard}`}
                     className="h-[2px] bg-[#DC4C03] absolute left-4 top-[10px]"
                     style={{
-                      animation: 'fillProgress 5s linear forwards'
+                      animation: "fillProgress 5s linear forwards",
                     }}
                   />
                 )}
-                
+
                 {/* Completed progress bar for previous cards */}
                 {activeCard > index && (
                   <div className="h-[2px] bg-[#DC4C03] absolute left-4 top-[10px] w-full" />
@@ -76,14 +77,42 @@ export default function WorksWithPartners() {
 
             <div
               className={`transition-all duration-500 ${
-                activeCard >= index
-                  ? "opacity-100" 
-                  : "opacity-40"
+                activeCard >= index ? "opacity-100" : "opacity-40"
               }`}
             >
               <SubH2 className="pt-7 pb-2">{item?.title}</SubH2>
 
               <p className="text-base text-[#4C5861]">{item?.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile */}
+      <div className="mt-9">
+        {cardData?.map((item, index) => (
+          <div
+            key={"card_" + index}
+            className={`flex gap-7 items-start pb-10 relative`}
+          >
+            {/* Line */}
+            {index !== cardData?.length - 1 && (
+              <div className="h-full w-[2px] bg-[#E1E1E1] absolute left-[10px] top-4" />
+            )}
+
+            <div className="w-6 h-6">
+              <Image
+                src={"/images/star-orange.svg"}
+                alt="banner"
+                width={30}
+                height={30}
+                className="w-full h-full relative z-[1]"
+              />
+            </div>
+            <div className="w-[90%]">
+              <SubH2 className="pb-2">{item?.title}</SubH2>
+
+              <p className="text-sm text-[#4C5861]">{item?.description}</p>
             </div>
           </div>
         ))}

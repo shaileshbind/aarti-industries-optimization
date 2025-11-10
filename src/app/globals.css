@@ -185,7 +185,7 @@ body {
 /* Banner Button */
 .white-btn-underline::before,
 .white-btn-underline::after {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
 }
 
 /* Blip Border */

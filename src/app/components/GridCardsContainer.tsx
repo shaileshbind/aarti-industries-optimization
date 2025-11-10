@@ -30,7 +30,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({ data }) => {
 
       <ScaleInGroup
         delay={0.2}
-        className="lg:mt-16 mt-2 grid grid-cols-1 sm:grid-cols-3 gap-[6px] sm:gap-[6px] lg:w-[70%] justify-items-center"
+        className="lg:mt-16 mt-2 grid grid-cols-1 sm:grid-cols-3 gap-[16px] sm:gap-[6px] lg:w-[70%] justify-items-center"
       >
         {/* Empty placeholder for design spacing */}
         <div
@@ -43,7 +43,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({ data }) => {
           card?.map(({ title, image, description }, i) => (
             <div
               key={i}
-              className=" sm:h-auto min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
+              className=" sm:h-auto lg:min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
               data-scroll
             >
               {image?.url && (

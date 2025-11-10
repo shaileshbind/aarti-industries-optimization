@@ -1,5 +1,10 @@
 import React from "react";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  useMediaQuery,
+} from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
 type MainAccordionProps = {
@@ -19,6 +24,8 @@ export default function MainAccordion({
   title,
   children,
 }: MainAccordionProps) {
+  const isMobile = useMediaQuery("(max-width:820px)");
+
   const styles = {
     "&:before": {
       display: "none",
@@ -27,7 +34,7 @@ export default function MainAccordion({
       margin: 0,
     },
     "& .MuiAccordionSummary-root": {
-      padding: "24px 0",
+      padding: isMobile ? "16px 0 " : "24px 0",
     },
     "& .MuiAccordionDetails-root": {
       paddingLeft: 0,

@@ -140,7 +140,7 @@ const HeroBanner = ({
                 />
               )}
               <div className="absolute inset-0 bg-black/20 z-[1]" />
-              <div className="w-full h-full absolute pt-[150px] z-[3] ">
+              <div className="w-full h-full absolute pt-[64px] lg:pt-[150px] z-[3] ">
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container">
@@ -158,10 +158,13 @@ const HeroBanner = ({
 
                 {/* buttons */}
                 {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
-                  <FadeInRevealBlur delay={0.1} className="flex gap-9 fluid-container">
+                  <FadeInRevealBlur
+                    delay={0.1}
+                    className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-12"
+                  >
                     {secondaryBtnLeftTitle && (
                       <Button
-                        className="mt-12 text-white white-btn-underline"
+                        className="text-white white-btn-underline"
                         title={secondaryBtnLeftTitle}
                         href={secondaryBtnLeftLink || "#"}
                         secondary
@@ -170,7 +173,7 @@ const HeroBanner = ({
 
                     {secondaryBtnRightTitle && (
                       <Button
-                        className="mt-12 text-white white-btn-underline"
+                        className="text-white white-btn-underline"
                         title={secondaryBtnRightTitle}
                         href={secondaryBtnRightLink || "#"}
                         secondary
