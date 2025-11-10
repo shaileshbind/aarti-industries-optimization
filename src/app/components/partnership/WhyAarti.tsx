@@ -101,7 +101,7 @@ export default function WhyAarti() {
 
         return nextIndex;
       });
-    }, 500000000);
+    }, 5000);
   };
 
   useEffect(() => {

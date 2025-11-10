@@ -15,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface StickyImageProps {
   stickyImageRef?: RefObject<HTMLDivElement>;
+  className?: string;
 }
 
 export default function ParallaxCardSection() {
@@ -280,7 +281,7 @@ export default function ParallaxCardSection() {
       {/* Top Line */}
       <div
         ref={topLineRef}
-        className="mx-auto h-[64px] md:h-[60px] lg:h-[120px] w-[1px]"
+        className="mx-auto h-[64px] md:h-[60px] lg:h-[120px] w-[2px]"
       >
         <Image src="/images/home/line.svg" alt="line" width={1} height={120} />
       </div>
@@ -381,9 +382,7 @@ export default function ParallaxCardSection() {
               formats
             </p>
 
-            <div className="block lg:hidden">
-              <StickyImage />
-            </div>
+            <StickyImage className="block lg:hidden" />
           </FadeInReveal>
 
           <FadeInReveal className="pt-6 xl:pt-18">
@@ -432,18 +431,22 @@ export default function ParallaxCardSection() {
         </div>
 
         {/* Sticky Image */}
-        <div className="hidden lg:block">
-          <StickyImage stickyImageRef={stickyImageRef} />
-        </div>
+        <StickyImage
+          stickyImageRef={stickyImageRef}
+          className="hidden lg:block"
+        />
       </div>
     </div>
   );
 }
 
-const StickyImage: React.FC<StickyImageProps> = ({ stickyImageRef }) => {
+const StickyImage: React.FC<StickyImageProps> = ({
+  stickyImageRef,
+  className,
+}) => {
   return (
-    <div className="lg:pr-0 mt-6 lg:mt-0 ">
-      <div className="order-1 lg:order-2  h-[317px] lg:h-[640px] w-full overflow-hidden relative lg:sticky lg:top-[100px]">
+    <div className={`lg:pr-0 mt-6 lg:mt-0 ${className}`}>
+      <div className="order-1 lg:order-2 h-[317px] lg:h-[640px] w-full overflow-hidden relative lg:sticky lg:top-[100px]">
         <div
           ref={stickyImageRef}
           className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-0`}
@@ -452,7 +455,7 @@ const StickyImage: React.FC<StickyImageProps> = ({ stickyImageRef }) => {
             src={"/images/partnership/stickyBanner.png"}
             alt={"banner"}
             fill
-            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] "
+            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]"
           />
 
           <Image
