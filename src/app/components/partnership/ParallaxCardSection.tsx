@@ -2,7 +2,7 @@
 import React, { useRef, useLayoutEffect, useState, RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FadeInReveal, WordReveal } from "../ScrollReveal";
+import { FadeInReveal } from "../ScrollReveal";
 import { BodyText2, H3, SubH1 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import Image from "next/image";
@@ -100,8 +100,11 @@ export default function ParallaxCardSection({
             is1024: "(max-width: 1024px)",
           },
           (context) => {
-            const { isDesktop, isMidScreen, is1024 } =
-              context.conditions as any;
+            const { isDesktop, isMidScreen, is1024 } = context.conditions as {
+              isDesktop: boolean;
+              isMidScreen: boolean;
+              is1024: boolean;
+            };
 
             // Set responsive scale & x-offset
             const scaleValue = isDesktop
