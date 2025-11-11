@@ -14,6 +14,7 @@ export type CDMOBannerProps = {
 export type CDMOPartnerProps = {
   data: {
     description: string;
+    title?: string;
     card: {
       title: string;
       image: ImageProps;
@@ -80,6 +81,6 @@ export type CDMOSafegreenProps = {
 export type CDMOExpProps = {
   data: {
     title: string;
-    ctaButton: ButtonProps[]
+    ctaButton: ButtonProps[];
   }[];
 };
