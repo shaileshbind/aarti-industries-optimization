@@ -13,84 +13,44 @@ import WorksWithPartners from "../components/partnership/WorksWithPartners";
 export const dynamic = "force-dynamic";
 
 const Page = async () => {
-  const data = await getPageData("/pages/by-slug/cdmo");
+  const data = await getPageData("/pages/by-slug/partnership");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
 
-  const cardData = {
-    id: 1,
-    title: "Why Global Companies Trust AIL",
-    description:
-      "Partnering with AIL means gaining more than a supplier; you gain a strategic ally who understands the complexity of speciality chemicals and global markets.",
-    card: [
-      {
-        id: 281,
-        title: "Reduce Risk",
-        description: "Proven EHS, Responsible Care certified, EcoVadis Gold.",
-        image: {
-          url: "https://d2sslj1veyp2s3.cloudfront.net/fi_1320521_70628892db.png",
-          alternativeText: "Reduce Risk",
-        },
-      },
-      {
-        id: 282,
-        title: "Scale With Confidence",
-        description: "Multi-location plants, flexible MPP capacity.",
-        image: {
-          url: "https://d2sslj1veyp2s3.cloudfront.net/development_2_37ccefdad0.png",
-          alternativeText: "Scale With Confidence",
-        },
-      },
-      {
-        id: 283,
-        title: "Accelerate Innovation",
-        description: "Deep R&D, pilot-to-commercial scale-up.",
-        image: {
-          url: "https://d2sslj1veyp2s3.cloudfront.net/fi_11538824_d6548e7961.png",
-          alternativeText: "Accelerate Innovation",
-        },
-      },
-      {
-        id: 284,
-        title: "Secure Supply Chains",
-        description: "Long-term sourcing partnerships for critical RMs.",
-        image: {
-          url: "https://d2sslj1veyp2s3.cloudfront.net/fi_98741_1caa547923.png",
-          alternativeText: "Secure Supply Chains",
-        },
-      },
-      {
-        id: 285,
-        title: "Global Trust",
-        description: "400+ customers, 60+ countries, 10+ year relationships.",
-        image: {
-          url: "https://d2sslj1veyp2s3.cloudfront.net/fi_98741_1caa547923.png",
-          alternativeText: "Global Trust",
-        },
-      },
-    ],
-  };
-
-  const { section_five } = data;
+  const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+    section_five,
+    section_six,
+    section_seven,
+    section_eight,
+  } = data;
 
   return (
     <div>
-      <PartnershipBanner />
+      {section_one && <PartnershipBanner data={section_one} />}
 
-      <ParallaxCardSection />
+      <ParallaxCardSection
+        section_two={section_two}
+        section_three={section_three}
+      />
 
-      {cardData && <GridCardsContainer data={cardData} />}
+      {section_four && <GridCardsContainer data={section_four} />}
 
-      <WhyAarti />
+      {section_five && <WhyAarti data={section_five} />}
 
-      <WorksWithPartners />
+      {section_six && <WorksWithPartners data={section_six} />}
 
-      {section_five && <CardsSlider data={section_five} />}
+      {section_seven && <CardsSlider data={section_seven} />}
 
-      {<GloballyCertified itemsData={globallyCertifiedData} />}
+      {globallyCertifiedData && (
+        <GloballyCertified itemsData={globallyCertifiedData} />
+      )}
 
-      {<PartneshipExplore />}
+      {section_eight && <PartneshipExplore data={section_eight} />}
     </div>
   );
 };

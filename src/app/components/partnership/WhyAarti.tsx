@@ -4,58 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
+import { WhyAartiProps } from "@/app/types/partnership.type";
 
 interface LayoutImageProps {
   src: string;
   imageFade?: boolean;
 }
 
-export default function WhyAarti() {
-  const accordionData = [
-    {
-      title: "India's Edge",
-      description:
-        "Use these as icons: 3rd largest economy (GDP, PPP), 6th largest chemical market globally, $1 trillion chemical industry projected by 2030, Skilled workforce and cost-competitive ecosystem.",
-      image: {
-        url: "/images/partnership/whyAartiBanner.png",
-        alternativeText: "banner",
-      },
-      list: [
-        {
-          title:
-            "India offers cost-competitive manufacturing with global scale.",
-        },
-        {
-          title:
-            "Proximity to growing end-markets in Asia, Europe, and the US.",
-        },
-        {
-          title: "Strong policy support for speciality chemical manufacturing.",
-        },
-      ],
-    },
-    {
-      title: "AIL's Innovation Advantage",
-      description:
-        "Manufacturing Partnerships (Contract Manufacturing) allow AIL and its partners to co-invest in infrastructure, technologies or the new product, aligning capabilities to unlock innovation and market expansion.",
-      image: {
-        url: "/images/partnership/stickyBanner.png",
-        alternativeText: "banner",
-      },
-      list: [
-        {
-          title: "Shared ownership, governance, and operational synergies",
-        },
-        {
-          title: "Shared ownership, governance, and operational synergies",
-        },
-      ],
-    },
-  ];
+export default function WhyAarti({ data }: WhyAartiProps) {
+  const { title, content } = data;
 
   const [expanded, setExpanded] = useState<number>(0);
   const [activeImage, setactiveImage] = useState<string>(
-    accordionData[0]?.image?.url
+    content[0]?.image?.url
   );
   const [progress, setProgress] = useState<boolean>(false);
   const [imageFade, setImageFade] = useState<boolean>(true);
@@ -67,7 +28,7 @@ export default function WhyAarti() {
     setImageFade(false);
 
     setTimeout(() => {
-      setactiveImage(accordionData?.[index]?.image?.url);
+      setactiveImage(content?.[index]?.image?.url);
       setImageFade(true);
     }, 300);
 
@@ -85,13 +46,13 @@ export default function WhyAarti() {
   const startAutoRotation = () => {
     intervalRef.current = setInterval(() => {
       setExpanded((prevExpanded) => {
-        const nextIndex = (prevExpanded + 1) % accordionData.length;
+        const nextIndex = (prevExpanded + 1) % content.length;
 
         // Fade out image
         setImageFade(false);
 
         setTimeout(() => {
-          setactiveImage(accordionData[nextIndex]?.image?.url);
+          setactiveImage(content[nextIndex]?.image?.url);
           setImageFade(true);
         }, 300);
 
@@ -124,59 +85,78 @@ export default function WhyAarti() {
       </div>
 
       <div className="xl:w-[80%] relative">
-        <H2>Why India. Why Aarti Industries.</H2>
+        {title && <H2>{title}</H2>}
 
-        <div className="pt-10 xl:pt-[86px]">
-          {accordionData?.map((item, index) => (
-            <div key={`accordion-${index}`} className="relative">
-              <MainAccordion
-                expanded={expanded === index}
-                showIcon={isMobile ? true : false}
-                onChange={() => handleAccordion(index)}
-                title={
-                  <h2
-                    className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
-                      expanded === index && "opacity-100"
-                    }`}
-                  >
-                    {item?.title}
-                  </h2>
-                }
-              >
-                <div>
-                  {/* Mobile */}
-                  <div className="block lg:hidden mb-4">
-                    <LayoutImage src={item?.image?.url} imageFade={imageFade} />
-                  </div>
-
-                  <BodyText2 className="pb-4 ">{item?.description}</BodyText2>
-
-                  <div className="flex flex-col gap-2">
-                    {item?.list?.map((listItem, listIndex) => (
-                      <div key={"list_" + listIndex} className="flex gap-2">
-                        <Image
-                          src={"/images/star-orange.svg"}
-                          alt="banner"
-                          width={20}
-                          height={20}
+        {content?.length > 0 && (
+          <div className="pt-10 xl:pt-[86px]">
+            {content?.map((item, index) => (
+              <div key={`accordion-${index}`} className="relative">
+                <MainAccordion
+                  expanded={expanded === index}
+                  showIcon={isMobile ? true : false}
+                  onChange={() => handleAccordion(index)}
+                  title={
+                    <h2
+                      className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
+                        expanded === index && "opacity-100"
+                      }`}
+                    >
+                      {item?.title}
+                    </h2>
+                  }
+                >
+                  <div>
+                    {/* Mobile */}
+                    {item?.mobImage?.url && (
+                      <div className="block lg:hidden mb-4">
+                        <LayoutImage
+                          src={item?.mobImage?.url}
+                          imageFade={imageFade}
                         />
-                        <BodyText2>{listItem?.title}</BodyText2>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </MainAccordion>
+                    )}
 
-              {expanded === index && (
-                <div
-                  className={`h-[2px] bg-[#DC4C03] absolute bottom-0 transition-all duration-[5000ms] ease-linear ${
-                    progress ? "w-full" : "w-0"
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+                    {item?.description && (
+                      <BodyText2 className="pb-4 ">
+                        {item?.description}
+                      </BodyText2>
+                    )}
+
+                    {item?.BulletPoints?.length > 0 && (
+                      <div className="flex flex-col gap-2">
+                        {item?.BulletPoints?.map(
+                          (listItem, listIndex) =>
+                            listItem?.title && (
+                              <div
+                                key={"list_" + listIndex}
+                                className="flex gap-2"
+                              >
+                                <Image
+                                  src={"/images/star-orange.svg"}
+                                  alt="banner"
+                                  width={20}
+                                  height={20}
+                                />
+                                <BodyText2>{listItem?.title}</BodyText2>
+                              </div>
+                            )
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </MainAccordion>
+
+                {expanded === index && (
+                  <div
+                    className={`h-[2px] bg-[#DC4C03] absolute bottom-0 transition-all duration-[5000ms] ease-linear ${
+                      progress ? "w-full" : "w-0"
+                    }`}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

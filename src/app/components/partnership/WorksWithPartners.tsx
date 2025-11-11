@@ -2,34 +2,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
+import { WorksWithPartnersProps } from "@/app/types/partnership.type";
 
-export default function WorksWithPartners() {
+export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
+  const { sectionTitle, card } = data;
+
   const [activeCard, setActiveCard] = useState<number>(0);
   const [mobileProgress, setMobileProgress] = useState<number[]>([0, 0, 0, 0]);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const cardData = [
-    {
-      title: "R&D",
-      description:
-        "Define opportunities together and then turn your concept into a feasible roadmap.",
-    },
-    {
-      title: "Scaleup",
-      description:
-        "Test ideas on a smaller scale to minimize risk, learn effectively, and ensure success before scaling up.",
-    },
-    {
-      title: "Manufacturing",
-      description:
-        "Ensure consistent production processes that maintain quality, efficiency, and reliability as you scale.",
-    },
-    {
-      title: "Optimisation",
-      description:
-        "Ongoing optimisation to enhance efficiency, reduce costs, and improve sustainability.",
-    },
-  ];
 
   // Desktop auto-rotation only
   useEffect(() => {
@@ -37,11 +17,11 @@ export default function WorksWithPartners() {
     if (!isDesktop) return;
 
     const interval = setInterval(() => {
-      setActiveCard((prev) => (prev + 1) % cardData.length);
+      setActiveCard((prev) => (prev + 1) % card?.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [cardData.length]);
+  }, [card.length]);
 
   // Mobile scroll-based progress - SEQUENTIAL
   useEffect(() => {
@@ -49,11 +29,10 @@ export default function WorksWithPartners() {
       const newProgress = [...mobileProgress];
       const windowHeight = window.innerHeight;
 
-      cardRefs.current.forEach((card, index) => {
-        if (card && index < cardData.length - 1) {
-          const rect = card.getBoundingClientRect();
+      cardRefs.current.forEach((item, index) => {
+        if (item && index < card?.length - 1) {
+          const rect = item.getBoundingClientRect();
           const cardTop = rect.top;
-          const cardHeight = rect.height;
 
           // Define trigger zone for this card
           const startTrigger = windowHeight * 0.7; // Start when card is 70% down viewport
@@ -97,112 +76,126 @@ export default function WorksWithPartners() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [mobileProgress, cardData.length]);
+  }, [mobileProgress, card.length]);
 
   return (
     <div className="fluid-container">
-      <H2>How AIL works with Partners</H2>
+      {sectionTitle && <H2>{sectionTitle}</H2>}
 
       {/* Desktop */}
-      <div className="mt-[50px] hidden grid-cols-4 lg:grid">
-        {cardData?.map((item, index) => (
-          <div key={"card_" + index} className="relative pr-[50px]">
-            {index !== cardData?.length - 1 && (
-              <>
-                {/* Background progress line */}
-                <div className="top-progress absolute left-0 top-[10px] h-[1px] w-full bg-[#E1E1E1]" />
+      {card?.length > 0 && (
+        <div className="mt-[50px] hidden grid-cols-4 lg:grid">
+          {card?.map((item, index) => (
+            <div key={"card_" + index} className="relative pr-[50px]">
+              {index !== card?.length - 1 && (
+                <>
+                  {/* Background progress line */}
+                  <div className="top-progress absolute left-0 top-[10px] h-[1px] w-full bg-[#E1E1E1]" />
 
-                {/* Animated progress bar */}
-                {activeCard === index && (
-                  <div
-                    key={`progress-${activeCard}`}
-                    className="absolute left-4 top-[10px] h-[2px] bg-[#DC4C03]"
-                    style={{
-                      animation: "fillProgress 5s linear forwards",
-                    }}
-                  />
-                )}
+                  {/* Animated progress bar */}
+                  {activeCard === index && (
+                    <div
+                      key={`progress-${activeCard}`}
+                      className="absolute left-4 top-[10px] h-[2px] bg-[#DC4C03]"
+                      style={{
+                        animation: "fillProgress 5s linear forwards",
+                      }}
+                    />
+                  )}
 
-                {/* Completed progress bar for previous cards */}
-                {activeCard > index && (
-                  <div className="absolute left-4 top-[10px] h-[2px] w-full bg-[#DC4C03]" />
-                )}
-              </>
-            )}
+                  {/* Completed progress bar for previous card */}
+                  {activeCard > index && (
+                    <div className="absolute left-4 top-[10px] h-[2px] w-full bg-[#DC4C03]" />
+                  )}
+                </>
+              )}
 
-            <Image
-              src={"/images/star-orange.svg"}
-              alt="banner"
-              width={20}
-              height={20}
-              className="relative z-[1]"
-            />
-
-            <div
-              className={`transition-all duration-500 ${
-                activeCard >= index ? "opacity-100" : "opacity-40"
-              }`}
-            >
-              <SubH2 className="pb-2 pt-7">{item?.title}</SubH2>
-              <p className="text-base text-[#4C5861]">{item?.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Mobile */}
-      <div className="mt-9 lg:hidden">
-        {cardData?.map((item, index) => (
-          <div
-            key={"card_" + index}
-            ref={(el) => {
-              if (el) {
-                cardRefs.current[index] = el;
-              }
-            }}
-            className={`relative flex items-start gap-7  ${
-              index === cardData?.length - 1 ? "pb-0" : "pb-10"
-            }`}
-          >
-            {/* Vertical line container */}
-            {index !== cardData?.length - 1 && (
-              <div className="absolute left-[10px] top-4 h-full w-[2px]">
-                {/* Background line */}
-                <div className="absolute h-full w-full bg-[#E1E1E1]" />
-
-                {/* Scroll-based progress line */}
-                <div
-                  className="absolute w-full bg-[#DC4C03] transition-all duration-150 ease-out"
-                  style={{
-                    height: `${mobileProgress[index]}%`,
-                  }}
-                />
-              </div>
-            )}
-
-            <div className="relative z-[1] h-6 w-6">
               <Image
                 src={"/images/star-orange.svg"}
                 alt="banner"
-                width={30}
-                height={30}
-                className="h-full w-full"
+                width={20}
+                height={20}
+                className="relative z-[1]"
               />
-            </div>
 
-            <div
-              className="w-[90%] transition-opacity duration-300"
-              style={{
-                opacity:
-                  index === 0 || mobileProgress[index - 1] >= 100 ? 1 : 0.4,
-              }}
-            >
-              <SubH2 className="pb-2">{item?.title}</SubH2>
-              <p className="text-sm text-[#4C5861]">{item?.description}</p>
+              <div
+                className={`transition-all duration-500 ${
+                  activeCard >= index ? "opacity-100" : "opacity-40"
+                }`}
+              >
+                {item?.title && (
+                  <SubH2 className="pb-2 pt-7">{item?.title}</SubH2>
+                )}
+
+                {item?.description && (
+                  <p className="text-base text-[#4C5861]">
+                    {item?.description}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {/* Mobile */}
+      {card?.length > 0 && (
+        <div className="mt-9 lg:hidden">
+          {card?.map((item, index) => (
+            <div
+              key={"card_" + index}
+              ref={(el) => {
+                if (el) {
+                  cardRefs.current[index] = el;
+                }
+              }}
+              className={`relative flex items-start gap-7  ${
+                index === card?.length - 1 ? "pb-0" : "pb-10"
+              }`}
+            >
+              {/* Vertical line container */}
+              {index !== card?.length - 1 && (
+                <div className="absolute left-[10px] top-4 h-full w-[2px]">
+                  {/* Background line */}
+                  <div className="absolute h-full w-full bg-[#E1E1E1]" />
+
+                  {/* Scroll-based progress line */}
+                  <div
+                    className="absolute w-full bg-[#DC4C03] transition-all duration-150 ease-out"
+                    style={{
+                      height: `${mobileProgress[index]}%`,
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="relative z-[1] h-6 w-6">
+                <Image
+                  src={"/images/star-orange.svg"}
+                  alt="banner"
+                  width={30}
+                  height={30}
+                  className="h-full w-full"
+                />
+              </div>
+
+              <div
+                className="w-[90%] transition-opacity duration-300"
+                style={{
+                  opacity:
+                    index === 0 || mobileProgress[index - 1] >= 100 ? 1 : 0.4,
+                }}
+              >
+                {item?.title && <SubH2 className="pb-2">{item?.title}</SubH2>}
+
+                {item?.description && (
+                  <p className="text-sm text-[#4C5861]">{item?.description}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fillProgress {
