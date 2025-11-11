@@ -14,6 +14,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
+import Button from "../Button";
 
 type FormValues = {
   fullName: string;
@@ -38,6 +39,7 @@ export default function MSDSPopup({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -50,7 +52,49 @@ export default function MSDSPopup({
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Form Data:", data, document);
+    const formattedData = {
+      full_name: data.fullName,
+      email: data.email,
+      mobile: data.phone,
+      country: data.country,
+      message: data.message,
+    };
+
+    try {
+      const response = await fetch("/api/submitPopupData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: "/standard-form/submit",
+          data: formattedData,
+        }),
+      });
+
+      if (response.ok) {
+        // const result = await response.json();
+        // console.log("Success:", result);
+        setshowMSDSPopup(false);
+        reset();
+        if (document) {
+          const link = window.document.createElement("a");
+          link.href = document;
+          link.download = "document.pdf";
+          link.target = "_blank";
+          window.document.body.appendChild(link);
+          link.click();
+          window.document.body.removeChild(link);
+        }
+      } else {
+        const error = await response.json();
+        setshowMSDSPopup(false);
+        console.error("Error:", error);
+      }
+    } catch (error) {
+      setshowMSDSPopup(false);
+      console.error("Request failed:", error);
+    }
   };
 
   return (
@@ -171,16 +215,7 @@ export default function MSDSPopup({
               ></textarea>
             </div>
 
-            <button
-              type="submit"
-              className="py-[14px] w-full md:w-[124px] rounded-[6px] text-[#FFFFFF] mt-6 cursor-pointer"
-              style={{
-                background:
-                  "linear-gradient(201deg, #FA8129 -42.93%, #DC4C03 95.27%)",
-              }}
-            >
-              Submit
-            </button>
+            <Button title={"Submit"} className="mt-6" />
           </form>
         </div>
       </Popup>

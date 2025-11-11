@@ -19,7 +19,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
   return (
     <div
       className={clsxN(
-        "button-subtle-scale duration-800 flex items-center justify-between border-b-2 p-4 border-transparent min-w-full w-full md:w-auto",
+        "button-subtle-scale duration-800 flex items-center justify-between border-b-2 py-4 px-2 lg:px-4 border-transparent min-w-full w-full md:w-auto",
         isHovered
           ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `
           : `${secondary ? " border-gray-200" : "bg-white border-gray-200"} `
@@ -32,7 +32,7 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
         {title && (
           <BodyText1
             className={clsxN(
-              "text-lg font-medium  ",
+              "text-sm lg:text-lg font-medium  ",
               isHovered ? "text-white" : "text-blue-200"
             )}
           >
@@ -45,13 +45,24 @@ const ProductList = ({ title, link, pdfLink, secondary }: ProductListProps) => {
             href={pdfLink}
             download
             className={clsxN(
-              "flex items-center space-x-1 text-sm md:hidden mt-1 ",
+              "flex items-center space-x-1 text-xs md:hidden mt-1 ",
               isHovered ? "text-white" : "text-gray-800"
             )}
             onClick={(e) => e.stopPropagation()}
             target="_blank"
           >
             {"View TDS"}
+
+            <Image
+              src={
+                isHovered
+                  ? "/images/download-icon-white.svg"
+                  : "/images/download-icon-grey.svg"
+              }
+              alt="download icon"
+              width={20}
+              height={20}
+            />
           </a>
         )}
       </div>

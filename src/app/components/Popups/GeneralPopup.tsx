@@ -13,6 +13,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
+import Button from "../Button";
 
 type FormValues = {
   fullName: string;
@@ -27,13 +28,13 @@ type FormValues = {
 };
 
 type GeneralPopupProps = {
-  setshowNormalPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setshowGeneralPopup: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   document?: string;
 };
 
 export default function GeneralPopup({
-  setshowNormalPopup,
+  setshowGeneralPopup,
   isOpen,
   document,
 }: GeneralPopupProps) {
@@ -71,18 +72,21 @@ export default function GeneralPopup({
     };
 
     try {
-      const response = await fetch("/api/submitGeneralPopupData", {
+      const response = await fetch("/api/submitPopupData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formattedData),
+        body: JSON.stringify({
+          url: "/msds-form/submit",
+          data: formattedData,
+        }),
       });
 
       if (response.ok) {
         // const result = await response.json();
         // console.log("Success:", result);
-        setshowNormalPopup(false);
+        setshowGeneralPopup(false);
         reset();
         if (document) {
           const link = window.document.createElement("a");
@@ -95,18 +99,18 @@ export default function GeneralPopup({
         }
       } else {
         const error = await response.json();
-        setshowNormalPopup(false);
+        setshowGeneralPopup(false);
         console.error("Error:", error);
       }
     } catch (error) {
-      setshowNormalPopup(false);
+      setshowGeneralPopup(false);
       console.error("Request failed:", error);
     }
   };
 
   return (
     <div>
-      <Popup onOverlayClick={() => setshowNormalPopup(false)} isOpen={isOpen}>
+      <Popup onOverlayClick={() => setshowGeneralPopup(false)} isOpen={isOpen}>
         <div className="w-full">
           <div>
             <p className="text-xl text-[#002F50]">Recipient Information</p>
@@ -305,16 +309,7 @@ export default function GeneralPopup({
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="py-[14px] w-full md:w-[124px] rounded-[6px] text-[#FFFFFF] mt-6 cursor-pointer"
-              style={{
-                background:
-                  "linear-gradient(201deg, #FA8129 -42.93%, #DC4C03 95.27%)",
-              }}
-            >
-              Submit
-            </button>
+            <Button title={"Submit"} className="mt-6" />
           </form>
         </div>
       </Popup>
