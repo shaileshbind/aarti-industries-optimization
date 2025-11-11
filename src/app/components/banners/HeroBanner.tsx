@@ -17,6 +17,10 @@ type HeroBannerProps = {
   mobAlt?: string;
   alt?: string;
   fullBg?: boolean;
+  secondaryBtnLeftTitle?: string;
+  secondaryBtnLeftLink?: string;
+  secondaryBtnRightTitle?: string;
+  secondaryBtnRightLink?: string;
 };
 const HeroBanner = ({
   title,
@@ -29,6 +33,10 @@ const HeroBanner = ({
   mobAlt,
   alt,
   fullBg,
+  secondaryBtnLeftTitle,
+  secondaryBtnLeftLink,
+  secondaryBtnRightTitle,
+  secondaryBtnRightLink,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -132,7 +140,7 @@ const HeroBanner = ({
                 />
               )}
               <div className="absolute inset-0 bg-black/20 z-[1]" />
-              <div className="w-full h-full absolute pt-[150px] z-[3] ">
+              <div className="w-full h-full absolute pt-[64px] lg:pt-[150px] z-[3] ">
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container">
@@ -145,6 +153,32 @@ const HeroBanner = ({
                     <H2 className="text-white mt-[12px] max-w-[260px] lg:max-w-[560px] fluid-container">
                       {title}
                     </H2>
+                  </FadeInRevealBlur>
+                )}
+
+                {/* buttons */}
+                {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
+                  <FadeInRevealBlur
+                    delay={0.1}
+                    className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-12"
+                  >
+                    {secondaryBtnLeftTitle && (
+                      <Button
+                        className="text-white white-btn-underline"
+                        title={secondaryBtnLeftTitle}
+                        href={secondaryBtnLeftLink || "#"}
+                        secondary
+                      />
+                    )}
+
+                    {secondaryBtnRightTitle && (
+                      <Button
+                        className="text-white white-btn-underline"
+                        title={secondaryBtnRightTitle}
+                        href={secondaryBtnRightLink || "#"}
+                        secondary
+                      />
+                    )}
                   </FadeInRevealBlur>
                 )}
               </div>

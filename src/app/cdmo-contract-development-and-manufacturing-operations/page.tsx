@@ -1,14 +1,14 @@
 import React from "react";
 import CDMOBanner from "../components/cdmo/CDMOBanner";
-import CDMOPartner from "../components/cdmo/CDMOPartner";
 import CDMODriving from "../components/cdmo/CDMODriving";
 import CDMOE2E from "../components/cdmo/CDMOE2E";
-import CDMOSplchem from "../components/cdmo/CDMOSplchem";
 import CDMOSafegreen from "../components/cdmo/CDMOSafegreen";
 import GloballyCertified from "../components/GloballyCertified";
 import CDMOExp from "../components/cdmo/CDMOExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
+import CardsSlider from "../components/CardsSlider";
+import GridCardsContainer from "../components/GridCardsContainer";
 
 export const dynamic = "force-dynamic";
 
@@ -33,13 +33,13 @@ const Page = async () => {
     <div>
       {section_one && <CDMOBanner data={section_one} />}
 
-      {section_two && <CDMOPartner data={section_two} />}
+      {section_two && <GridCardsContainer data={section_two} />}
 
       {section_three && <CDMODriving data={section_three} />}
 
       {section_four && <CDMOE2E data={section_four} />}
 
-      {section_five && <CDMOSplchem data={section_five} />}
+      {section_five && <CardsSlider data={section_five} />}
 
       {section_six && <CDMOSafegreen data={section_six} />}
 
