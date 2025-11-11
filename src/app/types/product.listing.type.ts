@@ -67,7 +67,7 @@ interface CatagoriesData {
 }
 
 export interface ProductFilterProps {
-  catagoriesData: any[]; // Update with proper type
+  catagoriesData: CatagoriesData[]; // Update with proper type
   searchQuery?: string;
   activeTab: string;
   setActiveTab: (tab: string) => void;

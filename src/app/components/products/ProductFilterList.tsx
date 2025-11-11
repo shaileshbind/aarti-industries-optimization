@@ -75,10 +75,10 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       }
 
       // Navigate with new params
-      const newUrl = params.toString()
-        ? `${pathname}?${params.toString()}`
-        : pathname;
-      router.push(newUrl, { scroll: false });
+      // const newUrl = params.toString()
+      //   ? `${pathname}?${params.toString()}`
+      //   : pathname;
+      // router.push(newUrl, { scroll: false });
     },
     [pathname, router, searchParams]
   );
