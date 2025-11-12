@@ -511,3 +511,37 @@ body {
     margin-top: 200px !important;
   }
 }
+
+.potential-accordion:nth-child(3)::after {
+  content: "";
+  position: absolute;
+  right: 6%;
+  bottom: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url("/images/star.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translateY(50%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.potential-accordion:nth-child(3):before {
+  content: "";
+  position: absolute;
+  right: 6%;
+  top: -32px;
+  width: 32px;
+  height: 32px;
+  background-image: url("/images/star.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translateY(50%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  pointer-events: none;
+}

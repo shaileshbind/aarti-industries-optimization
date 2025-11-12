@@ -7,6 +7,7 @@ import ContactBanner from "../components/ContactBanner";
 import ImageGallery from "../components/ImageGallery";
 import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
 import ComprehensiveCare from "../components/thrive-at-aarti/ComprehensiveCare";
+import InvestingInPotential from "../components/thrive-at-aarti/InvestingInPotential";
 
 export const dynamic = "force-dynamic";
 
@@ -34,13 +35,19 @@ const page = async () => {
     <div>
       {section_one && <RDHeroBanner data={section_one} />}
 
-      {section_three && <ScrollableCardWithImage data={section_three} />}
-
-      <ComprehensiveCare />
-
-      {data2?.sectionSix && (
-        <ImageGallery imgArr={data2?.sectionSeven} />
+      {section_three && (
+        <div className="py-[112px]">
+          <ScrollableCardWithImage data={section_three} />
+        </div>
       )}
+
+      <InvestingInPotential />
+
+      <div className="pt-[120px] pb-5">
+        <ComprehensiveCare />
+      </div>
+
+      {data2?.sectionSix && <ImageGallery imgArr={data2?.sectionSeven} />}
 
       {section_nine && (
         <GloballyCertified

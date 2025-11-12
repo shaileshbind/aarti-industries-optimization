@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   useMediaQuery,
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
@@ -14,6 +15,7 @@ type MainAccordionProps = {
   showIcon?: boolean;
   title?: React.ReactNode;
   children: React.ReactNode;
+  borderBottom?: string;
 };
 
 export default function MainAccordion({
@@ -23,6 +25,7 @@ export default function MainAccordion({
   showIcon = true,
   title,
   children,
+  borderBottom,
 }: MainAccordionProps) {
   const isMobile = useMediaQuery("(max-width:820px)");
 
@@ -42,7 +45,8 @@ export default function MainAccordion({
     },
     boxShadow: "none",
     border: "none",
-    borderBottom: "1px solid #D9D9D9",
+    borderBottom: borderBottom || "1px solid #D9D9D9",
+    background: "transparent",
   };
 
   return (
