@@ -11,7 +11,7 @@ import { FosteringSafeProps } from "@/app/types/home.type";
 const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
   const { title, description, ctaButton } = data;
   const { images } = imgArr;
-
+console.log("imgArr", imgArr);
   interface ImageConfig {
     marginTop: string;
     height: string;

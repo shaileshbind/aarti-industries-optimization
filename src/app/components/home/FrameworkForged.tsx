@@ -113,7 +113,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
       )}
 
       <div className={clsx(`relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${layout === "imgLeftContentRight" ? "lg:grid-cols-[45%_55%]" : "lg:grid-cols-[45%_55%]"}`)}>
-        <div className={clsx(`${layout === "imgLeftContentRight" ? " order-2 lg:order-2 pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
+        <div className={clsx(`${layout === "imgLeftContentRight" ? " order-2 lg:order-2 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
           {title && (
             <H2 className="hidden lg:block text-blue-200 max-w-[460px]">
               {title}

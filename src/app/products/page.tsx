@@ -12,7 +12,7 @@ export default async function Product() {
     section_one,
     product_categories,
   } = data;
-
+console.log(data);
   return (
     <>
       {/* <Banner data={section_one} />
