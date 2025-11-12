@@ -182,6 +182,12 @@ body {
   transition-delay: 0.3s;
 }
 
+/* Banner Button */
+.white-btn-underline::before,
+.white-btn-underline::after {
+  background-color: #ffffff !important;
+}
+
 /* Blip Border */
 .blip-border {
   border: 1px solid transparent;
@@ -435,7 +441,10 @@ body {
   margin-top: 30px;
   margin-inline: 20px !important;
 }
-.swiper-button-disabled { opacity: 0.5 !important; pointer-events: none !important;}
+.swiper-button-disabled {
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+}
 
 /* Phone Input */
 .phone_input .search-box {
@@ -464,6 +473,11 @@ body {
   background-color: #ffffff;
 }
 
+/* Accordion */
+#accordion .MuiAccordionSummary-content {
+  margin: 0 !important;
+}
+
 /* Popup */
 .popup_container::-webkit-scrollbar {
   width: 4px;
@@ -478,8 +492,22 @@ body {
   background: #dc4c03;
   border-radius: 20px;
 }
+
+.active-card {
+  animation: toggleWidth 5s ease-out;
+}
+
+@keyframes toggleWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 @media (max-width: 380px) {
-  .topMarginCsm{
+  .topMarginCsm {
     margin-top: 200px !important;
   }
 }

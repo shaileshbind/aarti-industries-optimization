@@ -3,33 +3,29 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const { url, data } = body;
 
-    console.log("ssddffggwerdfv", body);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-    const data = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/msds-form/submit`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    );
-
-    if (!data.ok) {
-      const error = await data.json();
+    if (!response.ok) {
+      const error = await response.json();
       return NextResponse.json(
         { error: "API submission failed", details: error },
-        { status: data.status }
+        { status: response.status }
       );
     }
 
-    const result = await data.json();
+    const result = await response.json();
     return NextResponse.json({
       message: "API submission successful",
-      data: result,
+      response: result,
     });
   } catch (error) {
     console.error(error);
