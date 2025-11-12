@@ -7,7 +7,6 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import { ComprehensiveCareProps } from "@/app/types/thrive-at-aarti.type";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
-import { Tags } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 const ComprehensiveCare: React.FC<ComprehensiveCareProps> = () => {
@@ -76,8 +75,8 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = () => {
 
   return (
     <div>
-      <div className="mt-[50px] fluid-container mx-auto relative">
-        <div className="grid grid-cols-2 gap-[80px]">
+      <div className="lg:mt-[50px] fluid-container mx-auto relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[80px]">
           <FadeInRevealBlur>
             <H2 className="max-w-[450px] mb-9">
               {"Comprehensive Care for Every Stage of Your Journey"}
@@ -86,50 +85,51 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = () => {
             <Button title="Join Our Team" />
           </FadeInRevealBlur>
 
-          <div className="flex flex-col gap-[60px]">
-            {cardData?.map((item, index) => (
-              <div
-                key={"card_" + index}
-                ref={(el) => {
-                  if (el) gridRefs.current[index] = el;
-                }}
-              >
-                <div className="flex gap-x-4">
-                  <p className="mt-3 text-[#DC4C03] text-base">{`0${
-                    index + 1
-                  }`}</p>
-                  <div>
-                    {item?.title && (
-                      <SubH1 className="text-blue-200">{item?.title}</SubH1>
-                    )}
+          {cardData?.length > 0 && (
+            <div className="flex flex-col gap-10 lg:gap-[60px]">
+              {cardData?.map((item, index) => (
+                <div
+                  key={"card_" + index}
+                  ref={(el) => {
+                    if (el) gridRefs.current[index] = el;
+                  }}
+                >
+                  <div className="flex gap-x-4">
+                    <p className="mt-0 lg:mt-3 pl-6 text-[#DC4C03] text-base">{`0${
+                      index + 1
+                    }`}</p>
+                    <div>
+                      {item?.title && (
+                        <SubH1 className="text-blue-200">{item?.title}</SubH1>
+                      )}
 
-                    {item?.description && (
-                      <BodyText2 className="text-grey-400 mt-[10px]">
-                        {item?.description}
-                      </BodyText2>
-                    )}
+                      {item?.description && (
+                        <BodyText2 className="text-grey-400 mt-[10px]">
+                          {item?.description}
+                        </BodyText2>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* line & star */}
-        <div className="absolute top-0 left-[7%] translate-x-[-7%] lg:left-[50%] h-full lg:translate-x-[-50%] grid justify-items-center">
+        <div className="absolute top-[33%] md:top-[46%] lg:top-0 left-[4%] md:left-[1%] translate-x-[-7%] lg:left-[50%] h-[70%] md:h-[60%] lg:h-full lg:translate-x-[-50%] grid justify-items-center">
           {/* gray line */}
           <div className="mt-[-12px] h-full w-[1px] bg-grey-100 relative overflow-hidden">
             {/* orange line */}
             <div
               ref={orangeLineRef}
-              className="absolute top-0 w-[2px] bg-orange-500 h-full"
+              className="absolute top-0 lg:top-0 w-[2px] bg-orange-500 h-full"
             />
           </div>
           {/* star image */}
           <div
             ref={starRef}
-            className="absolute top-0 mt-[-15px]"
-            style={{ width: "37px", height: "37px" }}
+            className="absolute top-0 mt-[-15px] w-6 lg:w-9 h-6 lg:h-9"
           >
             <Image
               src="/images/home/star.svg"

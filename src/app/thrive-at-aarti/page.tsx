@@ -36,14 +36,14 @@ const page = async () => {
       {section_one && <RDHeroBanner data={section_one} />}
 
       {section_three && (
-        <div className="py-[112px]">
+        <div className="py-[74px] lg:py-[112px]">
           <ScrollableCardWithImage data={section_three} />
         </div>
       )}
 
       <InvestingInPotential />
 
-      <div className="pt-[120px] pb-5">
+      <div className="pt-[80px] lg:pt-[120px] pb-5">
         <ComprehensiveCare />
       </div>
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import MainAccordion from "../Accordion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -132,7 +133,7 @@ export default function InvestingInPotential() {
 
         {/* Accordion Section */}
         <div className="relative z-[2]">
-          <H2 className="text-white py-[32px] max-w-[449px] fluid-container">
+          <H2 className="text-white py-6 lg:py-[32px] max-w-[449px] fluid-container">
             Investing in Potential, Investing in Excellence
           </H2>
 
@@ -158,14 +159,14 @@ export default function InvestingInPotential() {
                   animateImageTransition(index, direction);
                 }}
                 title={
-                  <SubH2 className="text-white py-2 fluid-container">
-                    <span className="mr-[50px]">{`0${index + 1}`}</span>
+                  <SubH2 className="text-white xl:py-2 fluid-container">
+                    <span className="mr-4 lg:mr-[50px]">{`0${index + 1}`}</span>
                     {item.title}
                   </SubH2>
                 }
               >
-                <div className="flex justify-end -mt-12 pr-40">
-                  <p className="text-white w-[45%] text-base pb-4">
+                <div className="lg:flex justify-end lg:-mt-12 pr-12 xl:pr-40">
+                  <p className="text-white lg:w-[45%] xl:w-1/2 text-sm lg:text-base pb-4 pl-5 lg:pl-0">
                     {item.description}
                   </p>
                 </div>

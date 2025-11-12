@@ -93,7 +93,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                 )}
 
                 <div>
-                  <div className="flex gap-x-[24px]">
+                  <div className="flex items-baseline gap-x-[24px]">
                     <Tags title={`0${index + 1}`} />
                     <div>
                       {items?.title && (
