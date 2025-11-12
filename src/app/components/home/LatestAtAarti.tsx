@@ -14,6 +14,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
+  console.log(data, "data 123");
   const { sectionTitle, card } = data;
   const [active, setActive] = useState<string>(card?.[0]?.post_category?.slug);
   const [activeIndex, setactiveIndex] = useState<number>(0);
@@ -21,7 +22,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
+console.log(card, "card");
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     handleResize();

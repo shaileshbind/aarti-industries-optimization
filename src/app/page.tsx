@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const data = await getPageData("/pages/by-slug/home-page");
-
+console.log(data);
   const {
     sectionOne,
     sectionTwo,
@@ -26,7 +26,7 @@ export default async function Home() {
     sectionNine,
     sectionTen,
   } = data;
-
+console.log("sectionSix", data);
   return (
     <div>
       {sectionOne && <HomeHero data={sectionOne} />}

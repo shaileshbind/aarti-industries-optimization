@@ -572,3 +572,10 @@ body {
     margin-top: 200px !important;
   }
 }
+
+.opactiSlide{
+  opacity: 0.5;
+}
+.opactiSlide.swiper-slide-active{
+  opacity: 1;
+}
