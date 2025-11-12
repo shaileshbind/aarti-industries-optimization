@@ -1,15 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { BodyText1, H2 } from "../Typography2";
-import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
-import { FadeInRevealBlur } from "../ScrollReveal";
 import { FosteringSafeProps } from "@/app/types/home.type";
+import { FadeInRevealBlur } from "./ScrollReveal";
+import { BodyText1, H2 } from "./Typography2";
+import Button from "./Button";
 
-const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
-  const { title, description, ctaButton } = data;
+const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
+  const { title, description, ctaButton } = data ?? {};
   const { images } = imgArr;
 
   interface ImageConfig {
@@ -242,19 +242,19 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
           loop={true}
           modules={[Autoplay, FreeMode]}
           centeredSlides={!isDesktop}
-          breakpoints={
-            {
-              600: {
-                slidesPerView: 2.2,
-              },
-              1024: {
-                slidesPerView: 5,
-              },
-            }
-          }
+          breakpoints={{
+            600: {
+              slidesPerView: 2.2,
+            },
+            1024: {
+              slidesPerView: 5,
+            },
+          }}
           onSwiper={(s) => {
-            const wrapper = s.el.querySelector('.swiper-wrapper') as HTMLElement | null;
-            if (wrapper) wrapper.style.transitionTimingFunction = 'linear';
+            const wrapper = s.el.querySelector(
+              ".swiper-wrapper"
+            ) as HTMLElement | null;
+            if (wrapper) wrapper.style.transitionTimingFunction = "linear";
           }}
         >
           {slidesToRender?.map((slide) => renderSwiperSlide(slide))}
@@ -264,4 +264,4 @@ const FosteringSafe: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
   );
 };
 
-export default FosteringSafe;
+export default ImageGallery;

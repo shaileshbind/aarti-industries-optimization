@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Cta, SubH1 } from "../Typography2";
-import { FadeInReveal } from "../ScrollReveal";
+import { Cta, SubH1 } from "./Typography2";
+import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {

@@ -1,14 +1,12 @@
 import React from "react";
 import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
-import RDInfo from "../components/r-and-d/RDInfo";
-import RDDiverseChem from "../components/r-and-d/RDDiverseChem";
-import RDSafety from "../components/r-and-d/RDSafety";
-import RDAnalyticalExc from "../components/r-and-d/RDAnalyticalExc";
 import GloballyCertified from "../components/GloballyCertified";
-import RDExplore from "../components/r-and-d/RDExplore";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
+import ContactBanner from "../components/ContactBanner";
+import ImageGallery from "../components/ImageGallery";
 import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
+import ComprehensiveCare from "../components/thrive-at-aarti/ComprehensiveCare";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +15,7 @@ const page = async () => {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
+  const data2 = await getPageData("/pages/by-slug/home-page");
 
   const {
     section_one,
@@ -28,22 +27,20 @@ const page = async () => {
     section_seven,
     section_eight,
     section_nine,
-    section_ten
+    section_ten,
   } = data;
 
   return (
     <div>
       {section_one && <RDHeroBanner data={section_one} />}
 
-      {section_two && <RDInfo data={section_two} />}
-
       {section_three && <ScrollableCardWithImage data={section_three} />}
 
-      <RDAnalyticalExc data={section_four} sliderData={section_five} />
+      <ComprehensiveCare />
 
-      <RDDiverseChem data={section_six} data2={section_seven} />
-
-      {section_eight && <RDSafety data={section_eight} />}
+      {data2?.sectionSix && (
+        <ImageGallery imgArr={data2?.sectionSeven} />
+      )}
 
       {section_nine && (
         <GloballyCertified
@@ -52,7 +49,7 @@ const page = async () => {
         />
       )}
 
-      {section_ten && <RDExplore data={section_ten} />}
+      {data2?.sectionTen && <ContactBanner data={data2?.sectionTen} />}
     </div>
   );
 };
