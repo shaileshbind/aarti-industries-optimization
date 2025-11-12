@@ -1,0 +1,267 @@
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { H2 } from "../Typography2";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css/pagination";
+import "swiper/css/grid";
+import { Mousewheel, Pagination, Grid, Navigation } from "swiper/modules";
+import Tabs from "../Tabs";
+// import { LatestAtAartiProps } from "@/app/types/home.type";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import AddressCard from "../cards/AddressCard";
+import { 
+  WhereWeOperateProps, 
+  WhereWeOperateDataItem,
+  AddressCardItem,
+  WhereWeOperateTab 
+} from "@/app/types/contact.type";  
+
+gsap.registerPlugin(ScrollTrigger);
+
+const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
+  // Transform API data to group by regionName and map to AddressCard format
+  const apiData = data || [];
+
+  // Group data by regionName
+  const indiaData: AddressCardItem[] = apiData
+    .filter((item: WhereWeOperateDataItem) => item.regionName === "India")
+    .map((item: WhereWeOperateDataItem) => ({
+      location: item.locationName || "",
+      company: item.companyName || "",
+      address: item.address || "",
+      phone: item.mobileNo || "",
+      url: item.googleMapLink || "",
+      registeredOffice: item.officeLabel === "REGISTERED OFFICE",
+      type: item.officeLabel || "",
+    }));
+
+  const internationalData: AddressCardItem[] = apiData
+    .filter((item: WhereWeOperateDataItem) => item.regionName === "International")
+    .map((item: WhereWeOperateDataItem) => ({
+      location: item.locationName || "",
+      company: item.companyName || "",
+      address: item.address || "",
+      phone: item.mobileNo || "",
+      url: item.googleMapLink || "",
+      registeredOffice: item.officeLabel === "REGISTERED OFFICE",
+      type: item.officeLabel || "",
+    }));
+
+  const card: WhereWeOperateTab[] = [   
+    {
+      id: 1,
+      category: "India",
+      post_category: {
+        id: 1,
+        name: "India",
+        slug: "india",
+        address: indiaData
+      }
+    },
+    {
+      id: 2,
+      category: "International",
+      post_category: {
+        id: 2,
+        name: "International",
+        slug: "international",
+        address: internationalData
+      }
+    }
+  ];
+  const [active, setActive] = useState<string>(card?.[0]?.post_category?.slug || "india");
+  const [activeIndex, setactiveIndex] = useState<number>(0);
+  const latestAtAartiRef = useRef<HTMLDivElement>(null);
+  const cardsWrapRef = useRef<HTMLDivElement>(null);
+  const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    let tabsAnim: gsap.core.Tween | undefined;
+    if (latestAtAartiRef.current) {
+      tabsAnim = gsap.fromTo(
+        latestAtAartiRef.current,
+        { opacity: 0, y: 30, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.1,
+          scrollTrigger: {
+            trigger: latestAtAartiRef.current,
+            start: "top 87%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+    return () => {
+      if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
+      if (tabsAnim) tabsAnim.kill();
+    };
+  }, []);
+
+  const handleTabChange = (slug: string, index: number) => {
+    if (!cardsWrapRef.current) {
+      setActive(String(slug));
+      setactiveIndex(index);
+      return;
+    }
+
+    const cards = cardsWrapRef.current.querySelectorAll(".address-card-anim");
+    if (!cards || cards.length === 0) {
+      setActive(String(slug));
+      setactiveIndex(index);
+      return;
+    }
+
+    if (switchAnimRef.current) {
+      switchAnimRef.current.kill();
+      switchAnimRef.current = null;
+    }
+
+    gsap.set(cards, { transformOrigin: "50% 50%" });
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.in" },
+      onComplete: () => {
+        setActive(String(slug));
+        setactiveIndex(index);
+      },
+    });
+    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
+    switchAnimRef.current = tl;
+  };
+
+  useEffect(() => {
+    if (!cardsWrapRef.current) return;
+    const cards = cardsWrapRef.current.querySelectorAll(".address-card-anim");
+    if (!cards || cards.length === 0) return;
+
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
+    tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 });
+
+    return () => {
+      tl.kill();
+    };
+  }, [activeIndex]);
+
+  const postsCount = card[activeIndex]?.post_category?.address?.length || 0;
+  // Determine if progress bar should be shown
+  const showProgressBar =
+    isMobile ? postsCount > 1 : postsCount > 4;
+  return (
+    <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
+      <H2 className="text-blue-200 text-center">Where We Operate</H2>
+      <div className="mt-[18px] md:mt-[30px] w-full ">
+        <div className="max-w-[100%]  fluid-container ">
+          <Tabs
+            tabs={card as unknown as Parameters<typeof Tabs>[0]['tabs']}
+            activeId={active}
+            onChange={(slug, index) => {
+              handleTabChange(slug, index);
+            }}
+            className="justify-center"
+          />
+        </div>
+
+        {postsCount > 0 && (
+          <>
+            <div className="mt-[52px]" ref={cardsWrapRef}>
+              <Swiper
+                key={active}
+                spaceBetween={24}
+                slidesPerView={2}
+                grid={{
+                  rows: 2,
+                  fill: "row",
+                }}
+                navigation={{
+                  prevEl: ".swiper-button-prev-where-we-operate",
+                  nextEl: ".swiper-button-next-where-we-operate",
+                }}
+                breakpoints={{
+                  1024: {
+                    slidesPerView: 3, grid: {
+                      rows: 2,
+                      fill: "row",
+                    }
+                  },
+                  786: {
+                    slidesPerView: 2, grid: {
+                      rows: 2,
+                      fill: "row",
+                    }
+                  },
+                }}
+                modules={[Pagination, Mousewheel, Grid, Navigation]}
+                direction="horizontal"
+
+                pagination={showProgressBar ? {
+                  el: ".home-latest-at-swiper",
+                  type: "progressbar",
+                } : undefined}
+                className=" w-full !px-[20px] lg:!px-[60px]"
+              >
+                {card[activeIndex]?.post_category?.address?.map((item: AddressCardItem, index: number) => (
+                  <SwiperSlide key={`${activeIndex}-${index}`}>
+                    <div className="address-card-anim">
+                      <AddressCard
+                        location={item?.location}
+                        name={item?.company}
+                        fullAddress={item?.address}
+                        phone={item?.phone}
+                         
+                        type={item?.type}
+                        url={item?.url}
+                        registeredOffice={item?.registeredOffice}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            {showProgressBar && (
+              <div className="flex justify-between items-center px-[20px] lg:px-[60px] mt-[30px]">
+                <div className="relative h-[1px] mx-[20px] lg:mr-[60px]  flex w-full">
+                  <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+
+                </div>
+                <div className="flex gap-3">
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="prev"
+                    width={34}
+                    height={34}
+                    className={`-rotate-180 swiper-button-prev-where-we-operate transition-opacity`}
+                  />
+
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="next"
+                    width={34}
+                    height={34}
+                    className={`swiper-button-next-where-we-operate transition-opacity `}
+                  />
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default WhereWeOperate;

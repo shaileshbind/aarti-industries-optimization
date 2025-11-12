@@ -21,7 +21,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
           />
 
           {title && (
-            <FadeInReveal delay={0.2} className="w-full lg:w-1/2">
+            <FadeInReveal delay={0.2} className="w-full ">
               <SubH1 className="text-white">{title}</SubH1>
             </FadeInReveal>
           )}
@@ -29,8 +29,8 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
           {ctaButton?.[0]?.title && (
             <FadeInReveal delay={0.2}>
               <Link href={ctaButton?.[0]?.link || "#"} target="_blank">
-                <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px] max-w-[125px] cursor-pointer relative z-10">
-                  <Cta className="text-orange-200 ">
+                <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10">
+                  <Cta className="text-orange-200  whitespace-nowrap">
                     {ctaButton?.[0]?.title}
                   </Cta>
                 </div>
