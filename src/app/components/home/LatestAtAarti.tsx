@@ -14,7 +14,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
-  console.log(data, "data 123");
   const { sectionTitle, card } = data;
   const [active, setActive] = useState<string>(card?.[0]?.post_category?.slug);
   const [activeIndex, setactiveIndex] = useState<number>(0);
@@ -22,7 +21,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-console.log(card, "card");
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     handleResize();
@@ -104,8 +103,7 @@ console.log(card, "card");
 
   const postsCount = card[activeIndex]?.post_category?.posts?.length || 0;
   // Determine if progress bar should be shown
-  const showProgressBar =
-    isMobile ? postsCount > 1 : postsCount > 4;
+  const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
       {sectionTitle && (
@@ -143,10 +141,14 @@ console.log(card, "card");
                   sensitivity: 1,
                   releaseOnEdges: true,
                 }}
-                pagination={showProgressBar ? {
-                  el: ".home-latest-at-swiper",
-                  type: "progressbar",
-                } : undefined}
+                pagination={
+                  showProgressBar
+                    ? {
+                        el: ".home-latest-at-swiper",
+                        type: "progressbar",
+                      }
+                    : undefined
+                }
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
                 {card[activeIndex]?.post_category?.posts?.map((item, index) => (

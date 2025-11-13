@@ -13,7 +13,7 @@ import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import Button from "../Button";
-import { H2, SubH2 } from "../Typography2";
+import { H2 } from "../Typography2";
 
 type FormValues = {
   fullName: string;

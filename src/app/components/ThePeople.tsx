@@ -6,32 +6,33 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { BodyText1, BodyText2, H2 } from "./Typography2";
 import Image from "next/image";
-interface Person {
+import { ImageProps } from "../types/global.type";
+
+interface Testimonials {
   id: number;
   name: string;
   designation: string;
   testimonialText: string;
-  image: {
-    url: string;
-    alternativeText: string;
-  };
-  url?: string;
+  image: ImageProps;
+  mobImage: ImageProps;
 }
+
 interface ThePeopleProps {
   data: {
     title: string;
-    testimonials: Person[];
+    testimonials: Testimonials[];
   };
 }
 
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
-  console.log("data", data);
+  const { title, testimonials } = data;
+
   return (
     <div className="w-full mt-10 mb-40">
-      {data?.title && <H2 className="text-center mb-11">{data?.title}</H2>}
+      {title && <H2 className="text-center mb-11">{title}</H2>}
 
       {/* Swiper center mode slider */}
-      {data?.testimonials?.length > 0 && (
+      {testimonials?.length > 0 && (
         <div className="container !max-w-[800px] relative mb-10">
           <Swiper
             spaceBetween={24}
@@ -54,19 +55,19 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               },
             }}
           >
-            {data?.testimonials?.map((person) => (
+            {testimonials?.map((person) => (
               <SwiperSlide
                 key={person?.id}
                 className="opactiSlide transition-all duration-300"
               >
-                <div className="bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col lg:flex-row">
+                <div className="bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col lg:flex-row  lg:h-[370px]">
                   <div className="w-full lg:w-[40%] relative pt-8 order-2 lg:order-1">
                     <Image
                       src={person?.image?.url}
-                      alt={person?.image?.alternativeText || ""}
+                      alt={person?.name}
                       width={326}
                       height={350}
-                      className="object-contain"
+                      className="object-contain h-full"
                       // className="w-28 h-28 object-cover rounded-full mb-6 border-4 border-gray-100"
                     />
                   </div>
