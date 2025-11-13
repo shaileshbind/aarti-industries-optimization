@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BodyText2, H3 } from "./Typography2";
 import { FadeInRevealBlur } from "./ScrollReveal";
 import { ImageProps } from "../types/global.type";
+import clsx from "clsx";
 
 type GloballyCertifiedProps = {
   title?: string;
@@ -12,9 +13,10 @@ type GloballyCertifiedProps = {
     heading?: string;
     image?: ImageProps;
   }[];
+  className?: string
 };
 
-const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
+const GloballyCertified = ({ title, itemsData, className }: GloballyCertifiedProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [marqueeItems, setMarqueeItems] = useState(itemsData);
 
@@ -45,7 +47,7 @@ const GloballyCertified = ({ title, itemsData }: GloballyCertifiedProps) => {
   if (!itemsData?.length) return null;
 
   return (
-    <div className="w-full pb-[100px]">
+    <div className={clsx(`w-full pb-[72px] lg:pb-[100px]`, className)}>
       <FadeInRevealBlur delay={0.1}>
         <H3 className="text-blue-100 mx-auto w-fit">
           {title || "Globally Certified"}

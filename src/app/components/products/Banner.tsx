@@ -4,9 +4,16 @@ import React from "react";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
 import { H2, BodyText1 } from "../Typography2";
-import {BannerProps} from "@/app/types/product.listing.type";
+import { BannerProps } from "@/app/types/product.listing.type";
 
-const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({ data, onSearch }) => {
+const Banner: React.FC<
+  BannerProps & { onSearch: (q: string) => void; clearTrigger: number }
+> = ({
+  data,
+  onSearch,
+  setActiveTab,
+  clearTrigger, // Add this prop
+}) => {
   const { title, description, image, mobImage } = data;
 
   return (
@@ -18,7 +25,11 @@ const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({ dat
       </div>
 
       {/* Search */}
-      <SearchBar onSearch={onSearch} />
+      <SearchBar
+        onSearch={onSearch}
+        setActiveTab={setActiveTab}
+        clearTrigger={clearTrigger}
+      />
 
       {/* Background Images */}
       <div className="absolute top-0 h-full w-full z-0">
@@ -30,7 +41,9 @@ const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({ dat
           className="h-full w-full object-cover md:block hidden"
         />
         <Image
-          src={mobImage?.url || "/images/products/product-banner-image-mobile.png"}
+          src={
+            mobImage?.url || "/images/products/product-banner-image-mobile.png"
+          }
           alt={mobImage?.alternativeText || "banner-mobile"}
           width={mobImage?.width || 1000}
           height={mobImage?.height || 306}
@@ -41,13 +54,28 @@ const Banner: React.FC<BannerProps & { onSearch: (q: string) => void }> = ({ dat
       {/* Decorative Elements */}
       <div className="hidden lg:block absolute h-full bg-white w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5" />
       <div className="hidden lg:block absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 ">
-        <Image src="/images/home/star-white.svg" alt="star" width={72} height={72} />
+        <Image
+          src="/images/home/star-white.svg"
+          alt="star"
+          width={72}
+          height={72}
+        />
       </div>
       <div className="absolute bottom-[-22px] lg:bottom-[-36px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 ">
-        <Image src="/images/home/star-white.svg" alt="img" width={72} height={72} />
+        <Image
+          src="/images/home/star-white.svg"
+          alt="img"
+          width={72}
+          height={72}
+        />
       </div>
       <div className="block lg:hidden absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px] w-[42px] lg:w-[72px] z-5">
-        <Image src="/images/home/star-white.svg" alt="img" width={72} height={72} />
+        <Image
+          src="/images/home/star-white.svg"
+          alt="img"
+          width={72}
+          height={72}
+        />
       </div>
     </div>
   );

@@ -1,19 +1,19 @@
 import { getPageData } from "@/_lib/pageData.fetch";
 import ByUseSection from "./components/home/ByUseSection";
-import ContactBanner from "./components/home/ContactBanner";
-import FosteringSafe from "./components/home/FosteringSafe";
+import ContactBanner from "./components/ContactBanner";
 import FourtyYears from "./components/home/FourtyYears";
 import FrameworkForged from "./components/home/FrameworkForged";
 import GlobalPartner from "./components/home/GlobalPartner";
 import HomeHero from "./components/home/HomeHero";
 import LatestAtAarti from "./components/home/LatestAtAarti";
 import SustainableChem from "./components/home/SustainableChem";
+import ImageGallery from "./components/ImageGallery";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const data = await getPageData("/pages/by-slug/home-page");
-
+console.log(data);
   const {
     sectionOne,
     sectionTwo,
@@ -26,7 +26,7 @@ export default async function Home() {
     sectionNine,
     sectionTen,
   } = data;
-
+console.log("sectionSix", data);
   return (
     <div>
       {sectionOne && <HomeHero data={sectionOne} />}
@@ -39,7 +39,7 @@ export default async function Home() {
 
       {sectionFive && <ByUseSection data={sectionFive} />}
 
-      {sectionSix && <FosteringSafe data={sectionSix} imgArr={sectionSeven} />}
+      {sectionSix && <ImageGallery data={sectionSix} imgArr={sectionSeven} />}
 
       {sectionEight && <FrameworkForged data={sectionEight} />}
 

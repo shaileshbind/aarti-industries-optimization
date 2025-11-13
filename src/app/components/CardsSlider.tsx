@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { H2, SubH2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
-import { WordReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
+import { WordReveal } from "./ScrollReveal";
+import { H2, SubH2 } from "./Typography2";
 
-const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
+const CardsSlider: React.FC<CDMOSplchemProps> = ({ data }) => {
   const { sectionTitle, cards } = data;
   const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -46,7 +46,7 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
           )}
 
           {/* Right Swiper */}
-          <div className="flex-1 min-w-0 mt-[22px] lg:mt-[0px]">
+          <div className="flex-1 min-w-0 mt-[22px] lg:mt-[40px]">
             <div className="relative">
               <Swiper
                 spaceBetween={14}
@@ -150,4 +150,4 @@ const SimplifiedSwiperSection: React.FC<CDMOSplchemProps> = ({ data }) => {
   );
 };
 
-export default SimplifiedSwiperSection;
+export default CardsSlider;

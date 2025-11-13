@@ -182,6 +182,12 @@ body {
   transition-delay: 0.3s;
 }
 
+/* Banner Button */
+.white-btn-underline::before,
+.white-btn-underline::after {
+  background-color: #ffffff !important;
+}
+
 /* Blip Border */
 .blip-border {
   border: 1px solid transparent;
@@ -435,7 +441,10 @@ body {
   margin-top: 30px;
   margin-inline: 20px !important;
 }
-.swiper-button-disabled { opacity: 0.5 !important; pointer-events: none !important;}
+.swiper-button-disabled {
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+}
 
 /* Phone Input */
 .phone_input .search-box {
@@ -464,6 +473,11 @@ body {
   background-color: #ffffff;
 }
 
+/* Accordion */
+#accordion .MuiAccordionSummary-content {
+  margin: 0 !important;
+}
+
 /* Popup */
 .popup_container::-webkit-scrollbar {
   width: 4px;
@@ -478,8 +492,90 @@ body {
   background: #dc4c03;
   border-radius: 20px;
 }
+
+.potential-accordion:nth-child(3)::after {
+  content: "";
+  position: absolute;
+  right: 6%;
+  bottom: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url("/images/star.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translateY(50%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.potential-accordion:nth-child(3)::before {
+  content: "";
+  position: absolute;
+  right: 6%;
+  top: -32px;
+  width: 32px;
+  height: 32px;
+  background-image: url("/images/star.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translateY(50%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.active-card {
+  animation: toggleWidth 5s ease-out;
+}
+
+@keyframes toggleWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .potential-accordion:nth-child(3)::after {
+    right: 5.8%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 5.8%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .potential-accordion:nth-child(3)::after {
+    right: 5.5%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 5.5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .potential-accordion:nth-child(3)::after {
+    right: 2.6%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 2.6%;
+  }
+}
+
 @media (max-width: 380px) {
-  .topMarginCsm{
+  .topMarginCsm {
     margin-top: 200px !important;
   }
+}
+
+.opactiSlide{
+  opacity: 0.5;
+}
+.opactiSlide.swiper-slide-active{
+  opacity: 1;
 }

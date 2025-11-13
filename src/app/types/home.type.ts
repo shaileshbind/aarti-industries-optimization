@@ -65,10 +65,10 @@ export type ByUseSectionProps = {
 };
 
 export type FosteringSafeProps = {
-  data: {
-    title: string;
-    description: string;
-    ctaButton: ButtonProps;
+  data?: {
+    title?: string;
+    description?: string;
+    ctaButton?: ButtonProps;
   };
   imgArr: {
     images: {
@@ -122,6 +122,6 @@ export type CategoryDataProps = {
 export type ContactBannerProps = {
   data: {
     title: string;
-    ctaButton: ButtonProps[];
-  }[];
+    ctaButton: ButtonProps;
+  };
 };

@@ -9,10 +9,14 @@ import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import clsx from "clsx";
 
 gsap.registerPlugin(ScrollTrigger);
+interface LayoutProps {
+  layout?: "imgLeftContentRight" | "imgRightContentLeft";
+}
 
-const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
+const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, layout }) => {
   const { title, card, partnerWithUsCta } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -108,8 +112,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
         </H2>
       )}
 
-      <div className="relative w-full grid grid-cols-1 lg:grid-cols-[55%_45%] px-[20px] lg:px-[unset]">
-        <div className="lg:ml-[60px] order-2 lg:order-1">
+      <div className={clsx(`relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${layout === "imgLeftContentRight" ? "lg:grid-cols-[45%_55%]" : "lg:grid-cols-[45%_55%]"}`)}>
+        <div className={clsx(`${layout === "imgLeftContentRight" ? " order-2 lg:order-2 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
           {title && (
             <H2 className="hidden lg:block text-blue-200 max-w-[460px]">
               {title}
@@ -128,11 +132,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${
-                    activeIndex > 0
+                  className={`-rotate-180 swiper-button-prev transition-opacity ${activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                  }`}
+                    }`}
                 />
 
                 <Image
@@ -140,11 +143,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${
-                    activeIndex < card?.length - 1
+                  className={`swiper-button-next transition-opacity ${activeIndex < card?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                  }`}
+                    }`}
                 />
               </div>
             </div>
@@ -185,9 +187,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
                   return (
                     <SwiperSlide
                       key={items?.id}
-                      className={`transition-all duration-500  ${
-                        index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
-                      }`}
+                      className={`transition-all duration-500  ${index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
+                        }`}
                     >
                       <SubH1 className={`text-blue-200`}>{items?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
@@ -209,8 +210,29 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
             </div>
           )}
         </div>
-        <div className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">
-          <div
+        <div className={clsx(` relative w-full overflow-hidden ${layout === "imgLeftContentRight" ? " order-1 lg:order-1" : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "}`)}>
+          {layout === "imgLeftContentRight" ? (
+             <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden">
+                <Image
+                  src={card?.[currentImageIndex]?.image?.url}
+                  alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                  fill
+                  className="object-cover scale-110"
+                />
+                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+                  <Image
+                    src={card?.[currentImageIndex]?.image?.url}
+                    alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                    fill
+                    className="object-cover scale-110"
+                  />
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div
             className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
           >
             {card?.[currentImageIndex]?.image?.url && (
@@ -256,6 +278,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps> = ({ data }) => {
             <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
             <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
           </div>
+          )}
         </div>
       </div>
       </div>

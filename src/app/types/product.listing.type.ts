@@ -49,6 +49,9 @@ interface BannerData {
 
 export interface BannerProps {
   data: BannerData;
+  onSearch: (query: string) => void;
+  setActiveTab: (tab: string) => void;
+  clearTrigger: number;
 }
 
 export interface ProductSubCategory {
@@ -57,22 +60,39 @@ export interface ProductSubCategory {
   slug: string;
 }
 
-interface CatagoriesData{
+interface CatagoriesData {
   productCategory: string;
   slug: string;
   product_sub_categories: ProductSubCategory[];
 }
 
-export interface ProductFilterProps{
-  catagoriesData: CatagoriesData[];
+export interface ProductFilterProps {
+  catagoriesData: CatagoriesData[]; // Update with proper type
+  searchQuery?: string;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  clearSearch: () => void;
 }
 
-export interface ProductWrapperProps{
+export interface ProductWrapperProps {
   section_one: BannerData;
   product_categories: CatagoriesData[];
 }
 
 export interface ProductFilterListProps extends ProductFilterProps {
   searchQuery?: string;
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export interface SubCategory {
+  slug: string;
+  subCategory: string;
+  // Add any other properties your subcategory has
+}
+
+export type SearchBarProps = {
+  onSearch: (query: string) => void;
+  setActiveTab: (tab: string) => void;
+  clearTrigger: number;
+};

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 interface ButtonProps {
   title: string;
-  href: string;
+  href?: string;
   secondary?: boolean;
   className?: string;
 }
@@ -13,7 +13,7 @@ const Button = ({ href, title, secondary, className }: ButtonProps) => {
     <>
       {secondary ? (
         <>
-          <Link href={href} target="_blank" className="w-fit">
+          <Link href={href || "#"} target="_blank" className="w-fit">
             <button className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under] ${className}`}>
               {title}
             </button>
@@ -21,7 +21,7 @@ const Button = ({ href, title, secondary, className }: ButtonProps) => {
         </>
       ) : (
         <Link
-          href={href}
+          href={href || "#"}
           target="_blank"
           className="w-fit group relative inline-block"
         >

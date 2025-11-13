@@ -103,8 +103,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   const postsCount = card[activeIndex]?.post_category?.posts?.length || 0;
   // Determine if progress bar should be shown
-  const showProgressBar =
-    isMobile ? postsCount > 1 : postsCount > 4;
+  const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
       {sectionTitle && (
@@ -142,10 +141,14 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   sensitivity: 1,
                   releaseOnEdges: true,
                 }}
-                pagination={showProgressBar ? {
-                  el: ".home-latest-at-swiper",
-                  type: "progressbar",
-                } : undefined}
+                pagination={
+                  showProgressBar
+                    ? {
+                        el: ".home-latest-at-swiper",
+                        type: "progressbar",
+                      }
+                    : undefined
+                }
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
                 {card[activeIndex]?.post_category?.posts?.map((item, index) => (

@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Cta, SubH1 } from "../Typography2";
-import { FadeInReveal } from "../ScrollReveal";
+import { Cta, SubH1 } from "./Typography2";
+import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
-  const { title, ctaButton } = data?.[0];
+  const { title, ctaButton } = data;
 
   return (
     <div className="container">
@@ -21,17 +21,17 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
           />
 
           {title && (
-            <FadeInReveal delay={0.2} className="w-full lg:w-1/2">
+            <FadeInReveal delay={0.2} className="md:w-[60%] ">
               <SubH1 className="text-white">{title}</SubH1>
             </FadeInReveal>
           )}
 
-          {ctaButton?.[0]?.title && (
+          {ctaButton?.title && (
             <FadeInReveal delay={0.2}>
-              <Link href={ctaButton?.[0]?.link || "#"} target="_blank">
-                <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px] max-w-[125px] cursor-pointer relative z-10">
-                  <Cta className="text-orange-200 ">
-                    {ctaButton?.[0]?.title}
+              <Link href={ctaButton?.link || "#"} target="_blank">
+                <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10">
+                  <Cta className="text-orange-200  whitespace-nowrap">
+                    {ctaButton?.title}
                   </Cta>
                 </div>
               </Link>

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import Popup from "../Popup";
 import {
   TextField,
   FormControl,
@@ -14,6 +13,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
+import { SubH2 } from "../Typography2";
 
 type FormValues = {
   fullName: string;
@@ -23,17 +23,7 @@ type FormValues = {
   message: string;
 };
 
-type MSDSPopupProps = {
-  setshowMSDSPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  isOpen: boolean;
-  document?: string;
-};
-
-export default function MSDSPopup({
-  setshowMSDSPopup,
-  isOpen,
-  document,
-}: MSDSPopupProps) {
+export default function WriteToUs({document}: {document?: string}) {
   const {
     register,
     handleSubmit,
@@ -55,31 +45,31 @@ export default function MSDSPopup({
 
   return (
     <div>
-      <Popup onOverlayClick={() => setshowMSDSPopup(false)} isOpen={isOpen}>
+       
         <div className="w-full">
           <div>
-            <p className="text-xl text-[#002F50]">Recipient Information</p>
-            <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
+            <SubH2>Write to Us</SubH2> 
+            {/* <div className="w-full h-[1px] bg-[#F3663399] mt-2" /> */}
           </div>
 
           <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-            <div className=" flex flex-col gap-4 h-[72vh] overflow-y-auto pt-7 popup_container pr-4">
+            <div className=" flex flex-wrap gap-[4%] pt-7 popup_container pr-4">
               {/* Full Name */}
               <TextField
                 label="Full Name *"
                 variant="outlined"
-                className="w-full"
                 sx={MaterialInputStyle(!!errors.fullName)}
                 {...register("fullName", { required: "Full Name is required" })}
                 error={!!errors.fullName}
                 helperText={errors.fullName?.message}
+                className="w-[48%] min-h-[85px]"
               />
 
               {/* Email */}
               <TextField
                 label="Email ID *"
                 variant="outlined"
-                className="w-full"
+                className="w-[48%] mb-[10px]"
                 sx={MaterialInputStyle(!!errors.email)}
                 {...register("email", {
                   required: "Email is required",
@@ -90,11 +80,13 @@ export default function MSDSPopup({
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}
+                
               />
 
               {/* Phone Number */}
               <Controller
                 name="phone"
+                 
                 control={control}
                 rules={{
                   required: "Phone number is required",
@@ -104,7 +96,7 @@ export default function MSDSPopup({
                   },
                 }}
                 render={({ field }) => (
-                  <div className="w-full phone_input">
+                  <div className="w-[48%] min-h-[85px] phone_input">
                     <PhoneInput
                       {...field}
                       country={"us"}
@@ -138,7 +130,7 @@ export default function MSDSPopup({
               />
 
               {/* Country (no validation) */}
-              <FormControl fullWidth sx={MaterialInputStyle(false)}>
+              <FormControl className="w-[48%] min-h-[85px]" sx={MaterialInputStyle(false)}>
                 <InputLabel id="country">Country</InputLabel>
                 <Controller
                   name="country"
@@ -159,15 +151,37 @@ export default function MSDSPopup({
                   )}
                 />
               </FormControl>
+              <FormControl className="w-full min-h-[85px]" sx={MaterialInputStyle(false)}>
+                <InputLabel id="country">Business Category</InputLabel>
+                <Controller
+                  name="country"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      value={field.value || ""}
+                      labelId="country"
+                      IconComponent={KeyboardArrowDownIcon}
+                    >
+                      {Countries.map((country) => (
+                        <MenuItem key={country.code} value={country.name}>
+                          {country.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormControl>
 
-              {/* Message */}
+              
+              
               <textarea
                 id="message"
                 {...register("message")}
                 rows={5}
                 cols={40}
                 placeholder="Write your message here"
-                className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
+                className="border-[#e8e6e6] border-2 p-4 w-full h-[110px] rounded-[10px] outline-none resize-none flex-shrink-0"
               ></textarea>
             </div>
 
@@ -183,7 +197,7 @@ export default function MSDSPopup({
             </button>
           </form>
         </div>
-      </Popup>
+       
     </div>
   );
 }
