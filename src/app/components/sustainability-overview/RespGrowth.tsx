@@ -107,14 +107,16 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
       const mainTl = gsap.timeline({
         scrollTrigger: {
-          id: "mainTrigger",
+          id: "respGrowthTrigger11",
           trigger: triggerRef.current,
           start: "top 50%",
           end: `+=${animationScrollDistance}`,
           scrub: 1,
           pin: true,
           pinSpacing: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
+          refreshPriority: 0,
           onUpdate: (self) => {
             // Sync slides after animation phase (55% progress) - similar to test slider logic
             if (
@@ -149,6 +151,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 delay: 0.2,
               });
             }
+            // Refresh ScrollTrigger after leaving
+            requestAnimationFrame(() => {
+              ScrollTrigger.refresh();
+            });
           },
           onEnterBack: () => {
             if (!isMobile && tabsRef.current) {
@@ -158,6 +164,9 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 ease: "power2.in",
               });
             }
+            requestAnimationFrame(() => {
+              ScrollTrigger.refresh();
+            });
           },
         },
       });
@@ -341,6 +350,9 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
     return () => {
       ctx.revert();
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
     };
   }, [mainSection.length]);
 
@@ -366,13 +378,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   }, [activeTab, mainSection.length, measureIndicator]);
 
   return (
-    <div
-      ref={triggerRef}
-      className="w-full relative h-[40vh] mt-[1400px] lg:mt-[1500px] "
-    >
+    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]">
       <div
         ref={titleSection}
-        className="absolute top-0 w-full flex justify-center items-center z-20 bg-white my-[100px] lg:my-[unset]"
+        className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
           {leftText && (

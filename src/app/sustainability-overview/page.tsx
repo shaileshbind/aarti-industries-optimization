@@ -6,6 +6,7 @@ import SusCore from "../components/sustainability-overview/SusCore";
 import AILRoadmap from "../components/sustainability-overview/AILRoadmap";
 import RespGrowth from "../components/sustainability-overview/RespGrowth";
 import { getPageData } from "@/_lib/pageData.fetch";
+import SustainableChem from "../components/home/SustainableChem";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -16,13 +17,13 @@ const page = async () => {
   const { section_one, section_two, section_three, section_four } = data;
 
   return (
-    <div>
+    <div className="overflow-hidden w-full">
       <SusBanner data={section_one} />
       <SusCore data={section_two} />
       <AILRoadmap data={section_three} />
-      <RespGrowth data={section_four} />
-      {globallyCertifiedData && (
-        <div className="!mt-[1500px] relative">
+       <RespGrowth data={section_four} />
+     {globallyCertifiedData && (
+        <div>
           <GloballyCertified itemsData={globallyCertifiedData} />
         </div>
       )}
