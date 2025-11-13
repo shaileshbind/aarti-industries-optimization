@@ -26,7 +26,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
 //   const { title, people } = data;
   console.log("people", data);
   return (
-    <div className="w-full mt-10 mb-40">
+    <div className="w-full mt-10 mb-40 overflow-hidden">
       {/* Title */}
       {/* <h2 className="text-center text-3xl lg:text-5xl font-bold mb-11">{data.title}</h2> */}
       

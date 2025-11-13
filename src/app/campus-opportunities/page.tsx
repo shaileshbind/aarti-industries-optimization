@@ -11,7 +11,6 @@ export const dynamic = "force-dynamic";
 
 const Page = async () => {
   const data = await getPageData("/pages/by-slug/campus-opportunities");
-  console.log(data);
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
@@ -62,6 +61,7 @@ const Page = async () => {
     section_one,
     section_two,
     section_three,
+    section_four,
     section_five,
     // section_sixData
   } = data;
