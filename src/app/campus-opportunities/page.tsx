@@ -19,8 +19,8 @@ const Page = async () => {
     section_one,
     section_two,
     section_three,
+    section_four,
     section_five,
-    section_six
   } = data;
 
   return (
@@ -32,7 +32,7 @@ const Page = async () => {
         </div>
       }
       {section_three && <ImageGallery data={section_three} imgArr={section_three} />}
-      {section_six && <ThePeople data={section_six} />}
+      {section_four && <ThePeople data={section_four} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
