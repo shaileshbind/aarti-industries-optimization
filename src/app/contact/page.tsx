@@ -3,7 +3,6 @@ import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import ContactBanner from "../components/Contact/ContactBanner";
 import WhereWeOperate from "../components/Contact/WhereWeOperate";
-import ContactBannerBottom from "../components/home/ContactBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 
 export const dynamic = 'force-dynamic';
@@ -26,7 +25,7 @@ const Page = async () => {
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {section_one && <ContactBannerBottom data={section_one} />}
+      {section_one && <ContactBanner data={section_one} />}
     </div>
   );
 };

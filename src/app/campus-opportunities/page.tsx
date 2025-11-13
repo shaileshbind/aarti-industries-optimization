@@ -1,12 +1,12 @@
 import React from "react";
 import CampusBanner from "../components/cdmo/CDMOBanner";
 import CampusInfo from "../components/home/FrameworkForged";
-import FosteringSafe from "../components/home/FosteringSafe";
 import GloballyCertified from "../components/GloballyCertified";
 import WhoExp from "../components/who-we-are/WhoExp";
 import { getData } from "@/_lib/getData.fetch";
 import { getPageData } from "@/_lib/pageData.fetch";
-import ThePeople from "../components/Contact/ThePeople";
+import ThePeople from "../components/ThePeople";
+import ImageGallery from "../components/ImageGallery";
 export const dynamic = "force-dynamic";
 
 const Page = async () => {
@@ -74,7 +74,7 @@ const Page = async () => {
           <CampusInfo data={section_two} layout="imgLeftContentRight" />
         </div>
       }
-      {section_three && <FosteringSafe data={section_three} imgArr={section_three} />}
+      {section_three && <ImageGallery data={section_three} imgArr={section_three} />}
       {section_sixData && <ThePeople data={section_sixData} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
