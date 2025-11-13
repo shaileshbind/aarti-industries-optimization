@@ -122,6 +122,6 @@ export type CategoryDataProps = {
 export type ContactBannerProps = {
   data: {
     title: string;
-    ctaButton: ButtonProps[];
-  }[];
+    ctaButton: ButtonProps;
+  };
 };

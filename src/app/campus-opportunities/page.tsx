@@ -11,59 +11,16 @@ export const dynamic = "force-dynamic";
 
 const Page = async () => {
   const data = await getPageData("/pages/by-slug/campus-opportunities");
-  console.log(data);
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-  const section_sixData = {
-    title: "From The People of Aarti Industries",
-    people: [
-      {
-        id: 1,
-        name: "Shri Renil R. Gogri",
-        designation: "Vice Chairman",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        image: "/images/shrirenil.png",
-      },
-    {
-    id: 1,
-    name: "Shri Renil R. Gogri",
-    designation: "Vice Chairman",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "/images/shrirenil.png",
-    url: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    name: "Shri Renil R. Gogri",
-    designation: "Vice Chairman",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "/images/shrirenil.png",
-    url: "https://via.placeholder.com/150",
-  },
-  {
-    id: 3,
-    name: "Shri Renil R. Gogri",
-    designation: "Vice Chairman",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "/images/shrirenil.png",
-    url: "https://via.placeholder.com/150",
-  },
-  {
-    id: 4,
-    name: "Shri Renil R. Gogri",
-    designation: "Vice Chairman",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    image: "/images/shrirenil.png",
-  },
-  ]
-  };
+  
   const {
     section_one,
     section_two,
     section_three,
+    section_four,
     section_five,
-    // section_sixData
   } = data;
 
   return (
@@ -75,7 +32,7 @@ const Page = async () => {
         </div>
       }
       {section_three && <ImageGallery data={section_three} imgArr={section_three} />}
-      {section_sixData && <ThePeople data={section_sixData} />}
+      {section_four && <ThePeople data={section_four} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
