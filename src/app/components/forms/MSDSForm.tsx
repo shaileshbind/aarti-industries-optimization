@@ -13,6 +13,7 @@ import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import Button from "../Button";
+import { H2 } from "../Typography2";
 
 type FormValues = {
   fullName: string;
@@ -25,11 +26,13 @@ type FormValues = {
 type MSDSFormProps = {
   setshowMSDSPopup?: React.Dispatch<React.SetStateAction<boolean>>;
   document?: string;
+  onPageForm?: boolean;
 };
 
 export default function MSDSForm({
   setshowMSDSPopup,
   document,
+  onPageForm = false,
 }: MSDSFormProps) {
   const {
     register,
@@ -95,10 +98,16 @@ export default function MSDSForm({
 
   return (
     <div className="w-full">
+      {!onPageForm ? (
       <div>
         <p className="text-xl text-[#002F50]">Recipient Information</p>
         <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
       </div>
+      ):(
+        <div> 
+          <H2>Write to Us</H2>
+        </div>
+      )}
 
       <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
         <div className=" flex flex-col gap-4 h-[72vh] overflow-y-auto pt-7 popup_container pr-4">
