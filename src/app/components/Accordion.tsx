@@ -3,7 +3,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   useMediaQuery,
 } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";

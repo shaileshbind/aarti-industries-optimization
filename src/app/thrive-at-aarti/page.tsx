@@ -2,7 +2,7 @@ import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import ContactBanner from "../components/ContactBanner";
+// import ContactBanner from "../components/ContactBanner";
 import ImageGallery from "../components/ImageGallery";
 import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
 import ComprehensiveCare from "../components/thrive-at-aarti/ComprehensiveCare";
@@ -25,7 +25,7 @@ const page = async () => {
     section_four,
     section_five,
     section_six,
-    section_seven,
+    // section_seven,
   } = data;
 
   return (
