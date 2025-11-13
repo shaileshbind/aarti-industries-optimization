@@ -5,11 +5,15 @@ import Image from "next/image";
 import MainAccordion from "../Accordion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FadeInReveal } from "../ScrollReveal";
+import { InvestingInPotentialProps } from "@/app/types/thrive-at-aarti.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function InvestingInPotential() {
+export default function InvestingInPotential({
+  data,
+}: InvestingInPotentialProps) {
+  const { title, cards } = data;
+
   const [activeCard, setActiveCard] = useState(0);
   const [expanded, setExpanded] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,36 +21,6 @@ export default function InvestingInPotential() {
   const imageRefs = useRef<HTMLDivElement[]>([]);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const prevIndexRef = useRef(0);
-
-  const cardData = [
-    {
-      title: "Capability Building",
-      description:
-        "We empower our people to learn with purpose, perform with confidence, and lead with impact. Through ATOMS, our digital learning platform, employees chart their own growth journeys and access self-paced learning opportunities across five streams — Functional (technical expertise and cross-functional excellence), Behavioural (guided by the Aarti Leadership Competency Framework), Systems (digital tools, and plant management systems), Sustainability (high standards of safety, and environmental responsibility), and Compliance (regulatory norms, ethical conduct, and quality standards)",
-      image: {
-        url: "/images/thrive-at-aarti/banner.png",
-        alternativeText: "banner",
-      },
-    },
-    {
-      title: "Talent & Leadership Development",
-      description:
-        "Talent We empower our people to learn with purpose, perform with confidence, and lead with impact. Through ATOMS, our digital learning platform, employees chart their own growth journeys and access self-paced learning opportunities across five streams — Functional (technical expertise and cross-functional excellence), Behavioural (guided by the Aarti Leadership Competency Framework), Systems (digital tools, and plant management systems), Sustainability (high standards of safety, and environmental responsibility), and Compliance (regulatory norms, ethical conduct, and quality standards)",
-      image: {
-        url: "/images/thrive-at-aarti/banner2.png",
-        alternativeText: "banner",
-      },
-    },
-    {
-      title: "Prioritizing Internal Talent",
-      description:
-        "Prioritizing We empower our people to learn with purpose, perform with confidence, and lead with impact. Through ATOMS, our digital learning platform, employees chart their own growth journeys and access self-paced learning opportunities across five streams — Functional (technical expertise and cross-functional excellence), Behavioural (guided by the Aarti Leadership Competency Framework), Systems (digital tools, and plant management systems), Sustainability (high standards of safety, and environmental responsibility), and Compliance (regulatory norms, ethical conduct, and quality standards)",
-      image: {
-        url: "/images/thrive-at-aarti/banner3.png",
-        alternativeText: "banner",
-      },
-    },
-  ];
 
   // 🔹 Animation function for image transition
   const animateImageTransition = (newIndex: number, direction: number) => {
@@ -81,7 +55,7 @@ export default function InvestingInPotential() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const total = cardData.length;
+      const total = cards.length;
       const scrollDistance = window.innerHeight * total * 0.8;
 
       // Initialize clip paths
@@ -120,7 +94,7 @@ export default function InvestingInPotential() {
     }, wrapperRef);
 
     return () => ctx.revert();
-  }, [cardData.length]);
+  }, [cards.length]);
 
   return (
     <div ref={wrapperRef}>
@@ -133,69 +107,81 @@ export default function InvestingInPotential() {
 
         {/* Accordion Section */}
         <div className="relative z-[2]">
-          <H2 className="text-white py-6 lg:py-[32px] max-w-[449px] fluid-container">
-            Investing in Potential, Investing in Excellence
-          </H2>
+          {title && (
+            <H2 className="text-white py-6 lg:py-[32px] max-w-[449px] fluid-container">
+              {title}
+            </H2>
+          )}
 
-          {cardData.map((item, index) => (
-            <div
-              key={index}
-              className={`relative potential-accordion ${
-                expanded === index ? "is-expanded" : ""
-              }`}
-            >
-              <MainAccordion
-                borderBottom={
-                  cardData.length - 1 !== index ? "1px solid gray" : "none"
-                }
-                expanded={expanded === index}
-                showIcon={false}
-                onChange={() => {
-                  // Just update state and animate - NO scrolling
-                  const direction = index > prevIndexRef.current ? 1 : -1;
-
-                  setExpanded(index);
-                  setActiveCard(index);
-                  animateImageTransition(index, direction);
-                }}
-                title={
-                  <SubH2 className="text-white xl:py-2 fluid-container">
-                    <span className="mr-4 lg:mr-[50px]">{`0${index + 1}`}</span>
-                    {item.title}
-                  </SubH2>
-                }
+          {cards?.length > 0 &&
+            cards?.map((item, index) => (
+              <div
+                key={index}
+                className={`relative potential-accordion ${
+                  expanded === index ? "is-expanded" : ""
+                }`}
               >
-                <div className="lg:flex justify-end lg:-mt-12 pr-12 xl:pr-40">
-                  <p className="text-white lg:w-[45%] xl:w-1/2 text-sm lg:text-base pb-4 pl-5 lg:pl-0">
-                    {item.description}
-                  </p>
-                </div>
-              </MainAccordion>
-            </div>
-          ))}
+                <MainAccordion
+                  borderBottom={
+                    cards.length - 1 !== index ? "1px solid gray" : "none"
+                  }
+                  expanded={expanded === index}
+                  showIcon={false}
+                  onChange={() => {
+                    // Just update state and animate - NO scrolling
+                    const direction = index > prevIndexRef.current ? 1 : -1;
+
+                    setExpanded(index);
+                    setActiveCard(index);
+                    animateImageTransition(index, direction);
+                  }}
+                  title={
+                    <SubH2 className="text-white xl:py-2 fluid-container">
+                      <span className="mr-4 lg:mr-[50px]">{`0${
+                        index + 1
+                      }`}</span>
+                      {item?.title}
+                    </SubH2>
+                  }
+                >
+                  {item?.description ? (
+                    <div className="lg:flex justify-end lg:-mt-12 pr-12 xl:pr-40">
+                      <p className="text-white lg:w-[45%] xl:w-1/2 text-sm lg:text-base pb-4 pl-5 lg:pl-0">
+                        {item?.description}
+                      </p>
+                    </div>
+                  ) : null}
+                </MainAccordion>
+              </div>
+            ))}
         </div>
 
         {/* Background Images */}
-        <div className="absolute inset-0 z-[0]">
-          {cardData.map((item, index) => (
-            <div
-              key={`image-${index}`}
-              ref={(el) => {
-                if (el) imageRefs.current[index] = el;
-              }}
-              className="absolute inset-0"
-              style={{ zIndex: activeCard === index ? 2 : 1 }}
-            >
-              <Image
-                src={item.image.url}
-                alt={item.image.alternativeText}
-                fill
-                className="object-cover"
-                priority={index === 0}
-              />
-            </div>
-          ))}
-        </div>
+        {cards?.length > 0 && (
+          <div className="absolute inset-0 z-[0]">
+            {cards?.map(
+              (item, index) =>
+                item?.image?.url && (
+                  <div
+                    key={`image-${index}`}
+                    ref={(el) => {
+                      if (el) imageRefs.current[index] = el;
+                    }}
+                    className="absolute inset-0"
+                    style={{ zIndex: activeCard === index ? 2 : 1 }}
+                  >
+                    <Image
+                      src={item?.image?.url}
+                      alt={item?.image?.alternativeText}
+                      fill
+                      className="object-cover"
+                      priority={index === 0}
+                    />
+                  </div>
+                )
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
