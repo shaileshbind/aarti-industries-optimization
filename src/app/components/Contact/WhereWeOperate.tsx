@@ -8,16 +8,15 @@ import "swiper/css/pagination";
 import "swiper/css/grid";
 import { Mousewheel, Pagination, Grid, Navigation } from "swiper/modules";
 import Tabs from "../Tabs";
-// import { LatestAtAartiProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AddressCard from "../cards/AddressCard";
-import { 
-  WhereWeOperateProps, 
+import {
+  WhereWeOperateProps,
   WhereWeOperateDataItem,
   AddressCardItem,
-  WhereWeOperateTab 
-} from "@/app/types/contact.type";  
+  WhereWeOperateTab,
+} from "@/app/types/contact.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,7 +38,9 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     }));
 
   const internationalData: AddressCardItem[] = apiData
-    .filter((item: WhereWeOperateDataItem) => item.regionName === "International")
+    .filter(
+      (item: WhereWeOperateDataItem) => item.regionName === "International"
+    )
     .map((item: WhereWeOperateDataItem) => ({
       location: item.locationName || "",
       company: item.companyName || "",
@@ -50,7 +51,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
       type: item.officeLabel || "",
     }));
 
-  const card: WhereWeOperateTab[] = [   
+  const card: WhereWeOperateTab[] = [
     {
       id: 1,
       category: "India",
@@ -58,8 +59,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
         id: 1,
         name: "India",
         slug: "india",
-        address: indiaData
-      }
+        address: indiaData,
+      },
     },
     {
       id: 2,
@@ -68,11 +69,13 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
         id: 2,
         name: "International",
         slug: "international",
-        address: internationalData
-      }
-    }
+        address: internationalData,
+      },
+    },
   ];
-  const [active, setActive] = useState<string>(card?.[0]?.post_category?.slug || "india");
+  const [active, setActive] = useState<string>(
+    card?.[0]?.post_category?.slug || "india"
+  );
   const [activeIndex, setactiveIndex] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
@@ -159,15 +162,14 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
 
   const postsCount = card[activeIndex]?.post_category?.address?.length || 0;
   // Determine if progress bar should be shown
-  const showProgressBar =
-    isMobile ? postsCount > 1 : postsCount > 4;
+  const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
       <H2 className="text-blue-200 text-center">Where We Operate</H2>
       <div className="mt-[18px] md:mt-[30px] w-full ">
         <div className="max-w-[100%]  fluid-container ">
           <Tabs
-            tabs={card as unknown as Parameters<typeof Tabs>[0]['tabs']}
+            tabs={card as unknown as Parameters<typeof Tabs>[0]["tabs"]}
             activeId={active}
             onChange={(slug, index) => {
               handleTabChange(slug, index);
@@ -178,65 +180,77 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
 
         {postsCount > 0 && (
           <>
-            <div className="mt-[52px]" ref={cardsWrapRef}>
+            <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
               <Swiper
                 key={active}
                 spaceBetween={24}
                 slidesPerView={2}
                 grid={{
-                  rows: 2,
+                  rows: 1,
                   fill: "row",
+                }}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                    grid: {
+                      rows: 3,
+                      fill: "row",
+                    },
+                  },
+                  786: {
+                    slidesPerView: 2,
+                    grid: {
+                      rows: 2,
+                      fill: "row",
+                    },
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    grid: {
+                      rows: 2,
+                      fill: "row",
+                    },
+                  },
                 }}
                 navigation={{
                   prevEl: ".swiper-button-prev-where-we-operate",
                   nextEl: ".swiper-button-next-where-we-operate",
                 }}
-                breakpoints={{
-                  1024: {
-                    slidesPerView: 3, grid: {
-                      rows: 2,
-                      fill: "row",
-                    }
-                  },
-                  786: {
-                    slidesPerView: 2, grid: {
-                      rows: 2,
-                      fill: "row",
-                    }
-                  },
-                }}
                 modules={[Pagination, Mousewheel, Grid, Navigation]}
                 direction="horizontal"
-
-                pagination={showProgressBar ? {
-                  el: ".home-latest-at-swiper",
-                  type: "progressbar",
-                } : undefined}
-                className=" w-full !px-[20px] lg:!px-[60px]"
+                pagination={
+                  showProgressBar
+                    ? {
+                        el: ".home-latest-at-swiper",
+                        type: "progressbar",
+                      }
+                    : undefined
+                }
+                className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
               >
-                {card[activeIndex]?.post_category?.address?.map((item: AddressCardItem, index: number) => (
-                  <SwiperSlide key={`${activeIndex}-${index}`}>
-                    <div className="address-card-anim">
-                      <AddressCard
-                        location={item?.location}
-                        name={item?.company}
-                        fullAddress={item?.address}
-                        phone={item?.phone}
-                         
-                        type={item?.type}
-                        url={item?.url}
-                        registeredOffice={item?.registeredOffice}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
+                {card[activeIndex]?.post_category?.address?.map(
+                  (item: AddressCardItem, index: number) => (
+                    <SwiperSlide key={`${activeIndex}-${index}`}>
+                      <div className="address-card-anim h-full">
+                        <AddressCard
+                          location={item?.location}
+                          name={item?.company}
+                          fullAddress={item?.address}
+                          phone={item?.phone}
+                          type={item?.type}
+                          url={item?.url}
+                          registeredOffice={item?.registeredOffice}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  )
+                )}
               </Swiper>
             </div>
             {showProgressBar && (
               <div className="flex justify-between items-center px-[20px] lg:px-[60px] mt-[30px]">
                 <div className="relative h-[1px] mx-[20px] lg:mr-[60px]  flex w-full">
                   <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
-
                 </div>
                 <div className="flex gap-3">
                   <Image
@@ -260,6 +274,15 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
           </>
         )}
       </div>
+      <style jsx global>{`
+        .where-we-operate-swiper .swiper-slide {
+          height: auto !important;
+          display: flex;
+        }
+        .where-we-operate-swiper .swiper-slide > div {
+          width: 100%;
+        }
+      `}</style>
     </div>
   );
 };
