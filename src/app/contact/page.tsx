@@ -2,9 +2,10 @@ import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import ContactBanner from "../components/Contact/ContactBanner";
-import ContactBannerBottom from "../components/Contact/ContactBannerBottom";
 import WhereWeOperate from "../components/Contact/WhereWeOperate";
 import { getPageData } from "@/_lib/pageData.fetch";
+import ContactExp from "../components/Contact/ContactExp";
+import ContactMap from "../components/Contact/ContactMap";
 
 export const dynamic = 'force-dynamic';
 
@@ -22,10 +23,11 @@ const Page = async () => {
     <div>
       {leftSection && <ContactBanner data={leftSection} />}
       {whereWeOperateData && <WhereWeOperate data={whereWeOperateData} />}
+      <ContactMap/>
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {section_two && <ContactBannerBottom data={section_two} />}
+      {section_two && <ContactExp data={section_two} />}
     </div>
   );
 };

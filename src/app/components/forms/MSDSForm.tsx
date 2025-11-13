@@ -21,6 +21,7 @@ type FormValues = {
   phone: string;
   country: string | null;
   message: string;
+   businessCategory: string;
 };
 
 type MSDSFormProps = {
@@ -108,105 +109,125 @@ export default function MSDSForm({
           <H2>Write to Us</H2>
         </div>
       )}
-
       <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-        <div className=" flex flex-col gap-4 h-[72vh] overflow-y-auto pt-7 popup_container pr-4">
-          {/* Full Name */}
-          <TextField
-            label="Full Name *"
-            variant="outlined"
-            className="w-full"
-            sx={MaterialInputStyle(!!errors.fullName)}
-            {...register("fullName", { required: "Full Name is required" })}
-            error={!!errors.fullName}
-            helperText={errors.fullName?.message}
-          />
-
-          {/* Email */}
-          <TextField
-            label="Email ID *"
-            variant="outlined"
-            className="w-full"
-            sx={MaterialInputStyle(!!errors.email)}
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/,
-                message: "Invalid email address",
-              },
-            })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-
-          {/* Phone Number */}
-          <Controller
-            name="phone"
-            control={control}
-            rules={{
-              required: "Phone number is required",
-              minLength: {
-                value: 10,
-                message: "Enter a valid phone number",
-              },
-            }}
-            render={({ field }) => (
-              <div className="w-full phone_input">
-                <PhoneInput
-                  {...field}
-                  country={"us"}
-                  inputStyle={{
-                    width: "100%",
-                    padding: "30px 20px 30px 80px",
-                    borderRadius: "10px",
-                    border: errors.phone
-                      ? "1px solid red"
-                      : "2px solid #e8e6e6",
-                    outline: "none",
-                  }}
-                  dropdownClass="w-full"
-                  containerStyle={{ width: "100%" }}
-                  enableSearch
-                  searchPlaceholder="Search Country"
-                  disableSearchIcon
-                  buttonClass={`w-[60px] border-2 ${
-                    errors.phone && "!border-[#d32f2f]"
-                  }`}
-                  placeholder="Phone no *"
-                  onChange={(value) => field.onChange(value)}
-                />
-                {errors.phone && (
-                  <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-            )}
-          />
-
-          {/* Country (no validation) */}
-          <FormControl fullWidth sx={MaterialInputStyle(false)}>
-            <InputLabel id="country">Country</InputLabel>
+        <div className={`flex flex-col gap-4 ${!onPageForm ? 'h-[72vh]' : 'h-auto'} overflow-y-auto pt-5 lg:pt-6 popup_container pr-4`}>
+          <div className="grid lg:flex gap-[14px]">
+            {/* Full Name */}    
+            <TextField
+              label="Full Name *"
+              variant="outlined"
+              className="w-full"
+              sx={MaterialInputStyle(!!errors.fullName)}
+              {...register("fullName", { required: "Full Name is required" })}
+              error={!!errors.fullName}
+              helperText={errors.fullName?.message}
+            />     
+            {/* Email */}
+            <TextField
+              label="Email ID *"
+              variant="outlined"
+              className="w-full"
+              sx={MaterialInputStyle(!!errors.email)}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/,
+                  message: "Invalid email address",
+                },
+              })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          </div>
+          <div className="grid lg:flex gap-[14px]">
+            {/* Phone Number */}
             <Controller
-              name="country"
+              name="phone"
               control={control}
+              rules={{
+                required: "Phone number is required",
+                minLength: {
+                  value: 10,
+                  message: "Enter a valid phone number",
+                },
+              }}
               render={({ field }) => (
-                <Select
-                  {...field}
-                  value={field.value || ""}
-                  labelId="country"
-                  IconComponent={KeyboardArrowDownIcon}
-                >
-                  {Countries.map((country) => (
-                    <MenuItem key={country.code} value={country.name}>
-                      {country.name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <div className="w-full phone_input">
+                  <PhoneInput
+                    {...field}
+                    country={"us"}
+                    inputStyle={{
+                      width: "100%",
+                      padding: "30px 20px 30px 80px",
+                      borderRadius: "10px",
+                      border: errors.phone
+                        ? "1px solid red"
+                        : "2px solid #e8e6e6",
+                      outline: "none",
+                    }}
+                    dropdownClass="w-full"
+                    containerStyle={{ width: "100%" }}
+                    enableSearch
+                    searchPlaceholder="Search Country"
+                    disableSearchIcon
+                    buttonClass={`w-[60px] border-2 ${
+                      errors.phone && "!border-[#d32f2f]"
+                    }`}
+                    placeholder="Phone no *"
+                    onChange={(value) => field.onChange(value)}
+                  />
+                  {errors.phone && (
+                    <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
               )}
             />
-          </FormControl>
-
+            {/* Country (no validation) */}
+            <FormControl fullWidth sx={MaterialInputStyle(false)}>
+              <InputLabel id="country">Country</InputLabel>
+              <Controller
+                name="country"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="country"
+                    IconComponent={KeyboardArrowDownIcon}
+                  >
+                    {Countries.map((country) => (
+                      <MenuItem key={country.code} value={country.name}>
+                        {country.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </FormControl>
+          </div>
+            <FormControl fullWidth sx={MaterialInputStyle(false)}>
+              <InputLabel id="businessCategory">Business Category</InputLabel>
+              <Controller
+                name="businessCategory"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="businessCategory"
+                    IconComponent={KeyboardArrowDownIcon}
+                  >
+                    {["A", "B"].map((item) => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </FormControl>
           {/* Message */}
           <textarea
             id="message"
@@ -217,7 +238,6 @@ export default function MSDSForm({
             className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
           ></textarea>
         </div>
-
         <Button title={"Submit"} className="mt-6" />
       </form>
     </div>

@@ -1,3 +1,5 @@
+import { ButtonProps } from "./global.type";
+
 export type WhereWeOperateDataItem = {
   id: number;
   documentId: string;
@@ -71,4 +73,11 @@ export type ContactBannerProps = {
       sectionTitle?: string | null;
       office?: ContactBannerOffice | null;
   } | null;
+};
+
+export type ContactExpProps = {
+   data: {
+      title: string;
+      ctaButton: ButtonProps;
+  };
 };
