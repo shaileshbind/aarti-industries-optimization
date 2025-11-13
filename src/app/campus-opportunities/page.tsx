@@ -75,7 +75,7 @@ const Page = async () => {
         </div>
       }
       {section_three && <ImageGallery data={section_three} imgArr={section_three} />}
-      {section_sixData && <ThePeople data={section_sixData} />}
+      {section_four && <ThePeople data={section_four} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

@@ -2,6 +2,7 @@ import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import ContactBanner from "../components/Contact/ContactBanner";
+import ContactBannerBottom from "../components/Contact/ContactBannerBottom";
 import WhereWeOperate from "../components/Contact/WhereWeOperate";
 import { getPageData } from "@/_lib/pageData.fetch";
 
@@ -15,9 +16,8 @@ const Page = async () => {
   ])
   const {
     leftSection,
-    section_one,
+    section_two,
   } = data;
-
   return (
     <div>
       {leftSection && <ContactBanner data={leftSection} />}
@@ -25,7 +25,7 @@ const Page = async () => {
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {section_one && <ContactBanner data={section_one} />}
+      {section_two && <ContactBannerBottom data={section_two} />}
     </div>
   );
 };

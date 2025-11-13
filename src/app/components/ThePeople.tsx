@@ -10,24 +10,28 @@ interface Person {
   id: number;
   name: string;
   designation: string;
-  description: string;
-  image: string;
+  testimonialText: string;
+  image: {
+    url: string;
+    alternativeText: string;
+  };
   url?: string;
 }
 interface ThePeopleProps {
   data: {
     title: string;
-    people: Person[];
+    testimonials: Person[];
   };
 }
 
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
+  console.log("data", data);
   return (
     <div className="w-full mt-10 mb-40">
       {data?.title && <H2 className="text-center mb-11">{data?.title}</H2>}
 
       {/* Swiper center mode slider */}
-      {data?.people?.length > 0 && (
+      {data?.testimonials?.length > 0 && (
         <div className="container !max-w-[800px] relative mb-10">
           <Swiper
             spaceBetween={24}
@@ -50,7 +54,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               },
             }}
           >
-            {data?.people?.map((person) => (
+            {data?.testimonials?.map((person) => (
               <SwiperSlide
                 key={person?.id}
                 className="opactiSlide transition-all duration-300"
@@ -58,8 +62,8 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
                 <div className="bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col lg:flex-row">
                   <div className="w-full lg:w-[40%] relative pt-8 order-2 lg:order-1">
                     <Image
-                      src={person?.image}
-                      alt={person?.name}
+                      src={person?.image?.url}
+                      alt={person?.image?.alternativeText || ""}
                       width={326}
                       height={350}
                       className="object-contain"
@@ -67,8 +71,8 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
                     />
                   </div>
                   <div className="w-full lg:w-[60%] self-center  px-8 py-8 order-1 lg:order-2">
-                    {person?.description && (
-                      <BodyText1>{person?.description}</BodyText1>
+                    {person?.testimonialText && (
+                      <BodyText1>{person?.testimonialText}</BodyText1>
                     )}
 
                     {person?.name && (

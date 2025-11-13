@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import Link from "next/link";
 import { ContactBannerProps } from "@/app/types/contact.type";
+import MSDSForm from "../forms/MSDSForm";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
     return (
@@ -80,7 +81,9 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                         </div>
                     </div>
                     <div className="col-span-7 pl-[30px]">
-                        {/* Form Section */}
+                        <MSDSForm 
+                            onPageForm={true}
+                        />
                     </div>
                 </div>
             </div>
