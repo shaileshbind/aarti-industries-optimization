@@ -150,7 +150,7 @@ const HeroBanner = ({
                 )}
                 {title && (
                   <FadeInRevealBlur delay={0.1}>
-                    <H2 className="text-white mt-[12px] max-w-[260px] lg:max-w-[560px] fluid-container">
+                    <H2 className="text-white mt-[12px] max-w-[280px] lg:max-w-[580px] fluid-container">
                       {title}
                     </H2>
                   </FadeInRevealBlur>
@@ -179,6 +179,13 @@ const HeroBanner = ({
                         secondary
                       />
                     )}
+                  </FadeInRevealBlur>
+                )}
+                 {btnTitle && btnLink && (
+                  <FadeInRevealBlur delay={0.1}>
+                    <div className="mt-[10px] lg:mt-[35px] fluid-container">
+                      <Button title={btnTitle} href={btnLink} />
+                    </div>
                   </FadeInRevealBlur>
                 )}
               </div>

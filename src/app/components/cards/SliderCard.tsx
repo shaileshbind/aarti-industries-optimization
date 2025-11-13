@@ -65,9 +65,9 @@ const SliderCard: FC<SliderCardProps> = ({
           <BodyText1 className="mt-[20px]">{description}</BodyText1>
         )}
 
-        <div className="flex gap-[1%] mt-6 mb-[36px] flex-wrap text-[26px]">
+        <div className="gap-[1%] mt-6 mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
           {values?.map((stat, idx) => (
-            <div key={idx} className="w-[48%]">
+            <div key={idx}>
               {stat?.value && <H2 className="text-orange-200">{stat.value}</H2>}
               {stat?.description && (
                 <BodyText2 className="text-grey-400 mt-[4px]">
@@ -120,9 +120,9 @@ const SliderCard: FC<SliderCardProps> = ({
         <div className="w-[60%]">
           {description && <BodyText1>{description}</BodyText1>}
           {values?.length ? (
-            <div className="flex gap-6 lg:gap-5 my-8">
+            <div className=" gap-6 lg:gap-5 my-8 grid grid-cols-3 items-start gap-x-[10px]">
               {values.map((stat, idx) => (
-                <div key={idx} className="w-1/3">
+                <div key={idx}>
                   {stat?.value && (
                     <H2 className="text-orange-200 !text-[36px]">{stat.value}</H2> 
                   )}

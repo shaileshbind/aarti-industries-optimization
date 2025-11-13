@@ -203,7 +203,7 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[0]?.image?.url}
-                alt={images?.[0]?.image?.alternativeText}
+                alt={images?.[0]?.image?.alternativeText ? images?.[0]?.image?.alternativeText : 'img'}
                 width={284}
                 height={275}
                 className="w-full h-full"
@@ -224,7 +224,7 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[1]?.image?.url}
-                alt={images?.[1]?.image?.alternativeText}
+                alt={images?.[1]?.image?.alternativeText ? images?.[1]?.image?.alternativeText : 'img'}
                 width={236}
                 height={216}
                 className="w-full h-full"
@@ -241,7 +241,7 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[2]?.image?.url}
-                alt={images?.[2]?.image?.alternativeText}
+                alt={images?.[2]?.image?.alternativeText ? images?.[2]?.image?.alternativeText : 'img'}
                 width={274}
                 height={198}
                 className="w-full h-full"
@@ -256,7 +256,7 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[3]?.image?.url}
-                alt={images?.[3]?.image?.alternativeText}
+                alt={images?.[3]?.image?.alternativeText ? images?.[3]?.image?.alternativeText : 'img'}
                 width={355}
                 height={256}
                 className="w-full h-full"
@@ -273,7 +273,7 @@ export default function ParallaxCardSection({
           >
             <Image
               src={images?.[3]?.mobImage?.url}
-              alt={images?.[3]?.mobImage?.alternativeText}
+              alt={images?.[3]?.mobImage?.alternativeText ? images?.[3]?.mobImage?.alternativeText : 'img'}
               width={335}
               height={246}
               className="w-full h-full"
