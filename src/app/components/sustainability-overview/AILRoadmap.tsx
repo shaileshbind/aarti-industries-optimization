@@ -62,12 +62,16 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
 
         const tl = gsap.timeline({
           scrollTrigger: {
+            id: "ailRoadmapTrigger11",
             trigger: wrapper,
             start: "top top",
             end: "+=2500",
             scrub: true,
             pin: true,
             pinSpacing: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 1,
             onUpdate: () => {
               const starRect = star.getBoundingClientRect();
               const starY = starRect.top + window.scrollY;
@@ -93,6 +97,17 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                 );
               }
             },
+            onLeave: () => {
+              // Refresh other ScrollTriggers after this one completes
+              requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+              });
+            },
+            onEnterBack: () => {
+              requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+              });
+            },
           },
         });
 
@@ -107,6 +122,9 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
     return () => {
       clearTimeout(timeoutId);
       gsapContextRef.current?.revert();
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
     };
   }, []);
 
@@ -125,14 +143,17 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
       backgroundImage: `url(${nextImageData.url})`,
       backgroundSize: "cover",
       backgroundPosition: "top",
+      backgroundAttachment: "fixed",
       zIndex: "2",
-      transform: "translateY(100%)",
+      // transform: "translateY(100%)",
       opacity: "0",
+      height: "0%",
     });
     container.appendChild(newImage);
 
     gsap.to(newImage, {
-      y: "0%",
+      // y: "0%",
+      height: "100%",
       opacity: 1,
       duration: 0.8,
       ease: "power3.out",
@@ -170,28 +191,28 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
         <div className="absolute inset-0 bg-black/20" />
         <div className="w-full h-full absolute">
           <div className="relative w-full h-full">
-            <div className="h-full w-[1px] bg-gray-300/30 absolute left-[12%] lg:left-[5%]" />
+            <div className="h-full w-[1px] bg-gray-300/30 absolute left-[90px]" />
             {sectionTitle && (
-              <H2 className="text-white left-[16%] lg:left-[7%] mt-[150px] absolute mr-[20px] lg:mr-[20px]">
+              <H2 className="text-white left-[120px]  mt-[150px] absolute mr-[20px] lg:mr-[20px]">
                 {sectionTitle}
               </H2>
             )}
             <div
               ref={scrollContainerRef}
-              className="mt-[250px] absolute left-[2%]"
+              className="mt-[250px] absolute left-[40px]"
             >
               <div
                 ref={lineRef}
-                className="w-[1px] bg-white absolute left-[10.4%] lg:left-[7%]"
+                className="w-[1px] bg-white absolute left-[50px]"
                 style={{ height: "0px" }}
               />
-              <div ref={starRef} className="relative">
+              <div ref={starRef} className="absolute left-[50px] min-w-[20px] ml-[-10px]">
                 <Image
                   src="/images/home/star-white.svg"
                   alt="star"
                   width={20}
                   height={20}
-                  className="absolute -translate-x-full top-[-5px] left-[13%] lg:left-[8.7%]"
+                  // className="absolute -translate-x-full top-[-5px] "
                 />
               </div>
               <div className="grid row-cols-4 items-start gap-y-[20px]">
