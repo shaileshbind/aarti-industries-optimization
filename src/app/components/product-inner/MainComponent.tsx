@@ -4,9 +4,13 @@ import { BodyText1, BodyText2, H3, SubH1 } from "@/app/components/Typography2";
 import Image from "next/image";
 import ProductList from "@/app/components/products/ProdutList";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
-import { ProductData, RelatedProduct } from "@/app/types/product.inner.type";
+import {
+  CategorySubcategoryProps,
+  ProductData,
+  RelatedProduct,
+} from "@/app/types/product.inner.type";
 import MSDSPopup from "../Popups/MSDSPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GeneralPopup from "../Popups/GeneralPopup";
 
 interface ProductInnerPageProps {
@@ -21,12 +25,14 @@ export default function ProductInnerPage({
   const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(false);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [document, setdocument] = useState<string>("");
+  const [categorySubcategoryData, setcategorySubcategoryData] =
+    useState<CategorySubcategoryProps>([]);
 
   const product = data;
   const productDetails = product?.productDetails;
   const relatedProducts = relatedData;
 
-  console.log("product", product)
+  // console.log("product", product);
 
   const productTable = [
     { title: "Chemistries", desc: productDetails?.chemistries },
@@ -47,6 +53,37 @@ export default function ProductInnerPage({
     },
     { title: "IUPAC Name", desc: productDetails?.iupacName },
   ];
+
+  useEffect(() => {
+    const filteredCategorySubcategory: CategorySubcategoryProps = [];
+
+    product?.product_sub_categories?.forEach((item) => {
+      filteredCategorySubcategory?.push({
+        category: item?.product_category?.productCategory,
+        subCategories: [item?.subCategory],
+      });
+    });
+
+    const mergedData = Object.values(
+      filteredCategorySubcategory.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = {
+            category: item.category,
+            subCategories: new Set(),
+          };
+        }
+        item.subCategories.forEach((sub) =>
+          acc[item.category].subCategories.add(sub)
+        );
+        return acc;
+      }, {} as Record<string, { category: string; subCategories: Set<string> }>)
+    ).map((item) => ({
+      category: item.category,
+      subCategories: Array.from(item.subCategories),
+    }));
+
+    setcategorySubcategoryData(mergedData);
+  }, []);
 
   return (
     <div className="w-full min-h-screen">
@@ -125,8 +162,8 @@ export default function ProductInnerPage({
                 <button
                   className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
                   onClick={() => {
-                    setshowGeneralPopup(true)
-                    setdocument("")
+                    setshowGeneralPopup(true);
+                    setdocument("");
                   }}
                 >
                   Enquire now
@@ -269,6 +306,7 @@ export default function ProductInnerPage({
           isOpen={showGeneralPopup}
           setshowGeneralPopup={setshowGeneralPopup}
           document={document}
+          categorySubcategoryData={categorySubcategoryData}
         />
       )}
     </div>

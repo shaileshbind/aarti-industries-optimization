@@ -7,7 +7,7 @@ import { ProductPageProps } from "../../types/product.type";
 export const dynamic = "force-dynamic";
 
 export default async function ProductInner({ params }: ProductPageProps) {
-  const { productId } = params;
+  const { productId } = await params;
   let relatedData;
 
   const mainData = await getData(`/products-details/${productId}`);

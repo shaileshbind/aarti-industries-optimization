@@ -40,6 +40,13 @@ interface ProductImageProps {
   url: string;
 }
 
+export type ProductSubcategory = {
+  subCategory: string;
+  product_category: {
+    productCategory: string;
+  };
+};
+
 export interface ProductData {
   id: number;
   slug?: string;
@@ -48,6 +55,7 @@ export interface ProductData {
   productImage?: ProductImageProps;
   productMobImage?: string | null;
   productDetails?: ProductDetails;
+  product_sub_categories?: ProductSubcategory[];
 }
 
 export interface RelatedProduct {
@@ -61,3 +69,8 @@ export interface RelatedProduct {
     };
   };
 }
+
+export type CategorySubcategoryProps = {
+  category: string;
+  subCategories: string[];
+}[];

@@ -24,17 +24,47 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
   const starRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const imageRef = useRef<HTMLDivElement>(null);
+  const imageRefs = useRef<HTMLDivElement[]>([]);
   const gsapContextRef = useRef<gsap.Context | null>(null);
-
-  // Memoize current image data
-  const imageData = useMemo(
-    () => leftSection?.[active]?.image,
-    [leftSection, active]
-  );
+  const prevIndexRef = useRef(0);
 
   // Memoize right section data
   const rightSectionData = useMemo(() => rightSection?.[0], [rightSection]);
+
+  // 🔹 Animation function for image transition (same as InvestingInPotential)
+  const animateImageTransition = useCallback(
+    (newIndex: number, direction: number) => {
+      const incoming = imageRefs.current[newIndex];
+      const outgoing = imageRefs.current[prevIndexRef.current];
+
+      if (newIndex === prevIndexRef.current || !incoming || !outgoing) return;
+
+      // Animate outgoing image
+      gsap.to(outgoing, {
+        clipPath:
+          direction > 0 ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)",
+        duration: 0.6,
+        ease: "power2.in",
+      });
+
+      // Animate incoming image
+      gsap.fromTo(
+        incoming,
+        {
+          clipPath:
+            direction > 0 ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
+        },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.6,
+          ease: "power2.out",
+        }
+      );
+
+      prevIndexRef.current = newIndex;
+    },
+    []
+  );
 
   // GSAP scroll animation
   useEffect(() => {
@@ -42,11 +72,19 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
     const star = starRef.current;
     const line = lineRef.current;
     const container = scrollContainerRef.current;
-    const image = imageRef.current;
 
-    if (!wrapper || !star || !line || !container || !image) return;
+    if (!wrapper || !star || !line || !container) return;
 
     const timeoutId = setTimeout(() => {
+      // Initialize clip paths
+      imageRefs.current.forEach((el, i) => {
+        if (el) {
+          gsap.set(el, {
+            clipPath: i === 0 ? "inset(0% 0% 0% 0%)" : "inset(100% 0% 0% 0%)",
+          });
+        }
+      });
+
       gsapContextRef.current = gsap.context(() => {
         const containerTop = container.getBoundingClientRect().top;
 
@@ -58,21 +96,20 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
 
         gsap.set(star, { y: 0 });
         gsap.set(line, { height: 0 });
-        gsap.set(image, { y: "0%", opacity: 1 });
 
         const tl = gsap.timeline({
           scrollTrigger: {
             id: "ailRoadmapTrigger11",
             trigger: wrapper,
             start: "top top",
-            end: "+=2500",
+            end: "+=1500",
             scrub: true,
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             refreshPriority: 1,
-            onUpdate: () => {
+            onUpdate: (self) => {
               const starRect = star.getBoundingClientRect();
               const starY = starRect.top + window.scrollY;
               let activeIndex: number | null = null;
@@ -91,14 +128,15 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                 }
               }
 
-              if (activeIndex !== null) {
-                setActive((prev) =>
-                  prev !== activeIndex ? activeIndex : prev
-                );
+              if (
+                activeIndex !== null &&
+                activeIndex !== prevIndexRef.current
+              ) {
+                setActive(activeIndex);
+                animateImageTransition(activeIndex, self.direction);
               }
             },
             onLeave: () => {
-              // Refresh other ScrollTriggers after this one completes
               requestAnimationFrame(() => {
                 ScrollTrigger.refresh();
               });
@@ -126,44 +164,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
         ScrollTrigger.refresh();
       });
     };
-  }, []);
-
-  // Image swipe animation
-  useEffect(() => {
-    const container = imageRef.current;
-    if (!container) return;
-
-    const currentImage = container.querySelector(".active-img");
-    const nextImageData = leftSection?.[active]?.image;
-    if (!nextImageData?.url) return;
-
-    const newImage = document.createElement("div");
-    newImage.className = "absolute inset-0 new-img";
-    Object.assign(newImage.style, {
-      backgroundImage: `url(${nextImageData.url})`,
-      backgroundSize: "cover",
-      backgroundPosition: "top",
-      backgroundAttachment: "fixed",
-      zIndex: "2",
-      // transform: "translateY(100%)",
-      opacity: "0",
-      height: "0%",
-    });
-    container.appendChild(newImage);
-
-    gsap.to(newImage, {
-      // y: "0%",
-      height: "100%",
-      opacity: 1,
-      duration: 0.8,
-      ease: "power3.out",
-      onComplete: () => {
-        currentImage?.remove();
-        newImage.classList.remove("new-img");
-        newImage.classList.add("active-img");
-      },
-    });
-  }, [active, leftSection]);
+  }, [animateImageTransition]);
 
   // Memoized ref callback
   const setItemRef = useCallback(
@@ -176,24 +177,43 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
   return (
     <>
       <div ref={wrapperRef} className="w-full h-screen relative">
-        {imageData?.url && (
-          <div ref={imageRef} className="absolute inset-0">
-            <div
-              className="absolute inset-0 active-img"
-              style={{
-                backgroundImage: `url(${imageData.url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "top",
-              }}
-            />
+        {/* Background Images with clip-path animation */}
+        {leftSection && leftSection?.length > 0 && (
+          <div className="absolute inset-0 z-[0]">
+            {leftSection?.map(
+              (item, index) =>
+                item?.image?.url && (
+                  <div
+                    key={`image-${index}`}
+                    ref={(el) => {
+                      if (el) imageRefs.current[index] = el;
+                    }}
+                    className="absolute inset-0"
+                    style={{ zIndex: active === index ? 2 : 1 }}
+                  >
+                    <Image
+                      src={item?.image?.url}
+                      alt={
+                        item?.image?.alternativeText ||
+                        `Roadmap image ${index + 1}`
+                      }
+                      fill
+                      className="object-cover"
+                      priority={index === 0}
+                    />
+                  </div>
+                )
+            )}
           </div>
         )}
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="w-full h-full absolute">
+
+        <div className="absolute inset-0 bg-black/20 z-[1]" />
+
+        <div className="w-full h-full absolute z-[2]">
           <div className="relative w-full h-full">
             <div className="h-full w-[1px] bg-gray-300/30 absolute left-[90px]" />
             {sectionTitle && (
-              <H2 className="text-white left-[120px]  mt-[150px] absolute mr-[20px] lg:mr-[20px]">
+              <H2 className="text-white left-[120px] mt-[150px] absolute mr-[20px] lg:mr-[20px]">
                 {sectionTitle}
               </H2>
             )}
@@ -206,13 +226,15 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                 className="w-[1px] bg-white absolute left-[50px]"
                 style={{ height: "0px" }}
               />
-              <div ref={starRef} className="absolute left-[50px] min-w-[20px] ml-[-10px]">
+              <div
+                ref={starRef}
+                className="absolute left-[50px] min-w-[20px] ml-[-10px]"
+              >
                 <Image
                   src="/images/home/star-white.svg"
                   alt="star"
                   width={20}
                   height={20}
-                  // className="absolute -translate-x-full top-[-5px] "
                 />
               </div>
               <div className="grid row-cols-4 items-start gap-y-[20px]">
