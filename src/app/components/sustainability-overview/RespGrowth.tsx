@@ -103,7 +103,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       const animationEndProgress = 0.55;
       const animationScrollDistance = isMobile
         ? window.innerHeight * 1.5
-        : window.innerHeight * 6;
+        : window.innerHeight * 4;
 
       const mainTl = gsap.timeline({
         scrollTrigger: {
@@ -151,10 +151,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 delay: 0.2,
               });
             }
-            // Refresh ScrollTrigger after leaving
-            requestAnimationFrame(() => {
-              ScrollTrigger.refresh();
-            });
           },
           onEnterBack: () => {
             if (!isMobile && tabsRef.current) {
@@ -164,10 +160,33 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 ease: "power2.in",
               });
             }
-            requestAnimationFrame(() => {
-              ScrollTrigger.refresh();
-            });
           },
+          // onLeave: () => {
+          //   if (!isMobile && tabsRef.current) {
+          //     gsap.to(tabsRef.current, {
+          //       opacity: 0,
+          //       duration: 0.6,
+          //       ease: "power2.out",
+          //       delay: 0.2,
+          //     });
+          //   }
+          //   // Refresh ScrollTrigger after leaving
+          //   requestAnimationFrame(() => {
+          //     ScrollTrigger.refresh();
+          //   });
+          // },
+          // onEnterBack: () => {
+          //   if (!isMobile && tabsRef.current) {
+          //     gsap.to(tabsRef.current, {
+          //       opacity: 1,
+          //       duration: 0.6,
+          //       ease: "power2.in",
+          //     });
+          //   }
+          //   requestAnimationFrame(() => {
+          //     ScrollTrigger.refresh();
+          //   });
+          // },
         },
       });
 
@@ -378,7 +397,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   }, [activeTab, mainSection.length, measureIndicator]);
 
   return (
-    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]">
+    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[100px]">
       <div
         ref={titleSection}
         className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
