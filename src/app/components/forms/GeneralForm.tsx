@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -13,6 +13,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import Button from "../Button";
+import { CategorySubcategoryProps } from "@/app/types/product.inner.type";
+import clsx from "clsx";
 
 type FormValues = {
   fullName: string;
@@ -29,16 +31,20 @@ type FormValues = {
 type GeneralFormProps = {
   setshowGeneralPopup?: React.Dispatch<React.SetStateAction<boolean>>;
   document?: string;
+  categorySubcategoryData?: CategorySubcategoryProps;
 };
 
 export default function GeneralForm({
   setshowGeneralPopup,
   document,
+  categorySubcategoryData,
 }: GeneralFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     control,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<FormValues>({
@@ -54,6 +60,25 @@ export default function GeneralForm({
       subCategory: "",
     },
   });
+
+  // 🔹 Watch the category field
+  const selectedCategory = watch("category");
+
+  // 🔹 Get subcategories based on selected category
+  const availableSubcategories =
+    categorySubcategoryData?.find((item) => item.category === selectedCategory)
+      ?.subCategories || [];
+
+  // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
+  useEffect(() => {
+    if (availableSubcategories.length === 1) {
+      // Auto-select if only one subcategory
+      setValue("subCategory", availableSubcategories[0]);
+    } else {
+      // Reset if multiple or no subcategories
+      setValue("subCategory", "");
+    }
+  }, [availableSubcategories, setValue]);
 
   const onSubmit = async (data: FormValues) => {
     const formattedData = {
@@ -104,6 +129,7 @@ export default function GeneralForm({
       console.error("Request failed:", error);
     }
   };
+
   return (
     <div className="w-full">
       <div>
@@ -112,7 +138,7 @@ export default function GeneralForm({
       </div>
 
       <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-        <div className=" flex flex-col gap-4 h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container">
+        <div className=" flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container">
           {/* Full Name */}
           <TextField
             label="Full Name *"
@@ -257,6 +283,7 @@ export default function GeneralForm({
           </FormControl>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Category */}
             <FormControl fullWidth sx={MaterialInputStyle(false)}>
               <InputLabel id="category">Category</InputLabel>
               <Controller
@@ -269,9 +296,9 @@ export default function GeneralForm({
                     labelId="category"
                     IconComponent={KeyboardArrowDownIcon}
                   >
-                    {["A", "B"].map((item) => (
-                      <MenuItem key={item} value={item}>
-                        {item}
+                    {categorySubcategoryData?.map((item, index) => (
+                      <MenuItem key={index} value={item?.category}>
+                        {item?.category}
                       </MenuItem>
                     ))}
                   </Select>
@@ -279,7 +306,16 @@ export default function GeneralForm({
               />
             </FormControl>
 
-            <FormControl fullWidth sx={MaterialInputStyle(false)}>
+            {/* Subcategory - Disabled if no subcategories */}
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(false)}
+              className={clsx(
+                availableSubcategories?.length > 0
+                  ? "opacity-100 pointer-events-auto"
+                  : "opacity-60 pointer-events-none"
+              )}
+            >
               <InputLabel id="subCategory">Sub category</InputLabel>
               <Controller
                 name="subCategory"
@@ -290,12 +326,18 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="subCategory"
                     IconComponent={KeyboardArrowDownIcon}
+                    // 🔹 Disable if there's only one (auto-selected) or none
+                    disabled={
+                      availableSubcategories.length !== 1 &&
+                      availableSubcategories.length === 0
+                    }
                   >
-                    {["A", "B"].map((item) => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
+                    {availableSubcategories?.length > 0 &&
+                      availableSubcategories?.map((subCat, index) => (
+                        <MenuItem key={index} value={subCat}>
+                          {subCat}
+                        </MenuItem>
+                      ))}
                   </Select>
                 )}
               />

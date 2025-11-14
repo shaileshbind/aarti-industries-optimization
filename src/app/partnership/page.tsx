@@ -44,7 +44,12 @@ const Page = async () => {
 
       {section_six && <WorksWithPartners data={section_six} />}
 
-      {section_seven && <CardsSlider data={section_seven} />}
+      {section_seven && (
+        <CardsSlider
+          data={section_seven}
+          headingClassName="text-[24px] md:text-[30px] xl:text-[36px]"
+        />
+      )}
 
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />

@@ -21,7 +21,7 @@ type FormValues = {
   phone: string;
   country: string | null;
   message: string;
-   businessCategory: string;
+  businessCategory: string;
 };
 
 type MSDSFormProps = {
@@ -50,6 +50,15 @@ export default function MSDSForm({
       message: "",
     },
   });
+
+  const businessCategories = [
+    "Chemical",
+    "Sustainability",
+    "Investor Relations",
+    "Purchase",
+    "New/Strategic Business Development",
+    "Corporate communications",
+  ];
 
   const onSubmit = async (data: FormValues) => {
     const formattedData = {
@@ -100,19 +109,23 @@ export default function MSDSForm({
   return (
     <div className="w-full">
       {!onPageForm ? (
-      <div>
-        <p className="text-xl text-[#002F50]">Recipient Information</p>
-        <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
-      </div>
-      ):(
-        <div> 
+        <div>
+          <p className="text-xl text-[#002F50]">Recipient Information</p>
+          <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
+        </div>
+      ) : (
+        <div>
           <H2>Write to Us</H2>
         </div>
       )}
       <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-        <div className={`flex flex-col gap-4 ${!onPageForm ? 'h-[72vh]' : 'h-auto'} overflow-y-auto pt-5 lg:pt-6 popup_container pr-4`}>
+        <div
+          className={`flex flex-col gap-4 ${
+            !onPageForm ? "max-h-[72vh]" : "h-auto"
+          } overflow-y-auto pt-5 lg:pt-6 popup_container pr-4`}
+        >
           <div className="grid lg:flex gap-[14px]">
-            {/* Full Name */}    
+            {/* Full Name */}
             <TextField
               label="Full Name *"
               variant="outlined"
@@ -121,7 +134,7 @@ export default function MSDSForm({
               {...register("fullName", { required: "Full Name is required" })}
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
-            />     
+            />
             {/* Email */}
             <TextField
               label="Email ID *"
@@ -207,6 +220,8 @@ export default function MSDSForm({
               />
             </FormControl>
           </div>
+
+          {onPageForm && (
             <FormControl fullWidth sx={MaterialInputStyle(false)}>
               <InputLabel id="businessCategory">Business Category</InputLabel>
               <Controller
@@ -219,7 +234,7 @@ export default function MSDSForm({
                     labelId="businessCategory"
                     IconComponent={KeyboardArrowDownIcon}
                   >
-                    {["A", "B"].map((item) => (
+                    {businessCategories.map((item) => (
                       <MenuItem key={item} value={item}>
                         {item}
                       </MenuItem>
@@ -228,6 +243,8 @@ export default function MSDSForm({
                 )}
               />
             </FormControl>
+          )}
+
           {/* Message */}
           <textarea
             id="message"

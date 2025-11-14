@@ -68,6 +68,7 @@ export type CDMOSplchemProps = {
       image: ImageProps;
     }[];
   };
+  headingClassName?: string;
 };
 
 export type CDMOSafegreenProps = {
