@@ -3,7 +3,7 @@ import React, { useRef, useLayoutEffect, useState, RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInReveal } from "../ScrollReveal";
-import { BodyText2, H3, SubH1 } from "../Typography2";
+import { BodyText2, H3, SubH2 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import Image from "next/image";
 import Button from "../Button";
@@ -64,7 +64,7 @@ export default function ParallaxCardSection({
         const images = [
           { ref: leftImageRef, y: -400 },
           { ref: rightImageRef, y: -400 },
-          { ref: bottomLeftImageRef, y: -300 },
+          { ref: bottomLeftImageRef, y: -250 },
         ];
 
         images.forEach(({ ref, y }) => {
@@ -194,7 +194,7 @@ export default function ParallaxCardSection({
         <Image src="/images/home/line.svg" alt="line" width={1} height={120} />
       </div>
 
-      <div className="mt-5 lg:mt-[90px]">
+      <div className="mt-5 xl:mt-[0px]">
         <div className="flex gap-12 justify-between">
           {images?.[0]?.image?.url && (
             <div
@@ -203,17 +203,21 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[0]?.image?.url}
-                alt={images?.[0]?.image?.alternativeText ? images?.[0]?.image?.alternativeText : 'img'}
+                alt={
+                  images?.[0]?.image?.alternativeText
+                    ? images?.[0]?.image?.alternativeText
+                    : "img"
+                }
                 width={284}
                 height={275}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
 
           {description && (
             <AnimatedText className="w-[90%] lg:w-[70%] text-center mx-auto">
-              <SubH1 className="text-blue-200">{description}</SubH1>
+              <SubH2 className="text-blue-200">{description}</SubH2>
             </AnimatedText>
           )}
 
@@ -224,10 +228,14 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[1]?.image?.url}
-                alt={images?.[1]?.image?.alternativeText ? images?.[1]?.image?.alternativeText : 'img'}
+                alt={
+                  images?.[1]?.image?.alternativeText
+                    ? images?.[1]?.image?.alternativeText
+                    : "img"
+                }
                 width={236}
                 height={216}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
@@ -241,10 +249,14 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[2]?.image?.url}
-                alt={images?.[2]?.image?.alternativeText ? images?.[2]?.image?.alternativeText : 'img'}
+                alt={
+                  images?.[2]?.image?.alternativeText
+                    ? images?.[2]?.image?.alternativeText
+                    : "img"
+                }
                 width={274}
                 height={198}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
@@ -256,10 +268,14 @@ export default function ParallaxCardSection({
             >
               <Image
                 src={images?.[3]?.image?.url}
-                alt={images?.[3]?.image?.alternativeText ? images?.[3]?.image?.alternativeText : 'img'}
+                alt={
+                  images?.[3]?.image?.alternativeText
+                    ? images?.[3]?.image?.alternativeText
+                    : "img"
+                }
                 width={355}
                 height={256}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
@@ -273,7 +289,11 @@ export default function ParallaxCardSection({
           >
             <Image
               src={images?.[3]?.mobImage?.url}
-              alt={images?.[3]?.mobImage?.alternativeText ? images?.[3]?.mobImage?.alternativeText : 'img'}
+              alt={
+                images?.[3]?.mobImage?.alternativeText
+                  ? images?.[3]?.mobImage?.alternativeText
+                  : "img"
+              }
               width={335}
               height={246}
               className="w-full h-full"
@@ -283,7 +303,7 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[64px] lg:pt-[110px] px-5 lg:pl-[60px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[64px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}

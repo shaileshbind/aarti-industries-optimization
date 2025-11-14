@@ -137,6 +137,7 @@ body {
 /* [ Primary Button Animation - subtle scale  ] */
 .button-subtle-scale {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform: scale(1);
 }
 .button-subtle-scale:hover {
   transform: scale(1.06);
@@ -578,4 +579,12 @@ body {
 }
 .opactiSlide.swiper-slide-active{
   opacity: 1;
+}
+.people-swiper .swiper-slide {
+  height: auto !important;
+  display: flex;
+}
+
+.people-swiper .slide-box {
+  height: 100%;
 }

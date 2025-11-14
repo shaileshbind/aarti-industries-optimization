@@ -9,8 +9,12 @@ import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 import { WordReveal } from "./ScrollReveal";
 import { H2, SubH2 } from "./Typography2";
+import clsx from "clsx";
 
-const CardsSlider: React.FC<CDMOSplchemProps> = ({ data }) => {
+const CardsSlider: React.FC<CDMOSplchemProps> = ({
+  data,
+  headingClassName,
+}) => {
   const { sectionTitle, cards } = data;
   const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -39,9 +43,13 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({ data }) => {
               stagger={0.1}
               fromY={10}
               duration={3}
-              className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4"
+              className={clsx(
+                `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`
+              )}
             >
-              <H2 className="text-blue-200">{sectionTitle}</H2>
+              <H2 className={clsx(`text-blue-200`, headingClassName)}>
+                {sectionTitle}
+              </H2>
             </WordReveal>
           )}
 
@@ -55,7 +63,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({ data }) => {
                   1024: {
                     slidesPerView: 4.2,
                     spaceBetween: 24,
-                    slidesOffsetBefore: 55,
+                    slidesOffsetBefore: 40,
                   },
                 }}
                 modules={[Pagination, Navigation, Mousewheel]}
@@ -107,39 +115,41 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({ data }) => {
               </Swiper>
 
               <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
-                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
-                  <button
-                    className={`swiper-button-prev-simplified transition-opacity ${
-                      isBeginning
-                        ? "pointer-events-none opacity-30"
-                        : "cursor-pointer opacity-100"
-                    }`}
-                    aria-label="Previous slide"
-                  >
-                    <Image
-                      src="/images/home/chevron-right-orange.svg"
-                      alt="Previous"
-                      width={34}
-                      height={34}
-                      className="rotate-180"
-                    />
-                  </button>
-                  <button
-                    className={`swiper-button-next-simplified transition-opacity ${
-                      isEnd
-                        ? "pointer-events-none opacity-30"
-                        : "cursor-pointer opacity-100"
-                    }`}
-                    aria-label="Next slide"
-                  >
-                    <Image
-                      src="/images/home/chevron-right-orange.svg"
-                      alt="Next"
-                      width={34}
-                      height={34}
-                    />
-                  </button>
-                </div>
+                {cards?.length > 4 && (
+                  <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                    <button
+                      className={`swiper-button-prev-simplified transition-opacity ${
+                        isBeginning
+                          ? "pointer-events-none opacity-30"
+                          : "cursor-pointer opacity-100"
+                      }`}
+                      aria-label="Previous slide"
+                    >
+                      <Image
+                        src="/images/home/chevron-right-orange.svg"
+                        alt="Previous"
+                        width={34}
+                        height={34}
+                        className="rotate-180"
+                      />
+                    </button>
+                    <button
+                      className={`swiper-button-next-simplified transition-opacity ${
+                        isEnd
+                          ? "pointer-events-none opacity-30"
+                          : "cursor-pointer opacity-100"
+                      }`}
+                      aria-label="Next slide"
+                    >
+                      <Image
+                        src="/images/home/chevron-right-orange.svg"
+                        alt="Next"
+                        width={34}
+                        height={34}
+                      />
+                    </button>
+                  </div>
+                )}
                 <div className="simplified-swiper-pagination lg:!ml-14 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[75%]" />
               </div>
             </div>

@@ -63,7 +63,7 @@ const Header = () => {
     },
     {
       name: "Sustainability",
-      href: "/sustainability",
+      href: "/sustainability-overview",
       hasDropdown: true,
       dropdownItems: [
         { name: "ESG Initiatives", href: "/sustainability/esg" },
@@ -102,7 +102,7 @@ const Header = () => {
         { name: "Downloads", href: "/resources/downloads" },
         { name: "Media Center", href: "/resources/media" },
         { name: "Events", href: "/resources/events" },
-        { name: "Contact", href: "/resources/contact" },
+        { name: "Contact", href: "/contact" },
       ],
     },
   ];

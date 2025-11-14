@@ -33,12 +33,13 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
 
       {/* Swiper center mode slider */}
       {testimonials?.length > 0 && (
-        <div className="container !max-w-[800px] relative md:mb-10">
+        <div className="container !max-w-[900px] relative md:mb-10">
           <Swiper
             spaceBetween={24}
             slidesPerView={1}
             centeredSlides={true}
-            loop={true}
+            autoHeight={false}
+            loop={false}
             modules={[Navigation, Pagination]}
             pagination={{
               el: ".home-by-use-section-swiper",
@@ -60,17 +61,17 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
                 key={person?.id}
                 className="opactiSlide transition-all duration-300"
               >
-                <div className="bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col md:flex-row  md:h-[370px]">
-                  <div className="w-full md:w-[40%] relative md:pt-8 order-2 md:order-1 h-[278px] md:h-full">
+                <div className="slide-box  bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col md:flex-row ">
+                  <div className="w-full md:w-[35%] relative mt-auto md:pt-8 order-2 md:order-1 h-[278px] md:h-full">
                     <Image
                       src={person?.image?.url}
                       alt={person?.name}
                       width={326}
                       height={350}
-                      className="w-[80%] md:w-full  h-full"
+                      className="w-[80%] md:w-full  h-full object-contain object-bottom"
                     />
                   </div>
-                  <div className="w-full md:w-[60%] self-center p-5 md:px-8 md:py-8 order-1 md:order-2">
+                  <div className="w-full md:w-[65%] self-center p-5 md:px-8 md:py-8 order-1 md:order-2">
                     {person?.testimonialText && (
                       <BodyText1>{person?.testimonialText}</BodyText1>
                     )}
