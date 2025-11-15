@@ -239,7 +239,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                       sensitivity: 1,
                       releaseOnEdges: true,
                     }}
-                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:pl-[unset]"
+                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {data?.[active]?.card?.map((item, index) => (
                       <SwiperSlide key={`${active}-${index}`}>
@@ -257,7 +257,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
 
               {/* Navigation Buttons */}
               <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
-                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-2 right-[100px]">
                   <button
                     className={`swiper-button-prev-useBySection transition-opacity ${
                       isBeginning
@@ -292,7 +292,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     />
                   </button>
                 </div>
-                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[75%] relative" />
+                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[78%] relative" />
               </div>
             </div>
           </div>

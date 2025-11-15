@@ -37,9 +37,11 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     width: 0,
     visible: false,
   });
-  const indicatorColor = "#F97316";
-  const indicatorTransition = "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
-  
+  const indicatorColor =
+    "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
+  const indicatorTransition =
+    "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
+
   const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -47,14 +49,17 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     const activeButton = tabRefs.current[activeTab] ?? null;
 
     if (!activeButton) {
-      setIndicator((prev) => (prev.visible ? { ...prev, visible: false } : prev));
+      setIndicator((prev) =>
+        prev.visible ? { ...prev, visible: false } : prev
+      );
       return;
     }
 
     const left = activeButton.offsetLeft - (container.scrollLeft || 0);
     const width = activeButton.offsetWidth;
     setIndicator((prev) => {
-      if (prev.left === left && prev.width === width && prev.visible) return prev;
+      if (prev.left === left && prev.width === width && prev.visible)
+        return prev;
       return { left, width, visible: true };
     });
   }, [activeTab]);
@@ -98,7 +103,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
       // Animation timeline - handles the initial animations and slide sync
       const animationEndProgress = 0.55;
-      const animationScrollDistance = isMobile ? window.innerHeight * 1.5 : window.innerHeight * 4;
+      const animationScrollDistance = isMobile
+        ? window.innerHeight * 1.5
+        : window.innerHeight * 4;
 
       const mainTl = gsap.timeline({
         scrollTrigger: {
@@ -112,14 +119,24 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Sync slides after animation phase (55% progress) - similar to test slider logic
-            if (self.progress >= animationEndProgress && swiperRef.current && mainSection.length > 0) {
+            if (
+              self.progress >= animationEndProgress &&
+              swiperRef.current &&
+              mainSection.length > 0
+            ) {
               const slides = mainSection.length;
               // Map progress from 0.55 to 1.0 to slide indices 0 to slides-1
-              const slideProgress = (self.progress - animationEndProgress) / (1 - animationEndProgress);
+              const slideProgress =
+                (self.progress - animationEndProgress) /
+                (1 - animationEndProgress);
               const progress = slideProgress * (slides - 1);
               const index = Math.round(progress);
-              
-              if (swiperRef.current && !swiperRef.current.destroyed && index !== swiperRef.current.activeIndex) {
+
+              if (
+                swiperRef.current &&
+                !swiperRef.current.destroyed &&
+                index !== swiperRef.current.activeIndex
+              ) {
                 swiperRef.current.slideTo(index);
                 setActiveTab(index);
               }
@@ -158,7 +175,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )
           .fromTo(
             sustainbleLogo.current,
-            { height: "0px",  },
+            { height: "0px" },
             { height: "203px", duration: 6 },
             "<"
           )
@@ -194,7 +211,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           .fromTo(
             susLogotr.current,
             { width: "100px", right: 0, top: 0 },
-            { width: window.innerWidth - 40, right: 20,  duration: 1 }
+            { width: window.innerWidth - 40, right: 20, duration: 1 }
           )
           .fromTo(
             sustainbleLogo.current,
@@ -230,7 +247,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { opacity: 1, duration: 5 },
             "<"
           );
-         
       } else {
         mainTl
           .fromTo(
@@ -352,7 +368,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   }, [activeTab, mainSection.length, measureIndicator]);
 
   return (
-    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]">
+    <div
+      ref={triggerRef}
+      className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]"
+    >
       <div
         ref={titleSection}
         className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
@@ -374,7 +393,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
               >
                 {images?.[2]?.url && (
-                  <i ref={susLogotl} className="absolute top-0 left-0">
+                  <i ref={susLogotl} className="absolute top-0 left-1">
                     <Image
                       src={images?.[2]?.url}
                       alt={images?.[2]?.alternativeText || "icon"}
@@ -386,7 +405,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 )}
 
                 {images?.[1]?.url && (
-                  <i ref={susLogotr} className="absolute top-0 right-0">
+                  <i ref={susLogotr} className="absolute top-0 right-[2px]">
                     <Image
                       src={images?.[1]?.url}
                       alt={images?.[1]?.alternativeText || "icon"}
@@ -399,7 +418,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 )}
 
                 {images?.[0]?.url && (
-                  <i ref={susLogobl} className="absolute bottom-0 left-0">
+                  <i ref={susLogobl} className="absolute bottom-[3px] left-1">
                     <Image
                       src={images?.[0]?.url}
                       alt={images?.[0]?.alternativeText || "icon"}
@@ -411,7 +430,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 )}
 
                 {images?.[3]?.url && (
-                  <i ref={susLogobr} className="absolute bottom-0 right-0">
+                  <i
+                    ref={susLogobr}
+                    className="absolute bottom-[3px] right-[2px]"
+                  >
                     <Image
                       src={images?.[3]?.url}
                       alt={images?.[3]?.alternativeText || "icon"}
@@ -500,7 +522,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         pointerEvents: "none",
                       }}
                     />
-                    
+
                     {/* Tab Buttons */}
                     {mainSection?.map(
                       (items, index) =>
@@ -563,7 +585,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
-                       
                     />
                   </div>
                 ))}

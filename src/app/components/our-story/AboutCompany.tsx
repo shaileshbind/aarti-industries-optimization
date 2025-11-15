@@ -12,7 +12,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
   const { sectionTitle, description, ctaButton } = data;
 
   return (
-    <section className="fluid-container flex flex-col lg:flex-row justify-between my-[50px] lg:my-[100px]">
+    <section className="fluid-container flex flex-col lg:flex-row justify-between my-[22px] lg:my-[20px]">
       {/* Left Section — Title */}
       <FadeInRevealBlur delay={0.1}>
         {sectionTitle && (

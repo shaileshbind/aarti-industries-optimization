@@ -55,7 +55,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
             <div
               key={item.id}
               className={`
-                flex gap-[53px] 
+                flex gap-6 lg:gap-[53px] 
                 ${index !== focus_item.length - 1 ? "border-b border-b-[#E6EBEE] lg:pb-8 pb-4" : ""}
               `}
             >
