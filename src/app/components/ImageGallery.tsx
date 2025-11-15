@@ -200,7 +200,7 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
   };
 
   return (
-    <div className="w-full my-[100px]">
+    <div className="w-full my-[100px] pointer-events-none">
       <div className="w-full container mx-auto">
         {title && (
           <FadeInRevealBlur>
@@ -226,7 +226,7 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
           </FadeInRevealBlur>
         )}
       </div>
-      <div className="mt-[100px] relative">
+      <div className="mt-[100px] relative !pointer-events-none">
         <Swiper
           key={isDesktop ? "desktop" : "mobile"}
           slidesPerView={1.8}

@@ -5,6 +5,7 @@ import Header from "@/app/components/Header";
 import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { GlobalCursor } from "./GlobalCursor";
+import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -18,19 +19,20 @@ export const metadata: Metadata = {
   description: "Aarti Industries",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data = await fetchHeaderFooterData();
   return (
     <html lang="en">
       <body className={roboto.variable}>
         <GSAPProvider>
-           <GlobalCursor />
+          <GlobalCursor />
           <Header />
           <main>{children}</main>
-          <Footer />
+          <Footer   data={data?.Footer}/>
         </GSAPProvider>
       </body>
     </html>

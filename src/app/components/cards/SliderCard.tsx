@@ -36,7 +36,12 @@ const SliderCard: FC<SliderCardProps> = ({
     <>
       {/* Mobile Version */}
       <div className="lg:hidden">
-        <div className={clsx('relative w-full pt-[60%] ', 'overflow-hidden rounded-[1rem] flex items-center justify-center')}>
+        <div
+          className={clsx(
+            "relative w-full pt-[60%] h-[300px]",
+            "overflow-hidden rounded-[1rem] flex items-center justify-center"
+          )}
+        >
           <div className="absolute inset-0 overflow-hidden">
             <Image
               src={imgSrc}
@@ -44,8 +49,10 @@ const SliderCard: FC<SliderCardProps> = ({
               fill
               className="object-cover scale-110"
             />
+            <div className="absolute inset-0 bg-black/40 z-[1]" />
+
             <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-            <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+            <span className="absolute bottom-0 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
               <Image
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
@@ -78,42 +85,44 @@ const SliderCard: FC<SliderCardProps> = ({
           ))}
         </div>
 
-        {ctaButton?.title && (
+        {ctaButton?.title && ctaButton?.link && (
           <Button
-            title={ctaButton.title}
-            href={ctaButton.link || "#"}
+            title={ctaButton?.title}
+            href={ctaButton?.link}
             secondary
           />
         )}
       </div>
 
       {/* Desktop Version */}
-      <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg">
+      <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
           <div className="w-full pt-[100%] relative">
-          <div className="absolute inset-0 overflow-hidden">
-            <Image
-              src={imgSrc}
-              alt={imgAlt ? imgAlt : "img"}
-              fill
-              className="object-cover scale-110"
-            />
-            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-            <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+            <div className="absolute inset-0 overflow-hidden">
               <Image
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
                 fill
                 className="object-cover scale-110"
               />
-            </span>
-          </div>
-          
-          {title && (
-            <h2 className="absolute top-1/2 -translate-y-1/2 w-full text-center text-4xl font-medium text-white z-10">
-              {title}
-            </h2>
-          )}
+              <div className="absolute inset-0 bg-black/30 z-[1]" />
+
+              <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+              <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
+                <Image
+                  src={imgSrc}
+                  alt={imgAlt ? imgAlt : "img"}
+                  fill
+                  className="object-cover scale-110"
+                />
+              </span>
+            </div>
+
+            {title && (
+              <h2 className="absolute top-1/2 -translate-y-1/2 w-full text-center text-4xl font-medium text-white z-10">
+                {title}
+              </h2>
+            )}
           </div>
         </div>
 
@@ -124,7 +133,9 @@ const SliderCard: FC<SliderCardProps> = ({
               {values.map((stat, idx) => (
                 <div key={idx}>
                   {stat?.value && (
-                    <H2 className="text-orange-200 !text-[36px]">{stat.value}</H2> 
+                    <H2 className="text-orange-200 !text-[36px]">
+                      {stat.value}
+                    </H2>
                   )}
                   {stat?.description && (
                     <BodyText2 className="text-grey-400 mt-[5px]">
@@ -136,13 +147,13 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           ) : null}
 
-          {ctaButton?.title && (
-            <Button
-              title={ctaButton.title}
-              href={ctaButton.link || "#"}
-              secondary
-            />
-          )}
+          {ctaButton?.title && ctaButton?.link && (
+          <Button
+            title={ctaButton?.title}
+            href={ctaButton?.link}
+            secondary
+          />
+        )}
         </div>
       </div>
     </>

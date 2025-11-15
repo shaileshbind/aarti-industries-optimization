@@ -13,7 +13,6 @@ import { CDMOE2EProps } from "@/app/types/cdmo.type";
 
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
-console.log('content', data);
   const [active, setActive] = useState(0);
   // const [activeIndex, setActiveIndex] = useState(0);
   // const [activeImg, setActiveImg] = useState<string>("");

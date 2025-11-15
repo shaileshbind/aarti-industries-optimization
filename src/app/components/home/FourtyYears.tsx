@@ -59,7 +59,7 @@ const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto my-[100px]">
+      <div ref={wrapperRef} className="container mx-auto mt-[54px] lg:mt-[42px] mb-[52px] lg:mb-[100px]">
         {/* Top Line */}
         <div
           ref={topLineRef}
@@ -82,7 +82,7 @@ const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
 
           {title && (
             <FadeInRevealBlur delay={0.1}>
-              <H2 className="text-blue-100">{title}</H2>
+              <H2 className="text-[#002F50]">{title}</H2>
             </FadeInRevealBlur>
           )}
 

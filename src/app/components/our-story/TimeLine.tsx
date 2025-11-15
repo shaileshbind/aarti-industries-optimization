@@ -80,7 +80,7 @@ export default function TimeLine({
   }, [currentPhase]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:my-[100px] relative lg:pt-32 pt-4">
+    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:my-[100px] relative lg:pt-0 pt-4">
       <WordReveal className="fluid-container" stagger={0.1} fromY={10} duration={3}>
         <H3 className="lg:w-[35%] static lg:absolute lg:top-24 mb-5 lg:mb-[unset]">
           {sectionTitle}

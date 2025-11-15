@@ -63,13 +63,13 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               >
                 <div className="slide-box  bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col md:flex-row ">
                   <div className="w-full md:w-[35%] relative mt-auto md:pt-8 order-2 md:order-1 h-[278px] md:h-full">
-                    <Image
+                  {person?.image?.url &&  <Image
                       src={person?.image?.url}
                       alt={person?.name}
                       width={326}
                       height={350}
                       className="w-[80%] md:w-full  h-full object-contain object-bottom"
-                    />
+                    />}
                   </div>
                   <div className="w-full md:w-[65%] self-center p-5 md:px-8 md:py-8 order-1 md:order-2">
                     {person?.testimonialText && (

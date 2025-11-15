@@ -13,7 +13,7 @@ const Header = () => {
   const pathname = usePathname();
   const mobileNavRef = useRef<HTMLDivElement>(null);
   const mobileMenuToggle = () => {
-    console.log('isMenuOpen', isMenuOpen);
+   // console.log('isMenuOpen', isMenuOpen);
     if (isMenuOpen) {
       setIsMenuOpen(false);
       gsap.fromTo(mobileNavRef.current, {
@@ -122,7 +122,7 @@ const Header = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     if (isMenuOpen && mobileNavRef.current) {
-      console.log('pathname close mobile menu', pathname);
+     // console.log('pathname close mobile menu', pathname);
       setIsMenuOpen(false);
       gsap.fromTo(mobileNavRef.current, {
         top: '0%',
