@@ -13,17 +13,16 @@ const Page = async () => {
   const [data, whereWeOperateData, globallyCertifiedData] = await Promise.all([
     getPageData("/pages/by-slug/contact-us"),
     getData("/where-we-operates?populate=*"),
-    getData("/globally-certified-datas?populate=*")
-  ])
-  const {
-    leftSection,
-    section_two,
-  } = data;
+    getData("/globally-certified-datas?populate=*"),
+  ]);
+  const { leftSection, section_two, mapSection } = data;
   return (
     <div>
       {leftSection && <ContactBanner data={leftSection} />}
       {whereWeOperateData && <WhereWeOperate data={whereWeOperateData} />}
-      <ContactMap/>
+      {mapSection && (
+        <ContactMap data={mapSection} data2={whereWeOperateData} />
+      )}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

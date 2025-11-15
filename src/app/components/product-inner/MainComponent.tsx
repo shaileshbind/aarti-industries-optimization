@@ -32,8 +32,6 @@ export default function ProductInnerPage({
   const productDetails = product?.productDetails;
   const relatedProducts = relatedData;
 
-  // console.log("product", product);
-
   const productTable = [
     { title: "Chemistries", desc: productDetails?.chemistries },
     {

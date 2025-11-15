@@ -3,40 +3,9 @@ import React from "react";
 import Image from "next/image";
 import Tags from "./Tags";
 import Link from "next/link";
+import { FooterProps } from "../types/header-footer.type";
 
 const footerData = {
-  footer_logo_section: {
-    text: "Follow Us",
-    footer_socials: {
-      social_medias: [
-        {
-          id: 1,
-          link: "https://facebook.com",
-          image_desktop: "/images/logo-fb.svg",
-          image_mobile: "/images/logo-fb.svg",
-        },
-        {
-          id: 2,
-          link: "https://twitter.com",
-          image_desktop: "/images/logo-x.svg",
-          image_mobile: "/images/logo-x.svg",
-        },
-        {
-          id: 3,
-          link: "https://instagram.com",
-          image_desktop: "/images/logo-insta.svg",
-          image_mobile: "/images/logo-insta.svg",
-        },
-        {
-          id: 4,
-          link: "https://youtube.com",
-          image_desktop: "/images/logo-yt.svg",
-          image_mobile: "/images/logo-yt.svg",
-        },
-      ],
-    },
-  },
-  copy_rights: "© 2025 Aarti Industries Ltd.",
   footer_menus: [
     {
       id: 0,
@@ -292,50 +261,53 @@ const footerData = {
     },
   ],
 };
-const Footer = () => {
+const Footer = ({ data }: FooterProps) => {
+  const { Logo, FollowUs, Legal } = data;
   return (
     <footer>
       <div className="bg-white container !py-[30px] lg:!py-[60px] grid lg:grid-cols-4 gap-x-[60px]">
         <div className="lg:col-span-1 grid content-between">
           <div>
-            <Image
-              src="/images/logo.png"
-              alt="logo"
-              width={190}
-              height={73}
-              priority
-            />
+            {Logo?.Logo?.url && (
+              <Image
+                src={Logo?.Logo?.url}
+                alt="logo"
+                width={190}
+                height={73}
+                priority
+              />
+            )}
             <div
               className="mt-[40px] text-[14px] font-roboto text-[#002F50] hidden md:block"
               dangerouslySetInnerHTML={{
-                __html: footerData.footer_logo_section.text,
+                __html: "Follow Us",
               }}
             />
             <div className=" hidden md:grid mt-[15px] grid-cols-4 w-fit gap-x-[8px]">
-              {footerData.footer_logo_section.footer_socials.social_medias.map(
-                (item) => (
-                  <a
-                    key={item.id}
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <div
-                      className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
+              {FollowUs?.map((items) => (
+                <a
+                  key={items?.id}
+                  href={items?.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div
+                    className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
              transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] 
              hover:scale-110  hover:shadow-lg hover:shadow-[#E55E2C]/30"
-                    >
+                  >
+                    {items?.image?.url && (
                       <Image
-                        src={item.image_desktop}
+                        src={items?.image?.url}
                         alt="icon"
                         width={24}
                         height={24}
                         className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
                       />
-                    </div>
-                  </a>
-                )
-              )}
+                    )}
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
@@ -424,41 +396,43 @@ const Footer = () => {
         <div
           className="mt-[40px] text-[14px] font-roboto text-[#002F50] block lg:hidden"
           dangerouslySetInnerHTML={{
-            __html: footerData.footer_logo_section.text,
+            __html: "Follow Us",
           }}
         />
         <div className=" mt-[15px] grid grid-cols-4 lg:hidden w-fit gap-x-[8px]">
-          {footerData.footer_logo_section.footer_socials.social_medias.map(
-            (item) => (
-              <Link
-                key={item?.id}
-                href={item?.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div
-                  className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
+          {FollowUs?.map((item) => (
+            <Link
+              key={item?.id}
+              href={item?.link ? item?.link : ""}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div
+                className="bg-[#E55E2C] w-[42px] h-[42px] grid place-items-center rounded-full overflow-hidden 
              transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] 
              hover:scale-110  hover:shadow-xl hover:shadow-[#E55E2C]/30"
-                >
+              >
+                {item?.image?.url && (
                   <Image
-                    src={item.image_desktop}
+                    src={item?.image?.url}
                     alt="icon"
                     width={24}
                     height={24}
                     className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
                   />
-                </div>
-              </Link>
-            )
-          )}
+                )}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
       <div className="container h-[1px] w-full bg-grey-200 mb-[24px]" />
       <div className="container w-full mb-[24px] grid lg:flex lg:justify-between">
-        <p className="font-roboto text-center lg:text-left mt-[18px] md:mt-[unset] text-[14px] leading-[100%] font-normal text-[#343434] order-1 lg:order-0">
-          {footerData?.copy_rights}
-        </p>
+        {Legal?.leftText && (
+          <p className="font-roboto text-center lg:text-left mt-[18px] md:mt-[unset] text-[14px] leading-[100%] font-normal text-[#343434] order-1 lg:order-0">
+            {Legal?.leftText}
+          </p>
+        )}
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1">
           <a
             href="#"

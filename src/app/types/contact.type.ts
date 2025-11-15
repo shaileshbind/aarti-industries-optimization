@@ -1,4 +1,4 @@
-import { ButtonProps } from "./global.type";
+import { ButtonProps, ImageProps } from "./global.type";
 
 export type WhereWeOperateDataItem = {
   id: number;
@@ -53,7 +53,6 @@ export type WhereWeOperateTab = {
   };
 };
 
-
 export type ContactBannerImage = {
   url: string;
   alternativeText?: string | null;
@@ -80,4 +79,13 @@ export type ContactExpProps = {
       title: string;
       ctaButton: ButtonProps;
   };
+};
+
+export type ContactMapProps = {
+  data: {
+    title?: string;
+    image?: ImageProps;
+    mobImage?: ImageProps;
+  };
+  data2 :WhereWeOperateDataItem[] | null;
 };
