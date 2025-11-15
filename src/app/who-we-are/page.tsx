@@ -33,7 +33,6 @@ const page = async () => {
     section_nine,
     section_ten,
   } = data;
-  console.log(data);
 
   return (
     <div>

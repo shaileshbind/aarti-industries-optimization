@@ -30,8 +30,8 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
             />
 
             {/* Decorative overlays */}
-            <div className="absolute left-0 object-cover backdrop-blur-lg rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[75px] lg:w-[155px]" />
-            <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg lg:rounded-[20px] rounded-b-[20px] h-[calc(100%-245px)] lg:h-[calc(100%-505px)] w-full" />
+            <div className="absolute left-0 object-cover backdrop-blur-lg rounded-tl-[20px] lg:rounded-tl-[20px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[71px] lg:w-[155px]" />
+            <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg lg:!rounded-[20px] lg:!rounded-tl-[0px] rounded-b-[20px] h-[calc(100%-245px)] lg:h-[calc(100%-505px)] w-full" />
 
             <Image
               src="/images/home/star-white.svg"

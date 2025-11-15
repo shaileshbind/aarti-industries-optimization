@@ -103,7 +103,7 @@ export default function InvestingInPotential({
         className="h-[calc(100vh-70px)] relative overflow-hidden"
       >
         {/* Vertical Line */}
-        <div className="w-[1px] h-full bg-gray-500 absolute right-[7%] top-0 z-[2]" />
+        <div className="w-[1px] h-full bg-white absolute right-[6.3%] lg:right-[7.1%] top-0 z-[2]" />
 
         {/* Accordion Section */}
         <div className="relative z-[2]">
@@ -123,7 +123,7 @@ export default function InvestingInPotential({
               >
                 <MainAccordion
                   borderBottom={
-                    cards.length - 1 !== index ? "1px solid gray" : "none"
+                    cards.length - 1 !== index ? "1px solid white" : "none"
                   }
                   expanded={expanded === index}
                   showIcon={false}
@@ -169,14 +169,15 @@ export default function InvestingInPotential({
                     }}
                     className="absolute inset-0"
                     style={{ zIndex: activeCard === index ? 2 : 1 }}
-                  >
-                    <Image
-                      src={item?.image?.url}
-                      alt={item?.image?.alternativeText}
-                      fill
-                      className="object-cover"
-                      priority={index === 0}
-                    />
+                  >               
+                      <Image
+                        src={item?.image?.url}
+                        alt={item?.image?.alternativeText ? item?.image?.alternativeText : 'img'}
+                        fill
+                        className="object-cover object-top"
+                        priority={index === 0}
+                      />  
+                      <div className="absolute inset-0 bg-black/30 z-[1]" />             
                   </div>
                 )
             )}
