@@ -106,54 +106,57 @@ export default function InvestingInPotential({
         <div className="w-[1px] h-full bg-white absolute right-[6.3%] lg:right-[7.1%] top-0 z-[2]" />
 
         {/* Accordion Section */}
-        <div className="relative z-[2]">
+        <div className="relative z-[2] flex flex-col justify-between h-[90%]">
           {title && (
             <H2 className="text-white py-6 lg:py-[32px] max-w-[449px] fluid-container">
               {title}
             </H2>
           )}
 
-          {cards?.length > 0 &&
-            cards?.map((item, index) => (
-              <div
-                key={index}
-                className={`relative potential-accordion ${
-                  expanded === index ? "is-expanded" : ""
-                }`}
-              >
-                <MainAccordion
-                  borderBottom={
-                    cards.length - 1 !== index ? "1px solid white" : "none"
-                  }
-                  expanded={expanded === index}
-                  showIcon={false}
-                  onChange={() => {
-                    // Just update state and animate - NO scrolling
-                    const direction = index > prevIndexRef.current ? 1 : -1;
-
-                    setExpanded(index);
-                    setActiveCard(index);
-                    animateImageTransition(index, direction);
-                  }}
-                  title={
-                    <SubH2 className="text-white xl:py-2 fluid-container">
-                      <span className="mr-4 lg:mr-[50px]">{`0${
-                        index + 1
-                      }`}</span>
-                      {item?.title}
-                    </SubH2>
-                  }
+          {cards?.length > 0 && (
+            <div>
+              {cards?.map((item, index) => (
+                <div
+                  key={index}
+                  className={`relative potential-accordion ${
+                    expanded === index ? "is-expanded" : ""
+                  }`}
                 >
-                  {item?.description ? (
-                    <div className="lg:flex justify-end lg:-mt-12 pr-12 xl:pr-40">
-                      <p className="text-white lg:w-[45%] xl:w-1/2 text-sm lg:text-base pb-4 pl-5 lg:pl-0">
-                        {item?.description}
-                      </p>
-                    </div>
-                  ) : null}
-                </MainAccordion>
-              </div>
-            ))}
+                  <MainAccordion
+                    borderBottom={
+                      cards.length - 1 !== index ? "1px solid white" : "none"
+                    }
+                    expanded={expanded === index}
+                    showIcon={false}
+                    onChange={() => {
+                      // Just update state and animate - NO scrolling
+                      const direction = index > prevIndexRef.current ? 1 : -1;
+
+                      setExpanded(index);
+                      setActiveCard(index);
+                      animateImageTransition(index, direction);
+                    }}
+                    title={
+                      <SubH2 className="text-white xl:py-2 fluid-container">
+                        <span className="mr-4 lg:mr-[50px] text-sm md:text-base">{`0${
+                          index + 1
+                        }`}</span>
+                        {item?.title}
+                      </SubH2>
+                    }
+                  >
+                    {item?.description ? (
+                      <div className="lg:flex justify-end lg:-mt-12 pr-12 xl:pr-40">
+                        <p className="text-white lg:w-[45%] xl:w-1/2 text-sm lg:text-base pb-4 pl-5 lg:pl-0">
+                          {item?.description}
+                        </p>
+                      </div>
+                    ) : null}
+                  </MainAccordion>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Background Images */}
@@ -169,15 +172,19 @@ export default function InvestingInPotential({
                     }}
                     className="absolute inset-0"
                     style={{ zIndex: activeCard === index ? 2 : 1 }}
-                  >               
-                      <Image
-                        src={item?.image?.url}
-                        alt={item?.image?.alternativeText ? item?.image?.alternativeText : 'img'}
-                        fill
-                        className="object-cover object-top"
-                        priority={index === 0}
-                      />  
-                      <div className="absolute inset-0 bg-black/30 z-[1]" />             
+                  >
+                    <Image
+                      src={item?.image?.url}
+                      alt={
+                        item?.image?.alternativeText
+                          ? item?.image?.alternativeText
+                          : "img"
+                      }
+                      fill
+                      className="object-cover object-top"
+                      priority={index === 0}
+                    />
+                    <div className="absolute inset-0 bg-black/30 z-[1]" />
                   </div>
                 )
             )}

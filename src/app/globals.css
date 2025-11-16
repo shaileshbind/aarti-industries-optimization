@@ -563,6 +563,13 @@ body {
   .topMarginCsm {
     margin-top: -90px !important;
   }
+
+  .potential-accordion:nth-child(3)::after {
+    right: 4.4%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 4.4%;
+  }
 }
 
 @media (max-width: 768px) {
