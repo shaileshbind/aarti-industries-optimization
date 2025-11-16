@@ -20,7 +20,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
   const swiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <div className="py-[50px] lg:py-[100px]">
+    <div className="py-[50px] lg:pb-[100px] lg:pt-0">
       {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
 
       <div className="mt-[44px]">
@@ -31,7 +31,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               slidesPerView={1.2}
               spaceBetween={24}
-              breakpoints={{ 1024: { slidesPerView: 4 } }}
+              breakpoints={{
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+              }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               observer={true}
               observeParents={true}
@@ -56,7 +59,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
                 <SwiperSlide key={item?.id}>
                   {/* <CustomCursorTrigger title="Read Bio"> */}
                   {item?.image?.url && (
-                    <div className="relative rounded-[20px] overflow-hidden w-full h-[400px]">
+                    <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px]">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "leader"}

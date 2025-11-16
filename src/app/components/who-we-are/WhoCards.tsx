@@ -57,7 +57,7 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
 
   return (
     <div ref={wrapperRef} className="container mx-auto">
-      <div className="mt-[40px] lg:mt-[60px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
+      <div className="mt-[40px] lg:mt-[140px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
         <div ref={wrapperRefBox} className="w-full h-auto mx-auto">
           {cards?.length > 0 && (
             <div className="grid grid-cols-[1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">

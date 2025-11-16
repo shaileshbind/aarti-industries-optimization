@@ -16,7 +16,10 @@ interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
 
-const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, layout }) => {
+const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
+  data,
+  layout,
+}) => {
   const { title, card, partnerWithUsCta } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,81 +64,100 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
     const timer = setTimeout(() => {
       setIsImageAnimating(true);
     }, 50);
-    return () => clearTimeout(timer); 
+    return () => clearTimeout(timer);
   }, [activeIndex]);
-  const baseImageClasses = "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
-  const secondaryImageClasses = "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
-  const imageTransitionClasses = "transition-all duration-700 ease-out"; 
-  const imageInitialClasses = "transform scale-[0.99] opacity-0"; 
+  const baseImageClasses =
+    "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
+  const secondaryImageClasses =
+    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+  const imageTransitionClasses = "transition-all duration-700 ease-out";
+  const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
-  const backgroundFinalOpacityClass = "opacity-40"; 
+  const backgroundFinalOpacityClass = "opacity-40";
   const mainFinalOpacityClass = "opacity-100";
-  const backgroundAnimationClasses = isImageAnimating 
-    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}` 
+  const backgroundAnimationClasses = isImageAnimating
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}`
     : `${imageTransitionClasses} ${imageInitialClasses}`;
-  const mainAnimationClasses = isImageAnimating 
-    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}` 
+  const mainAnimationClasses = isImageAnimating
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}`
     : `${imageTransitionClasses} ${imageInitialClasses}`;
 
-    useEffect(() => {
-      let tabsAnim: gsap.core.Tween | undefined;
-      if (frameworkForgedRef.current) {
-        tabsAnim = gsap.fromTo(
-          frameworkForgedRef.current,
-          { opacity: 0, y: 30, filter: "blur(10px)" },
-          {
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",
-            duration: 0.8,
-            ease: "power2.out",
-            delay: 0.1,
-            scrollTrigger: {
-              trigger: frameworkForgedRef.current,
-              start: "top 87%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-      return () => {
-        if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
-        if (tabsAnim) tabsAnim.kill();
-      };
-    }, []);
+  useEffect(() => {
+    let tabsAnim: gsap.core.Tween | undefined;
+    if (frameworkForgedRef.current) {
+      tabsAnim = gsap.fromTo(
+        frameworkForgedRef.current,
+        { opacity: 0, y: 30, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.1,
+          scrollTrigger: {
+            trigger: frameworkForgedRef.current,
+            start: "top 87%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+    return () => {
+      if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
+      if (tabsAnim) tabsAnim.kill();
+    };
+  }, []);
 
   return (
-      <div ref={frameworkForgedRef}>
+    <div ref={frameworkForgedRef}>
       {title && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {title}
         </H2>
       )}
 
-      <div className={clsx(`relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${layout === "imgLeftContentRight" ? "lg:grid-cols-[45%_55%]" : "lg:grid-cols-[45%_55%]"}`)}>
-        <div className={clsx(`${layout === "imgLeftContentRight" ? " order-2 lg:order-2 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
+      <div
+        className={clsx(
+          `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${
+            layout === "imgLeftContentRight"
+              ? "lg:grid-cols-[45%_55%]"
+              : "lg:grid-cols-[45%_55%]"
+          }`
+        )}
+      >
+        <div
+          className={clsx(
+            `${
+              layout === "imgLeftContentRight"
+                ? " order-2 lg:order-2 lg:pl-20"
+                : "lg:ml-[60px] order-2 lg:order-1"
+            }`
+          )}
+        >
           {title && (
             <H2 className="hidden lg:block text-blue-200 max-w-[460px]">
               {title}
             </H2>
           )}
 
-          <div className="mt-[65px] mb-[27px] flex justify-between items-center max-w-[100%] lg:max-w-[440px]">
+          <div className="mt-6 md:mt-[65px] mb-[27px] flex justify-between items-center max-w-[100%] lg:max-w-[440px]">
             <BodyText2 className="text-orange-200">
               0{activeIndex + 1}-<span>0{card?.length}</span>
             </BodyText2>
 
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               <div className="flex gap-3">
                 <Image
                   src="/images/home/chevron-right-orange.svg"
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${activeIndex > 0
+                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                    activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                    }`}
+                  }`}
                 />
 
                 <Image
@@ -143,10 +165,11 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${activeIndex < card?.length - 1
+                  className={`swiper-button-next transition-opacity ${
+                    activeIndex < card?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                    }`}
+                  }`}
                 />
               </div>
             </div>
@@ -187,8 +210,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
                   return (
                     <SwiperSlide
                       key={items?.id}
-                      className={`transition-all duration-500  ${index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
-                        }`}
+                      className={`transition-all duration-500  ${
+                        index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
+                      }`}
                     >
                       <SubH1 className={`text-blue-200`}>{items?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
@@ -210,13 +234,24 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
             </div>
           )}
         </div>
-        <div className={clsx(` relative w-full overflow-hidden ${layout === "imgLeftContentRight" ? " order-1 lg:order-1" : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "}`)}>
+        <div
+          className={clsx(
+            ` relative w-full overflow-hidden ${
+              layout === "imgLeftContentRight"
+                ? " order-1 lg:order-1"
+                : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "
+            }`
+          )}
+        >
           {layout === "imgLeftContentRight" ? (
-             <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+            <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                   src={card?.[currentImageIndex]?.image?.url}
-                  alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
                   fill
                   className="object-cover scale-110"
                 />
@@ -224,7 +259,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
                 <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
                   <Image
                     src={card?.[currentImageIndex]?.image?.url}
-                    alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                    alt={
+                      card?.[currentImageIndex]?.image?.alternativeText ||
+                      "banner"
+                    }
                     fill
                     className="object-cover scale-110"
                   />
@@ -233,55 +271,61 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({ data, l
             </div>
           ) : (
             <div
-            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
-          >
-            {card?.[currentImageIndex]?.image?.url && (
-              <Image
-                key={`outer-${currentImageIndex}`} 
-                src={card?.[currentImageIndex]?.image?.url}
-                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
-                fill
-                sizes="(max-width: 768px) 768px, 
+              className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+            >
+              {card?.[currentImageIndex]?.image?.url && (
+                <Image
+                  key={`outer-${currentImageIndex}`}
+                  src={card?.[currentImageIndex]?.image?.url}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
+                  fill
+                  sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
-              />
-            )}
-            {card?.[currentImageIndex]?.image?.url && (
-              <Image
-                key={`main-${currentImageIndex}`} 
-                src={card?.[currentImageIndex]?.image?.url}
-                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
-                width={500}
-                height={548}
-                sizes="(max-width: 768px) 768px, 
+                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
+                />
+              )}
+              {card?.[currentImageIndex]?.image?.url && (
+                <Image
+                  key={`main-${currentImageIndex}`}
+                  src={card?.[currentImageIndex]?.image?.url}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
+                  width={500}
+                  height={548}
+                  sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
-              />
-            )}
+                  className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
+                />
+              )}
 
-            <Image
-              src="/images/home/star-white.svg"
-              alt="img"
-              width={72}
-              height={72}
-              className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-            />
-            <Image
-              src="/images/home/star-white.svg"
-              alt="img"
-              width={72}
-              height={72}
-              className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-            />
-            <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
-            <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
-          </div>
+              <Image
+                src="/images/home/star-white.svg"
+                alt="img"
+                width={72}
+                height={72}
+                className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+              />
+              <Image
+                src="/images/home/star-white.svg"
+                alt="img"
+                width={72}
+                height={72}
+                className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+              />
+              <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
+              <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
+            </div>
           )}
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 

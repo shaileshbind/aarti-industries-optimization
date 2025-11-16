@@ -26,7 +26,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   // Handle tab click (manual click or programmatic)
   const handleTabClick = useCallback((index: number) => {
     setActive((currentActive) => {
-      if (index === currentActive) return currentActive;  
+      if (index === currentActive) return currentActive;
       setIsTransitioning(true);
       // Kill the current progress animation when manually switching
       progressRefs.current.forEach((el) => {
@@ -96,8 +96,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       swiperRef.current.slideTo(0, 0);
       setActiveIndex(0);
       if (swiperRef.current.pagination && swiperRef.current.pagination.el) {
-        swiperRef.current.pagination.render(); 
-        swiperRef.current.pagination.update(); 
+        swiperRef.current.pagination.render();
+        swiperRef.current.pagination.update();
       }
     }
     const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
@@ -119,7 +119,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       {title && <H2 className="text-center container">{title}</H2>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
-        <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto">
+        <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center">
           {awards?.map((items, index) => (
             <div
               key={items.id}
@@ -156,7 +156,10 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1.5}
             spaceBetween={24}
-            breakpoints={{ 1024: { slidesPerView: 4 } }}
+            breakpoints={{
+              768: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+            }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             observer={true}
             observeParents={true}

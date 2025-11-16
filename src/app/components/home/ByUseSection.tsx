@@ -133,7 +133,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div ref={tabsRef} className="mt-[50px] overflow-hidden topMarginCsm">
+    <div ref={tabsRef} className="mt-[72px] md:mt-6 lg:mt-[50px] overflow-hidden topMarginCsm">
       {/* Tabs */}
       <div  className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
@@ -144,7 +144,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                   <button
                     key={items?.id}
                     onClick={() => handleTabClick(index)}
-                    className={`text-grey-300 font-alte-hans leading-[136%] text-[32px] lg:text-[44px] cursor-pointer flex-shrink-0 transition-all duration-600 ease-out hover:text-orange-200/70 ${
+                    className={`text-grey-300 font-alte-hans leading-[136%] text-[24px] lg:text-[44px] cursor-pointer flex-shrink-0 transition-all duration-600 ease-out hover:text-orange-200/70 ${
                       active === index ? "text-orange-200" : ""
                     } ${isTransitioning ? "pointer-events-none" : ""}`}
                   >
@@ -179,7 +179,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
             )}
           </div>
           {/* Right Swiper */}
-          <div className="flex-1 min-w-0 mt-[42px] lg:mt-[0px]">
+          <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">
             <div className="relative">
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>

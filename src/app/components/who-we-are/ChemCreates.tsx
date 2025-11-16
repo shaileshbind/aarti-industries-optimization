@@ -12,12 +12,14 @@ import Image from "next/image";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const { sectionTitle, card } = data;
-   const swiperRef = useRef<SwiperType | null>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="my-[100px]">
-      {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
+    <div className="mt-[32px] mb-[72px] lg:mb-[100px] lg:mt-0">
+      {sectionTitle && (
+        <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
+      )}
 
       {card?.length > 0 && (
         <>
@@ -26,6 +28,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
               slidesPerView={1.5}
               spaceBetween={24}
               breakpoints={{
+                768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
               }}
               modules={[Pagination, Mousewheel]}

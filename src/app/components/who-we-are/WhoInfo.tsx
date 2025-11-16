@@ -12,7 +12,7 @@ const WhoInfo: React.FC<WhoInfoProps> = ({ data }) => {
       <div className="max-w-[unset] lg:max-w-[1000px] mx-[20px] lg:mx-auto">
         {description && (
           <AnimatedText>
-            <H3 className="max-w-[unset] lg:max-w-[1000px] text-left lg:text-center mx-[unset] lg:mx-auto">
+            <H3 className="max-w-[unset] lg:max-w-[1000px] text-left mx-[unset] lg:mx-auto">
               {description}
             </H3>
           </AnimatedText>
