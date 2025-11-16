@@ -34,9 +34,9 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   }, []);
 
   return (
-    <div className="py-[50px] lg:py-[100px] overflow-hidden">
+    <div className="pt-[50px] pb-[25px] lg:py-[75px] overflow-hidden">
       {/* Content Section */}
-      <div className={clsx(`mt-[40px] lg:mt-[62px]`, className)}>
+      <div className={clsx(`mt-[0px] lg:mt-[62px]`, className)}>
         <div className="flex flex-col w-full">
           {/* Left Content */}
           {sectionTitle && (
@@ -157,7 +157,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     </button>
                   </div>
                 )}
-                <div className="simplified-swiper-pagination lg:!ml-14 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[75%]" />
+                <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
               </div>
             </div>
           </div>

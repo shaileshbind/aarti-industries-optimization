@@ -65,7 +65,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
                 />
               )}
 
-              <div className="mt-8 space-y-3">
+              <div className=" mt-3 md:mt-8 space-y-3">
                 {title && <SubH2>{title}</SubH2>}
 
                 {description && <BodyText2>{description}</BodyText2>}

@@ -5,7 +5,7 @@ import { CDMOExpProps } from "@/app/types/cdmo.type";
 const CDMOExp: React.FC<CDMOExpProps> = ({ data }) => {
   return (
     <div className="py-[50px] lg:py-[100px] container">
-      <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
+      <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard title={data?.[0]?.title} items={data?.[0]?.ctaButton} />
 
         <ExploreCard
