@@ -29,9 +29,9 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
 
   return (
     <div className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden">
+      {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
         <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
-          {title && <H2 className="lg:text-center mb-11">{title}</H2>}
           <Swiper
             spaceBetween={15}
             slidesPerView={1}
