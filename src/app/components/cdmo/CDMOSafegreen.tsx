@@ -7,8 +7,8 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
   const { title, description, image } = data?.[0];
 
   return (
-    <section className="flex lg:flex-row flex-col justify-between lg:py-[100px] py-[50px] pl-[20px] lg:pl-[60px]">
-      <div className="w-full lg:w-[43%] flex flex-col items-start justify-center pr-[20px] lg:pr-0">
+    <section className="flex md:flex-row flex-col justify-between lg:py-[100px] pt-[30px] pb-[50px] pl-[20px] lg:pl-[40px]">
+      <div className="w-full md:w-1/2 flex flex-col items-start justify-center pr-[20px] lg:pr-0">
         {title && <H2>{title}</H2>}
 
         {description && (
@@ -16,17 +16,17 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
         )}
       </div>
 
-      <div className="w-full lg:w-1/2 pr-[20px] lg:pr-0 mt-10 lg:mt-0">
+      <div className="w-full md:w-1/2 pr-[20px] lg:pr-0 mt-10 lg:mt-0">
         <div className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">
           <div
-            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
           >
             {image?.url && (
               <Image
                 src={image?.url}
                 alt={image?.alternativeText || "green-banner"}
                 fill
-                className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] "
+                className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] blur-md "
               />
             )}
 

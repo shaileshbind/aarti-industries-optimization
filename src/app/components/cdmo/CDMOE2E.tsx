@@ -25,11 +25,11 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   };
 
   return (
-    <div className="pt-[50px] lg:pt-[100px] overflow-hidden fluid-container">
-      <div className="flex flex-col-reverse lg:flex-row items-start gap-10">
+    <div className="pt-[25px] lg:pt-[100px] overflow-hidden fluid-container">
+      <div className="flex flex-col-reverse lg:flex-row  lg:gap-20">
         {/* LEFT SIDE – TEXT + SWIPER */}
         <div
-          className="w-full lg:w-1/2 lg:gap-18 gap-7 h-full mt-[unset] lg:mt-[40px] flex flex-col justify-between align-center"
+          className="w-full lg:w-[50%] lg:gap-18 gap-7  mt-[unset] lg:mt-[40px] flex flex-col justify-between align-center"
           ref={contentRef}
         >
           <div>
@@ -45,27 +45,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
           </div>
 
           {/* RIGHT SIDE – DYNAMIC IMAGE SECTION */}
-          <div className="relative w-full h-[300px] overflow-hidden rounded-[1rem] items-center justify-center flex lg:hidden">
-            {content?.[active]?.card?.[active]?.image?.url && (
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={content?.[active]?.card?.[active]?.image?.url}
-                  alt="active-img"
-                  fill
-                  className="object-cover scale-110"
-                />
-                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
-                  <Image
-                    src={content?.[active]?.card?.[active]?.image?.url}
-                    alt="active-img"
-                    fill
-                    className="object-cover scale-110"
-                  />
-                </span>
-              </div>
-            )}
-          </div>
+
 
           <div className="relative">
             <Swiper
@@ -90,6 +70,40 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                 content?.map((item, index) => (
                   <SwiperSlide key={`${index}`}>
                     <div className="relative w-full h-max overflow-hidden">
+
+                      <div className="relative w-full pt-[100%] overflow-hidden mb-5 !rounded-[10px] items-center justify-center flex lg:hidden">
+
+                        <div className="absolute inset-0 overflow-hidden w-full h-full">
+
+                          <Image
+                            src={item?.card?.[index]?.image?.url}
+                            alt="active-img"
+                            fill
+                            className="object-cover scale-110 w-full h-full "
+                          />
+                          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md !rounded-[10px] overflow-hidden"></i>
+                          <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-full h-full">
+                            <Image
+                              src={item?.card?.[index]?.image?.url}
+                              alt="active-img"
+                              fill
+                              className="object-cover scale-110 w-full h-full"
+                            />
+                          </span>
+                        </div>
+
+                      </div>
+
+                      {/* Pagination with 01 - 03 format */}
+                      <div className="flex items-center z-20 text-orange-200 text-[14px]">
+                        <span>
+                          {(active + 1).toString().padStart(2, '0')}
+                        </span>
+                        <span className="mx-1">-</span>
+                        <span>
+                          {(content?.length || 0).toString().padStart(2, '0')}
+                        </span>
+                      </div>
                       {item?.category && (
                         <SubH2 className="text-blue-200 pb-2">
                           {item?.category}
@@ -128,7 +142,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
             <div className="absolute top-0 right-0 py-2 z-10 hidden lg:block bg-white">
               <div className="flex justify-end gap-3 px-5 lg:px-0">
                 <button
-                  className={`swiper-button-prev-useBySection transition-opacity`}
+                  className={`swiper-button-prev-useBySection transition-opacity cursor-pointer`}
 
                 >
                   <Image
@@ -140,7 +154,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                   />
                 </button>
                 <button
-                  className={`swiper-button-next-useBySection transition-opacity `}
+                  className={`swiper-button-next-useBySection transition-opacity cursor-pointer `}
                 >
                   <Image
                     src="/images/home/chevron-right-orange.svg"
@@ -157,15 +171,15 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
 
             {/* Tabs */}
             <div className="overflow-x-auto pt-[40px] px-5 lg:px-0 mt-6">
-              <div className="gap-x-6 lg:gap-x-[72px] w-fit hidden lg:flex">
+              <div className="gap-x-6 lg:gap-x-[10px] hidden lg:flex w-full justify-between">
                 {content?.length > 0 &&
                   content?.map((items, index) => (
                     <div key={items.id} onClick={() => handleSlideChange(index)}>
                       {items?.category && (
                         <BodyText2
-                          className={`cursor-pointer flex-shrink-0 transition-all duration-300 ${active === index
-                              ? "text-orange-200"
-                              : "text-gray-600 hover:text-orange-100"
+                          className={`cursor-pointer flex-shrink-0 !text-[14px] transition-all duration-300 ${active === index
+                            ? "text-orange-200"
+                            : "text-[#9997A2] hover:text-orange-100"
                             }`}
                         >
                           {items?.category}
@@ -179,7 +193,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
         </div>
 
         {/* RIGHT SIDE – DYNAMIC IMAGE SECTION */}
-        <div className="w-1/2">
+        <div className="w-[50%]">
           <SwipeImage activeImg={content?.[active]?.card?.[active]?.image?.url} />
         </div>
       </div>
