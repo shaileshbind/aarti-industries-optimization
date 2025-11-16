@@ -115,8 +115,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div className="py-[50px] lg:py-[100px]">
-      {title && <H2 className="text-center container">{title}</H2>}
+    <div className="py-[72px] lg:py-[100px]">
+      {title && <H2 className="text-left lg:text-center container">{title}</H2>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
         <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center">
@@ -184,13 +184,13 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               <SwiperSlide key={`${active}-${idx}`}>
                 <div className="award-card-anim">
                   {item?.image?.url && (
-                    <div className="bg-[#EFF3F5] rounded-[20px] p-[60px] grid place-items-center">
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-[60px] grid place-items-center h-[230px] md:h-auto">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}
                         width={70}
                         height={190}
-                        className="object-contain w-[70px] h-[190px]"
+                        className="object-contain w-[70px] h-[130px] md:h-[190px]"
                       />
                     </div>
                   )}

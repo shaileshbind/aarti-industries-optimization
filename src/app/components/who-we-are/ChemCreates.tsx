@@ -16,7 +16,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="mt-[32px] mb-[72px] lg:mb-[100px] lg:mt-0">
+    <div className="mt-[0] mb-[72px] lg:mb-[100px] lg:mt-0">
       {sectionTitle && (
         <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
       )}
