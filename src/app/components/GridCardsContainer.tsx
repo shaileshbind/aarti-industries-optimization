@@ -4,8 +4,12 @@ import { CDMOPartnerProps } from "@/app/types/cdmo.type";
 import AnimatedText from "./AnimatedText";
 import { BodyText2, H3, SubH2 } from "./Typography2";
 import { ScaleInGroup } from "./ScrollReveal";
+import clsx from "clsx";
 
-const GridCardsContainer: React.FC<CDMOPartnerProps> = ({ data }) => {
+const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
+  data,
+  headingClassName,
+}) => {
   const { description, card, title } = data;
 
   return (
@@ -14,7 +18,13 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({ data }) => {
         {title && (
           <div className="w-full">
             <AnimatedText>
-              <H3 className="lg:!text-[28px]">{title}</H3>
+              <H3
+                className={clsx(
+                  headingClassName ? headingClassName : "lg:!text-[28px]"
+                )}
+              >
+                {title}
+              </H3>
             </AnimatedText>
           </div>
         )}

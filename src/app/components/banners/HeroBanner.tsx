@@ -166,7 +166,7 @@ const HeroBanner = ({
                 {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
                   <FadeInRevealBlur
                     delay={0.1}
-                    className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-12"
+                    className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-7"
                   >
                     {secondaryBtnLeftTitle && (
                       <Button

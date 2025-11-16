@@ -296,7 +296,7 @@ export default function ParallaxCardSection({
               }
               width={335}
               height={246}
-              className="w-full h-full"
+              className="w-full h-full object-cover"
             />
           </div>
         )}
@@ -318,57 +318,62 @@ export default function ParallaxCardSection({
             )}
           </FadeInReveal>
 
-          <FadeInReveal className="pt-6 xl:pt-18">
-            {accordion?.map((item, index) => (
-              <MainAccordion
-                key={`accordion-${index}`}
-                expanded={expanded === index}
-                onChange={() => setExpanded(index)}
-                title={
-                  <h2 className="text-base md:text-xl text-[#002F50]">
-                    {item?.title}
-                  </h2>
-                }
-              >
-                <div>
-                  {item?.description && (
-                    <BodyText2 className="pb-4 ">{item?.description}</BodyText2>
-                  )}
+          {accordion?.length > 0 && (
+            <FadeInReveal className="pt-6 xl:pt-18">
+              {accordion?.map((item, index) => (
+                <MainAccordion
+                  key={`accordion-${index}`}
+                  borderBottom={accordion?.length - 1 === index ? "border-b-0" : "1px solid #D9D9D9"}
+                  expanded={expanded === index}
+                  onChange={() => setExpanded(index)}
+                  title={
+                    <h2 className="text-base md:text-xl text-[#002F50]">
+                      {item?.title}
+                    </h2>
+                  }
+                >
+                  <div>
+                    {item?.description && (
+                      <BodyText2 className="pb-4 ">
+                        {item?.description}
+                      </BodyText2>
+                    )}
 
-                  {item?.bulletPoints?.length > 0 && (
-                    <div className="flex flex-col gap-2">
-                      {item?.bulletPoints?.map((item, index) => (
-                        <div key={"list_" + index} className="flex gap-2">
-                          <Image
-                            src={"/images/star-orange.svg"}
-                            alt="banner"
-                            width={20}
-                            height={20}
-                          />
-                          <BodyText2>{item?.title}</BodyText2>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    {item?.bulletPoints?.length > 0 && (
+                      <div className="flex flex-col gap-2">
+                        {item?.bulletPoints?.map((item, index) => (
+                          <div key={"list_" + index} className="flex gap-2">
+                            <Image
+                              src={"/images/star-orange.svg"}
+                              alt="banner"
+                              width={20}
+                              height={20}
+                            />
+                            <BodyText2 className="w-[96%]">{item?.title}</BodyText2>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                  {item?.description_two && (
-                    <BodyText2 className="text-[#3A3F42] py-5">
-                      {item?.description_two}
-                    </BodyText2>
-                  )}
+                    {item?.description_two && (
+                      <BodyText2 className="text-[#3A3F42] py-5">
+                        {item?.description_two}
+                      </BodyText2>
+                    )}
 
-                  {item?.ctaButton?.title && (
-                    <Button
-                      secondary
-                      title={item?.ctaButton?.title}
-                      href={item?.ctaButton?.link || "#"}
-                      className=" mb-2"
-                    />
-                  )}
-                </div>
-              </MainAccordion>
-            ))}
-          </FadeInReveal>
+                    {item?.ctaButton?.title && (
+                      <Button
+                        secondary
+                        title={item?.ctaButton?.title}
+                        href={item?.ctaButton?.link || "#"}
+                        className=" mb-2"
+                      />
+                    )}
+                  </div>
+                </MainAccordion>
+              ))}
+            </FadeInReveal>
+          )}
         </div>
 
         {/* Sticky Image Desktop */}

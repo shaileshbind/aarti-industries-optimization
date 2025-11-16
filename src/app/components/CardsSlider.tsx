@@ -13,6 +13,7 @@ import clsx from "clsx";
 
 const CardsSlider: React.FC<CDMOSplchemProps> = ({
   data,
+  className,
   headingClassName,
 }) => {
   const { sectionTitle, cards } = data;
@@ -35,7 +36,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   return (
     <div className="py-[50px] lg:py-[100px] overflow-hidden">
       {/* Content Section */}
-      <div className="mt-[40px] lg:mt-[62px]">
+      <div className={clsx(`mt-[40px] lg:mt-[62px]`, className)}>
         <div className="flex flex-col w-full">
           {/* Left Content */}
           {sectionTitle && (
@@ -60,6 +61,12 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 spaceBetween={14}
                 slidesPerView={1.2}
                 breakpoints={{
+                  768: {
+                    slidesPerView: 2.5,
+                    spaceBetween: 24,
+                    slidesOffsetBefore: 0,
+                  },
+
                   1024: {
                     slidesPerView: 4.2,
                     spaceBetween: 24,
@@ -99,7 +106,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                         </SubH2>
 
                         {item?.image?.url && (
-                          <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px]">
+                          <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] md:h-[220px] xl:h-[272px] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
                             <Image
                               src={item?.image?.url}
                               alt={item?.image?.alternativeText || item?.title}
