@@ -21,6 +21,7 @@ export type CDMOPartnerProps = {
       description: string;
     }[];
   };
+  headingClassName?: string;
 };
 
 export type CDMODrivingProps = {
@@ -69,6 +70,7 @@ export type CDMOSplchemProps = {
     }[];
   };
   headingClassName?: string;
+  className?: string;
 };
 
 export type CDMOSafegreenProps = {

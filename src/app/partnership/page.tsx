@@ -38,7 +38,12 @@ const Page = async () => {
         section_three={section_three}
       />
 
-      {section_four && <GridCardsContainer data={section_four} />}
+      {section_four && (
+        <GridCardsContainer
+          data={section_four}
+          headingClassName="!text-[28px] md:!text-[36px] lg:!text-[44px]"
+        />
+      )}
 
       {section_five && <WhyAarti data={section_five} />}
 
@@ -48,6 +53,7 @@ const Page = async () => {
         <CardsSlider
           data={section_seven}
           headingClassName="text-[24px] md:text-[30px] xl:text-[36px]"
+          className="!mt-[0]"
         />
       )}
 
