@@ -18,15 +18,11 @@ const page = async () => {
   return (
     <div className="overflow-hidden w-full">
       <SusBanner data={section_one} />
-
       <SusCore data={section_two} />
-
       <AILRoadmap data={section_three} />
-
-      <div className="pt-[160px] pb-[140px]">
+      <div className="pt-[160px] pb-[80px] mb-[50px] md:mb-[unset]">
         <RespGrowth data={section_four} />
       </div>
-
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

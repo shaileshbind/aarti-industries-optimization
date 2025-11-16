@@ -38,7 +38,7 @@ const BlackInfoSection = ({
           <div className="absolute inset-0 bg-black/20 " />
         </div>
       )}
-      <div className="w-full relative lg:h-screen ">
+      <div className="w-full relative lg:h-[calc(100vh-70px)]">
         {image && (
           <div className="relative w-full h-full">
             <Image
@@ -47,13 +47,13 @@ const BlackInfoSection = ({
               fill
               className="hidden lg:block object-top object-cover"
             />
-            <div className="absolute inset-0 bg-black/20  " />
+            <div className="absolute inset-0 bg-black/30" />
           </div>
         )}
         <div className="lg:absolute w-full lg:py-[80px] px-[20px] lg:px-[60px] top-0">
           {title && (
             <FadeInReveal>
-              <H2 className="text-blue-200 lg:text-white max-w-[unset] lg:max-w-[100%]">
+              <H2 className="text-blue-200 lg:text-white max-w-[unset] lg:max-w-[470px]">
                 {title}
               </H2>
             </FadeInReveal>

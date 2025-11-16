@@ -12,26 +12,28 @@ const ContactMap = ({ data, data2 }: ContactMapProps) => {
           {title}
         </H2>
       )}
-      <div className="relative container mx-auto w-full h-[180px] lg:h-[600px]">
+      <div className="relative container mx-auto w-full">
         {image?.url && (
           <Image
             src={image?.url}
             alt="img"
-            fill
-            className="absolute object-contain hidden lg:block"
+            width={1265}
+            height={623}
+            className="w-full h-auto block lg:hidden"
           />
         )}
         {mobImage?.url && (
           <Image
             src={mobImage?.url}
             alt="img"
-            fill
-            className="absolute object-contain block lg:hidden"
+            width={365}
+            height={180}
+            className="w-full h-auto hidden lg:block"
           />
         )}
       </div>
       <div className="block lg:hidden">
-        <div className="grid gap-y-[42px] mt-[50px] container">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[42px] gap-y-[42px] mt-[50px] container">
           {data2?.map((items, index) => {
             return (
               <div key={index}>

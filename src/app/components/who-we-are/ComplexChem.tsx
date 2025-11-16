@@ -65,23 +65,23 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
     };
 
   return (
-    <div className="py-[50px] lg:py-[100px] fluid-container">
+    <div className="py-[50px] md:pb-[140px] md:pt-0 fluid-container">
       {sectionTitle && <H2>{sectionTitle}</H2>}
 
       {content?.length > 0 && (
-        <div className="mt-[30px] lg:mt-[60px]">
+        <div className="mt-[30px] md:mt-[60px]">
           {content?.map((item, index) => (
-            <div key={index} className="relative ">
+            <div key={index} className="relative complex-chemistry">
               <FaqAccordion
                 faqTitle={
                   <div
                     className={`w-full flex gap-x-[48px] justify-between ${
                       expanded === `panel${index}`
                         ? "my-[unset]"
-                        : "my-[18px] lg:my-[30px]"
+                        : "my-[18px] md:my-[30px]"
                     }`}
                   >
-                    <div className="flex items-start gap-x-[12px] lg:gap-x-[48px]">
+                    <div className="flex items-start gap-x-[12px] md:gap-x-[48px]">
                       <BodyText3 className="text-orange-200 mt-[5px]">
                         0{index + 1}
                       </BodyText3>
@@ -92,7 +92,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                           </SubH2>
                         )}
                         {expanded === `panel${index}` && (
-                          <div className="relative not-last:mt-[20px] hidden lg:block ">
+                          <div className="relative not-last:mt-[20px] hidden md:block ">
                             {item?.description && (
                               <BodyText2 className="mt-[20px] max-w-[650px]">
                                 {item?.description}
@@ -103,7 +103,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                       </div>
                     </div>
                     {expanded === `panel${index}` && (
-                      <div className="relative w-[290px] h-[200px] rounded-[20px] overflow-hidden hidden lg:block ">
+                      <div className="relative md:w-1/2 lg:w-[290px] h-[200px] rounded-[20px] overflow-hidden hidden md:block md:mr-6 lg:mr-[88px]">
                         {item?.image?.url && (
                           <Image
                             src={item?.image?.url}
@@ -117,7 +117,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                   </div>
                 }
                 faqContent={
-                  <div className="block lg:hidden ml-[26px] mb-[30px]">
+                  <div className="block md:hidden ml-[26px] mb-[30px]">
                     <BodyText2>{item?.description}</BodyText2>
                     <div className="mt-[24px] relative  h-[170px] rounded-[10px] overflow-hidden">
                       {item?.mobImage?.url && (

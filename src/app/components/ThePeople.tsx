@@ -28,14 +28,12 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
 
   return (
-    <div className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[100px] overflow-hidden">
-      {title && <H2 className="text-center mb-11">{title}</H2>}
-
-      {/* Swiper center mode slider */}
+    <div className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden">
+      {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
-        <div className="container !max-w-[900px] relative md:mb-10">
+        <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
           <Swiper
-            spaceBetween={24}
+            spaceBetween={15}
             slidesPerView={1}
             centeredSlides={true}
             autoHeight={false}
@@ -68,7 +66,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
                       alt={person?.name}
                       width={326}
                       height={350}
-                      className="w-[80%] md:w-full  h-full object-contain object-bottom"
+                      className="w-full md:w-full  h-full object-contain object-bottom"
                     />}
                   </div>
                   <div className="w-full md:w-[65%] self-center p-5 md:px-8 md:py-8 order-1 md:order-2">
@@ -83,7 +81,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
                     )}
 
                     {person?.designation && (
-                      <BodyText2 className="mb-1 text-gray-300">
+                      <BodyText2 className="mb-1 text-[#9997A2]">
                         {person?.designation}
                       </BodyText2>
                     )}
@@ -95,21 +93,21 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
           {/* <div className="absolute top-[100%] mt-2.5 left-0 w-full h-5 z-10"> */}
           <div className="md:hidden home-by-use-section-swiper mt-10 h-[2px] w-[90%] mx-auto z-[1]" />
           {/* </div> */}
-          <div className="hidden md:block swiper-button-prev-people absolute top-1/2 -translate-y-1/2 right-full min-w-[65px] min-h-[70px] p-3  cursor-pointer">
+          <div className="hidden md:block swiper-button-prev-people absolute top-1/2 -translate-y-1/2 right-full mr-[20px] min-w-[65px] min-h-[70px] p-3  cursor-pointer">
             <Image
               src="/images/home/chevron-right-orange.svg"
               alt="arrow-left"
-              width={24}
-              height={24}
+              width={34}
+              height={34}
               className="rotate-180"
             />
           </div>
-          <div className="hidden md:block swiper-button-next-people absolute top-1/2 -translate-y-1/2 left-full min-w-[65px] min-h-[70px] p-3  cursor-pointer">
+          <div className="hidden md:block swiper-button-next-people absolute top-1/2 -translate-y-1/2 ml-[20px] left-full min-w-[65px] min-h-[70px] p-3  cursor-pointer">
             <Image
               src="/images/home/chevron-right-orange.svg"
               alt="arrow-left"
-              width={24}
-              height={24}
+              width={34}
+              height={34}
             />
           </div>
         </div>

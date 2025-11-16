@@ -113,7 +113,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       )}
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
-        <div className="max-w-[100%] md:max-w-fit fluid-container">
+        <div className="max-w-[100%] md:max-w-fit container">
           <Tabs
             tabs={card}
             activeId={active}

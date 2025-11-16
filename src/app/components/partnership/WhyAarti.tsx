@@ -88,7 +88,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         {title && <H2>{title}</H2>}
 
         {content?.length > 0 && (
-          <div className="pt-10 xl:pt-[86px]">
+          <div className="pt-10 xl:pt-[62px]">
             {content?.map((item, index) => (
               <div key={`accordion-${index}`} className="relative">
                 <MainAccordion
@@ -164,7 +164,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
 const LayoutImage: React.FC<LayoutImageProps> = ({ src, imageFade }) => {
   return (
-    <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden">
+    <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden rounded-[20px]">
       <div className="absolute right-0 top-0 min-h-[317px] lg:min-h-[500px] xl:min-h-[600px] w-[100%] lg:w-full rounded-[20px]">
         <Image
           src={src || ""}
@@ -176,18 +176,19 @@ const LayoutImage: React.FC<LayoutImageProps> = ({ src, imageFade }) => {
         />
 
         {/* Decorative overlays */}
-        <div className="absolute left-0 object-cover backdrop-blur-lg rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[75px] lg:w-[155px]" />
-        <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg lg:rounded-[20px] rounded-b-[20px] h-[calc(100%-245px)] lg:h-[calc(100%-505px)] w-full" />
+        <div className="absolute left-0 object-cover backdrop-blur-lg h-[calc(100%-71px)] lg:h-[calc(100%-70px)] w-[75px] lg:w-[110px]" />
+
+        <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg h-[calc(100%-245px)] lg:h-[calc(100%-530px)] w-full" />
 
         <Image
           src="/images/home/star-white.svg"
           alt="star-icon"
           width={72}
           height={72}
-          className="absolute bottom-[50px] lg:bottom-[57px] z-10 left-[50px] lg:left-[120px] w-[42px] lg:w-[72px]"
+          className="absolute bottom-[50px] lg:bottom-[34px] z-10 left-[50px] lg:left-[74px] w-[42px] lg:w-[72px]"
         />
-        <div className="absolute min-h-screen bg-white w-[1px] left-[71px] lg:left-[155px]" />
-        <div className="absolute w-full bg-white bottom-[71px] lg:bottom-[92.5px] h-[1px]" />
+        <div className="absolute min-h-screen bg-white w-[1px] left-[71px] lg:left-[110px]" />
+        <div className="absolute w-full bg-white bottom-[71px] lg:bottom-[70px] h-[1px]" />
       </div>
     </div>
   );

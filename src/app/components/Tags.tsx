@@ -12,7 +12,7 @@ const Tags = ({ title, className }: TagProps) => {
   return (
     <p
       className={clsxN(
-        "text-[#FF7932] font-medium text-[14px] font-roboto leading-[100%]",
+        "text-[#FF7932] font-medium text-[14px] font-roboto",
         className
       )}
     >

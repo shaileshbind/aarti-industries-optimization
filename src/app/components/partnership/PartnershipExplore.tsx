@@ -4,8 +4,8 @@ import { PartneshipExploreProps } from "@/app/types/partnership.type";
 
 const PartneshipExplore: React.FC<PartneshipExploreProps> = ({ data }) => {
   return (
-    <div className="py-[50px] lg:py-[100px] container">
-      <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
+    <div className="py-[50px] md:py-[100px] container">
+      <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={data?.[0]?.exploreMore?.title}
           items={data?.[0]?.exploreMore?.ctaButton}

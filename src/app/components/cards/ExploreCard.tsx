@@ -25,7 +25,7 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
         alt="img"
         width={151}
         height={151}
-        className="absolute bottom-[35px] md:bottom-[40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
+        className="absolute top-[-35px] md:top-[-40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
       />
       <SubH2 className="text-white">{title}</SubH2>
       {items && items?.length > 0 && (

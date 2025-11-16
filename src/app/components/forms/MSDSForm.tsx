@@ -122,7 +122,7 @@ export default function MSDSForm({
         <div
           className={`flex flex-col gap-4 ${
             !onPageForm ? "max-h-[72vh]" : "h-auto"
-          } overflow-y-auto pt-5 lg:pt-6 popup_container pr-4`}
+          } overflow-y-auto pt-5 lg:pt-6 popup_container lg:pr-4`}
         >
           <div className="grid lg:flex gap-[14px]">
             {/* Full Name */}
@@ -160,7 +160,7 @@ export default function MSDSForm({
               rules={{
                 required: "Phone number is required",
                 minLength: {
-                  value: 10,
+                  value: 12,
                   message: "Enter a valid phone number",
                 },
               }}

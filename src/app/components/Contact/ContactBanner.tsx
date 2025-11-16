@@ -10,10 +10,10 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
   return (
     <section className="w-full ">
       <div className="container">
-        <H2 className="mb-[40px] mt-[50px] lg:mt-[145px] text-center font-normal">
+        <H2 className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal">
           {data?.sectionTitle}
         </H2>
-        <div className="grid lg:grid-cols-12 gap-x-4 gap-y-[50px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-4 gap-y-[50px] w-full">
           <div className="lg:col-span-5">
             <div className="relative w-full rounded-[20px] overflow-hidden bg-[#EFF3F5]">
               {/* Top Image Section */}
@@ -68,7 +68,27 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                     </svg>
                   </div>
                   <BodyText1 className="text-grey-400">
-                    {data?.office?.mobileNo}
+                    {data?.office?.mobileNo
+                      ?.split("/")
+                      .map((phone, index, array) => {
+                        const trimmedPhone = phone.trim();
+                        // For numbers after the first one, construct full number by replacing last part
+                        let fullNumber = trimmedPhone;
+                        if (index > 0 && array[0]) {
+                          const firstPart = array[0].trim();
+                          const parts = firstPart.split(" ");
+                          const baseNumber = parts.slice(0, -1).join(" ");
+                          fullNumber = `${baseNumber} ${trimmedPhone}`;
+                        }
+                        return (
+                          <React.Fragment key={index}>
+                            <a href={`tel:${fullNumber.replace(/\s+/g, "")}`} className="hover:text-orange-200 transition-all duration-300 cursor-pointer">
+                              {trimmedPhone}
+                            </a>
+                            {index < array.length - 1 && <span> / </span>}
+                          </React.Fragment>
+                        );
+                      })}
                   </BodyText1>
                 </div>
 
@@ -99,8 +119,8 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                     </svg>
                   </div>
                   {data?.office?.googleMapLink && (
-                    <Link href={data.office.googleMapLink} target="_blank">
-                      <BodyText1 className="text-grey-400 cursor-pointer">
+                    <Link href={data.office.googleMapLink} target="_blank" className="group">
+                      <BodyText1 className="text-grey-400 group-hover:text-orange-200 transition-all duration-300 cursor-pointer">
                         View on map
                       </BodyText1>
                     </Link>
@@ -109,7 +129,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="lg:col-span-7 lg:pl-[30px]">
+          <div className="w-full lg:col-span-7 lg:pl-[30px]">
             <MSDSForm onPageForm={true} />
           </div>
         </div>
