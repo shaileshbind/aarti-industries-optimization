@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
@@ -175,9 +175,21 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
     }
     return slides;
   };
-  const slidesToRender = isDesktop
+  const baseSlides = isDesktop
     ? generateSwiperSlides(imgArr?.images)
     : generateMobileSwiperSlides(imgArr?.images);
+
+  // Duplicate slides multiple times for seamless looping
+  const slidesToRender = useMemo(() => {
+    if (!baseSlides || baseSlides.length === 0) return [];
+    // Duplicate slides 3 times to ensure smooth continuous loop
+    const duplicated = [...baseSlides, ...baseSlides, ...baseSlides];
+    // Update IDs to be unique
+    return duplicated.map((slide, index) => ({
+      ...slide,
+      id: index,
+    }));
+  }, [baseSlides]);
 
   const renderSwiperSlide = (slide: Slide): React.ReactElement => {
     return (
@@ -228,9 +240,8 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
       </div>
       <div className="mt-[100px] relative !pointer-events-none">
         <Swiper
-          key={isDesktop ? "desktop" : "mobile"}
           slidesPerView={1.8}
-          speed={2000}
+          speed={3000}
           allowTouchMove={false}
           freeMode={{ enabled: true, momentum: false }}
           spaceBetween={6}
@@ -238,8 +249,11 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
             delay: 0,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
-          }}
+            stopOnLastSlide: false,
+        }}
           loop={true}
+          loopAdditionalSlides={10}
+          loopPreventsSliding={false}
           modules={[Autoplay, FreeMode]}
           centeredSlides={!isDesktop}
           breakpoints={{
@@ -254,7 +268,14 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
             const wrapper = s.el.querySelector(
               ".swiper-wrapper"
             ) as HTMLElement | null;
-            if (wrapper) wrapper.style.transitionTimingFunction = "linear";
+            if (wrapper) {
+              wrapper.style.transitionTimingFunction = "linear";
+              wrapper.style.willChange = "transform";
+            }
+            // Force smooth autoplay
+            if (s.autoplay) {
+              s.autoplay.start();
+            }
           }}
         >
           {slidesToRender?.map((slide) => renderSwiperSlide(slide))}

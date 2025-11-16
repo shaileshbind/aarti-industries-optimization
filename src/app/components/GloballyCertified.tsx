@@ -47,7 +47,7 @@ const GloballyCertified = ({ title, itemsData, className }: GloballyCertifiedPro
   if (!itemsData?.length) return null;
 
   return (
-    <div className={clsx(`w-full pb-[72px] lg:pb-[100px]`, className)}>
+    <div className={clsx(`w-full pb-[50px] lg:pb-[100px]`, className)}>
       <FadeInRevealBlur delay={0.1}>
         <H3 className="text-blue-100 mx-auto w-fit">
           {title || "Globally Certified"}

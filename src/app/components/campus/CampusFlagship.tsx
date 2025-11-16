@@ -5,6 +5,7 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -17,7 +18,7 @@ interface LayoutProps {
 }
 
 const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, layout }) => {
-  const { title, card, partnerWithUsCta } = data;
+  const {  card, partnerWithUsCta, sectionTitle } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -106,21 +107,22 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
 
   return (
       <div ref={frameworkForgedRef}>
-      {title && (
+             {sectionTitle && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
-          {title}
+          {sectionTitle}
         </H2>
       )}
 
-      <div className={clsx(`relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${layout === "imgLeftContentRight" ? "lg:grid-cols-[45%_55%]" : "lg:grid-cols-[45%_55%]"}`)}>
-        <div className={clsx(`${layout === "imgLeftContentRight" ? " order-2 lg:order-2 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
-          {title && (
-            <H2 className="hidden lg:block text-blue-200 max-w-[460px]">
-              {title}
+
+      <div className={clsx(`relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `)}>
+        <div className={clsx( `w-full md:w-[55%] lg:w-[65%]  ${layout === "imgLeftContentRight" ? " order-2 lg:order-2 md:pl-10 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
+          {sectionTitle && (
+            <H2 className="hidden lg:block text-blue-200 max-w-[460px] font-normal">
+              {sectionTitle}
             </H2>
           )}
 
-          <div className="mt-[65px] mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px]">
+          <div className="mt-[20px] lg:mt-[65px] mb-[27px] flex justify-between max-w-[100%] lg:max-w-[calc((100%-80px)/1.5)]">
             <BodyText2 className="text-orange-200">
               0{activeIndex + 1}-<span>0{card?.length}</span>
             </BodyText2>
@@ -155,7 +157,14 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
           {card?.length > 0 && (
             <div ref={containerRef} className="w-full">
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel]}
+                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                autoplay={
+                    {
+                          delay: 5000,
+                          disableOnInteraction: false,
+                         
+                  }
+                }
                 navigation={{
                   nextEl: ".swiper-button-next",
                   prevEl: ".swiper-button-prev",
@@ -168,10 +177,12 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
                     spaceBetween: 0,
                     allowTouchMove: true,
                   },
-                  768: {
+                  1024: {
                     slidesPerView: slidesPerView,
                     spaceBetween: 80,
                     allowTouchMove: false,
+                    autoplay: false
+
                   },
                 }}
                 scrollbar={{ draggable: true }}
@@ -210,23 +221,25 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
             </div>
           )}
         </div>
-        <div className={clsx(` relative w-full overflow-hidden ${layout === "imgLeftContentRight" ? " order-1 lg:order-1" : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "}`)}>
+        <div className={clsx(` relative md:w-[45%] lg:w-[35%] w-full overflow-hidden ${layout === "imgLeftContentRight" ? " order-1 lg:order-1" : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "}`)}>
           {layout === "imgLeftContentRight" ? (
              <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
                 <Image
+                  key={`bg-${currentImageIndex}`}
                   src={card?.[currentImageIndex]?.image?.url}
                   alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                   fill
-                  className="object-cover scale-110"
+                  className={`object-cover scale-110 transition-opacity duration-700 ease-out ${isImageAnimating ? "opacity-40" : "opacity-0"}`}
                 />
                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                 <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
                   <Image
+                    key={`main-${currentImageIndex}`}
                     src={card?.[currentImageIndex]?.image?.url}
                     alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
                     fill
-                    className="object-cover scale-110"
+                    className={`object-cover scale-110 transition-opacity duration-700 ease-out ${isImageAnimating ? "opacity-100" : "opacity-0"}`}
                   />
                 </span>
               </div>
