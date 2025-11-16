@@ -481,6 +481,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         ref={envSlider}
         className="w-full max-h-[100vh] bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
       >
+        {/* desktop */}
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
           {mainSection?.length > 0 && (
             <div>
@@ -572,36 +573,39 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             </div>
           </div>
         </div>
-        <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
-          <div className="pt-[70px]">
-            {mainSection?.length > 0 && (
-              <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
-                {mainSection?.map(
-                  (item: any, index: number) =>
-                    item?.category && (
-                      <div
-                        key={index}
-                        onClick={() => setActiveTabMob(index)}
-                        className={`text-grey-400 text-[11px] lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                          activeTabMob === index
-                            ? "text-white bg-gradient-orange-3"
-                            : "hover:bg-grey-200"
-                        }`}
-                      >
-                        {item?.category}
-                      </div>
-                    )
-                )}
-              </div>
-            )}
-          </div>
-          <div className="mt-[32px]">
-            <div className="grid items-center">
-              {mainSection
-                .filter((_, index) => index === activeTabMob)
-                .map((slide, index) => (
-                  <div key={index}>
+        {/* Mobile Only */}
+        <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 overflow-y-auto left-0 w-full !h-[100%] min-h-[100vh] ">
+          <div className="relative">
+            <div className="w-full absolute mt-[70px]">
+              {/* Tabs */}
+              {mainSection?.length > 0 && (
+                <div className="overflow-x-auto mb-6">
+                  <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-max">
+                    {mainSection.map((item: any, index: number) =>
+                      item?.category ? (
+                        <div
+                          key={index}
+                          onClick={() => setActiveTabMob(index)}
+                          className={`text-grey-400 text-[12px] sm:text-[14px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                            activeTabMob === index
+                              ? "text-white bg-gradient-orange-3"
+                              : "hover:bg-grey-200"
+                          }`}
+                        >
+                          {item?.category}
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </div>
+              )}
+              {/* Content */}
+              <div className="grid items-center gap-6">
+                {mainSection
+                  .filter((_, index) => index === activeTabMob)
+                  .map((slide, index) => (
                     <SliderCard
+                      key={index}
                       imgSrc={slide?.image?.url}
                       imgAlt={slide?.image?.alternativeText || "banner"}
                       title={slide?.category}
@@ -609,8 +613,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
                     />
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
           </div>
         </div>

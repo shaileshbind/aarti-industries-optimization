@@ -18,12 +18,16 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
 
   return (
     <div className="my-[50px] lg:my-[100px]">
-      <H2 className="fluid-container">{sectionTitle}</H2>
+      <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
       <div className="mt-[52px]">
         <Swiper
           spaceBetween={24}
           slidesPerView={1.5}
-          breakpoints={{ 1024: { slidesPerView: 4 } }}
+          breakpoints={{
+          768: { slidesPerView: 2.5 },
+          1024: { slidesPerView: 3 },
+          1440: { slidesPerView: 4 }, 
+          }}
           modules={[Pagination, Mousewheel]}
           pagination={{
             el: ".env-latest-at-swiper",
