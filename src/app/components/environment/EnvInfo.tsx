@@ -10,7 +10,7 @@ const EnvInfo = ({ data }: EnvInfoProps) => {
     <div className="pt-[70px] lg:pt-[100px]">
       <div className="max-w-[unset] lg:max-w-[1000px] mx-[20px] lg:mx-auto">
         <AnimatedText>
-          <H3 className="max-w-[unset] xl:max-w-[1000px] text-left xl:text-center mx-[unset] lg:mx-auto">
+          <H3 className="max-w-[unset] xl:max-w-[1000px] text-left mx-[unset] lg:mx-auto">
             {heading}
           </H3>
         </AnimatedText>

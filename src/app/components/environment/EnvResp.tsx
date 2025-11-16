@@ -174,7 +174,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
             <BodyText2>
               {cardWithCategory?.[active]?.content?.description}
             </BodyText2>
-            <div className="flex gap-x-[60px] mt-[30px]">
+            <div className="w-full grid grid-cols-[300px_1fr] gap-x-[60px] mt-[30px]">
               <div>
                 {/* SDG */}
                 <BodyText2>
