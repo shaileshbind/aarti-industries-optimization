@@ -559,7 +559,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       <div
                         key={index}
                         onClick={() => setActiveTabMob(index)}
-                        className={`text-grey-400 text-[11px] lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                        className={`text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
                           activeTabMob === index
                             ? "text-white bg-gradient-orange-3"
                             : "hover:bg-grey-200"

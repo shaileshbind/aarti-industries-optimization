@@ -43,7 +43,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const star = starRef.current;
     const star2 = starRef2.current;
     const star3 = starRef3.current;
-    const stars = [ star2, star3];
+    const stars = [star2, star3];
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
     const orangeBar = orangeScroll.current;
@@ -88,17 +88,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       duration: 0.5,
       ease: "power3.out",
     })
-      .to(
-        star,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          ease: "sine.out",
-          stagger: 0.2,
-        },
-        
-      )
+      .to(star, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.6,
+        ease: "sine.out",
+        stagger: 0.2,
+      })
       // Step 2: Lines draw in
       .to(
         vLine,
@@ -191,8 +187,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   return (
     <div
       ref={wrapperRef}
-      className="h-[calc(100dvh-64px)] lg:min-h-screen w-full relative overflow-hidden"
+      className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
     >
+      <div className="absolute inset-0 bg-black/20 z-[1]" />
+
       {data?.banner?.length > 0 && (
         <Swiper
           onSwiper={(swiper: SwiperType) => {
@@ -211,7 +209,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
           }}
-          
           on={{
             transitionStart: (swiper: SwiperType) => {
               const realIndex =
@@ -243,8 +240,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           }}
         >
           {data?.banner?.map((items, index) => (
-            <SwiperSlide key={index}>
-              <div className="w-full min-h-screen relative overflow-hidden">
+            <SwiperSlide key={index} className="h-full">
+              <div className="w-full min-h-screen md:min-h-[80vh] lg:min-h-screen relative overflow-hidden">
                 {items?.card?.[0]?.image?.url && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -358,7 +355,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       {/* Bottom nav titles */}
       <div
         ref={navTitles}
-        className="absolute z-10 bottom-[40px] md:bottom-[80px] w-full "
+        className="absolute z-10 bottom-[40px] md:bottom-[60px] lg:bottom-[80px] w-full "
       >
         {/* desktop */}
         {data?.banner?.length > 0 && (
