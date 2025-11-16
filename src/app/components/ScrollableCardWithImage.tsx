@@ -92,9 +92,9 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                   </div>
                 )}
                 <div>
-                  <div className="flex items-baseline gap-x-[24px] pr-[unset] lg:pr-[110px]">
-                    <Tags title={`0${index + 1}`} />
-                    <div>
+                  <div className="flex items-start gap-x-[24px] pr-[unset] lg:pr-[110px]">
+                    <Tags title={`0${index + 1}`} className="mt-1 xl:mt-[6px]" />
+                    <div className="">
                       {items?.title && (
                         <SubH1 className="text-blue-200">{items?.title}</SubH1>
                       )}

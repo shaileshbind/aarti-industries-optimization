@@ -5,6 +5,7 @@ import { SxProps, Theme } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Image from "next/image";
+import clsx from "clsx";
 
 type FaqProps = {
   faqTitle: React.ReactNode;
@@ -16,7 +17,8 @@ type FaqProps = {
   classNameTitle?: string;
   plusMinusVariant?: boolean;
   sx?: SxProps<Theme>;
-  iconProp?:React.ReactNode;
+  iconProp?: React.ReactNode;
+  imageClassName?: string;
 };
 
 const FaqAccordion = ({
@@ -28,6 +30,7 @@ const FaqAccordion = ({
   className,
   iconProp,
   classNameTitle,
+  imageClassName,
   sx,
 }: FaqProps) => {
   return (
@@ -48,6 +51,7 @@ const FaqAccordion = ({
                 alt="img"
                 width={28}
                 height={28}
+                className={clsx(imageClassName)}
               />
             )
           ) : null

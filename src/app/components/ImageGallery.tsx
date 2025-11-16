@@ -212,7 +212,7 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
   };
 
   return (
-    <div className="w-full my-[100px] pointer-events-none">
+    <div className="w-full my-[72px] lg:my-[100px] pointer-events-none">
       <div className="w-full container mx-auto">
         {title && (
           <FadeInRevealBlur>

@@ -13,17 +13,17 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="max-w-5xl mx-auto lg:py-[100px] py-[50px]">
+    <section className="max-w-5xl mx-auto md:py-[100px] py-[50px]">
       {description && (
-        <H2 className="max-w-xl mx-auto text-center py-3 lg:py-9">
+        <H2 className="max-w-xl mx-auto text-center py-3 md:py-9">
           {description}
         </H2>
       )}
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex flex-row items-stretch overflow-hidden relative">
+      <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
         {/* Left Tabs + Progress Bar */}
-        <div className="relative bg-white text-white lg:w-[40%] flex flex-col justify-center">
+        <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
           <div className="relative flex gap-4">
             {/* Progress Bar */}
             {content?.length > 0 && (
@@ -86,39 +86,50 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           alt="img"
           width={42}
           height={42}
-          className="absolute top-[36px] z-10 right-[50px] lg:left-[385px] w-[42px] lg:w-[52px]"
+          className="absolute top-[36px] z-10 right-[50px] md:left-[385px] w-[42px] md:w-[52px]"
         />
       </div>
 
       {/* Mobile Accordion */}
       {content?.length > 0 && (
-        <div className="lg:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
+        <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
           {content?.map((tab, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={tab.id}
-                className="border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out"
+                className={clsx(`border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out`, content?.length - 1 === index && "border-b-0" )}
               >
                 {/* Header Button */}
                 {tab?.value && (
                   <button
                     className={clsx(
-                      "w-full text-left p-5 rounded-2xl flex justify-between items-center transition-all duration-300",
+                      "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative",
                       isOpen
-                        ? "bg-gradient-orange-1 text-white"
+                        ? "bg-gradient-orange-1 text-white pt-5"
                         : "text-gray-700 hover:bg-gray-50"
                     )}
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                   >
-                    <H2
+                    <p
                       className={clsx(
-                        "transition-colors duration-100",
+                        "transition-colors duration-100 text-[24px]",
                         isOpen ? "text-white" : "text-gray-700"
                       )}
                     >
                       {tab?.value}
-                    </H2>
+                    </p>
+
+                    {openIndex === index && <div
+                      className="absolute -bottom-4 z-[1] right-10"
+                    >
+                      <Image
+                        src="/images/star.png"
+                        alt="img"
+                        width={30}
+                        height={30}
+                      />
+                    </div>}
                   </button>
                 )}
 

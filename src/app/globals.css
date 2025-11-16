@@ -559,6 +559,29 @@ body {
   }
 }
 
+@media (max-width: 820px) {
+  .topMarginCsm {
+    margin-top: -90px !important;
+  }
+
+  .potential-accordion:nth-child(3)::after {
+    right: 4.4%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 4.4%;
+  }
+}
+
+@media (max-width: 768px) {
+  .topMarginCsm {
+    margin-top: 20px !important;
+  }
+
+  .complex-chemistry .MuiAccordionSummary-content {
+    width: 90%;
+  }
+}
+
 @media (max-width: 480px) {
   .potential-accordion:nth-child(3)::after {
     right: 2.6%;
@@ -570,14 +593,14 @@ body {
 
 @media (max-width: 380px) {
   .topMarginCsm {
-    margin-top: 200px !important;
+    margin-top: 260px !important;
   }
 }
 
-.opactiSlide{
+.opactiSlide {
   opacity: 0.5;
 }
-.opactiSlide.swiper-slide-active{
+.opactiSlide.swiper-slide-active {
   opacity: 1;
 }
 .people-swiper .swiper-slide {
