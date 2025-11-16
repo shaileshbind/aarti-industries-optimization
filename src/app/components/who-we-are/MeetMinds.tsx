@@ -59,7 +59,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
                 <SwiperSlide key={item?.id}>
                   {/* <CustomCursorTrigger title="Read Bio"> */}
                   {item?.image?.url && (
-                    <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px]">
+                    <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "leader"}

@@ -107,13 +107,13 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
       {sectionTitle && (
-        <div className="container mx-auto">
+        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
           <H2 className="text-blue-200">{sectionTitle}</H2>
         </div>
       )}
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
-        <div className="max-w-[100%] md:max-w-fit container">
+        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
           <Tabs
             tabs={card}
             activeId={active}
