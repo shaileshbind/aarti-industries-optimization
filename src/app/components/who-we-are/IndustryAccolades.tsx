@@ -116,7 +116,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
 
   return (
     <div className="py-[50px] lg:py-[100px]">
-      {title && <H2 className="text-center container">{title}</H2>}
+      {title && <H2 className="text-left lg:text-center container">{title}</H2>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
         <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto">

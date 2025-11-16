@@ -40,6 +40,8 @@ const HeroBanner = ({
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
+  const starRef2 = useRef<HTMLDivElement>(null);
+  const starRef3 = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
 
@@ -47,13 +49,17 @@ const HeroBanner = ({
     if (
       !wrapperRef.current ||
       !starRef.current ||
+      !starRef2.current ||
+      !starRef3.current ||
       !lineVertical.current ||
       !lineHorizontal.current
     )
       return;
 
     const star = starRef.current;
-    const stars = [star];
+    const star2 = starRef2.current;
+    const star3 = starRef3.current;
+    const stars = [star, star2, star3];
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
 
@@ -139,7 +145,7 @@ const HeroBanner = ({
                   className="object-cover block lg:hidden"
                 />
               )}
-              <div className="absolute inset-0 bg-black/20 z-[1]" />
+              <div className="absolute inset-0 bg-black/30 z-[1]" />
               <div className="w-full h-full absolute pt-[64px] lg:pt-[150px] z-[3] ">
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
@@ -181,7 +187,7 @@ const HeroBanner = ({
                     )}
                   </FadeInRevealBlur>
                 )}
-                 {btnTitle && btnLink && (
+                {btnTitle && btnLink && (
                   <FadeInRevealBlur delay={0.1}>
                     <div className="mt-[10px] lg:mt-[35px] fluid-container">
                       <Button title={btnTitle} href={btnLink} />
@@ -205,6 +211,28 @@ const HeroBanner = ({
                 <Image
                   src="/images/home/star-white.svg"
                   alt="star"
+                  width={72}
+                  height={72}
+                />
+              </div>
+              <div
+                ref={starRef2}
+                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-5 "
+              >
+                <Image
+                  src="/images/home/star-white.svg"
+                  alt="img"
+                  width={72}
+                  height={72}
+                />
+              </div>
+              <div
+                ref={starRef3}
+                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px] w-[42px] lg:w-[72px] z-5"
+              >
+                <Image
+                  src="/images/home/star-white.svg"
+                  alt="img"
                   width={72}
                   height={72}
                 />
@@ -244,7 +272,7 @@ const HeroBanner = ({
           </div>
           <div
             ref={wrapperRef}
-            className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-screen"
+            className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-screen"
           >
             {image && (
               <Image

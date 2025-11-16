@@ -302,7 +302,7 @@ const Footer = ({ data }: FooterProps) => {
                         alt="icon"
                         width={24}
                         height={24}
-                        className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
+                        className="w-6 h-6 object-contain transition-transform duration-300 ease-in-out"
                       />
                     )}
                   </div>
@@ -316,7 +316,7 @@ const Footer = ({ data }: FooterProps) => {
             <div>
               <Tags
                 title={footerData?.footer_menus[0]?.title}
-                className="mb-[20px]"
+                className="mb-[20px] uppercase"
               />
               <div className="grid grid-cols-2 md:grid-cols-1">
                 <div className=" grid">
@@ -361,7 +361,7 @@ const Footer = ({ data }: FooterProps) => {
           <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px]">
             {footerData.footer_menus.slice(1).map((section) => (
               <div key={section?.id} className="">
-                <Tags title={section.title} className="mb-[20px]" />
+                <Tags title={section.title} className="mb-[20px] uppercase" />
                 <div>
                   <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
                     {section?.sub_menus.map((item) => {
@@ -418,7 +418,7 @@ const Footer = ({ data }: FooterProps) => {
                     alt="icon"
                     width={24}
                     height={24}
-                    className="w-6 h-6 rounded-full object-contain transition-transform duration-300 ease-in-out"
+                    className="w-6 h-6  object-contain transition-transform duration-300 ease-in-out"
                   />
                 )}
               </div>
@@ -429,32 +429,32 @@ const Footer = ({ data }: FooterProps) => {
       <div className="container h-[1px] w-full bg-grey-200 mb-[24px]" />
       <div className="container w-full mb-[24px] grid lg:flex lg:justify-between">
         {Legal?.leftText && (
-          <p className="font-roboto text-center lg:text-left mt-[18px] md:mt-[unset] text-[14px] leading-[100%] font-normal text-[#343434] order-1 lg:order-0">
+          <p className="font-roboto text-center lg:text-left mt-[18px] md:mt-[unset] text-[14px] leading-[100%] font-normal text-grey-400 order-1 lg:order-0">
             {Legal?.leftText}
           </p>
         )}
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1">
           <a
             href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#717171] my-[0.5px] footer-animated-underline text-center"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-grey-400 my-[0.5px] footer-animated-underline text-center"
           >
             Legal Disclaimer
           </a>
           <a
             href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-[#717171]  my-[0.5px] footer-animated-underline text-center"
+            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-grey-400  my-[0.5px] footer-animated-underline text-center"
           >
             Privacy Policy
           </a>
           <a
             href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#717171]   my-[0.5px] footer-animated-underline text-center"
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-grey-400   my-[0.5px] footer-animated-underline text-center"
           >
             Sitemap
           </a>
           <a
             href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-[#717171]  my-[0.5px] footer-animated-underline text-center"
+            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-grey-400  my-[0.5px] footer-animated-underline text-center"
           >
             Job Fraud Alert
           </a>

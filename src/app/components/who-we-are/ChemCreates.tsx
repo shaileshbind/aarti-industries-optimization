@@ -16,7 +16,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="my-[100px]">
+    <div className="mt-[22px] lg:mt-[20px] mb-[72px] lg:mb-[120px]">
       {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
 
       {card?.length > 0 && (
