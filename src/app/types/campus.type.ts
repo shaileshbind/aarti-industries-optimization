@@ -13,6 +13,7 @@ export type CampusBannerProps = {
 
 export type CampusFlagshipProps = {
   data: {
+    sectionTitle: string;
     title: string;
     card: {
       id: string | number;

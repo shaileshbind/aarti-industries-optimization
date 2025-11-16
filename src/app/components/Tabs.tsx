@@ -147,7 +147,7 @@ const Tabs: React.FC<TabsProps> = ({
                 type="button"
                 className={`${buttonClassName} ${
                   isActive ? activeButtonClassName : inactiveButtonClassName
-                } cursor-pointer`}
+                } cursor-pointer `}
                 aria-selected={isActive}
                 role="tab"
               >

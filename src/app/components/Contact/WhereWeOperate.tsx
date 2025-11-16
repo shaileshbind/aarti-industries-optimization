@@ -77,6 +77,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     card?.[0]?.post_category?.slug || "india"
   );
   const [activeIndex, setactiveIndex] = useState<number>(0);
+  const [showAll, setShowAll] = useState<boolean>(false);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
@@ -119,6 +120,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     if (!cardsWrapRef.current) {
       setActive(String(slug));
       setactiveIndex(index);
+      setShowAll(false);
       return;
     }
 
@@ -126,6 +128,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     if (!cards || cards.length === 0) {
       setActive(String(slug));
       setactiveIndex(index);
+      setShowAll(false);
       return;
     }
 
@@ -140,6 +143,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
       onComplete: () => {
         setActive(String(slug));
         setactiveIndex(index);
+        setShowAll(false);
       },
     });
     tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
@@ -171,6 +175,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
           <Tabs
             tabs={card as unknown as Parameters<typeof Tabs>[0]["tabs"]}
             activeId={active}
+            buttonClassName="py-2 px-4 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10"
+            indicatorColor="var(--gradient-orange-1)"
             onChange={(slug, index) => {
               handleTabChange(slug, index);
             }}
@@ -180,6 +186,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
 
         {postsCount > 0 && (
           <>
+          <div className="w-full hidden lg:block">
             <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
               <Swiper
                 key={active}
@@ -271,6 +278,40 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                 </div>
               </div>
             )}
+          </div>
+          <div className="w-full lg:hidden px-[20px]">
+          {(showAll 
+            ? card[activeIndex]?.post_category?.address 
+            : card[activeIndex]?.post_category?.address?.slice(0, 2)
+          )?.map(
+                  (item: AddressCardItem, index: number) => (
+                    <div key={`${activeIndex}-${index}`}>
+                      <AddressCard
+                        location={item?.location}
+                        name={item?.company}
+                        fullAddress={item?.address}
+                        phone={item?.phone}
+                        type={item?.type}
+                        url={item?.url}
+                        registeredOffice={item?.registeredOffice}
+                      />
+                    </div>
+                  )
+                )}
+                {card[activeIndex]?.post_category?.address?.length > 2 && (
+                  <div className="p-5 mt-[20px] flex justify-center">
+                    <div className="w-fit group relative inline-block">
+                      <button
+                        onClick={() => setShowAll(!showAll)}
+                        className="relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300"
+                      >
+                        <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+                        <span className="relative z-10 text-white">{showAll ? "Show Less" : "View All"}</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+          </div>
           </>
         )}
       </div>

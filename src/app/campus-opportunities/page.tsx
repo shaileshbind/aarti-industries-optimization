@@ -26,7 +26,7 @@ const Page = async () => {
     <div>
       {section_one && <CampusBanner data={section_one} />}
       {section_two && (
-        <div className="container !pt-20 lg:!pt-50">
+        <div className="w-full !pt-[]72px lg:!pt-[140px]">
           <CampusFlagship data={section_two} layout="imgLeftContentRight" />
         </div>
       )}
