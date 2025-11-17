@@ -7,8 +7,9 @@ import MiddleBanner from "../components/digital-transformation/MiddleBanner";
 import DrivingCrossFunctional from "../components/digital-transformation/DrivingCrossFunctional";
 import FrameworkForged from "../components/sections/FrameworkForged";
 import GloballyCertified from "../components/GloballyCertified";
-import CDMOExp from "../components/cdmo/CDMOExp";
 import ExploreCards from "../components/digital-transformation/ExploreCards";
+
+export const dynamic = "force-dynamic";
 
 export default async function page() {
   const data = await getPageData("/pages/by-slug/who-we-are");

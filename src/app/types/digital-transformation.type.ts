@@ -37,7 +37,7 @@ export type DrivingCrossFunctionalProps = {
   };
 };
 
-export type CDMOExpProps = {
+export type ExploreCardsProps = {
   data: {
     title: string;
     ctaButton: ButtonProps[];
