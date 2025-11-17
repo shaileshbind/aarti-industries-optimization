@@ -251,10 +251,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="hidden lg:block object-cover"
                   />
                 )}
-                {items?.card?.[0]?.image?.url && (
+                {items?.card?.[0]?.mobImage?.url && (
                   <Image
-                    src={items?.card?.[0]?.image?.url}
-                    alt={items?.card?.[0]?.image?.alternativeText || "banner"}
+                    src={items?.card?.[0]?.mobImage?.url}
+                    alt={items?.card?.[0]?.mobImage?.alternativeText || "banner"}
                     fill
                     priority
                     className="block lg:hidden object-cover"

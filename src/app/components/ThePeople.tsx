@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Mousewheel, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { BodyText1, BodyText2, H2 } from "./Typography2";
@@ -38,7 +38,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             centeredSlides={true}
             autoHeight={false}
             loop={false}
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Mousewheel]}
             pagination={{
               el: ".home-by-use-section-swiper",
               type: "progressbar",
@@ -47,6 +47,11 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               nextEl: ".swiper-button-next-people",
               prevEl: ".swiper-button-prev-people",
             }}
+               mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
             className="people-swiper !overflow-visible"
             breakpoints={{
               1024: {
@@ -91,9 +96,9 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             ))}
           </Swiper>
           {/* <div className="absolute top-[100%] mt-2.5 left-0 w-full h-5 z-10"> */}
-          <div className="md:hidden home-by-use-section-swiper mt-10 h-[2px] w-[90%] mx-auto z-[1]" />
+          <div className="lg:hidden home-by-use-section-swiper mt-10 h-[2px] w-[90%] mx-auto z-[1]" />
           {/* </div> */}
-          <div className="hidden md:block swiper-button-prev-people absolute top-1/2 -translate-y-1/2 right-full mr-[20px] min-w-[65px] min-h-[70px] p-3  cursor-pointer">
+          <div className="hidden lg:block swiper-button-prev-people absolute top-1/2 -translate-y-1/2 right-full mr-[0px] xl:mr-[20px] min-w-[65px] min-h-[70px] p-3  cursor-pointer ">
             <Image
               src="/images/home/chevron-right-orange.svg"
               alt="arrow-left"
@@ -102,7 +107,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               className="rotate-180"
             />
           </div>
-          <div className="hidden md:block swiper-button-next-people absolute top-1/2 -translate-y-1/2 ml-[20px] left-full min-w-[65px] min-h-[70px] p-3  cursor-pointer">
+          <div className="hidden lg:block swiper-button-next-people absolute top-1/2 -translate-y-1/2 ml-[0px] xl:ml-[20px] left-full min-w-[65px] min-h-[70px] p-3  cursor-pointer">
             <Image
               src="/images/home/chevron-right-orange.svg"
               alt="arrow-left"

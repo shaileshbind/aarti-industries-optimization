@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { CDMOPartnerProps } from "@/app/types/cdmo.type";
-import AnimatedText from "./AnimatedText";
-import { BodyText2, H3, SubH2 } from "./Typography2";
-import { ScaleInGroup } from "./ScrollReveal";
+import AnimatedText from "../AnimatedText";
+import { BodyText2, H3, SubH2 } from "../Typography2";
+import { ScaleInGroup } from "../ScrollReveal";
 import clsx from "clsx";
 
 const GridCardsContainer: React.FC<CDMOPartnerProps> = ({

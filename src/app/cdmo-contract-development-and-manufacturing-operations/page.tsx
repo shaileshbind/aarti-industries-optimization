@@ -7,8 +7,8 @@ import GloballyCertified from "../components/GloballyCertified";
 import CDMOExp from "../components/cdmo/CDMOExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import CardsSlider from "../components/CardsSlider";
-import GridCardsContainer from "../components/GridCardsContainer";
+import CardsSlider from "../components/sections/CardsSlider";
+import GridCardsContainer from "../components/sections/GridCardsContainer";
 
 export const dynamic = "force-dynamic";
 

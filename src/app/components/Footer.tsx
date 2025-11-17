@@ -5,269 +5,13 @@ import Tags from "./Tags";
 import Link from "next/link";
 import { FooterProps } from "../types/header-footer.type";
 
-const footerData = {
-  footer_menus: [
-    {
-      id: 0,
-      title: "Company",
-      sub_menus: [
-        {
-          id: 0,
-          title: "Discover Aarti",
-          menus: [
-            {
-              id: 1,
-              title: "Who we are",
-              link: "/who-we-are",
-            },
-            {
-              id: 2,
-              title: "Our Story",
-              link: "/our-story",
-            },
-            {
-              id: 3,
-              title: "Industries we Serve",
-              link: "/industries-we-serve",
-            },
-            {
-              id: 4,
-              title: "Global Reach",
-              link: "/global-reach",
-            },
-          ],
-          link: "#",
-        },
-        {
-          id: 0,
-          title: "Capabilities & Partnerships",
-          menus: [
-            {
-              id: 0,
-              title: "R&D",
-              link: "/r-and-d",
-            },
-            {
-              id: 1,
-              title: "Aarti Advantage",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Digital Transformation",
-              link: "#",
-            },
-            {
-              id: 3,
-              title: "Manufacturing Capabilities",
-              link: "#",
-            },
-            {
-              id: 4,
-              title: "Partnership",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 1,
-      title: "Business",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: [
-            {
-              id: 0,
-              title: "CDMO",
-              link: "/cdmo-contract-development-and-manufacturing-operations",
-            },
-            {
-              id: 1,
-              title: "Analytical Testing",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Process Safety Testing Services",
-              link: "#",
-            },
-            {
-              id: 3,
-              title: "Aarti Mahasuper",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Sustainability",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: [
-            {
-              id: 0,
-              title: "Environment",
-              link: "/environment",
-            },
-            {
-              id: 1,
-              title: "Social",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Responsible Supply Chain",
-              link: "#",
-            },
-            {
-              id: 3,
-              title: "Health & Safety",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Investors",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: [
-            {
-              id: 0,
-              title: "Overview",
-              link: "#",
-            },
-            {
-              id: 1,
-              title: "Financial Information",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Shareholders Information",
-              link: "#",
-            },
-            {
-              id: 3,
-              title: "Governance",
-              link: "#",
-            },
-            {
-              id: 4,
-              title: "Policies & Code",
-              link: "#",
-            },
-            {
-              id: 5,
-              title: "Ethics",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "Resources",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: [
-            {
-              id: 0,
-              title: "Newsroom",
-              link: "#",
-            },
-            {
-              id: 1,
-              title: "Press Releases",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Webinars",
-              link: "#",
-            },
-            {
-              id: 3,
-              title: "Media Kit",
-              link: "#",
-            },
-            {
-              id: 4,
-              title: "Blogs ",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 5,
-      title: "Career",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: [
-            {
-              id: 0,
-              title: "Life at Aarti",
-              link: "#",
-            },
-            {
-              id: 1,
-              title: "Learning & Development",
-              link: "#",
-            },
-            {
-              id: 2,
-              title: "Campus",
-              link: "#",
-            },
-          ],
-          link: "#",
-        },
-      ],
-    },
-    {
-      id: 6,
-      title: "Contact",
-      sub_menus: [
-        {
-          id: 0,
-          title: "",
-          menus: null,
-          link: "#",
-        },
-      ],
-    },
-  ],
-};
 const Footer = ({ data }: FooterProps) => {
-  const { Logo, FollowUs, Legal } = data;
+  const { Logo, FollowUs, Legal, menu } = data;
   return (
     <footer>
       <div className="bg-white container !py-[30px] lg:!py-[60px] grid lg:grid-cols-4 gap-x-[60px]">
         <div className="lg:col-span-1 grid content-between">
-          <div>
+          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset]">
             {Logo?.Logo?.url && (
               <Image
                 src={Logo?.Logo?.url}
@@ -278,12 +22,12 @@ const Footer = ({ data }: FooterProps) => {
               />
             )}
             <div
-              className="mt-[40px] text-[14px] font-roboto text-[#002F50] hidden md:block"
+              className="mt-[40px] text-[14px] font-roboto text-[#002F50] hidden lg:block"
               dangerouslySetInnerHTML={{
                 __html: "Follow Us",
               }}
             />
-            <div className=" hidden md:grid mt-[15px] grid-cols-4 w-fit gap-x-[8px]">
+            <div className=" hidden lg:grid mt-[15px] grid-cols-4 w-fit gap-x-[8px] ">
               {FollowUs?.map((items) => (
                 <a
                   key={items?.id}
@@ -311,60 +55,65 @@ const Footer = ({ data }: FooterProps) => {
             </div>
           </div>
         </div>
-        <div className="lg:col-span-3 grid lg:grid-cols-12 gap-[20px] gap-y-[36px] mt-[40px] md:mt-[unset]">
+        <div className="lg:col-span-3 grid lg:grid-cols-12 gap-[20px] gap-y-[36px] mt-[40px] md:mt-[unset] ">
           <div className="lg:col-span-3">
             <div>
-              <Tags
-                title={footerData?.footer_menus[0]?.title}
-                className="mb-[20px] uppercase"
-              />
-              <div className="grid grid-cols-2 md:grid-cols-1">
+              {menu[0]?.category && (
+                <Tags
+                  title={menu[0]?.category}
+                  className="mb-[20px] uppercase"
+                />
+              )}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
                 <div className=" grid">
-                  <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
-                    {footerData?.footer_menus[0]?.sub_menus[0]?.title}
-                  </div>
-                  {footerData?.footer_menus[0]?.sub_menus[0]?.menus?.map(
-                    (items) => {
-                      return (
-                        <a
-                          key={items.id}
-                          href={items?.link}
-                          className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
-                        >
-                          {items?.title}
-                        </a>
-                      );
-                    }
+                  {menu[0]?.subMenu?.[0]?.title && (
+                    <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
+                      {menu[0]?.subMenu?.[0]?.title}
+                    </div>
                   )}
+                  {menu[0]?.subMenu?.[0]?.item?.map((items) => {
+                    return (
+                      <a
+                        key={items.id}
+                        href={items?.subMenuLink}
+                        className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
+                      >
+                        {items?.subMenuTitle}
+                      </a>
+                    );
+                  })}
                 </div>
                 <div className="grid">
                   <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
-                    {footerData?.footer_menus[0]?.sub_menus[1]?.title}
+                    {menu[0]?.subMenu?.[1]?.title}
                   </div>
-                  {footerData?.footer_menus[0]?.sub_menus[1]?.menus?.map(
-                    (items) => {
-                      return (
-                        <a
-                          key={items.id}
-                          href={items?.link ? items?.link : ""}
-                          className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
-                        >
-                          {items?.title}
-                        </a>
-                      );
-                    }
-                  )}
+                  {menu[0]?.subMenu?.[1]?.item?.map((items) => {
+                    return (
+                      <a
+                        key={items.id}
+                        href={items?.subMenuLink}
+                        className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
+                      >
+                        {items?.subMenuTitle}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
-          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px]">
-            {footerData.footer_menus.slice(1).map((section) => (
-              <div key={section?.id} className="">
-                <Tags title={section.title} className="mb-[20px] uppercase" />
+          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px] ">
+            {menu.slice(1).map((section) => (
+              <div key={section?.id}>
+                {section?.category && (
+                  <Tags
+                    title={section?.category}
+                    className="mb-[20px] uppercase"
+                  />
+                )}
                 <div>
                   <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
-                    {section?.sub_menus.map((item) => {
+                    {section?.subMenu?.map((item) => {
                       return (
                         <div
                           key={item?.id}
@@ -372,14 +121,14 @@ const Footer = ({ data }: FooterProps) => {
                         >
                           {item?.title}
                           <div className="grid">
-                            {item?.menus?.map((items) => {
+                            {item?.item?.map((items) => {
                               return (
                                 <a
                                   key={items.id}
-                                  href={items?.link}
+                                  href={items?.subMenuLink}
                                   className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                                 >
-                                  {items?.title}
+                                  {items?.subMenuTitle}
                                 </a>
                               );
                             })}
@@ -429,35 +178,22 @@ const Footer = ({ data }: FooterProps) => {
       <div className="container h-[1px] w-full bg-grey-200 mb-[24px]" />
       <div className="container w-full mb-[24px] grid lg:flex lg:justify-between">
         {Legal?.leftText && (
-          <p className="font-roboto text-center lg:text-left mt-[18px] md:mt-[unset] text-[14px] leading-[100%] font-normal text-grey-400 order-1 lg:order-0">
+          <p className="font-roboto text-center lg:text-left mt-[18px] lg:mt-[unset] text-[14px] leading-[100%] font-normal text-grey-400 order-1 lg:order-0">
             {Legal?.leftText}
           </p>
         )}
-        <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1">
-          <a
-            href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-grey-400 my-[0.5px] footer-animated-underline text-center"
-          >
-            Legal Disclaimer
-          </a>
-          <a
-            href="#"
-            className="cursor-pointer font-roboto text-[14px] leading-[100%] font-normal text-grey-400  my-[0.5px] footer-animated-underline text-center"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-grey-400   my-[0.5px] footer-animated-underline text-center"
-          >
-            Sitemap
-          </a>
-          <a
-            href="#"
-            className="cursor-pointer  font-roboto text-[14px] leading-[100%] font-normal text-grey-400  my-[0.5px] footer-animated-underline text-center"
-          >
-            Job Fraud Alert
-          </a>
+        <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1 justify-between">
+          {Legal?.data?.map((items) => {
+            return (
+              <a
+                key={items?.id}
+                href={items?.link}
+                className="cursor-pointer font-roboto text-[12px] md:text-[14px] leading-[100%] font-normal text-grey-400 my-[0.5px] footer-animated-underline text-center"
+              >
+                {items?.text}
+              </a>
+            );
+          })}
         </div>
       </div>
     </footer>

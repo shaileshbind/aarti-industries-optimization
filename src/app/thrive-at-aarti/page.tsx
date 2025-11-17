@@ -33,7 +33,7 @@ const page = async () => {
       {section_one && <ThriveBanner data={section_one} />}
 
       {section_two && (
-        <div className="py-[74px] lg:py-[112px]">
+        <div className="pb-[74px] lg:pb-[112px] pt-[0px] lg:pt-[112px]">
           <ScrollableCardWithImage data={section_two} />
         </div>
       )}
