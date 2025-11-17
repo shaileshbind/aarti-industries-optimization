@@ -17,20 +17,28 @@ const page = async () => {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-  const { section_one, section_two, section_three, section_four, section_five, section_six } = data;
+  const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+    section_five,
+    section_six,
+  } = data;
+
   return (
     <div>
       <EnvBanner data={section_one} />
       <EnvInfo data={section_two} />
-      <EnvCards data={section_two}/>
-      <EnvResp data={section_three}/>
-      <EnvStrong data={section_four}/>
+      <EnvCards data={section_two} />
+      <EnvResp data={section_three} />
+      <EnvStrong data={section_four} />
       <EnvLatest data={section_five} />
       <GloballyCertified
         title="Globally Certified"
         itemsData={globallyCertifiedData}
       />
-      <EnvExp data={section_six}/>
+      <EnvExp data={section_six} />
     </div>
   );
 };
