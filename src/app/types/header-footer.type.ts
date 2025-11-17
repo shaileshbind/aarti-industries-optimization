@@ -8,12 +8,16 @@ export type FooterProps = {
       };
       menu: {
         id?: number;
-        title?: string;
-        link?: string;
-        SubMenu?: {
+        category?: string;
+        subMenu?: {
           id?: number;
-          subMenuTitle?: string;
-          subMenuLink?: string;
+          title?: string;
+          link?: string;
+          item?:{
+            id?:number;
+            subMenuTitle?:string;
+            subMenuLink?:string;
+          }[]
         }[];
       }[];
       FollowUs: {
@@ -30,7 +34,7 @@ export type FooterProps = {
           id?: number;
           text?: string;
           link?: string;
-        };
+        }[]
       };
   };
 };
