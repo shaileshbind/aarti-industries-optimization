@@ -7,8 +7,8 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
-import { WordReveal } from "./ScrollReveal";
-import { H2, SubH2 } from "./Typography2";
+import { WordReveal } from "../ScrollReveal";
+import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
 
 const CardsSlider: React.FC<CDMOSplchemProps> = ({

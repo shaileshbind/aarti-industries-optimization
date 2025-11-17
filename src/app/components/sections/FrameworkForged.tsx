@@ -30,6 +30,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const slidesPerView = 1.5;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     function computeOffset() {
       if (!containerRef.current) return;
@@ -66,6 +67,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
     }, 50);
     return () => clearTimeout(timer);
   }, [activeIndex]);
+  
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
   const secondaryImageClasses =

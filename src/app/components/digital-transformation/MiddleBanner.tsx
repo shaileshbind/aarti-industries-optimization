@@ -1,12 +1,12 @@
 import React from "react";
 import BlackInfoSection from "../sections/BlackInfoSection";
-import { EnvStrongProps } from "@/app/types/environment.type";
+import { MiddleBannerProps } from "@/app/types/digital-transformation.type";
 
-const EnvStrong = ({ data }: EnvStrongProps) => {
-  const { image, mobImage, title, ctaButton, description } = data;
+const MiddleBanner = ({ data }: MiddleBannerProps) => {
+  const { image, mobImage, title, description } = data;
 
   return (
-    <div className="my-[50px] lg:my-[100px]">
+    <div className="mb-[50px] lg:mb-[30px] xl:mb-[100px]">
       <BlackInfoSection
         image={image?.url}
         mobAlt={mobImage?.alternativeText}
@@ -14,11 +14,9 @@ const EnvStrong = ({ data }: EnvStrongProps) => {
         mobImage={mobImage?.url}
         title={title}
         description={description}
-        ctaLink={ctaButton?.link}
-        ctaTitle={ctaButton?.title}
       />
     </div>
   );
 };
 
-export default EnvStrong;
+export default MiddleBanner;

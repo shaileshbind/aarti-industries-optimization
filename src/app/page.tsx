@@ -2,7 +2,7 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import ByUseSection from "./components/home/ByUseSection";
 import ContactBanner from "./components/ContactBanner";
 import FourtyYears from "./components/home/FourtyYears";
-import FrameworkForged from "./components/home/FrameworkForged";
+import FrameworkForged from "./components/sections/FrameworkForged";
 import GlobalPartner from "./components/home/GlobalPartner";
 import HomeHero from "./components/home/HomeHero";
 import LatestAtAarti from "./components/home/LatestAtAarti";
