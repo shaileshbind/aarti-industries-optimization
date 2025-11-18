@@ -45,17 +45,30 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                 {content?.map(
                   (tab, index) =>
                     tab?.value && (
-                      <button key={tab.id} onClick={() => setActive(index)}>
+                      <button
+                        key={tab.id}
+                        onClick={() => setActive(index)}
+                        className="relative"
+                      >
                         <H2
                           className={clsx(
-                            "block text-left transition-all duration-300 cursor-pointer",
+                            "block text-left transition-all duration-300 cursor-pointer  ",
                             active === index
-                              ? "text-white"
+                              ? "text-white "
                               : "text-white/40 !text-[36px] hover:text-white/80"
                           )}
                         >
                           {tab?.value}
                         </H2>
+                        {active === index && (
+                          <Image
+                            src="/images/home/star-white.svg"
+                            alt="img"
+                            width={42}
+                            height={42}
+                            className="absolute z-10 right-[-60px] top-[50%] translate-y-[-50%] w-[42px] md:w-[52px]"
+                          />
+                        )}
                       </button>
                     )
                 )}
@@ -80,14 +93,6 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             </FadeInReveal>
           )}
         </div>
-
-        <Image
-          src="/images/home/star-white.svg"
-          alt="img"
-          width={42}
-          height={42}
-          className="absolute top-[36px] z-10 right-[50px] md:left-[385px] w-[42px] md:w-[52px]"
-        />
       </div>
 
       {/* Mobile Accordion */}
@@ -98,13 +103,16 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             return (
               <div
                 key={tab.id}
-                className={clsx(`border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out`, content?.length - 1 === index && "border-b-0" )}
+                className={clsx(
+                  `border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out mx-[20px]`,
+                  content?.length - 1 === index && "border-b-0"
+                )}
               >
                 {/* Header Button */}
                 {tab?.value && (
                   <button
                     className={clsx(
-                      "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative",
+                      "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative ",
                       isOpen
                         ? "bg-gradient-orange-1 text-white pt-5"
                         : "text-gray-700 hover:bg-gray-50"
@@ -120,16 +128,16 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                       {tab?.value}
                     </p>
 
-                    {openIndex === index && <div
-                      className="absolute -bottom-4 z-[1] right-10"
-                    >
-                      <Image
-                        src="/images/star.png"
-                        alt="img"
-                        width={30}
-                        height={30}
-                      />
-                    </div>}
+                    {openIndex === index && (
+                      <div className="absolute -bottom-4 z-[1] right-10">
+                        <Image
+                          src="/images/star.png"
+                          alt="img"
+                          width={30}
+                          height={30}
+                        />
+                      </div>
+                    )}
                   </button>
                 )}
 

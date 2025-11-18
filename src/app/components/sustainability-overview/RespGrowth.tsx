@@ -580,7 +580,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               {/* Tabs */}
               {mainSection?.length > 0 && (
                 <div className="overflow-x-auto mb-6">
-                  <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-max">
+                  <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-full justify-between md:w-[50%] mx-[unset] md:mx-auto">
                     {mainSection.map((item: any, index: number) =>
                       item?.category ? (
                         <div
