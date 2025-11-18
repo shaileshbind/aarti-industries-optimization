@@ -22,6 +22,7 @@ export type FourtyYearsProps = {
     title: string;
     ctaButton: ButtonProps;
   };
+  showBottomLine?: boolean;
 };
 
 export type GlobalPartnerProps = {

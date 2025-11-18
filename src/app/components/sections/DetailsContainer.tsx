@@ -10,7 +10,10 @@ import { FourtyYearsProps } from "@/app/types/home.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
+const DetailsContainer: React.FC<FourtyYearsProps> = ({
+  data,
+  showBottomLine = true,
+}) => {
   const { sectionTitle, description, title, ctaButton } = data;
 
   const wrapperRef = useRef(null);
@@ -59,7 +62,10 @@ const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto mt-[54px] lg:mt-[42px] mb-[52px] lg:mb-[100px]">
+      <div
+        ref={wrapperRef}
+        className="container mx-auto mt-[54px] lg:mt-[42px] mb-[52px] lg:mb-[100px]"
+      >
         {/* Top Line */}
         <div
           ref={topLineRef}
@@ -105,30 +111,32 @@ const FourtyYears: React.FC<FourtyYearsProps> = ({ data }) => {
           </FadeInRevealBlur>
         </div>
         {/* Bottom Line */}
-        <div className="relative mt-[30px] md:mt-[36px] w-[37px] mx-auto grid justify-items-center">
-          <div ref={starRef}>
-            <Image
-              src="/images/home/star.svg"
-              alt="star"
-              width={37}
-              height={37}
-            />
+        {showBottomLine && (
+          <div className="relative mt-[30px] md:mt-[36px] w-[37px] mx-auto grid justify-items-center">
+            <div ref={starRef}>
+              <Image
+                src="/images/home/star.svg"
+                alt="star"
+                width={37}
+                height={37}
+              />
+            </div>
+            <div
+              ref={bottomLineRef}
+              className="mt-[-10px] h-[88px] md:h-[144px] w-[1px]"
+            >
+              <Image
+                src="/images/home/star-line.svg"
+                alt="star-line"
+                width={1}
+                height={144}
+              />
+            </div>
           </div>
-          <div
-            ref={bottomLineRef}
-            className="mt-[-10px] h-[88px] md:h-[144px] w-[1px]"
-          >
-            <Image
-              src="/images/home/star-line.svg"
-              alt="star-line"
-              width={1}
-              height={144}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default FourtyYears;
+export default DetailsContainer;
