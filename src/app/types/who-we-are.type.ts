@@ -30,16 +30,18 @@ export type WhoPrinciplesProps = {
   };
 };
 
+export type ManagementBoardProps = {
+  id: string;
+  name: string;
+  image: ImageProps;
+  designation: string;
+  bio: string;
+};
+
 export type MeetMindsProps = {
   data: {
     sectionTitle: string;
-    management_boards: {
-      id: string;
-      name: string;
-      image: ImageProps;
-      designation: string;
-      bio: string;
-    }[];
+    management_boards: ManagementBoardProps[];
   };
 };
 
