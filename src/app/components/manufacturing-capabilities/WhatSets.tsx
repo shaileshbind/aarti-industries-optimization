@@ -17,7 +17,7 @@ export default function WhatSets() {
         />
       </div>
 
-      <div className="relative z-[1] fluid-container py-[80px] px-[60px] flex flex-col justify-between h-full">
+      <div className="relative z-[1] fluid-container py-10 xl:py-[80px] px-8 xl:px-[60px] flex flex-col justify-between h-full">
         <div>
           <H2 className="max-w-[560px] text-[#FFF]">
             What Sets Aarti Industries Apart in Speciality Manufacturing
@@ -27,7 +27,7 @@ export default function WhatSets() {
         </div>
 
         <div className="grid grid-cols-4 gap-6">
-          {[...Array(4)]?.map((item, index) => (
+          {[...Array(4)]?.map((_, index) => (
             <FadeInReveal
               delay={index * 0.2}
               className="bg-[#FFF] p-8 flex flex-col justify-between h-[232px] rounded-[20px]"
