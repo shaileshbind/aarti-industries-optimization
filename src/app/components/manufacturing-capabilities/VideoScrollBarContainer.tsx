@@ -108,7 +108,7 @@ export default function VideoScrollBarContainer() {
               >
                 <div
                   className={clsx(
-                    `w-[180px] h-[100px] p-1 border-2 rounded-[14px] overflow-hidden`,
+                    `w-[180px] h-[100px] p-1 border-2 rounded-[20px] overflow-hidden`,
                     activeCard === index ? "border-[#DC4C03]" : "border-[#FFF]"
                   )}
                 >
@@ -138,8 +138,12 @@ export default function VideoScrollBarContainer() {
             <FadeInReveal className="w-1/2 xl:w-[60%] h-[470px] rounded-[20px] overflow-hidden">
               <video width="600" height="470" className="w-full h-full">
                 <source
-                  src={cards[activeCard]?.video?.url}
+                  src={cards?.[activeCard]?.video?.url}
                   type="video/mp4"
+                />
+                <source
+                  src={cards?.[activeCard]?.video?.url}
+                  type="video/ogg"
                 />
               </video>
             </FadeInReveal>
