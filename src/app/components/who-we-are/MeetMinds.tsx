@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
+import { BodyText1, BodyText2, H2, H3, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -9,7 +9,12 @@ import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
-import { MeetMindsProps } from "@/app/types/who-we-are.type";
+import {
+  ManagementBoardProps,
+  MeetMindsProps,
+} from "@/app/types/who-we-are.type";
+import CustomCursorTrigger from "@/app/CustomCursorTrigger";
+import Popup from "../Popup";
 // import CustomCursorTrigger from "../../CustomCursorTrigger";
 // import Link from "next/link";
 
@@ -18,6 +23,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
+  const [showPopup, setshowPopup] = useState<boolean>(false);
+  const [popupDetails, setpopupDetails] = useState<ManagementBoardProps | null>(
+    null
+  );
 
   return (
     <div className="py-[50px] lg:pb-[100px] lg:pt-0">
@@ -57,28 +66,35 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
             >
               {management_boards?.map((item) => (
                 <SwiperSlide key={item?.id}>
-                  {/* <CustomCursorTrigger title="Read Bio"> */}
-                  {item?.image?.url && (
-                    <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
-                      <Image
-                        src={item?.image?.url}
-                        alt={item?.image?.alternativeText || "leader"}
-                        fill
-                        className="object-cover object-top"
-                      />
+                  <CustomCursorTrigger title="Read Bio">
+                    <div
+                      onClick={() => {
+                        setshowPopup(true);
+                        setpopupDetails(item);
+                      }}
+                    >
+                      {item?.image?.url && (
+                        <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
+                          <Image
+                            src={item?.image?.url}
+                            alt={item?.image?.alternativeText || "leader"}
+                            fill
+                            className="object-cover object-top"
+                          />
+                        </div>
+                      )}
+                      {item?.name && (
+                        <BodyText2 className="mt-[18px] text-blue-200">
+                          {item?.name}
+                        </BodyText2>
+                      )}
+                      {item?.designation && (
+                        <BodyText1 className="mt-[4px] text-grey-300">
+                          {item?.designation}
+                        </BodyText1>
+                      )}
                     </div>
-                  )}
-                  {item?.name && (
-                    <BodyText2 className="mt-[18px] text-blue-200">
-                      {item?.name}
-                    </BodyText2>
-                  )}
-                  {item?.designation && (
-                    <BodyText1 className="mt-[4px] text-grey-300">
-                      {item?.designation}
-                    </BodyText1>
-                  )}
-                  {/* </CustomCursorTrigger> */}
+                  </CustomCursorTrigger>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -138,6 +154,25 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
           </div>
         </div>
       </div>
+
+      <Popup isOpen={showPopup} onOverlayClick={() => setshowPopup(false)}>
+        <div className="max-h-[80vh]">
+          <H3>{popupDetails?.name}</H3>
+          <SubH3>{popupDetails?.designation} </SubH3>
+
+          <div className="w-1/2 h-[400px]">
+            <Image
+              src={popupDetails?.image?.url || ""}
+              alt={popupDetails?.image?.alternativeText || "leader"}
+              className="object-cover object-top w-full h-full"
+              width={400}
+              height={800}
+            />
+          </div>
+
+          <div>{popupDetails?.bio}</div>
+        </div>
+      </Popup>
     </div>
   );
 };

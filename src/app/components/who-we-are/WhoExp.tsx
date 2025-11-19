@@ -1,6 +1,6 @@
 import React from "react";
 import ExploreCard from "../cards/ExploreCard";
-import { WhoExpProps } from "@/app/types/who-we-are.type";
+import { WhoExpProps } from "../../types/who-we-are.type";
 
 const WhoExp: React.FC<WhoExpProps> = ({ data }) => {
   const { ExlporeCard } = data;
