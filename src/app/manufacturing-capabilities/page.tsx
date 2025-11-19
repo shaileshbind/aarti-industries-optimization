@@ -11,38 +11,50 @@ import Explore from "../components/manufacturing-capabilities/Explore";
 import VideoScrollBarContainer from "../components/manufacturing-capabilities/VideoScrollBarContainer";
 
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/who-we-are");
-  const data2 = await getPageData("/pages/by-slug/home-page");
-  const data3 = await getPageData("/pages/by-slug/our-story");
+  const data = await getPageData("/pages/by-slug/manufacturing-capabilities");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
 
+  const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+    section_five,
+    section_six,
+    section_seven,
+  } = data;
+
   return (
     <div>
-      {data?.section_one && <ManufacturingBanner data={data?.section_one} />}
+      {section_one && <ManufacturingBanner data={section_one} />}
 
-      {data2?.sectionTwo && (
-        <DetailsContainer data={data2?.sectionTwo} showBottomLine={false} />
+      {section_two && (
+        <DetailsContainer data={section_two} showBottomLine={false} />
       )}
 
-      <div className="mt-[40px] mb-[72px] lg:mb-[140px]">
-        <ScaleUpEngine />
-      </div>
+      {section_three && (
+        <div className="mt-[40px] mb-[72px] lg:mb-[140px]">
+          <ScaleUpEngine data={section_three} />
+        </div>
+      )}
 
-      <WhatSets />
+      {section_four && <WhatSets data={section_four} />}
 
-      {data3?.section_four && <GlobalInnovation data={data3?.section_four} />}
+      {section_five && <GlobalInnovation data={section_five} />}
 
-      <div className="mb-[72px] lg:mb-[140px]">
-        <VideoScrollBarContainer />
-      </div>
+      {section_six && (
+        <div className="mb-[72px] lg:mb-[140px]">
+          <VideoScrollBarContainer data={section_six} />
+        </div>
+      )}
 
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
 
-      {data?.section_ten && <Explore data={data?.section_ten} />}
+      {section_seven && <Explore data={section_seven} />}
     </div>
   );
 }

@@ -12,33 +12,40 @@ import ExploreCards from "../components/digital-transformation/ExploreCards";
 export const dynamic = "force-dynamic";
 
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/who-we-are");
-  const data2 = await getPageData("/pages/by-slug/environment");
+  const data = await getPageData("/pages/by-slug/digital-transformation");
   const data3 = await getPageData("/pages/by-slug/research-and-development");
-  const data4 = await getPageData("/pages/by-slug/home-page");
-  const data5 = await getPageData("/pages/by-slug/cdmo");
-
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
 
+  const {
+    section_one,
+    section_two,
+    section_three,
+    section_four,
+    section_five,
+    section_six,
+  } = data;
+
   return (
     <div>
-      {data?.section_one && <DigitalBanner data={data?.section_one} />}
+      {section_one && <DigitalBanner data={section_one} />}
 
-      <div className="py-[72px] lg:py-[140px]">
-        <TitleCardsContainer />
-      </div>
-
-      {data2?.section_four && <MiddleBanner data={data2?.section_four} />}
-
-      {data3?.section_eight && (
-        <DrivingCrossFunctional data={data3?.section_eight} />
+      {section_two && (
+        <div className="py-[72px] lg:py-[140px]">
+          <TitleCardsContainer data={section_two} />
+        </div>
       )}
 
-      {data4?.sectionEight && (
+      {section_three && <MiddleBanner data={section_three} />}
+
+      {section_four && (
+        <DrivingCrossFunctional data={section_four} />
+      )}
+
+      {section_five && (
         <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
-          <FrameworkForged data={data4?.sectionEight} />
+          <FrameworkForged data={section_five} />
         </div>
       )}
 
@@ -46,7 +53,7 @@ export default async function page() {
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
 
-      {data5?.section_eight && <ExploreCards data={data5?.section_eight} />}
+      {section_six && <ExploreCards data={section_six} />}
     </div>
   );
 }

@@ -2,72 +2,25 @@ import React from "react";
 import { BodyText2, SubH1, SubH2 } from "./Typography2";
 import Image from "next/image";
 import { FadeInReveal, ScaleInGroup } from "./ScrollReveal";
+import { TitleCardsContainerProps } from "../types/digital-transformation.type";
 
-export default function TitleCardsContainer() {
-  const cards = [
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-    {
-      title: "Conducted information",
-      description: "Deep R&D, pilot-to-commercial scale-up.",
-      image: {
-        url: "/images/star-orange.svg",
-        alternativeText: "Banner",
-      },
-    },
-  ];
+export default function TitleCardsContainer({
+  data,
+}: TitleCardsContainerProps) {
+  const { title, card } = data;
 
   return (
-    <div className="lg:flex justify-between gap-10 fluid-container">
-      <FadeInReveal>
-        <SubH1 className="lg:max-w-[300px] xl:max-w-[400px] pb-8 lg:pb-0">
-          We strengthen operations with full-site security checks, trained
-          teams, and modern digital systems.
-        </SubH1>
-      </FadeInReveal>
+    <div className="lg:flex justify-between gap-12 fluid-container">
+      {title && (
+        <FadeInReveal className="lg:max-w-[300px] xl:max-w-[400px] pb-8 lg:pb-0">
+          <SubH1>{title}</SubH1>
+        </FadeInReveal>
+      )}
 
       <ScaleInGroup delay={0.2}>
-        {cards?.length > 0 && (
+        {card?.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1">
-            {cards.map(({ title, image, description }, i) => (
+            {card.map(({ title, image, description }, i) => (
               <div
                 key={i}
                 className="sm:h-auto lg:min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-4 xl:p-8 flex flex-col justify-between"

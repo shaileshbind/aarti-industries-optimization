@@ -6,104 +6,25 @@ import clsx from "clsx";
 import { FadeInReveal } from "../ScrollReveal";
 import Button from "../Button";
 import { useMediaQuery } from "@mui/material";
+import { VideoScrollBarContainerProps } from "@/app/types/manufacturing-capabilities.type";
 
-export default function VideoScrollBarContainer() {
-  const cards = [
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon3.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon2.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/move.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon3.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon2.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon3.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon2.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon3.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur.",
-      image: {
-        url: "/images/environment/e-icon2.png",
-        alternativeText: "",
-      },
-      video: {
-        url: "/videos/sample.mp4",
-      },
-    },
-  ];
+export default function VideoScrollBarContainer({
+  data,
+}: VideoScrollBarContainerProps) {
+  const { title, card } = data;
+
   const [activeCard, setactiveCard] = useState<number>(0);
   const isMobile = useMediaQuery("(max-width:820px)");
   const [showAll, setshowAll] = useState<boolean>(false);
 
   return (
     <div className="fluid-container">
-      <H2 className="lg:max-w-[560px]">
-        Inside AIL's Manufacturing Excellence
-      </H2>
+      {title && <H2 className="lg:max-w-[560px]">{title}</H2>}
 
-      {cards?.length > 0 && (
+      {card?.length > 0 && (
         <div className="mt-6 lg:mt-12 flex justify-between">
-          <div className="lg:w-[40%] xl:w-[35%] flex flex-col gap-4 lg:gap-6 lg:max-h-[60vh] lg:overflow-y-scroll scrollbar">
-            {(isMobile ? (showAll ? cards : cards?.slice(0, 5)) : cards)?.map(
+          <div className="lg:w-[40%] xl:w-[35%] flex flex-col gap-4 lg:gap-6 lg:max-h-[60vh] lg:overflow-y-auto scrollbar">
+            {(isMobile ? (showAll ? card : card?.slice(0, 5)) : card)?.map(
               (item, index) => (
                 <div
                   key={"item_" + index}
@@ -123,26 +44,28 @@ export default function VideoScrollBarContainer() {
                   >
                     <Image
                       src={item?.image?.url}
-                      alt={item?.image?.alternativeText || "logo"}
+                      alt={"banner"}
                       width={180}
                       height={100}
                       className="w-full h-full rounded-[14px]"
                     />
                   </div>
 
-                  <SubH3
-                    className={clsx(
-                      `lg:max-w-[80%] xl:max-w-[200px] text-[#4C5861]`
-                    )}
-                  >
-                    {item?.title}
-                  </SubH3>
+                  {item?.title && (
+                    <SubH3
+                      className={clsx(
+                        `lg:max-w-[80%] xl:max-w-[200px] text-[#4C5861]`
+                      )}
+                    >
+                      {item?.title}
+                    </SubH3>
+                  )}
                 </div>
               )
             )}
           </div>
 
-          {cards?.[activeCard]?.video?.url && (
+          {card?.[activeCard]?.media?.url && (
             <FadeInReveal className="w-1/2 xl:w-[60%] h-[470px] rounded-[20px] overflow-hidden hidden lg:block">
               <video
                 width="600"
@@ -151,14 +74,8 @@ export default function VideoScrollBarContainer() {
                 key={activeCard}
                 controls
               >
-                <source
-                  src={cards?.[activeCard]?.video?.url}
-                  type="video/mp4"
-                />
-                <source
-                  src={cards?.[activeCard]?.video?.url}
-                  type="video/ogg"
-                />
+                <source src={card?.[activeCard]?.media?.url} type="video/mp4" />
+                <source src={card?.[activeCard]?.media?.url} type="video/ogg" />
               </video>
             </FadeInReveal>
           )}

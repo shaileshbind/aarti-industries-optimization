@@ -5,11 +5,11 @@ import { DrivingCrossFunctionalProps } from "@/app/types/digital-transformation.
 const DrivingCrossFunctional: React.FC<DrivingCrossFunctionalProps> = ({
   data,
 }) => {
-  const { details } = data;
+  const { details, title } = data;
 
   return (
     <>
-      <TabsAutoplay data={details} />
+      <TabsAutoplay data={details} title={title} />
     </>
   );
 };
