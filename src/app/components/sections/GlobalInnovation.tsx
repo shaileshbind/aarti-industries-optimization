@@ -12,7 +12,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
-    <section className="fluid-container flex flex-col justify-between my-[50px] lg:my-[100px]">
+    <section className="fluid-container flex flex-col justify-between my-[72px] lg:my-[100px]">
       {/* Animated Heading */}
       <AnimatedText className="lg:w-[60%] w-full mb-16">
         <H3>{title}</H3>
