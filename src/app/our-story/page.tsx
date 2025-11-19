@@ -2,10 +2,10 @@ import React from "react";
 import HeroBanner from "../components/our-story/HeroBanner";
 import AboutCompany from "../components/our-story/AboutCompany";
 import TimeLine from "../components/our-story/TimeLine";
-import GlobalInnovation from "../components/sections/GlobalInnovation";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
+import GlobalInnovation from "../components/sections/GlobalInnovation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,6 @@ export default async function page() {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-  console.log(data);
 
   const { section_one, section_two, section_three, section_four } = data;
 

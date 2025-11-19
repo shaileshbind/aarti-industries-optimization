@@ -13,7 +13,6 @@ export const dynamic = "force-dynamic";
 
 export default async function page() {
   const data = await getPageData("/pages/by-slug/digital-transformation");
-  const data3 = await getPageData("/pages/by-slug/research-and-development");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
