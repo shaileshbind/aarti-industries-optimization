@@ -31,6 +31,9 @@ export type OurPortfolioProps = {
         image: ImageProps;
         mobImage: ImageProps;
         ctaButton: ButtonProps;
+        BulletPoints: {
+          title: string;
+        }[];
       }[];
     }[];
   };

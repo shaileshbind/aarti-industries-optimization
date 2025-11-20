@@ -631,3 +631,17 @@ body {
 .people-swiper .slide-box {
   height: 100%;
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar::-webkit-scrollbar-button {
+  background: #ffffff;
+}
+.scrollbar::-webkit-scrollbar-track-piece {
+  background: #dfdfdf;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #dc4c03;
+  border-radius: 20px;
+}

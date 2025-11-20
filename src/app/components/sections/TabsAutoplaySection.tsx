@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
-import { BodyText2, SubH1, SubH2 } from "../Typography2";
+import { BodyText2, H2, SubH1, SubH2 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -16,11 +16,13 @@ type TabsAutoplayProps = {
   data: RDCardProps[];
   tabClass?: string;
   starImgEffect?: boolean;
+  title?: string;
 };
 
 const TabsAutoplaySection = ({
   data,
   tabClass,
+  title,
   starImgEffect,
 }: TabsAutoplayProps) => {
   const [active, setActive] = useState(0);
@@ -110,6 +112,12 @@ const TabsAutoplaySection = ({
 
   return (
     <>
+      {title && (
+        <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-6 lg:mb-0">
+          <H2>{title}</H2>
+        </div>
+      )}
+
       {/* Desktop */}
       <div className="mx-[20px] lg:mx-[60px] my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
         {/* Tabs */}
@@ -217,11 +225,34 @@ const TabsAutoplaySection = ({
                           {tabItem.card[0].title}
                         </SubH2>
                       )}
+
                       {tabItem.card[0]?.description && (
                         <BodyText2 className="mt-[18px]">
                           {tabItem.card[0].description}
                         </BodyText2>
                       )}
+
+                      <div className="flex flex-col gap-2 mt-3">
+                        {tabItem.card[0]?.BulletPoints?.length > 0 &&
+                          tabItem.card[0]?.BulletPoints?.map(
+                            (items, index2) => (
+                              <div
+                                className="flex gap-2"
+                                key={"pointerss_" + index2}
+                              >
+                                <Image
+                                  src={"/images/star-orange.svg"}
+                                  alt={"star"}
+                                  className="object-cover object-top w-5 h-5"
+                                  width={20}
+                                  height={20}
+                                />
+                                <p className="text-[#4C5861]">{items?.title}</p>
+                              </div>
+                            )
+                          )}
+                      </div>
+
                       {tabItem.card[0]?.ctaButton?.link && (
                         <div className="mt-[18px] pointer-events-auto">
                           <Button
@@ -239,6 +270,7 @@ const TabsAutoplaySection = ({
           ))}
         </Swiper>
       </div>
+
       {/* Mobile Accordion */}
       {data?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
@@ -317,6 +349,27 @@ const TabsAutoplaySection = ({
                             {item.card[0].description}
                           </BodyText2>
                         )}
+
+                        <div className="flex flex-col gap-2 mt-5">
+                          {item.card[0]?.BulletPoints?.length > 0 &&
+                            item.card[0]?.BulletPoints?.map(
+                              (items, index2) => (
+                                <div
+                                  className="flex gap-2"
+                                  key={"pointerss_" + index2}
+                                >
+                                  <Image
+                                    src={"/images/star-orange.svg"}
+                                    alt={"star"}
+                                    className="object-cover object-top w-4 h-4"
+                                    width={14}
+                                    height={14}
+                                  />
+                                  <p className="text-[#4C5861] text-sm">{items?.title}</p>
+                                </div>
+                              )
+                            )}
+                        </div>
                       </>
                     )}
                   </div>

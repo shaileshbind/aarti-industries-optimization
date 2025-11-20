@@ -15,6 +15,7 @@ type MainAccordionProps = {
   title?: React.ReactNode;
   children: React.ReactNode;
   borderBottom?: string;
+  icon?: React.ReactNode;
 };
 
 export default function MainAccordion({
@@ -24,6 +25,7 @@ export default function MainAccordion({
   showIcon = true,
   title,
   children,
+  icon,
   borderBottom,
 }: MainAccordionProps) {
   const isMobile = useMediaQuery("(max-width:820px)");
@@ -61,7 +63,11 @@ export default function MainAccordion({
           expandIcon={
             showIcon && (
               <div className="text-2xl font-bold text-[#002F50]">
-                {expanded ? (
+                {icon ? (
+                  // Use custom icon if provided
+                  icon
+                ) : // Otherwise use default Add/Remove icons
+                expanded ? (
                   <Remove className="text-[#DC4C03]" />
                 ) : (
                   <Add className="text-[#DC4C03]" />

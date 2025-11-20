@@ -28,7 +28,7 @@ const BlackInfoSection = ({
   return (
     <>
       {mobImage && (
-        <div className="rounded-[14px] overflow-hidden mb-[20px] h-[240px] relative block lg:hidden mx-[20px]">
+        <div className="rounded-[14px] overflow-hidden mb-[20px] h-[240px] md:h-[340px] relative block lg:hidden mx-[20px]">
           <Image
             src={mobImage}
             alt={mobAlt ? mobAlt : "banner"}
@@ -53,7 +53,7 @@ const BlackInfoSection = ({
         <div className="lg:absolute w-full lg:py-[80px] px-[20px] lg:px-[60px] top-0 flex flex-col justify-between h-full">
           {title && (
             <FadeInReveal>
-              <H2 className="text-blue-200 lg:text-white max-w-[unset] lg:max-w-[470px]">
+              <H2 className="text-[#002F50] lg:text-white max-w-[unset] lg:max-w-[648px]">
                 {title}
               </H2>
             </FadeInReveal>
