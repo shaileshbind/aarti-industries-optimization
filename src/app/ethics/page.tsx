@@ -5,7 +5,7 @@ import GloballyCertified from "../components/GloballyCertified";
 import WhoExp from "../components/who-we-are/WhoExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import GlobalInnovation from "../components/our-story/GlobalInnovation";
+import GlobalInnovation from "../components/sections/GlobalInnovation";
 
 export const dynamic = "force-dynamic";
 

@@ -6,7 +6,7 @@ const MiddleBanner = ({ data }: MiddleBannerProps) => {
   const { image, mobImage, title, description } = data;
 
   return (
-    <div className="mb-[50px] lg:mb-[30px] xl:mb-[100px]">
+    <div className="mb-[72px] lg:mb-[30px] xl:mb-[100px]">
       <BlackInfoSection
         image={image?.url}
         mobAlt={mobImage?.alternativeText}
