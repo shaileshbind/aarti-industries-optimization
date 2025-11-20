@@ -172,6 +172,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
         <div className="block lg:hidden mt-[14px]">
           {card?.map((item, index) => (
             <MainAccordion
+              key={"MainAccordion" + index}
               expanded={expanded === index}
               icon={
                 expanded === index ? (
@@ -241,7 +242,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
 
               <div className="pt-5">
                 {item?.description && (
-                  <p className="text-sm md:text-base text-[#4C5861]">{item?.description}</p>
+                  <p className="text-sm md:text-base text-[#4C5861]">
+                    {item?.description}
+                  </p>
                 )}
 
                 <div className="flex flex-col gap-2 mt-3">
@@ -258,7 +261,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                           width={14}
                           height={14}
                         />
-                        <p className="w-[96%] text-sm text-[#4C5861]">{items?.title}</p>
+                        <p className="w-[96%] text-sm text-[#4C5861]">
+                          {items?.title}
+                        </p>
                       </div>
                     ))}
 

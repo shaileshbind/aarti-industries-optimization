@@ -57,6 +57,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {cards?.map((item, index) => (
               <FadeInReveal
+                key={"card_" + index}
                 delay={index * 0.2}
                 className="bg-[#EFF3F5] lg:bg-[#FFF] p-4 xl:p-8 flex flex-col gap-6 justify-between md:h-[232px] rounded-[20px]"
               >
