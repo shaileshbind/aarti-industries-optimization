@@ -633,15 +633,15 @@ body {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 4px !important;
 }
 .scrollbar::-webkit-scrollbar-button {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 .scrollbar::-webkit-scrollbar-track-piece {
-  background: #dfdfdf;
+  background: #dfdfdf !important;
 }
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #dc4c03;
-  border-radius: 20px;
+  background: #dc4c03 !important;
+  border-radius: 20px !important;
 }
