@@ -1,7 +1,7 @@
 import React from "react";
 import type { FC } from "react";
 import Image from "next/image";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
+import { BodyText1, BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import clsx from "clsx";
 
@@ -14,23 +14,31 @@ interface CTAButton {
   title?: string;
   link?: string;
 }
+interface bulletProp {
+  id?: number;
+  title?: string;
+}
 
 interface SliderCardProps {
   imgSrc: string;
   imgAlt?: string;
   title?: string;
+  heading?: string;
   description?: string;
   values?: SliderValue[];
   ctaButton?: CTAButton;
+  bullets?: bulletProp[];
 }
 
 const SliderCard: FC<SliderCardProps> = ({
   imgSrc,
   imgAlt,
   title,
+  heading,
   description,
   values,
   ctaButton,
+  bullets,
 }) => {
   return (
     <>
@@ -43,22 +51,22 @@ const SliderCard: FC<SliderCardProps> = ({
           )}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <Image
+           {imgSrc && <Image
               src={imgSrc}
               alt={imgAlt ? imgAlt : "img"}
               fill
               className="object-cover scale-110"
-            />
+            />}
             <div className="absolute inset-0 bg-black/40 z-[1]" />
 
             <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
             <span className="absolute bottom-0 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
-              <Image
+             {imgSrc && <Image
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
                 fill
                 className="object-cover scale-110"
-              />
+              />}
             </span>
           </div>
           {title && (
@@ -67,11 +75,26 @@ const SliderCard: FC<SliderCardProps> = ({
             </h2>
           )}
         </div>
-
+        {heading && <SubH1 className="mb-[10px] lg:mb-[14px] mt-[14px] lg:mt-[unset]">{heading}</SubH1>}
         {description && (
-          <BodyText1 className="mt-[20px]">{description}</BodyText1>
+          <BodyText1 className="mt-[unset] lg:mt-[20px]">{description}</BodyText1>
         )}
-
+        {bullets && (
+          <div className="mt-[16px] lg:mt-[18px]">
+            {bullets?.map((bp:bulletProp ) => (
+              <div key={bp?.id} className="mb-[10px] flex gap-x-[10px] items-start">
+                <Image
+                  src="/images/star-orange.svg"
+                  alt="icon"
+                  width={14}
+                  height={14}
+                  className="mt-[5px]"
+                />
+                <BodyText2>{bp?.title}</BodyText2>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="gap-[1%] mt-6 mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
           {values?.map((stat, idx) => (
             <div key={idx}>
@@ -84,37 +107,31 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           ))}
         </div>
-
         {ctaButton?.title && ctaButton?.link && (
-          <Button
-            title={ctaButton?.title}
-            href={ctaButton?.link}
-            secondary
-          />
+          <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
         )}
       </div>
-
       {/* Desktop Version */}
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
           <div className="w-full pt-[100%] relative">
             <div className="absolute inset-0 overflow-hidden">
-              <Image
+             {imgSrc && <Image
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
                 fill
                 className="object-cover scale-110"
-              />
+              />}
               <div className="absolute inset-0 bg-black/30 z-[1]" />
 
               <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
               <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
-                <Image
+               {imgSrc && <Image
                   src={imgSrc}
                   alt={imgAlt ? imgAlt : "img"}
                   fill
                   className="object-cover scale-110"
-                />
+                />}
               </span>
             </div>
 
@@ -125,9 +142,24 @@ const SliderCard: FC<SliderCardProps> = ({
             )}
           </div>
         </div>
-
         <div className="w-[60%]">
+          {heading && <SubH1 className="mb-[14px]">{heading}</SubH1>}
           {description && <BodyText1>{description}</BodyText1>}
+          {bullets && (
+            <div className="mt-[18px]">
+              {bullets?.map((bp: bulletProp) => (
+                <div key={bp?.id} className="mb-[10px] flex gap-x-[10px]">
+                  <Image
+                    src="/images/star-orange.svg"
+                    alt="icon"
+                    width={14}
+                    height={14}
+                  />
+                  <BodyText2>{bp?.title}</BodyText2>
+                </div>
+              ))}
+            </div>
+          )}
           {values?.length ? (
             <div className=" gap-6 lg:gap-5 my-8 grid grid-cols-3 items-start gap-x-[10px]">
               {values.map((stat, idx) => (
@@ -146,14 +178,9 @@ const SliderCard: FC<SliderCardProps> = ({
               ))}
             </div>
           ) : null}
-
           {ctaButton?.title && ctaButton?.link && (
-          <Button
-            title={ctaButton?.title}
-            href={ctaButton?.link}
-            secondary
-          />
-        )}
+            <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
+          )}
         </div>
       </div>
     </>
