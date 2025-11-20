@@ -92,6 +92,9 @@ export type RDCardProps = {
     description: string;
     ctaButton: ButtonProps;
     image: ImageProps;
+    BulletPoints: {
+      title: string;
+    }[];
   }[];
 };
 

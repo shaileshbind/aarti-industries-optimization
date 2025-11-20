@@ -12,9 +12,9 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
-    <section className="fluid-container flex flex-col justify-between my-[50px] lg:my-[100px]">
+    <section className="fluid-container flex flex-col justify-between my-[72px] lg:my-[100px]">
       {/* Animated Heading */}
-      <AnimatedText className="lg:w-[70%] w-full mb-16">
+      <AnimatedText className="lg:w-[60%] w-full mb-16">
         <H3>{title}</H3>
       </AnimatedText>
 
@@ -46,7 +46,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
         </div>
 
         {/* Focus Items */}
-        <div className="lg:w-[37%] w-full flex flex-col gap-4 lg:gap-8 mt-[30px] lg:mt-0">
+        <div className="lg:w-[40%] w-full flex flex-col gap-4 lg:gap-8 mt-[30px] lg:mt-0">
           {focusSectionTitle && (
             <SubH2 className="lg:mb-6 mb-4">{focusSectionTitle}</SubH2>
           )}
