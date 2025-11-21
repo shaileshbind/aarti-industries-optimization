@@ -7,13 +7,11 @@ const ShareHolderBanner: React.FC<ShareHolderBannerProps> = ({ data }) => {
 
   return (
     <HeroBanner
-      title={"Shareholders Information"}
-      desc={
-        "We deliver sustainable chemical solutions that power innovation across global industries."
-      }
+      title={title}
+      desc={description}
       fullBg
       centerText={true}
-      image={"/images/sustainability/sus-banner.png"}
+      image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}

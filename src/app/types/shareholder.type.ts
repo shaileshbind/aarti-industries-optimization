@@ -8,3 +8,16 @@ export type ShareHolderBannerProps = {
     mobImage: ImageProps;
   };
 };
+
+export type TabsYearsContainerProps = {
+  data: {
+    type: string;
+    reports: {
+      year: string;
+      report: {
+        heading: string;
+        link: string;
+      }[];
+    }[];
+  }[];
+};
