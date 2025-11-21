@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { CPReportProps } from "@/app/types/code-and-policies.type";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import { AnnualRProps } from "@/app/types/annual-reports.type";
 
-const PolicyListComponent = ({ data }: CPReportProps) => {
-  const { code_and_policy_reports } = data;
+const AnnualList = ({ data }: AnnualRProps) => {
+  const { annual_reports } = data;
   const [visibleCount, setVisibleCount] = useState(12);
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 2);
@@ -12,7 +12,7 @@ const PolicyListComponent = ({ data }: CPReportProps) => {
   return (
     <div className="container">
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto py-[42px] lg:py-[70px]">
-        {code_and_policy_reports?.slice(0, visibleCount)?.map((item: any) => (
+        {annual_reports?.slice(0, visibleCount)?.map((item: any) => (
           <OrangeTabCard
             key={item?.reports?.id}
             title={item?.reports?.heading}
@@ -20,7 +20,7 @@ const PolicyListComponent = ({ data }: CPReportProps) => {
           />
         ))}
       </div>
-      {code_and_policy_reports && code_and_policy_reports?.length > 12 && (
+      {annual_reports && annual_reports?.length > 12 && (
         <div className="flex justify-center mb-8">
           <button
             onClick={handleLoadMore}
@@ -34,4 +34,4 @@ const PolicyListComponent = ({ data }: CPReportProps) => {
   );
 };
 
-export default PolicyListComponent;
+export default AnnualList;

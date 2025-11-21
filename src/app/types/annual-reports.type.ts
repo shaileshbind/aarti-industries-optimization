@@ -1,6 +1,6 @@
 import { ImageProps } from "./global.type";
 
-export type CPBannerProps = {
+export type AnnualRBannerProps = {
   data: {
     title: string;
     description: string;
@@ -9,11 +9,11 @@ export type CPBannerProps = {
   };
 };
 
-export type CPReportProps = {
+export type AnnualRProps = {
   data: {
-    code_and_policy_reports?: {
+    annual_reports?: {
       id?: number;
-      reports?: {
+      annual_reports?: {
         id?: number;
         heading?: string;
         link?: string;
