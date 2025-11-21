@@ -8,8 +8,8 @@ import {
 import clsx from "clsx";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ProductList from "../products/ProdutList";
 import { TabsYearsContainerProps } from "@/app/types/shareholder.type";
+import OrangeTabCard from "../cards/OrangeTabCard";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeTab, setactiveTab] = useState<number>(0);
@@ -17,8 +17,8 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeYear, setactiveYear] = useState<string | number>(
     data?.[0]?.reports?.[0]?.year
   );
-  const [activeDropdownTab, setactiveDropdownTab] = useState(
-    "Shareholding Pattern"
+  const [activeDropdownTab, setactiveDropdownTab] = useState<string>(
+    data?.[0]?.type
   );
   const [dropdownClicked, setdropdownClicked] = useState(false);
 
@@ -44,7 +44,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   };
 
   const mobStyles = {
-    backgroundColor: "#EFF3F5",
+    backgroundColor: "#F7F9FA",
     borderRadius: "10px",
     "& .MuiOutlinedInput-notchedOutline": {
       border: "none",
@@ -57,9 +57,25 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
     },
   };
 
-  const handleChange = (event: SelectChangeEvent<string | number>) => {
+  // Handler for Archive year dropdown (Desktop & Mobile)
+  const handleArchiveChange = (event: SelectChangeEvent<string | number>) => {
     setactiveYear(event.target.value);
     setdropdownClicked(true);
+  };
+
+  // Handler for Mobile Tabs Dropdown
+  const handleMobileTabChange = (event: SelectChangeEvent<string | number>) => {
+    const selectedType = event.target.value as string;
+    setactiveDropdownTab(selectedType);
+
+    // Find the corresponding tab index and update data
+    const tabIndex = data?.findIndex((item) => item?.type === selectedType);
+    if (tabIndex !== -1 && tabIndex !== undefined) {
+      setactiveTab(tabIndex);
+      setactiveData(data?.[tabIndex]?.reports);
+      setactiveYear(data?.[tabIndex]?.reports?.[0]?.year);
+      setdropdownClicked(false);
+    }
   };
 
   // helper to measure active item relative to yearsRowRef
@@ -121,7 +137,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             id="activeDropdownTab-select"
             value={activeDropdownTab}
             label="activeDropdownTab"
-            onChange={handleChange}
+            onChange={handleMobileTabChange}
             IconComponent={KeyboardArrowDownIcon}
           >
             {data?.map((item, index) => (
@@ -194,12 +210,10 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
                   id="archiveYear-select"
                   value={dropdownClicked ? activeYear : "Archive"}
                   label="archiveYear"
-                  onChange={handleChange}
+                  onChange={handleArchiveChange}
                   IconComponent={KeyboardArrowDownIcon}
                 >
-                  <MenuItem value={"Archive"} selected>
-                    Archive
-                  </MenuItem>
+                  <MenuItem value={"Archive"}>Archive</MenuItem>
 
                   {activeData?.slice(4)?.map((items, index2) => (
                     <MenuItem value={items?.year} key={"archive_" + index2}>
@@ -218,10 +232,10 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             ?.find((item: any) => item.year === activeYear)
             ?.report?.map((item: any) => (
               <div className="md:pb-4" key={item.id}>
-                <ProductList
-                  title={item.heading}
-                  link={item.link}
-                  secondary={item.secondary}
+                <OrangeTabCard
+                  key={item?.id}
+                  title={item?.heading}
+                  link={item?.link}
                   scale={false}
                 />
               </div>
@@ -230,29 +244,32 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
       </div>
 
       {/* Mobile */}
-      <div className="mt-10 block md:hidden">
-        <FormControl fullWidth>
-          <Select
-            sx={mobStyles}
-            MenuProps={menuProps}
-            labelId="archiveYear-label"
-            id="archiveYear-select"
-            value={activeYear}
-            label="archiveYear"
-            onChange={handleChange}
-            IconComponent={KeyboardArrowDownIcon}
-          >
-            <MenuItem value={"Archive"} selected>
-              Past years
-            </MenuItem>
-            {activeData?.slice(4)?.map((items, index2) => (
-              <MenuItem value={items?.year} key={"mobile_archive_" + index2}>
-                {items?.year}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      {activeData?.length > 4 && (
+        <div className="mt-10 block md:hidden">
+          <FormControl fullWidth>
+            <Select
+              sx={{
+                ...mobStyles,
+                backgroundColor: "#EFF3F5",
+              }}
+              MenuProps={menuProps}
+              labelId="archiveYear-label-mobile"
+              id="archiveYear-select-mobile"
+              value={dropdownClicked ? activeYear : "Past years"}
+              label="archiveYear"
+              onChange={handleArchiveChange}
+              IconComponent={KeyboardArrowDownIcon}
+            >
+              <MenuItem value={"Past years"}>Past years</MenuItem>
+              {activeData?.slice(4)?.map((items, index2) => (
+                <MenuItem value={items?.year} key={"mobile_archive_" + index2}>
+                  {items?.year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      )}
     </div>
   );
 }

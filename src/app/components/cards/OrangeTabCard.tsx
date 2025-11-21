@@ -45,6 +45,7 @@ const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
         {link && (
           <Link
             href={link}
+            target="_blank"
             className={clsxN(
               "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer",
               isHovered
