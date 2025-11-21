@@ -45,9 +45,7 @@ const AartiNirvana = ({ data,
               mobImage={items?.image?.url}
               icon={items?.icon?.url}
               desc={items?.description}
-              flipImg={
-                "https://d2sslj1veyp2s3.cloudfront.net/gallery_13_589d93455a.webp"
-              }
+              flipImg={items?.flipImage?.url}
             />
           );
         })}
@@ -62,16 +60,15 @@ const AartiNirvana = ({ data,
                 key={items?.id ?? index}
                 className="bg-[#EFF3F5] rounded-[14px] px-[20px] py-[24px] mb-[17px]"
               >
-                {items?.image?.url && (
+                {items?.mobImage?.url && (
                   <Image
-                    src={items?.image?.url}
+                    src={items?.mobImage?.url}
                     height={40}
                     width={40}
                     alt="icon"
                     className="h-[40px] w-[40px] object-contain"
                   />
                 )}
-
                 <SubH2 className="mt-[30px] text-grey-400 text-[14px]">
                   {items?.description}
                 </SubH2>
