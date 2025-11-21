@@ -8,19 +8,10 @@ import Link from "next/link";
 type ProductListProps = {
   title: string;
   link: string;
-  pdfLink?: string;
-  pdfTitle?: string;
-  secondary?: boolean;
   scale?: boolean;
 };
 
-const ProductList = ({
-  title,
-  link,
-  pdfLink,
-  secondary,
-  scale=true,
-}: ProductListProps) => {
+const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -30,7 +21,7 @@ const ProductList = ({
         scale && "button-subtle-scale ",
         isHovered
           ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `
-          : `${secondary ? " border-gray-200" : "bg-white border-gray-200"} `
+          : `"bg-white border-gray-200 `
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -47,68 +38,14 @@ const ProductList = ({
             {title}
           </BodyText1>
         )}
-        {/* Mobile PDF link */}
-        {pdfLink && (
-          <a
-            href={pdfLink}
-            download
-            className={clsxN(
-              "flex items-center space-x-1 text-xs md:hidden mt-1 ",
-              isHovered ? "text-white" : "text-gray-800"
-            )}
-            onClick={(e) => e.stopPropagation()}
-            target="_blank"
-          >
-            {"View TDS"}
-
-            <Image
-              src={
-                isHovered
-                  ? "/images/download-icon-white.svg"
-                  : "/images/download-icon-grey.svg"
-              }
-              alt="download icon"
-              width={20}
-              height={20}
-            />
-          </a>
-        )}
       </div>
       {/* Right side */}
       <div className="flex items-center space-x-4">
-        {/* Desktop PDF download */}
-        {pdfLink && (
-          <Link
-            href={pdfLink}
-            download
-            className={clsxN(
-              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer ",
-              isHovered ? "text-white" : "text-gray-800"
-            )}
-            target="_blank"
-          >
-            <span
-              className={clsxN(isHovered ? "text-white" : "text-[#4d5861]")}
-            >
-              {"View TDS"}
-            </span>
-            <div className="w-[20px] h-[20px] relative ">
-              <Image
-                src={
-                  isHovered
-                    ? "/images/download-icon-white.svg"
-                    : "/images/download-icon-grey.svg"
-                }
-                alt="download icon"
-                fill
-              />
-            </div>
-          </Link>
-        )}
         {/* Redirect link */}
         {link && (
           <Link
-            href={"/products" + link}
+            href={link}
+            target="_blank"
             className={clsxN(
               "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer",
               isHovered
@@ -134,4 +71,4 @@ const ProductList = ({
   );
 };
 
-export default ProductList;
+export default OrangeTabCard;

@@ -59,15 +59,17 @@ export type LAAEngageProps = {
 };
 
 export type LAANirvanaProps = {
-    title?: string;
+  title?: string;
+  description?: string;
+  cards?: {
+    id?: number;
     description?: string;
-    cards?: {
-      id?: number;
-      description?: string;
-      image?: ImageProps;
-      hasGreyBackgroung?: string;
-      icon?: ImageProps;
-    }[];
+    image?: ImageProps;
+    hasGreyBackgroung?: string;
+    icon?: ImageProps;
+    mobImage?: ImageProps;
+    flipImage?: ImageProps;
+  }[];
 };
 
 export type LAAWorldProps = {
@@ -92,9 +94,9 @@ export type LAAContactProps = {
 };
 
 export type LAAMobSliderProps = {
-    images?: {
-      id?: number;
-      sequence?: number;
-      image?: ImageProps;
-    }[];
+  images?: {
+    id?: number;
+    sequence?: number;
+    image?: ImageProps;
+  }[];
 };

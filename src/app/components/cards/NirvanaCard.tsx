@@ -116,12 +116,12 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
           </div>
           {/* BACK SIDE  */}
           <div className="flip-side flip-back">
-            <Image
+           {flipImg! && <Image
               src={flipImg!}
               alt="flip-img"
               fill
               className="object-cover"
-            />
+            />}
           </div>
         </div>
       )}
