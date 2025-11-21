@@ -37,75 +37,91 @@ const Header = () => {
 
   const navigation = [
     {
-      name: "Products",
-      href: "/products",
+      name: "Company",
+      href: "/company",
       hasDropdown: true,
       dropdownItems: [
-        {
-          name: "2-ethyl-6-methylaniline",
-          href: "/products/2-ethyl-6-methylaniline",
-        },
-      ],
+        { name: "About Us", href: "/company/about-us" },
+        { name: "Our Customers", href: "/company/our-customer" },
+        { name: "Awards", href: "/company/awards" },
+        { name: "CSR", href: "/company/csr" },
+        { name: "Journey", href: "/company/journey" },
+        { name: "Events", href: "/company/events" }
+      ]
     },
     {
-      name: "Business",
-      href: "/business",
+      name: "Products & Services",
+      href: "/products-and-services",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Pharmaceuticals", href: "/business/pharmaceuticals" },
-        { name: "Agrochemicals", href: "/business/agrochemicals" },
-        { name: "Specialty Chemicals", href: "/business/specialty-chemicals" },
-        {
-          name: "Performance Materials",
-          href: "/business/performance-materials",
-        },
-      ],
+        { name: "Products", href: "/products" },
+        { name: "Testing Services", href: "/products/testing-services" },
+        { name: "Strategic Partnership", href: "/partnership" },
+        { name: "CDMO", href: "/cdmo-contract-development-and-manufacturing-operations" }
+      ]
+    },
+    {
+      name: "R&D",
+      href: "/r-and-d",
+      hasDropdown: false,
     },
     {
       name: "Sustainability",
-      href: "/sustainability-overview",
+      href: "/sustainability",
       hasDropdown: true,
       dropdownItems: [
-        { name: "ESG Initiatives", href: "/sustainability/esg" },
-        { name: "Environmental", href: "/sustainability/environmental" },
-        { name: "Social", href: "/sustainability/social" },
-        { name: "Governance", href: "/sustainability/governance" },
-      ],
+        { name: "Overview", href: "/sustainability-overview" },
+        { name: "Health & Safety", href: "/sustainability/Health-and-Safety" },
+        { name: "Environment", href: "/environment" },
+        { name: "Responsible Workforce", href: "/sustainability/responsible-workforce" },
+        { name: "Ethics", href: "/sustainability/ethics" },
+        { name: "Social Commitment", href: "/sustainability/social-commitment" },
+        { name: "Responsible Procurement", href: "/sustainability/responsible-procurement" },
+        { name: "Compliance", href: "/sustainability/compliance" },
+        { name: "Sustainability Reports", href: "/sustainability/sustainability-reports" },
+        { name: "GPS Safety Summary", href: "/sustainability/health-and-safety/gps-safety-summary" }
+      ]
     },
     {
       name: "Investors",
       href: "/investors",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Financial Reports", href: "/investors/reports" },
-        { name: "Stock Information", href: "/investors/stock" },
-        { name: "Investor Presentations", href: "/investors/presentations" },
-        { name: "Corporate Announcements", href: "/investors/announcements" },
-      ],
+        { name: "Overview", href: "/investor-relations" },
+        { name: "Disclosures", href: "/investors/disclosures" },
+        { name: "Financial information", href: "/investors/financial-information" },
+        { name: "Shareholders Information", href: "/investors/shareholders-information" },
+        { name: "Corporate Governance", href: "/investors/corporate-governance" },
+        { name: "Code & Policy", href: "/investors/code-and-policies" },
+        { name: "Downloads", href: "/investors/download" },
+        { name: "Annual reports", href: "/investors/financial-information/annual-reports" }
+      ]
     },
     {
       name: "Careers",
       href: "/careers",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Job Openings", href: "/careers/jobs" },
-        { name: "Campus Recruitment", href: "/careers/campus" },
-        { name: "Life at Aarti", href: "/careers/life" },
-        { name: "Benefits", href: "/careers/benefits" },
-      ],
+        { name: "Why Aarti Industries", href: "/careers/why-aarti" },
+        { name: "Values", href: "/careers/Values-and-Cultural-Attributes" },
+        { name: "Rewards & Benefits", href: "/careers/rewards-and-benefits" },
+        { name: "Nurturing Talent", href: "/careers/Nurturing-talent" },
+        { name: "Join Our Team", href: "/careers/why-aarti" },
+        { name: "Life @ Aarti", href: "/careers/life-aarti-Industries" },
+        { name: "Campus", href: "/careers/campus-connect" },
+        { name: "Job Fraud Alert", href: "/upload/pdf/Job-Fraud-Alert-AIL.pdf", "target": "_blank" }
+      ]
     },
     {
-      name: "Resources",
-      href: "/resources",
+      name: "Contact us",
+      href: "/contact",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Downloads", href: "/resources/downloads" },
-        { name: "Media Center", href: "/resources/media" },
-        { name: "Events", href: "/resources/events" },
-        { name: "Contact", href: "/contact" },
-      ],
+        { name: "Contact us", href: "/contact" },
+        { name: "Supplier Portal", href: "https://docs.google.com/forms/d/e/1FAIpQLScdbjHXbe4v0DJWPhjvT3m_oOs8kirFMJ7Lir6JOzqlFZbPGg/viewform", "target": "_blank" }
+      ]
     },
-  ];
+  ]
 
   const isActive = (href: string) => {
     return pathname === href || pathname.startsWith(href + "/");

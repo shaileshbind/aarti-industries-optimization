@@ -7,6 +7,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
 
 type HeroBannerProps = {
+  centerText?: boolean;
   tag?: string;
   title?: string;
   desc?: string;
@@ -23,6 +24,7 @@ type HeroBannerProps = {
   secondaryBtnRightLink?: string;
 };
 const HeroBanner = ({
+  centerText,
   title,
   tag,
   desc,
@@ -124,10 +126,10 @@ const HeroBanner = ({
     <>
       {fullBg ? (
         <>
-          <div className="h-[490px] lg:h-[640px] w-full relative overflow-hidden">
+          <div className={` w-full relative overflow-hidden `}>
             <div
               ref={wrapperRef}
-              className="relative overflow-hidden h-[490px] lg:h-[640px] w-full"
+              className={`relative overflow-hidden ${centerText ? "h-[440px]" : "h-[490px] lg:h-[640px]"} w-full`}
             >
               {image && (
                 <Image
@@ -146,7 +148,7 @@ const HeroBanner = ({
                 />
               )}
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
-              <div className="w-full h-full absolute pt-[64px] lg:pt-[150px] z-[3] ">
+              <div className={`w-full h-full absolute pt-[64px] z-[3] ${centerText ? "flex flex-col items-center justify-center lg:pt-[50px] text-center" : "lg:pt-[150px]"}`}>
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container">
@@ -161,7 +163,11 @@ const HeroBanner = ({
                     </H2>
                   </FadeInRevealBlur>
                 )}
-
+                {desc && centerText && (
+                  <FadeInRevealBlur delay={0.1}>
+                    <BodyText1 className="text-white mt-[20px] max-w-[480px]">{desc}</BodyText1>
+                  </FadeInRevealBlur>
+                )}
                 {/* buttons */}
                 {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
                   <FadeInRevealBlur
@@ -230,10 +236,12 @@ const HeroBanner = ({
               ref={lineVertical}
               className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
             />
+            {!centerText && (
             <div
               ref={lineHorizontal}
               className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5"
             />
+            )}
             <div
               ref={starRef}
               className="absolute 
