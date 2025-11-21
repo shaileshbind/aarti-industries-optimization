@@ -9,15 +9,18 @@ export type ShareHolderBannerProps = {
   };
 };
 
+export type ReportsProps = {
+  year: string;
+  report: {
+    id: string;
+    heading: string;
+    link: string;
+  }[];
+};
+
 export type TabsYearsContainerProps = {
   data: {
     type: string;
-    reports: {
-      year: string;
-      report: {
-        heading: string;
-        link: string;
-      }[];
-    }[];
+    reports: ReportsProps[];
   }[];
 };

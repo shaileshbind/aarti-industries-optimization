@@ -9,15 +9,17 @@ export type CPBannerProps = {
   };
 };
 
+export type ReportsProps = {
+  id?: number;
+  reports?: {
+    id?: number;
+    heading?: string;
+    link?: string;
+  };
+};
+
 export type CPReportProps = {
   data: {
-    code_and_policy_reports?: {
-      id?: number;
-      reports?: {
-        id?: number;
-        heading?: string;
-        link?: string;
-      };
-    }[];
+    code_and_policy_reports?: ReportsProps[];
   };
 };

@@ -3,9 +3,10 @@ import ShareHolderBanner from "../components/shareholder-information/ShareHolder
 import TabsYearsContainer from "../components/shareholder-information/TabsYearsContainer";
 import { getPageData } from "@/_lib/pageData.fetch";
 
+export const dynamic = "force-dynamic";
+
 export default async function page() {
   const data = await getPageData("/pages/by-slug/shareholder-report");
-  console.log("data", data);
 
   return (
     <div>

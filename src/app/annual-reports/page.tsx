@@ -2,6 +2,7 @@ import React from "react";
 import AnnualRBanner from "../components/annual-reports/AnnualRBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 import AnnualList from "../components/annual-reports/AnnualList";
+
 export const dynamic = "force-dynamic";
 
 const page = async () => {

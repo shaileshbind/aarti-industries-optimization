@@ -2,6 +2,7 @@ import React from "react";
 import PolicyListComponent from "../components/code-and-policies/PolicyList";
 import { getPageData } from "@/_lib/pageData.fetch";
 import CodePolicyBanner from "../components/code-and-policies/CodePolicyBanner";
+
 export const dynamic = "force-dynamic";
 
 const page = async () => {

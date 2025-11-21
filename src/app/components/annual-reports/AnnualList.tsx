@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
-import { AnnualRProps } from "@/app/types/annual-reports.type";
+import { AnnualRProps, ReportsProps } from "@/app/types/annual-reports.type";
 
 const AnnualList = ({ data }: AnnualRProps) => {
   const { annual_reports } = data;
@@ -12,11 +12,11 @@ const AnnualList = ({ data }: AnnualRProps) => {
   return (
     <div className="container">
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto py-[42px] lg:py-[70px]">
-        {annual_reports?.slice(0, visibleCount)?.map((item: any) => (
+        {annual_reports?.slice(0, visibleCount)?.map((item: ReportsProps) => (
           <OrangeTabCard
-            key={item?.reports?.id}
-            title={item?.reports?.heading}
-            link={item?.reports?.link}
+            key={item?.id}
+            title={item?.reports?.heading ? item?.reports?.heading : ""}
+            link={item?.reports?.link ? item?.reports?.link : ""}
           />
         ))}
       </div>

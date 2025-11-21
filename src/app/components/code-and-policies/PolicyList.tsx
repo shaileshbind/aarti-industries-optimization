@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { CPReportProps } from "@/app/types/code-and-policies.type";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import { ReportsProps } from "@/app/types/annual-reports.type";
 
 const PolicyListComponent = ({ data }: CPReportProps) => {
   const { code_and_policy_reports } = data;
@@ -12,13 +13,15 @@ const PolicyListComponent = ({ data }: CPReportProps) => {
   return (
     <div className="container">
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto py-[42px] lg:py-[70px]">
-        {code_and_policy_reports?.slice(0, visibleCount)?.map((item: any) => (
-          <OrangeTabCard
-            key={item?.reports?.id}
-            title={item?.reports?.heading}
-            link={item?.reports?.link}
-          />
-        ))}
+        {code_and_policy_reports
+          ?.slice(0, visibleCount)
+          ?.map((item: ReportsProps) => (
+            <OrangeTabCard
+              key={item?.reports?.id}
+              title={item?.reports?.heading ? item?.reports?.heading : ""}
+              link={item?.reports?.link ? item?.reports?.link : ""}
+            />
+          ))}
       </div>
       {code_and_policy_reports && code_and_policy_reports?.length > 12 && (
         <div className="flex justify-center mb-8">

@@ -9,15 +9,17 @@ export type AnnualRBannerProps = {
   };
 };
 
+export type ReportsProps = {
+  id?: number;
+  reports?: {
+    id?: number;
+    heading?: string;
+    link?: string;
+  };
+};
+
 export type AnnualRProps = {
   data: {
-    annual_reports?: {
-      id?: number;
-      annual_reports?: {
-        id?: number;
-        heading?: string;
-        link?: string;
-      };
-    }[];
+    annual_reports?: ReportsProps[];
   };
 };

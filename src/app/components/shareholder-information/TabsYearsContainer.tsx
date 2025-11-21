@@ -8,19 +8,21 @@ import {
 import clsx from "clsx";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { TabsYearsContainerProps } from "@/app/types/shareholder.type";
+import { ReportsProps, TabsYearsContainerProps } from "@/app/types/shareholder.type";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import Button from "../Button";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeTab, setactiveTab] = useState<number>(0);
-  const [activeData, setactiveData] = useState(data?.[0]?.reports);
+  const [activeData, setactiveData] = useState<ReportsProps[]>(data?.[0]?.reports);
   const [activeYear, setactiveYear] = useState<string | number>(
     data?.[0]?.reports?.[0]?.year
   );
   const [activeDropdownTab, setactiveDropdownTab] = useState<string>(
     data?.[0]?.type
   );
-  const [dropdownClicked, setdropdownClicked] = useState(false);
+  const [dropdownClicked, setdropdownClicked] = useState<boolean>(false);
+  const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
 
   // refs
   const yearsRowRef = useRef<HTMLDivElement | null>(null);
@@ -75,6 +77,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
       setactiveData(data?.[tabIndex]?.reports);
       setactiveYear(data?.[tabIndex]?.reports?.[0]?.year);
       setdropdownClicked(false);
+      setMobileVisibleCount(5); // Reset count when tab changes
     }
   };
 
@@ -102,6 +105,11 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
     return () => window.removeEventListener("resize", onResize);
   }, [activeYear]);
 
+  // Get current reports based on active year
+  const currentReports = activeData?.find(
+    (item) => item.year === activeYear
+  )?.report;
+
   return (
     <div className="fluid-container pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
       {/* Tabs - Desktop */}
@@ -119,6 +127,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
                 setactiveData(item?.reports);
                 setactiveYear(item?.reports?.[0]?.year);
                 setdropdownClicked(false);
+                setMobileVisibleCount(5); // Reset count when tab changes
               }}
             >
               <p className="text-lg">{item?.type}</p>
@@ -168,6 +177,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
                   onClick={() => {
                     setactiveYear(item?.year);
                     setdropdownClicked(false);
+                    setMobileVisibleCount(5); // Reset count when year changes
                     requestAnimationFrame(() => measure(item?.year));
                   }}
                   className="cursor-pointer"
@@ -228,18 +238,44 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
 
         {/* list */}
         <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
-          {activeData
-            ?.find((item: any) => item.year === activeYear)
-            ?.report?.map((item: any) => (
+          {/* Desktop - show all */}
+          <div className="hidden lg:block">
+            {currentReports?.map((item) => (
               <div className="md:pb-4" key={item.id}>
                 <OrangeTabCard
-                  key={item?.id}
                   title={item?.heading}
                   link={item?.link}
                   scale={false}
                 />
               </div>
             ))}
+          </div>
+
+          {/* Mobile - show limited with pagination */}
+          <div className="block lg:hidden">
+            {currentReports?.slice(0, mobileVisibleCount)?.map((item) => (
+              <div className="md:pb-4" key={item.id}>
+                <OrangeTabCard
+                  title={item?.heading}
+                  link={item?.link}
+                  scale={false}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* View More Button - Only show on mobile if there are more items */}
+          {currentReports && currentReports?.length > mobileVisibleCount && (
+            <div
+              className="flex justify-center lg:hidden mt-4"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileVisibleCount((prevCount) => prevCount + 5);
+              }}
+            >
+              <Button secondary title="View more" />
+            </div>
+          )}
         </div>
       </div>
 
