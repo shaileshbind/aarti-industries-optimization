@@ -247,12 +247,12 @@ export default function YearQuarterListing({
           </div>
 
           {/* Report list - All quarters displayed in reverse order */}
-          <div className="mt-6 lg:mt-15 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
             {quarters?.length > 0 ? (
               quarters.map((quarterItem, qIdx) => (
                 <div
                   key={`quarter_section_${qIdx}`}
-                  className="mb-8 last:mb-0 flex items-baseline"
+                  className="mb-6 md:mb-8 lg:mb-12 last:mb-0 flex items-baseline"
                 >
                   {/* Quarter Header */}
                   <div className="mb-4 pb-2 w-[20%]">

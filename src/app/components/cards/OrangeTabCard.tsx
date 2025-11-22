@@ -31,7 +31,7 @@ const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
         {title && (
           <BodyText1
             className={clsxN(
-              "text-sm lg:text-lg font-medium  ",
+              "text-sm lg:text-lg font-medium pr-4",
               isHovered ? "text-white" : "text-blue-200"
             )}
           >
