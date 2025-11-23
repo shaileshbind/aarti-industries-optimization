@@ -5,6 +5,7 @@ import { TabsYearsContainerProps } from "@/app/types/shareholder.type";
 import SimpleListing from "../templates/SimpleListing";
 import YearAndListing from "../templates/YearAndListing";
 import YearQuarterListing from "../templates/YearQuarterListing";
+import ContactDetails from "./ContactDetails";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -28,7 +29,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
 
     // Check the component type
     switch (firstLayout.__component) {
-      case "reports.simple-list":
+      case "reports.sub-category-with-report":
         // Simple listing template (General category)
         // Filter only simple-list layouts
         const simpleListLayouts = currentCategory.reportLayout.filter(
@@ -36,10 +37,10 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             layout
           ): layout is Extract<
             typeof layout,
-            { __component: "reports.simple-list" }
-          > => layout.__component === "reports.simple-list"
+            { __component: "reports.sub-category-with-report" }
+          > => layout.__component === "reports.sub-category-with-report"
         );
-        return <SimpleListing />;
+        return <SimpleListing reportLayout={simpleListLayouts} />;
 
       case "reports.sub-year-and-report":
         // Year and Report template (Others category)
@@ -100,7 +101,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
       </div>
 
       {/* Render appropriate template based on category */}
-      {getTemplateComponent()}
+      {activeTab === 3 ? <ContactDetails /> : getTemplateComponent()}
     </div>
   );
 }

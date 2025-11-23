@@ -1,15 +1,8 @@
-export interface SimpleListingReport {
-  id: number;
-  heading: string;
-  link: string;
-}
-
-export interface SimpleListingLayout {
-  __component: "reports.simple-list";
-  id: number;
-  reports: SimpleListingReport[];
-}
+import { SubCategoryWithReportLayout } from "@/app/types/shareholder.type";
 
 export interface SimpleListingProps {
-  reportLayout: SimpleListingLayout[];
+  reportLayout: SubCategoryWithReportLayout[];
 }
+
+// Re-export for convenience
+export type { SubCategoryWithReportLayout as SimpleListingLayout } from "@/app/types/shareholder.type";

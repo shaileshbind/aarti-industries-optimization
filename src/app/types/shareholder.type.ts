@@ -16,14 +16,18 @@ export type Report = {
   link: string;
 };
 
-// Simple List Layout (for General category)
-export type SimpleListingLayout = {
-  __component: "reports.simple-list";
+// Simple List Layout
+export type SubCategoryWithReportLayout = {
+  __component: "reports.sub-category-with-report";
   id: number;
-  reports: Report[];
+  subCategory: string;
+  reports: {
+    id: number;
+    reports: Report[];
+  }[];
 };
 
-// Year and Report Layout (for Others category)
+// Year and Report Layout
 export type YearAndReportLayout = {
   __component: "reports.sub-year-and-report";
   id: number;
@@ -35,7 +39,7 @@ export type YearAndReportLayout = {
   }[];
 };
 
-// Year and Quarter Layout (for IEPF category)
+// Year and Quarter Layout
 export type FinancialYear = {
   id: number;
   documentId: string;
@@ -67,7 +71,7 @@ export type YearAndQuarterLayout = {
 
 // Union type for all possible report layouts
 export type ReportLayout =
-  | SimpleListingLayout
+  | SubCategoryWithReportLayout
   | YearAndReportLayout
   | YearAndQuarterLayout;
 
@@ -85,5 +89,5 @@ export type TabsYearsContainerProps = {
   }[];
 };
 
-// Legacy type for backwards compatibility (deprecated)
+// Legacy type for backwards compatibility
 export type ReportsProps = YearAndReportLayout;
