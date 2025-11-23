@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { BodyText1, BodyText2, H2, H3, SubH3 } from "../Typography2";
+import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -15,8 +15,6 @@ import {
 } from "@/app/types/who-we-are.type";
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
-// import CustomCursorTrigger from "../../CustomCursorTrigger";
-// import Link from "next/link";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
   const { sectionTitle, management_boards } = data;
@@ -155,12 +153,13 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
         </div>
       </div>
 
-      <Popup isOpen={showPopup} onOverlayClick={() => setshowPopup(false)}>
-        <div className="max-h-[80vh]">
-          <H3>{popupDetails?.name}</H3>
-          <SubH3>{popupDetails?.designation} </SubH3>
-
-          <div className="w-1/2 h-[400px]">
+      <Popup
+        className="!w-[90%] lg:!w-[60%] !p-4 md:!p-10"
+        isOpen={showPopup}
+        onOverlayClick={() => setshowPopup(false)}
+      >
+        <div className="max-h-[80vh] overflow-y-auto lg:flex gap-10 pr-2 md:pr-0">
+          <div className="md:w-[60%] lg:w-[40%] h-[350px] md:h-[500px] rounded-[20px] overflow-hidden">
             <Image
               src={popupDetails?.image?.url || ""}
               alt={popupDetails?.image?.alternativeText || "leader"}
@@ -169,8 +168,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               height={800}
             />
           </div>
+          <div className="lg:w-1/2 mt-2 md:mt-8 lg:mt-0">
+            <SubH3 className="text-[#17191E] font-semibold">
+              {popupDetails?.name}
+            </SubH3>
+            <BodyText2>{popupDetails?.designation} </BodyText2>
 
-          <div>{popupDetails?.bio}</div>
+            <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E]">
+              {`"${popupDetails?.bio}"`}
+            </p>
+          </div>
         </div>
       </Popup>
     </div>
