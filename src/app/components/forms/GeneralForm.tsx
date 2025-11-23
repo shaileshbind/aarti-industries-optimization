@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -13,7 +14,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import Button from "../Button";
-import { CategorySubcategoryProps } from "@/app/types/product.inner.type";
 import clsx from "clsx";
 
 type FormValues = {
@@ -26,19 +26,50 @@ type FormValues = {
   hearAboutAil: string;
   category: string;
   subCategory: string;
+  productName: string;
+};
+
+type CategorySubcategoryItem = {
+  category: string;
+  subCategories: string[];
 };
 
 type GeneralFormProps = {
   setshowGeneralPopup?: React.Dispatch<React.SetStateAction<boolean>>;
   document?: string;
-  categorySubcategoryData?: CategorySubcategoryProps;
+  prefillCategory?: string;
+  prefillSubCategory?: string;
+  prefillProduct?: string;
+};
+
+type productsDataType = {
+  id?: number;
+  productName?: string;
+  slug?: string;
+};
+
+type formSubCategories = {
+  id?: number;
+  name?: string;
+};
+type productsDataCatSubcatType = {
+  id?: number;
+  form_sub_categories?: formSubCategories[];
+  name?: string;
 };
 
 export default function GeneralForm({
   setshowGeneralPopup,
   document,
-  categorySubcategoryData,
+  prefillCategory,
+  prefillSubCategory,
+  prefillProduct,
 }: GeneralFormProps) {
+  const [categorySubcategoryData, setCategorySubcategoryData] = useState<
+    CategorySubcategoryItem[]
+  >([]);
+  const [productsData, setProductsData] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -58,11 +89,63 @@ export default function GeneralForm({
       hearAboutAil: "",
       category: "",
       subCategory: "",
+      productName: "",
     },
   });
 
+  // 🔹 Call API and transform data
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/formCategoriesData");
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        const data = await res.json();
+
+        const resProducts = await fetch("/api/formProductsData");
+        if (!resProducts.ok) throw new Error("Failed to fetch products");
+        const dataProducts = await resProducts.json();
+
+        const transformedProducts = dataProducts?.data?.map(
+          (item: productsDataType) => item?.productName
+        );
+        setProductsData(transformedProducts);
+        const transformedData: CategorySubcategoryItem[] =
+          data?.data?.map((item: productsDataCatSubcatType) => ({
+            category: item?.name,
+            subCategories:
+              item?.form_sub_categories?.map((sub: formSubCategories) => sub?.name) || [],
+          })) || [];
+
+        setCategorySubcategoryData(transformedData);
+
+        // Prefill values if they exist in API data
+        if (prefillCategory) {
+          const categoryExists = transformedData.some(
+            (item) => item.category === prefillCategory
+          );
+          if (categoryExists) setValue("category", prefillCategory);
+        }
+        if (prefillSubCategory && prefillCategory) {
+          const subCategoryExists = transformedData
+            .find((item) => item.category === prefillCategory)
+            ?.subCategories.includes(prefillSubCategory);
+          if (subCategoryExists) setValue("subCategory", prefillSubCategory);
+        }
+
+        if (prefillProduct && transformedProducts.includes(prefillProduct)) {
+          setValue("productName", prefillProduct);
+        }
+      } catch (err) {
+        console.error("Error fetching form categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, [prefillCategory, prefillSubCategory, prefillProduct, setValue]);
+
   // 🔹 Watch the category field
   const selectedCategory = watch("category");
+  const selectedSubcategory = watch("subCategory");
 
   // 🔹 Get subcategories based on selected category
   const availableSubcategories =
@@ -72,42 +155,49 @@ export default function GeneralForm({
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
     if (availableSubcategories.length === 1) {
-      // Auto-select if only one subcategory
       setValue("subCategory", availableSubcategories[0]);
     } else {
-      // Reset if multiple or no subcategories
       setValue("subCategory", "");
     }
-  }, [availableSubcategories, setValue]);
+   }, [selectedCategory, setValue]);
 
   const onSubmit = async (data: FormValues) => {
+    // Determine if Salesforce lead applies
+    const hasSalesforceLead =
+      data.subCategory === "Chemicals Products" &&
+      data.productName !== "" &&
+      data.productName !== null &&
+      data.productName !== undefined;
+    // Clear productName if hasSalesforceLead is false
+    const cleanedData = {
+      ...data,
+      productName: hasSalesforceLead ? data.productName : "",
+    };
+
     const formattedData = {
-      full_name: data.fullName,
-      email: data.email,
-      mobile: data.phone,
-      job_role: data.jobRole,
-      country: data.country,
-      message: data.message,
-      enquiry_source: data.hearAboutAil,
-      category: data.category,
-      sub_category: data.subCategory,
+      full_name: cleanedData.fullName,
+      email: cleanedData.email,
+      mobile: cleanedData.phone,
+      job_role: cleanedData.jobRole,
+      country: cleanedData.country,
+      message: cleanedData.message,
+      enquiry_source: cleanedData.hearAboutAil,
+      category: cleanedData.category,
+      sub_category: cleanedData.subCategory,
+      product_name: cleanedData.productName,
+      hasSalesforceLead,
     };
 
     try {
       const response = await fetch("/api/submitPopupData", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: "/msds-form/submit",
-          data: formattedData,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: "/msds-form/submit", data: formattedData }),
       });
 
       if (response.ok) {
-        // const result = await response.json();
-        // console.log("Success:", result);
+        const result = await response.json();
+        console.log("Success:", result);
         setshowGeneralPopup?.(false);
         reset();
         if (document) {
@@ -129,7 +219,6 @@ export default function GeneralForm({
       console.error("Request failed:", error);
     }
   };
-
   return (
     <div className="w-full">
       <div>
@@ -224,7 +313,7 @@ export default function GeneralForm({
               helperText={errors.jobRole?.message}
             />
 
-            {/* Country (no validation) */}
+            {/* Country */}
             <FormControl fullWidth sx={MaterialInputStyle(false)}>
               <InputLabel id="country">Country</InputLabel>
               <Controller
@@ -272,7 +361,18 @@ export default function GeneralForm({
                   labelId="hearAboutAil"
                   IconComponent={KeyboardArrowDownIcon}
                 >
-                  {["A", "B"].map((item) => (
+                  {[
+                    "Articles",
+                    "Events",
+                    "Search Engine",
+                    "Weblinks",
+                    "LinkedIn",
+                    "Recommendation",
+                    "Advertisement",
+                    "Industry Reports",
+                    "Employees",
+                    "Other",
+                  ].map((item) => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>
@@ -306,7 +406,7 @@ export default function GeneralForm({
               />
             </FormControl>
 
-            {/* Subcategory - Disabled if no subcategories */}
+            {/* Subcategory */}
             <FormControl
               fullWidth
               sx={MaterialInputStyle(false)}
@@ -326,7 +426,6 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="subCategory"
                     IconComponent={KeyboardArrowDownIcon}
-                    // 🔹 Disable if there's only one (auto-selected) or none
                     disabled={
                       availableSubcategories.length !== 1 &&
                       availableSubcategories.length === 0
@@ -343,6 +442,31 @@ export default function GeneralForm({
               />
             </FormControl>
           </div>
+
+          {/* Products */}
+          {selectedSubcategory === "Chemicals Products" && (
+            <FormControl fullWidth sx={MaterialInputStyle(false)}>
+              <InputLabel id="productName">Product Name</InputLabel>
+              <Controller
+                name="productName"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="productName"
+                    IconComponent={KeyboardArrowDownIcon}
+                  >
+                    {productsData?.map((product, index) => (
+                      <MenuItem key={index} value={product}>
+                        {product}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </FormControl>
+          )}
         </div>
 
         <Button title={"Submit"} className="mt-6" />
