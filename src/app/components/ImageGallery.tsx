@@ -3,33 +3,48 @@ import React, { useState, useEffect, useMemo } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
-import { FosteringSafeProps } from "@/app/types/home.type";
 import { FadeInRevealBlur } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
 import Button from "./Button";
+import { ButtonProps, ImageProps } from "../types/global.type";
 
-const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
+type FosteringSafeProps = {
+  data?: {
+    title?: string;
+    description?: string;
+    ctaButton?: ButtonProps;
+  };
+  imgArr?: {
+    images?: {
+      image?: ImageProps;
+    }[];
+  };
+};
+
+interface ImageConfig {
+  marginTop: string;
+  height: string;
+}
+
+interface SlideConfig {
+  images: ImageConfig[];
+}
+
+interface SlideImageData {
+  src: string;
+  alt: string;
+  config: ImageConfig;
+  index: number;
+}
+
+interface Slide {
+  id: number;
+  images: SlideImageData[];
+  patternIndex: number;
+}
+
+const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   const { title, description, ctaButton } = data ?? {};
-  const { images } = imgArr;
-
-  interface ImageConfig {
-    marginTop: string;
-    height: string;
-  }
-  interface SlideConfig {
-    images: ImageConfig[];
-  }
-  interface SlideImageData {
-    src: string;
-    alt: string;
-    config: ImageConfig;
-    index: number;
-  }
-  interface Slide {
-    id: number;
-    images: SlideImageData[];
-    patternIndex: number;
-  }
 
   // A custom hook to detect screen size for responsive rendering
   const useIsDesktop = (): { isDesktop: boolean | null; mounted: boolean } => {
@@ -49,8 +64,14 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
   };
   const { isDesktop } = useIsDesktop();
 
+  type ImageArrayType = {
+    image?: ImageProps;
+  }[] | undefined;
+
   // if not enough images on mobile add one -
-  const generateMobileSwiperSlides = (imageArray: typeof images): Slide[] => {
+  const generateMobileSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
+    if (!imageArray || imageArray.length === 0) return [];
+    
     const pattern = [2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -77,24 +98,24 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
       },
     ];
 
-    while (imageIndex < imageArray?.length) {
+    while (imageIndex < imageArray.length) {
       const imagesInThisSlide = pattern[patternIndex];
       const slideConfig = slideConfigs[patternIndex];
       const slideImages: SlideImageData[] = [];
 
       for (let i = 0; i < imagesInThisSlide; i++) {
         // If we've reached the end of images, start repeating from the beginning
-        const currentImageIndex = imageIndex % imageArray?.length;
+        const currentImageIndex = imageIndex % imageArray.length;
 
         slideImages.push({
-          src: imageArray?.[currentImageIndex]?.image?.url,
-          alt: imageArray?.[currentImageIndex]?.image?.alternativeText,
+          src: imageArray[currentImageIndex]?.image?.url || "",
+          alt: imageArray[currentImageIndex]?.image?.alternativeText || "",
           config: slideConfig.images[i],
           index: currentImageIndex,
         });
 
         // Only increment imageIndex if we haven't processed all original images yet
-        if (imageIndex < imageArray?.length) {
+        if (imageIndex < imageArray.length) {
           imageIndex++;
         }
       }
@@ -109,14 +130,17 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
 
       // Break if we've created enough slides to avoid infinite loop
       // This ensures we don't create too many slides when repeating
-      if (slides.length >= Math.ceil(imageArray?.length * 1.5)) {
+      if (slides.length >= Math.ceil(imageArray.length * 1.5)) {
         break;
       }
     }
 
     return slides;
   };
-  const generateSwiperSlides = (imageArray: typeof images): Slide[] => {
+
+  const generateSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
+    if (!imageArray || imageArray.length === 0) return [];
+    
     const pattern = [1, 2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -144,19 +168,19 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
         ],
       },
     ];
-    while (imageIndex < imageArray?.length) {
+    while (imageIndex < imageArray.length) {
       const imagesInThisSlide = pattern[patternIndex];
       const slideConfig = slideConfigs[patternIndex];
       const slideImages: SlideImageData[] = [];
 
       for (
         let i = 0;
-        i < imagesInThisSlide && imageIndex < imageArray?.length;
+        i < imagesInThisSlide && imageIndex < imageArray.length;
         i++
       ) {
         slideImages.push({
-          src: imageArray?.[imageIndex]?.image?.url,
-          alt: imageArray?.[imageIndex]?.image?.alternativeText,
+          src: imageArray[imageIndex]?.image?.url || "",
+          alt: imageArray[imageIndex]?.image?.alternativeText || "",
           config: slideConfig.images[i],
           index: imageIndex,
         });
@@ -175,6 +199,7 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
     }
     return slides;
   };
+
   const baseSlides = isDesktop
     ? generateSwiperSlides(imgArr?.images)
     : generateMobileSwiperSlides(imgArr?.images);
@@ -200,11 +225,11 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
               key={index}
               className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
             >
-              <img
+            {imageData?.src &&  <img
                 src={imageData?.src}
                 alt={imageData?.alt || ""}
                 className="swiper-lazy w-full h-full object-cover"
-              />
+              />}
             </div>
           ))}
       </SwiperSlide>
@@ -250,7 +275,7 @@ const ImageGallery: React.FC<FosteringSafeProps> = ({ data, imgArr }) => {
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
             stopOnLastSlide: false,
-        }}
+          }}
           loop={true}
           loopAdditionalSlides={10}
           loopPreventsSliding={false}

@@ -25,8 +25,6 @@ export default function ProductInnerPage({
   const [showMSDSPopup, setshowMSDSPopup] = useState<boolean>(false);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [document, setdocument] = useState<string>("");
-  const [categorySubcategoryData, setcategorySubcategoryData] =
-    useState<CategorySubcategoryProps>([]);
 
   const product = data;
   const productDetails = product?.productDetails;
@@ -61,27 +59,7 @@ export default function ProductInnerPage({
         subCategories: [item?.subCategory],
       });
     });
-
-    const mergedData = Object.values(
-      filteredCategorySubcategory.reduce((acc, item) => {
-        if (!acc[item.category]) {
-          acc[item.category] = {
-            category: item.category,
-            subCategories: new Set(),
-          };
-        }
-        item.subCategories.forEach((sub) =>
-          acc[item.category].subCategories.add(sub)
-        );
-        return acc;
-      }, {} as Record<string, { category: string; subCategories: Set<string> }>)
-    ).map((item) => ({
-      category: item.category,
-      subCategories: Array.from(item.subCategories),
-    }));
-
-    setcategorySubcategoryData(mergedData);
-  }, []);
+  }, [product?.product_sub_categories]);
 
   return (
     <div className="w-full min-h-screen">
@@ -136,15 +114,15 @@ export default function ProductInnerPage({
                             className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
                             onClick={() => {
-                              index === 0
-                                ? setshowMSDSPopup(true)
-                                : setshowGeneralPopup(true);
-
+                              if (index === 0) {
+                                setshowMSDSPopup(true);
+                              } else {
+                                setshowGeneralPopup(true);
+                              }
                               setdocument(item?.file?.url);
                             }}
                           >
                             {item?.documentName}
-
                             <Image
                               src="/images/download-icon-grey2.svg"
                               alt="globe"
@@ -304,7 +282,10 @@ export default function ProductInnerPage({
           isOpen={showGeneralPopup}
           setshowGeneralPopup={setshowGeneralPopup}
           document={document}
-          categorySubcategoryData={categorySubcategoryData}
+          // document="https://example-files.online-convert.com/document/pdf/example.pdf"
+          prefillCategory="Business Products / Services"
+          prefillSubCategory="Chemicals Products"
+          prefillProduct={product?.productName}
         />
       )}
     </div>
