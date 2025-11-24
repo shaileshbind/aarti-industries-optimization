@@ -6,6 +6,8 @@ import Typography from "@/app/components/typography";
 import Image from "next/image";
 import AnimateTextOnHover from "./ui/AnimateTextOnHover";
 import gsap from "gsap";
+import clsx from "clsx";
+import StockTicker from "./home/StockTicker";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,27 +15,35 @@ const Header = () => {
   const pathname = usePathname();
   const mobileNavRef = useRef<HTMLDivElement>(null);
   const mobileMenuToggle = () => {
-   // console.log('isMenuOpen', isMenuOpen);
+    // console.log('isMenuOpen', isMenuOpen);
     if (isMenuOpen) {
       setIsMenuOpen(false);
-      gsap.fromTo(mobileNavRef.current, {
-        top: '0%',
-      }, {
-        top: '-100%',
-        duration: 0.6,
-        ease: "power3.inOut",
-      })
+      gsap.fromTo(
+        mobileNavRef.current,
+        {
+          top: "0%",
+        },
+        {
+          top: "-100%",
+          duration: 0.6,
+          ease: "power3.inOut",
+        }
+      );
     } else {
       setIsMenuOpen(true);
-      gsap.fromTo(mobileNavRef.current, {
-        top: '-100%',
-      }, {
-        top: '0%',
-        duration: 1.2,
-        ease: "power3.inOut",
-      })
+      gsap.fromTo(
+        mobileNavRef.current,
+        {
+          top: "-100%",
+        },
+        {
+          top: "0%",
+          duration: 1.2,
+          ease: "power3.inOut",
+        }
+      );
     }
-  }
+  };
 
   const navigation = [
     {
@@ -46,8 +56,8 @@ const Header = () => {
         { name: "Awards", href: "/company/awards" },
         { name: "CSR", href: "/company/csr" },
         { name: "Journey", href: "/company/journey" },
-        { name: "Events", href: "/company/events" }
-      ]
+        { name: "Events", href: "/company/events" },
+      ],
     },
     {
       name: "Products & Services",
@@ -57,8 +67,11 @@ const Header = () => {
         { name: "Products", href: "/products" },
         { name: "Testing Services", href: "/products/testing-services" },
         { name: "Strategic Partnership", href: "/partnership" },
-        { name: "CDMO", href: "/cdmo-contract-development-and-manufacturing-operations" }
-      ]
+        {
+          name: "CDMO",
+          href: "/cdmo-contract-development-and-manufacturing-operations",
+        },
+      ],
     },
     {
       name: "R&D",
@@ -73,14 +86,29 @@ const Header = () => {
         { name: "Overview", href: "/sustainability-overview" },
         { name: "Health & Safety", href: "/sustainability/Health-and-Safety" },
         { name: "Environment", href: "/environment" },
-        { name: "Responsible Workforce", href: "/sustainability/responsible-workforce" },
+        {
+          name: "Responsible Workforce",
+          href: "/sustainability/responsible-workforce",
+        },
         { name: "Ethics", href: "/sustainability/ethics" },
-        { name: "Social Commitment", href: "/sustainability/social-commitment" },
-        { name: "Responsible Procurement", href: "/sustainability/responsible-procurement" },
+        {
+          name: "Social Commitment",
+          href: "/sustainability/social-commitment",
+        },
+        {
+          name: "Responsible Procurement",
+          href: "/sustainability/responsible-procurement",
+        },
         { name: "Compliance", href: "/sustainability/compliance" },
-        { name: "Sustainability Reports", href: "/sustainability/sustainability-reports" },
-        { name: "GPS Safety Summary", href: "/sustainability/health-and-safety/gps-safety-summary" }
-      ]
+        {
+          name: "Sustainability Reports",
+          href: "/sustainability/sustainability-reports",
+        },
+        {
+          name: "GPS Safety Summary",
+          href: "/sustainability/health-and-safety/gps-safety-summary",
+        },
+      ],
     },
     {
       name: "Investors",
@@ -89,13 +117,25 @@ const Header = () => {
       dropdownItems: [
         { name: "Overview", href: "/investor-relations" },
         { name: "Disclosures", href: "/investors/disclosures" },
-        { name: "Financial information", href: "/investors/financial-information" },
-        { name: "Shareholders Information", href: "/investors/shareholders-information" },
-        { name: "Corporate Governance", href: "/investors/corporate-governance" },
+        {
+          name: "Financial information",
+          href: "/investors/financial-information",
+        },
+        {
+          name: "Shareholders Information",
+          href: "/investors/shareholders-information",
+        },
+        {
+          name: "Corporate Governance",
+          href: "/investors/corporate-governance",
+        },
         { name: "Code & Policy", href: "/investors/code-and-policies" },
         { name: "Downloads", href: "/investors/download" },
-        { name: "Annual reports", href: "/investors/financial-information/annual-reports" }
-      ]
+        {
+          name: "Annual reports",
+          href: "/investors/financial-information/annual-reports",
+        },
+      ],
     },
     {
       name: "Careers",
@@ -109,8 +149,12 @@ const Header = () => {
         { name: "Join Our Team", href: "/careers/why-aarti" },
         { name: "Life @ Aarti", href: "/careers/life-aarti-Industries" },
         { name: "Campus", href: "/careers/campus-connect" },
-        { name: "Job Fraud Alert", href: "/upload/pdf/Job-Fraud-Alert-AIL.pdf", "target": "_blank" }
-      ]
+        {
+          name: "Job Fraud Alert",
+          href: "/upload/pdf/Job-Fraud-Alert-AIL.pdf",
+          target: "_blank",
+        },
+      ],
     },
     {
       name: "Contact us",
@@ -118,10 +162,14 @@ const Header = () => {
       hasDropdown: true,
       dropdownItems: [
         { name: "Contact us", href: "/contact" },
-        { name: "Supplier Portal", href: "https://docs.google.com/forms/d/e/1FAIpQLScdbjHXbe4v0DJWPhjvT3m_oOs8kirFMJ7Lir6JOzqlFZbPGg/viewform", "target": "_blank" }
-      ]
+        {
+          name: "Supplier Portal",
+          href: "https://docs.google.com/forms/d/e/1FAIpQLScdbjHXbe4v0DJWPhjvT3m_oOs8kirFMJ7Lir6JOzqlFZbPGg/viewform",
+          target: "_blank",
+        },
+      ],
     },
-  ]
+  ];
 
   const isActive = (href: string) => {
     return pathname === href || pathname.startsWith(href + "/");
@@ -138,23 +186,33 @@ const Header = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     if (isMenuOpen && mobileNavRef.current) {
-     // console.log('pathname close mobile menu', pathname);
+      // console.log('pathname close mobile menu', pathname);
       setIsMenuOpen(false);
-      gsap.fromTo(mobileNavRef.current, {
-        top: '0%',
-      }, {
-        top: '-100%',
-        duration: 0.6,
-        ease: "power3.inOut",
-      });
+      gsap.fromTo(
+        mobileNavRef.current,
+        {
+          top: "0%",
+        },
+        {
+          top: "-100%",
+          duration: 0.6,
+          ease: "power3.inOut",
+        }
+      );
     }
   }, [pathname]);
 
-  
   return (
     <>
+      {pathname === "/" && <StockTicker />}
+
       {/* Fixed Header Container */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white">
+      <div
+        className={clsx(
+          `fixed left-0 right-0 z-50 bg-white`,
+          pathname === "/" ? `top-11` : `top-0`
+        )}
+      >
         {/* Main Header */}
         <header className="bg-white border-b border-grey-100 flex justify-between">
           <div className="ml-[20px] lg:ml-[60px] w-full h-auto">
@@ -274,7 +332,9 @@ const Header = () => {
                   />
                   <span
                     className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
-                      isMenuOpen ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full" : ""
+                      isMenuOpen
+                        ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
+                        : ""
                     }`}
                   />
                 </div>
@@ -358,18 +418,24 @@ const Header = () => {
               </div>
 
               {/* Mobile Dropdown Items */}
-                <div className={`bg-gray-50 border-t border-gray-100 transition-all duration-400 overflow-hidden ${item.hasDropdown && openDropdown === index ? "max-h-[200px]" : "max-h-0"}`}>
-                  {item.dropdownItems?.map((dropdownItem) => (
-                    <Link
-                      key={dropdownItem.name}
-                      href={dropdownItem.href}
-                      className="block px-10 py-3 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {dropdownItem.name}
-                    </Link>
-                  ))}
-                </div>
+              <div
+                className={`bg-gray-50 border-t border-gray-100 transition-all duration-400 overflow-hidden ${
+                  item.hasDropdown && openDropdown === index
+                    ? "max-h-[200px]"
+                    : "max-h-0"
+                }`}
+              >
+                {item.dropdownItems?.map((dropdownItem) => (
+                  <Link
+                    key={dropdownItem.name}
+                    href={dropdownItem.href}
+                    className="block px-10 py-3 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {dropdownItem.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           ))}
         </nav>

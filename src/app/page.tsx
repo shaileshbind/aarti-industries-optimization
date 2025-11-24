@@ -8,11 +8,17 @@ import LatestAtAarti from "./components/home/LatestAtAarti";
 import SustainableChem from "./components/home/SustainableChem";
 import ImageGallery from "./components/ImageGallery";
 import DetailsContainer from "./components/sections/DetailsContainer";
+import GloballyCertified from "./components/GloballyCertified";
+import { getData } from "@/_lib/getData.fetch";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const data = await getPageData("/pages/by-slug/home-page");
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*"
+  );
+
   const {
     sectionOne,
     sectionTwo,
@@ -25,7 +31,7 @@ export default async function Home() {
     sectionNine,
     sectionTen,
   } = data;
-  
+
   return (
     <div>
       {sectionOne && <HomeHero data={sectionOne} />}
@@ -43,6 +49,10 @@ export default async function Home() {
       {sectionEight && <FrameworkForged data={sectionEight} />}
 
       {sectionNine && <LatestAtAarti data={sectionNine} />}
+
+      {globallyCertifiedData && (
+        <GloballyCertified itemsData={globallyCertifiedData} />
+      )}
 
       {sectionTen && <ContactBanner data={sectionTen} />}
     </div>
