@@ -32,7 +32,7 @@ export default async function RootLayout({
           <GlobalCursor />
           <Header />
           <main>{children}</main>
-          <Footer   data={data?.Footer}/>
+          <Footer data={data?.Footer} />
         </GSAPProvider>
       </body>
     </html>

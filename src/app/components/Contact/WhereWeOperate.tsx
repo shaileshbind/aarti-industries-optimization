@@ -271,7 +271,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       alt="prev"
                       width={34}
                       height={34}
-                      className={`-rotate-180 swiper-button-prev-where-we-operate transition-opacity`}
+                      className={`-rotate-180 swiper-button-prev-where-we-operate transition-opacity cursor-pointer`}
                     />
 
                     <Image
@@ -279,7 +279,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       alt="next"
                       width={34}
                       height={34}
-                      className={`swiper-button-next-where-we-operate transition-opacity `}
+                      className={`swiper-button-next-where-we-operate transition-opacity cursor-pointer`}
                     />
                   </div>
                 </div>
