@@ -72,9 +72,9 @@ export type FosteringSafeProps = {
     description?: string;
     ctaButton?: ButtonProps;
   };
-  imgArr: {
-    images: {
-      image: ImageProps;
+  imgArr?: {
+    images?: {
+      image?: ImageProps;
     }[];
   };
 };

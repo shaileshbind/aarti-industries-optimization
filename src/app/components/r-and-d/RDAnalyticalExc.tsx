@@ -8,9 +8,9 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import Button from "../Button";
 import { Navigation, Mousewheel } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -27,7 +27,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 }) => {
   const { leftText, rightText, image } = data;
   const { details } = sliderData;
-
+  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
@@ -272,7 +272,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     };
   }, []);
 
-  return (
+  return (<>
     <div ref={triggerRef} className="w-full relative  min-h-[40vh]">
       <div
         ref={titleSection}
@@ -437,11 +437,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                           )}
                           {slide?.ctaButton?.link && (
                             <div className="mt-[40px]">
-                              <Button
-                                title={slide?.ctaButton?.title}
-                                href={slide?.ctaButton?.link || "#"}
-                                secondary
-                              />
+                              <button
+                                onClick={() => {
+                                  setshowGeneralPopup(true);
+                                }}
+                                className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
+                              >
+                                Read More
+                              </button>
                             </div>
                           )}
                         </div>
@@ -463,8 +466,17 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           </div>
         </div>
       </div>
+
+     
     </div>
-  );
+      <GeneralPopup
+                isOpen={showGeneralPopup}
+                setshowGeneralPopup={setshowGeneralPopup}
+                // document={document}
+                prefillCategory="Business Products / Services"
+                prefillSubCategory="LAB Testing (Analytical/ Safety)"
+              />
+ </> );
 };
 
 export default RDAnalyticalExc;
