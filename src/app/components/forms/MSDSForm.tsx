@@ -76,7 +76,7 @@ export default function MSDSForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url: "/standard-form/submit",
+          url: "/msds-form/submit",
           data: formattedData,
         }),
       });

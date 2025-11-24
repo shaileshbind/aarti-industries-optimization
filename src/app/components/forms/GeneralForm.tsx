@@ -94,54 +94,109 @@ export default function GeneralForm({
   });
 
   // 🔹 Call API and transform data
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("/api/formCategoriesData");
-        if (!res.ok) throw new Error("Failed to fetch categories");
-        const data = await res.json();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const res = await fetch("/api/formCategoriesData");
+  //       if (!res.ok) throw new Error("Failed to fetch categories");
+  //       const data = await res.json();
 
-        const resProducts = await fetch("/api/formProductsData");
-        if (!resProducts.ok) throw new Error("Failed to fetch products");
-        const dataProducts = await resProducts.json();
+  //       const resProducts = await fetch("/api/formProductsData");
+  //       if (!resProducts.ok) throw new Error("Failed to fetch products");
+  //       const dataProducts = await resProducts.json();
 
-        const transformedProducts = dataProducts?.data?.map(
-          (item: productsDataType) => item?.productName
-        );
-        setProductsData(transformedProducts);
-        const transformedData: CategorySubcategoryItem[] =
-          data?.data?.map((item: productsDataCatSubcatType) => ({
-            category: item?.name,
-            subCategories:
-              item?.form_sub_categories?.map((sub: formSubCategories) => sub?.name) || [],
-          })) || [];
+  //       const transformedProducts = dataProducts?.data?.map(
+  //         (item: productsDataType) => item?.productName
+  //       );
+  //       setProductsData(transformedProducts);
+  //       const transformedData: CategorySubcategoryItem[] =
+  //         data?.data?.map((item: productsDataCatSubcatType) => ({
+  //           category: item?.name,
+  //           subCategories:
+  //             item?.form_sub_categories?.map((sub: formSubCategories) => sub?.name) || [],
+  //         })) || [];
 
-        setCategorySubcategoryData(transformedData);
+  //       setCategorySubcategoryData(transformedData);
 
-        // Prefill values if they exist in API data
+  //       // Prefill values if they exist in API data
+  //       if (prefillCategory) {
+  //         const categoryExists = transformedData.some(
+  //           (item) => item.category === prefillCategory
+  //         );
+  //         if (categoryExists) setValue("category", prefillCategory);
+  //       }
+  //       if (prefillSubCategory && prefillCategory) {
+  //         const subCategoryExists = transformedData
+  //           .find((item) => item.category === prefillCategory)
+  //           ?.subCategories.includes(prefillSubCategory);
+  //         if (subCategoryExists) setValue("subCategory", prefillSubCategory);
+  //       }
+
+  //       if (prefillProduct && transformedProducts.includes(prefillProduct)) {
+  //         setValue("productName", prefillProduct);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching form categories:", err);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, [prefillCategory, prefillSubCategory, prefillProduct, setValue]);
+
+  // 🔹 Call API and transform data
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/formCategoriesData");
+      if (!res.ok) throw new Error("Failed to fetch categories");
+      const data = await res.json();
+
+      const resProducts = await fetch("/api/formProductsData");
+      if (!resProducts.ok) throw new Error("Failed to fetch products");
+      const dataProducts = await resProducts.json();
+
+      const transformedProducts = dataProducts?.data?.map(
+        (item: productsDataType) => item?.productName
+      );
+      setProductsData(transformedProducts);   
+      const transformedData: CategorySubcategoryItem[] =
+        data?.data?.map((item: productsDataCatSubcatType) => ({
+          category: item?.name,
+          subCategories:
+            item?.form_sub_categories?.map((sub: formSubCategories) => sub?.name) || [],
+        })) || [];
+      setCategorySubcategoryData(transformedData);
+      // ⚠️ Move prefill logic here, AFTER setState completes
+      // Use setTimeout to ensure state updates have processed
+      setTimeout(() => {
         if (prefillCategory) {
           const categoryExists = transformedData.some(
             (item) => item.category === prefillCategory
           );
-          if (categoryExists) setValue("category", prefillCategory);
+          if (categoryExists) {
+            setValue("category", prefillCategory);        
+            // Set subcategory after category is set
+            if (prefillSubCategory) {
+              const subCategoryExists = transformedData
+                .find((item) => item.category === prefillCategory)
+                ?.subCategories.includes(prefillSubCategory);
+              if (subCategoryExists) {
+                setValue("subCategory", prefillSubCategory);
+              }
+            }
+          }
         }
-        if (prefillSubCategory && prefillCategory) {
-          const subCategoryExists = transformedData
-            .find((item) => item.category === prefillCategory)
-            ?.subCategories.includes(prefillSubCategory);
-          if (subCategoryExists) setValue("subCategory", prefillSubCategory);
-        }
-
         if (prefillProduct && transformedProducts.includes(prefillProduct)) {
           setValue("productName", prefillProduct);
         }
-      } catch (err) {
-        console.error("Error fetching form categories:", err);
-      }
-    };
+      }, 0);
+    } catch (err) {
+      console.error("Error fetching form categories:", err);
+    }
+  };
 
-    fetchCategories();
-  }, [prefillCategory, prefillSubCategory, prefillProduct, setValue]);
+  fetchCategories();
+}, [prefillCategory, prefillSubCategory, prefillProduct, setValue]);
 
   // 🔹 Watch the category field
   const selectedCategory = watch("category");
@@ -192,7 +247,7 @@ export default function GeneralForm({
       const response = await fetch("/api/submitPopupData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: "/msds-form/submit", data: formattedData }),
+        body: JSON.stringify({ url: "/standard-form/submit", data: formattedData }),
       });
 
       if (response.ok) {
