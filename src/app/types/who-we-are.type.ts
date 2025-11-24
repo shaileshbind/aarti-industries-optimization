@@ -40,6 +40,9 @@ export type ManagementBoardProps = {
 
 export type MeetMindsProps = {
   hideTitle?: boolean;
+  progressClassName?: string;
+  navigationNextClass?: string;
+  navigationPrevClass?: string;
   data: {
     sectionTitle: string;
     management_boards: ManagementBoardProps[];

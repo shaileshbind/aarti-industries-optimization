@@ -16,7 +16,13 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 
-const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
+const MeetMinds: React.FC<MeetMindsProps> = ({
+  data,
+  hideTitle = false,
+  progressClassName,
+  navigationNextClass,
+  navigationPrevClass,
+}) => {
   const { sectionTitle, management_boards } = data;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -28,7 +34,9 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
 
   return (
     <div className="py-[50px] lg:pb-[100px] lg:pt-0">
-      {!hideTitle && sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
+      {!hideTitle && sectionTitle && (
+        <H2 className="fluid-container">{sectionTitle}</H2>
+      )}
 
       <div className="mt-[44px]">
         {/* Swiper */}
@@ -53,12 +61,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
               }}
               modules={[Pagination, Mousewheel, Navigation]}
               pagination={{
-                el: ".leader-section-swiper",
+                el: `.${progressClassName || "leader-section-swiper"}`,
                 type: "progressbar",
               }}
               navigation={{
-                nextEl: ".swiper-button-next-leaderSection",
-                prevEl: ".swiper-button-prev-leaderSection",
+                nextEl: `.${
+                  navigationNextClass || "swiper-button-next-leaderSection"
+                }`,
+                prevEl: `.${
+                  navigationPrevClass || "swiper-button-prev-leaderSection"
+                }`,
               }}
               className="!pr-[20px] !lg:pr-[unset]"
             >
@@ -98,15 +110,18 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
             </Swiper>
           </div>
         )}
+
         {/* Navigation */}
         <div className="w-full mt-[40px]">
           <div className="mx-[20px] lg:mx-[60px] flex items-center lg:gap-x-[32px]">
             <div className="w-[100%] lg:w-[95%] relative">
-              <div className="leader-section-swiper" />
+              <div className={progressClassName || "leader-section-swiper"} />
             </div>
             <div className="w-fit gap-x-[12px] hidden lg:flex">
               <button
-                className={`swiper-button-prev-leaderSection transition-opacity 
+                className={`${
+                  navigationPrevClass || "swiper-button-prev-leaderSection"
+                } transition-opacity 
                         ${
                           activeIndex === 0
                             ? "pointer-events-none opacity-30"
@@ -126,7 +141,9 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
               </button>
 
               <button
-                className={`swiper-button-next-leaderSection transition-opacity ${
+                className={`${
+                  navigationNextClass || "swiper-button-next-leaderSection"
+                } transition-opacity ${
                   activeIndex >=
                   (management_boards?.length || 0) -
                     Math.floor(

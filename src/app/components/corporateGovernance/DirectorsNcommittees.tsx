@@ -8,7 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({ data }) => {
+const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
+  data,
+}) => {
   const [active, setActive] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -101,17 +103,26 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({ data }) => 
   }, [active]);
 
   return (
-    <div className="w-full mx-auto py-30 px-20 md:pb-[70px]">
-      <div ref={tabsRef} className="flex gap-6 md:flex-row items-center">
+    <div className="w-full mx-auto pt-30 pb-5">
+      <div
+        ref={tabsRef}
+        className="flex gap-[50px] md:flex-row items-center px-5 lg:px-[60px]"
+      >
         {data?.map((item, index) => (
           <button
             key={item?.id}
             onClick={() => handleTabClick(index)}
             className={`text-grey-300 font-alte-hans leading-[136%] text-[24px] lg:text-[44px] cursor-pointer transition-all duration-600 ease-out hover:text-orange-200/70 ${
-              active === index ? "text-orange-200" : ""
-            } ${isTransitioning ? "pointer-events-none" : ""}`}
+              isTransitioning ? "pointer-events-none" : ""
+            }`}
           >
-            <H2>{item?.category}</H2>
+            <H2
+              className={`${
+                active === index ? "text-[#002F50]" : "text-[#9997A2]"
+              }`}
+            >
+              {item?.category}
+            </H2>
           </button>
         ))}
       </div>
@@ -123,6 +134,9 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({ data }) => 
               management_boards: data[active]?.management_boards || [],
             }}
             hideTitle={true}
+            progressClassName="leader-section-swiper-2"
+            navigationNextClass="swiper-button-next-leaderSection-2"
+            navigationPrevClass="swiper-button-prev-leaderSection-2"
           />
         )}
       </div>
@@ -130,4 +144,4 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({ data }) => 
   );
 };
 
-export default DirectorsNcommittees; 
+export default DirectorsNcommittees;
