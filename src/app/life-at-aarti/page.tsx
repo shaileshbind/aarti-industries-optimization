@@ -22,7 +22,7 @@ const page = async () => {
     section_five,
     section_six,
     section_seven,
-    images,
+   gallery,
   } = data;
 
   const globallyCertifiedData = await getData(
@@ -35,7 +35,7 @@ const page = async () => {
       {section_two && <LifeAtValues data2={section_two} />}
       {section_three && <PeopleVision data={section_three} />}
       {section_four && <AartiEngage data={section_four} />}
-      {section_five && <AartiNirvana data={section_five}  dataImg={images}/>}
+      {section_five && <AartiNirvana data={section_five}  dataImg={gallery}/>}
       {section_six && <AartiWorldLeader data={section_six} />}
       <GloballyCertified
         title="Globally Certified"

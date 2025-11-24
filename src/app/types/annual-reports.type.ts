@@ -9,13 +9,18 @@ export type AnnualRBannerProps = {
   };
 };
 
+export type ReportItemProps = {
+  id?: number;
+  heading?: string;
+  link?: string;
+};
+
 export type ReportsProps = {
   id?: number;
-  reports?: {
+  reportLayout?: {
     id?: number;
-    heading?: string;
-    link?: string;
-  };
+    reports?: ReportItemProps[];
+  }[];
 };
 
 export type AnnualRProps = {

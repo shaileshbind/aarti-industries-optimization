@@ -1,26 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { BodyText1, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
-//import ImageGallery from "../ImageGallery";
 import NirvanaCard from "../cards/NirvanaCard";
 import {
-  LAAMobSliderProps,
   LAANirvanaProps,
 } from "@/app/types/life-at-aarti.type";
+import ImageGallery from "../ImageGallery";
 
 type Props = {
   data: LAANirvanaProps;
-  dataImg: LAAMobSliderProps;
+  dataImg: any;
 };
 
 const AartiNirvana = ({ data,
-   //dataImg 
+   dataImg 
   }: Props) => {
   const { title, description, cards } = data;
-  // const section_seven = {
-  //   id: 1,
-  //   dataImg,
-  // };
 
   return (
     <div className="pb-[72px]">
@@ -76,7 +72,7 @@ const AartiNirvana = ({ data,
             ))}
         </div>
         <div className="mt-[60px]">
-          {/* {section_seven && <ImageGallery imgArr={section_seven} />} */}
+          {dataImg && <ImageGallery imgArr={dataImg} />}
         </div>
       </div>
     </div>

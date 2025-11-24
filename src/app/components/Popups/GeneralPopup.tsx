@@ -2,19 +2,23 @@ import React from "react";
 import Popup from "../Popup";
 import GeneralForm from "../forms/GeneralForm";
 import { CategorySubcategoryProps } from "@/app/types/product.inner.type";
-
 type GeneralPopupProps = {
   setshowGeneralPopup: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   document?: string;
   categorySubcategoryData?: CategorySubcategoryProps;
+  prefillCategory?: string;
+  prefillProduct?: string;
+  prefillSubCategory?: string;
 };
 
 export default function GeneralPopup({
   setshowGeneralPopup,
   isOpen,
   document,
-  categorySubcategoryData,
+  prefillCategory,
+  prefillProduct,
+  prefillSubCategory,
 }: GeneralPopupProps) {
   return (
     <div>
@@ -22,7 +26,9 @@ export default function GeneralPopup({
         <GeneralForm
           setshowGeneralPopup={setshowGeneralPopup}
           document={document}
-          categorySubcategoryData={categorySubcategoryData}
+          prefillCategory={prefillCategory}
+          prefillProduct={prefillProduct}
+          prefillSubCategory={prefillSubCategory}
         />
       </Popup>
     </div>
