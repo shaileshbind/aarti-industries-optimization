@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
+import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle"; // Assuming path is correct
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -58,6 +58,7 @@ type productsDataCatSubcatType = {
   name?: string;
 };
 
+// --- Component Start ---
 export default function GeneralForm({
   setshowGeneralPopup,
   document,
@@ -68,7 +69,7 @@ export default function GeneralForm({
   const [categorySubcategoryData, setCategorySubcategoryData] = useState<
     CategorySubcategoryItem[]
   >([]);
-  const [productsData, setProductsData] = useState([]);
+  const [productsData, setProductsData] = useState<string[]>([]);
 
   const {
     register,
@@ -93,10 +94,11 @@ export default function GeneralForm({
     },
   });
 
-  // 🔹 Call API and transform data
+  // 🔹 Call API and transform data & Handle Prefilling
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        // 1. FETCH DATA
         const res = await fetch("/api/formCategoriesData");
         if (!res.ok) throw new Error("Failed to fetch categories");
         const data = await res.json();
@@ -105,35 +107,50 @@ export default function GeneralForm({
         if (!resProducts.ok) throw new Error("Failed to fetch products");
         const dataProducts = await resProducts.json();
 
-        const transformedProducts = dataProducts?.data?.map(
-          (item: productsDataType) => item?.productName
-        );
+        // 2. TRANSFORM & SET STATE
+        const transformedProducts: string[] =
+          dataProducts?.data?.map(
+            (item: productsDataType) => item?.productName
+          ) || [];
         setProductsData(transformedProducts);
         const transformedData: CategorySubcategoryItem[] =
           data?.data?.map((item: productsDataCatSubcatType) => ({
             category: item?.name,
             subCategories:
-              item?.form_sub_categories?.map((sub: formSubCategories) => sub?.name) || [],
+              item?.form_sub_categories?.map(
+                (sub: formSubCategories) => sub?.name
+              ) || [],
           })) || [];
-
         setCategorySubcategoryData(transformedData);
 
-        // Prefill values if they exist in API data
+        // 3. APPLY PREFILL USING reset()
+        const updatedDefaults: Partial<FormValues> = {};
         if (prefillCategory) {
           const categoryExists = transformedData.some(
             (item) => item.category === prefillCategory
           );
-          if (categoryExists) setValue("category", prefillCategory);
-        }
-        if (prefillSubCategory && prefillCategory) {
-          const subCategoryExists = transformedData
-            .find((item) => item.category === prefillCategory)
-            ?.subCategories.includes(prefillSubCategory);
-          if (subCategoryExists) setValue("subCategory", prefillSubCategory);
-        }
+          if (categoryExists) {
+            updatedDefaults.category = prefillCategory;
 
+            if (prefillSubCategory) {
+              const subCategoryExists = transformedData
+                .find((item) => item.category === prefillCategory)
+                ?.subCategories.includes(prefillSubCategory);
+              if (subCategoryExists) {
+                updatedDefaults.subCategory = prefillSubCategory;
+              }
+            }
+          }
+        }
         if (prefillProduct && transformedProducts.includes(prefillProduct)) {
-          setValue("productName", prefillProduct);
+          updatedDefaults.productName = prefillProduct;
+        }
+        // Use reset to apply the prefilled values reliably
+        if (Object.keys(updatedDefaults).length > 0) {
+          reset((prevDefaults) => ({
+            ...prevDefaults,
+            ...updatedDefaults,
+          }));
         }
       } catch (err) {
         console.error("Error fetching form categories:", err);
@@ -141,9 +158,9 @@ export default function GeneralForm({
     };
 
     fetchCategories();
-  }, [prefillCategory, prefillSubCategory, prefillProduct, setValue]);
+  }, [prefillCategory, prefillSubCategory, prefillProduct, reset]); // DEPENDENCY CHANGE: use 'reset' instead of 'setValue'
 
-  // 🔹 Watch the category field
+  // 🔹 Watch the category field for dynamic subcategory loading
   const selectedCategory = watch("category");
   const selectedSubcategory = watch("subCategory");
 
@@ -154,12 +171,27 @@ export default function GeneralForm({
 
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
-    if (availableSubcategories.length === 1) {
-      setValue("subCategory", availableSubcategories[0]);
-    } else {
-      setValue("subCategory", "");
+    // Only auto-select if a category is already chosen and there are subcategories
+    if (selectedCategory && availableSubcategories.length === 1) {
+      // Ensure we don't override an existing valid prefill, although reset() should handle most of this
+      if (watch("subCategory") !== availableSubcategories[0]) {
+        setValue("subCategory", availableSubcategories[0]);
+      }
+    } else if (availableSubcategories.length > 1) {
+      // If category is selected and multiple subcategories exist, ensure subCategory is reset
+      // if it's not one of the available ones (unless it was prefilled)
+      if (!prefillSubCategory) {
+        // Only clear if it wasn't a prop-based prefill
+        setValue("subCategory", "");
+      }
     }
-   }, [selectedCategory, setValue]);
+  }, [
+    selectedCategory,
+    availableSubcategories.length,
+    setValue,
+    watch,
+    prefillSubCategory,
+  ]);
 
   const onSubmit = async (data: FormValues) => {
     // Determine if Salesforce lead applies
@@ -192,14 +224,17 @@ export default function GeneralForm({
       const response = await fetch("/api/submitPopupData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: "/msds-form/submit", data: formattedData }),
+        body: JSON.stringify({
+          url: "/standard-form/submit",
+          data: formattedData,
+        }),
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log("Success:", result);
         setshowGeneralPopup?.(false);
-        reset();
+        reset(); // Reset form fields to default after successful submission
         if (document) {
           const link = window.document.createElement("a");
           link.href = document;
@@ -219,6 +254,8 @@ export default function GeneralForm({
       console.error("Request failed:", error);
     }
   };
+
+  // --- Form JSX ---
   return (
     <div className="w-full">
       <div>
@@ -308,7 +345,9 @@ export default function GeneralForm({
               variant="outlined"
               className="w-full"
               sx={MaterialInputStyle(!!errors.jobRole)}
-              {...register("jobRole")}
+              {...register("jobRole", {
+                required: "Job Role is required",
+              })}
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
             />
@@ -338,22 +377,40 @@ export default function GeneralForm({
           </div>
 
           {/* Message */}
-          <textarea
-            id="message"
-            {...register("message")}
-            rows={5}
-            cols={40}
-            placeholder="Write your message here"
-            className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
-          ></textarea>
+          <div className="flex flex-col">
+            <textarea
+              id="message"
+              {...register("message", {
+                required: "Message is required",
+              })}
+              rows={5}
+              cols={40}
+              placeholder="Write your message here *"
+              className={clsx(
+                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]"
+              )}
+            ></textarea>
+            {errors.message && (
+              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                {errors.message.message}
+              </p>
+            )}
+          </div>
 
-          <FormControl fullWidth sx={MaterialInputStyle(false)}>
+          {/* Hear About AIL - MANDATORY */}
+          <FormControl
+            fullWidth
+            sx={MaterialInputStyle(!!errors.hearAboutAil)}
+            error={!!errors.hearAboutAil}
+          >
             <InputLabel id="hearAboutAil">
-              How did you hear about AIL?
+              How did you hear about AIL? *
             </InputLabel>
             <Controller
               name="hearAboutAil"
               control={control}
+              rules={{ required: "Selection is required" }}
               render={({ field }) => (
                 <Select
                   {...field}
@@ -380,15 +437,25 @@ export default function GeneralForm({
                 </Select>
               )}
             />
+            {errors.hearAboutAil && (
+              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                {errors.hearAboutAil.message}
+              </p>
+            )}
           </FormControl>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Category */}
-            <FormControl fullWidth sx={MaterialInputStyle(false)}>
-              <InputLabel id="category">Category</InputLabel>
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.category)}
+              error={!!errors.category}
+            >
+              <InputLabel id="category">Category *</InputLabel>
               <Controller
                 name="category"
                 control={control}
+                rules={{ required: "Category is required" }}
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -404,22 +471,30 @@ export default function GeneralForm({
                   </Select>
                 )}
               />
+              {errors.category && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.category.message}
+                </p>
+              )}
             </FormControl>
 
             {/* Subcategory */}
+            {/* Subcategory - MANDATORY */}
             <FormControl
               fullWidth
-              sx={MaterialInputStyle(false)}
+              sx={MaterialInputStyle(!!errors.subCategory)}
+              error={!!errors.subCategory}
               className={clsx(
                 availableSubcategories?.length > 0
                   ? "opacity-100 pointer-events-auto"
                   : "opacity-60 pointer-events-none"
               )}
             >
-              <InputLabel id="subCategory">Sub category</InputLabel>
+              <InputLabel id="subCategory">Sub category *</InputLabel>
               <Controller
                 name="subCategory"
                 control={control}
+                rules={{ required: "Sub category is required" }}
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -440,16 +515,27 @@ export default function GeneralForm({
                   </Select>
                 )}
               />
+              {errors.subCategory && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.subCategory.message}
+                </p>
+              )}
             </FormControl>
           </div>
 
           {/* Products */}
+          {/* Products - CONDITIONAL MANDATORY */}
           {selectedSubcategory === "Chemicals Products" && (
-            <FormControl fullWidth sx={MaterialInputStyle(false)}>
-              <InputLabel id="productName">Product Name</InputLabel>
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.productName)}
+              error={!!errors.productName}
+            >
+              <InputLabel id="productName">Product Name *</InputLabel>
               <Controller
                 name="productName"
                 control={control}
+                rules={{ required: "Product Name is required" }} // Added required rule here
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -465,6 +551,11 @@ export default function GeneralForm({
                   </Select>
                 )}
               />
+              {errors.productName && (
+                <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                  {errors.productName.message}
+                </p>
+              )}
             </FormControl>
           )}
         </div>

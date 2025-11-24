@@ -58,7 +58,7 @@ const Footer = ({ data }: FooterProps) => {
         <div className="lg:col-span-3 grid lg:grid-cols-12 gap-[20px] gap-y-[36px] mt-[40px] md:mt-[unset] ">
           <div className="lg:col-span-3">
             <div>
-              {menu[0]?.category && (
+              {menu?.[0]?.category && (
                 <Tags
                   title={menu[0]?.category}
                   className="mb-[20px] uppercase"
@@ -66,12 +66,12 @@ const Footer = ({ data }: FooterProps) => {
               )}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
                 <div className=" grid">
-                  {menu[0]?.subMenu?.[0]?.title && (
+                  {menu?.[0]?.subMenu?.[0]?.title && (
                     <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
                       {menu[0]?.subMenu?.[0]?.title}
                     </div>
                   )}
-                  {menu[0]?.subMenu?.[0]?.item?.map((items) => {
+                  {menu?.[0]?.subMenu?.[0]?.item?.map((items) => {
                     return (
                       <a
                         key={items.id}
@@ -85,9 +85,9 @@ const Footer = ({ data }: FooterProps) => {
                 </div>
                 <div className="grid">
                   <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
-                    {menu[0]?.subMenu?.[1]?.title}
+                    {menu?.[0]?.subMenu?.[1]?.title}
                   </div>
-                  {menu[0]?.subMenu?.[1]?.item?.map((items) => {
+                  {menu?.[0]?.subMenu?.[1]?.item?.map((items) => {
                     return (
                       <a
                         key={items.id}
@@ -103,7 +103,7 @@ const Footer = ({ data }: FooterProps) => {
             </div>
           </div>
           <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px] ">
-            {menu.slice(1).map((section) => (
+            {menu?.slice(1).map((section) => (
               <div key={section?.id}>
                 {section?.category && (
                   <Tags

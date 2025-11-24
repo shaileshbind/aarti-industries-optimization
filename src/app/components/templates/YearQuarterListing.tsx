@@ -252,17 +252,17 @@ export default function YearQuarterListing({
               quarters.map((quarterItem, qIdx) => (
                 <div
                   key={`quarter_section_${qIdx}`}
-                  className="mb-6 md:mb-8 lg:mb-12 last:mb-0 flex items-baseline"
+                  className="mb-6 last:mb-0 flex items-baseline"
                 >
                   {/* Quarter Header */}
-                  <div className="mb-4 pb-2 w-[20%]">
-                    <h3 className="text-lg text-[#4C5861]">
+                  <div className="mb-4 pb-2 w-[10%] md:w-[8%]">
+                    <h3 className="text-sm md:text-lg text-[#4C5861]">
                       {quarterItem.quarter}
                     </h3>
                   </div>
 
                   {/* Desktop - show all reports for this quarter */}
-                  <div className="hidden lg:block w-[80%]">
+                  <div className="hidden lg:block w-[90%] md:w-[92%]">
                     {quarterItem.report?.map((item) => (
                       <div className="md:pb-4" key={item.id}>
                         <OrangeTabCard
@@ -281,7 +281,7 @@ export default function YearQuarterListing({
                   </div>
 
                   {/* Mobile - show limited with pagination per quarter */}
-                  <div className="block lg:hidden w-[80%]">
+                  <div className="block lg:hidden w-[90%] md:w-[92%]">
                     {quarterItem.report
                       ?.slice(0, mobileVisibleCount)
                       ?.map((item) => (
