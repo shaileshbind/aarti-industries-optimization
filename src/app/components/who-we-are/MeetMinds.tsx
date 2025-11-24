@@ -18,7 +18,7 @@ import Popup from "../Popup";
 // import CustomCursorTrigger from "../../CustomCursorTrigger";
 // import Link from "next/link";
 
-const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
+const MeetMinds: React.FC<MeetMindsProps> = ({ data, hideTitle = false }) => {
   const { sectionTitle, management_boards } = data;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,7 +30,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
 
   return (
     <div className="py-[50px] lg:pb-[100px] lg:pt-0">
-      {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
+      {!hideTitle && sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
 
       <div className="mt-[44px]">
         {/* Swiper */}

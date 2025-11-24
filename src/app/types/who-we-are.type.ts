@@ -39,6 +39,7 @@ export type ManagementBoardProps = {
 };
 
 export type MeetMindsProps = {
+  hideTitle?: boolean;
   data: {
     sectionTitle: string;
     management_boards: ManagementBoardProps[];
