@@ -7,6 +7,8 @@ import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { GlobalCursor } from "./GlobalCursor";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 
+export const revalidate = 1;
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -21,10 +23,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const data = await fetchHeaderFooterData();
+  console.log("🔍 FINAL HEADER DATA:", data?.Header);
+  console.log("🔍 FINAL FOOTER DATA:", data?.Footer);
   return (
     <html lang="en">
       <body className={roboto.variable}>
@@ -32,7 +36,7 @@ export default async function RootLayout({
           <GlobalCursor />
           <Header />
           <main>{children}</main>
-          <Footer data={data?.Footer} />
+          <Footer data={data?.Footer}/>
         </GSAPProvider>
       </body>
     </html>
