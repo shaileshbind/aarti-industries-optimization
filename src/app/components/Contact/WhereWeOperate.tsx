@@ -37,6 +37,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
       type: item.officeLabel || "",
     }));
 
+  console.log(apiData);
+
   const internationalData: AddressCardItem[] = apiData
     .filter(
       (item: WhereWeOperateDataItem) => item.regionName === "International"
@@ -82,6 +84,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     handleResize();
@@ -186,132 +189,135 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
 
         {postsCount > 0 && (
           <>
-          <div className="w-full hidden lg:block">
-            <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
-              <Swiper
-                key={active}
-                spaceBetween={24}
-                slidesPerView={2}
-                grid={{
-                  rows: 1,
-                  fill: "row",
-                }}
-                breakpoints={{
-                  0: {
-                    slidesPerView: 1,
-                    grid: {
-                      rows: 3,
-                      fill: "row",
+            <div className="w-full hidden lg:block">
+              <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
+                <Swiper
+                  key={active}
+                  spaceBetween={24}
+                  slidesPerView={2}
+                  grid={{
+                    rows: 1,
+                    fill: "row",
+                  }}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 1,
+                      grid: {
+                        rows: 3,
+                        fill: "row",
+                      },
                     },
-                  },
-                  786: {
-                    slidesPerView: 2,
-                    grid: {
-                      rows: 2,
-                      fill: "row",
+                    786: {
+                      slidesPerView: 2,
+                      grid: {
+                        rows: 2,
+                        fill: "row",
+                      },
                     },
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                    grid: {
-                      rows: 2,
-                      fill: "row",
+                    1024: {
+                      slidesPerView: 3,
+                      grid: {
+                        rows: 2,
+                        fill: "row",
+                      },
                     },
-                  },
-                }}
-                navigation={{
-                  prevEl: ".swiper-button-prev-where-we-operate",
-                  nextEl: ".swiper-button-next-where-we-operate",
-                }}
-                modules={[Pagination, Mousewheel, Grid, Navigation]}
-                direction="horizontal"
-                pagination={
-                  showProgressBar
-                    ? {
-                        el: ".home-latest-at-swiper",
-                        type: "progressbar",
-                      }
-                    : undefined
-                }
-                className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
-              >
-                {card[activeIndex]?.post_category?.address?.map(
-                  (item: AddressCardItem, index: number) => (
-                    <SwiperSlide key={`${activeIndex}-${index}`}>
-                      <div className="address-card-anim h-full">
-                        <AddressCard
-                          location={item?.location}
-                          name={item?.company}
-                          fullAddress={item?.address}
-                          phone={item?.phone}
-                          type={item?.type}
-                          url={item?.url}
-                          registeredOffice={item?.registeredOffice}
-                        />
-                      </div>
-                    </SwiperSlide>
-                  )
-                )}
-              </Swiper>
-            </div>
-            {showProgressBar && (
-              <div className="flex justify-between items-center px-[20px] lg:px-[60px] mt-[30px]">
-                <div className="relative h-[1px] mx-[20px] lg:mr-[60px]  flex w-full">
-                  <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
-                </div>
-                <div className="flex gap-3">
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="prev"
-                    width={34}
-                    height={34}
-                    className={`-rotate-180 swiper-button-prev-where-we-operate transition-opacity`}
-                  />
-
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="next"
-                    width={34}
-                    height={34}
-                    className={`swiper-button-next-where-we-operate transition-opacity `}
-                  />
-                </div>
+                  }}
+                  navigation={{
+                    prevEl: ".swiper-button-prev-where-we-operate",
+                    nextEl: ".swiper-button-next-where-we-operate",
+                  }}
+                  modules={[Pagination, Mousewheel, Grid, Navigation]}
+                  direction="horizontal"
+                  pagination={
+                    showProgressBar
+                      ? {
+                          el: ".home-latest-at-swiper",
+                          type: "progressbar",
+                        }
+                      : undefined
+                  }
+                  className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
+                >
+                  {card[activeIndex]?.post_category?.address?.map(
+                    (item: AddressCardItem, index: number) => (
+                      <SwiperSlide key={`${activeIndex}-${index}`}>
+                        <div className="address-card-anim h-full">
+                          <AddressCard
+                            location={item?.location}
+                            name={item?.company}
+                            fullAddress={item?.address}
+                            phone={item?.phone}
+                            type={item?.type}
+                            url={item?.url}
+                            registeredOffice={item?.registeredOffice}
+                            corporateOffice={item?.address?.includes(
+                              "Vikhroli"
+                            )}
+                          />
+                        </div>
+                      </SwiperSlide>
+                    )
+                  )}
+                </Swiper>
               </div>
-            )}
-          </div>
-          <div className="w-full lg:hidden px-[20px]">
-          {(showAll 
-            ? card[activeIndex]?.post_category?.address 
-            : card[activeIndex]?.post_category?.address?.slice(0, 2)
-          )?.map(
-                  (item: AddressCardItem, index: number) => (
-                    <div key={`${activeIndex}-${index}`}>
-                      <AddressCard
-                        location={item?.location}
-                        name={item?.company}
-                        fullAddress={item?.address}
-                        phone={item?.phone}
-                        type={item?.type}
-                        url={item?.url}
-                        registeredOffice={item?.registeredOffice}
-                      />
-                    </div>
-                  )
-                )}
-                {card[activeIndex]?.post_category?.address?.length > 2 && (
-                  <div className="p-5 mt-[20px] flex justify-center">
-                    <div className="w-fit group relative inline-block">
-                      <button
-                        onClick={() => setShowAll(!showAll)}
-                        className="relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300"
-                      >
-                        <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                        <span className="relative z-10 text-white">{showAll ? "Show Less" : "View All"}</span>
-                      </button>
-                    </div>
+              {showProgressBar && (
+                <div className="flex justify-between items-center px-[20px] lg:px-[60px] mt-[30px]">
+                  <div className="relative h-[1px] mx-[20px] lg:mr-[60px]  flex w-full">
+                    <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
                   </div>
-                )}
-          </div>
+                  <div className="flex gap-3">
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="prev"
+                      width={34}
+                      height={34}
+                      className={`-rotate-180 swiper-button-prev-where-we-operate transition-opacity`}
+                    />
+
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="next"
+                      width={34}
+                      height={34}
+                      className={`swiper-button-next-where-we-operate transition-opacity `}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="w-full lg:hidden px-[20px]">
+              {(showAll
+                ? card[activeIndex]?.post_category?.address
+                : card[activeIndex]?.post_category?.address?.slice(0, 2)
+              )?.map((item: AddressCardItem, index: number) => (
+                <div key={`${activeIndex}-${index}`}>
+                  <AddressCard
+                    location={item?.location}
+                    name={item?.company}
+                    fullAddress={item?.address}
+                    phone={item?.phone}
+                    type={item?.type}
+                    url={item?.url}
+                    registeredOffice={item?.registeredOffice}
+                  />
+                </div>
+              ))}
+              {card[activeIndex]?.post_category?.address?.length > 2 && (
+                <div className="p-5 mt-[20px] flex justify-center">
+                  <div className="w-fit group relative inline-block">
+                    <button
+                      onClick={() => setShowAll(!showAll)}
+                      className="relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300"
+                    >
+                      <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+                      <span className="relative z-10 text-white">
+                        {showAll ? "Show Less" : "View All"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>
