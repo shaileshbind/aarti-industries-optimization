@@ -33,9 +33,9 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   );
 
   return (
-    <div className="py-[50px] lg:pb-[100px] lg:pt-0">
+    <div className="pb-[50px] lg:pb-[100px] lg:pt-0">
       {!hideTitle && sectionTitle && (
-        <H2 className="fluid-container">{sectionTitle}</H2>
+        <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
       )}
 
       <div className="mt-[44px]">
@@ -48,7 +48,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
               spaceBetween={24}
               breakpoints={{
                 768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 3 },
+                1280: {
+                  slidesPerView: 4,
+                },
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               observer={true}
@@ -84,7 +87,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                       }}
                     >
                       {item?.image?.url && (
-                        <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
+                        <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
                           <Image
                             src={item?.image?.url}
                             alt={item?.image?.alternativeText || "leader"}

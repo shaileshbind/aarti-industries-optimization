@@ -103,27 +103,27 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
   }, [active]);
 
   return (
-    <div className="w-full mx-auto pt-30 pb-5">
+    <div className="w-full mx-auto pt-[72px] lg:pt-30 pb-5">
       <div
         ref={tabsRef}
-        className="flex gap-[50px] md:flex-row items-center px-5 lg:px-[60px]"
+        className="flex gap-6 md:gap-[50px] md:flex-row items-center px-5 lg:px-[60px]"
       >
         {data?.map((item, index) => (
-          <button
+          <div
             key={item?.id}
             onClick={() => handleTabClick(index)}
-            className={`text-grey-300 font-alte-hans leading-[136%] text-[24px] lg:text-[44px] cursor-pointer transition-all duration-600 ease-out hover:text-orange-200/70 ${
+            className={`text-grey-300 font-alte-hans leading-[136%] text-base md:text-[24px] lg:text-[44px] cursor-pointer transition-all duration-600 ease-out hover:text-orange-200/70 ${
               isTransitioning ? "pointer-events-none" : ""
             }`}
           >
             <H2
-              className={`${
+              className={`text-[20px] md:text-[36px] xl:text-[44px] ${
                 active === index ? "text-[#002F50]" : "text-[#9997A2]"
               }`}
             >
               {item?.category}
             </H2>
-          </button>
+          </div>
         ))}
       </div>
       <div ref={contentRef}>

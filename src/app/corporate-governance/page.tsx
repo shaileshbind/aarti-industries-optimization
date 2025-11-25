@@ -724,7 +724,7 @@ const page = async () => {
       {section_three && <OurCodeAndPolicies data={section_three} />}
 
       {section_four && (
-        <div className="mt-[72px] md:mt-[120px]">
+        <div className="mt-[72px] lg:mt-[120px]">
           <MeetMinds data={section_four} />
         </div>
       )}
@@ -733,7 +733,7 @@ const page = async () => {
 
       {section_six && <DirectorsNcommittees data={section_six} />}
 
-      <section className="pb-30 w-full">
+      <section className="pb-[72px] lg:pb-30 w-full">
         {section_five && <ContactBanner data={section_five} />}
       </section>
       {/*       
