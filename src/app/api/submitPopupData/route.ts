@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
       },
       body: JSON.stringify(data),
     });

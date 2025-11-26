@@ -8,6 +8,7 @@ import gsap from "gsap";
 
 type HeroBannerProps = {
   centerText?: boolean;
+  leftDesc?: boolean;
   tag?: string;
   title?: string;
   desc?: string;
@@ -25,6 +26,7 @@ type HeroBannerProps = {
 };
 const HeroBanner = ({
   centerText,
+  leftDesc,
   title,
   tag,
   desc,
@@ -161,6 +163,13 @@ const HeroBanner = ({
                     <H2 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
                       {title}
                     </H2>
+                  </FadeInRevealBlur>
+                )}
+                {desc && leftDesc && (
+                  <FadeInRevealBlur delay={0.1}>
+                    <BodyText1 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
+                      {desc}
+                    </BodyText1>
                   </FadeInRevealBlur>
                 )}
                 {desc && centerText && (

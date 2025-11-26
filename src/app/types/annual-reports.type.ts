@@ -23,6 +23,10 @@ export type ReportsProps = {
   }[];
 };
 
+export type DynamicReportsData = {
+  [key: string]: ReportsProps[];
+};
+
 export type AnnualRProps = {
   data: {
     annual_reports?: ReportsProps[];

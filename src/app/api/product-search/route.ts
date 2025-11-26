@@ -20,7 +20,6 @@ export async function GET(req: Request) {
       );
     }
 
-
     const apiUrl = new URL(`${baseUrl}/product/search`);
     apiUrl.searchParams.append("q", query);
 
@@ -28,7 +27,10 @@ export async function GET(req: Request) {
 
     const res = await fetch(apiUrl.toString(), {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
       cache: "no-store",
     });
 
@@ -43,7 +45,6 @@ export async function GET(req: Request) {
 
     const data = await res.json();
     return NextResponse.json(data);
-
   } catch (error) {
     console.error("Error in search API:", error);
     return NextResponse.json(
