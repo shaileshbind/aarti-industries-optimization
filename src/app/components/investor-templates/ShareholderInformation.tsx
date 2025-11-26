@@ -1,13 +1,13 @@
 import React from "react";
-import ShareHolderBanner from "../components/shareholder-information/ShareHolderBanner";
-import TabsYearsContainer from "../components/shareholder-information/TabsYearsContainer";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import GloballyCertified from "../components/GloballyCertified";
+import ShareHolderBanner from "../shareholder-information/ShareHolderBanner";
+import TabsYearsContainer from "../shareholder-information/TabsYearsContainer";
+import GloballyCertified from "../GloballyCertified";
 
 export const dynamic = "force-dynamic";
 
-export default async function page() {
+export default async function ShareholderInformation() {
   const data = await getPageData("/pages/by-slug/shareholder-report");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"

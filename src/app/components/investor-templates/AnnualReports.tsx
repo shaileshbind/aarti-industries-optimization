@@ -1,13 +1,13 @@
 import React from "react";
-import AnnualRBanner from "../components/annual-reports/AnnualRBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
-import AnnualList from "../components/annual-reports/AnnualList";
 import { getData } from "@/_lib/getData.fetch";
-import GloballyCertified from "../components/GloballyCertified";
+import AnnualRBanner from "../annual-reports/AnnualRBanner";
+import GloballyCertified from "../GloballyCertified";
+import OrangeCardListing from "../templates/OrangeCardListing";
 
 export const dynamic = "force-dynamic";
 
-const page = async () => {
+const AnnualReports = async () => {
   const data = await getPageData("/pages/by-slug/annual-report");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
@@ -16,7 +16,7 @@ const page = async () => {
   return (
     <div>
       {data && <AnnualRBanner data={data} />}
-      {data && <AnnualList data={data} />}
+      {data && <OrangeCardListing data={data} reportKey="annual_reports" />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
@@ -24,4 +24,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default AnnualReports;

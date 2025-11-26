@@ -14,6 +14,7 @@ import { YearQuarterListingProps } from "@/app/types/year-quarter-listing.type";
 
 export default function YearQuarterListing({
   reportLayout,
+  showFinancialYear = false,
 }: YearQuarterListingProps) {
   const [activeSubCategory, setActiveSubCategory] = useState<string>(
     reportLayout?.[0]?.subCategory || ""
@@ -252,17 +253,34 @@ export default function YearQuarterListing({
               quarters.map((quarterItem, qIdx) => (
                 <div
                   key={`quarter_section_${qIdx}`}
-                  className="mb-6 last:mb-0 flex items-baseline"
+                  className="mb-7 lg:mb-6 last:mb-0 xl:flex items-baseline"
                 >
                   {/* Quarter Header */}
-                  <div className="mb-4 pb-2 w-[10%] md:w-[8%]">
-                    <h3 className="text-sm md:text-lg text-[#4C5861]">
+                  <div
+                    className={clsx(
+                      `xl:mb-4 xl:pb-2`,
+                      !showFinancialYear
+                        ? `w-full xl:w-[10%]`
+                        : ` w-full xl:w-[15%]`
+                    )}
+                  >
+                    <h3 className="text-sm xl:text-base text-[#4C5861]">
                       {quarterItem.quarter}
+                      {showFinancialYear &&
+                        "-" +
+                          quarterItem?.financial_year?.year?.replace("-", " ")}
                     </h3>
                   </div>
 
                   {/* Desktop - show all reports for this quarter */}
-                  <div className="hidden lg:block w-[90%] md:w-[92%]">
+                  <div
+                    className={clsx(
+                      `hidden lg:block`,
+                      !showFinancialYear
+                        ? ` w-full xl:w-[90%]`
+                        : ` w-full xl:w-[85%]`
+                    )}
+                  >
                     {quarterItem.report?.map((item) => (
                       <div className="md:pb-4" key={item.id}>
                         <OrangeTabCard
@@ -281,7 +299,7 @@ export default function YearQuarterListing({
                   </div>
 
                   {/* Mobile - show limited with pagination per quarter */}
-                  <div className="block lg:hidden w-[90%] md:w-[92%]">
+                  <div className="block lg:hidden w-full">
                     {quarterItem.report
                       ?.slice(0, mobileVisibleCount)
                       ?.map((item) => (

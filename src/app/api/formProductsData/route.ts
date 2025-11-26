@@ -5,7 +5,11 @@ export async function GET() {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/products`,
       {
-        cache: "no-store", // ensures fresh data on each request
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
+        },
       }
     );
 

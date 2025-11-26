@@ -1,4 +1,4 @@
-import { ButtonProps, ImageProps } from "./global.type";
+import { ImageProps } from "./global.type";
 
 export type CorporateBannerProps = {
   data: {
@@ -20,7 +20,6 @@ export type OurPhilosophyProps = {
   };
 };
 
-
 export type PoliciesProps = {
   id?: number;
   policies?: {
@@ -38,7 +37,6 @@ export type OurCodeAndPoliciesProps = {
   };
 };
 
-
 export type IndependentDirectorsProps = {
   data: {
     category: string;
@@ -53,7 +51,6 @@ export type IndependentDirectorsProps = {
     }[];
   }[];
 };
-
 
 // export type IndependentDirectorsProps = {
 //   data: {
