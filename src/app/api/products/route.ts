@@ -31,7 +31,10 @@ export async function GET(req: Request) {
     // Forward the request
     const res = await fetch(apiUrl.toString(), {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
       cache: "no-store", // prevent caching
     });
 

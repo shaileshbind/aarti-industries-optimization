@@ -7,6 +7,10 @@ export const getData = async (slug: string) => {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${slug}`, {
       cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
     });
 
     // Handle non-OK response

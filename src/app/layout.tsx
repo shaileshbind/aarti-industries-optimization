@@ -27,8 +27,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await fetchHeaderFooterData();
-  console.log("🔍 FINAL HEADER DATA:", data?.Header);
-  console.log("🔍 FINAL FOOTER DATA:", data?.Footer);
+
   return (
     <html lang="en">
       <body className={roboto.variable}>
