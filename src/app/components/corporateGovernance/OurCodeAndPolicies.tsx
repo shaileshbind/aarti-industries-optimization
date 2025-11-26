@@ -2,9 +2,9 @@ import React from "react";
 import { BodyText1, H2 } from "../Typography2";
 import {
   OurCodeAndPoliciesProps,
-  // PoliciesProps,
+  PoliciesProps,
 } from "@/app/types/corporate-governance.type";
-// import OrangeTabCard from "../cards/OrangeTabCard";
+import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 
 const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
@@ -25,13 +25,12 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
       </div>
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto pt-8 lg:pt-[44px]">
         {policies &&
-          policies?.map(() => (
-            ""
-            // <OrangeTabCard
-            //   key={policy?.id}
-            //   title={policy?.heading}
-            //   link={policy?.link}
-            // />
+          policies?.map((policy: PoliciesProps) => (
+            <OrangeTabCard
+              key={policy?.id}
+              title={policy.heading}
+              link={policy?.link}
+            />
           ))}
       </div>
 

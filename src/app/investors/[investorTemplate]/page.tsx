@@ -1,3 +1,5 @@
+import { getData } from "@/_lib/getData.fetch";
+import GloballyCertified from "@/app/components/GloballyCertified";
 import AnnualReports from "@/app/components/investor-templates/AnnualReports";
 import CodeAndPolicies from "@/app/components/investor-templates/CodeAndPolicies";
 import FinancialInformation from "@/app/components/investor-templates/FinancialInformation";
@@ -13,6 +15,10 @@ type PageProps = {
 
 export default async function page({ params }: PageProps) {
   const { investorTemplate } = await params;
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*"
+  );
+
   const templates = [
     "shareholder-information",
     "annual-reports",
@@ -37,5 +43,15 @@ export default async function page({ params }: PageProps) {
     }
   };
 
-  return <div>{getTemplateComponent()}</div>;
+  return (
+    <div>
+      {getTemplateComponent()}
+
+      {globallyCertifiedData && (
+        <div className="mt-[30px] md:mt-[70px]">
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        </div>
+      )}
+    </div>
+  );
 }
