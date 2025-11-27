@@ -29,7 +29,7 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
       />
       <SubH2 className="text-white">{title}</SubH2>
       {items && items?.length > 0 && (
-        <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px]">
+        <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px] xl:gap-x-[50px]">
           {items?.map((item) => {
             if (!item?.link) return null;
             return (

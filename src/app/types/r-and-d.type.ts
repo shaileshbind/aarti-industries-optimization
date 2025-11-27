@@ -66,6 +66,8 @@ export type RDDiverseChemProps = {
         cards: {
           id: string;
           title: string;
+          image?:ImageProps;
+          mobImage?:ImageProps;
         }[];
       }[];
     };
@@ -77,6 +79,8 @@ export type RDDiverseChemProps = {
         cards: {
           id: string;
           title: string;
+          image?:ImageProps;
+          mobImage?:ImageProps;
         }[];
       }[];
     };
