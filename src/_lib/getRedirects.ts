@@ -10,22 +10,24 @@ export interface RedirectMapping {
 export async function getRedirects(): Promise<RedirectMapping[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const apiToken = process.env.API_TOKEN;
     if (!baseUrl) {
-      console.error("NEXT_PUBLIC_BASE_URL is not set");
+      return [];
+    }
+    if (!apiToken) {
       return [];
     }
 
-    // Fetch redirects from backend
-    // Adjust the endpoint path as needed based on your backend API
-    const response = await fetch(`${baseUrl}/redirects`, {
+    const endpoint = `${baseUrl}/redirects?filters[isActive]=true&populate=*`;
+    const response = await fetch(endpoint, {
       cache: "no-store",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${apiToken}`,
       },
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch redirects: ${response.status}`);
       return [];
     }
 
@@ -42,8 +44,6 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
 
     return [];
   } catch (error) {
-    console.error("Error fetching redirects:", error);
     return [];
   }
 }
-
