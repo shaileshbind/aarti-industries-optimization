@@ -11,7 +11,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
   return (
     <div className="container">
       <FadeInReveal>
-        <div className="relative  w-full min-h-[186px] md:min-h-[158px] max-w-[full] lg:max-w-[920px] mx-auto rounded-[14px] md:rounded-[20px] py-[30px] md:py-[37px] px-[28px] md:px-[40px]  grid md:flex justify-between items-center gap-y-[24px] bg-gradient-orange-1 overflow-hidden">
+        <div className="relative  w-full min-h-[186px] md:min-h-[158px] max-w-[full] lg:max-w-[920px] mx-auto rounded-[14px] md:rounded-[20px] py-[30px] md:py-[37px] px-[28px] md:px-[40px] grid md:flex justify-between items-center gap-y-[24px] bg-gradient-orange-1 overflow-hidden">
           <Image
             src="/images/home/flower-t.svg"
             alt="img"
