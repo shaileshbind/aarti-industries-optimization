@@ -423,19 +423,22 @@ body {
 }
 
 /* Who we are - leader section [Progress Bar] */
-.leader-section-swiper .swiper-pagination-progressbar-fill {
+.leader-section-swiper .swiper-pagination-progressbar-fill,
+.leader-section-swiper-2 .swiper-pagination-progressbar-fill {
   background-color: #f36633 !important;
   border-radius: 10px !important;
   height: 2px !important;
 }
-.leader-section-swiper {
+.leader-section-swiper,
+.leader-section-swiper-2 {
   --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
   --swiper-theme-color: #f36633 !important;
   border-radius: 10px !important;
   height: 2px !important;
   top: unset !important;
 }
-.leader-section-swiper .swiper-pagination-progressbar {
+.leader-section-swiper .swiper-pagination-progressbar,
+.leader-section-swiper-2 .swiper-pagination-progressbar {
   background: var(--swiper-pagination-progressbar-bg-color) !important;
   height: 2px !important;
   border-radius: 10px;

@@ -17,7 +17,7 @@ const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
   return (
     <div
       className={clsxN(
-        "duration-800 flex items-center justify-between border-b-2 py-4 px-2 lg:px-4 border-transparent min-w-full w-full md:w-auto",
+        "duration-800 flex items-center justify-between border-b-2 py-4 lg:px-4 border-transparent min-w-full w-full md:w-auto",
         scale && "button-subtle-scale ",
         isHovered
           ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `

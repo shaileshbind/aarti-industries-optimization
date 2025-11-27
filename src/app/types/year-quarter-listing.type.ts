@@ -2,6 +2,7 @@ import { YearAndQuarterLayout } from "@/app/types/shareholder.type";
 
 export interface YearQuarterListingProps {
   reportLayout: YearAndQuarterLayout[];
+  showFinancialYear?: boolean;
 }
 
 // Re-export for convenience

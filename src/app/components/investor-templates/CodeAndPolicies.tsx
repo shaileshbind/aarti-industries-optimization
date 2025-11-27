@@ -1,13 +1,13 @@
 import React from "react";
-import PolicyListComponent from "../components/code-and-policies/PolicyList";
 import { getPageData } from "@/_lib/pageData.fetch";
-import CodePolicyBanner from "../components/code-and-policies/CodePolicyBanner";
 import { getData } from "@/_lib/getData.fetch";
-import GloballyCertified from "../components/GloballyCertified";
+import CodePolicyBanner from "../code-and-policies/CodePolicyBanner";
+import GloballyCertified from "../GloballyCertified";
+import OrangeCardListing from "../templates/OrangeCardListing";
 
 export const dynamic = "force-dynamic";
 
-const page = async () => {
+const CodeAndPolicies = async () => {
   const data = await getPageData("/pages/by-slug/code-and-policies");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
@@ -16,7 +16,9 @@ const page = async () => {
   return (
     <div>
       {data && <CodePolicyBanner data={data} />}
-      {data && <PolicyListComponent data={data} />}
+      {data && (
+        <OrangeCardListing data={data} reportKey="code_and_policy_reports" />
+      )}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
@@ -24,4 +26,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default CodeAndPolicies;

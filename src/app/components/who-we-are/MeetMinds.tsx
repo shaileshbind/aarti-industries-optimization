@@ -16,7 +16,13 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 
-const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
+const MeetMinds: React.FC<MeetMindsProps> = ({
+  data,
+  hideTitle = false,
+  progressClassName,
+  navigationNextClass,
+  navigationPrevClass,
+}) => {
   const { sectionTitle, management_boards } = data;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -27,8 +33,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
   );
 
   return (
-    <div className="py-[50px] lg:pb-[100px] lg:pt-0">
-      {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
+    <div className="pb-[50px] lg:pb-[100px] lg:pt-0">
+      {!hideTitle && sectionTitle && (
+        <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
+      )}
 
       <div className="mt-[44px]">
         {/* Swiper */}
@@ -40,7 +48,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               spaceBetween={24}
               breakpoints={{
                 768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
+                1024: { slidesPerView: 3 },
+                1280: {
+                  slidesPerView: 4,
+                },
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               observer={true}
@@ -53,12 +64,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               }}
               modules={[Pagination, Mousewheel, Navigation]}
               pagination={{
-                el: ".leader-section-swiper",
+                el: `.${progressClassName || "leader-section-swiper"}`,
                 type: "progressbar",
               }}
               navigation={{
-                nextEl: ".swiper-button-next-leaderSection",
-                prevEl: ".swiper-button-prev-leaderSection",
+                nextEl: `.${
+                  navigationNextClass || "swiper-button-next-leaderSection"
+                }`,
+                prevEl: `.${
+                  navigationPrevClass || "swiper-button-prev-leaderSection"
+                }`,
               }}
               className="!pr-[20px] !lg:pr-[unset]"
             >
@@ -72,7 +87,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
                       }}
                     >
                       {item?.image?.url && (
-                        <div className="relative rounded-[20px] overflow-hidden w-full h-[266px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
+                        <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
                           <Image
                             src={item?.image?.url}
                             alt={item?.image?.alternativeText || "leader"}
@@ -98,15 +113,18 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
             </Swiper>
           </div>
         )}
+
         {/* Navigation */}
         <div className="w-full mt-[40px]">
           <div className="mx-[20px] lg:mx-[60px] flex items-center lg:gap-x-[32px]">
             <div className="w-[100%] lg:w-[95%] relative">
-              <div className="leader-section-swiper" />
+              <div className={progressClassName || "leader-section-swiper"} />
             </div>
             <div className="w-fit gap-x-[12px] hidden lg:flex">
               <button
-                className={`swiper-button-prev-leaderSection transition-opacity 
+                className={`${
+                  navigationPrevClass || "swiper-button-prev-leaderSection"
+                } transition-opacity 
                         ${
                           activeIndex === 0
                             ? "pointer-events-none opacity-30"
@@ -126,7 +144,9 @@ const MeetMinds: React.FC<MeetMindsProps> = ({ data }) => {
               </button>
 
               <button
-                className={`swiper-button-next-leaderSection transition-opacity ${
+                className={`${
+                  navigationNextClass || "swiper-button-next-leaderSection"
+                } transition-opacity ${
                   activeIndex >=
                   (management_boards?.length || 0) -
                     Math.floor(
