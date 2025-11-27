@@ -1,8 +1,7 @@
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "@/app/components/GloballyCertified";
-import AnnualReports from "@/app/components/investor-templates/AnnualReports";
-import CodeAndPolicies from "@/app/components/investor-templates/CodeAndPolicies";
 import FinancialInformation from "@/app/components/investor-templates/FinancialInformation";
+import OrangeCardListingPage from "@/app/components/investor-templates/OranegCardListingPage";
 import ShareholderInformation from "@/app/components/investor-templates/ShareholderInformation";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -21,24 +20,40 @@ export default async function page({ params }: PageProps) {
 
   const templates = [
     "shareholder-information",
-    "annual-reports",
-    "code-and-policies",
     "financial-information",
+    "disclosure",
+    "intimation-of-stock-exchange",
+    "corporate-restructuring",
+    "regulation",
+    "saksham-niveshak",
   ];
 
-  if (!templates?.includes(investorTemplate)) {
+  const orangeCardListingPages = [
+    "annual-report",
+    "code-and-policies",
+    "subsidiaries-and-reports",
+    "credit-ratings",
+    "memorandum-and-articles-of-association",
+  ];
+
+  const allValidTemplates = [...templates, ...orangeCardListingPages];
+
+  // Check if the template is valid
+  if (!allValidTemplates.includes(investorTemplate)) {
     return notFound();
   }
 
   const getTemplateComponent = () => {
+    // Check if it's an orange card listing page first
+    if (orangeCardListingPages.includes(investorTemplate)) {
+      return <OrangeCardListingPage params={investorTemplate} />;
+    }
+
+    // Handle other specific templates
     switch (investorTemplate) {
       case templates[0]:
         return <ShareholderInformation />;
       case templates[1]:
-        return <AnnualReports />;
-      case templates[2]:
-        return <CodeAndPolicies />;
-      case templates[3]:
         return <FinancialInformation />;
     }
   };

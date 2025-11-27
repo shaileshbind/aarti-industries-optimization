@@ -15,6 +15,7 @@ import {
 } from "@/app/types/who-we-are.type";
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
+import clsx from "clsx";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -33,7 +34,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   );
 
   return (
-    <div className="pb-[50px] lg:pb-[100px] lg:pt-0">
+    <div className="pb-[72px] lg:pb-[100px] lg:pt-0">
       {!hideTitle && sectionTitle && (
         <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
       )}
@@ -115,60 +116,67 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
         )}
 
         {/* Navigation */}
-        <div className="w-full mt-[40px]">
+        <div
+          className={clsx(
+            `w-full`,
+            management_boards?.length > 4 ? "mt-[40px]" : "mt-[40px] lg:mt-0"
+          )}
+        >
           <div className="mx-[20px] lg:mx-[60px] flex items-center lg:gap-x-[32px]">
             <div className="w-[100%] lg:w-[95%] relative">
               <div className={progressClassName || "leader-section-swiper"} />
             </div>
-            <div className="w-fit gap-x-[12px] hidden lg:flex">
-              <button
-                className={`${
-                  navigationPrevClass || "swiper-button-prev-leaderSection"
-                } transition-opacity 
+            {management_boards?.length > 4 && (
+              <div className="w-fit gap-x-[12px] hidden lg:flex">
+                <button
+                  className={`${
+                    navigationPrevClass || "swiper-button-prev-leaderSection"
+                  } transition-opacity 
                         ${
                           activeIndex === 0
                             ? "pointer-events-none opacity-30"
                             : "cursor-pointer opacity-100"
                         }
                       `}
-                aria-label="Previous slide"
-                onClick={() => swiperRef.current?.slidePrev()}
-              >
-                <Image
-                  src="/images/home/chevron-right-orange.svg"
-                  alt="Previous"
-                  width={34}
-                  height={34}
-                  className="rotate-180"
-                />
-              </button>
+                  aria-label="Previous slide"
+                  onClick={() => swiperRef.current?.slidePrev()}
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="Previous"
+                    width={34}
+                    height={34}
+                    className="rotate-180"
+                  />
+                </button>
 
-              <button
-                className={`${
-                  navigationNextClass || "swiper-button-next-leaderSection"
-                } transition-opacity ${
-                  activeIndex >=
-                  (management_boards?.length || 0) -
-                    Math.floor(
-                      typeof swiperRef.current?.params.slidesPerView ===
-                        "number"
-                        ? swiperRef.current.params.slidesPerView
-                        : 1
-                    )
-                    ? "pointer-events-none opacity-30"
-                    : "cursor-pointer opacity-100"
-                }`}
-                aria-label="Next slide"
-                onClick={() => swiperRef.current?.slideNext()}
-              >
-                <Image
-                  src="/images/home/chevron-right-orange.svg"
-                  alt="Next"
-                  width={34}
-                  height={34}
-                />
-              </button>
-            </div>
+                <button
+                  className={`${
+                    navigationNextClass || "swiper-button-next-leaderSection"
+                  } transition-opacity ${
+                    activeIndex >=
+                    (management_boards?.length || 0) -
+                      Math.floor(
+                        typeof swiperRef.current?.params.slidesPerView ===
+                          "number"
+                          ? swiperRef.current.params.slidesPerView
+                          : 1
+                      )
+                      ? "pointer-events-none opacity-30"
+                      : "cursor-pointer opacity-100"
+                  }`}
+                  aria-label="Next slide"
+                  onClick={() => swiperRef.current?.slideNext()}
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="Next"
+                    width={34}
+                    height={34}
+                  />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -194,7 +202,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
             </SubH3>
             <BodyText2>{popupDetails?.designation} </BodyText2>
 
-            <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E]">
+            <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto scrollbar">
               {`"${popupDetails?.bio}"`}
             </p>
           </div>

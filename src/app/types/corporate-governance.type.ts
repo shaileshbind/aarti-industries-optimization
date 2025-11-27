@@ -1,3 +1,4 @@
+import { ReportsProps } from "./annual-reports.type";
 import { ImageProps } from "./global.type";
 
 export type CorporateBannerProps = {
@@ -20,67 +21,32 @@ export type OurPhilosophyProps = {
   };
 };
 
-
-export type PoliciesProps = {
-  id?: number;
-  policies?: {
-    id?: number;
-    heading?: string;
-    link?: string;
-  };
-};
-
 export type OurCodeAndPoliciesProps = {
   data: {
-    heading: string;
-    description: string;
-    policies?: PoliciesProps[];
+    title: string;
+    sectionTitle: string;
+    code_and_policy_reports?: ReportsProps[];
   };
 };
 
+export type LeaderProps = {
+  id: number | string;
+  image: ImageProps;
+  mobImage: ImageProps;
+  name: string;
+  bio: string;
+  designation: string;
+};
 
 export type IndependentDirectorsProps = {
   data: {
-    category: string;
-    id: string;
-    management_boards: {
-      id: string;
-      name: string;
-      image: ImageProps;
-      designation: string;
-      bio: string;
-      mobImage: ImageProps;
-    }[];
-  }[];
+    committee: {
+      title: string;
+      committees: LeaderProps[];
+    };
+    independentDirectors: {
+      title: string;
+      independent_directors: LeaderProps[];
+    };
+  };
 };
-
-
-// export type IndependentDirectorsProps = {
-//   data: {
-//     category: string;
-//     id: string | number;
-//     management_boards: {
-//       id: string;
-//       name: string;
-//       image: ImageProps;
-//       designation: string;
-//       bio: string;
-//       mobImage: ImageProps;
-//     }[];
-//   }[];
-// };
-
-// export type BoardCommitteesProps = {
-//   data: {
-//     category: string;
-//     id: string | number;
-//     management_boards: {
-//       id: string;
-//       name: string;
-//       image: ImageProps;
-//       designation: string;
-//       bio: string;
-//       mobImage: ImageProps;
-//     }[];
-//   }[];
-// };

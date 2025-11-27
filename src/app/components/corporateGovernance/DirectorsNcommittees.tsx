@@ -17,6 +17,33 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
   const tabsRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
 
+  // Transform data structure to match MeetMinds component expectations
+  const tabs = [
+    {
+      category: data?.independentDirectors?.title || "Independent Directors",
+      meetMindsData: {
+        sectionTitle:
+          data?.independentDirectors?.title || "Independent Directors",
+        management_boards:
+          data?.independentDirectors?.independent_directors?.map((item) => ({
+            ...item,
+            id: String(item.id), // Ensure id exists
+          })) || [],
+      },
+    },
+    {
+      category: data?.committee?.title || "Committees",
+      meetMindsData: {
+        sectionTitle: data?.committee?.title || "Committees",
+        management_boards:
+          data?.committee?.committees?.map((item) => ({
+            ...item,
+            id: String(item.id), // Ensure id exists
+          })) || [],
+      },
+    },
+  ];
+
   const handleTabClick = (index: number) => {
     if (index === active || isTransitioning) return;
 
@@ -108,9 +135,9 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
         ref={tabsRef}
         className="flex gap-6 md:gap-[50px] md:flex-row items-center px-5 lg:px-[60px]"
       >
-        {data?.map((item, index) => (
+        {tabs?.map((item, index) => (
           <div
-            key={item?.id}
+            key={"tab_" + index}
             onClick={() => handleTabClick(index)}
             className={`text-grey-300 font-alte-hans leading-[136%] text-base md:text-[24px] lg:text-[44px] cursor-pointer transition-all duration-600 ease-out hover:text-orange-200/70 ${
               isTransitioning ? "pointer-events-none" : ""
@@ -127,12 +154,9 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
         ))}
       </div>
       <div ref={contentRef}>
-        {data?.[active] && (
+        {tabs?.[active] && (
           <MeetMinds
-            data={{
-              sectionTitle: data[active]?.category || "",
-              management_boards: data[active]?.management_boards || [],
-            }}
+            data={tabs[active]?.meetMindsData}
             hideTitle={true}
             progressClassName="leader-section-swiper-2"
             navigationNextClass="swiper-button-next-leaderSection-2"
