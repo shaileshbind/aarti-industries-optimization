@@ -75,7 +75,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
 
   return (
     <div>
-      {/* Top Category Tabs - Desktop */}
+      {/* Top Category Tabs */}
       <div className="bg-[#002F50] flex md:justify-center gap-6 !py-5 overflow-x-auto px-7">
         {data?.map((item, index) => (
           <div

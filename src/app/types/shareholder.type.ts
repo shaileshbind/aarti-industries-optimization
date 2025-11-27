@@ -82,10 +82,6 @@ export type TabsYearsContainerProps = {
     documentId: string;
     category: string;
     reportLayout: ReportLayout[];
-    createdAt?: string;
-    updatedAt?: string;
-    publishedAt?: string | null;
-    locale?: string | null;
   }[];
 };
 
