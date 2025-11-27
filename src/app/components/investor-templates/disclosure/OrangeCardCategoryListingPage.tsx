@@ -10,8 +10,6 @@ export default async function OrangeCardCategoryListingPage({
   const categories = await getData("/disclosures-reports");
   const data = await getDisclosureData(`/get-disclosure-report/${template}`);
 
-  console.log("data", data);
-
   return (
     <div>
       <ListingContainer data={data} categories={categories} />

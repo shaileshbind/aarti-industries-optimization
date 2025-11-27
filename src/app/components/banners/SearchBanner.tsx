@@ -28,6 +28,7 @@ const SearchBanner = ({
   value,
   onChange,
   handleSearch,
+  placeholder,
 }: SearchBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -147,32 +148,32 @@ const SearchBanner = ({
                 }`}
               >
                 {tag && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <div>
                     <BodyText2 className="text-white font-alte-hans fluid-container">
                       {tag}
                     </BodyText2>
-                  </FadeInRevealBlur>
+                  </div>
                 )}
                 {title && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <div>
                     <H2 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
                       {title}
                     </H2>
-                  </FadeInRevealBlur>
+                  </div>
                 )}
                 {desc && leftDesc && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <div>
                     <BodyText1 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
                       {desc}
                     </BodyText1>
-                  </FadeInRevealBlur>
+                  </div>
                 )}
                 {desc && centerText && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <div>
                     <BodyText1 className="text-white mt-[20px] max-w-[480px]">
                       {desc}
                     </BodyText1>
-                  </FadeInRevealBlur>
+                  </div>
                 )}
 
                 {/* SearchBar */}
@@ -180,6 +181,7 @@ const SearchBanner = ({
                   value={value}
                   onChange={onChange}
                   handleSearch={handleSearch}
+                  placeholder={placeholder}
                 />
 
                 {/* buttons */}

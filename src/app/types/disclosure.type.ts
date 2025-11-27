@@ -1,7 +1,12 @@
 import { ReportItemProps } from "./annual-reports.type";
 import { ImageProps } from "./global.type";
+import { YearAndQuarterLayout } from "./shareholder.type";
 
 export type OrangeCardCategoryListingPageProps = {
+  template: string;
+};
+
+export type IntimationOfStockExchangeProps = {
   template: string;
 };
 
@@ -16,6 +21,22 @@ export type ListingContainerProps = {
     reportLayout?: Array<{
       reports: ReportItemProps[];
     }>;
+  };
+  categories: {
+    category: string;
+    slug: string;
+  }[];
+};
+
+export type StockExchangeContainerProps = {
+  data: {
+    banner: {
+      title: string;
+      description: string;
+      image: ImageProps;
+      mobImage: ImageProps;
+    };
+    reportLayout?: YearAndQuarterLayout[];
   };
   categories: {
     category: string;
@@ -51,6 +72,7 @@ export type SearchBannerProps = {
   secondaryBtnLeftLink?: string;
   secondaryBtnRightTitle?: string;
   secondaryBtnRightLink?: string;
+  placeholder?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: () => void;

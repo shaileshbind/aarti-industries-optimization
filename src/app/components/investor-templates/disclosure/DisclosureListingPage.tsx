@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import OrangeTabCard from "../../cards/OrangeTabCard";
 import { ReportItemProps } from "@/app/types/annual-reports.type";
 import { DisclosureListingPageProps } from "@/app/types/disclosure.type";
-import { SubH3 } from "../../Typography2";
 
 export default function DisclosureListingPage({
   reports,

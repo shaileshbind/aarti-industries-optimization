@@ -41,7 +41,7 @@ export default async function page({ params }: PageProps) {
     // Handle other specific templates
     switch (disclosureTemplate) {
       case templates[0]:
-        return <IntimationOfStockExchange />;
+        return <IntimationOfStockExchange template={disclosureTemplate} />;
     }
   };
 

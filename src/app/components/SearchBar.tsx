@@ -5,11 +5,13 @@ type SearchBarProps = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: () => void;
+  placeholder?: string;
 };
 
 export default function SearchBar({
   value,
   onChange,
+  placeholder,
   handleSearch,
 }: SearchBarProps) {
   return (
@@ -19,7 +21,7 @@ export default function SearchBar({
     >
       <input
         type="text"
-        placeholder="Search by Document Name..."
+        placeholder={placeholder || "Search by Document Name..."}
         value={value}
         onChange={onChange}
         className="flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
