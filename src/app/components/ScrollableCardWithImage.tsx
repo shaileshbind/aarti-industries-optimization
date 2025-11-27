@@ -79,10 +79,10 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                   if (el) gridRefs.current[index] = el;
                 }}
                 key={items?.id}
-                className="grid grid-cols-[0.9fr] lg:grid-cols-[1fr_1fr] justify-end lg:justify-items-center gap-x-[60px] gap-y-[18px] mb-[40px] lg:mb-[80px] relative"
+                className="grid grid-cols-[0.9fr] lg:grid-cols-[1fr_1fr] gap-x-[120px] justify-end lg:justify-[unset] gap-y-[18px] mb-[40px] lg:mb-[80px] relative "
               >
                 {items?.image?.url && (
-                  <div className="relative w-full lg:w-[424px] h-[286px] rounded-[20px] overflow-hidden">
+                  <div className="relative w-full lg:w-[424px] h-[286px] rounded-[20px] overflow-hidden justify-self-end">
                     <Image
                       src={items?.image?.url}
                       alt={items?.image?.alternativeText || "banner"}
@@ -93,7 +93,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                 )}
                 <div>
                   <div className="flex items-start gap-x-[24px] pr-[unset] lg:pr-[110px]">
-                    <Tags title={`0${index + 1}`} className="mt-1 xl:mt-[6px]" />
+                    <Tags title={`0${index + 1}`} className="mt-1 xl:mt-[6px] !text-[14px] lg:!text-[20px]" />
                     <div className="">
                       {items?.title && (
                         <SubH1 className="text-blue-200">{items?.title}</SubH1>

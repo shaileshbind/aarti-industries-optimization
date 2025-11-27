@@ -10,6 +10,7 @@ import ImageGallery from "./components/ImageGallery";
 import DetailsContainer from "./components/sections/DetailsContainer";
 import GloballyCertified from "./components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
+import SEO from "./components/SEO";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,29 @@ export default async function Home() {
 
   return (
     <div>
+      <SEO
+        title={"Aarti Industries"}
+        metaTitle="Aarti Industries Desc"
+        metaDescription="Aarti Industries Desc"
+        keywords="Aarti Industries, chemical, specialty chemicals"
+        canonical="https://example.com/aarti-industries"
+        robots="index, follow"
+        ogURL="https://example.com/aarti-industries"
+        ogImg="https://example.com/images/aarti-industries-logo.png"
+        ogTitle="Aarti Industries"
+        ogDesc="Aarti Industries Desc"
+        twtUrl="https://example.com/aarti-industries"
+        twtImg="https://example.com/images/aarti-industries-logo.png"
+        twtTitle="Aarti Industries"
+        twtDesc="Aarti Industries Desc"
+        schemaData={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Aarti Industries",
+          url: "https://example.com/aarti-industries",
+          logo: "https://example.com/images/aarti-industries-logo.png",
+        }}
+      />
       {sectionOne && <HomeHero data={sectionOne} />}
 
       {sectionTwo && <DetailsContainer data={sectionTwo} />}

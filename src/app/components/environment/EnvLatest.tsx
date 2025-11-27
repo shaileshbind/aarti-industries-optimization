@@ -50,6 +50,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
                 date={item?.title}
                 desc={item?.description}
                 link={item?.slug}
+                animate
               />
             </SwiperSlide>
           ))}
