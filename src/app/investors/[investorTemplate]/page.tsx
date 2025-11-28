@@ -18,15 +18,7 @@ export default async function page({ params }: PageProps) {
     "/globally-certified-datas?populate=*"
   );
 
-  const templates = [
-    "shareholder-information",
-    "financial-information",
-    "disclosure",
-    "intimation-of-stock-exchange",
-    "corporate-restructuring",
-    "regulation",
-    "saksham-niveshak",
-  ];
+  const templates = ["shareholder-information", "financial-information"];
 
   const orangeCardListingPages = [
     "annual-report",

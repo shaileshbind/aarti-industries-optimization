@@ -5,7 +5,7 @@ import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import OurCodeAndPolicies from "../components/corporateGovernance/OurCodeAndPolicies";
-import MeetMinds from "../components/who-we-are/MeetMinds";
+import MeetMinds from "../components/sections/MeetMinds";
 import ContactBanner from "../components/ContactBanner";
 import DirectorsNcommittees from "../components/corporateGovernance/DirectorsNcommittees";
 

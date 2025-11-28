@@ -6,7 +6,7 @@ import Button from "../Button";
 import { ReportItemProps } from "@/app/types/annual-reports.type";
 
 const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
-  const { title, sectionTitle, code_and_policy_reports } = data;
+  const { title, sectionTitle, code_and_policy_reports, ctaButton1 } = data;
 
   return (
     <div className="lg:max-w-[1320px] mx-auto px-[15px] lg:pt-[70px]">
@@ -16,13 +16,18 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
 
           {sectionTitle && (
             <div className="mt-2">
-              <div dangerouslySetInnerHTML={{ __html: sectionTitle }} className="text-[#4C5861]" />
+              <div
+                dangerouslySetInnerHTML={{ __html: sectionTitle }}
+                className="text-[#4C5861]"
+              />
             </div>
           )}
         </div>
-        <div className="hidden lg:block">
-          <Button title="View All" href="/solutions" />
-        </div>
+        {ctaButton1?.title && ctaButton1?.link?.link && (
+          <div className="hidden lg:block">
+            <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+          </div>
+        )}
       </div>
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto pt-8 lg:pt-[44px]">
         {code_and_policy_reports?.length &&
@@ -37,9 +42,11 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
           )}
       </div>
 
-      <div className="flex justify-center mt-10 lg:hidden">
-        <Button title="View All" href="/investors/code-and-policies" />
-      </div>
+      {ctaButton1?.title && ctaButton1?.link?.link && (
+        <div className="flex justify-center mt-10 lg:hidden">
+          <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+        </div>
+      )}
     </div>
   );
 };

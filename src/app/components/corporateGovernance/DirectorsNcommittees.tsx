@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { H2 } from "../Typography2";
 import { IndependentDirectorsProps } from "@/app/types/corporate-governance.type";
-import MeetMinds from "../who-we-are/MeetMinds";
+import MeetMinds from "../sections/MeetMinds";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 

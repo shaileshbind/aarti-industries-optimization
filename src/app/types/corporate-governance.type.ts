@@ -26,6 +26,12 @@ export type OurCodeAndPoliciesProps = {
     title: string;
     sectionTitle: string;
     code_and_policy_reports?: ReportsProps[];
+    ctaButton1: {
+      title: string;
+      link: {
+        link: string;
+      };
+    };
   };
 };
 
