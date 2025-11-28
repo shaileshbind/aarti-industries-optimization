@@ -159,6 +159,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                         date={item?.title}
                         desc={item?.description}
                         link={item?.slug}
+                        animate
                       />
                     </div>
                   </SwiperSlide>

@@ -3,7 +3,7 @@ import HeroBanner from "../banners/HeroBanner";
 import { LAABannerProps } from "@/app/types/life-at-aarti.type";
 
 const LifeAtBanner = ({ data }: LAABannerProps) => {
-  const { sectionTitle, title, image, mobImage, ctaButtons, description } =
+  const { sectionTitle, title, image, mobImage, ctaButton, description } =
     data;
   return (
     <div>
@@ -11,8 +11,8 @@ const LifeAtBanner = ({ data }: LAABannerProps) => {
         tag={sectionTitle}
         title={title}
         desc={description}
-        btnTitle={ctaButtons?.title}
-        btnLink={ctaButtons?.link}
+        btnTitle={ctaButton?.title}
+        btnLink={ctaButton?.link}
         image={image?.url}
         mobImage={mobImage?.url}
         alt={image?.alternativeText}

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import Header from "@/app/components/Header";
@@ -6,6 +5,7 @@ import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { GlobalCursor } from "./GlobalCursor";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
+import SEO from "./components/SEO";
 
 export const revalidate = 1;
 
@@ -16,11 +16,6 @@ const roboto = Roboto({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Aarti Industries",
-  description: "Aarti Industries",
-};
-
 export default async function RootLayout({
   children,
 }: {
@@ -30,6 +25,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <SEO/>
       <body className={roboto.variable}>
         <GSAPProvider>
           <GlobalCursor />
