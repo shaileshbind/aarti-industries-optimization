@@ -1,12 +1,16 @@
 "use client";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { BodyText2, SubH3 } from "../Typography2";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ContactDetails() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const data = [
     {
       subCategory: "Shareholder Grievances & Nodal Officer",
@@ -38,12 +42,30 @@ export default function ContactDetails() {
     },
   ];
 
-  const [activeSubCategory, setActiveSubCategory] = useState<string>(
-    data?.[0]?.subCategory || ""
-  );
+  const [activeSubCategory, setActiveSubCategory] = useState<string>("");
   const [activeData, setactiveData] = useState<
     (typeof data)[0]["address"] | null
-  >(data?.[0]?.address);
+  >(null);
+
+  // Initialize from URL or default to first subcategory
+  useEffect(() => {
+    if (!data || data.length === 0) return;
+
+    const urlSubCat = searchParams.get("subCategory");
+    const targetSubCategory = urlSubCat || data[0]?.subCategory || "";
+
+    const matchingSubCategory = data.find(
+      (item) => item.subCategory === targetSubCategory
+    );
+
+    if (matchingSubCategory) {
+      setActiveSubCategory(targetSubCategory);
+      setactiveData(matchingSubCategory.address);
+    } else if (data[0]) {
+      setActiveSubCategory(data[0].subCategory);
+      setactiveData(data[0].address);
+    }
+  }, [searchParams]);
 
   const menuProps = {
     PaperProps: {
@@ -67,6 +89,18 @@ export default function ContactDetails() {
     },
   };
 
+  // Handler for subcategory selection
+  const handleSubCategoryClick = (subCat: string) => {
+    setActiveSubCategory(subCat);
+    const found = data.find((item) => item.subCategory === subCat);
+    setactiveData(found ? found.address : null);
+
+    // Update URL with query parameter
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("subCategory", subCat);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="fluid-container pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
       {/* Left Sidebar - Subcategories (Desktop) */}
@@ -80,10 +114,7 @@ export default function ContactDetails() {
                 ? "text-[#002F50]"
                 : "text-[#9997A2] hover:text-[#002F50]"
             )}
-            onClick={() => {
-              setActiveSubCategory(subCat.subCategory);
-              setactiveData(subCat?.address);
-            }}
+            onClick={() => handleSubCategoryClick(subCat.subCategory)}
           >
             {subCat.subCategory}
           </div>
@@ -97,12 +128,7 @@ export default function ContactDetails() {
             sx={mobStyles}
             MenuProps={menuProps}
             value={activeSubCategory}
-            onChange={(e) => {
-              const selected = e.target.value;
-              setActiveSubCategory(selected);
-              const found = data.find((item) => item.subCategory === selected);
-              setactiveData(found ? found.address : null);
-            }}
+            onChange={(e) => handleSubCategoryClick(e.target.value as string)}
             IconComponent={KeyboardArrowDownIcon}
           >
             {data?.map((subCat, idx) => (

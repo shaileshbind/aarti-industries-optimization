@@ -1,17 +1,39 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import clsx from "clsx";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SimpleListingProps } from "@/app/types/simple-listing.type";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SimpleListing({ reportLayout }: SimpleListingProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
   const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
-  const [activeSubCategory, setActiveSubCategory] = useState<string>(
-    reportLayout?.[0]?.subCategory || ""
-  );
+  const [activeSubCategory, setActiveSubCategory] = useState<string>("");
+
+  // Initialize from URL or default to first subcategory
+  useEffect(() => {
+    if (!reportLayout || reportLayout.length === 0) return;
+
+    const urlSubCat = searchParams.get("subCategory");
+    const targetSubCategory = urlSubCat || reportLayout[0]?.subCategory || "";
+
+    const matchingSubCategory = reportLayout.find(
+      (item) => item.subCategory === targetSubCategory
+    );
+
+    if (matchingSubCategory) {
+      setActiveSubCategory(targetSubCategory);
+      setMobileVisibleCount(5);
+    } else if (reportLayout[0]) {
+      setActiveSubCategory(reportLayout[0].subCategory);
+      setMobileVisibleCount(5);
+    }
+  }, [searchParams, reportLayout]);
 
   const mobStyles = {
     backgroundColor: "#F7F9FA",
@@ -39,6 +61,11 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
   const handleSubCategoryClick = (subCat: string) => {
     setActiveSubCategory(subCat);
     setMobileVisibleCount(5);
+    
+    // Update URL with query parameter
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("subCategory", subCat);
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   // Get current subcategory data

@@ -58,7 +58,7 @@ export default function ListingContainer({
         desc={description}
         fullBg
         centerText={true}
-        image={image?.url || "/images/thrive-at-aarti/banner3.png"}
+        image={image?.url}
         mobImage={mobImage?.url}
         alt={image?.alternativeText}
         mobAlt={mobImage?.alternativeText}
