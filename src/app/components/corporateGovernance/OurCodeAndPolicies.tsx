@@ -1,43 +1,52 @@
 import React from "react";
-import { BodyText1, H2 } from "../Typography2";
-import {
-  OurCodeAndPoliciesProps,
-  // PoliciesProps,
-} from "@/app/types/corporate-governance.type";
-// import OrangeTabCard from "../cards/OrangeTabCard";
+import { H2 } from "../Typography2";
+import { OurCodeAndPoliciesProps } from "@/app/types/corporate-governance.type";
+import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
+import { ReportItemProps } from "@/app/types/annual-reports.type";
 
 const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
-  const { description, heading, policies } = data;
+  const { title, sectionTitle, code_and_policy_reports, ctaButton1 } = data;
 
   return (
     <div className="lg:max-w-[1320px] mx-auto px-[15px] lg:pt-[70px]">
       <div className="lg:flex justify-between items-center">
-        <div>
-          <H2>{heading}</H2>
-          <BodyText1 className="mt-2 lg:mt-0">
-            <div dangerouslySetInnerHTML={{ __html: description }} />
-          </BodyText1>
+        <div className="md:max-w-[486px]">
+          {title && <H2>{title}</H2>}
+
+          {sectionTitle && (
+            <div className="mt-2">
+              <div
+                dangerouslySetInnerHTML={{ __html: sectionTitle }}
+                className="text-[#4C5861]"
+              />
+            </div>
+          )}
         </div>
-        <div className="hidden lg:block">
-          <Button title="View All" href="/solutions" />
-        </div>
+        {ctaButton1?.title && ctaButton1?.link?.link && (
+          <div className="hidden lg:block">
+            <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+          </div>
+        )}
       </div>
       <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto pt-8 lg:pt-[44px]">
-        {policies &&
-          policies?.map(() => (
-            ""
-            // <OrangeTabCard
-            //   key={policy?.id}
-            //   title={policy?.heading}
-            //   link={policy?.link}
-            // />
-          ))}
+        {code_and_policy_reports?.length &&
+          code_and_policy_reports?.[0]?.reportLayout?.[0]?.reports?.map(
+            (policy: ReportItemProps) => (
+              <OrangeTabCard
+                key={policy?.id}
+                title={policy.heading || ""}
+                link={policy?.link || ""}
+              />
+            )
+          )}
       </div>
 
-      <div className="flex justify-center mt-10 lg:hidden">
-        <Button title="View All" href="/solutions" />
-      </div>
+      {ctaButton1?.title && ctaButton1?.link?.link && (
+        <div className="flex justify-center mt-10 lg:hidden">
+          <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+        </div>
+      )}
     </div>
   );
 };

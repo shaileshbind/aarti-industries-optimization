@@ -5,7 +5,7 @@ export type LAABannerProps = {
     sectionTitle?: string;
     title?: string;
     description?: string;
-    ctaButtons: ButtonProps;
+    ctaButton?: ButtonProps;
     image: ImageProps;
     mobImage: ImageProps;
   };

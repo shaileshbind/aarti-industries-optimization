@@ -1,14 +1,28 @@
 "use client";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TabsYearsContainerProps } from "@/app/types/shareholder.type";
 import SimpleListing from "../templates/SimpleListing";
 import YearAndListing from "../templates/YearAndListing";
 import YearQuarterListing from "../templates/YearQuarterListing";
 import ContactDetails from "./ContactDetails";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeTab, setActiveTab] = useState<number>(0);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+
+  // Initialize from URL
+  useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    if (urlCategory) {
+      const index = data?.findIndex((item) => item.category === urlCategory);
+      if (index !== -1) setActiveTab(index);
+    }
+  }, [searchParams, data]);
 
   // Determine which template to render based on category
   const getTemplateComponent = () => {
@@ -75,7 +89,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
 
   return (
     <div>
-      {/* Top Category Tabs - Desktop */}
+      {/* Top Category Tabs */}
       <div className="bg-[#002F50] flex md:justify-center gap-6 !py-5 overflow-x-auto px-7">
         {data?.map((item, index) => (
           <div
@@ -86,6 +100,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             )}
             onClick={() => {
               setActiveTab(index);
+              router.push(`?category=${item.category}`, { scroll: false });
             }}
           >
             <p

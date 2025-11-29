@@ -90,7 +90,7 @@ const Header = () => {
           name: "Responsible Workforce",
           href: "/sustainability/responsible-workforce",
         },
-        { name: "Ethics", href: "/sustainability/ethics" },
+        { name: "Ethics", href: "/ethics" },
         {
           name: "Social Commitment",
           href: "/sustainability/social-commitment",
@@ -123,17 +123,17 @@ const Header = () => {
         },
         {
           name: "Shareholders Information",
-          href: "/investors/shareholders-information",
+          href: "/shareholder-information",
         },
         {
           name: "Corporate Governance",
           href: "/investors/corporate-governance",
         },
-        { name: "Code & Policy", href: "/investors/code-and-policies" },
+        { name: "Code & Policy", href: "/code-and-policies" },
         { name: "Downloads", href: "/investors/download" },
         {
           name: "Annual reports",
-          href: "/investors/financial-information/annual-reports",
+          href: "/annual-reports",
         },
       ],
     },
@@ -147,8 +147,8 @@ const Header = () => {
         { name: "Rewards & Benefits", href: "/careers/rewards-and-benefits" },
         { name: "Nurturing Talent", href: "/careers/Nurturing-talent" },
         { name: "Join Our Team", href: "/careers/why-aarti" },
-        { name: "Life @ Aarti", href: "/careers/life-aarti-Industries" },
-        { name: "Campus", href: "/careers/campus-connect" },
+        { name: "Life @ Aarti", href: "/life-at-aarti" },
+        { name: "Campus", href: "/campus-opportunities" },
         {
           name: "Job Fraud Alert",
           href: "/upload/pdf/Job-Fraud-Alert-AIL.pdf",

@@ -3,7 +3,7 @@ import WhoBanner from "../components/who-we-are/WhoBanner";
 import WhoInfo from "../components/who-we-are/WhoInfo";
 import WhoCards from "../components/who-we-are/WhoCards";
 import WhoPrinciples from "../components/who-we-are/WhoPrinciples";
-import MeetMinds from "../components/who-we-are/MeetMinds";
+import MeetMinds from "../components/sections/MeetMinds";
 import ComplexChem from "../components/who-we-are/ComplexChem";
 import ShapedBy from "../components/who-we-are/ShapedBy";
 import IndustryAccolades from "../components/who-we-are/IndustryAccolades";

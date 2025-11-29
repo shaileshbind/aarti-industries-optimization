@@ -6,19 +6,27 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import { YearQuarterListingProps } from "@/app/types/year-quarter-listing.type";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function YearQuarterListing({
   reportLayout,
   showFinancialYear = false,
 }: YearQuarterListingProps) {
-  const [activeSubCategory, setActiveSubCategory] = useState<string>(
-    reportLayout?.[0]?.subCategory || ""
-  );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get subCategory from URL or use first one as default
+  const urlSubCategory = searchParams.get("subCategory");
+  const defaultSubCategory =
+    urlSubCategory || reportLayout?.[0]?.subCategory || "";
+
+  const [activeSubCategory, setActiveSubCategory] =
+    useState<string>(defaultSubCategory);
   const [activeYear, setActiveYear] = useState<string | number>(
     reportLayout?.[0]?.yearAndQuarter?.[0]?.year || ""
   );
@@ -29,6 +37,33 @@ export default function YearQuarterListing({
   const yearsRowRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<Map<string | number, HTMLDivElement>>(new Map());
   const [underline, setUnderline] = useState({ left: 0, width: 0 });
+
+  // Update activeSubCategory when URL changes
+  useEffect(() => {
+    if (!reportLayout || reportLayout.length === 0) return;
+
+    const urlSubCat = searchParams.get("subCategory");
+    const targetSubCategory = urlSubCat || reportLayout[0]?.subCategory || "";
+
+    // Find the matching subcategory
+    const matchingSubCategory = reportLayout.find(
+      (item) => item.subCategory === targetSubCategory
+    );
+
+    if (matchingSubCategory) {
+      setActiveSubCategory(targetSubCategory);
+      const firstYear = matchingSubCategory.yearAndQuarter?.[0]?.year || "";
+      setActiveYear(firstYear);
+      setDropdownClicked(false);
+      setMobileVisibleCount(5);
+    } else if (reportLayout[0]) {
+      // Fallback to first subcategory if URL param doesn't match
+      setActiveSubCategory(reportLayout[0].subCategory);
+      setActiveYear(reportLayout[0].yearAndQuarter?.[0]?.year || "");
+      setDropdownClicked(false);
+      setMobileVisibleCount(5);
+    }
+  }, [searchParams, reportLayout]);
 
   const styles = {
     "&::before": { borderBottom: "none" },
@@ -90,7 +125,7 @@ export default function YearQuarterListing({
     setMobileVisibleCount(5);
   };
 
-  // Handler for subcategory selection
+  // Handler for subcategory selection - UPDATED
   const handleSubCategoryClick = (subCat: string) => {
     setActiveSubCategory(subCat);
     const newSubCategory = reportLayout?.find(
@@ -100,6 +135,11 @@ export default function YearQuarterListing({
     setActiveYear(firstYear?.year || "");
     setDropdownClicked(false);
     setMobileVisibleCount(5);
+
+    // Update URL with query parameter
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("subCategory", subCat);
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   // helper to measure active item relative to yearsRowRef

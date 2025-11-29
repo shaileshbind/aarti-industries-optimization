@@ -62,8 +62,8 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     };
 
   return (
-    <div className="pt-[100px] xl:pt-[150px] pb-[50px] xl:py-[100px] mx-[20px] lg:mx-[60px]">
-      <div className="w-full grid xl:grid-cols-[40%_1fr] gap-y-[10px] gap-x-[50px] ">
+    <div className="pt-[72px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px]">
+      <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[50px] ">
         {title && (
           <div>
             <H2>{title}</H2>
@@ -89,7 +89,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                   className={`mt-[30px] ${swapped ? "hidden" : "block"}`}
                   key={"tab_" + index}
                 >
-                  {item?.heading && <BodyText1>{item?.heading}</BodyText1>}
+                  {item?.heading && <BodyText1 className="!text-blue-100">{item?.heading}</BodyText1>}
 
                   <div className="mt-[14px] flex flex-wrap gap-[12px]">
                     {item?.cards?.length > 0 &&
@@ -97,7 +97,8 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                         <Chip
                           key={items.id}
                           title={items.title}
-                          imageSrc="/images/rd/chemical-1.svg"
+                          imageSrc={items?.image?.url}
+                          imageAlt={items?.image?.alternativeText}
                         />
                       ))}
                   </div>
@@ -191,7 +192,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                   <div className="px-[20px]">
                     {items?.content?.map((p) => (
                       <div key={p?.id} className="mb-[30px]">
-                        {p.heading && <BodyText1>{p.heading}</BodyText1>}
+                        {p.heading && <BodyText1 className="!text-blue-100">{p.heading}</BodyText1>}
 
                         {p?.cards?.length > 0 && (
                           <div className="mt-[20px] flex flex-wrap gap-[10px]">
@@ -199,7 +200,8 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                               <Chip
                                 key={l.id}
                                 title={l.title}
-                                imageSrc="/images/rd/chemical-1.svg"
+                                imageSrc={l.mobImage?.url}
+                                imageAlt={l.mobImage?.alternativeText}
                               />
                             ))}
                           </div>
