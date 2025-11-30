@@ -24,10 +24,12 @@ type TabsProps = {
   className?: string;
   containerClassName?: string;
   buttonClassName?: string;
+  leftAlign?: boolean;
   activeButtonClassName?: string;
   inactiveButtonClassName?: string;
   indicatorColor?: string;
   indicatorTransition?: string;
+  innerClassName?: string;
   textComponent?: React.ComponentType<{
     className?: string;
     children: React.ReactNode;
@@ -39,8 +41,10 @@ const Tabs: React.FC<TabsProps> = ({
   activeId = 0,
   onChange,
   className = "",
-  containerClassName = "bg-gray-100 md:max-w-fit w-fit mx-auto p-1 rounded-full",
+  containerClassName = "bg-gray-100 md:max-w-fit w-fit p-1 rounded-full",
+  innerClassName,
   buttonClassName = "p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10",
+  leftAlign = false,
   activeButtonClassName = "!text-white",
   inactiveButtonClassName = "bg-transparent !text-[#4C5861]",
   indicatorColor = "#F97316",
@@ -110,11 +114,13 @@ const Tabs: React.FC<TabsProps> = ({
   return (
     <div className="overflow-scroll lg:overflow-hidden mb-[42px] w-[calc(100%+30px)] mx-[-15px] px-[15px]">
       <div
-        className={`relative flex justify-center mb-2 ${containerClassName} ${className}`}
+        className={`relative flex justify-center mb-2 ${containerClassName} ${className} ${
+          !leftAlign && "mx-auto "
+        }`}
       >
         <div
           ref={containerRef}
-          className="relative flex md:space-x-3 z-10 px-1 w-max"
+          className={`relative flex md:space-x-3 z-10 px-1 w-max ${innerClassName}`}
         >
           {/* Animated Indicator */}
           <div
