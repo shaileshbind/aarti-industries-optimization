@@ -1,4 +1,4 @@
-import { ButtonProps, ImageProps } from "./global.type";
+import { ImageProps } from "./global.type";
 
 export type BlogBannerProps = {
   data: {
@@ -53,4 +53,22 @@ export type RelatedBogsProps = {
   date: string;
   excerpt: string;
   slug: string;
+};
+
+export type BlogDataProps = {
+  thumbnailImageDesktop: { url: string };
+  date: string;
+  excerpt: string;
+  slug: string;
+  id: string | number;
+};
+
+export type BlogAndCaseStudiesProps = {
+  data: {
+    toggleTabs: {
+      title: string;
+      id: string | number;
+    }[];
+  };
+  lastestBlogId: string;
 };

@@ -6,6 +6,8 @@ import MediaBanner from "../components/media-kit/MediaBanner";
 import ContactBanner from "../components/ContactBanner";
 import { getDemoData } from "@/_lib/getDemoData.fetch";
 
+export const dynamic = "force-dynamic";
+
 export default async function page() {
   const data = await getDemoData("/pages/by-slug/media-kit");
 

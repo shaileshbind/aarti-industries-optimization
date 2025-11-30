@@ -9,6 +9,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
+import { BlogAndCaseStudiesProps, BlogDataProps } from "@/app/types/blogs.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,10 +89,10 @@ const getTypeFromSlug = (slug: string): string => {
   return typeMap[slug] || slug;
 };
 
-export default function BlogAndCaseStudies({ data, lastestBlogId }: any) {
+export default function BlogAndCaseStudies({ data, lastestBlogId }: BlogAndCaseStudiesProps) {
   // Transform data into tabs format similar to MediaContainer
   const tabs =
-    data?.toggleTabs?.map((item: any) => ({
+    data?.toggleTabs?.map((item) => ({
       title: item?.title,
       slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
       id: item?.id,
@@ -100,7 +101,7 @@ export default function BlogAndCaseStudies({ data, lastestBlogId }: any) {
   const [active, setActive] = useState(tabs?.[0]?.slug || "");
   const [activeIndex, setactiveIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [blogData, setBlogData] = useState<any[]>([]);
+  const [blogData, setBlogData] = useState<BlogDataProps[]>([]);
   const [totalPages, setTotalPages] = useState(10);
   const [loading, setLoading] = useState(false);
 
@@ -226,10 +227,7 @@ export default function BlogAndCaseStudies({ data, lastestBlogId }: any) {
     };
   }, [activeIndex, blogData]);
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    page: number
-  ) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
     // Scroll to top of content
     if (cardsWrapRef.current) {

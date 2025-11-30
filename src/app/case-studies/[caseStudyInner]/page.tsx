@@ -1,6 +1,5 @@
 import { getBlogsCasestudies } from "@/_lib/getBlogsCaseStudies.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import { getPageData } from "@/_lib/pageData.fetch";
 import CopyLink from "@/app/components/blogs/CopyLink";
 import Share from "@/app/components/blogs/Share";
 import DateCard from "@/app/components/cards/DateCard";
@@ -15,6 +14,8 @@ import {
 import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
+
+export const dynamic = "force-dynamic";
 
 export default async function page({ params }: CaseStuydInnerProps) {
   const { caseStudyInner } = await params;

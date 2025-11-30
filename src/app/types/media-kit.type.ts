@@ -33,6 +33,12 @@ export type CorporateVideoProps = {
   };
 };
 
+export type VendorFullscreenDocument = Document & {
+  webkitFullscreenElement?: Element | null;
+  mozFullScreenElement?: Element | null;
+  msFullscreenElement?: Element | null;
+};
+
 export type PhotosProps = {
   data: {
     sectionImages: CardImageProps[];
@@ -64,9 +70,18 @@ export type DownloadCardProps = {
   filename?: string;
 };
 
+export type TabProps = {
+  title: string;
+  id: string;
+};
+
+export type MediaContainerItem = {
+  title: string;
+  id: string;
+  sectionVideos: VideoProps[];
+  sectionImages: CardImageProps[];
+};
+
 export type MediaContainerProps = {
-  data: {
-    sectionVideos: VideoProps[];
-    sectionImages: CardImageProps[];
-  }[];
+  data: MediaContainerItem[];
 };

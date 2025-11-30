@@ -8,14 +8,14 @@ import Photos from "./Photos";
 import Logos from "./Logos";
 import BrandGuidelines from "./BrandGuidelines";
 import Brochures from "./Brochures";
-import { MediaContainerProps } from "@/app/types/media-kit.type";
+import { MediaContainerProps, TabProps } from "@/app/types/media-kit.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function MediaContainer({ data }: MediaContainerProps) {
   // Transform data into tabs format
   const tabs =
-    data?.map((item: any) => ({
+    (data as TabProps[])?.map((item) => ({
       title: item.title,
       slug: item.title.toLowerCase().replace(/\s+/g, "-"),
       id: item.id,

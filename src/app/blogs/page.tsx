@@ -8,6 +8,8 @@ import BlogAndCaseStudies from "../components/blogs/BlogAndCaseStudies";
 import { getDemoData } from "@/_lib/getDemoData.fetch";
 import { getBlogsCasestudies } from "@/_lib/getBlogsCaseStudies.fetch";
 
+export const dynamic = "force-dynamic";
+
 export default async function page() {
   const data = await getDemoData("/pages/by-slug/blogs");
   const latestBlog = await getBlogsCasestudies(

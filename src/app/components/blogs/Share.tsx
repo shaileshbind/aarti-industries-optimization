@@ -1,6 +1,5 @@
 "use client";
 import { ShareSharp } from "@mui/icons-material";
-import Image from "next/image";
 
 const Share = () => {
   const handleShare = async () => {

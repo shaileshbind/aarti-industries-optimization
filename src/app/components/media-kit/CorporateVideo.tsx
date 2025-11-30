@@ -1,7 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { SubH2 } from "../Typography2";
 import Image from "next/image";
-import { CorporateVideoProps } from "@/app/types/media-kit.type";
+import {
+  CorporateVideoProps,
+  VendorFullscreenDocument,
+} from "@/app/types/media-kit.type";
 
 export default function CorporateVideo({ data }: CorporateVideoProps) {
   const { sectionVideos } = data;
@@ -13,12 +16,15 @@ export default function CorporateVideo({ data }: CorporateVideoProps) {
   // Check fullscreen state
   useEffect(() => {
     const handleFullscreenChange = () => {
+      const doc = document as VendorFullscreenDocument;
+
       const isCurrentlyFullscreen = !!(
-        document.fullscreenElement ||
-        (document as any).webkitFullscreenElement ||
-        (document as any).mozFullScreenElement ||
-        (document as any).msFullscreenElement
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.mozFullScreenElement ||
+        doc.msFullscreenElement
       );
+      
       setIsFullscreen(isCurrentlyFullscreen);
 
       // If exiting fullscreen and video is paused, hide controls to show play button
