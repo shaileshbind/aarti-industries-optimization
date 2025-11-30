@@ -22,7 +22,6 @@ export default async function page() {
 
   const { section_one, section_two, section_three, section_four } = data;
 
-  console.log("latestBlog", latestBlog);
   return (
     <div>
       {section_one && <BlogBanner data={section_one} />}

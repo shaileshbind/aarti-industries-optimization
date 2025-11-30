@@ -21,7 +21,7 @@ export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [card.length]);
+  }, [card?.length]);
 
   // Mobile scroll-based progress - SEQUENTIAL
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [mobileProgress, card.length]);
+  }, [mobileProgress, card?.length]);
 
   return (
     <div className="fluid-container">
