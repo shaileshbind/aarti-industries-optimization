@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import Tabs from "../Tabs";
+import SimpleTabs from "../SimpleTabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CorporateVideo from "./CorporateVideo";
@@ -8,18 +8,27 @@ import Photos from "./Photos";
 import Logos from "./Logos";
 import BrandGuidelines from "./BrandGuidelines";
 import Brochures from "./Brochures";
+import { MediaContainerProps } from "@/app/types/media-kit.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function MediaContainer({ data }: any) {
-  // Extract card array from data
-  const tabs = data?.card || [];
+export default function MediaContainer({ data }: MediaContainerProps) {
+  // Transform data into tabs format
+  const tabs =
+    data?.map((item: any) => ({
+      title: item.title,
+      slug: item.title.toLowerCase().replace(/\s+/g, "-"),
+      id: item.id,
+    })) || [];
 
-  const [active, setActive] = useState(tabs?.[0]?.post_category?.slug || "");
+  const [active, setActive] = useState(tabs?.[0]?.slug || "");
   const [activeIndex, setactiveIndex] = useState(0);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Get active data based on activeIndex
+  const activeData = data?.[activeIndex];
 
   // Initial animation for the container
   useEffect(() => {
@@ -99,11 +108,31 @@ export default function MediaContainer({ data }: any) {
     };
   }, [activeIndex]);
 
+  // Render component based on activeIndex
+  const renderContent = () => {
+    if (!activeData) return <div>No content available</div>;
+
+    switch (activeIndex) {
+      case 0:
+        return <CorporateVideo data={activeData} />;
+      case 1:
+        return <Photos data={activeData} />;
+      case 2:
+        return <Logos data={activeData} />;
+      case 3:
+        return <BrandGuidelines data={activeData} />;
+      case 4:
+        return <Brochures data={activeData} />;
+      default:
+        return <div>No content available</div>;
+    }
+  };
+
   return (
-    <div className="pt-[60px] pb-[72px] lg:pb-[100px]" ref={containerRef}>
+    <div className="pt-[60px] pb-[50px] lg:pb-[100px]" ref={containerRef}>
       <div className="fluid-container">
-        <Tabs
-          tabs={tabs as unknown as Parameters<typeof Tabs>[0]["tabs"]}
+        <SimpleTabs
+          tabs={tabs}
           activeId={active}
           onChange={(slug, index) => {
             handleTabChange(slug, index);
@@ -115,17 +144,7 @@ export default function MediaContainer({ data }: any) {
 
         {/* Cards container */}
         <div className="mt-[30px] lg:mt-[12px]" ref={cardsWrapRef}>
-          {active === "blogs" ? (
-            <CorporateVideo />
-          ) : active === "news-media" ? (
-            <Photos />
-          ) : active === "reports-publications" ? (
-            <Logos />
-          ) : active === "stories" ? (
-            <BrandGuidelines />
-          ) : (
-            <Brochures />
-          )}
+          {renderContent()}
         </div>
       </div>
     </div>

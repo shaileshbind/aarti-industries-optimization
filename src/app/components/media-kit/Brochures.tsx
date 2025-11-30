@@ -1,17 +1,31 @@
 import React from "react";
 import DownloadCard from "./DownloadCard";
+import { BrochuresProps } from "@/app/types/media-kit.type";
 
-export default function Brochures() {
+export default function Brochures({ data }: BrochuresProps) {
+  const { sectionImages } = data;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {[1, 2, 16, 16]?.map((_, index) => (
-        <div key={"brand_" + index}>
-          <DownloadCard src={"/images/our-story/old1.png"} />
-          <p className="text-base md:text-lg text-[#002F50] pt-2 md:pt-[18px]">
-            Brand Guidelines
-          </p>
+    <div>
+      {sectionImages?.[0]?.imageCards?.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {sectionImages?.[0]?.imageCards?.map((item, index) => (
+            <div key={"brand_" + index}>
+              <DownloadCard
+                src={item?.image?.url}
+                downloadUrl={item?.file?.url || item?.image?.url}
+                filename={item?.title || "brochure"}
+              />
+
+              {item?.title && (
+                <p className="text-base md:text-lg text-[#002F50] pt-2 md:pt-[18px]">
+                  {item?.title}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
