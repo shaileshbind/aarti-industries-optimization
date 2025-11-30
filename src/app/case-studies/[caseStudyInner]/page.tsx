@@ -8,7 +8,7 @@ import ContactBanner from "@/app/components/ContactBanner";
 import GloballyCertified from "@/app/components/GloballyCertified";
 import { BodyText2, H2, H3, SubH1 } from "@/app/components/Typography2";
 import {
-  BlogInnerProps,
+  CaseStuydInnerProps,
   PointerProps,
   RelatedBogsProps,
 } from "@/app/types/blogs.type";
@@ -16,10 +16,10 @@ import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 
-export default async function page({ params }: BlogInnerProps) {
-  const { blogInner } = await params;
+export default async function page({ params }: CaseStuydInnerProps) {
+  const { caseStudyInner } = await params;
   const data = await getBlogsCasestudies(
-    `/blog-case-study/by-slug/${blogInner}`
+    `/blog-case-study/by-slug/${caseStudyInner}`
   );
 
   const {

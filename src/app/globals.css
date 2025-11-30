@@ -622,6 +622,7 @@ body {
 .blogInner img {
   border-radius: 20px;
   overflow: hidden;
+  padding-bottom: 8px;
   width: 100%;
   height: 406px;
   object-fit: cover;
@@ -629,6 +630,7 @@ body {
 
 .blogInner iframe {
   border-radius: 20px;
+  padding-bottom: 8px;
   overflow: hidden;
   width: 100%;
   height: 450px;

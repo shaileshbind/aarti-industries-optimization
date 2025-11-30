@@ -70,7 +70,7 @@ export default function DownloadCard({
             width={312}
             height={398}
             alt="logo"
-            className="w-full h-full"
+            className="w-full h-full object-cover"
           />
 
           <div className="absolute right-6 bottom-6 w-12 h-12 rounded-full bg-[#FFF] grid place-items-center cursor-pointer hover:scale-110 transition-transform">

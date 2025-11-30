@@ -1,11 +1,16 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Tabs from "../Tabs";
+import SimpleTabs from "../SimpleTabs";
 import DateCard from "../cards/DateCard";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { formatDate } from "../../../../utils/formatDate";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Custom styled Pagination
 const StyledPagination = styled(Pagination)(({ theme }) => ({
@@ -53,7 +58,7 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
   },
 }));
 
-// Custom arrow components (you can replace these with your own SVGs)
+// Custom arrow components
 const PreviousIcon = () => (
   <Image
     src="/images/accordian-down.svg"
@@ -74,15 +79,74 @@ const NextIcon = () => (
   />
 );
 
-export default function BlogAndCaseStudies({ data }: any) {
-  const tabs = data?.card || [];
+// Type mapping for API filter
+const getTypeFromSlug = (slug: string): string => {
+  const typeMap: { [key: string]: string } = {
+    blogs: "blog",
+    "case-study": "case-study",
+  };
+  return typeMap[slug] || slug;
+};
 
-  const [active, setActive] = useState(tabs?.[0]?.post_category?.slug || "");
+export default function BlogAndCaseStudies({ data, lastestBlogId }: any) {
+  // Transform data into tabs format similar to MediaContainer
+  const tabs =
+    data?.toggleTabs?.map((item: any) => ({
+      title: item?.title,
+      slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
+      id: item?.id,
+    })) || [];
+
+  const [active, setActive] = useState(tabs?.[0]?.slug || "");
   const [activeIndex, setactiveIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [blogData, setBlogData] = useState<any[]>([]);
+  const [totalPages, setTotalPages] = useState(10);
+  const [loading, setLoading] = useState(false);
+
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Fetch blog data
+  const fetchBlogData = async (type: string, page: number) => {
+    setLoading(true);
+    try {
+      const typeFilter = getTypeFromSlug(type);
+      const apiUrl = `${
+        process.env.NEXT_PUBLIC_OTHER_URL
+      }/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=${typeFilter}&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&pagination[pageSize]=12&pagination[page]=${page}&fields[4]=slug&status=published${
+        typeFilter === "blog"
+          ? `&filters[documentId][$ne]=${lastestBlogId || ""}`
+          : ""
+      }`;
+
+      // Replace with your actual API call
+      const response = await fetch(apiUrl);
+      const result = await response.json();
+      console.log("result", result);
+
+      setBlogData(result.data || []);
+      setTotalPages(result.meta?.pagination?.pageCount || 1);
+    } catch (error) {
+      console.error("Error fetching blog data:", error);
+      setBlogData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch data when active tab or page changes
+  useEffect(() => {
+    if (active) {
+      fetchBlogData(active, currentPage);
+    }
+  }, [active, currentPage]);
+
+  // Reset to page 1 when tab changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeIndex]);
 
   // Initial animation for the container
   useEffect(() => {
@@ -160,20 +224,26 @@ export default function BlogAndCaseStudies({ data }: any) {
     return () => {
       tl.kill();
     };
-  }, [activeIndex]);
+  }, [activeIndex, blogData]);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number
   ) => {
     setCurrentPage(page);
-    // Add your pagination logic here
+    // Scroll to top of content
+    if (cardsWrapRef.current) {
+      cardsWrapRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   return (
-    <div className="fluid-container">
-      <Tabs
-        tabs={tabs as unknown as Parameters<typeof Tabs>[0]["tabs"]}
+    <div className="fluid-container" ref={containerRef}>
+      <SimpleTabs
+        tabs={tabs}
         activeId={active}
         onChange={(slug, index) => {
           handleTabChange(slug, index);
@@ -187,39 +257,62 @@ export default function BlogAndCaseStudies({ data }: any) {
         className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-8 md:gap-y-14"
         ref={cardsWrapRef}
       >
-        {[...Array(12)]?.map((_, index) => (
-          <div key={"item_" + index} className="relative">
-            <DateCard
-              imageSrc={"/images/home/blog1.png"}
-              date={"May 21, 2025"}
-              desc={
-                "Lorem ipsum dolor sit amet consectetur. Tristique nulla sed hac donec nulla habitant facilisi."
-              }
-              link={"/blogs/16"}
-              animate
-              useTargetBlank={false}
-            />
+        {loading ? (
+          // Loading state
+          [...Array(12)].map((_, index) => (
+            <div key={`loading_${index}`} className="relative">
+              <div className="animate-pulse">
+                <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
+                <div className="bg-gray-200 h-4 rounded w-3/4 mb-2"></div>
+                <div className="bg-gray-200 h-4 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))
+        ) : blogData.length > 0 ? (
+          // Render actual blog data
+          blogData?.map((item, index) => (
+            <div key={item?.id || `item_${index}`} className="relative">
+              <DateCard
+                imageSrc={item?.thumbnailImageDesktop?.url}
+                date={formatDate(item?.date) || ""}
+                desc={item?.excerpt}
+                link={`/${active === "blogs" ? "blogs" : "case-studies"}/${
+                  item?.slug
+                }`}
+                animate
+                useTargetBlank={false}
+              />
+            </div>
+          ))
+        ) : (
+          // No data state
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-500">
+              No {active === "blogs" ? "blogs" : "case studies"} found.
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
-      <div className="flex justify-center mt-[54px]">
-        <StyledPagination
-          count={10}
-          page={currentPage}
-          onChange={handlePageChange}
-          shape="rounded"
-          renderItem={(item) => (
-            <PaginationItem
-              slots={{
-                previous: PreviousIcon,
-                next: NextIcon,
-              }}
-              {...item}
-            />
-          )}
-        />
-      </div>
+      {!loading && blogData.length > 0 && totalPages > 1 && (
+        <div className="flex justify-center mt-[54px]">
+          <StyledPagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            shape="rounded"
+            renderItem={(item) => (
+              <PaginationItem
+                slots={{
+                  previous: PreviousIcon,
+                  next: NextIcon,
+                }}
+                {...item}
+              />
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 }

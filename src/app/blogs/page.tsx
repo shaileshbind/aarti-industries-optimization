@@ -1,39 +1,50 @@
 import { getData } from "@/_lib/getData.fetch";
-import { getPageData } from "@/_lib/pageData.fetch";
 import React from "react";
 import BlogBanner from "../components/blogs/BlogBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";
 import LatestBlog from "../components/blogs/LatestBlog";
 import BlogAndCaseStudies from "../components/blogs/BlogAndCaseStudies";
+import { getDemoData } from "@/_lib/getDemoData.fetch";
+import { getBlogsCasestudies } from "@/_lib/getBlogsCaseStudies.fetch";
 
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/home-page");
-  const data2 = await getPageData(
-    "/pages/by-slug/financial-information-report"
+  const data = await getDemoData("/pages/by-slug/blogs");
+  const latestBlog = await getBlogsCasestudies(
+    "/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=blog&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&fields[4]=slug&pagination[pageSize]=1&pagination[page]=1&status=published"
   );
 
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
 
+  const { section_one, section_two, section_three, section_four } = data;
+
+  console.log("latestBlog", latestBlog);
   return (
     <div>
-      <BlogBanner data={data2} />
+      {section_one && <BlogBanner data={section_one} />}
 
-      <div className="py-[72px] lg:py-[100px]">
-        <LatestBlog />
-      </div>
+      {latestBlog && (
+        <div className="py-[72px] lg:py-[100px]">
+          <LatestBlog data={latestBlog} section_two={section_two} />
+        </div>
+      )}
 
-      <div className="pb-[72px] lg:pb-[100px]">
-        <BlogAndCaseStudies data={data?.sectionNine} />
-      </div>
+      {section_three && (
+        <div className="pb-[72px] lg:pb-[100px]">
+          <BlogAndCaseStudies
+            data={section_three}
+            lastestBlogId={latestBlog?.data?.[0]?.documentId}
+          />
+        </div>
+      )}
 
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
 
-      {data?.sectionTen && <ContactBanner data={data?.sectionTen} />}
+      {section_four && <ContactBanner data={section_four} />}
     </div>
   );
 }
