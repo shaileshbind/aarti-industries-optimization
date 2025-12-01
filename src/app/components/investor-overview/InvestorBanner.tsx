@@ -1,19 +1,21 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
+import { InvestorBannerProps } from "@/app/types/investor-overview.type";
 
-const InvestorBanner = () => {
+const InvestorBanner = ({ data }: InvestorBannerProps) => {
+  const { title, sectionTitle, ctaButton, description, image, mobImage } = data;
   return (
     <div>
       <HeroBanner
-        tag="Investor Overview"
-        title="Annual Report 2024 - 2025"
-        desc=""
-        btnTitle="Download Annual Report"
-        btnLink="#"
-        image="/images/home/hero-banner1.png"
-        mobImage="/images/home/hero-banner1.png"
-        alt="img"
-        mobAlt="img"
+        tag={sectionTitle}
+        title={title}
+        desc={description}
+        btnLink={ctaButton?.link}
+        btnTitle={ctaButton?.title}
+        image={image?.url}
+        mobImage={mobImage?.url}
+        alt={image?.alternativeText}
+        mobAlt={mobImage?.alternativeText}
         fullBg
         showStar2={false}
         showStar3={false}

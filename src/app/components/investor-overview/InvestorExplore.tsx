@@ -1,22 +1,20 @@
 import React from "react";
 import ExploreCard from "../cards/ExploreCard";
+import { InvestorExpProps } from "@/app/types/investor-overview.type";
 
-const InvestorExplore = () => {
+const InvestorExplore = ({ data }: InvestorExpProps) => {
+  const { exploreMore } = data;
   return (
     <div className="py-[50px] lg:py-[100px] container">
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
-          title="Meet the Leaders Shaping Our Vision"
-          items={[
-            { id: 0, title: "View our Leadership", link: "/market-overview" },
-          ]}
+          title={exploreMore[0]?.title}
+          items={exploreMore[0]?.ctaButton}
         />
         <ExploreCard
           lightVariant
-          title="Get to Know Us Better"
-          items={[
-            { id: 0, title: "View our Leadership", link: "/market-overview" },
-          ]}
+          title={exploreMore[0]?.title}
+          items={exploreMore[0]?.ctaButton}
         />
       </div>
     </div>
