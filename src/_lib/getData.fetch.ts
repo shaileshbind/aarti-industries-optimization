@@ -21,7 +21,6 @@ export const getData = async (slug: string) => {
     const data = await response.json();
 
     if (data?.data) {
-      // console.log("%cGlobally Certified Data", "color : yellow", data?.data);
       return data?.data;
     }
   } catch (error) {
