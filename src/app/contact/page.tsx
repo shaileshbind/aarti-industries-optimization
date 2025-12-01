@@ -6,6 +6,7 @@ import WhereWeOperate from "../components/Contact/WhereWeOperate";
 import { getPageData } from "@/_lib/pageData.fetch";
 import ContactExp from "../components/Contact/ContactExp";
 import ContactMap from "../components/Contact/ContactMap";
+import SEO from "../components/SEO";
 
 export const dynamic = 'force-dynamic';
 
@@ -15,9 +16,27 @@ const Page = async () => {
     getData("/where-we-operates?populate=*"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { leftSection, section_two, mapSection } = data;
+  const { leftSection, section_two, mapSection } = data?.data;
+  const seo = data?.seo
   return (
     <div>
+       <SEO
+        title={seo?.title ?? "Contact Us"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/contact"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      />
       {leftSection && <ContactBanner data={leftSection} />}
       {whereWeOperateData && <WhereWeOperate data={whereWeOperateData} />}
       {mapSection && (

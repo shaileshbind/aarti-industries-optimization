@@ -9,6 +9,7 @@ import InvestorContacts from "../components/investor-overview/InvestorContacts";
 import InvestorExplore from "../components/investor-overview/InvestorExplore";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
+//import SEO from "../components/SEO";
 
 const leaderData = {
   id: 1,
@@ -74,6 +75,23 @@ const page = async () => {
   );
   return (
     <div>
+       {/* <SEO
+        title={seo?.title ?? "Industries We Serve"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/industries-we-serve"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      /> */}
       <InvestorBanner />
       <InvestorBlueSection />
       {leaderData && <InvestorLeaders data={leaderData} />}

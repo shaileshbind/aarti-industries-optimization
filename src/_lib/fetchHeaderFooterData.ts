@@ -20,9 +20,8 @@ export async function fetchHeaderFooterData(): Promise<HeaderFooterData> {
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
-
     const responseData = await res.json();
-    console.log("🔍 RESPONSE STATUS + data:", res.status, responseData);
+
     return responseData.data;
   } catch (error) {
     console.error("Failed to fetch header and footer data:", error);

@@ -23,8 +23,6 @@ export async function GET(req: Request) {
     const apiUrl = new URL(`${baseUrl}/product/search`);
     apiUrl.searchParams.append("q", query);
 
-    //console.log("Search API URL:", apiUrl.toString());
-
     const res = await fetch(apiUrl.toString(), {
       method: "GET",
       headers: {

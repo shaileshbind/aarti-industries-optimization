@@ -6,6 +6,7 @@ import SusCore from "../components/sustainability-overview/SusCore";
 import AILRoadmap from "../components/sustainability-overview/AILRoadmap";
 import RespGrowth from "../components/sustainability-overview/RespGrowth";
 import { getPageData } from "@/_lib/pageData.fetch";
+import SEO from "../components/SEO";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -13,20 +14,40 @@ const page = async () => {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-  const { section_one, section_two, section_three, section_four } = data;
+  const { section_one, section_two, section_three, section_four } = data?.data;
+  const seo = data?.seo;
 
   return (
-    <div className="overflow-hidden w-full">
-      <SusBanner data={section_one} />
-      <SusCore data={section_two} />
-      <AILRoadmap data={section_three} />
-      <div className="pt-[160px] pb-[80px] mb-[50px] md:mb-[unset]">
-        <RespGrowth data={section_four} />
+    <>
+      <SEO
+        title={seo?.title ?? "Sustainability Overview"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/sustainability-overview"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      />
+      <div className="overflow-hidden w-full">
+        <SusBanner data={section_one} />
+        <SusCore data={section_two} />
+        <AILRoadmap data={section_three} />
+        <div className="pt-[160px] pb-[80px] mb-[50px] md:mb-[unset]">
+          <RespGrowth data={section_four} />
+        </div>
+        {globallyCertifiedData && (
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        )}
       </div>
-      {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
-      )}
-    </div>
+    </>
   );
 };
 
