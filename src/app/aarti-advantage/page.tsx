@@ -5,7 +5,7 @@ import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
 import AilEdge from "../components/aarti-advantage/AilEdge";
-import WorksWithPartners from "../components/partnership/WorksWithPartners";
+import WorksWithPartners from "../components/sections/WorksWithPartners";
 import AdvExplore from "../components/aarti-advantage/AdvExplore";
 import SEO from "../components/SEO";
 import { getPageData } from "@/_lib/pageData.fetch";
