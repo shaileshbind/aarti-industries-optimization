@@ -6,6 +6,7 @@ import WhoExp from "../components/who-we-are/WhoExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import GlobalInnovation from "../components/sections/GlobalInnovation";
+import SEO from "../components/SEO";
 
 export const dynamic = "force-dynamic";
 
@@ -19,20 +20,34 @@ const page = async () => {
     section_two,
     section_three,
     section_four,
-  } = data;
+  } = data?.data;
+  const seo = data?.seo;
 
   return (
     <div>
-       {section_one && <WhoBanner data={section_one} />} 
-
+      <SEO
+        title={seo?.title ?? "Ethics"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/ethics"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      />
+      {section_one && <WhoBanner data={section_one} />} 
       {section_two && <EthicsAndCode data={section_two} />}
-
       {section_three && <GlobalInnovation data={section_three} />}
-      
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-
       {section_four && <WhoExp data={section_four} />} 
     </div>
   );

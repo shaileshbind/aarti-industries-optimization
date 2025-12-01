@@ -37,8 +37,6 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
       type: item.officeLabel || "",
     }));
 
-  console.log(apiData);
-
   const internationalData: AddressCardItem[] = apiData
     .filter(
       (item: WhereWeOperateDataItem) => item.regionName === "International"

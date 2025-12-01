@@ -48,7 +48,6 @@ export default async function page({ params }: PageProps) {
   return (
     <div>
       {getTemplateComponent()}
-
       {globallyCertifiedData && (
         <div className="mt-[30px] md:mt-[70px]">
           <GloballyCertified itemsData={globallyCertifiedData} />
