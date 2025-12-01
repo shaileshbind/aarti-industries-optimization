@@ -26,8 +26,6 @@ export async function GET(req: Request) {
     apiUrl.searchParams.append("category", category);
     if (subcategory) apiUrl.searchParams.append("subcategory", subcategory);
 
-    // console.log(apiUrl,".......................................................................")
-
     // Forward the request
     const res = await fetch(apiUrl.toString(), {
       method: "GET",
