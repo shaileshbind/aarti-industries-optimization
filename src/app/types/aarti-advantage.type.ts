@@ -11,7 +11,7 @@ export type AartiAdvantageBannerProps = {
 
 export type AilEdgeProps = {
   data: {
-    title: string;
+    heading: string;
     cards: {
       title: string;
       image: ImageProps;

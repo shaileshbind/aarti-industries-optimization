@@ -7,7 +7,6 @@ import GloballyCertified from "../components/GloballyCertified";
 import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
 import AilEdge from "../components/aarti-advantage/AilEdge";
 import WorksWithPartners from "../components/partnership/WorksWithPartners";
-import PartneshipExplore from "../components/partnership/PartnershipExplore";
 import AdvExplore from "../components/aarti-advantage/AdvExplore";
 
 export const dynamic = "force-dynamic";
@@ -37,17 +36,23 @@ export default async function page() {
 
       <RDAnalyticalExc data={section_three} sliderData={section_four} />
 
-      <div className="py-[72px] md:py-[140px]">
-        <AilEdge data={section_five} />
-      </div>
+      {section_five && (
+        <div className="py-[72px] lg:py-[140px]">
+          <AilEdge data={section_five} />
+        </div>
+      )}
 
-      {/* {section_six && <WorksWithPartners data={section_six} />}
+      {section_six && (
+        <div className="pb-[72px] lg:pb-[140px]">
+          <WorksWithPartners data={section_six} className="grid-cols-5" />
+        </div>
+      )}
 
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
 
-      {section_seven && <AdvExplore data={section_seven} />} */}
+      {section_seven && <AdvExplore data={section_seven} />}
     </div>
   );
 }

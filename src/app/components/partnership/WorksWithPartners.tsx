@@ -3,8 +3,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";
+import clsx from "clsx";
 
-export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
+export default function WorksWithPartners({
+  data,
+  className,
+}: WorksWithPartnersProps) {
   const { sectionTitle, card } = data;
 
   const [activeCard, setActiveCard] = useState<number>(0);
@@ -84,7 +88,9 @@ export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
 
       {/* Desktop */}
       {card?.length > 0 && (
-        <div className="mt-[50px] hidden grid-cols-4 lg:grid">
+        <div
+          className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}
+        >
           {card?.map((item, index) => (
             <div key={"card_" + index} className="relative pr-[50px]">
               {index !== card?.length - 1 && (

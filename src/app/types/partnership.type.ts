@@ -57,6 +57,7 @@ export type WorksWithPartnersProps = {
       description: string;
     }[];
   };
+  className?: string;
 };
 
 export type PartneshipExploreProps = {

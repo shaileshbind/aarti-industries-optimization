@@ -4,43 +4,13 @@ import Image from "next/image";
 import { AilEdgeProps } from "@/app/types/aarti-advantage.type";
 
 export default function AilEdge({ data }: AilEdgeProps) {
-  const dataa = {
-    title: " AIL's Competitive Edge",
-    cards: [
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "100+ Speciality Products",
-      },
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "Export Reach to 60+ Countries",
-      },
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "Proximity to Ports",
-      },
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "Efficient Supply Chain Planning",
-      },
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "Application Diversity",
-      },
-      {
-        image: { url: "/images/orange-play.svg", alternativeText: "" },
-        title: "New Age Chemistries",
-      },
-    ],
-  };
-
-  const { title, cards } = dataa;
+  const { heading, cards } = data;
 
   return (
     <div className="relative fluid-container xl:flex items-start">
-      {title && (
+      {heading && (
         <H2 className="xl:absolute xl:top-0 xl:max-w-[412px] pb-6 xl:pb-0">
-          {title}
+          {heading}
         </H2>
       )}
       <div className="xl:w-[412px] hidden xl:block" />
