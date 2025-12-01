@@ -7,40 +7,58 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import { InvestorHeadlines } from "@/app/types/investor-overview.type";
 
-const InHeadlines = () => {
+const InHeadlines = ({ data }: InvestorHeadlines) => {
+  const { sectionTitle, pressRelease, mediaCoverage } = data;
   return (
     <div className="my-[72px] lg:my-[120px]">
-      <H2 className="fluid-container">In the Headlines</H2>
+      {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
       <div className="mt-[30px] grid lg:grid-cols-[300px_1fr] gap-y-[50px] gap-x-[60px] mx-[unset] lg:mx-[60px]">
         <div className="mx-[20px] lg:mx-[unset]">
-          <SubH2 className="mb-[12px] lg:mb-[30px]">Press Release</SubH2>
-          {[0, 1, 2].map((index) => {
-            return (
+          {pressRelease?.title && (
+            <SubH2 className="mb-[12px] lg:mb-[30px]">
+              {pressRelease?.title}
+            </SubH2>
+          )}
+          {pressRelease?.press_releases?.map((release) =>
+            release?.report?.map((item) => (
               <div
-                key={index}
+                key={item?.id}
                 className="pb-[14px] border-b border-grey-200 mb-[14px]"
               >
-                <BodyText2>
-                  Lorem ipsum dolor sit amet consectetur. Ac vulputate metu
-                </BodyText2>
+                <BodyText2>{item?.heading}</BodyText2>
                 <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
                   November 11, 2025
                 </BodyText2>
               </div>
-            );
-          })}
-          <Button
-            secondary
-            href="#"
-            title="Read More Coverages"
-            className="mt-[10px] lg:mt-[30px]"
-          />
+            ))
+          )}
+          {pressRelease?.ctaButton?.externalLink &&
+            pressRelease?.ctaButton?.title && (
+              <Button
+                secondary
+                href={pressRelease?.ctaButton?.externalLink}
+                title={pressRelease?.ctaButton?.title}
+                className="mt-[10px] lg:mt-[30px]"
+              />
+            )}
         </div>
         <div className=" overflow-hidden">
           <div className="flex justify-between mx-[20px] lg:mx-[unset]">
-            <H2 className="!text-[20px] lg:!text-[24px] ">Media Coverages</H2>
-            <Button href="#" title="View All" secondary />
+            {mediaCoverage?.title && (
+              <H2 className="!text-[20px] lg:!text-[24px] ">
+                {mediaCoverage?.title}
+              </H2>
+            )}
+            {mediaCoverage?.ctaButton?.[0]?.title &&
+              mediaCoverage?.ctaButton?.[0]?.externalLink && (
+                <Button
+                  href={mediaCoverage?.ctaButton?.[0]?.externalLink}
+                  title={mediaCoverage?.ctaButton?.[0]?.title}
+                  secondary
+                />
+              )}
           </div>
           <div className="mt-[28px]">
             <Swiper
