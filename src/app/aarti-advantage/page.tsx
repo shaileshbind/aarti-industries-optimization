@@ -1,4 +1,3 @@
-import { getDemoData } from "@/_lib/getDemoData.fetch";
 import React from "react";
 import AartiAdvantageBanner from "../components/aarti-advantage/AartiAdvantageBanner";
 import DetailsContainer from "../components/sections/DetailsContainer";
@@ -8,11 +7,13 @@ import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
 import AilEdge from "../components/aarti-advantage/AilEdge";
 import WorksWithPartners from "../components/partnership/WorksWithPartners";
 import AdvExplore from "../components/aarti-advantage/AdvExplore";
+import SEO from "../components/SEO";
+import { getPageData } from "@/_lib/pageData.fetch";
 
 export const dynamic = "force-dynamic";
 
 export default async function page() {
-  const data = await getDemoData("/pages/by-slug/aarti-advantage");
+  const data = await getPageData("/pages/by-slug/aarti-advantage");
 
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
@@ -26,10 +27,30 @@ export default async function page() {
     section_five,
     section_six,
     section_seven,
-  } = data;
+  } = data?.data;
+
+  const seo = data?.seo;
 
   return (
     <div>
+      <SEO
+        title={seo?.title ?? "Aarti Industries"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      />
+
       {section_one && <AartiAdvantageBanner data={section_one} />}
 
       {section_two && <DetailsContainer data={section_two} />}

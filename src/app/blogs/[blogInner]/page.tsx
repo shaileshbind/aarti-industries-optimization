@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
+import SEO from "@/app/components/SEO";
 
 export const dynamic = "force-dynamic";
 
@@ -37,104 +38,131 @@ export default async function page({ params }: BlogInnerProps) {
     relatedBlogs,
   } = data?.data?.[0];
 
-  console.log("data", data);
+  const seo = data?.data?.[0]?.seo;
 
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
 
   return (
-    <div className="pt-[72px] lg:pt-[140px] fluid-container">
-      <div className="md:flex items-start gap-[60px] relative">
-        <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[60%]">
-          {date && <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>}
+    <>
+      <SEO
+        title={seo?.title ?? "Aarti Industries"}
+        metaTitle={seo?.metaTitle}
+        metaDescription={seo?.metaDescription}
+        keywords={seo?.keywords}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+        robots={seo?.robots ?? "index, follow"}
+        ogURL={seo?.ogURL}
+        ogImg={seo?.ogImg?.url}
+        ogTitle={seo?.ogTitle}
+        ogDesc={seo?.ogDesc}
+        twtUrl={seo?.twtUrl}
+        twtImg={seo?.twtImg?.url}
+        twtTitle={seo?.twtTitle}
+        twtDesc={seo?.twtDesc}
+        schemaData={seo?.schemaData}
+      />
+      <div className="pt-[72px] lg:pt-[140px] fluid-container">
+        <div className="md:flex items-start gap-[60px] relative">
+          <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[60%]">
+            {date && (
+              <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
+            )}
 
-          {title && <H3>{title}</H3>}
+            {title && <H3>{title}</H3>}
 
-          {bannerImageDesktop?.url && (
-            <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
-              <Image
-                src={bannerImageDesktop?.url}
-                width={872}
-                height={406}
-                alt={bannerImageDesktop?.all || "banner"}
-                className="w-full h-full"
-              />
+            {bannerImageDesktop?.url && (
+              <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
+                <Image
+                  src={bannerImageDesktop?.url}
+                  width={872}
+                  height={406}
+                  alt={bannerImageDesktop?.all || "banner"}
+                  className="w-full h-full"
+                />
+              </div>
+            )}
+
+            {bannerDescription && <BodyText2>{bannerDescription}</BodyText2>}
+
+            {pointers?.length > 0 && (
+              <div className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 md:mb-16">
+                {pointers?.map((item: PointerProps, index: number) => (
+                  <div key={"num" + index}>
+                    {item?.title && (
+                      <H2 className="text-[#DC4C03] pb-1">{item?.title}</H2>
+                    )}
+
+                    <BodyText2>{item?.description}</BodyText2>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Rich Text */}
+            {contentSections?.[0]?.description && (
+              <div className="blogInner">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: contentSections?.[0]?.description,
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6 md:mt-24 md:sticky md:top-24">
+            <p className="text-[#002F50] text-base pb-4">
+              {shareViaSocials?.title}
+            </p>
+            <div className="flex gap-4 items-start">
+              <Share />
+              <CopyLink />
             </div>
-          )}
+          </div>
+        </div>
 
-          {bannerDescription && <BodyText2>{bannerDescription}</BodyText2>}
+        {/* Related Blogs */}
+        <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
+          {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
 
-          {pointers?.length > 0 && (
-            <div className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 md:mb-16">
-              {pointers?.map((item: PointerProps, index: number) => (
-                <div key={"num" + index}>
-                  {item?.title && (
-                    <H2 className="text-[#DC4C03] pb-1">{item?.title}</H2>
-                  )}
-
-                  <BodyText2>{item?.description}</BodyText2>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Rich Text */}
-          {contentSections?.[0]?.description && (
-            <div className="blogInner">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: contentSections?.[0]?.description,
-                }}
-              />
+          {relatedBlogs?.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
+              {relatedBlogs
+                ?.slice(0, 4)
+                ?.map((item: RelatedBogsProps, index: number) => (
+                  <div key={"item_" + index} className="relative">
+                    <DateCard
+                      imageSrc={item?.thumbnailImageDesktop?.url}
+                      date={formatDate(item?.date)}
+                      desc={item?.excerpt}
+                      link={
+                        type === "blog"
+                          ? `/blogs/${item?.slug}`
+                          : `/case-studies/${item?.slug}`
+                      }
+                      animate
+                      useTargetBlank={false}
+                    />
+                  </div>
+                ))}
             </div>
           )}
         </div>
 
-        <div className="mt-6 md:mt-24 md:sticky md:top-24">
-          <p className="text-[#002F50] text-base pb-4">
-            {shareViaSocials?.title}
-          </p>
-          <div className="flex gap-4 items-start">
-            <Share />
-            <CopyLink />
-          </div>
-        </div>
-      </div>
+        {globallyCertifiedData && (
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        )}
 
-      {/* Related Blogs */}
-      <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
-        {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
-
-        {relatedBlogs?.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
-            {relatedBlogs
-              ?.slice(0, 4)
-              ?.map((item: RelatedBogsProps, index: number) => (
-                <div key={"item_" + index} className="relative">
-                  <DateCard
-                    imageSrc={item?.thumbnailImageDesktop?.url}
-                    date={formatDate(item?.date)}
-                    desc={item?.excerpt}
-                    link={
-                      type === "blog"
-                        ? `/blogs/${item?.slug}`
-                        : `/case-studies/${item?.slug}`
-                    }
-                    animate
-                    useTargetBlank={false}
-                  />
-                </div>
-              ))}
-          </div>
+        {ctaSection && (
+          <ContactBanner
+            data={ctaSection}
+            src={"/images/download-icon-orange.svg"}
+            className="w-[240px] md:w-full"
+          />
         )}
       </div>
-
-      {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
-      )}
-
-      {ctaSection && <ContactBanner data={ctaSection} />}
-    </div>
+    </>
   );
 }

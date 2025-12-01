@@ -80,16 +80,10 @@ const NextIcon = () => (
   />
 );
 
-// Type mapping for API filter
-const getTypeFromSlug = (slug: string): string => {
-  const typeMap: { [key: string]: string } = {
-    blogs: "blog",
-    "case-study": "case-study",
-  };
-  return typeMap[slug] || slug;
-};
-
-export default function BlogAndCaseStudies({ data, lastestBlogId }: BlogAndCaseStudiesProps) {
+export default function BlogAndCaseStudies({
+  data,
+  lastestBlogId,
+}: BlogAndCaseStudiesProps) {
   // Transform data into tabs format similar to MediaContainer
   const tabs =
     data?.toggleTabs?.map((item) => ({
@@ -104,33 +98,41 @@ export default function BlogAndCaseStudies({ data, lastestBlogId }: BlogAndCaseS
   const [blogData, setBlogData] = useState<BlogDataProps[]>([]);
   const [totalPages, setTotalPages] = useState(10);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch blog data
+  // Fetch blog data via server-side API
   const fetchBlogData = async (type: string, page: number) => {
     setLoading(true);
-    try {
-      const typeFilter = getTypeFromSlug(type);
-      const apiUrl = `${
-        process.env.NEXT_PUBLIC_OTHER_URL
-      }/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=${typeFilter}&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&pagination[pageSize]=12&pagination[page]=${page}&fields[4]=slug&status=published${
-        typeFilter === "blog"
-          ? `&filters[documentId][$ne]=${lastestBlogId || ""}`
-          : ""
-      }`;
+    setError(null);
 
-      // Replace with your actual API call
-      const response = await fetch(apiUrl);
+    try {
+      const params = new URLSearchParams({
+        type,
+        page: page.toString(),
+        ...(type === "blogs" && lastestBlogId
+          ? { excludeId: lastestBlogId }
+          : {}),
+      });
+
+      const response = await fetch(`/api/fetchBlogsCasestudies?${params}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+
       const result = await response.json();
-      console.log("result", result);
 
       setBlogData(result.data || []);
       setTotalPages(result.meta?.pagination?.pageCount || 1);
     } catch (error) {
       console.error("Error fetching blog data:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to load content"
+      );
       setBlogData([]);
     } finally {
       setLoading(false);
@@ -292,7 +294,7 @@ export default function BlogAndCaseStudies({ data, lastestBlogId }: BlogAndCaseS
         )}
       </div>
 
-      {!loading && blogData.length > 0 && totalPages > 1 && (
+      {!loading && !error && blogData.length > 0 && totalPages > 1 && (
         <div className="flex justify-center mt-[54px]">
           <StyledPagination
             count={totalPages}

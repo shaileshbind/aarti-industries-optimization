@@ -5,12 +5,12 @@ export const getBlogsCasestudies = async (slug: string) => {
       throw new Error("Slug is required");
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_OTHER_URL}${slug}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${slug}`, {
       cache: "no-store",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${process.env.API_TOKEN}`,
-    //   },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
     });
 
     // Handle non-OK response
@@ -21,7 +21,6 @@ export const getBlogsCasestudies = async (slug: string) => {
     const data = await response.json();
 
     if (data) {
-      // console.log("%cGlobally Certified Data", "color : yellow", data?.data);
       return data;
     }
   } catch (error) {
