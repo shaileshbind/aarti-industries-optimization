@@ -25,6 +25,10 @@ export default async function page({ params }: BlogInnerProps) {
     `/blog-case-study/by-slug/${blogInner}`
   );
 
+  const relatedBlogs = await getBlogsCasestudies(
+    `/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=blog&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&fields[4]=slug&filters[documentId][$ne]=${data?.data?.[0]?.documentId}&pagination[pageSize]=4&pagination[page]=1&status=published`
+  );
+
   const {
     date,
     title,
@@ -36,7 +40,6 @@ export default async function page({ params }: BlogInnerProps) {
     contentSections,
     ctaSection,
     shareViaSocials,
-    relatedBlogs,
   } = data?.data?.[0];
 
   const seo = data?.data?.[0]?.seo;
@@ -64,6 +67,7 @@ export default async function page({ params }: BlogInnerProps) {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
       <div className="pt-[72px] lg:pt-[140px] fluid-container">
         <div className="md:flex items-start gap-[60px] relative">
           <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[60%]">
@@ -125,13 +129,13 @@ export default async function page({ params }: BlogInnerProps) {
         </div>
 
         {/* Related Blogs */}
-        {relatedBlogs?.length > 0 && (
+        {relatedBlogs?.data?.length > 0 && (
           <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
             {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
 
-            {relatedBlogs?.length > 0 && (
+            {relatedBlogs?.data?.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
-                {relatedBlogs
+                {relatedBlogs?.data
                   ?.slice(0, 4)
                   ?.map((item: RelatedBogsProps, index: number) => (
                     <div key={"item_" + index} className="relative">
@@ -157,7 +161,8 @@ export default async function page({ params }: BlogInnerProps) {
         {globallyCertifiedData && (
           <div
             className={clsx(
-              relatedBlogs?.length === 0 && "mt-[72px] lg:mt-[140px]"
+              (relatedBlogs?.data?.length === 0 || !relatedBlogs) &&
+                "mt-[72px] lg:mt-[140px]"
             )}
           >
             <GloballyCertified itemsData={globallyCertifiedData} />
