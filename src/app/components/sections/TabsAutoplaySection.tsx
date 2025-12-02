@@ -36,10 +36,8 @@ const TabsAutoplaySection = ({
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
-
     setProgress(0);
     startTimeRef.current = performance.now();
-
     const duration = 8000;
 
     const animate = (time: number) => {
@@ -113,13 +111,12 @@ const TabsAutoplaySection = ({
   return (
     <>
       {title && (
-        <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-6 lg:mb-0">
+        <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-[30px] lg:mb-[50px]">
           <H2>{title}</H2>
         </div>
       )}
-
       {/* Desktop */}
-      <div className="mx-[20px] lg:mx-[60px] my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
+      <div className="mx-[20px] lg:mx-[60px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
         {/* Tabs */}
         {data?.length > 0 && (
           <div className="mt-[14px]">
@@ -237,13 +234,13 @@ const TabsAutoplaySection = ({
                           tabItem.card[0]?.BulletPoints?.map(
                             (items, index2) => (
                               <div
-                                className="flex gap-2"
+                                className="flex gap-2 items-start"
                                 key={"pointerss_" + index2}
                               >
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
-                                  className="object-cover object-top w-5 h-5"
+                                  className="object-cover object-top w-5 h-5 mt-[2px]"
                                   width={20}
                                   height={20}
                                 />
@@ -270,7 +267,6 @@ const TabsAutoplaySection = ({
           ))}
         </Swiper>
       </div>
-
       {/* Mobile Accordion */}
       {data?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
@@ -355,13 +351,13 @@ const TabsAutoplaySection = ({
                             item.card[0]?.BulletPoints?.map(
                               (items, index2) => (
                                 <div
-                                  className="flex gap-2"
+                                  className="flex gap-2 items-start"
                                   key={"pointerss_" + index2}
                                 >
                                   <Image
                                     src={"/images/star-orange.svg"}
                                     alt={"star"}
-                                    className="object-cover object-top w-4 h-4"
+                                    className="object-cover object-top w-4 h-4 mt-[2px]"
                                     width={14}
                                     height={14}
                                   />
