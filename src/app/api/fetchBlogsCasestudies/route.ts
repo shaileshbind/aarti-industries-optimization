@@ -82,7 +82,11 @@ export async function GET(request: NextRequest) {
 
     // Fetch data from external API
     const response = await fetch(apiUrl.toString(), {
-      next: { revalidate: 60 }, // Cache for 60 seconds
+      headers: {
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 20 },
     });
 
     if (!response.ok) {

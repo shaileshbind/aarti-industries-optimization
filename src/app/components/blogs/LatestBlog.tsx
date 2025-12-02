@@ -25,7 +25,7 @@ export default function LatestBlog({ data, section_two }: LatestBlogProps) {
               width={650}
               height={340}
               alt={thumbnailImageDesktop?.alternativeText || "banner"}
-              className="w-full h-full"
+              className="w-full h-full object-cover object-top"
             />
           </FadeInReveal>
         )}
