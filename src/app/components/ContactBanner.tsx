@@ -4,8 +4,13 @@ import Image from "next/image";
 import { Cta, SubH1 } from "./Typography2";
 import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
+import clsx from "clsx";
 
-const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
+const ContactBanner: React.FC<ContactBannerProps> = ({
+  data,
+  src,
+  className,
+}) => {
   const { title, ctaButton } = data;
 
   return (
@@ -29,10 +34,25 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
           {ctaButton?.title && (
             <FadeInReveal delay={0.2}>
               <Link href={ctaButton?.link || "#"} target="_blank">
-                <div className="bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10 w-[60%] md:w-full text-center">
+                <div
+                  className={clsx(
+                    `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10 w-[60%] md:w-full text-center flex`,
+                    className
+                  )}
+                >
                   <Cta className="text-orange-200  whitespace-nowrap">
                     {ctaButton?.title}
                   </Cta>
+
+                  {src && (
+                    <Image
+                      src={src}
+                      width={18}
+                      height={18}
+                      alt={"download"}
+                      className="w-full h-full ml-2"
+                    />
+                  )}
                 </div>
               </Link>
             </FadeInReveal>

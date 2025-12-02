@@ -3,9 +3,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";
+import clsx from "clsx";
+import Button from "../Button";
 
-export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
-  const { sectionTitle, card } = data;
+export default function WorksWithPartners({
+  data,
+  className,
+}: WorksWithPartnersProps) {
+  const { sectionTitle, card, ctaTitle, ctaLink } = data;
 
   const [activeCard, setActiveCard] = useState<number>(0);
   const [mobileProgress, setMobileProgress] = useState<number[]>([0, 0, 0, 0]);
@@ -21,7 +26,7 @@ export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [card.length]);
+  }, [card?.length]);
 
   // Mobile scroll-based progress - SEQUENTIAL
   useEffect(() => {
@@ -76,15 +81,23 @@ export default function WorksWithPartners({ data }: WorksWithPartnersProps) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [mobileProgress, card.length]);
+  }, [mobileProgress, card?.length]);
 
   return (
     <div className="fluid-container">
-      {sectionTitle && <H2>{sectionTitle}</H2>}
+      <div className="lg:flex justify-between items-center">
+        {sectionTitle && <H2>{sectionTitle}</H2>}
+
+        {ctaTitle && ctaLink && (
+          <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
+        )}
+      </div>
 
       {/* Desktop */}
       {card?.length > 0 && (
-        <div className="mt-[50px] hidden grid-cols-4 lg:grid">
+        <div
+          className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}
+        >
           {card?.map((item, index) => (
             <div key={"card_" + index} className="relative pr-[50px]">
               {index !== card?.length - 1 && (
