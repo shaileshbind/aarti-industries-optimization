@@ -126,4 +126,6 @@ export type ContactBannerProps = {
     title: string;
     ctaButton: ButtonProps;
   };
+  src?: string;
+  className?: string;
 };

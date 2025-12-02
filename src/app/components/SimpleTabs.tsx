@@ -1,24 +1,14 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { ImageProps } from "../types/global.type";
 
-type Tab = {
-  category: string;
-  post_category: {
-    id: string;
-    name: string;
-    slug: string;
-    posts: {
-      title: string;
-      slug: string;
-      image: ImageProps;
-      mobImage: ImageProps;
-    }[];
-  };
+type SimpleTab = {
+  title: string;
+  slug: string;
+  id: number | string;
 };
 
-type TabsProps = {
-  tabs: Tab[];
+type SimpleTabsProps = {
+  tabs: SimpleTab[];
   activeId: string;
   onChange: (slug: string, index: number) => void;
   className?: string;
@@ -36,12 +26,12 @@ type TabsProps = {
   }>;
 };
 
-const Tabs: React.FC<TabsProps> = ({
+const SimpleTabs: React.FC<SimpleTabsProps> = ({
   tabs,
-  activeId = 0,
+  activeId = "",
   onChange,
   className = "",
-  containerClassName = "bg-gray-100 md:max-w-fit w-fit p-1 rounded-full",
+  containerClassName = "bg-[#F7F9FA] md:max-w-fit w-fit p-1 rounded-full",
   innerClassName,
   buttonClassName = "p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10",
   leftAlign = false,
@@ -63,9 +53,7 @@ const Tabs: React.FC<TabsProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const activeIndex = tabs.findIndex(
-      (tab) => tab?.post_category?.slug === activeId
-    );
+    const activeIndex = tabs.findIndex((tab) => tab?.slug === activeId);
     const activeButton = tabRefs.current[activeIndex] ?? null;
 
     if (!activeButton) {
@@ -141,15 +129,15 @@ const Tabs: React.FC<TabsProps> = ({
 
           {/* Tab Buttons */}
           {tabs?.map((tab, index) => {
-            const isActive = activeId === tab?.post_category?.slug;
+            const isActive = activeId === tab?.slug;
 
             return (
               <button
-                key={tab?.post_category?.id}
+                key={tab?.id}
                 ref={(element) => {
                   tabRefs.current[index] = element;
                 }}
-                onClick={() => onChange(tab?.post_category?.slug, index)}
+                onClick={() => onChange(tab?.slug, index)}
                 type="button"
                 className={`${buttonClassName} ${
                   isActive ? activeButtonClassName : inactiveButtonClassName
@@ -157,7 +145,7 @@ const Tabs: React.FC<TabsProps> = ({
                 aria-selected={isActive}
                 role="tab"
               >
-                {renderTabContent(tab?.post_category?.name, isActive)}
+                {renderTabContent(tab?.title, isActive)}
               </button>
             );
           })}
@@ -167,4 +155,4 @@ const Tabs: React.FC<TabsProps> = ({
   );
 };
 
-export default Tabs;
+export default SimpleTabs;

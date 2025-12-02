@@ -7,7 +7,7 @@ interface SEOProps {
   keywords?: string;
   canonical?: string;
   robots?: string;
-  schemaData?: Record<string, unknown>  ;
+  schemaData?: Record<string, unknown>;
   ogURL?: string;
   ogImg?: string;
   ogTitle?: string;
@@ -70,7 +70,6 @@ const SEO = ({
       {twtImg && <meta property="twitter:image" content={twtImg} />}
       {twtTitle && <meta property="twitter:title" content={twtTitle} />}
       {twtDesc && <meta property="twitter:description" content={twtDesc} />}
-
     </>
   );
 };
