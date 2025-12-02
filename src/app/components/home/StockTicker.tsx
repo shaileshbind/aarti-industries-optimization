@@ -6,7 +6,11 @@ import Link from "next/link";
 
 export default function StockTicker() {
   return (
+<<<<<<< HEAD
     <div className="bg-[#10456A] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50">
+=======
+    <div className="bg-[#10456A] py-[10px] overflow-hidden fixed w-full top-0 left-0 z-[99]">
+>>>>>>> dev
       <div className="marquee">
         <div className="container lg:mx-auto flex items-center gap-[110px] ">
           <div className="flex gap-[60px]">
