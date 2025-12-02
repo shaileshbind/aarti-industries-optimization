@@ -19,7 +19,7 @@ export const getBlogsCasestudies = async (slug: string) => {
     }
 
     const data = await response.json();
-console.log("ssdd", data)
+
     if (data) {
       return data;
     }
