@@ -310,14 +310,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           )}
         </div>
       </div>
-
       <div
         ref={envSlider}
         className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
       >
-        <div className="flex w-full h-screen relative flex-col justify-center">
+        <div className="flex w-full min-h-screen h-full relative flex-col justify-center">
           <div className=" mx-[20px] lg:mx-[unset] mb-[70px] lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
-            <div className="relative w-full h-[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+            <div className="relative w-full h-[350px] md:h-[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
               {details[active]?.image?.url && (
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
@@ -418,13 +417,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                               {slide?.BulletPoints?.map((items) => (
                                 <div
                                   key={items?.id}
-                                  className="flex gap-4 mb-4 items-center"
+                                  className="flex gap-4 mb-4 items-start"
                                 >
                                   <Image
                                     src="/images/home/star.svg"
                                     alt="star"
                                     width={16}
                                     height={16}
+                                    className="mt-[2px]"
                                   />
                                   {items?.title && (
                                     <BodyText2 className="text-grey-400">

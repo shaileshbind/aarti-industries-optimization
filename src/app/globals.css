@@ -73,11 +73,36 @@
   --gradient-orange-3: var(--gradient-orange-3);
 }
 
-html,
+html {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Alte Hans Grotesk", sans-serif;
+  overflow-x: hidden;
 }
 
 /* [ Container ] */
@@ -569,57 +594,6 @@ body {
   }
 }
 
-@media (max-width: 1024px) {
-  .potential-accordion:nth-child(3)::after {
-    right: 5.5%;
-  }
-  .potential-accordion:nth-child(3)::before {
-    right: 5.5%;
-  }
-}
-
-@media (max-width: 820px) {
-  .topMarginCsm {
-    margin-top: -90px !important;
-  }
-
-  .potential-accordion:nth-child(3)::after {
-    right: 4.4%;
-  }
-  .potential-accordion:nth-child(3)::before {
-    right: 4.4%;
-  }
-}
-
-@media (max-width: 768px) {
-  .topMarginCsm {
-    margin-top: 20px !important;
-  }
-
-  .complex-chemistry .MuiAccordionSummary-content {
-    width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  .potential-accordion:nth-child(3)::after {
-    right: 2.6%;
-  }
-  .potential-accordion:nth-child(3)::before {
-    right: 2.6%;
-  }
-
-  .marquee {
-    animation: marquee 30s linear infinite;
-  }
-}
-
-@media (max-width: 380px) {
-  .topMarginCsm {
-    margin-top: 260px !important;
-  }
-}
-
 .inverted-radius:hover {
   --r: 20px; /* the radius */
   --s: 30px; /* size of inner curve */
@@ -667,4 +641,140 @@ body {
 .scrollbar::-webkit-scrollbar-thumb {
   background: #dc4c03 !important;
   border-radius: 20px !important;
+}
+
+/* Blog Inner */
+.blogInner img {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  height: 406px;
+  object-fit: cover;
+  margin-top: 60px;
+}
+
+.blogInner iframe,
+.blogInner video {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  height: 450px;
+  border: 1px solid #d2d2d2;
+  object-fit: cover;
+  margin-bottom: 30px;
+}
+
+.blogInner p,
+.blogInner li {
+  font-size: 16px;
+  color: #4c5861;
+  font-family: "Alte Hans Grotesk";
+}
+
+.blogInner h1,
+.blogInner h2,
+.blogInner h3,
+.blogInner h4,
+.blogInner h5,
+.blogInner h6 {
+  color: #002f50;
+  font-family: "Alte Hans Grotesk";
+}
+
+.blogInner h3 {
+  color: #002f50;
+  font-size: 16px;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+.blogInner figcaption {
+  background-color: #eff3f5;
+  padding: 32px 20px 16px 20px;
+  border-radius: 0 0 20px 20px;
+  margin-top: -20px;
+}
+
+.blogInner figcaption span {
+  color: #002f50;
+  font-family: "Alte Hans Grotesk";
+  font-size: 16px;
+}
+
+@media (max-width: 1024px) {
+  .potential-accordion:nth-child(3)::after {
+    right: 5.5%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 5.5%;
+  }
+}
+
+@media (max-width: 820px) {
+  .topMarginCsm {
+    margin-top: -90px !important;
+  }
+
+  .potential-accordion:nth-child(3)::after {
+    right: 4.4%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 4.4%;
+  }
+
+  .bannerBottomStar {
+    right: 66px;
+  }
+
+  .blogInner img {
+    height: 380px;
+  }
+
+  .blogInner iframe,
+  .blogInner video {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topMarginCsm {
+    margin-top: 20px !important;
+  }
+
+  .complex-chemistry .MuiAccordionSummary-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .potential-accordion:nth-child(3)::after {
+    right: 2.6%;
+  }
+  .potential-accordion:nth-child(3)::before {
+    right: 2.6%;
+  }
+
+  .marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .bannerBottomStar {
+    right: 67px;
+  }
+
+  .blogInner img {
+    height: 300px;
+    margin-top: 30px;
+  }
+
+  .blogInner iframe,
+  .blogInner video {
+    height: 300px;
+  }
+}
+
+@media (max-width: 380px) {
+  .topMarginCsm {
+    margin-top: 260px !important;
+  }
 }

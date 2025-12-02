@@ -3,7 +3,7 @@ import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
 import RDInfo from "../components/r-and-d/RDInfo";
 import RDDiverseChem from "../components/r-and-d/RDDiverseChem";
 import RDSafety from "../components/r-and-d/RDSafety";
-import RDAnalyticalExc from "../components/r-and-d/RDAnalyticalExc";
+import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
 import GloballyCertified from "../components/GloballyCertified";
 import RDExplore from "../components/r-and-d/RDExplore";
 import { getPageData } from "@/_lib/pageData.fetch";

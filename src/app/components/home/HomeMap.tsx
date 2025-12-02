@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { BodyText2, BodyText3, H2, SubH1 } from "../Typography2";
 import DesktopMapSvg from "../global-reach/DesktopMapSvg";
 import Image from "next/image";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const HomeMap = () => {
   const [activeBlip, setActiveBlip] = useState(4);
+  const { marginBottom } = useMargin();
   const mobileStatsData = [
     { id: 0, percent: "46%", title: "India" },
     { id: 1, percent: "23%", title: "Middle East" },
@@ -15,7 +17,10 @@ const HomeMap = () => {
     { id: 5, percent: "6%", title: "Rest of the world" },
   ];
   return (
-    <div className="w-full lg:h-screen relative z-10 bg-white">
+    <div 
+      className="w-full lg:h-screen relative z-10 bg-white pt-20"
+      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    >
       <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
           Growing Across Markets and Beyond Borders

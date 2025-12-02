@@ -82,7 +82,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                 className="grid grid-cols-[0.9fr] lg:grid-cols-[1fr_1fr] gap-x-[120px] justify-end lg:justify-[unset] gap-y-[18px] mb-[40px] lg:mb-[80px] relative "
               >
                 {items?.image?.url && (
-                  <div className="relative w-full lg:w-[424px] h-[286px] rounded-[20px] overflow-hidden justify-self-end">
+                  <div className="relative w-full h-[170px] md:h-[286px] lg:w-[424px] rounded-[20px] overflow-hidden justify-self-end">
                     <Image
                       src={items?.image?.url}
                       alt={items?.image?.alternativeText || "banner"}
@@ -113,7 +113,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
           {/* line & star */}
           <div className="absolute top-0 left-[7%] translate-x-[-7%] lg:left-[50%] h-full lg:translate-x-[-50%] grid justify-items-center">
             {/* gray line */}
-            <div className="mt-[-12px] h-full w-[1px] bg-grey-100 relative overflow-hidden">
+            <div className="h-full w-[1px] bg-grey-100 relative overflow-hidden">
               {/* orange line */}
               <div
                 ref={orangeLineRef}
@@ -123,8 +123,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
             {/* star image */}
             <div
               ref={starRef}
-              className="absolute top-0 mt-[-15px]"
-              style={{ width: "37px", height: "37px" }}
+              className="absolute top-0 mt-[-18px] h-[24px] w-[24px] lg:h-[37px] lg:w-[37px]"
             >
               <Image
                 src="/images/home/star.svg"

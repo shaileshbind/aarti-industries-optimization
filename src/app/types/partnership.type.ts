@@ -52,11 +52,14 @@ export type WhyAartiProps = {
 export type WorksWithPartnersProps = {
   data: {
     sectionTitle: string;
+    ctaTitle: string;
+    ctaLink: string;
     card: {
       title: string;
       description: string;
     }[];
   };
+  className?: string;
 };
 
 export type PartneshipExploreProps = {
