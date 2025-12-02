@@ -28,13 +28,13 @@ const page = async () => {
     section_seven,
     section_eight,
     section_nine,
-    section_ten
+    section_ten,
   } = data?.data;
   const seo = data?.seo;
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Research & Development"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
