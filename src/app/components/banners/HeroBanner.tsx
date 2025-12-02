@@ -368,7 +368,7 @@ const HeroBanner = ({
             {showStar2 && (
               <div
                 ref={starRef2}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
               >
                 <Image
                   src="/images/home/star-white.svg"
@@ -381,7 +381,7 @@ const HeroBanner = ({
             {showStar3 && (
               <div
                 ref={starRef3}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
               >
                 <Image
                   src="/images/home/star-white.svg"
