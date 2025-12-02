@@ -9,6 +9,7 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
@@ -16,6 +17,8 @@ gsap.registerPlugin(ScrollTrigger);
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const { leftText, rightText, images, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const tabBarContainerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
   const sustainbleLogo = useRef<HTMLDivElement>(null);
@@ -37,6 +40,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     width: 0,
     visible: false,
   });
+  const { setMarginBottom } = useMargin();
   const indicatorColor =
     "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
   const indicatorTransition =
@@ -367,6 +371,49 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     };
   }, [activeTab, mainSection.length, measureIndicator]);
 
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = sliderContainerRef.current;
+      const tabBarContainer = tabBarContainerRef.current;
+      if (!sliderContainer || !tabBarContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const sliderHeight = sliderContainer.offsetHeight;
+      const tabBarHeight = tabBarContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const totalHeight = sliderHeight + tabBarHeight;
+
+      if (totalHeight > screenHeight) {
+        const margin = totalHeight - screenHeight;
+        console.log("margin", margin);
+        setMarginBottom(margin);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (sliderContainerRef.current) {
+      resizeObserver.observe(sliderContainerRef.current);
+    }
+    if (tabBarContainerRef.current) {
+      resizeObserver.observe(tabBarContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeTabMob, mainSection.length]);
+
+
+
   return (
     <div
       ref={triggerRef}
@@ -550,7 +597,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           </div>
         </div>
         <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
-          <div className="pt-[70px]">
+          <div className=" pt-[110px]" ref={tabBarContainerRef}>
             {mainSection?.length > 0 && (
               <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
                 {mainSection?.map(
@@ -572,7 +619,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               </div>
             )}
           </div>
-          <div className="mt-[32px]">
+          <div className="mt-[16px] lg:mt-[32px] " ref={sliderContainerRef}>
             <div className="grid items-center">
               {mainSection
                 .filter((_, index) => index === activeTabMob)

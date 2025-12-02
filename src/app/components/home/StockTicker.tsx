@@ -6,22 +6,22 @@ import Link from "next/link";
 
 export default function StockTicker() {
   return (
-    <div className="bg-[#10456A] py-[10px] overflow-hidden fixed w-full top-0 left-0 z-[99]">
+    <div className="bg-[#10456A] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50">
       <div className="marquee">
         <div className="container lg:mx-auto flex items-center gap-[110px] ">
           <div className="flex gap-[60px]">
             <div className="flex gap-4">
-              <p className="text-[#FFFFFF] text-base">NSE: BREIT</p>
+              <p className="text-[#FFFFFF] text-sm lg:text-base">NSE: BREIT</p>
 
-              <p className="text-[#06FF2E]">
+              <p className="text-[#06FF2E] text-sm lg:text-base">
                 271.50 <PlayArrowIcon className="rotate-270" /> +2.22 (+0.87 %)
               </p>
             </div>
 
             <div className="flex gap-4">
-              <p className="text-[#FFFFFF] text-base">BSE: BOM</p>
+              <p className="text-[#FFFFFF] text-sm lg:text-base">BSE: BOM</p>
 
-              <p className="text-[#FF2A2D]">
+              <p className="text-[#FF2A2D] text-sm lg:text-base">
                 271.50 <PlayArrowIcon className="rotate-270" /> +2.22 (+0.87 %)
               </p>
             </div>
@@ -30,7 +30,7 @@ export default function StockTicker() {
           {/* News */}
           <div className="flex gap-[110px]">
             {[...Array(4)]?.map((_, index) => (
-              <Link href={"#"} className="text-sm text-[#FFF]" key={index}>
+              <Link href={"#"} className="text-sm lg:text-base text-[#FFF]" key={index}>
                 Lorem ipsum dolor sit amet consectetur{" "}
                 <ArrowForwardIcon
                   className="rotate-325 ml-1"
