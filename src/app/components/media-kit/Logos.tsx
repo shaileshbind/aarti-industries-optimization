@@ -68,7 +68,7 @@ export default function Logos({ data }: LogosProps) {
                 sectionImages?.[0]?.imageCards?.[0]?.image?.alternativeText ||
                 "logo"
               }
-              className="w-full h-full"
+              className="w-full h-full object-cover"
             />
           </div>
         )}

@@ -15,6 +15,7 @@ import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
+import clsx from "clsx";
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,7 @@ export default async function page({ params }: BlogInnerProps) {
               <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
             )}
 
-            {title && <H3>{title}</H3>}
+            {title && <H3 className="py-1">{title}</H3>}
 
             {bannerImageDesktop?.url && (
               <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
@@ -79,7 +80,7 @@ export default async function page({ params }: BlogInnerProps) {
                   width={872}
                   height={406}
                   alt={bannerImageDesktop?.all || "banner"}
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                 />
               </div>
             )}
@@ -124,35 +125,43 @@ export default async function page({ params }: BlogInnerProps) {
         </div>
 
         {/* Related Blogs */}
-        <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
-          {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
+        {relatedBlogs?.length > 0 && (
+          <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
+            {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
 
-          {relatedBlogs?.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
-              {relatedBlogs
-                ?.slice(0, 4)
-                ?.map((item: RelatedBogsProps, index: number) => (
-                  <div key={"item_" + index} className="relative">
-                    <DateCard
-                      imageSrc={item?.thumbnailImageDesktop?.url}
-                      date={formatDate(item?.date)}
-                      desc={item?.excerpt}
-                      link={
-                        type === "blog"
-                          ? `/blogs/${item?.slug}`
-                          : `/case-studies/${item?.slug}`
-                      }
-                      animate
-                      useTargetBlank={false}
-                    />
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
+            {relatedBlogs?.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
+                {relatedBlogs
+                  ?.slice(0, 4)
+                  ?.map((item: RelatedBogsProps, index: number) => (
+                    <div key={"item_" + index} className="relative">
+                      <DateCard
+                        imageSrc={item?.thumbnailImageDesktop?.url}
+                        date={formatDate(item?.date)}
+                        desc={item?.excerpt}
+                        link={
+                          type === "blog"
+                            ? `/blogs/${item?.slug}`
+                            : `/case-studies/${item?.slug}`
+                        }
+                        animate
+                        useTargetBlank={false}
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {globallyCertifiedData && (
-          <GloballyCertified itemsData={globallyCertifiedData} />
+          <div
+            className={clsx(
+              relatedBlogs?.length === 0 && "mt-[72px] lg:mt-[140px]"
+            )}
+          >
+            <GloballyCertified itemsData={globallyCertifiedData} />
+          </div>
         )}
 
         {ctaSection && (
