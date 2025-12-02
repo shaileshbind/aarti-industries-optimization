@@ -15,6 +15,7 @@ import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
+import clsx from "clsx";
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,7 @@ export default async function page({ params }: CaseStuydInnerProps) {
               <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
             )}
 
-            {title && <H3>{title}</H3>}
+            {title && <H3 className="py-1">{title}</H3>}
 
             {bannerImageDesktop?.url && (
               <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
@@ -79,7 +80,7 @@ export default async function page({ params }: CaseStuydInnerProps) {
                   width={872}
                   height={406}
                   alt={bannerImageDesktop?.all || "banner"}
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                 />
               </div>
             )}
@@ -152,7 +153,13 @@ export default async function page({ params }: CaseStuydInnerProps) {
         </div>
 
         {globallyCertifiedData && (
-          <GloballyCertified itemsData={globallyCertifiedData} />
+          <div
+            className={clsx(
+              relatedBlogs?.length === 0 && "mt-[72px] lg:mt-[140px]"
+            )}
+          >
+            <GloballyCertified itemsData={globallyCertifiedData} />
+          </div>
         )}
 
         {ctaSection && (
