@@ -149,12 +149,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               x: "-50%",
             },
             {
-              width: "100%",
-              height: "500px",
-              left: "0%",
-              top: "50%",
-              y: "-50%",
-              x: "0%",
+              width: "90%",
+              height: "300px",
+              left: "50%",
+              top: "0%",
+              y: "-90%",
+              x: "-50%",
               duration: 1,
             },
             "<"
@@ -169,7 +169,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
-            { opacity: 1, duration: 15 },
+            { opacity: 1, duration: 5 },
             "<"
           );
       } else {
@@ -274,14 +274,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 
   return (
     <>
-      <div ref={triggerRef} className="w-full relative  min-h-[40vh]">
+      <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]">
         <div
           ref={titleSection}
           className="absolute top-0 w-full flex justify-center items-center z-20 bg-white  "
         >
-          <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  pt-[100px] lg:pt-[unset] ">
+          <div className=" flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  lg:pt-[unset] ">
             {leftText && (
-              <span ref={headinLeft}>
+              <span className="lg:min-w-[366px]" ref={headinLeft}>
                 <H2>{leftText}</H2>
               </span>
             )}
@@ -307,7 +307,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             )}
 
             {rightText && (
-              <span ref={headinRight}>
+              <span className="lg:min-w-[366px]" ref={headinRight}>
                 <H2>{rightText}</H2>
               </span>
             )}
@@ -318,9 +318,9 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
         >
-          <div className="flex w-full h-screen relative flex-col justify-center">
+          <div className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
             <div className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
-              <div className="relative w-full h-[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+              <div className="relative w-full randdImageHeight h-[250px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
                     <Image
@@ -342,7 +342,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 )}
               </div>
               <div className="w-full overflow-hidden">
-                <div className="mt-[18px] mb-[18px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px] ">
+                <div className="mt-[18px] mb-[10px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px] ">
                   <BodyText2 className="text-orange-200">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
@@ -421,7 +421,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                 {slide?.BulletPoints?.map((items) => (
                                   <div
                                     key={items?.id}
-                                    className="flex gap-4 mb-4 items-center"
+                                    className="flex lg:gap-4 lg:mb-4 mb-2 gap-2 items-center"
                                   >
                                     <Image
                                       src="/images/home/star.svg"
@@ -439,7 +439,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                               </div>
                             )}
                             {slide?.ctaButton?.link && (
-                              <div className="mt-[40px]">
+                              <div className="mt-[20px] lg:mt-[40px]">
                                 <button
                                   onClick={() => {
                                     setshowGeneralPopup(true);
