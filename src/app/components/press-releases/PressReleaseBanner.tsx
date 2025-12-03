@@ -1,13 +1,13 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
-import { PressReleaseBannerProps } from "@/app/types/press-release.type";   
+import { PressReleaseBannerProps } from "@/app/types/press-release.type";
 
 const PressReleaseBanner: React.FC<PressReleaseBannerProps> = ({ data }) => {
-  const { title, description, image, mobImage } = data;
+  const { sectionTitle, description, image, mobImage } = data;
 
   return (
     <HeroBanner
-      title={title}
+      title={sectionTitle}
       desc={description}
       fullBg
       centerText={true}

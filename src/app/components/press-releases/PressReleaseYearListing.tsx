@@ -11,9 +11,24 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
 import { PressReleaseYearListingProps } from "@/app/types/press-release.type";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BodyText2, BodyText3, SubH1, SubH2 } from "../Typography2";
-import { BodyText1 } from "../Typography2";
+import { BodyText2, BodyText3, SubH1 } from "../Typography2";
 import Button from "../Button";
+
+export type Item1 = {
+  id?: number;
+  financial_year?: {
+    year?: string | number;
+  };
+};
+export type Item2 = {
+  id?: number;
+  heading?: string;
+  date?: string;
+  file?: {
+    id?: number;
+    url?: string;
+  };
+};
 
 export default function PressReleaseYearListing({
   yearAndPressReleases,
@@ -33,23 +48,21 @@ export default function PressReleaseYearListing({
   // Initialize state when yearAndPressReleases is available or when URL changes
   useEffect(() => {
     if (!yearAndPressReleases || yearAndPressReleases.length === 0) return;
-
     const urlYear = searchParams.get("year");
-    const targetYear = urlYear || yearAndPressReleases[0]?.year || "";
-
-    // Find the matching year
+    const firstYear = yearAndPressReleases[0]?.financial_year?.year;
+    // Use URL year if provided, otherwise use first available year
+    const targetYear = urlYear || firstYear;
+    // Find the matching year in the data
     const matchingYear = yearAndPressReleases.find(
-      (item) => String(item.year) === String(targetYear)
+      (item) => item?.financial_year?.year === targetYear
     );
-
-    if (matchingYear) {
-      setActiveYear(matchingYear.year);
-      setDropdownClicked(false);
-    } else if (yearAndPressReleases[0]) {
-      // Fallback to first year if URL param doesn't match
-      setActiveYear(yearAndPressReleases[0].year);
-      setDropdownClicked(false);
+    // Set active year - use match if found, otherwise fallback to first year
+    if (matchingYear?.financial_year?.year) {
+      setActiveYear(matchingYear.financial_year.year);
+    } else if (firstYear) {
+      setActiveYear(firstYear);
     }
+    setDropdownClicked(false);
   }, [searchParams, yearAndPressReleases]);
 
   const styles = {
@@ -83,9 +96,10 @@ export default function PressReleaseYearListing({
   };
 
   // Get current press releases based on active year
-  const currentPressReleases = yearAndPressReleases?.find(
-    (item) => item.year === activeYear
-  )?.pressReleases || [];
+  const currentPressReleases =
+    yearAndPressReleases?.find(
+      (item) => item?.financial_year?.year === activeYear
+    )?.report || [];
 
   // Handler for Archive year dropdown
   const handleArchiveChange = (event: SelectChangeEvent<string | number>) => {
@@ -93,7 +107,7 @@ export default function PressReleaseYearListing({
 
     // If "Archive" or "Past years" is selected, reset to first year
     if (selectedValue === "Archive" || selectedValue === "Past years") {
-      setActiveYear(yearAndPressReleases?.[0]?.year || "");
+      setActiveYear(yearAndPressReleases?.[0]?.financial_year?.year || "");
       setDropdownClicked(false);
     } else {
       setActiveYear(selectedValue);
@@ -143,27 +157,24 @@ export default function PressReleaseYearListing({
         {/* Left Sidebar - Latest Release (Desktop) */}
         {latestReleases && latestReleases.length > 0 && (
           <div className="w-full lg:w-[20%] mb-8 lg:mb-0">
-            {/* <p className="text-[#002F50] text-[30px] font-['Alte_Haas_Grotesk'] leading-[1.4] mb-8">
-              Latest Release
-            </p> */}
             <SubH1 className="mt-4 mb-8">Latest Release</SubH1>
             <div className="flex flex-col gap-[30px]">
               {latestReleases.slice(0, 2).map((item, index) => (
                 <div key={`latest_${index}`} className="flex flex-col gap-5">
                   <div className="flex flex-col gap-3">
-                    <BodyText3
-                      className="text-[#9997A2]"
-                    >
-                      {item.date}
+                    <BodyText3 className="text-[#9997A2]">
+                      {item?.date}
                     </BodyText3>
                     <BodyText2 className="text-[#10456A] text-base leading-[1.54]">
-                      {item.title}
+                      {item?.heading}
                     </BodyText2>
                   </div>
-                  {item.pdfLink && (
-                        
-                        <Button title="Download PDF" secondary={true} />
-                       
+                  {item?.file?.url && (
+                    <Button
+                      title="Download PDF"
+                      secondary
+                      href={item?.file?.url}
+                    />
                   )}
                   {index < latestReleases.slice(0, 2).length - 1 && (
                     <div className="bg-[#D9D9D9] h-px w-full mt-2" />
@@ -182,29 +193,38 @@ export default function PressReleaseYearListing({
                 ref={yearsRowRef}
                 className="flex gap-x-8 lg:gap-x-[54px] relative pb-3"
               >
-                {yearAndPressReleases?.slice(0, 4)?.map((item, index) => (
-                  <div
-                    key={`item_${index}`}
-                    ref={(el) => {
-                      if (el) {
-                        itemRefs.current.set(item?.year, el);
-                      }
-                    }}
-                    onClick={() => handleYearClick(item?.year)}
-                    className="cursor-pointer"
-                  >
-                    <p
-                      className={clsx(
-                        "text-base",
-                        item?.year === activeYear
-                          ? "text-[#002F50] font-semibold"
-                          : "text-[#4C5861]"
-                      )}
+                {yearAndPressReleases
+                  ?.slice(0, 4)
+                  ?.map((item: Item1, index: number) => (
+                    <div
+                      key={`item_${index}`}
+                      ref={(el) => {
+                        const year = item?.financial_year?.year;
+
+                        if (el && year !== undefined) {
+                          itemRefs.current.set(year, el);
+                        }
+                      }}
+                      onClick={() => {
+                        const year = item?.financial_year?.year;
+                        if (year !== undefined) {
+                          handleYearClick(year);
+                        }
+                      }}
+                      className="cursor-pointer"
                     >
-                      {item?.year}
-                    </p>
-                  </div>
-                ))}
+                      <p
+                        className={clsx(
+                          "text-base",
+                          item?.financial_year?.year === activeYear
+                            ? "text-[#002F50] font-semibold"
+                            : "text-[#4C5861]"
+                        )}
+                      >
+                        {item?.financial_year?.year}
+                      </p>
+                    </div>
+                  ))}
 
                 {/* Animated underline */}
                 {!dropdownClicked && (
@@ -236,8 +256,11 @@ export default function PressReleaseYearListing({
                   >
                     <MenuItem value={"Archive"}>Archive</MenuItem>
                     {yearAndPressReleases?.slice(4)?.map((items, index2) => (
-                      <MenuItem value={items?.year} key={`archive_${index2}`}>
-                        {items?.year}
+                      <MenuItem
+                        value={items?.financial_year?.year}
+                        key={`archive_${index2}`}
+                      >
+                        {items?.financial_year?.year}
                       </MenuItem>
                     ))}
                   </Select>
@@ -250,22 +273,22 @@ export default function PressReleaseYearListing({
           <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
             {/* Desktop - show all */}
             <div className="hidden lg:block">
-              {currentPressReleases?.map((item, index) => (
+              {currentPressReleases?.map((item:   Item2) => (
                 <div
-                  key={item.id}
+                  key={item?.id}
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1">
                     <p className="text-[#0F3557] text-lg leading-[1.6]">
-                      {item.title}
+                      {item?.heading}
                     </p>
                     <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item.date}
+                      {item?.date}
                     </p>
                   </div>
-                  {item.pdfLink && (
+                  {item?.file?.url && (
                     <a
-                      href={item.pdfLink}
+                      href={item?.file?.url}
                       download
                       target="_blank"
                       rel="noopener noreferrer"
@@ -291,22 +314,22 @@ export default function PressReleaseYearListing({
 
             {/* Mobile - show all */}
             <div className="block lg:hidden">
-              {currentPressReleases?.map((item, index) => (
+              {currentPressReleases?.map((item: Item2) => (
                 <div
                   key={item.id}
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1 pr-4">
                     <p className="text-[#0F3557] text-lg leading-[1.6]">
-                      {item.title}
+                      {item?.heading}
                     </p>
                     <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item.date}
+                      {item?.date}
                     </p>
                   </div>
-                  {item.pdfLink && (
+                  {item?.file?.url && (
                     <a
-                      href={item.pdfLink}
+                      href={item?.file?.url}
                       download
                       target="_blank"
                       rel="noopener noreferrer"
@@ -352,10 +375,10 @@ export default function PressReleaseYearListing({
                 <MenuItem value={"Past years"}>Past years</MenuItem>
                 {yearAndPressReleases?.slice(4)?.map((items, index2) => (
                   <MenuItem
-                    value={items?.year}
+                    value={items?.financial_year?.year} // ← Fixed
                     key={`mobile_archive_${index2}`}
                   >
-                    {items?.year}
+                    {items?.financial_year?.year}
                   </MenuItem>
                 ))}
               </Select>
@@ -366,4 +389,3 @@ export default function PressReleaseYearListing({
     </div>
   );
 }
-
