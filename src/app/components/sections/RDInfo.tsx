@@ -10,7 +10,7 @@ import { RDInfoProps } from "@/app/types/r-and-d.type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
+const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
   const { description, valuesCard, rightSectionImage } = data;
   const wrapperRef = useRef(null);
   const topLineRef = useRef(null);
@@ -77,19 +77,24 @@ const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto mb-[72px] lg:mb-[100px] mt-[unset] lg:mt-[50px]">
+      <div
+        ref={wrapperRef}
+        className="container mx-auto mb-[72px] lg:mb-[140px] mt-[unset] lg:mt-[50px]"
+      >
         {/* Top Line */}
-        <div
-          ref={topLineRef}
-          className="mx-auto h-[64px] md:h-[120px] w-[1px] mb-20 lg:mb-0"
-        >
-          <Image
-            src="/images/home/line.svg"
-            alt="line"
-            width={1}
-            height={120}
-          />
-        </div>
+        {showLine && (
+          <div
+            ref={topLineRef}
+            className="mx-auto h-[64px] md:h-[120px] w-[1px] mb-20 lg:mb-0"
+          >
+            <Image
+              src="/images/home/line.svg"
+              alt="line"
+              width={1}
+              height={120}
+            />
+          </div>
+        )}
         {/* Text content */}
         {description && (
           <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">

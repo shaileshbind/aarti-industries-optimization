@@ -4,32 +4,29 @@ import PrivacyPolicyBanner from "@/app/components/privacy-policy/privacyPolicyBa
 import PrivacyPolicyContent from "../components/privacy-policy/PrivacyPolicyContent";
 import { getPageData } from "@/_lib/pageData.fetch";
 
-
 const page = async () => {
-    const data = await getPageData("/pages/by-slug/privacy-policy");
+  const data = await getPageData("/pages/by-slug/privacy-policy");
 
-    console.log("data", data);
+  const BannerData = {
+    title: data?.data?.title,
+    description: "",
+    image: {
+      alternativeText: "",
+      url: data?.data?.image?.url,
+    },
+    mobImage: {
+      alternativeText: "",
+      url: data?.data?.mobImage?.url,
+    },
+  };
 
-    const BannerData = {
-        title: data?.data?.title,
-        description: "",
-        image: {
-            alternativeText: '',
-            url: data?.data?.image?.url,
-        },
-        mobImage: {
-            alternativeText: '',
-            url: data?.data?.mobImage?.url,
-        }
-    };
+  return (
+    <div>
+      {BannerData.title ? <PrivacyPolicyBanner data={BannerData} /> : null}
 
-    return (
-        <div>
-            {BannerData.title ? <PrivacyPolicyBanner data={BannerData} /> : null}
-
-            <PrivacyPolicyContent data={data?.data} />
-        </div>
-    );
+      {data?.data && <PrivacyPolicyContent data={data?.data} />}
+    </div>
+  );
 };
 
 export default page;

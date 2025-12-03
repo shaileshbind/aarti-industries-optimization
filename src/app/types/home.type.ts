@@ -87,6 +87,9 @@ export type FrameworkForgedProps = {
       title: string;
       description: string;
       image: ImageProps;
+      BulletPoints: {
+        title: string;
+      }[];
     }[];
     partnerWithUsCta: ButtonProps;
   };
