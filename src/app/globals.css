@@ -778,3 +778,13 @@ body {
     margin-top: 260px !important;
   }
 }
+
+.randdImageHeight {
+  
+  @media (max-width: 450px) {
+    height: 300px;
+  }
+  @media (max-width: 380px) {
+    height: 220px;
+  }
+}
