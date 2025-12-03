@@ -149,7 +149,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
     const onResize = () => measure(activeYear);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [activeYear]);
+  }, [activeYear, measure]);
 
   return (
     <div>

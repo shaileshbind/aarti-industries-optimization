@@ -1,0 +1,45 @@
+import { ImageProps } from "./global.type";
+
+export type PressReleaseBannerProps = {
+  data: {
+   sectionTitle: string;
+    description: string;
+    image: ImageProps;
+    mobImage: ImageProps;
+  };
+};
+
+// Press Release Item
+export type PressReleaseItem = {
+  id: string | number;
+  heading: string;
+  link: string;
+  file?: {
+    id?: number;
+    url?: string;
+  };
+  date?:string;
+};
+
+// Year and Press Release Layout
+export type YearAndPressReleaseLayout = {
+  id: number;
+  financial_year?:{
+    year?:string | number;
+  }
+  report?: {
+    id: number;
+    heading: string;
+    link: string;
+    file?: {
+      id?: number;
+      url?: string;
+    };
+  }[];
+};
+
+// Press Release Year Listing Props
+export type PressReleaseYearListingProps = {
+  yearAndPressReleases: YearAndPressReleaseLayout[];
+  latestReleases?: PressReleaseItem[];
+};
