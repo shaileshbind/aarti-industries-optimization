@@ -19,12 +19,11 @@ export async function getPageData(slug: string) {
     }
 
     const data = await response.json();
-
-     return {
-      data: data?.layout?.[0], 
-      seo: data?.seo,          
+    console.log("data", data?.layout?.[0]);
+    return {
+      data: data?.layout?.[0],
+      seo: data?.seo,
     };
-
   } catch (error: unknown) {
     // Handle fetch error
     if (error instanceof Error) {
