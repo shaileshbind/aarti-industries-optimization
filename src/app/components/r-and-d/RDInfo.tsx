@@ -77,7 +77,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data }) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto mb-[72px] lg:mb-[100px] mt-[50px]">
+      <div ref={wrapperRef} className="container mx-auto mb-[72px] lg:mb-[100px] mt-[unset] lg:mt-[50px]">
         {/* Top Line */}
         <div
           ref={topLineRef}

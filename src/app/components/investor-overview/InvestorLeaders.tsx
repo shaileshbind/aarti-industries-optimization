@@ -7,10 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
-import { InvestorWorldProps } from "@/app/types/investor-overview.type";
+import { InvestorPeopleProps} from "@/app/types/investor-overview.type";
 
-const InvestorLeaders = ({ data }: InvestorWorldProps) => {
-  const { title, leadersCard } = data;
+const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
+  const { title, testimonials } = data;
   const [active, setActive] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -35,12 +35,12 @@ const InvestorLeaders = ({ data }: InvestorWorldProps) => {
         <div className="grid grid-cols-1 xl:grid-cols-[500px_1fr] container gap-y-[16px] lg:gap-x-[80px]">
           {/* image section */}
           <div className="w-[100%] h-[300px] lg:h-[450px] overflow-hidden rounded-[14px] lg:rounded-[20px] relative">
-            {leadersCard?.[active]?.image?.url && (
+            {testimonials?.[active]?.image?.url && (
               <Image
-                src={leadersCard?.[active]?.image?.url}
+                src={testimonials?.[active]?.image?.url}
                 alt={
-                  leadersCard?.[active]?.image?.alternativeText
-                    ? leadersCard?.[active]?.image?.alternativeText
+                  testimonials?.[active]?.image?.alternativeText
+                    ? testimonials?.[active]?.image?.alternativeText
                     : "img"
                 }
                 fill
@@ -52,7 +52,7 @@ const InvestorLeaders = ({ data }: InvestorWorldProps) => {
           <div className="relative">
             {/* tabs */}
             <div className="flex gap-x-[8px] w-full">
-              {leadersCard?.map((items, index) => {
+              {testimonials?.map((items, index) => {
                 return (
                   <div
                     key={index}
@@ -134,10 +134,10 @@ const InvestorLeaders = ({ data }: InvestorWorldProps) => {
                 }}
                 className="w-full"
               >
-                {leadersCard?.map((items) => {
+                {testimonials?.map((items) => {
                   return (
                     <SwiperSlide key={items?.id}>
-                      <SubH2 className="text-grey-400">{items?.message}</SubH2>
+                      <SubH2 className="text-grey-400">{items?.testimonialText}</SubH2>
                       <SubH3 className="mt-[18px] lg:mt-[30px] !text-[16px] md:!text-[20px]">
                         {items?.name}
                       </SubH3>

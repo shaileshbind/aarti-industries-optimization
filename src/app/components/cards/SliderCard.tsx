@@ -46,7 +46,7 @@ const SliderCard: FC<SliderCardProps> = ({
       <div className="lg:hidden">
         <div
           className={clsx(
-            "relative w-full pt-[60%] h-[300px]",
+            "relative w-full pt-[60%] h-[250px] lg:h-[300px] mb-[10px] lg:mb-[unset]",
             "overflow-hidden rounded-[1rem] flex items-center justify-center"
           )}
         >
@@ -95,7 +95,7 @@ const SliderCard: FC<SliderCardProps> = ({
             ))}
           </div>
         )}
-        <div className="gap-[1%] mt-6 mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
+        <div className="gap-[1%] mt-[10px] lg:mt-6  mb-[20px] lg:mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
           {values?.map((stat, idx) => (
             <div key={idx}>
               {stat?.value && <H2 className="text-orange-200">{stat.value}</H2>}

@@ -9,6 +9,7 @@ type DateCardProps = {
   date?: string;
   desc?: string;
   animate?: boolean;
+  useTargetBlank?: boolean;
 };
 
 const DateCard = ({
@@ -18,12 +19,13 @@ const DateCard = ({
   date,
   desc,
   animate,
+  useTargetBlank = true,
 }: DateCardProps) => {
   const CardContent = () => (
     <>
       {animate ? (
         <div className="group relative inverted-radius transition-all duration-300">
-          <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[230px] overflow-hidden z-[2]">
+          <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2]">
             {imageSrc && (
               <Image
                 src={imageSrc}
@@ -64,7 +66,11 @@ const DateCard = ({
   );
 
   return link ? (
-    <Link href={link} target="_blank" className="block cursor-pointer">
+    <Link
+      href={link}
+      target={useTargetBlank ? "_blank" : "_self"}
+      className="block cursor-pointer"
+    >
       {animate && (
         <div className="absolute right-3 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500">
           <Image

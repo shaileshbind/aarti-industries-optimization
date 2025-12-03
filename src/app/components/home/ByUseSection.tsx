@@ -133,7 +133,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div ref={tabsRef} className="mt-[72px] md:mt-6 lg:mt-[50px] overflow-hidden topMarginCsm">
+    <div ref={tabsRef} className="mt-[72px] md:mt-2 lg:mt-[50px] overflow-hidden ">
       {/* Tabs */}
       <div  className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (

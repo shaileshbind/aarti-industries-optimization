@@ -5,6 +5,7 @@ import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
+import clsx from "clsx";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -25,6 +26,8 @@ type HeroBannerProps = {
   secondaryBtnRightLink?: string;
   showStar2?: boolean;
   showStar3?: boolean;
+  lineClassName?: string;
+  bottomMiddleStarClassName?: string;
 };
 const HeroBanner = ({
   centerText,
@@ -45,6 +48,8 @@ const HeroBanner = ({
   secondaryBtnRightLink,
   showStar2 = true,
   showStar3 = true,
+  lineClassName,
+  bottomMiddleStarClassName,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -155,7 +160,7 @@ const HeroBanner = ({
               <div
                 className={`w-full h-full absolute pt-[64px] z-[3] ${
                   centerText
-                    ? "flex flex-col items-center justify-center lg:pt-[50px] text-center"
+                    ? "flex flex-col items-center justify-center !pt-0 lg:!pt-[50px] text-center"
                     : "lg:pt-[150px]"
                 }`}
               >
@@ -168,7 +173,12 @@ const HeroBanner = ({
                 )}
                 {title && (
                   <FadeInRevealBlur delay={0.1}>
-                    <H2 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
+                    <H2
+                      className={clsx(
+                        `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
+                        centerText && "pr-0 md:pr-[70px]"
+                      )}
+                    >
                       {title}
                     </H2>
                   </FadeInRevealBlur>
@@ -223,21 +233,25 @@ const HeroBanner = ({
               {/* starts & lines */}
               <div
                 ref={lineVertical}
-                className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5"
+                className={clsx(
+                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
+                  lineClassName
+                )}
               />
               {!centerText && (
                 <div
                   ref={lineHorizontal}
-                  className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5"
+                  className={clsx(
+                    `absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5`
+                  )}
                 />
               )}
               <div
                 ref={starRef}
-                className="absolute 
-              bottom-[34px] lg:bottom-[84px] 
-              right-[67.5px] lg:right-[177px] 
-              w-[38px] lg:w-[72px] 
-              z-5 "
+                className={clsx(
+                  `absolute bottom-[34px] lg:bottom-[84px] right-[67.5px] lg:right-[177px] w-[38px] lg:w-[72px] z-5`,
+                  bottomMiddleStarClassName
+                )}
               >
                 <Image
                   src="/images/home/star-white.svg"
@@ -249,7 +263,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-22px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
+                  className="absolute bottom-[-22px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -354,7 +368,7 @@ const HeroBanner = ({
             {showStar2 && (
               <div
                 ref={starRef2}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
               >
                 <Image
                   src="/images/home/star-white.svg"
@@ -367,7 +381,7 @@ const HeroBanner = ({
             {showStar3 && (
               <div
                 ref={starRef3}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
               >
                 <Image
                   src="/images/home/star-white.svg"

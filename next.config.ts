@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         destination: "/investors/disclosures/disclosure",
         permanent: true,
       },
+      {
+        source: "/case-studies",
+        destination: "/blogs",
+        permanent: true,
+      },
     ];
   },
 };

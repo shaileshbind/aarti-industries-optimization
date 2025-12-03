@@ -1,0 +1,31 @@
+import React from "react";
+import DownloadCard from "./DownloadCard";
+import { BrandGuidelinesProps } from "@/app/types/media-kit.type";
+
+export default function BrandGuidelines({ data }: BrandGuidelinesProps) {
+  const { sectionImages } = data;
+
+  return (
+    <div>
+      {sectionImages?.[0]?.imageCards?.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 md:gap-6">
+          {sectionImages?.[0]?.imageCards?.map((item, index) => (
+            <div key={"bbrand" + index}>
+              <DownloadCard
+                src={item?.image?.url}
+                downloadUrl={item?.file?.url || item?.image?.url}
+                filename={item?.title || "brand-image"}
+              />
+
+              {item?.title && (
+                <p className="text-base md:text-lg text-[#002F50] pt-2 md:pt-[18px]">
+                  {item?.title}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

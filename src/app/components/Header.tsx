@@ -208,7 +208,7 @@ const Header = () => {
       <div
         className={clsx(
           `fixed left-0 right-0 z-50 bg-white`,
-          pathname === "/" ? `top-11` : `top-0`
+          pathname === "/" ? `top-9 lg:top-11` : `top-0`
         )}
       >
         {/* Main Header */}
