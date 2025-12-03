@@ -11,6 +11,7 @@ import "swiper/css";
 import { Navigation, Mousewheel } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
+import clsx from "clsx";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -24,6 +25,7 @@ interface ScrollTriggerInstance {
 const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   data,
   sliderData,
+  className
 }) => {
   const { leftText, rightText, image } = data;
   const { details } = sliderData;
@@ -281,7 +283,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         >
           <div className=" flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  lg:pt-[unset] ">
             {leftText && (
-              <span className="lg:min-w-[366px]" ref={headinLeft}>
+              <span className={clsx(`lg:min-w-[366px]`, className)} ref={headinLeft}>
                 <H2>{leftText}</H2>
               </span>
             )}
