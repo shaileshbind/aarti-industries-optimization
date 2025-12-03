@@ -51,6 +51,7 @@ export type RDAnalyticalExcProps = {
       }[];
     }[];
   };
+  className?: string;
 };
 
 export type RDDiverseChemProps = {

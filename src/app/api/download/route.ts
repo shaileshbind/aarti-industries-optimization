@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
         extension = mimeToExt[contentType] || 'file';
       }
     }
-    
-    const finalFilename = filename || `download.${extension}`;
+
+    const finalFilename = filename?.replace(/[^a-zA-Z0-9 ]/g, "") || `download.${extension}`;
     
     return new NextResponse(blob, {
       headers: {
