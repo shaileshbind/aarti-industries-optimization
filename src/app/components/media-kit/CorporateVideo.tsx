@@ -92,9 +92,9 @@ export default function CorporateVideo({ data }: CorporateVideoProps) {
 
   return (
     <div>
-      <SubH2 className="pb-[24px]">Corporate Video Name</SubH2>
+      <SubH2 className="pb-[24px] text-center lg:text-left">Corporate Video Name</SubH2>
 
-      <div className="relative w-full h-[280px] md:h-[628px] rounded-[20px] overflow-hidden">
+      <div className="relative w-full h-[220px] md:h-[628px] rounded-[20px] overflow-hidden">
         <video
           ref={videoRef}
           width="320"
