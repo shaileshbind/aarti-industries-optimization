@@ -15,6 +15,7 @@ import Image from "next/image";
 import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
+import clsx from "clsx";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,10 @@ export default async function page({ params }: BlogInnerProps) {
   const { blogInner } = await params;
   const data = await getBlogsCasestudies(
     `/blog-case-study/by-slug/${blogInner}`
+  );
+
+  const relatedBlogs = await getBlogsCasestudies(
+    `/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=blog&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&fields[4]=slug&filters[documentId][$ne]=${data?.data?.[0]?.documentId}&pagination[pageSize]=4&pagination[page]=1&status=published`
   );
 
   const {
@@ -35,7 +40,6 @@ export default async function page({ params }: BlogInnerProps) {
     contentSections,
     ctaSection,
     shareViaSocials,
-    relatedBlogs,
   } = data?.data?.[0];
 
   const seo = data?.data?.[0]?.seo;
@@ -63,6 +67,7 @@ export default async function page({ params }: BlogInnerProps) {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
       <div className="pt-[72px] lg:pt-[140px] fluid-container">
         <div className="md:flex items-start gap-[60px] relative">
           <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[60%]">
@@ -70,7 +75,7 @@ export default async function page({ params }: BlogInnerProps) {
               <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
             )}
 
-            {title && <H3>{title}</H3>}
+            {title && <H3 className="py-1">{title}</H3>}
 
             {bannerImageDesktop?.url && (
               <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
@@ -79,7 +84,7 @@ export default async function page({ params }: BlogInnerProps) {
                   width={872}
                   height={406}
                   alt={bannerImageDesktop?.all || "banner"}
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                 />
               </div>
             )}
@@ -124,35 +129,44 @@ export default async function page({ params }: BlogInnerProps) {
         </div>
 
         {/* Related Blogs */}
-        <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
-          {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
+        {relatedBlogs?.data?.length > 0 && (
+          <div className="pb-[72px] md:pb-[100px] pt-[72px] lg:pt-[120px]">
+            {relatedBlogSecTitle && <SubH1>{relatedBlogSecTitle}</SubH1>}
 
-          {relatedBlogs?.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
-              {relatedBlogs
-                ?.slice(0, 4)
-                ?.map((item: RelatedBogsProps, index: number) => (
-                  <div key={"item_" + index} className="relative">
-                    <DateCard
-                      imageSrc={item?.thumbnailImageDesktop?.url}
-                      date={formatDate(item?.date)}
-                      desc={item?.excerpt}
-                      link={
-                        type === "blog"
-                          ? `/blogs/${item?.slug}`
-                          : `/case-studies/${item?.slug}`
-                      }
-                      animate
-                      useTargetBlank={false}
-                    />
-                  </div>
-                ))}
-            </div>
-          )}
-        </div>
+            {relatedBlogs?.data?.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mt-[30px]">
+                {relatedBlogs?.data
+                  ?.slice(0, 4)
+                  ?.map((item: RelatedBogsProps, index: number) => (
+                    <div key={"item_" + index} className="relative">
+                      <DateCard
+                        imageSrc={item?.thumbnailImageDesktop?.url}
+                        date={formatDate(item?.date)}
+                        desc={item?.excerpt}
+                        link={
+                          type === "blog"
+                            ? `/blogs/${item?.slug}`
+                            : `/case-studies/${item?.slug}`
+                        }
+                        animate
+                        useTargetBlank={false}
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {globallyCertifiedData && (
-          <GloballyCertified itemsData={globallyCertifiedData} />
+          <div
+            className={clsx(
+              (relatedBlogs?.data?.length === 0 || !relatedBlogs) &&
+                "mt-[72px] lg:mt-[140px]"
+            )}
+          >
+            <GloballyCertified itemsData={globallyCertifiedData} />
+          </div>
         )}
 
         {ctaSection && (
