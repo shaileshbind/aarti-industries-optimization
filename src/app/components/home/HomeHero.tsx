@@ -190,7 +190,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-black/20 z-[1]" />
-
       {data?.banner?.length > 0 && (
         <Swiper
           onSwiper={(swiper: SwiperType) => {
@@ -265,12 +264,16 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[20vh] w-full z-10">
                     <div className="fluid-container">
-                      {items?.card?.[0]?.title && (
-                        <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                          {items?.card?.[0]?.title}
-                        </H1>
-                      )}
-
+                      {items?.card?.[0]?.title &&
+                        (index === 0 ? (
+                          <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                            {items.card[0].title}
+                          </H1>
+                        ) : (
+                          <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                            {items.card[0].title}
+                          </h2>
+                        ))}
                       {items?.card?.[0]?.description && (
                         <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
                           {items?.card?.[0]?.description}

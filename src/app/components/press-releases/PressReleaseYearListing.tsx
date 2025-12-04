@@ -36,7 +36,6 @@ export default function PressReleaseYearListing({
 }: PressReleaseYearListingProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [activeYear, setActiveYear] = useState<string | number>("");
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
 
@@ -149,7 +148,7 @@ export default function PressReleaseYearListing({
     const onResize = () => measure(activeYear);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [activeYear]);
+  }, [activeYear, measure]);
 
   return (
     <div className="fluid-container pt-10 pb-10 md:pb-[80px]">
@@ -375,7 +374,7 @@ export default function PressReleaseYearListing({
                 <MenuItem value={"Past years"}>Past years</MenuItem>
                 {yearAndPressReleases?.slice(4)?.map((items, index2) => (
                   <MenuItem
-                    value={items?.financial_year?.year} // ← Fixed
+                    value={items?.financial_year?.year} 
                     key={`mobile_archive_${index2}`}
                   >
                     {items?.financial_year?.year}
