@@ -8,6 +8,8 @@ import AnimateTextOnHover from "./ui/AnimateTextOnHover";
 import gsap from "gsap";
 import clsx from "clsx";
 import StockTicker from "./home/StockTicker";
+import { SubH1 } from "./Typography2";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -213,7 +215,7 @@ const Header = () => {
       >
         {/* Main Header */}
         <header className="bg-white border-b border-grey-100 flex justify-between">
-          <div className="ml-[20px] lg:ml-[60px] w-full h-auto">
+          <div className="ml-[20px] lg:ml-[60px] w-full h-auto relative z-10">
             <div className="flex items-center justify-between lg:justify-between h-16 lg:h-18 pr-[24px] relative">
               {/* Logo desktop */}
               <Link
@@ -363,6 +365,20 @@ const Header = () => {
               </div>
             </div>
           </Link>
+          <div className={clsx("absolute top-0 left-0 w-full bg-[#DFE0E1]")}>
+            <div className="container">
+              <div className="pt-26 pb-16 flex flex-col justify-start">
+               <SubH1 className="text-blue-200 font-medium">Search</SubH1>
+               <SearchBar
+                 value={""}
+                 onChange={() => {}}
+                 handleSearch={() => {}}
+                 placeholder="Search by Document Name..."
+                 headerSearch={true}
+                />
+                </div>
+            </div>
+          </div>
         </header>
       </div>
 
