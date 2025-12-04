@@ -1,6 +1,6 @@
 import React from "react";
 import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
-import RDInfo from "../components/r-and-d/RDInfo";
+import RDInfo from "../components/sections/RDInfo";
 import RDDiverseChem from "../components/r-and-d/RDDiverseChem";
 import RDSafety from "../components/r-and-d/RDSafety";
 import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
@@ -10,6 +10,7 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
 import SEO from "../components/SEO";
+
 export const dynamic = "force-dynamic";
 
 const page = async () => {
@@ -28,13 +29,13 @@ const page = async () => {
     section_seven,
     section_eight,
     section_nine,
-    section_ten
+    section_ten,
   } = data?.data;
   const seo = data?.seo;
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Research & Development"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}

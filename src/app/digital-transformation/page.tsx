@@ -4,7 +4,7 @@ import React from "react";
 import DigitalBanner from "../components/digital-transformation/DigitalBanner";
 import TitleCardsContainer from "../components/TitleCardsContainer";
 import MiddleBanner from "../components/digital-transformation/MiddleBanner";
-import DrivingCrossFunctional from "../components/digital-transformation/DrivingCrossFunctional";
+import DrivingCrossFunctional from "../components/sections/DrivingCrossFunctional";
 import FrameworkForged from "../components/sections/FrameworkForged";
 import GloballyCertified from "../components/GloballyCertified";
 import ExploreCards from "../components/digital-transformation/ExploreCards";
@@ -58,7 +58,7 @@ export default async function page() {
         <DrivingCrossFunctional data={section_four} />
       )}
       {section_five && (
-        <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
+        <div className="my-[72px] lg:my-[140px]">
           <FrameworkForged data={section_five} />
         </div>
       )}

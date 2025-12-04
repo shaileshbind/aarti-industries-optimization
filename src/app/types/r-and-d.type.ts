@@ -17,6 +17,7 @@ export type RDInfoProps = {
     valuesCard: ValueProps[];
     rightSectionImage: ImageProps;
   };
+  showLine?: boolean;
 };
 
 export type RDInnovatingChemProps = {
@@ -50,6 +51,7 @@ export type RDAnalyticalExcProps = {
       }[];
     }[];
   };
+  className?: string;
 };
 
 export type RDDiverseChemProps = {
@@ -66,8 +68,8 @@ export type RDDiverseChemProps = {
         cards: {
           id: string;
           title: string;
-          image?:ImageProps;
-          mobImage?:ImageProps;
+          image?: ImageProps;
+          mobImage?: ImageProps;
         }[];
       }[];
     };
@@ -79,8 +81,8 @@ export type RDDiverseChemProps = {
         cards: {
           id: string;
           title: string;
-          image?:ImageProps;
-          mobImage?:ImageProps;
+          image?: ImageProps;
+          mobImage?: ImageProps;
         }[];
       }[];
     };

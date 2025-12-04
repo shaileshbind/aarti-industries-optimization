@@ -20,7 +20,7 @@ export default function Photos({ data }: PhotosProps) {
               <div key={"photos" + index}>
                 <DownloadCard
                   src={item?.image?.url}
-                  downloadUrl={item?.image?.url}
+                  downloadUrl={item?.file?.url || item?.image?.url}
                   filename={item?.title || "leader"}
                 />
 
@@ -53,7 +53,7 @@ export default function Photos({ data }: PhotosProps) {
               <div key={"plant" + index}>
                 <DownloadCard
                   src={item?.image?.url}
-                  downloadUrl={item?.image?.url}
+                  downloadUrl={item?.file?.url || item?.image?.url}
                   filename={item?.title || "plant"}
                   className={`!h-[298px]`}
                 />

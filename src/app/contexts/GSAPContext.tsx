@@ -44,7 +44,7 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
   useEffect(() => {
     // Initialize Lenis Smooth Scroll with optimal settings
     const lenis = new Lenis({
-      duration: 0.8,
+      duration: 1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1,
@@ -56,7 +56,7 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
 
     // Add Lenis to GSAP ticker
     const raf = (time: number) => {
-      lenis.raf(time * 800);
+      lenis.raf(time * 1000);
     };
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
