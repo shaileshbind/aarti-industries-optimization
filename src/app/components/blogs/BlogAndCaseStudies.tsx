@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import SimpleTabs from "../SimpleTabs";
 import DateCard from "../cards/DateCard";
 import Pagination from "@mui/material/Pagination";
@@ -84,7 +84,6 @@ export default function BlogAndCaseStudies({
   data,
   lastestBlogId,
 }: BlogAndCaseStudiesProps) {
-  // Transform data into tabs format similar to MediaContainer
   const tabs =
     data?.toggleTabs?.map((item) => ({
       title: item?.title,
@@ -104,8 +103,8 @@ export default function BlogAndCaseStudies({
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch blog data via server-side API
-  const fetchBlogData = async (type: string, page: number) => {
+  const fetchBlogData = useCallback(
+  async (type: string, page: number) => {
     setLoading(true);
     setError(null);
 
@@ -137,14 +136,15 @@ export default function BlogAndCaseStudies({
     } finally {
       setLoading(false);
     }
-  };
+  },
+  [lastestBlogId]
+);
 
-  // Fetch data when active tab or page changes
-  useEffect(() => {
-    if (active) {
-      fetchBlogData(active, currentPage);
-    }
-  }, [active, currentPage]);
+useEffect(() => {
+  if (active) {
+    fetchBlogData(active, currentPage);
+  }
+}, [active, currentPage, fetchBlogData]);
 
   // Reset to page 1 when tab changes
   useEffect(() => {

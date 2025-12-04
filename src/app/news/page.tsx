@@ -1,32 +1,28 @@
 import React from "react";
-import GloballyCertified from "../components/GloballyCertified";
+import NewsBanner from "../components/news/NewsBanner";
+import NewsListing from "../components/news/NewsListing";
 import { getData } from "@/_lib/getData.fetch";
-import MediaContainer from "../components/media-kit/MediaContainer";
-import MediaBanner from "../components/media-kit/MediaBanner";
+import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";
-import SEO from "../components/SEO";
 import { getPageData } from "@/_lib/pageData.fetch";
-
+import SEO from "../components/SEO";
 export const dynamic = "force-dynamic";
 
-export default async function page() {
-  const data = await getPageData("/pages/by-slug/media-kit");
-
+const page = async () => {
+  const data = await getPageData("/pages/by-slug/news");
+  const { section_one, section_two } = data?.data;
+  const seo = data?.seo;
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-
-  const { section_one, section_two, section_three } = data?.data;
-  const seo = data?.seo;
-
   return (
     <div>
       <SEO
-        title={seo?.title ?? "Media Kit"}
+        title={seo?.title ?? "News"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/media-kit"}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/news"}
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -38,16 +34,14 @@ export default async function page() {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-
-      {section_one && <MediaBanner data={section_one} />}
-
-      {section_two && <MediaContainer data={section_two} />}
-
+      {section_one && <NewsBanner data={section_one} />}
+      <NewsListing />
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-
-      {section_three && <ContactBanner data={section_three} />}
+      {section_two && <ContactBanner data={section_two} />}
     </div>
   );
-}
+};
+
+export default page;

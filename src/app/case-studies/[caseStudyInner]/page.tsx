@@ -51,11 +51,11 @@ export default async function page({ params }: CaseStuydInnerProps) {
   return (
     <>
       <SEO
-        title={seo?.title ?? "Aarti Industries"}
+        title={seo?.title ?? "Case Studies"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+         canonical={seo?.canonical ?? `https://www.aarti-industries.com/case-studies/${caseStudyInner}`}
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
