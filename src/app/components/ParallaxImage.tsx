@@ -61,8 +61,7 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
           alt={alt}
           className="object-cover"
           priority
-          height={1080}
-          width={1920}
+          fill
         />
       </div>
     </div>
