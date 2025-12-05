@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Pagination } from "swiper/modules";
-import Tabs from "../Tabs";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps } from "@/app/types/home.type";
 import gsap from "gsap";
@@ -15,12 +14,36 @@ gsap.registerPlugin(ScrollTrigger);
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
-  const [active, setActive] = useState<string>(card?.[0]?.post_category?.slug);
-  const [activeIndex, setactiveIndex] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [indicator, setIndicator] = useState({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
+  const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureIndicator = useCallback(() => {
+    const activeButton = tabRefs.current[activeTab];
+    if (!activeButton || !containerRef.current) {
+      setIndicator((prev) =>
+        prev.visible ? { ...prev, visible: false } : prev
+      );
+      return;
+    }
+    const left =
+      activeButton.offsetLeft - (containerRef.current.scrollLeft || 0);
+    const width = activeButton.offsetWidth;
+    setIndicator({ left, width, visible: true });
+  }, [activeTab]);
+  useEffect(() => {
+    measureIndicator();
+    window.addEventListener("resize", measureIndicator);
+    return () => window.removeEventListener("resize", measureIndicator);
+  }, [measureIndicator]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -56,17 +79,15 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     };
   }, []);
 
-  const handleTabChange = (slug: string, index: number) => {
+  const handleTabClick = (index: number) => {
     if (!cardsWrapRef.current) {
-      setActive(String(slug));
-      setactiveIndex(index);
+      setActiveTab(index);
       return;
     }
 
     const cards = cardsWrapRef.current.querySelectorAll(".date-card-anim");
     if (!cards || cards.length === 0) {
-      setActive(String(slug));
-      setactiveIndex(index);
+      setActiveTab(index);
       return;
     }
 
@@ -79,8 +100,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const tl = gsap.timeline({
       defaults: { ease: "power2.in" },
       onComplete: () => {
-        setActive(String(slug));
-        setactiveIndex(index);
+        setActiveTab(index);
       },
     });
     tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
@@ -99,10 +119,15 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     return () => {
       tl.kill();
     };
-  }, [activeIndex]);
+  }, [activeTab]);
 
-  const postsCount = card[activeIndex]?.post_category?.posts?.length || 0;
-  // Determine if progress bar should be shown
+  const currentCard = card[activeTab];
+  const postsContent = Array.isArray(currentCard?.postContent)
+    ? currentCard.postContent
+    : currentCard?.postContent
+    ? [currentCard.postContent]
+    : [];
+  const postsCount = postsContent.length;
   const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
@@ -111,23 +136,55 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           <H2 className="text-blue-200">{sectionTitle}</H2>
         </div>
       )}
-
       <div className="mt-[18px] md:mt-[30px] w-full ">
         <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
-          <Tabs
-            tabs={card}
-            activeId={active}
-            onChange={(slug, index) => {
-              handleTabChange(slug, index);
-            }}
-          />
+          <div className="overflow-x-auto w-full ">
+            <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
+              <div
+                ref={containerRef}
+                className="relative flex gap-x-[14px] z-10 px-1 w-max"
+              >
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: indicator.visible ? indicator.left : 0,
+                    top: 0,
+                    height: "100%",
+                    borderRadius: 9999,
+                    background: "#F97316",
+                    width: indicator.visible ? indicator.width : 0,
+                    transition:
+                      "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)",
+                    zIndex: 0,
+                  }}
+                />
+                {card.map((item, index) => (
+                  <div
+                    key={item.id || index}
+                    ref={(el) => {
+                      if (el) {
+                        tabRefs.current[index] = el;
+                      }
+                    }}
+                    onClick={() => handleTabClick(index)}
+                    className={`text-grey-400 cursor-pointer font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
+                      activeTab === index ? "text-white" : "hover:bg-grey-200"
+                    }`}
+                  >
+                    {item.category}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {postsCount > 0 && (
           <>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
-                key={active}
+                key={activeTab}
                 spaceBetween={24}
                 slidesPerView={1.5}
                 breakpoints={{
@@ -151,14 +208,14 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 }
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
-                {card[activeIndex]?.post_category?.posts?.map((item, index) => (
-                  <SwiperSlide key={index}>
+                {postsContent.map((item, index) => (
+                  <SwiperSlide key={item?.id || index}>
                     <div className="date-card-anim">
                       <DateCard
                         imageSrc={item?.image?.url}
-                        date={item?.title}
+                        date={item?.date}
                         desc={item?.description}
-                        link={item?.slug}
+                        link={item?.link}
                         animate
                       />
                     </div>

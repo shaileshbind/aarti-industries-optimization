@@ -4,7 +4,8 @@ import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import Link from "next/link";
 import { ContactBannerProps } from "@/app/types/contact.type";
-import MSDSForm from "../forms/MSDSForm";
+// import MSDSForm from "../forms/MSDSForm";
+import GeneralForm from "../forms/GeneralForm";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
   return (
@@ -130,7 +131,8 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
             </div>
           </div>
           <div className="w-full lg:col-span-7 lg:pl-[30px]">
-            <MSDSForm onPageForm={true} />
+            {/* <MSDSForm onPageForm={true} /> */}
+            <GeneralForm showTitle={false} className="max-h-full overflow-y-visible pt-[0px]"/>
           </div>
         </div>
       </div>
