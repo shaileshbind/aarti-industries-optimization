@@ -7,10 +7,8 @@ import { fetchNews } from "@/_lib/fetchNews";
 
 type ItemProps = {
   id?: string;
-  file?: {
-    url?: string;
-  };
   heading?: string;
+  slug?:string;
 };
 export default function StockTicker() {
   const [pressReleases, setPressReleases] = useState<ItemProps[][]>([]);
@@ -46,10 +44,10 @@ export default function StockTicker() {
           {/* News */}
           <div className="flex gap-[110px]">
             {tickerData?.map((item: ItemProps) => {
-              if (!item.file?.url) return null;
+              if (!item?.slug) return null;
               return (
                 <Link
-                  href={item.file.url}
+                  href={`/press-releases/${item?.slug}`}
                   className="text-sm lg:text-base text-[#FFF]"
                   key={item.id}
                   target="_blank"
