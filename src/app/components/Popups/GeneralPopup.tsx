@@ -21,7 +21,7 @@ export default function GeneralPopup({
   prefillSubCategory,
 }: GeneralPopupProps) {
   return (
-    <div>
+    <div data-lenis-prevent>
       <Popup onOverlayClick={() => setshowGeneralPopup(false)} isOpen={isOpen}>
         <GeneralForm
           setshowGeneralPopup={setshowGeneralPopup}

@@ -9,12 +9,15 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  Autocomplete,
+  Paper,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
 import { Countries } from "../../../../utils/Countries";
 import Button from "../Button";
 import clsx from "clsx";
+import clsxN from "../../../../utils/clsxN";
 
 type FormValues = {
   fullName: string;
@@ -40,6 +43,8 @@ type GeneralFormProps = {
   prefillCategory?: string;
   prefillSubCategory?: string;
   prefillProduct?: string;
+  className?: string;
+  showTitle?: boolean;
 };
 
 type productsDataType = {
@@ -65,6 +70,8 @@ export default function GeneralForm({
   prefillCategory,
   prefillSubCategory,
   prefillProduct,
+  className,
+  showTitle = true,
 }: GeneralFormProps) {
   const [categorySubcategoryData, setCategorySubcategoryData] = useState<
     CategorySubcategoryItem[]
@@ -258,13 +265,19 @@ export default function GeneralForm({
   // --- Form JSX ---
   return (
     <div className="w-full">
-      <div>
-        <p className="text-xl text-[#002F50]">Recipient Information</p>
-        <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
-      </div>
-
+      {showTitle && (
+        <div>
+          <p className="text-xl text-[#002F50]">Recipient Information</p>
+          <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
+        </div>
+      )}
       <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
-        <div className=" flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container">
+        <div
+          className={clsxN(
+            `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
+            className
+          )}
+        >
           {/* Full Name */}
           <TextField
             label="Full Name *"
@@ -523,7 +536,6 @@ export default function GeneralForm({
             </FormControl>
           </div>
 
-          {/* Products */}
           {/* Products - CONDITIONAL MANDATORY */}
           {selectedSubcategory === "Chemicals Products" && (
             <FormControl
@@ -531,24 +543,33 @@ export default function GeneralForm({
               sx={MaterialInputStyle(!!errors.productName)}
               error={!!errors.productName}
             >
-              <InputLabel id="productName">Product Name *</InputLabel>
               <Controller
                 name="productName"
                 control={control}
-                rules={{ required: "Product Name is required" }} // Added required rule here
+                rules={{ required: "Product Name is required" }}
                 render={({ field }) => (
-                  <Select
+                  <Autocomplete
                     {...field}
-                    value={field.value || ""}
-                    labelId="productName"
-                    IconComponent={KeyboardArrowDownIcon}
-                  >
-                    {productsData?.map((product, index) => (
-                      <MenuItem key={index} value={product}>
-                        {product}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    options={productsData || []}
+                    getOptionLabel={(option) => option}
+                    onChange={(_, value) => field.onChange(value)}
+                    value={field.value || null}
+                    PaperComponent={(props) => (
+                      <Paper
+                        {...props}
+                        sx={{
+                          bgcolor: "#fffdf8",
+                        }}
+                      />
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Product Name *"
+                        error={!!errors.productName}
+                      />
+                    )}
+                  />
                 )}
               />
               {errors.productName && (

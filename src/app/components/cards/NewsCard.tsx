@@ -74,7 +74,7 @@ const NewsCard = ({
           <div className="mt-[16px] font-roboto text-[14px] leading-[140%] font-normal text-orange-200">
             {date}
           </div>
-          <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
+          <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
             {desc}
           </div>
         </div>
