@@ -29,7 +29,7 @@ const Page = async () => {
     section_eight,
   } = data?.data;
   const seo = data?.seo;
-
+console.log('partnership data',data);
   return (
     <div>
       <SEO
