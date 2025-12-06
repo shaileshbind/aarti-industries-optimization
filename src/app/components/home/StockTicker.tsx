@@ -15,7 +15,6 @@ export default function StockTicker() {
   useEffect(() => {
     const loadNews = async () => {
       const data = await fetchNews("/api/press");
-      console.log(data);
       setPressReleases(Object.values(data));
     };
     loadNews();

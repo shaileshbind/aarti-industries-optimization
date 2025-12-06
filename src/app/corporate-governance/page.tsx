@@ -27,7 +27,6 @@ const page = async () => {
     section_seven,
   } = data?.data;
   const seo = data?.seo
-  console.log(data);
   return (
     <div>
        <SEO
