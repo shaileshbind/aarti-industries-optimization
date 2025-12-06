@@ -1,4 +1,4 @@
-import { ButtonProps, ImageProps } from "./global.type";
+import { ImageProps } from "./global.type";
 
 export type MahasuperBannerProps = {
   data: {
@@ -16,19 +16,22 @@ export type ProductPortfolioProps = {
     data: {
       image: ImageProps;
       mobImage: ImageProps;
-      leftSection: {
+      cardSectionOneTitle: string;
+      cardSectionOneDescription: string;
+      cardSectionTwoTitle: string;
+      cardSectionTwoDescription: string;
+      cardSectionOne:{
+        id: string | number;
         title: string;
-        ctaButton: ButtonProps;
-        description: {
-            content: string;
-            items: { title: string }[];
-        };
-        accordion: {
-          title: string;
-          items: { title: string }[];
-        };
-      };
-       
+        description: string;
+        
+      }[];
+      cardSectionTwo:{
+        id: string | number;
+        title: string;
+        description: string;
+        
+      }[];
     };
   };
 

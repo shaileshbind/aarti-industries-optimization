@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { BodyText1, BodyText2, H2, H3, SubH2, SubH3 } from "../Typography2";
+import { BodyText2, SubH2, SubH3 } from "../Typography2";
 import ParallaxImage from "../ParallaxImage";
 import { ProductPortfolioProps } from "@/app/types/mahasuper.type";
 
 const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => { 
-  const { image, leftSection } = data;
+  const { image, cardSectionOneTitle, cardSectionOneDescription, cardSectionTwoTitle, cardSectionOne, cardSectionTwo } = data;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -39,19 +39,19 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
         <div className="w-full max-w-[540px] bg-white rounded-3xl relative ">
           {/* Main Content Section - Always Visible */}
           <div className="sm:pt-[40px] sm:pb-[120px] pt-7  flex flex-col">
-            {leftSection?.title && (
+            {cardSectionOneTitle && (
               <SubH2 className="w-full pb-6 px-[20px] sm:px-[42px] sm:!text-[30px]">
-                {leftSection?.title}
+                {cardSectionOneTitle}
               </SubH2>
             )}
 
-            {leftSection?.description && (
+            {cardSectionOneDescription && (
               <>
               <BodyText2 className="pb-7 px-[20px] sm:px-[42px]">
-                {leftSection?.description?.content}
+                {cardSectionOneDescription}
               </BodyText2>
               <div className="flex flex-col gap-2 px-[20px] sm:px-[40px]">
-              {leftSection?.description?.items?.length > 0 && leftSection?.description?.items?.map(
+              {cardSectionOne?.length > 0 && cardSectionOne?.map(
                 (item, index) =>
                   item?.title && (
                     <div key={index} className="flex items-start gap-3">
@@ -77,13 +77,13 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                 }`}
             >
               {/* Accordion Header - Always Visible */}
-              {leftSection?.accordion?.title && (
+              {cardSectionTwoTitle && (
                 <button
                   onClick={toggleAccordion}
                   className="w-full py-6 px-[42px] flex justify-between items-center cursor-pointer"
                 >
                   <SubH3 className="text-white">
-                    {leftSection?.accordion?.title}
+                    {cardSectionTwoTitle}
                   </SubH3>
                   <span
                     className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
@@ -95,7 +95,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               )}
 
               {/* Accordion Content - Collapsible */}
-              {leftSection?.accordion?.items?.length > 0 && (
+              {cardSectionTwo?.length > 0 && (
                 <div
                   className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
                 >
@@ -109,7 +109,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                   {/* Capabilities List */}
                   <div className="px-[42px] pb-9">
                     <div className="space-y-4 ">
-                      {leftSection?.accordion?.items?.map(
+                      {cardSectionTwo?.map(
                         (capability, index) =>
                           capability?.title && (
                             <div key={index} className="flex items-start gap-3">
@@ -138,13 +138,13 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
           className={`block sm:hidden mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mt-5`}
         >
           {/* Accordion Header - Always Visible */}
-          {leftSection?.accordion?.title && (
+          {cardSectionTwoTitle && (
             <button
               onClick={toggleAccordion}
               className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
             >
               <SubH2 className="text-white">
-                {leftSection?.accordion?.title}
+                {cardSectionTwoTitle}
               </SubH2>
               <span
                 className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
@@ -156,7 +156,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
           )}
 
           {/* Accordion Content - Collapsible */}
-          {leftSection?.accordion?.items?.length > 0 && (
+          {cardSectionTwo?.length > 0 && (
             <div
               className={`transition-all duration-700 ease-in-out 
                 ${isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"} 
@@ -167,7 +167,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               {/* Capabilities List */}
               <div className="px-[22px] pb-9">
                 <div className="space-y-4 ">
-                  {leftSection?.accordion?.items?.map(
+                  {cardSectionTwo?.map(
                     (capability, index) =>
                       capability?.title && (
                         <div key={index} className="flex items-start gap-3">

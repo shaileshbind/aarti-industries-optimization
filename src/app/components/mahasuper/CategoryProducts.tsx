@@ -1,10 +1,8 @@
 "use client";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { BodyText1, BodyText2, H2, H3, SubH2, SubH3, SubH1 } from "../Typography2";
-import ParallaxImage from "../ParallaxImage";
+import { SubH1 } from "../Typography2";
 import { CategoryProductsProps } from "@/app/types/mahasuper.type";
-import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
@@ -18,16 +16,13 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
     const [isBeginning, setIsBeginning] = useState(true);
     const [isEnd, setIsEnd] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
-console.log('category products data', data);
     return (
         <section className=" md:py-20 py-[30px] overflow-hidden ">
             <div className="md:mt-[40px] mt-[0px] lg:mt-[62px]">
                 <div className="flex flex-col lg:flex-row w-full">
                     {/* Left Content */}
                     <div className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[380px] xl:w-[420px] flex-shrink-0 mb-8 lg:mb-0">
-                        {/* {sectionTitle && ( */}
                             <SubH1 className="text-blue-200">{title}</SubH1>
-                        {/* )} */}
                     </div>
                     {/* Right Swiper */}
                     <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">

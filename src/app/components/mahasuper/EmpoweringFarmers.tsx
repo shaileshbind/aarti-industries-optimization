@@ -5,9 +5,6 @@ import { BodyText2, H2, H3, BodyText3 } from "../Typography2";
 import Button from "../Button";
 import { EmpoweringFarmersProps } from "@/app/types/mahasuper.type";
 
-
-
-
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
     const { title, description, states, subtitle, stats, ctaLink, ctaTitle,  image } = data;
   return (
