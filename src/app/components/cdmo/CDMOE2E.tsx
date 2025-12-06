@@ -5,7 +5,7 @@ import { BodyText2, H2, SubH2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination,Mousewheel } from "swiper/modules";
 import SwipeImage from "./SwipeImage";
 import { WordReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
@@ -25,7 +25,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   };
 
   return (
-    <div className="pt-[25px] lg:pt-[100px] overflow-hidden fluid-container">
+    <div className="pt-[22px] lg:pt-[100px] overflow-hidden fluid-container">
       <div className="flex flex-col-reverse lg:flex-row  lg:gap-20">
         {/* LEFT SIDE – TEXT + SWIPER */}
         <div
@@ -55,7 +55,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
               spaceBetween={30}
               onSlideChange={(swiper) => setActive(swiper.activeIndex)}
               // onSlideChangeTransitionStart={(swiper) => setActive(swiper.activeIndex)}
-              modules={[Pagination, Navigation]}
+              modules={[Pagination, Navigation,Mousewheel]}
               navigation={{
                 prevEl: ".swiper-button-prev-useBySection",
                 nextEl: ".swiper-button-next-useBySection",
@@ -64,6 +64,11 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                 el: ".home-by-use-section-swiper",
                 type: "progressbar",
               }}
+               mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
               className="rounded-xl overflow-hidden"
             >
               {content?.length > 0 &&

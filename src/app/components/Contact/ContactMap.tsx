@@ -37,10 +37,10 @@ const ContactMap = ({ data, data2 }: ContactMapProps) => {
           {data2?.map((items, index) => {
             return (
               <div key={index}>
-                <div className="text-white bg-gradient-orange-1 w-fit px-[24px] py-[6px] rounded-full text-[12px] uppercase">
+                <div className="text-white bg-gradient-orange-3 w-fit px-[24px] py-[6px] rounded-full text-[12px] uppercase">
                   {items?.officeLabel}
                 </div>
-                <SubH3 className="mt-[10px]">{items?.regionName}</SubH3>
+                <SubH3 className="mt-[10px] !text-[20px]">{items?.regionName}</SubH3>
                 <BodyText2 className="mt-[6px]">{items?.companyName}</BodyText2>
                 <BodyText2>{items?.address}</BodyText2>
               </div>

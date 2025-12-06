@@ -27,7 +27,7 @@ const Footer = ({ data }: FooterProps) => {
                 __html: "Follow Us",
               }}
             />
-            <div className=" hidden lg:grid mt-[15px] grid-cols-4 w-fit gap-x-[8px] ">
+            <div className=" hidden lg:grid mt-[15px] lg:grid-cols-4 xl:grid-cols-5 w-fit gap-[8px] ">
               {FollowUs?.map((items) => (
                 <a
                   key={items?.id}
@@ -148,7 +148,7 @@ const Footer = ({ data }: FooterProps) => {
             __html: "Follow Us",
           }}
         />
-        <div className=" mt-[15px] grid grid-cols-4 lg:hidden w-fit gap-x-[8px]">
+        <div className=" mt-[15px] grid grid-cols-5 md:hidden w-fit gap-[8px]">
           {FollowUs?.map((item) => (
             <Link
               key={item?.id}
