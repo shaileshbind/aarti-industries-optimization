@@ -8,7 +8,7 @@ import GlobalInnovation from "../components/sections/GlobalInnovation";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import Explore from "../components/manufacturing-capabilities/Explore";
-import VideoScrollBarContainer from "../components/manufacturing-capabilities/VideoScrollBarContainer";
+//import VideoScrollBarContainer from "../components/manufacturing-capabilities/VideoScrollBarContainer";
 import SEO from "../components/SEO";
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,7 @@ export default async function page() {
     section_three,
     section_four,
     section_five,
-    section_six,
+    //section_six,
     section_seven,
   } = data?.data;
  const seo = data?.seo;
@@ -58,11 +58,11 @@ export default async function page() {
       )}
       {section_four && <WhatSets data={section_four} />}
       {section_five && <GlobalInnovation data={section_five} />}
-      {section_six && (
+      {/* {section_six && (
         <div className="mb-[72px] lg:mb-[140px]">
           <VideoScrollBarContainer data={section_six} />
         </div>
-      )}
+      )} */}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

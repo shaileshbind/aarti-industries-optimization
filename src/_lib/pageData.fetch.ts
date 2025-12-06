@@ -13,6 +13,12 @@ export async function getPageData(slug: string) {
       },
     });
 
+    // If 404, return null instead of throwing
+    if (response.status === 404) {
+      return null;
+    }
+    
+
     // Handle non-OK response
     if (!response.ok) {
       throw new Error("Failed to fetch with response not ok");
@@ -23,6 +29,7 @@ export async function getPageData(slug: string) {
     return {
       data: data?.layout?.[0],
       seo: data?.seo,
+      pressData:data,
     };
   } catch (error: unknown) {
     // Handle fetch error
