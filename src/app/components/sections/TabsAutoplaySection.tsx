@@ -182,7 +182,7 @@ const TabsAutoplaySection = ({
                                   tabItem.card[0].image.alternativeText || "img"
                                 }
                                 fill
-                                className="absolute object-cover opacity-40"
+                                className="absolute object-cover blur-md"
                               />
                               <Image
                                 src={tabItem.card[0].image.url}
@@ -269,7 +269,7 @@ const TabsAutoplaySection = ({
       </div>
       {/* Mobile Accordion */}
       {data?.length > 0 && (
-        <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
+        <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] xl:py-[70px]">
           {data?.map((item, index) => (
             <div key={item.id} className="relative">
               <FaqAccordion
@@ -288,11 +288,11 @@ const TabsAutoplaySection = ({
                   <div className="mt-[20px] mb-[30px]">
                     {item?.card?.[0] && (
                       <>
-                        <div className="relative w-full h-[400px] xl:h-[200px] rounded-[14px] overflow-hidden">
+                        <div className={`relative w-full ${starImgEffect ? 'h-[300px] md:h-[400px]' : 'h-[200px] md:h-[400px]'}  rounded-[14px] overflow-hidden`}>
                           {item.card[0]?.image?.url && (
                             <>
                               {starImgEffect ? (
-                                <div className="absolute right-0 top-0 w-full h-[400px] xl:h-[200px] rounded-[14px] overflow-hidden">
+                                <div className="absolute right-0 top-0 w-full h-[300px] md:h-[400px] rounded-[14px] overflow-hidden">
                                   <Image
                                     src={item.card[0].image.url}
                                     alt={
@@ -300,7 +300,7 @@ const TabsAutoplaySection = ({
                                       "img"
                                     }
                                     fill
-                                    className="absolute object-cover opacity-40"
+                                    className="absolute object-cover blur-md"
                                   />
                                   <Image
                                     src={item.card[0].image.url}

@@ -89,7 +89,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
       {/* Part 1 - Pinned Section */}
       <div
         ref={sectionOne}
-        className="w-full lg:h-screen relative z-10 bg-white"
+        className="w-full xl:h-screen relative z-10 bg-white"
       >
         <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
           {sectionTitle && (
@@ -97,7 +97,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {sectionTitle}
             </H2>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px] ">
+          <div className="relative w-full h-[180px] lg:h-[550px] overflow-scroll ">
             <div className="w-fit h-full mx-auto hidden lg:block relative ">
               <DesktopMapSvg
                 hoverRestWorld={() => setActiveBlip(0)}
@@ -331,11 +331,14 @@ const GRMaps = ({ data }: GRMapsProps) => {
             />
           </div>
           <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
-            {mobileStatsData?.map((items) => {
+            {mobileStatsData?.map((items, index) => {
+              const isLastTwo = index >= mobileStatsData.length - 2;
               return (
                 <div
                   key={items?.id}
-                  className="border-b border-grey-200 pb-[16px] grid justify-center"
+                  className={`pb-[16px] grid justify-center ${
+                    !isLastTwo ? "border-b border-grey-200" : ""
+                  }`}
                 >
                   <H2 className="text-orange-200 text-center">
                     {items?.percent}
@@ -349,19 +352,21 @@ const GRMaps = ({ data }: GRMapsProps) => {
         {/* Part 2 - desktop only Circle Animation */}
         <div
           ref={revealCircle}
-          className="hidden lg:block fixed inset-0 bg-white transform scale-0 opacity-0 origin-center  z-20"
+          className="hidden xl:block fixed inset-0 bg-white transform scale-0 opacity-0 origin-center  z-20"
         >
           <div className="relative w-full container">
             <div
               ref={sectionTwo}
-              className=" relative z-30 h-auto min-h-screen my-[70px] w-full container grid lg:grid-cols-[35%_1fr] gap-x-[100px] items-center opacity-0 lg:opacity-100"
+              className=" relative z-30 h-auto min-h-screen my-[70px] w-full container grid xl:grid-cols-[35%_1fr] gap-x-[100px] items-center opacity-0 lg:opacity-100"
             >
               <div>
                 <div>
-                  {title &&<H3>{title}</H3>}
-                {description &&  <BodyText2 className="mt-[12px] lg:mt-[8px]">
-                    {description}
-                  </BodyText2>}
+                  {title && <H3>{title}</H3>}
+                  {description && (
+                    <BodyText2 className="mt-[12px] lg:mt-[8px]">
+                      {description}
+                    </BodyText2>
+                  )}
                   {ctaButton?.title && (
                     <div className="mt-5">
                       <Button
@@ -471,8 +476,8 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         fill
                         className="object-cover scale-110"
                       />
-                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                      <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
+                      <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                         <Image
                           src={
                             active === 0
@@ -511,10 +516,12 @@ const GRMaps = ({ data }: GRMapsProps) => {
         {/* Part 2 - Mobile only */}
         <div className="block lg:hidden">
           <div className="mt-[72px] mx-[20px]">
-           {title && <H3>{title}</H3>}
-           {description && <BodyText2 className="mt-[12px] lg:mt-[8px]">
-              {description}
-            </BodyText2>}
+            {title && <H3>{title}</H3>}
+            {description && (
+              <BodyText2 className="mt-[12px] lg:mt-[8px]">
+                {description}
+              </BodyText2>
+            )}
             {ctaButton?.title && (
               <div className="mt-5">
                 <Button
@@ -548,8 +555,8 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     fill
                     className="object-cover scale-110"
                   />
-                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                  <span className="absolute bottom-1 left-1 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[92%] h-[92%]">
+                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
+                  <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                     <Image
                       key={`inner-${activeMob}`}
                       src={

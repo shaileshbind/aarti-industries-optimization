@@ -20,8 +20,8 @@ const Banner: React.FC<
     <div className="relative overflow-hidden w-full h-[360px] md:h-[440px] flex items-center justify-center flex-col text-center py-8">
       {/* Text Content */}
       <div className="h-auto max-w-[65%] md:max-w-[30%] mt-20 z-10">
-        <H2 className="text-h2-l">{title}</H2>
-        <BodyText1 className="text-body-m mt-2.5 mb-9">{description}</BodyText1>
+        <H2 className="text-h2-l text-blue-100">{title}</H2>
+        <BodyText1 className="text-body-m mt-2.5 mb-9 text-[#646464]">{description}</BodyText1>
       </div>
 
       {/* Search */}
