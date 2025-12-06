@@ -29,7 +29,6 @@ const Page = async () => {
     section_eight,
   } = data?.data;
   const seo = data?.seo;
-
   return (
     <div>
       <SEO
