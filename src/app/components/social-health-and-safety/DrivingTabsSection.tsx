@@ -108,7 +108,6 @@ const DrivingTabsSection = ({
         setExpanded(panel);
       }
     };
-    console.log('tabs autoplay data',data);
   return (
     <>
       {title && (

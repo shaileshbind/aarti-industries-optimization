@@ -32,7 +32,6 @@ export default async function Home() {
     sectionTen,
   } = data?.data;
   const seo = data?.seo;
-console.log(data);
   return (
     <div>
       <SEO
