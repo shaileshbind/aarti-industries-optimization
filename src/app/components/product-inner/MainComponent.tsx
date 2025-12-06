@@ -60,7 +60,6 @@ export default function ProductInnerPage({
       });
     });
   }, [product?.product_sub_categories]);
-
   return (
     <div className="w-full min-h-screen">
       <div className="w-full container my-[70px] lg:my-[100px]">
@@ -162,22 +161,20 @@ export default function ProductInnerPage({
                 </div>
               )}
             </div>
-
             {/* RIGHT COLUMN */}
             <div>
-              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 xl:flex justify-between">
+              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 grid xl:grid-cols-[55%_1px_1fr] gap-x-[30px] ">
                 {/* Description */}
-                <div>
+                <div className="w-full">
                   {descriptionData?.length > 0 && (
                     <div>
                       <p className="pb-4 text-[#002F50] text-base md:text-lg">
                         Description :
                       </p>
-
-                      <div className="flex flex-col gap-[10px]">
+                      <div className="flex flex-col gap-[10px]  ">
                         {descriptionData?.map((item, index) => (
                           <div key={"desc_" + index} className="flex gap-4">
-                            <p className="text-sm md:text-base">
+                            <p className="text-sm md:text-base shrink-0">
                               {item?.title} :
                             </p>
                             <p className="text-sm md:text-base">{item?.desc}</p>
@@ -187,10 +184,7 @@ export default function ProductInnerPage({
                     </div>
                   )}
                 </div>
-
-                <div className="w-[1px] h-[140px] bg-[#002F5047] hidden xl:block" />
-                <div className="w-full h-[1px] bg-[#002F5047] my-4 block xl:hidden" />
-
+                <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-4 xl:my-0" />
                 {/* Applications */}
                 <div>
                   {product?.productDetails?.application?.length && (
@@ -198,50 +192,60 @@ export default function ProductInnerPage({
                       <p className="pb-4 text-[#002F50] text-base md:text-lg">
                         Applications :
                       </p>
-
-                      <div className="grid grid-cols-2 gap-[10px]">
+                      <div className="grid grid-cols-2 gap-x-[40px] justify-between">
                         {product?.productDetails?.application?.map(
-                          (item, index) => (
-                            <div
-                              key={"application" + index}
-                              className="flex gap-2"
-                            >
-                              <Image
-                                src="/images/star-orange.svg"
-                                alt="star"
-                                width={16}
-                                height={16}
-                              />
-                              <p className="text-sm md:text-base">
-                                {item?.application}
-                              </p>
-                            </div>
-                          )
+                          (item, index, arr) => {
+                            const isLastItem = index === arr.length - 1;
+                            const isOddCount = arr.length % 2 !== 0;
+                            const hasDesc = Boolean(item?.application?.trim());
+                            return (
+                              <div
+                                key={"application" + index}
+                                className={`flex gap-2 ${
+                                  isLastItem && isOddCount ? "col-span-2" : ""
+                                }`}
+                              >
+                                {hasDesc && (
+                                  <Image
+                                    src="/images/star-orange.svg"
+                                    alt="star"
+                                    width={16}
+                                    height={16}
+                                    className="shrink-0"
+                                  />
+                                )}
+                                {hasDesc && (
+                                  <p className="text-sm md:text-base">
+                                    {item.application}
+                                  </p>
+                                )}
+                              </div>
+                            );
+                          }
                         )}
                       </div>
                     </div>
                   )}
                 </div>
               </div>
-
               {/* Product Info Section */}
-              {productTable?.length > 0 && (
+              {productTable?.filter((item) => item?.desc)?.length > 0 && (
                 <div className="mt-[24px] border border-gray-200 rounded-[14px] lg:rounded-[20px] overflow-hidden">
-                  {productTable?.map((item, index) => (
-                    <div
-                      key={index}
-                      className={`${
-                        index % 2 === 0 ? "" : "bg-[#F7F9FA]"
-                      } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
-                    >
-                      {item?.title && (
+                  {productTable
+                    .filter((item) => item?.desc)
+                    .map((item, index) => (
+                      <div
+                        key={index}
+                        className={`${
+                          index % 2 === 0 ? "" : "bg-[#F7F9FA]"
+                        } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
+                      >
                         <BodyText2 className="text-[#002F50]">
-                          {item?.title + " :"}
+                          {item.title + " :"}
                         </BodyText2>
-                      )}
-                      {item?.desc && <BodyText2>{item.desc}</BodyText2>}
-                    </div>
-                  ))}
+                        <BodyText2>{item.desc}</BodyText2>
+                      </div>
+                    ))}
                 </div>
               )}
             </div>

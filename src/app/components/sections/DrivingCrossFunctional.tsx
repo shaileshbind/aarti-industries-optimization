@@ -1,5 +1,5 @@
 import React from "react";
-import TabsAutoplay from "../sections/TabsAutoplaySection";
+import TabsAutoplay from "./TabsAutoplaySection";
 import { DrivingCrossFunctionalProps } from "@/app/types/digital-transformation.type";
 
 const DrivingCrossFunctional: React.FC<DrivingCrossFunctionalProps> = ({

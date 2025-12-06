@@ -14,15 +14,19 @@ const OrangeCardListingPage = async ({
 }: OrangeCardListingPageProps) => {
   const data = await getPageData(`/pages/by-slug/${params}`);
   const key = Object.keys(data?.data).pop();
-  const seo = data?.seo
+  const seo = data?.seo;
+
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? `${data?.data?.title}`}
         metaTitle={seo?.metaTitle ?? `${data?.data?.title}`}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-      canonical={seo?.canonical ?? `https://www.aarti-industries.com/investors/${params}`}
+        canonical={
+          seo?.canonical ??
+          `https://www.aarti-industries.com/investors/${params}`
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

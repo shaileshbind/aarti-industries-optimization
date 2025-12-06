@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
@@ -127,8 +127,9 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  // helper to measure active item relative to yearsRowRef
-  const measure = (year: string | number = activeYear) => {
+  // // helper to measure active item relative to yearsRowRef
+  const measure = useCallback(
+  (year: string | number = activeYear) => {
     const row = yearsRowRef.current;
     const item = itemRefs.current.get(year);
     if (!row || !item) return;
@@ -140,16 +141,18 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
     const width = Math.round(itemRect.width);
 
     setUnderline({ left: Math.round(left), width });
-  };
+  },
+  [activeYear]
+);
 
-  // measure after layout and when activeYear changes
-  useLayoutEffect(() => {
-    measure(activeYear);
+// measure after layout and when activeYear changes
+useLayoutEffect(() => {
+  measure(activeYear);
 
-    const onResize = () => measure(activeYear);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [activeYear]);
+  const onResize = () => measure(activeYear);
+  window.addEventListener("resize", onResize);
+  return () => window.removeEventListener("resize", onResize);
+}, [activeYear, measure]);
 
   return (
     <div>

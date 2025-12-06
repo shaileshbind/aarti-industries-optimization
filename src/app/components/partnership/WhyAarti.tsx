@@ -75,7 +75,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [startAutoRotation]);
 
   return (
     <div className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">

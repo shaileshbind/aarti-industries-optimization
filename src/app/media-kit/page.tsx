@@ -22,11 +22,11 @@ export default async function page() {
   return (
     <div>
       <SEO
-        title={seo?.title ?? "Aarti Industries"}
+        title={seo?.title ?? "Media Kit"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/media-kit"}
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

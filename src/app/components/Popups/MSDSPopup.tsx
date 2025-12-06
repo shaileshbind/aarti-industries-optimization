@@ -15,7 +15,7 @@ export default function MSDSPopup({
   document,
 }: MSDSPopupProps) {
   return (
-    <div>
+    <div data-lenis-prevent>
       <Popup onOverlayClick={() => setshowMSDSPopup(false)} isOpen={isOpen}>
         <MSDSForm setshowMSDSPopup={setshowMSDSPopup} document={document} />
       </Popup>

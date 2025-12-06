@@ -87,6 +87,9 @@ export type FrameworkForgedProps = {
       title: string;
       description: string;
       image: ImageProps;
+      BulletPoints: {
+        title: string;
+      }[];
     }[];
     partnerWithUsCta: ButtonProps;
   };
@@ -96,19 +99,15 @@ export type LatestAtAartiProps = {
   data: {
     sectionTitle: string;
     card: {
-      category: string;
-      post_category: {
-        id: string;
-        name: string;
-        slug: string;
-        posts: {
-          id: string;
-          title: string;
-          slug: string;
-          description: string;
-          image: ImageProps;
-          mobImage: ImageProps;
-        }[];
+      id?: number;
+      category?: string;
+      postContent?: {
+        id?: string;
+        description?: string;
+        date?: string;
+        link?: string;
+        image?: ImageProps;
+        mobImage?: ImageProps;
       };
     }[];
   };

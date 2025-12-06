@@ -67,7 +67,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
     }, 50);
     return () => clearTimeout(timer);
   }, [activeIndex]);
-  
+
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
   const secondaryImageClasses =
@@ -220,6 +220,30 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       <BodyText2 className="mt-[12px] text-[#585858]">
                         {items?.description}
                       </BodyText2>
+
+                      <div className="flex flex-col gap-2 mt-3">
+                        {items?.BulletPoints?.length > 0 &&
+                          items?.BulletPoints?.map(
+                            (item, index2) =>
+                              item?.title && (
+                                <div
+                                  className="flex gap-2"
+                                  key={"pointerss_" + index2}
+                                >
+                                  <Image
+                                    src={"/images/star-orange.svg"}
+                                    alt={"star"}
+                                    className="object-cover object-top w-5 h-5"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  <p className="text-[#4C5861]">
+                                    {item?.title}
+                                  </p>
+                                </div>
+                              )
+                          )}
+                      </div>
                     </SwiperSlide>
                   );
                 })}

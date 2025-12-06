@@ -6,6 +6,7 @@ export type ImageProps = {
 export type ButtonProps = {
   title: string;
   link: string;
+  externalLink?:string;
 };
 
 export type ValueProps = {

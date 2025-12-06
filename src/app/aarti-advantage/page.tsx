@@ -34,11 +34,11 @@ export default async function page() {
   return (
     <div>
       <SEO
-        title={seo?.title ?? "Aarti Industries"}
+        title={seo?.title ?? "Aarti Advantage"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/aarti-advantage"}
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -55,10 +55,16 @@ export default async function page() {
 
       {section_two && <DetailsContainer data={section_two} />}
 
-      <RDAnalyticalExc data={section_three} sliderData={section_four} />
+      <div>
+        <RDAnalyticalExc
+          className="lg:!min-w-[0]"
+          data={section_three}
+          sliderData={section_four}
+        />
+      </div>
 
       {section_five && (
-        <div className="py-[72px] lg:py-[140px]">
+        <div className="pt-[180px] pb-[72px] lg:py-[140px]">
           <AilEdge data={section_five} />
         </div>
       )}

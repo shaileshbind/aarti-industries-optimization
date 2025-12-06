@@ -16,6 +16,7 @@ import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
 import clsx from "clsx";
+import StickyShare from "@/app/components/blogs/StickyShare";
 
 export const dynamic = "force-dynamic";
 
@@ -51,11 +52,11 @@ export default async function page({ params }: BlogInnerProps) {
   return (
     <>
       <SEO
-        title={seo?.title ?? "Aarti Industries"}
+        title={seo?.title ?? "Blogs"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com"}
+        canonical={seo?.canonical ?? `https://www.aarti-industries.com/blogs/${blogInner}`}
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -68,7 +69,7 @@ export default async function page({ params }: BlogInnerProps) {
         schemaData={seo?.schemaData}
       />
 
-      <div className="pt-[72px] lg:pt-[140px] fluid-container">
+      <div className="pt-[50px] lg:pt-[140px] fluid-container">
         <div className="md:flex items-start gap-[60px] relative">
           <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[60%]">
             {date && (
@@ -117,13 +118,17 @@ export default async function page({ params }: BlogInnerProps) {
             )}
           </div>
 
-          <div className="mt-6 md:mt-24 md:sticky md:top-24">
-            <p className="text-[#002F50] text-base pb-4">
-              {shareViaSocials?.title}
-            </p>
-            <div className="flex gap-4 items-start">
-              <Share />
-              <CopyLink />
+          <div className="hidden md:block">
+            <StickyShare title={shareViaSocials?.title} />{" "}
+          </div>
+
+          <div className="block md:hidden">
+            <div className="mt-6">
+              <p className="text-[#002F50] text-base pb-4">{shareViaSocials?.title}</p>
+              <div className="flex gap-4 items-start">
+                <Share />
+                <CopyLink />
+              </div>
             </div>
           </div>
         </div>
