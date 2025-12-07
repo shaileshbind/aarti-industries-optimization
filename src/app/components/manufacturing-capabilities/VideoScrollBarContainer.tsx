@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { H2, SubH3 } from "../Typography2";
+import { BodyText3, H2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import clsx from "clsx";
-import { FadeInReveal } from "../ScrollReveal";
+import { ScaleInReveal } from "../ScrollReveal";
 import Button from "../Button";
 import { useMediaQuery } from "@mui/material";
 import { VideoScrollBarContainerProps } from "@/app/types/manufacturing-capabilities.type";
@@ -18,25 +18,26 @@ export default function VideoScrollBarContainer({
   const [showAll, setshowAll] = useState<boolean>(false);
 
   return (
-    <div className="fluid-container">
+    <div className="container"> 
       {title && <H2 className="lg:max-w-[560px]">{title}</H2>}
 
       {card?.length > 0 && (
         <div className="mt-6 lg:mt-12 flex justify-between">
-          <div className="lg:w-[40%] xl:w-[35%] flex flex-col gap-4 lg:gap-6 lg:max-h-[60vh] lg:overflow-y-auto scrollbar">
+          <div className=" relative lg:w-[40%] xl:w-[35%] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:shadow-[0px_0px_21px_20px_rgba(255,255,255,1)] after:bg-white " >
+            <div className="relative lg:max-h-[470px] lg:overflow-y-auto scrollbar w-full flex flex-col gap-4 lg:gap-6 " data-lenis-prevent>
             {(isMobile ? (showAll ? card : card?.slice(0, 5)) : card)?.map(
               (item, index) => (
                 <div
                   key={"item_" + index}
                   className={clsx(
                     `flex gap-4 items-center cursor-pointer transition-all duration-200`,
-                    activeCard === index ? "opacity-100" : "lg:opacity-40"
+                    activeCard === index ? "opacity-100" : "lg:opacity-40 hover:opacity-70"
                   )}
                   onClick={() => setactiveCard(index)}
                 >
                   <div
                     className={clsx(
-                      `w-[180px] h-[100px] p-1 lg:border-2 rounded-[20px] overflow-hidden `,
+                      `w-[180px] h-[100px] p-1 lg:border-2 rounded-[17px] overflow-hidden `,
                       activeCard === index
                         ? "lg:border-[#DC4C03]"
                         : "border-[#FFF]"
@@ -47,26 +48,29 @@ export default function VideoScrollBarContainer({
                       alt={"banner"}
                       width={180}
                       height={100}
-                      className="w-full h-full rounded-[14px]"
+                      className="w-full h-full rounded-[14px] object-cover"
                     />
                   </div>
-
-                  {item?.title && (
+                  <div className="flex flex-col gap-2">
+                  <BodyText3 className="text-orange-200">{item?.date}</BodyText3>
+                  {item?.title && item?.date && (
                     <SubH3
-                      className={clsx(
-                        `lg:max-w-[80%] xl:max-w-[200px] text-[#4C5861]`
-                      )}
-                    >
-                      {item?.title}
-                    </SubH3>
-                  )}
+                        className={clsx(
+                          `line-clamp-2 lg:max-w-[80%] xl:max-w-[200px] text-[#4C5861]`
+                        )}
+                      >
+                        {item?.title}
+                      </SubH3>
+                    )}
+                  </div>
                 </div>
               )
             )}
+            </div>
           </div>
 
           {card?.[activeCard]?.media?.url && (
-            <FadeInReveal className="w-1/2 xl:w-[60%] h-[470px] rounded-[20px] overflow-hidden hidden lg:block">
+            <ScaleInReveal className="w-1/2 xl:w-[60%] h-[470px] rounded-[20px] overflow-hidden hidden lg:block">
               <video
                 width="600"
                 height="470"
@@ -77,7 +81,7 @@ export default function VideoScrollBarContainer({
                 <source src={card?.[activeCard]?.media?.url} type="video/mp4" />
                 <source src={card?.[activeCard]?.media?.url} type="video/ogg" />
               </video>
-            </FadeInReveal>
+            </ScaleInReveal>
           )}
         </div>
       )}

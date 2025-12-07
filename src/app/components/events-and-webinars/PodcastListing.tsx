@@ -1,0 +1,181 @@
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { PodcastListingProps } from "@/app/types/events-and-webinars.type";
+import PodcastCard from "./PodcastCard";
+import FeaturedPodcastCard from "./FeaturedPodcastCard";
+import { H2 } from "../Typography2";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import { styled } from "@mui/material/styles";
+import Image from "next/image";
+
+// Custom styled Pagination
+const StyledPagination = styled(Pagination)(({ theme }) => ({
+  "& .MuiPaginationItem-root": {
+    color: "#9997A2",
+    fontSize: "16px",
+    fontWeight: 400,
+    border: "none",
+    minWidth: "40px",
+    height: "40px",
+    margin: "0 4px",
+    transition: "all 0.3s ease",
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "32px",
+      height: "32px",
+      fontSize: "14px",
+      margin: "0 2px",
+    },
+    "&:hover": {
+      backgroundColor: "#EFF3F5",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "#EFF3F5",
+      color: "#1a1a1a",
+      fontWeight: 500,
+      "&:hover": {
+        backgroundColor: "#EFF3F5",
+      },
+    },
+  },
+  "& .MuiPaginationItem-previousNext": {
+    color: "#9997A2",
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "32px",
+      height: "32px",
+    },
+  },
+  "& .MuiPaginationItem-ellipsis": {
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "24px",
+    },
+  },
+}));
+
+// Custom arrow components
+const PreviousIcon = () => (
+  <Image
+    src="/images/accordian-down.svg"
+    alt="arrow"
+    width={34}
+    height={34}
+    className="rotate-90 w-5 h-5 md:w-[34px] md:h-[34px]"
+  />
+);
+
+const NextIcon = () => (
+  <Image
+    src="/images/accordian-down.svg"
+    alt="arrow"
+    width={34}
+    height={34}
+    className="rotate-270 w-5 h-5 md:w-[34px] md:h-[34px]"
+  />
+);
+
+const PodcastListing = ({ data }: PodcastListingProps) => {
+  const itemsPerPage = 3;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const cardsWrapRef = useRef<HTMLDivElement>(null);
+
+  // Calculate total pages based on podcasts count (excluding featured podcast)
+  useEffect(() => {
+    if (data?.podcasts) {
+      // Exclude the first podcast (featured) from pagination
+      const podcastsForPagination = data.podcasts.length > 1 ? data.podcasts.slice(1) : [];
+      const total = Math.ceil(podcastsForPagination.length / itemsPerPage);
+      setTotalPages(total || 1);
+    } else {
+      setTotalPages(1);
+    }
+  }, [data?.podcasts, itemsPerPage]);
+
+  // Reset to page 1 if current page is out of bounds when totalPages changes
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [totalPages]);
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of content
+    if (cardsWrapRef.current) {
+      cardsWrapRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  // Get paginated podcasts - useMemo to prevent unnecessary recalculations
+  // Exclude the first podcast (featured) from pagination
+  const paginatedPodcasts = React.useMemo(() => {
+    if (!data?.podcasts || data.podcasts.length === 0) return [];
+    // Exclude the first podcast (featured) from the list
+    const podcastsForPagination = data.podcasts.length > 1 ? data.podcasts.slice(1) : [];
+    if (podcastsForPagination.length === 0) return [];
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, podcastsForPagination.length);
+    const sliced = podcastsForPagination.slice(startIndex, endIndex);
+    // Ensure we only return exactly itemsPerPage items (or less if it's the last page)
+    return sliced.slice(0, itemsPerPage);
+  }, [data?.podcasts, currentPage, itemsPerPage]);
+
+  // Get featured podcast (first podcast from the list)
+  const featuredPodcast = data?.podcasts && data.podcasts.length > 0 ? data.podcasts[0] : null;
+
+  return (
+    <section className="py-[40px] lg:py-[60px]">
+        <div className="container">
+            <H2 className=" mb-[30px]">{data?.title}</H2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="col-span-1">
+                {featuredPodcast && (
+                  <FeaturedPodcastCard podcast={featuredPodcast} />
+                )}
+              </div>
+              <div className="col-span-1">
+                <div 
+                  className="flex flex-col gap-4"
+                  ref={cardsWrapRef}
+                >
+                  {paginatedPodcasts.map((podcast, index) => (
+                    <PodcastCard 
+                      key={`podcast-${currentPage}-${index}-${podcast?.title || index}`} 
+                      podcast={podcast} 
+                    />
+                  ))}
+                </div>
+                {paginatedPodcasts.length > 0 && data?.podcasts && data.podcasts.length > 1 && totalPages > 1 && (
+              <div className="flex justify-end mt-[20px]">
+                <StyledPagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  shape="rounded"
+                  renderItem={(item) => (
+                    <PaginationItem
+                      slots={{
+                        previous: PreviousIcon,
+                        next: NextIcon,
+                      }}
+                      {...item}
+                    />
+                  )}
+                />
+              </div>
+            )}
+              </div>
+            </div>
+           
+        </div>
+    </section>
+  );
+};
+
+export default PodcastListing;
