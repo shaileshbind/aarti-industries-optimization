@@ -14,6 +14,7 @@ import SearchBar from "./SearchBar";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const mobileNavRef = useRef<HTMLDivElement>(null);
   const mobileMenuToggle = () => {
@@ -184,6 +185,9 @@ const Header = () => {
     setOpenDropdown(null);
   };
 
+  const handleSearchToggle = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
   // Close mobile menu when route changes
   useEffect(() => {
     if (isMenuOpen && mobileNavRef.current) {
@@ -233,7 +237,7 @@ const Header = () => {
               </Link>
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
-                className="hidden lg:flex space-x-8 xl:space-x-10 absolute right-[212px] pr-[24px] h-[100%] items-center   "
+                className="hidden lg:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
                 {navigation.map((item, index) => (
@@ -306,9 +310,10 @@ const Header = () => {
                   </div>
                 ))}
                 {/* Desktop Search Icon */}
-                <div className="flex items-center cursor-pointer h-[100%] px-2">
-                  <div className="w-[20px] h-[20px] relative">
-                    <Image src="/images/search.svg" alt="icon" fill />
+                <div className="flex items-center cursor-pointer h-[100%]">
+                  <div className="w-[52px] h-[72px] relative flex items-center justify-center" onClick={handleSearchToggle}>
+                    <Image src="/images/search.svg" alt="icon" width={20} height={20} />
+                    <Image src="/images/search-close.svg" alt="icon" width={20} height={20} className={clsx("absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300", isSearchOpen ? "opacity-100" : "")} />
                   </div>
                 </div>
               </nav>
@@ -358,16 +363,14 @@ const Header = () => {
             </div>
           </div>
           {/* Contact Button - Fixed on right */}
-          <Link href="/contact" className="w-fit">
-            <div className="absolute top-0 right-0 w-[88px] lg:w-[212px] bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18">
-              <div className="cursor-pointer text-[14px] lg:text-[16px] text-white font-medium">
+          <Link href="/contact" 
+          className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18">
                 Get in touch
-              </div>
-            </div>
           </Link>
-          <div className={clsx("absolute top-0 left-0 w-full bg-[#DFE0E1]")}>
-            <div className="container">
-              <div className="pt-26 pb-16 flex flex-col justify-start">
+          <div className={
+            clsx("absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-[00px] overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10", isSearchOpen ? "!max-h-[320]" : "")}>
+            <div className="container relative">
+              <div className={clsx("absolute top-0 left-0 w-full pt-26 pb-16 flex flex-col justify-start transition-opactiy duration-600 delay-600", isSearchOpen ? "opacity-100" : "opacity-0 ")}>
                <SubH1 className="text-blue-200 font-medium">Search</SubH1>
                <SearchBar
                  value={""}
