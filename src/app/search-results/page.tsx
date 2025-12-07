@@ -1,4 +1,3 @@
-
 import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 // import { getData } from "@/_lib/getData.fetch";
@@ -18,7 +17,9 @@ const page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/search-results"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/search-results"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -32,9 +33,7 @@ const page = async () => {
       />
       <div className="container">
         <SearchResults />
-      
       </div>
-       
     </div>
   );
 };
