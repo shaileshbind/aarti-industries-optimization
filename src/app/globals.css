@@ -630,7 +630,7 @@ body {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px !important;
+  width: 2px !important;
 }
 .scrollbar::-webkit-scrollbar-button {
   background: #ffffff !important;

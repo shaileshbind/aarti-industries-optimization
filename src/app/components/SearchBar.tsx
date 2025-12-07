@@ -1,11 +1,13 @@
 import Image from "next/image";
 import React from "react";
+import clsx from "clsx";
 
 type SearchBarProps = {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: () => void;
   placeholder?: string;
+  headerSearch?: boolean;
 };
 
 export default function SearchBar({
@@ -13,11 +15,12 @@ export default function SearchBar({
   onChange,
   placeholder,
   handleSearch,
+  headerSearch,
 }: SearchBarProps) {
   return (
     <form
       onSubmit={handleSearch}
-      className="flex items-center w-full bg-white rounded-full shadow-sm overflow-hidden mx-auto max-w-[85%] md:max-w-[560px] z-10 mt-9"
+      className={clsx("flex items-center w-full bg-white rounded-full shadow-sm overflow-hidden  max-w-[85%]  z-10 ", headerSearch ? "mr-0 md:max-w-[760px] mt-4" : "mx-auto md:max-w-[560px] mt-9")}
     >
       <input
         type="text"
