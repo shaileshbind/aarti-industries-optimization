@@ -63,11 +63,11 @@ const section_nine =[
   return (
     <div>
       <SEO
-        title={seo?.title ?? "Mahasuper"}
+        title={seo?.title ?? "Social Health and Safety"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/mahasuper"}
+        canonical={seo?.canonical ?? "https://www.aarti-industries.com/social-health-and-safety"}  
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
