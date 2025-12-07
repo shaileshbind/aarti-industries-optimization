@@ -106,7 +106,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
           }}
           onClick={() => onChange("all")}
           type="button"
-          className={`cursor-pointer p-2 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
+          className={`cursor-pointer p-3 md:px-[24px] md:py-[12px] rounded-full transition-colors duration-200 relative z-10 ${
             activeTab === "all"
               ? "!text-white"
               : "bg-transparent !text-[#4C5861]"

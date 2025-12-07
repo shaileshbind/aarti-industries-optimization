@@ -80,16 +80,16 @@ export default function TimeLine({
   }, [currentPhase]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:my-[100px] relative lg:pt-0 pt-4">
+    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
       <WordReveal className="fluid-container" stagger={0.1} fromY={10} duration={3}>
-        <H3 className="lg:w-[35%] static lg:absolute lg:top-24 mb-5 lg:mb-[unset]">
+        <H3 className="lg:w-[35%] static lg:absolute lg:top-40 mb-5 lg:mb-[unset]">
           {sectionTitle}
         </H3>
       </WordReveal>
 
       <FadeInGroup
         stagger={0.2}
-        className="absolute lg:right-[-170] right-[-10] top-11 z-0 pointer-events-none flex gap-0"
+        className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0"
       >
         <h1 className="font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]">
           {String(currentYear).slice(2, 3)}
@@ -99,8 +99,8 @@ export default function TimeLine({
         </h1>
       </FadeInGroup>
 
-      <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-end fluid-container">
-        <div className="lg:w-[35%] h-fit">
+      <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-center lg:items-end fluid-container">
+        <div className="lg:w-[320px] h-fit lg:mb-9">
           <FadeInRevealBlur delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}
@@ -111,10 +111,10 @@ export default function TimeLine({
         </div>
 
         <div
-          className="lg:w-[50%] w-full lg:gap-6 gap-2 align-baseline justify-center lg:justify-end flex lg:flex-wrap"
+          className="xl:w-[50%] w-full lg:gap-6 gap-2 align-baseline justify-center lg:justify-end flex lg:flex-wrap items-center xl:mr-20"
           ref={imagesContainerRef}
         >
-          <div className="lg:w-[295px] lg:h-[340px] w-[170px] h-[196px]" ref={image1Ref}>
+          <div className="md:w-[295px] md:h-[340px] w-[170px] h-[196px]" ref={image1Ref}>
             <Image
               src={images[0]}
               alt={phases[currentPhase]?.title}
@@ -124,7 +124,7 @@ export default function TimeLine({
             />
           </div>
           <div className="flex flex-col lg:gap-6 gap-2 justify-end" ref={image2Ref}>
-            <div className="lg:w-[239px] lg:h-[200px] w-[144px] h-[130px] relative">
+            <div className="md:w-[239px] md:h-[200px] w-[144px] h-[130px] relative">
               <Image
                 src={images[2]}
                 alt={phases[currentPhase]?.title}
@@ -132,7 +132,7 @@ export default function TimeLine({
                 className="h-full w-full object-cover lg:rounded-3xl rounded-xl"
               />
             </div>
-            <div className="lg:w-[217px] lg:h-[220px] w-[135px] h-[121px]" ref={image3Ref}>
+            <div className="md:w-[217px] md:h-[220px] w-[135px] h-[121px]" ref={image3Ref}>
               <Image
                 src={images[1]}
                 alt={phases[currentPhase]?.title}
@@ -153,7 +153,7 @@ export default function TimeLine({
         </div>
       </div>
 
-      <div className="hidden lg:block fluid-container">
+      <div className="fluid-container">
         <MainTimeline
           phases={phases}
           activePhase={currentPhase}

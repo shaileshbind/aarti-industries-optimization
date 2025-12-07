@@ -24,7 +24,9 @@ export default async function page() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/our-story"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/our-story"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
