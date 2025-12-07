@@ -67,16 +67,17 @@ export type EducationDevelopmentProps = {
 export type ImpactStoriesSliderProps = {
   data: {
     title: string;
-    items: {
+    stories: {
       id: string | number;
       title: string;
       description: string;
+      image: ImageProps;
       items: {
         id: string | number;
         title: string;
         description: string;
       }[];
-      image: ImageProps;
+      
     }[];
   };
 };
