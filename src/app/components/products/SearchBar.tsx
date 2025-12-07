@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     >
       <input
         type="text"
-        placeholder="Search by product name, chemistry, or application"
+        placeholder="Search by product name"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"

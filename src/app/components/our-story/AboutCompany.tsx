@@ -12,7 +12,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
   const { sectionTitle, description, ctaButton } = data;
 
   return (
-    <section className="fluid-container flex flex-col lg:flex-row justify-between my-[22px] lg:my-[20px]">
+    <section className="fluid-container flex flex-col lg:flex-row gap-x-[200px] my-[22px] lg:my-[20px]">
       {/* Left Section — Title */}
       <FadeInRevealBlur delay={0.1}>
         {sectionTitle && (
@@ -23,7 +23,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
       </FadeInRevealBlur>
 
       {/* Right Section — Description & CTA */}
-      <div className="w-full lg:w-[75%] mt-5 lg:mt-0">
+      <div className="w-full lg:w-[60%] mt-5 lg:mt-0">
         {description && (
           <AnimatedText>
             <H3 className="whitespace-pre-line">{description}</H3>

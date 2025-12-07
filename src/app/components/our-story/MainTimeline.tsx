@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import { BodyText3 } from "../Typography2";
+import { BodyText2, BodyText3 } from "../Typography2";
 import Image from "next/image";
 
 interface Phase {
@@ -27,11 +27,13 @@ export default function MainTimeline({
   activePhase: externalActivePhase,
   activeYear: externalActiveYear,
   onPhaseClick: externalPhaseClick,
-  onYearClick: externalYearClick
+  onYearClick: externalYearClick,
 }: TimelineProps) {
   // Use external state if provided, otherwise maintain internal state
   const [internalActivePhase, setInternalActivePhase] = useState(0);
-  const [internalActiveYear, setInternalActiveYear] = useState(phases[0].years[0]);
+  const [internalActiveYear, setInternalActiveYear] = useState(
+    phases[0].years[0]
+  );
 
   const activePhase = externalActivePhase ?? internalActivePhase;
   const activeYear = externalActiveYear ?? internalActiveYear;
@@ -130,7 +132,7 @@ export default function MainTimeline({
   return (
     <div className="w-full">
       {/* Mobile View - Timeline Only (Dropdown will be in parent) */}
-      <div className="md:hidden flex items-center justify-center w-full max-w-md mx-auto mt-8">
+      <div className="flex lg:hidden items-center justify-center w-full max-w-md mx-auto h-[100px]">
         {/* Mobile Timeline - Single Phase */}
         <div className="flex-1 relative">
           <div className="relative w-full flex justify-between items-center px-4">
@@ -146,14 +148,21 @@ export default function MainTimeline({
                 className={`relative transition-all duration-300 z-10 w-1.5 h-1.5 rounded-full cursor-pointer bg-gray-200 `}
               >
                 <div
-                      className={`absolute inset-0 h-3 w-3 top-[-10] !z-50 left-[-9] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
-                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
+                  className={`absolute inset-0 h-4 w-4 top-[-13] !z-50 -left-[12px] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
+                      ${
+                        activeYear === year
+                          ? "opacity-100 bg-white/0"
+                          : "opacity-0"
+                      }
                     `}
-                      style={{ backgroundImage: "url('/images/star-orange.svg')" }}
-                    ></div>
+                  style={{ backgroundImage: "url('/images/star-orange.svg')" }}
+                ></div>
                 <BodyText3
-                  className={`absolute top-6 left-1/2 transform -translate-x-1/2 text-xs whitespace-nowrap ${activeYear === year ? "text-orange-600 font-medium" : "text-gray-600"
-                    }`}
+                  className={`absolute top-6 left-1/2 transform -translate-x-1/2 !text-xs whitespace-nowrap transition-all duration-300 ${
+                    activeYear === year
+                      ? "text-orange-600 font-medium scale-120"
+                      : "text-gray-600"
+                  }`}
                 >
                   {year}
                 </BodyText3>
@@ -164,7 +173,7 @@ export default function MainTimeline({
       </div>
 
       {/* Desktop View - Original Layout */}
-      <div className="hidden md:flex items-end justify-center w-full gap-3 px-4 py-16 overflow-hidden">
+      <div className="hidden lg:flex items-end justify-center w-full gap-3 px-4 py-16 overflow-hidden">
         {/* Timeline */}
         <div className="flex w-full max-full mx-6 transition-all">
           {phases.map((phase, i) => (
@@ -174,29 +183,39 @@ export default function MainTimeline({
                 if (el) phaseRefs.current[i] = el;
               }}
               onClick={() => handlePhaseClick(i)}
-              className={`flex flex-col items-center ml-1 justify-center relative cursor-pointer transition-all duration-500 ${activePhase === i ? " text-gray-900" : " text-gray-400"
-                }`}
+              className={`flex flex-col ml-1 justify-center relative cursor-pointer items-start transition-all duration-500 ${
+                activePhase === i ? " text-gray-900" : " text-gray-400"
+              }`}
             >
-              <BodyText3
-                className={`mb-2 pb-5 ${activePhase === i ? "text-gray-800" : "text-gray-400"
-                  }`}
+              <BodyText2
+                className={`mb-2 pb-5 ${
+                  activePhase === i ? "text-gray-800" : "text-gray-400"
+                }`}
               >
                 {phase.title}
-              </BodyText3>
+              </BodyText2>
 
               <div
                 className={`relative w-full flex justify-between items-center 
-                ${i === 0
+                ${
+                  i === 0
                     ? "pr-0"
-                    // : i === phases.length - 1
-                    //   ? "pl-7"
-                    : "pl-14"
-                  } ${activePhase === i ? "!pl-0" : "z-10"}
-                    ${activePhase > 0 && activePhase === i + 1 ? "!pr-14" : "z-10"}
+                    : // : i === phases.length - 1
+                      //   ? "pl-7"
+                      "pl-14"
+                } ${activePhase === i ? "!pl-0" : "z-10"}
+                    ${
+                      activePhase > 0 && activePhase === i + 1
+                        ? "!pr-14"
+                        : "z-10"
+                    }
                   `}
               >
-                <div className={`absolute top-1/2 left-0 right-0 h-[1px] -translate-y-1/2 ${activePhase === i ? " bg-slate-400/80" : " bg-gray-200"
-                  } `} />
+                <div
+                  className={`absolute top-1/2 left-0 right-0 h-[1px] -translate-y-1/2 ${
+                    activePhase === i ? " bg-slate-400/80" : " bg-gray-200"
+                  } `}
+                />
 
                 {phase.years.map((year) => (
                   <div
@@ -210,15 +229,26 @@ export default function MainTimeline({
                       handleYearClick(year);
                     }}
                     className={`relative z-30 w-1.5 h-1.5 bg-amber-500 rounded-full cursor-pointer transition-all duration-300
-                      ${activePhase === i ? activeYear === year?"!bg-transparent":"bg-gray-400" : "bg-gray-200/80"}
+                      ${
+                        activePhase === i
+                          ? activeYear === year
+                            ? "!bg-transparent"
+                            : "bg-gray-400"
+                          : "bg-gray-200/80"
+                      }
                     `}
                   >
-                    
                     <div
                       className={`absolute inset-0 h-3 w-3 top-[-10] !z-50 left-[-9] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
-                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
+                      ${
+                        activeYear === year
+                          ? "opacity-100 bg-white/0"
+                          : "opacity-0"
+                      }
                     `}
-                      style={{ backgroundImage: "url('/images/star-orange.svg')" }}
+                      style={{
+                        backgroundImage: "url('/images/star-orange.svg')",
+                      }}
                     ></div>
                     {/* YEAR LABEL: smooth fade */}
                     <BodyText3
@@ -228,7 +258,9 @@ export default function MainTimeline({
                         (activePhase === i
                           ? "opacity-100 translate-y-0 pointer-events-auto"
                           : "opacity-0 translate-y-2 pointer-events-none") +
-                        (activeYear === year ? " text-orange-100" : " text-[#8B97AF")
+                        (activeYear === year
+                          ? " text-orange-100"
+                          : " text-[#8B97AF")
                       }
                     >
                       {year}
@@ -275,4 +307,3 @@ export default function MainTimeline({
     </div>
   );
 }
-
