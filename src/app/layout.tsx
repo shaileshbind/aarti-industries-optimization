@@ -6,8 +6,15 @@ import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { GlobalCursor } from "./GlobalCursor";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 import SEO from "./components/SEO";
+import type { Metadata } from "next";
 
 export const revalidate = 1;
+
+export const metadata: Metadata = {
+  icons: {
+    icon: "/images/favicon.png",
+  },
+};
 
 const roboto = Roboto({
   subsets: ["latin"],
