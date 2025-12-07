@@ -8,13 +8,19 @@ import AnimateTextOnHover from "./ui/AnimateTextOnHover";
 import gsap from "gsap";
 import clsx from "clsx";
 import StockTicker from "./home/StockTicker";
-import { SubH1 } from "./Typography2";
+import { BodyText3, SubH1 } from "./Typography2";
 import SearchBar from "./SearchBar";
+import { HeaderProps } from "../types/header-footer.type";
 
-const Header = () => {
+const Header = ({ data }: HeaderProps) => {
+  const { Logo, menu  } = data || {};
+  // ctaButton
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [expandedSubMenuId, setExpandedSubMenuId] = useState<number | null>(null);
+  const [mobileExpandedMenu, setMobileExpandedMenu] = useState<number | null>(null);
+  const [mobileExpandedSubMenu, setMobileExpandedSubMenu] = useState<number | null>(null);
   const [searchedValue, setsearchedValue] = useState<string>("");
 
   const router = useRouter();
@@ -24,6 +30,9 @@ const Header = () => {
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
       setIsMenuOpen(false);
+      // Reset expanded menus when closing
+      setMobileExpandedMenu(null);
+      setMobileExpandedSubMenu(null);
       gsap.fromTo(
         mobileNavRef.current,
         {
@@ -37,6 +46,20 @@ const Header = () => {
       );
     } else {
       setIsMenuOpen(true);
+      // Find first menu item with dropdown and expand it
+      if (menu && menu.length > 0) {
+        const firstMenuWithDropdown = menu.findIndex(
+          (item) => item.subMenu && item.subMenu.length > 0
+        );
+        if (firstMenuWithDropdown !== -1) {
+          setMobileExpandedMenu(firstMenuWithDropdown);
+          // Also expand the first submenu within that menu
+          const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
+          if (firstSubMenu?.id !== undefined) {
+            setMobileExpandedSubMenu(firstSubMenu.id);
+          }
+        }
+      }
       gsap.fromTo(
         mobileNavRef.current,
         {
@@ -50,140 +73,13 @@ const Header = () => {
       );
     }
   };
-
-  const navigation = [
-    {
-      name: "Company",
-      href: "/company",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "About Us", href: "/company/about-us" },
-        { name: "Our Customers", href: "/company/our-customer" },
-        { name: "Awards", href: "/company/awards" },
-        { name: "CSR", href: "/company/csr" },
-        { name: "Journey", href: "/company/journey" },
-        { name: "Events", href: "/company/events" },
-      ],
-    },
-    {
-      name: "Products & Services",
-      href: "/products-and-services",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "Products", href: "/products" },
-        { name: "Testing Services", href: "/products/testing-services" },
-        { name: "Strategic Partnership", href: "/partnership" },
-        {
-          name: "CDMO",
-          href: "/cdmo-contract-development-and-manufacturing-operations",
-        },
-      ],
-    },
-    {
-      name: "R&D",
-      href: "/r-and-d",
-      hasDropdown: false,
-    },
-    {
-      name: "Sustainability",
-      href: "/sustainability",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "Overview", href: "/sustainability-overview" },
-        { name: "Health & Safety", href: "/sustainability/Health-and-Safety" },
-        { name: "Environment", href: "/environment" },
-        {
-          name: "Responsible Workforce",
-          href: "/sustainability/responsible-workforce",
-        },
-        { name: "Ethics", href: "/ethics" },
-        {
-          name: "Social Commitment",
-          href: "/sustainability/social-commitment",
-        },
-        {
-          name: "Responsible Procurement",
-          href: "/sustainability/responsible-procurement",
-        },
-        { name: "Compliance", href: "/sustainability/compliance" },
-        {
-          name: "Sustainability Reports",
-          href: "/sustainability/sustainability-reports",
-        },
-        {
-          name: "GPS Safety Summary",
-          href: "/sustainability/health-and-safety/gps-safety-summary",
-        },
-      ],
-    },
-    {
-      name: "Investors",
-      href: "/investors",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "Overview", href: "/investor-relations" },
-        { name: "Disclosures", href: "/investors/disclosures" },
-        {
-          name: "Financial information",
-          href: "/investors/financial-information",
-        },
-        {
-          name: "Shareholders Information",
-          href: "/shareholder-information",
-        },
-        {
-          name: "Corporate Governance",
-          href: "/investors/corporate-governance",
-        },
-        { name: "Code & Policy", href: "/code-and-policies" },
-        { name: "Downloads", href: "/investors/download" },
-        {
-          name: "Annual reports",
-          href: "/annual-reports",
-        },
-      ],
-    },
-    {
-      name: "Careers",
-      href: "/careers",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "Why Aarti Industries", href: "/careers/why-aarti" },
-        { name: "Values", href: "/careers/Values-and-Cultural-Attributes" },
-        { name: "Rewards & Benefits", href: "/careers/rewards-and-benefits" },
-        { name: "Nurturing Talent", href: "/careers/Nurturing-talent" },
-        { name: "Join Our Team", href: "/careers/why-aarti" },
-        { name: "Life @ Aarti", href: "/life-at-aarti" },
-        { name: "Campus", href: "/campus-opportunities" },
-        {
-          name: "Job Fraud Alert",
-          href: "/upload/pdf/Job-Fraud-Alert-AIL.pdf",
-          target: "_blank",
-        },
-      ],
-    },
-    {
-      name: "Contact us",
-      href: "/contact",
-      hasDropdown: true,
-      dropdownItems: [
-        { name: "Contact us", href: "/contact" },
-        {
-          name: "Supplier Portal",
-          href: "https://docs.google.com/forms/d/e/1FAIpQLScdbjHXbe4v0DJWPhjvT3m_oOs8kirFMJ7Lir6JOzqlFZbPGg/viewform",
-          target: "_blank",
-        },
-      ],
-    },
-  ];
-
   const isActive = (href: string) => {
     return pathname === href || pathname.startsWith(href + "/");
   };
 
-  const handleDropdownToggle = (index: number) => {
-    setOpenDropdown(openDropdown === index ? null : index);
-  };
+  // const handleDropdownToggle = (index: number) => {
+  //   setOpenDropdown(openDropdown === index ? null : index);
+  // };
 
   const closeAllDropdowns = () => {
     setOpenDropdown(null);
@@ -191,6 +87,40 @@ const Header = () => {
 
   const handleSearchToggle = () => {
     setIsSearchOpen(!isSearchOpen);
+  };
+
+  const toggleSubMenu = (subMenuId: number) => {
+    setExpandedSubMenuId((prev) => {
+      // If clicking the same submenu, close it; otherwise, open the new one (accordion behavior)
+      return prev === subMenuId ? null : subMenuId;
+    });
+  };
+
+  const toggleMobileMenu = (menuIndex: number) => {
+    const isCurrentlyExpanded = mobileExpandedMenu === menuIndex;
+
+    if (isCurrentlyExpanded) {
+      // Closing the menu - reset submenu
+      setMobileExpandedMenu(null);
+      setMobileExpandedSubMenu(null);
+    } else {
+      // Opening the menu - expand it and also expand the first submenu
+      setMobileExpandedMenu(menuIndex);
+
+      // Find and expand the first submenu within this menu item
+      if (menu && menu[menuIndex]?.subMenu && menu[menuIndex].subMenu.length > 0) {
+        const firstSubMenu = menu[menuIndex].subMenu[0];
+        if (firstSubMenu?.id !== undefined) {
+          setMobileExpandedSubMenu(firstSubMenu.id);
+        }
+      }
+    }
+  };
+
+  const toggleMobileSubMenu = (subMenuId: number) => {
+    setMobileExpandedSubMenu((prev) => {
+      return prev === subMenuId ? null : subMenuId;
+    });
   };
   // Close mobile menu when route changes
   useEffect(() => {
@@ -210,6 +140,19 @@ const Header = () => {
     }
   }, [pathname]);
 
+  // When a dropdown opens, expand the first submenu by default
+  useEffect(() => {
+    if (openDropdown !== null && menu) {
+      const currentMenu = menu[openDropdown];
+      if (currentMenu?.subMenu && currentMenu.subMenu.length > 0) {
+        const firstSubMenuId = currentMenu.subMenu[0].id ?? 0;
+        setExpandedSubMenuId(firstSubMenuId);
+      }
+    } else {
+      // When dropdown closes, reset expanded submenu
+      setExpandedSubMenuId(null);
+    }
+  }, [openDropdown, menu]);
   const handleSearch = (e?: React.FormEvent | React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
@@ -231,110 +174,193 @@ const Header = () => {
       {/* Fixed Header Container */}
       <div
         className={clsx(
-          `fixed left-0 right-0 z-50 bg-white`,
+          `fixed left-0 right-0 z-50`,
           pathname === "/" ? `top-9 lg:top-11` : `top-0`
         )}
       >
         {/* Main Header */}
-        <header className="bg-white border-b border-grey-100 flex justify-between">
+        <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
           <div className="ml-[20px] lg:ml-[60px] w-full h-auto relative z-10">
             <div className="flex items-center justify-between lg:justify-between h-16 lg:h-18 pr-[24px] relative">
               {/* Logo desktop */}
-              <Link
-                href="/"
-                className="hidden lg:flex items-center space-x-2 z-50"
-                onClick={() => {
-                  setsearchedValue("");
-                  setIsSearchOpen(false);
-                }}
-              >
-                <Image
-                  src="/images/logo.png"
-                  alt="Aarti Industries Logo"
-                  width={112}
-                  height={46}
-                  className="w-[112px]"
-                  objectPosition="center"
-                />
-              </Link>
+              {Logo?.Logo?.url && (
+                <Link
+                  href={Logo?.link || "/"}
+                  className="hidden lg:flex items-center space-x-2 z-50"
+                >
+                  <Image
+                    src={Logo?.Logo?.url}
+                    alt={Logo?.Logo?.alternativeText || "logo"}
+                    width={112}
+                    height={46}
+                    className="w-[112px]"
+                    objectPosition="center"
+                  />
+                </Link>
+              )}
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
                 className="hidden lg:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
-                {navigation.map((item, index) => (
-                  <div
-                    key={item.name}
-                    className="relative group h-[100%] grid "
-                    onMouseEnter={() =>
-                      item.hasDropdown && setOpenDropdown(index)
-                    }
-                    onMouseLeave={() =>
-                      item.hasDropdown && setOpenDropdown(null)
-                    }
-                  >
-                    <Link
-                      href={item.href}
-                      className={`flex items-center transition-colors hover:text-orange-500 ${
-                        isActive(item.href)
+                {menu?.map((item, index) => {
+                  const hasDropdown = item.subMenu && item.subMenu.length > 0;
+                  return (
+                    <div
+                      key={item.id}
+                      className="relative group h-[100%] grid "
+                      onMouseEnter={() =>
+                        hasDropdown && setOpenDropdown(index)
+                      }
+                      onMouseLeave={() =>
+                        hasDropdown && setOpenDropdown(null)
+                      }
+                    >
+                      <button
+                        className={`flex items-center transition-colors hover:text-orange-500 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
                           ? "text-orange-500 font-medium"
                           : "text-gray-700"
-                      }`}
-                    >
-                      <AnimateTextOnHover
-                        staggered
-                        activeHover={isActive(item.href)}
-                        className="text-sm font-medium"
-                      >
-                        {item.name}
-                      </AnimateTextOnHover>
-                      {item.hasDropdown && (
-                        <svg
-                          className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                            openDropdown === index ? "rotate-180" : ""
                           }`}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+                      >
+                        <AnimateTextOnHover
+                          staggered
+                          activeHover={isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")}
+                          className="text-sm font-medium"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      )}
-                    </Link>
+                          {item.menuTitle}
+                        </AnimateTextOnHover>
+                        {item.subMenu && item.subMenu.length > 0 && (
+                          <svg
+                            className={`ml-1 h-4 w-4 transition-transform duration-200 ${openDropdown === index ? "rotate-180" : ""
+                              }`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        )}
+                      </button>
 
-                    {item.hasDropdown && (
-                      <div
-                        className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-100 transition-all duration-200 z-[60] ${
-                          openDropdown === index
+                      {item.subMenu && item.subMenu.length > 0 && (
+                        <div
+                          className={`absolute top-full left-0 translate-x-[-30%] mt-2  w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 transition-all duration-500 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] ${openDropdown === index
                             ? "opacity-100 visible transform translate-y-0"
                             : "opacity-0 invisible transform -translate-y-2"
-                        }`}
-                      >
-                        <div className="py-2">
-                          {item.dropdownItems?.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.name}
-                              href={dropdownItem.href}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
-                              onClick={() => {
-                                setsearchedValue("");
-                                setIsSearchOpen(false);
-                                setOpenDropdown(null);
-                              }}
-                            >
-                              {dropdownItem.name}
-                            </Link>
-                          ))}
+                            }`}
+                        >
+                          <div className="grid grid-cols-2   gap-2">
+                            <div className="max-h-[500px] overflow-y-auto col-span-1">
+                              {item.subMenu.map((subMenuItem, subMenuIndex) => {
+                                const subMenuId = subMenuItem.id ?? subMenuIndex;
+                                const isExpanded = expandedSubMenuId === subMenuId;
+                                return (
+                                  <div key={subMenuId}>
+                                    <button
+                                      onClick={() => toggleSubMenu(subMenuId)}
+                                      className="w-full flex items-center justify-between text-sm font-medium py-2 text-orange-200 hover:text-orange-300 transition-colors cursor-pointer"
+                                    >
+                                      <BodyText3 className="text-orange-200">{subMenuItem.title}</BodyText3>
+                                      {subMenuItem.item && subMenuItem.item.length > 0 && (
+                                        <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                                      )}
+                                    </button>
+                                    {subMenuItem.item && subMenuItem.item.length > 0 && (
+                                      <div className={`mb-2 last:mb-0 overflow-hidden transition-all duration-600 ease-in-out max-h-0 ${isExpanded ? "!max-h-[500px] opacity-100" : ""}`}>
+                                        <div className="pt-1">
+                                          {subMenuItem.item.map((item) => {
+                                            // Get href from cta_link.link first, then fall back to externalLink
+                                            const href = item.cta_link?.link || item.externalLink;
+                                            
+                                            // Handle items without a valid link - show as disabled
+                                            if (!href || href === "#") {
+                                              return (
+                                                <div
+                                                  key={item.id}
+                                                  className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed"
+                                                >
+                                                  {item.title}
+                                                </div>
+                                              );
+                                            }
+
+                                            const isExternal = href.startsWith("http://") || href.startsWith("https://");
+                                            const target = item.target || (isExternal ? "_blank" : "_self");
+
+                                            // For external links, use regular <a> tag, for internal use Next.js Link
+                                            if (isExternal) {
+                                              return (
+                                                <a
+                                                  key={item.id}
+                                                  href={href}
+                                                  target={target}
+                                                  rel="noopener noreferrer"
+                                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                  onClick={() => setOpenDropdown(null)}
+                                                >
+                                                  {item.title}
+                                                </a>
+                                              );
+                                            }
+
+                                            return (
+                                              <Link
+                                                key={item.id}
+                                                href={href}
+                                                target={target}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                onClick={() => {
+                                                  setsearchedValue("");
+                                                  setIsSearchOpen(false);
+                                                  setOpenDropdown(null);
+                                                }}
+                                              >
+                                                {item.title}
+                                              </Link>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            {item.image && item.image.url && (
+                              <div className="overflow-y-auto col-span-1 p-7">
+                                <div className="w-[250px] h-[240px] relative">
+                                  <div className="absolute inset-0 overflow-hidden w-full h-full rounded-[10px]">
+                                    <Image
+                                      src={item.image.url}
+                                      alt={item.image.alternativeText || "active-img"}
+                                      fill
+                                      className="object-cover scale-110 w-full h-full "
+                                    />
+                                    <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md !rounded-[10px] overflow-hidden"></i>
+                                    <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-full h-full">
+                                      <Image
+                                        src={item.image.url}
+                                        alt={item.image.alternativeText || "active-img"}
+                                        fill
+                                        className="object-cover scale-110 w-full h-full"
+                                      />
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
                         </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      )}
+                    </div>
+                  );
+                })}
                 {/* Desktop Search Icon */}
 
                 {pathname !== "/search-results" && (
@@ -372,40 +398,38 @@ const Header = () => {
                 <div className="w-6 h-6 relative">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
-                      isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
-                    }`}
+                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
+                      }`}
                   />
                   <span
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${
-                      isMenuOpen ? "opacity-0" : "opacity-100"
-                    }`}
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${isMenuOpen ? "opacity-0" : "opacity-100"
+                      }`}
                   />
                   <span
-                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
-                      isMenuOpen
-                        ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
-                        : ""
-                    }`}
+                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen
+                      ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
+                      : ""
+                      }`}
                   />
                 </div>
               </button>
 
               {/* Logo mobile center */}
-              <Link
-                href="/"
-                className="block lg:hidden items-center space-x-2 z-50"
-              >
-                <Image
-                  src="/images/logo.png"
-                  alt="Aarti Industries Logo"
-                  width={112}
-                  height={46}
-                  className="w-[112px]"
-                  objectPosition="center"
-                />
-              </Link>
-
+              {Logo?.Logo?.url && (
+                <Link
+                  href={Logo?.link || "/"}
+                  className="block lg:hidden items-center space-x-2 z-50"
+                >
+                  <Image
+                    src={Logo?.Logo?.url}
+                    alt={Logo?.Logo?.alternativeText || "logo"}
+                    width={112}
+                    height={46}
+                    className="w-[112px]"
+                    objectPosition="center"
+                  />
+                </Link>
+              )}
               {/* Mobile Search */}
               {pathname !== "/search-results" && (
                 <div className="h-[100%] block lg:hidden">
@@ -426,12 +450,11 @@ const Header = () => {
               <div className="block lg:hidden w-[50px]" />
             </div>
           </div>
+          
 
           {/* Contact Button - Fixed on right */}
-          <Link
-            href="/contact"
-            className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18"
-          >
+          <Link href="/contact"
+            className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18">
             Get in touch
           </Link>
 
@@ -465,73 +488,159 @@ const Header = () => {
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
         ref={mobileNavRef}
-        className={`lg:hidden fixed inset-x-0 bg-white border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%]`}
-        style={{ paddingTop: "var(--header-height, 80px)" }}
+        className={`lg:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
+        style={{ paddingTop: `${pathname === "/" ? `99px` : `63px`}` }}
       >
         {/* Mobile/Tablet Navigation Links */}
-        <nav className="py-2">
-          {navigation.map((item, index) => (
-            <div
-              key={item.name}
-              className="border-b border-gray-100 last:border-b-0"
-            >
-              <div className="flex items-center justify-between px-6 py-3">
-                <Link
-                  href={item.href}
-                  className={`flex-1 transition-all duration-200 ${
-                    isActive(item.href)
-                      ? "text-orange-500 font-medium"
-                      : "text-gray-700"
-                  }`}
-                  onClick={() => !item.hasDropdown && setIsMenuOpen(false)}
-                >
-                  <Typography variant="body-l">{item.name}</Typography>
-                </Link>
-                {item.hasDropdown && (
-                  <button
-                    onClick={() => handleDropdownToggle(index)}
-                    className="p-2 ml-2 hover:bg-gray-100 rounded-full transition-colors"
-                  >
-                    <svg
-                      className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
-                        openDropdown === index ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+        <nav className="px-6 overflow-y-auto "
+          style={{ maxHeight: `calc(100vh - ${pathname === "/" ? `99px` : `63px`})` }}
+          data-lenis-prevent>
+          {menu?.map((item, index) => {
+            const hasDropdown = item.subMenu && item.subMenu.length > 0;
+            const isMenuExpanded = mobileExpandedMenu === index;
+
+            return (
+              <div
+                key={item.id}
+                className="border-b border-gray-200 last:border-b-0"
+              >
+                <div className="flex items-center justify-between">
+                  {hasDropdown ? (
+                    <button
+                      onClick={() => toggleMobileMenu(index)}
+                      className={`flex-1 text-left transition-all duration-200 py-3 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
+                          ? "text-orange-500 font-medium"
+                          : "text-gray-700"
+                        }`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
+                      <Typography variant="body-l">{item.menuTitle}</Typography>
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "#"}
+                      className={`flex-1 transition-all duration-200 py-3 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
+                          ? "text-orange-500 font-medium"
+                          : "text-gray-700"
+                        }`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Typography variant="body-l">{item.menuTitle}</Typography>
+                    </Link>
+                  )}
+                  {hasDropdown && (
+                    <button
+                      onClick={() => toggleMobileMenu(index)}
+                      className=" flex ml-2 hover:bg-gray-100 rounded-full transition-colors w-[14px] h-[14px] relative"
+                    >
+                      <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isMenuExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                      {/* <svg
+                        className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
+                          isMenuExpanded ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg> */}
+                    </button>
+                  )}
+                </div>
+
+                {/* Mobile Dropdown - SubMenu Sections */}
+                {hasDropdown && (
+                  <div
+                    className={` border-t border-gray-100 transition-all duration-400 overflow-hidden pl-3 ${isMenuExpanded ? "max-h-[1000px]" : "max-h-0"
+                      }`}
+                  >
+                    {item.subMenu?.map((subMenuItem, subMenuIndex) => {
+                      const subMenuId = subMenuItem.id ?? subMenuIndex;
+                      const isSubMenuExpanded = mobileExpandedSubMenu === subMenuId;
+                      const hasItems = subMenuItem.item && subMenuItem.item.length > 0;
+
+                      return (
+                        <div key={subMenuId} className="border-b border-gray-200 last:border-b-0">
+                          {/* SubMenu Section Header */}
+                          <button
+                            onClick={() => toggleMobileSubMenu(subMenuId)}
+                            className="w-full flex items-center justify-between pl-2 py-3 text-left hover:bg-gray-100 transition-colors"
+                          >
+                            <Typography variant="body-l" className="text-orange-200 font-medium">
+                              {subMenuItem.title}
+                            </Typography>
+                            {hasItems && (
+                              <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isSubMenuExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                            )}
+                          </button>
+
+                          {/* SubMenu Items */}
+                          {hasItems && (
+                            <div
+                              className={` transition-all duration-400 overflow-hidden pl-7 ${isSubMenuExpanded ? "max-h-[500px]" : "max-h-0"
+                                }`}
+                            >
+                              {subMenuItem.item?.map((item) => {
+                                // Get href from cta_link.link first, then fall back to externalLink
+                                const href = item.cta_link?.link || item.externalLink;
+                                
+                                // Handle items without a valid link - show as disabled
+                                if (!href || href === "#") {
+                                  return (
+                                    <div
+                                      key={item.id}
+                                      className="block   py-2 text-sm text-gray-400 cursor-not-allowed"
+                                    >
+                                      {item.title}
+                                    </div>
+                                  );
+                                }
+
+                                const isExternal = href.startsWith("http://") || href.startsWith("https://");
+                                const target = item.target || (isExternal ? "_blank" : "_self");
+
+                                // For external links, use regular <a> tag, for internal use Next.js Link
+                                if (isExternal) {
+                                  return (
+                                    <a
+                                      key={item.id}
+                                      href={href}
+                                      target={target}
+                                      rel="noopener noreferrer"
+                                      className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                      onClick={() => setIsMenuOpen(false)}
+                                    >
+                                      {item.title}
+                                    </a>
+                                  );
+                                }
+
+                                return (
+                                  <Link
+                                    key={item.id}
+                                    href={href}
+                                    target={target}
+                                    className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                    onClick={() => setIsMenuOpen(false)}
+                                  >
+                                    {item.title}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
-
-              {/* Mobile Dropdown Items */}
-              <div
-                className={`bg-gray-50 border-t border-gray-100 transition-all duration-400 overflow-hidden ${
-                  item.hasDropdown && openDropdown === index
-                    ? "max-h-[200px]"
-                    : "max-h-0"
-                }`}
-              >
-                {item.dropdownItems?.map((dropdownItem) => (
-                  <Link
-                    key={dropdownItem.name}
-                    href={dropdownItem.href}
-                    className="block px-10 py-3 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {dropdownItem.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </nav>
       </div>
 
@@ -551,7 +660,7 @@ const Header = () => {
       {/* Add CSS for menu item animations and header height variable */}
       <style jsx>{`
         :root {
-          --header-height: 80px;
+          --header-height: ${pathname === "/" ? `90px` : `60px`};
         }
 
         @media (min-width: 1024px) {
