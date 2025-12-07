@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Typography from "@/app/components/typography";
 import Image from "next/image";
 import AnimateTextOnHover from "./ui/AnimateTextOnHover";
@@ -21,8 +21,12 @@ const Header = ({ data }: HeaderProps) => {
   const [expandedSubMenuId, setExpandedSubMenuId] = useState<number | null>(null);
   const [mobileExpandedMenu, setMobileExpandedMenu] = useState<number | null>(null);
   const [mobileExpandedSubMenu, setMobileExpandedSubMenu] = useState<number | null>(null);
+  const [searchedValue, setsearchedValue] = useState<string>("");
+
+  const router = useRouter();
   const pathname = usePathname();
   const mobileNavRef = useRef<HTMLDivElement>(null);
+
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
       setIsMenuOpen(false);
@@ -149,6 +153,19 @@ const Header = ({ data }: HeaderProps) => {
       setExpandedSubMenuId(null);
     }
   }, [openDropdown, menu]);
+  const handleSearch = (e?: React.FormEvent | React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+
+    if (searchedValue.trim()) {
+      console.log(encodeURIComponent(searchedValue.trim()));
+      router.push(
+        `/search-results?search=${encodeURIComponent(searchedValue.trim())}`
+      );
+      setsearchedValue("");
+      setIsSearchOpen(false);
+    }
+  };
 
   return (
     <>
@@ -297,7 +314,11 @@ const Header = ({ data }: HeaderProps) => {
                                                 href={href}
                                                 target={target}
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
-                                                onClick={() => setOpenDropdown(null)}
+                                                onClick={() => {
+                                                  setsearchedValue("");
+                                                  setIsSearchOpen(false);
+                                                  setOpenDropdown(null);
+                                                }}
                                               >
                                                 {item.title}
                                               </Link>
@@ -341,12 +362,32 @@ const Header = ({ data }: HeaderProps) => {
                   );
                 })}
                 {/* Desktop Search Icon */}
-                <div className="flex items-center cursor-pointer h-[100%]">
-                  <div className="w-[52px] h-[72px] relative flex items-center justify-center" onClick={handleSearchToggle}>
-                    <Image src="/images/search.svg" alt="icon" width={20} height={20} />
-                    <Image src="/images/search-close.svg" alt="icon" width={20} height={20} className={clsx("absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300", isSearchOpen ? "opacity-100" : "")} />
+
+                {pathname !== "/search-results" && (
+                  <div className="flex items-center cursor-pointer h-[100%]">
+                    <div
+                      className="w-[52px] h-[72px] relative flex items-center justify-center"
+                      onClick={handleSearchToggle}
+                    >
+                      <Image
+                        src="/images/search.svg"
+                        alt="icon"
+                        width={20}
+                        height={20}
+                      />
+                      <Image
+                        src="/images/search-close.svg"
+                        alt="icon"
+                        width={20}
+                        height={20}
+                        className={clsx(
+                          "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300",
+                          isSearchOpen ? "opacity-100" : ""
+                        )}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </nav>
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
@@ -372,6 +413,7 @@ const Header = ({ data }: HeaderProps) => {
                   />
                 </div>
               </button>
+
               {/* Logo mobile center */}
               {Logo?.Logo?.url && (
                 <Link
@@ -388,25 +430,53 @@ const Header = ({ data }: HeaderProps) => {
                   />
                 </Link>
               )}
+              {/* Mobile Search */}
+              {pathname !== "/search-results" && (
+                <div className="h-[100%] block lg:hidden">
+                  <div
+                    className="w-[20px] h-[20px] absolute  right-[100px]md:right-[120px] top-1/2 -translate-y-1/2"
+                    onClick={handleSearchToggle}
+                  >
+                    <Image
+                      src="/images/search.svg"
+                      alt="icon"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </div>
+              )}
               {/* Extra div only for mobile */}
               <div className="block lg:hidden w-[50px]" />
             </div>
           </div>
+          
+
           {/* Contact Button - Fixed on right */}
           <Link href="/contact"
             className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18">
             Get in touch
           </Link>
-          <div className={
-            clsx("absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-[00px] overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10", isSearchOpen ? "!max-h-[320]" : "")}>
+
+          <div
+            className={clsx(
+              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-[00px] overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
+              isSearchOpen ? "!max-h-[320]" : ""
+            )}
+          >
             <div className="container relative">
-              <div className={clsx("absolute top-0 left-0 w-full pt-26 pb-16 flex flex-col justify-start transition-opactiy duration-600 delay-600", isSearchOpen ? "opacity-100" : "opacity-0 ")}>
+              <div
+                className={clsx(
+                  "absolute top-0 md:left-10 w-full pt-26 pb-16 flex flex-col justify-start transition-opactiy duration-600 delay-600",
+                  isSearchOpen ? "opacity-100" : "opacity-0 "
+                )}
+              >
                 <SubH1 className="text-blue-200 font-medium">Search</SubH1>
                 <SearchBar
-                  value={""}
-                  onChange={() => { }}
-                  handleSearch={() => { }}
-                  placeholder="Search by Document Name..."
+                  value={searchedValue}
+                  onChange={(e) => setsearchedValue(e.target.value)}
+                  handleSearch={handleSearch}
+                  placeholder="Search..."
                   headerSearch={true}
                 />
               </div>
@@ -573,6 +643,16 @@ const Header = ({ data }: HeaderProps) => {
           })}
         </nav>
       </div>
+
+      {isSearchOpen && (
+        <div
+          className="bg-black/50 fixed w-full h-full top-0 left-0 transition-all duration-300 z-[10]"
+          onClick={() => {
+            setIsSearchOpen(false);
+            setsearchedValue("");
+          }}
+        />
+      )}
 
       {/* Spacer to prevent content from hiding under fixed header */}
       <div className="h-16 lg:h-18 block lg:hidden"></div>

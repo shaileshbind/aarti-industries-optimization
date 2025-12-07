@@ -21,7 +21,12 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
 
   // GSAP Animations
   useLayoutEffect(() => {
-    if (!wrapperRef.current || !starRef.current || !lineVertical.current || !lineHorizontal.current)
+    if (
+      !wrapperRef.current ||
+      !starRef.current ||
+      !lineVertical.current ||
+      !lineHorizontal.current
+    )
       return;
 
     const star = starRef.current;
@@ -40,16 +45,8 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
       duration: 0.6,
       ease: "power3.out",
     })
-      .to(
-        vLine,
-        { scaleY: 1, duration: 0.8, ease: "power2.out" },
-        "-=0.2"
-      )
-      .to(
-        hLine,
-        { scaleX: 1, duration: 0.8, ease: "power2.out" },
-        "<"
-      )
+      .to(vLine, { scaleY: 1, duration: 0.8, ease: "power2.out" }, "-=0.2")
+      .to(hLine, { scaleX: 1, duration: 0.8, ease: "power2.out" }, "<")
       .to(
         star,
         { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
@@ -58,9 +55,9 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   }, []);
 
   return (
-    <div className="h-full lg:py-[100px] py-[50px] w-full relative overflow-hidden flex flex-col gap-y-[40px] gap-x-[80px]">
+    <div className="h-full lg:pt-[140px] lg:pb-[120px] py-[50px] w-full relative overflow-hidden flex flex-col gap-y-[40px] gap-x-[80px]">
       {/* Text Section */}
-      <div className="fluid-container flex flex-col items-center justify-center text-center">
+      <div className="fluid-container flex flex-col lg:items-center justify-center lg:text-center">
         {tag && (
           <FadeInRevealBlur delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
@@ -70,7 +67,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         )}
         {title && (
           <FadeInRevealBlur delay={0.2}>
-            <H2 className="mt-[12px] max-w-full lg:max-w-[480px] text-center">
+            <H2 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center">
               {title}
             </H2>
           </FadeInRevealBlur>
@@ -104,15 +101,27 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         {/* Animated lines & star */}
         <div
           ref={lineVertical}
-          className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[212.5px] z-10"
+          className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[152px] z-10"
         />
         <div
           ref={lineHorizontal}
-          className="absolute w-full bg-white bottom-[105px] lg:bottom-[119px] h-[1px] z-10"
+          className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-10"
         />
         <div
           ref={starRef}
-          className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-10"
+          className="absolute bottom-[32px] lg:bottom-[84px] right-[68px] lg:right-[116px] w-[42px] lg:w-[72px] z-10"
+        >
+          <Image
+            src="/images/home/star-white.svg"
+            alt="star"
+            width={72}
+            height={72}
+          />
+        </div>
+
+        <div
+          ref={starRef}
+          className="absolute -bottom-[22px] md:-bottom-6 lg:-bottom-9 right-[68px] lg:right-[116px] w-[42px] lg:w-[72px] z-10"
         >
           <Image
             src="/images/home/star-white.svg"
