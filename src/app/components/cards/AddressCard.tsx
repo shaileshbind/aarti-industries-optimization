@@ -29,7 +29,6 @@ const AddressCard = ({
           registered office
         </span>
       )}
-
       {corporateOffice && (
         <span className="absolute bg-white uppercase top-[-12px] border border-orange-200 text-orange-200 text-[12px] font-normal leading-[100%] font-alte-hans px-[10px] grid items-center rounded-[50px] left-[30px] h-[28px]">
           corporate office
@@ -79,40 +78,42 @@ const AddressCard = ({
           </BodyText1>
         </div>
       )}
-      <div className="flex">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="18"
-          viewBox="0 0 15 18"
-          fill="none"
-          className="mr-[10px] mt-[4px]"
-        >
-          <path
-            d="M13.8409 7.29545C13.8409 12.3864 7.29545 16.75 7.29545 16.75C7.29545 16.75 0.75 12.3864 0.75 7.29545C0.75 5.55949 1.43961 3.89463 2.66712 2.66712C3.89463 1.43961 5.55949 0.75 7.29545 0.75C9.03142 0.75 10.6963 1.43961 11.9238 2.66712C13.1513 3.89463 13.8409 5.55949 13.8409 7.29545Z"
-            stroke="#DC4C03"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M7.29545 9.47727C8.50044 9.47727 9.47727 8.50044 9.47727 7.29545C9.47727 6.09047 8.50044 5.11364 7.29545 5.11364C6.09047 5.11364 5.11364 6.09047 5.11364 7.29545C5.11364 8.50044 6.09047 9.47727 7.29545 9.47727Z"
-            stroke="#DC4C03"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <BodyText1 className="mb-[10px] cursor-pointer">
-          <Link
-            href={url || ""}
-            target="_blank"
-            className="group hover:text-orange-200 transition-all duration-300 cursor-pointer"
+      {url && (
+        <div className="flex">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="18"
+            viewBox="0 0 15 18"
+            fill="none"
+            className="mr-[10px] mt-[4px]"
           >
-            Get Direction
-          </Link>
-        </BodyText1>
-      </div>
+            <path
+              d="M13.8409 7.29545C13.8409 12.3864 7.29545 16.75 7.29545 16.75C7.29545 16.75 0.75 12.3864 0.75 7.29545C0.75 5.55949 1.43961 3.89463 2.66712 2.66712C3.89463 1.43961 5.55949 0.75 7.29545 0.75C9.03142 0.75 10.6963 1.43961 11.9238 2.66712C13.1513 3.89463 13.8409 5.55949 13.8409 7.29545Z"
+              stroke="#DC4C03"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M7.29545 9.47727C8.50044 9.47727 9.47727 8.50044 9.47727 7.29545C9.47727 6.09047 8.50044 5.11364 7.29545 5.11364C6.09047 5.11364 5.11364 6.09047 5.11364 7.29545C5.11364 8.50044 6.09047 9.47727 7.29545 9.47727Z"
+              stroke="#DC4C03"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <BodyText1 className="mb-[10px] cursor-pointer">
+            <Link
+              href={url}
+              target="_blank"
+              className="group hover:text-orange-200 transition-all duration-300 cursor-pointer"
+            >
+              Get Direction
+            </Link>
+          </BodyText1>
+        </div>
+      )}
     </div>
   );
 };

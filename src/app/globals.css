@@ -630,7 +630,7 @@ body {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px !important;
+  width: 2px !important;
 }
 .scrollbar::-webkit-scrollbar-button {
   background: #ffffff !important;
@@ -780,11 +780,89 @@ body {
 }
 
 .randdImageHeight {
-  
   @media (max-width: 450px) {
     height: 300px;
   }
   @media (max-width: 380px) {
     height: 220px;
+  }
+}
+
+/* Dangerous HTML CSS - Press */
+.dangerousHTMLPress {
+  font-family: "Alte Hans Grotesk";
+  table {
+    width: 100%;
+    overflow-x: unset;
+  }
+  p {
+   font-family: "Alte Hans Grotesk";
+    font-weight: 400;
+    font-size: 16px;
+    color: #363940;
+    margin-bottom: 16px;
+  }
+  h4 {
+   font-family: "Alte Hans Grotesk";
+    font-weight: 600;
+    line-height: 150%;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+  a {
+    cursor: pointer;
+    color: #f36633;
+  }
+  ul li {
+   font-family: "Alte Hans Grotesk";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #363940;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    list-style: none;
+    position: relative;
+    padding-left: 20px;
+  }
+  ul li::before {
+    content: "•";
+    color: black;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+  }
+  ol li {
+   font-family: "Alte Hans Grotesk";
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    color: #363940;
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+}
+@media screen and (max-width: 786px) {
+  .dangerousHTMLPress {
+    p {
+      font-size: 14px;
+    }
+    h4 {
+      font-size: 16px;
+      line-height: 140%;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      overflow-x: auto;
+    }
+    ul li {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    ol li {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
   }
 }

@@ -234,6 +234,11 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                         }
                       : undefined
                   }
+                  mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
                   className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
                 >
                   {card[activeIndex]?.post_category?.address?.map(

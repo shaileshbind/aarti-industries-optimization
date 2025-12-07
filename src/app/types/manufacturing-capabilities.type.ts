@@ -20,6 +20,7 @@ export type VideoScrollBarContainerProps = {
     title: string;
     card: {
       title: string;
+      date?: string;
       image: ImageProps;
       media: {
         url: string;

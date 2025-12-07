@@ -386,7 +386,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
       if (totalHeight > screenHeight) {
         const margin = totalHeight - screenHeight;
-        console.log("margin", margin);
         setMarginBottom(margin);
       } else {
         setMarginBottom(0);

@@ -110,7 +110,7 @@ export default function Popup({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center">
+    <div data-lenis-prevent className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center">
       <div
         ref={overlayRef}
         className="bg-[rgba(0,0,0,0.8)] fixed w-full h-full top-0 left-0"
@@ -119,7 +119,7 @@ export default function Popup({
       <div
         ref={popupRef}
         className={clsx(
-          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-5 md:p-[30px] z-[60] relative`,
+          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-[20px] md:p-[30px] z-[60] relative`,
           className
         )}
       >

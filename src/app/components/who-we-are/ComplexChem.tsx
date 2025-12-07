@@ -119,7 +119,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                 faqContent={
                   <div className="block md:hidden ml-[26px] mb-[30px]">
                     <BodyText2>{item?.description}</BodyText2>
-                    <div className="mt-[24px] relative  h-[170px] rounded-[10px] overflow-hidden">
+                    <div className="mt-[24px] relative  h-[170px] md:h-[240px] rounded-[10px] overflow-hidden">
                       {item?.mobImage?.url && (
                         <Image
                           src={item?.mobImage?.url}

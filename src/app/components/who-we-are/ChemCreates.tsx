@@ -25,7 +25,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
         <>
           <div className="mt-[36px] lg:mt-[40px]">
             <Swiper
-              slidesPerView={1.5}
+              slidesPerView={1.2}
               spaceBetween={24}
               breakpoints={{
                 768: { slidesPerView: 3 },

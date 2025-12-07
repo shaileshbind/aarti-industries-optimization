@@ -36,7 +36,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
               <Link href={ctaButton?.link || "#"} target="_blank">
                 <div
                   className={clsx(
-                    `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10 w-[60%] md:w-full text-center flex`,
+                    `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10 w-fit md:w-full text-center flex`,
                     className
                   )}
                 >

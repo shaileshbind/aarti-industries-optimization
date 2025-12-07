@@ -9,7 +9,7 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
   const { description, image, mobImage, title } = data;
 
   return (
-    <div className="w-full pt-[72px] pb-[50px] lg:pt-[120px] lg:pb-[150px]">
+    <div className="w-full pt-[72px] pb-[50px] lg:pt-[120px] md:pb-[70px] xl:pb-[150px]">
       <div className="container grid lg:grid-cols-[350px_1fr] gap-x-[130px] ">
         <div className="hidden lg:block">
           <div className="relative w-full h-[350px] overflow-hidden rounded-[1rem] flex items-center justify-center">

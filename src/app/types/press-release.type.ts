@@ -2,7 +2,7 @@ import { ImageProps } from "./global.type";
 
 export type PressReleaseBannerProps = {
   data: {
-   sectionTitle: string;
+    sectionTitle: string;
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
@@ -12,21 +12,28 @@ export type PressReleaseBannerProps = {
 // Press Release Item
 export type PressReleaseItem = {
   id: string | number;
-  heading: string;
+  heading?: string;
+  shortDescription?: string;
+  date?: string;
   link: string;
+  slug?: string;
+  pdfContent?: string;
   file?: {
     id?: number;
     url?: string;
   };
-  date?:string;
+  financial_year?: {
+    id?: number;
+    year?: string;
+  };
 };
 
 // Year and Press Release Layout
 export type YearAndPressReleaseLayout = {
   id: number;
-  financial_year?:{
-    year?:string | number;
-  }
+  financial_year?: {
+    year?: string | number;
+  };
   report?: {
     id: number;
     heading: string;
@@ -40,6 +47,7 @@ export type YearAndPressReleaseLayout = {
 
 // Press Release Year Listing Props
 export type PressReleaseYearListingProps = {
-  yearAndPressReleases: YearAndPressReleaseLayout[];
+  // yearAndPressReleases: YearAndPressReleaseLayout[];
+   yearAndPressReleases: unknown;
   latestReleases?: PressReleaseItem[];
 };
