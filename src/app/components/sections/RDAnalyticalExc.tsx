@@ -315,14 +315,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             )}
           </div>
         </div>
-
         <div
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
         >
           <div className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
             <div className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
-              <div className="relative w-full randdImageHeight h-[250px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+              <div className="relative w-full randdImageHeight h-[250px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
                     <Image
@@ -439,8 +438,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   </div>
                                 ))}
                               </div>
-                            )}
-                            {slide?.ctaButton?.link && (
+                            )}                    
                               <div className="mt-[20px] lg:mt-[40px]">
                                 <button
                                   onClick={() => {
@@ -451,7 +449,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   Read More
                                 </button>
                               </div>
-                            )}
+                         
                           </div>
                         </div>
                       </SwiperSlide>

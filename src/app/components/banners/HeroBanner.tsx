@@ -156,7 +156,7 @@ const HeroBanner = ({
                   className="object-cover block lg:hidden"
                 />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0)_70%)]" />
               <div
                 className={`w-full h-full absolute pt-[64px] z-[3] ${
                   centerText
@@ -263,7 +263,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-22px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
+                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -276,7 +276,7 @@ const HeroBanner = ({
               {showStar3 && (
                 <div
                   ref={starRef3}
-                  className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
                 >
                   <Image
                     src="/images/home/star-white.svg"

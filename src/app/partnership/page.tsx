@@ -50,25 +50,19 @@ const Page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-
       {section_one && <PartnershipBanner data={section_one} />}
-
       <ParallaxCardSection
         section_two={section_two}
         section_three={section_three}
       />
-
       {section_four && (
         <GridCardsContainer
           data={section_four}
           headingClassName="!text-[28px] md:!text-[36px] lg:!text-[44px]"
         />
       )}
-
       {section_five && <WhyAarti data={section_five} />}
-
       {section_six && <WorksWithPartners data={section_six} />}
-
       {section_seven && (
         <CardsSlider
           data={section_seven}
@@ -76,11 +70,9 @@ const Page = async () => {
           className="!mt-[0]"
         />
       )}
-
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-
       {section_eight && <PartneshipExplore data={section_eight} />}
     </div>
   );

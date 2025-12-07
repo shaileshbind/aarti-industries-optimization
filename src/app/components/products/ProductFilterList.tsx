@@ -253,6 +253,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
             ? `Search Results for "${searchQuery}" (${
                 loading ? "..." : totalProducts
               })`
+            : activeTab !== "all"
+            ? `Filtered Results (${loading ? "..." : totalProducts})`
             : `All Results (${loading ? "..." : totalProducts})`}
         </BodyText1>
         {!desktop && showSubCategories && (

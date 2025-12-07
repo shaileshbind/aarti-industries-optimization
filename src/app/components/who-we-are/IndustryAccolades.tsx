@@ -22,6 +22,38 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const progressRefs = useRef<HTMLDivElement[]>([]);
+  const tabsContainerRef = useRef<HTMLDivElement | null>(null);
+  const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Scroll active tab into view
+  const scrollActiveTabIntoView = useCallback((index: number) => {
+    const container = tabsContainerRef.current;
+    const activeTab = tabRefs.current[index];
+    if (!container || !activeTab) return;
+    // Check if container is scrollable
+    const isScrollable = container.scrollWidth > container.clientWidth;
+    if (isScrollable) {
+      const containerRect = container.getBoundingClientRect();
+      const tabRect = activeTab.getBoundingClientRect();
+      // Calculate if tab is outside visible area
+      const isOutOfView = 
+        tabRect.left < containerRect.left || 
+        tabRect.right > containerRect.right;
+      
+      if (isOutOfView) {
+        // Calculate scroll position to center the tab
+        const scrollLeft = 
+          activeTab.offsetLeft - 
+          container.offsetLeft - 
+          (container.clientWidth / 2) + 
+          (activeTab.clientWidth / 2);
+        container.scrollTo({
+          left: scrollLeft,
+          behavior: "smooth"
+        });
+      }
+    }
+  }, []);
 
   // Handle tab click (manual click or programmatic)
   const handleTabClick = useCallback((index: number) => {
@@ -55,6 +87,10 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       return index;
     });
   }, []);
+  // Scroll active tab into view when active changes
+  useEffect(() => {
+    scrollActiveTabIntoView(active);
+  }, [active, scrollActiveTabIntoView]);
 
   // Animate only the active tab's progress bar
   useEffect(() => {
@@ -119,10 +155,16 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       {title && <H2 className="text-left lg:text-center container">{title}</H2>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
-        <div className=" mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center">
+        <div 
+          ref={tabsContainerRef}
+          className="mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center"
+        >
           {awards?.map((items, index) => (
             <div
               key={items.id}
+              ref={(el) => {
+                tabRefs.current[index] = el;
+              }}
               onClick={() => !isTransitioning && handleTabClick(index)}
               className={`relative border-b px-[13px] pb-[4px] cursor-pointer transition-all duration-300 ${
                 active === index ? "border-transparent" : "border-grey-200"

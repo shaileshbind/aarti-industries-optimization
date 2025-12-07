@@ -110,7 +110,7 @@ export default function Popup({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center">
+    <div data-lenis-prevent className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center">
       <div
         ref={overlayRef}
         className="bg-[rgba(0,0,0,0.8)] fixed w-full h-full top-0 left-0"
