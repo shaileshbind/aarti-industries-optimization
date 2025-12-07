@@ -119,7 +119,7 @@ export default function Popup({
       <div
         ref={popupRef}
         className={clsx(
-          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-5 md:p-[30px] z-[60] relative`,
+          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-[20px] md:p-[30px] z-[60] relative`,
           className
         )}
       >
