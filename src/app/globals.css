@@ -734,6 +734,10 @@ body {
   .blogInner video {
     height: 400px;
   }
+
+  .button-subtle-scale:hover{
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 768px) {

@@ -12,7 +12,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
-    <section className="fluid-container flex flex-col justify-between my-[72px] lg:my-[100px]">
+    <section className="fluid-container flex flex-col justify-between my-[72px] lg:my-[120px]">
       {/* Animated Heading */}
       <AnimatedText className="lg:w-[60%] w-full mb-16">
         <H3>{title}</H3>
@@ -30,18 +30,18 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
             />
 
             {/* Decorative overlays */}
-            <div className="absolute left-0 object-cover backdrop-blur-lg rounded-tl-[20px] lg:rounded-tl-[20px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[71px] lg:w-[155px]" />
-            <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg lg:!rounded-[20px] lg:!rounded-tl-[0px] rounded-b-[20px] h-[calc(100%-245px)] lg:h-[calc(100%-505px)] w-full" />
+            <div className="absolute left-0 object-cover backdrop-blur-lg rounded-tl-[20px] lg:rounded-tl-[20px] h-[calc(100%-40px)] lg:h-[calc(100%-93px)] w-[71px] lg:w-[155px]" />
+            <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg lg:!rounded-[20px] lg:!rounded-tl-[0px] rounded-b-[20px] h-[calc(100%-278px)] lg:h-[calc(100%-505px)] w-full" />
 
             <Image
               src="/images/home/star-white.svg"
               alt="star-icon"
               width={72}
               height={72}
-              className="absolute bottom-[50px] lg:bottom-[57px] z-10 left-[50px] lg:left-[120px] w-[42px] lg:w-[72px]"
+              className="absolute bottom-[20px] lg:bottom-[57px] z-10 left-[50px] lg:left-[120px] w-[42px] lg:w-[72px]"
             />
             <div className="absolute min-h-screen bg-white w-[1px] left-[71px] lg:left-[155px]" />
-            <div className="absolute w-full bg-white bottom-[71px] lg:bottom-[92.5px] h-[1px]" />
+            <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[92.5px] h-[1px]" />
           </div>
         </div>
 
@@ -59,10 +59,10 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
                 ${index !== focus_item.length - 1 ? "border-b border-b-[#E6EBEE] lg:pb-8 pb-4" : ""}
               `}
             >
-              <BodyText1 className="text-orange-100">
+              <BodyText1 className="text-[#DC4C03]">
                 {item.order.padStart(2, "0")}
               </BodyText1>
-              <BodyText1>{item.description}</BodyText1>
+              <BodyText1 className="lg:w-[60%]">{item.description}</BodyText1>
             </div>
           ))}
         </div>
