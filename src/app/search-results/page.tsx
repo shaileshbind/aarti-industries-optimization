@@ -1,25 +1,14 @@
 
 import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
-import { getData } from "@/_lib/getData.fetch";
+// import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
-import SearchBar from "../components/SearchBar";
-import { SubH1 } from "../components/Typography2";
 import SearchResults from "../components/search-results/SearchResults";
 
 export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/ethics");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
-  );
-  const {
-    // section_one,
-    // section_two,
-    // section_three,
-    // section_four,
-  } = data?.data;
   const seo = data?.seo;
 
   return (
