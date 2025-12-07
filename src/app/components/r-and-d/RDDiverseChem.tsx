@@ -62,7 +62,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     };
 
   return (
-    <div className="pt-[72px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] lg:mt-[unset] lg:mb-[100px]">
+    <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]">
       <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[50px] ">
         {title && (
           <div>
@@ -173,8 +173,8 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
               className="border border-orange-200 !rounded-[14px] mb-[10px]"
               classNameTitle={`${
                 expanded === `panel${index}`
-                  ? "!p-[20px]"
-                  : "bg-gradient-orange-1 !rounded-[14px] !p-[20px]"
+                  ? "!px-[20px] !py-[10px]"
+                  : "bg-gradient-orange-1 !rounded-[14px] !px-[20px] !py-[10px]"
               }`}
               faqTitle={
                 <H3

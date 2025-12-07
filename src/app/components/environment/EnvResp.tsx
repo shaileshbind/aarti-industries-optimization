@@ -144,7 +144,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                       : "img"
                   }
                   fill
-                  className="absolute object-cover object-top opacity-20"
+                  className="absolute object-cover object-top  blur-md "
                 />
               )}
               {cardWithCategory[active]?.content?.image?.url && (
@@ -295,7 +295,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                               src={item.content?.image.url}
                               alt={item.content?.image.alternativeText || "img"}
                               fill
-                              className="absolute object-cover opacity-40"
+                              className="absolute object-cover blur-md"
                             />
                             <Image
                               src={item.content?.image.url}

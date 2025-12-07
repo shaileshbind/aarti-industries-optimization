@@ -75,7 +75,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
 
               {/* Accordion Content - Collapsible */}
               {leftSection?.accordion?.items?.length > 0 && (
-                <div
+                <div 
+                  data-lenis-prevent
                   className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
                 >
                   <Image

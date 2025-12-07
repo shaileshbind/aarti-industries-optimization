@@ -6,7 +6,7 @@ const OurPortfolio: React.FC<OurPortfolioProps> = ({ data }) => {
   const { title, content } = data;
 
   return (
-    <div className="mb-[22px] lg:mb-[140px]">
+    <div className="mb-[22px] md:mb-[30px] xl:mb-[140px]">
       {content?.length > 0 && (
         <div>
           <TabsAutoplaySection
