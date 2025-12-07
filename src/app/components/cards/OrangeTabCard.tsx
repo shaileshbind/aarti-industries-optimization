@@ -9,9 +9,15 @@ type ProductListProps = {
   title: string;
   link: string;
   scale?: boolean;
+  useTargetBlank?: boolean;
 };
 
-const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
+const OrangeTabCard = ({
+  title,
+  link,
+  scale = true,
+  useTargetBlank = true,
+}: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -45,7 +51,7 @@ const OrangeTabCard = ({ title, link, scale = true }: ProductListProps) => {
         {link && (
           <Link
             href={link}
-            target="_blank"
+            target={useTargetBlank ? "_blank" : "_self"}
             className={clsxN(
               "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer",
               isHovered
