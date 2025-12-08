@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { BodyText1, H3, SubH1, SubH2 } from '../Typography2';
+import { BodyText1, BodyText2, H3, SubH1, SubH2 } from '../Typography2';
 import { ImpactStoriesSliderProps } from '@/app/types/social-health-and-safety.type';
 import FaqAccordion from '../FaqAccordian';
 
@@ -147,12 +147,12 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                             <p className="text-white/80 leading-relaxed text-sm mb-6">
                               {story.description}
                             </p>
-                            {/* {items.map((item) => (  
+                            {story.items?.map((item) => (  
                               <div key={item.id}>
                                 <BodyText1 className="text-white">{item.title}</BodyText1>
-                                <BodyText2 className="text-white/80 leading-relaxed text-sm mb-6 mt-2">{item.description}</BodyText2>
+                                <BodyText2 className="text-white/80 leading-relaxed text-sm mb-6 mt-2">{item.description}</BodyText2> 
                               </div>
-                            ))} */}
+                            ))}
                           </div>
                         </div>
                         {/* Slide Number for Inactive */}

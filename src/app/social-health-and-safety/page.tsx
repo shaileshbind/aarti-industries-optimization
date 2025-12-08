@@ -6,12 +6,11 @@ import { getData } from "@/_lib/getData.fetch";
 import SEO from "@/app/components/SEO";
 import WhoCards from "../components/who-we-are/WhoCards";
 import OurResponsibility from "../components/social-health-and-safety/OurResponsibility";
-import CDMOExp from "../components/cdmo/CDMOExp";
 import DrivingEmpowerment from "../components/social-health-and-safety/DrivingEmpowerment";
 import GridCardsSocial from "../components/social-health-and-safety/GridCardsSocial";
 import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
 import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
-import { CDMOExpProps } from "@/app/types/cdmo.type";
+import SocialExplore from "../components/social-health-and-safety/SocialExplore";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -27,33 +26,9 @@ const page = async () => {
     section_five,
     section_six,
     section_seven,
+    section_eight,
   } = data?.data;
   const seo = data?.seo;
-const section_nine: CDMOExpProps['data'] = [
-    {
-        title: "Looking for R&D Solutions?",
-        ctaButton: [
-            {
-                title: "Inquire Now",
-                link: { link: "#", target: "_self" }
-            }
-        ]
-    },
-    {
-        title: "Your CDMO Partner Awaits",
-        ctaButton: [
-            {
-                title: "Product Portfolio",
-                link: { link: "#", target: "_self" }
-            },
-            {
-                title: "Partner with us",
-                link: { link: "#", target: "_self" }
-            }
-        ]
-    }
-]
-
   return (
     <div>
       <SEO
@@ -92,7 +67,7 @@ const section_nine: CDMOExpProps['data'] = [
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {section_nine && <CDMOExp data={section_nine} />}
+      {section_eight && <SocialExplore data={section_eight} />}
     </div>
   );
 };
