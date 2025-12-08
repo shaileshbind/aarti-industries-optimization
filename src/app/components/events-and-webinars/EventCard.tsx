@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { SubH2, BodyText1, BodyText2, BodyText3 } from "../Typography2";
+import { BodyText1, BodyText2, BodyText3, SubH3 } from "../Typography2";
 import Button from "../Button";
 
 type EventCardProps = {
@@ -63,27 +63,27 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
 
         {/* Event Title */}
         {title && (
-          <SubH2 className="text-blue-200 mb-[8px]">
+          <SubH3 className="text-blue-200 mb-[8px]">
             {title}
-          </SubH2>
+          </SubH3>
         )}
 
         {/* Location */}
         {location && (
-          <BodyText2 className="text-grey-400 mb-[8px]">
+          <BodyText1 className="text-[#4C5861] font-light mb-[8px]">
             {location}
-          </BodyText2>
+          </BodyText1>
         )}
 
         {/* Description */}
         {description && !pastEvent && (
-          <BodyText1 className="text-grey-400 mb-[12px]">
+          <BodyText2 className="text-grey-400 mb-[12px]">
             {description}
-          </BodyText1>
+          </BodyText2>
         )}
 
         {/* CTA Link */}
-        {ctaButton?.title && ctaButton?.link && (
+        {pastEvent && (
           onButtonClick ? (
             <button
               onClick={(e) => {
@@ -93,11 +93,13 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
               }}
               className="w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100%] font-alte-hans underline underline-offset-[4px] [text-underline-position:under] animated-underline"
             >
-              {ctaButton.title}
+              View Gallery
             </button>
-          ) : (
-            <Button title={ctaButton.title} href={ctaButton.link} secondary />
-          )
+          )  
+          : null
+        )}
+        {!pastEvent && (
+          <Button title={ctaButton?.title || ''} href={ctaButton?.link || ''} secondary />
         )}
       </div>
     </div>

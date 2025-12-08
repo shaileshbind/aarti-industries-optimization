@@ -36,7 +36,7 @@ export default async function RootLayout({
       <body className={roboto.variable}>
         <GSAPProvider>
           <GlobalCursor />
-          <Header />
+          <Header data={data?.Header} />
           <main>{children}</main>
           <Footer data={data?.Footer}/>
         </GSAPProvider>

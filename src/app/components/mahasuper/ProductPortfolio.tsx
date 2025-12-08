@@ -15,7 +15,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
 
   return (
     <section className="h-auto min-h-[calc(100vh-100px)] md:py-[100px] py-[50px] relative w-full md:w-[calc(100%-120px)] md:mx-[60px] flex-col sm:flex-row flex items-center">
-      <div className="sm:absolute top-0 left-0 w-full h-full  rounded-[20px] sm:rounded-[50px] overflow-hidden">
+      <div className="sm:absolute top-0 left-0 w-full h-full  rounded-[20px] overflow-hidden">
         {image?.url && (
           <Image
             src={image?.url}
@@ -135,7 +135,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
         </div>
 
         <div
-          className={`block sm:hidden mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mt-5`}
+          className={`block sm:hidden md:mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mt-5`}
         >
           {/* Accordion Header - Always Visible */}
           {cardSectionTwoTitle && (
