@@ -14,7 +14,10 @@ export default async function FinancialInformation() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/investors/financial-information"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/investors/financial-information"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -29,7 +32,9 @@ export default async function FinancialInformation() {
       {data && <FinancialBanner data={data?.data} />}
       {data?.data?.financial_information_reports?.[0]?.reportLayout && (
         <YearQuarterListing
-          reportLayout={data?.data?.financial_information_reports?.[0]?.reportLayout}
+          reportLayout={
+            data?.data?.financial_information_reports?.[0]?.reportLayout
+          }
           showFinancialYear
         />
       )}

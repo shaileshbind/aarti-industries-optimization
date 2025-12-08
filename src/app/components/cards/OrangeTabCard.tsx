@@ -4,6 +4,7 @@ import { BodyText1 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";
 import Link from "next/link";
+import { useMediaQuery } from "@mui/material";
 
 type ProductListProps = {
   title: string;
@@ -26,7 +27,7 @@ const OrangeTabCard = ({
         "duration-800 flex items-center justify-between border-b-2 py-4 lg:px-4 border-transparent min-w-full w-full md:w-auto",
         scale && "button-subtle-scale ",
         isHovered
-          ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `
+          ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2`
           : `"bg-white border-gray-200 `
       )}
       onMouseEnter={() => setIsHovered(true)}

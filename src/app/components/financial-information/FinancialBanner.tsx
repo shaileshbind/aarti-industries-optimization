@@ -24,6 +24,9 @@ const FinancialBanner: React.FC<FinancialBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      showStar3={false}
+      lineClassName="hidden md:block"
+      bottomMiddleStarClassName="hidden md:block"
     />
   );
 };

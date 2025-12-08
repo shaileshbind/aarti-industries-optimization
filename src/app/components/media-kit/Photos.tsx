@@ -2,6 +2,7 @@ import React from "react";
 import { H3 } from "../Typography2";
 import DownloadCard from "./DownloadCard";
 import { PhotosProps } from "@/app/types/media-kit.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 export default function Photos({ data }: PhotosProps) {
   const { sectionImages } = data;
@@ -17,7 +18,7 @@ export default function Photos({ data }: PhotosProps) {
         {sectionImages?.[0]?.imageCards?.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 lg:gap-6">
             {sectionImages?.[0]?.imageCards?.map((item, index) => (
-              <div key={"photos" + index}>
+              <FadeInReveal delay={index*0.2} key={"photos" + index}>
                 <DownloadCard
                   src={item?.image?.url}
                   downloadUrl={item?.file?.url || item?.image?.url}
@@ -35,7 +36,7 @@ export default function Photos({ data }: PhotosProps) {
                     {item?.description}
                   </p>
                 )}
-              </div>
+              </FadeInReveal>
             ))}
           </div>
         )}
@@ -50,14 +51,14 @@ export default function Photos({ data }: PhotosProps) {
         {sectionImages?.[1]?.imageCards?.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 lg:gap-6">
             {sectionImages?.[1]?.imageCards?.map((item, index) => (
-              <div key={"plant" + index}>
+              <FadeInReveal delay={index*0.2} key={"plant" + index}>
                 <DownloadCard
                   src={item?.image?.url}
                   downloadUrl={item?.file?.url || item?.image?.url}
                   filename={item?.title || "plant"}
                   className={`!h-[298px]`}
                 />
-              </div>
+              </FadeInReveal>
             ))}
           </div>
         )}
