@@ -168,7 +168,7 @@ export default function YearQuarterListing({
 
   return (
     <div>
-      <div className="fluid-container pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
+      <div className="fluid-container pt-6 md:pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
         {/* Left Sidebar - Subcategories (Desktop) */}
         <div className="w-[20%] hidden lg:block">
           {reportLayout?.map((subCat, idx) => (
@@ -250,7 +250,7 @@ export default function YearQuarterListing({
                 {/* Animated underline */}
                 {!dropdownClicked && (
                   <div
-                    className="absolute bottom-0 h-[2px] bg-[#002F50] transition-all duration-300 ease-out"
+                    className="absolute bottom-0 h-[2px] bg-[#DC4C03] lg:bg-[#002F50] transition-all duration-300 ease-out"
                     style={{
                       width: `${underline.width + 5}px`,
                       transform: `translateX(${underline.left}px)`,

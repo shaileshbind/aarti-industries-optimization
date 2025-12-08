@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
-import { BodyText2, H2, SubH1, SubH2 } from "../Typography2";
+import { BodyText1, BodyText2, H2, SubH1, SubH2 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -126,7 +126,7 @@ const TabsAutoplaySection = ({
                 onClick={() => handleTabClick(index)}
                 className="relative border-b border-transparent cursor-pointer group"
               >
-                <SubH2
+                <BodyText1
                   className={clsxN(
                     `${
                       index === active ? "text-orange-200" : "text-grey-300"
@@ -135,7 +135,7 @@ const TabsAutoplaySection = ({
                   )}
                 >
                   {item?.category}
-                </SubH2>
+                </BodyText1>
 
                 {/* Grey line */}
                 <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
@@ -241,8 +241,8 @@ const TabsAutoplaySection = ({
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
                                   className="object-cover object-top w-5 h-5 mt-[2px]"
-                                  width={20}
-                                  height={20}
+                                  width={16}
+                                  height={16}
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>

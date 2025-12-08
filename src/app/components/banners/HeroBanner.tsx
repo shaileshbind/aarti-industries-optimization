@@ -137,7 +137,7 @@ const HeroBanner = ({
             <div
               ref={wrapperRef}
               className={`relative overflow-hidden ${
-                centerText ? "h-[440px]" : "h-[490px] lg:h-[640px]"
+                centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
               {image && (
@@ -192,7 +192,7 @@ const HeroBanner = ({
                 )}
                 {desc && centerText && (
                   <FadeInRevealBlur delay={0.1}>
-                    <BodyText1 className="text-white mt-[20px] max-w-[480px]">
+                    <BodyText1 className="text-white mt-[20px] max-w-[260px] md:max-w-[480px]">
                       {desc}
                     </BodyText1>
                   </FadeInRevealBlur>
@@ -249,7 +249,7 @@ const HeroBanner = ({
               <div
                 ref={starRef}
                 className={clsx(
-                  `absolute bottom-[34px] lg:bottom-[84px] right-[67.5px] lg:right-[177px] w-[38px] lg:w-[72px] z-5`,
+                  `absolute bottom-[34px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
                   bottomMiddleStarClassName
                 )}
               >
@@ -263,7 +263,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
+                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
                 >
                   <Image
                     src="/images/home/star-white.svg"

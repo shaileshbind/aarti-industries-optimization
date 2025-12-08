@@ -102,7 +102,7 @@ export default function ContactDetails() {
   };
 
   return (
-    <div className="fluid-container pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
+    <div className="fluid-container pt-6 md:pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
       {/* Left Sidebar - Subcategories (Desktop) */}
       <div className="w-[20%] hidden lg:block">
         {data?.map((subCat, idx) => (
