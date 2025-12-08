@@ -6,7 +6,7 @@ import { ImpactStoriesSliderProps } from '@/app/types/social-health-and-safety.t
 import FaqAccordion from '../FaqAccordian';
 
 const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
-  const { title, items } = data;
+  const { title, stories = [] } = data || {};
   const [activeIndex, setActiveIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
@@ -17,6 +17,8 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
 
   // Desktop slider progress
   useEffect(() => {
+    if (!stories || stories.length === 0) return;
+    
     setProgress(0);
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
@@ -26,24 +28,24 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     }, 50);
 
     const autoplayTimeout = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % items.length);
+      setActiveIndex((prev) => (prev + 1) % stories.length);
     }, AUTOPLAY_DURATION);
 
     return () => {
       clearInterval(progressInterval);
       clearTimeout(autoplayTimeout);
     };
-  }, [activeIndex, items.length]);
+  }, [activeIndex, stories.length]);
 
   useEffect(() => {
-    if (items.length === 0) return;
+    if (!stories || stories.length === 0) return;
     
     setAccordionProgress(0);
     const progressInterval = setInterval(() => {
       setAccordionProgress((prev) => {
         if (prev >= 100) {
           // Move to next accordion when progress completes
-          const nextIndex = (active + 1) % items.length;
+          const nextIndex = (active + 1) % stories.length;
           setActive(nextIndex);
           setExpanded(`panel${nextIndex}`);
           return 0; // Reset progress
@@ -55,7 +57,12 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     return () => {
       clearInterval(progressInterval);
     };
-  }, [active, items.length]);
+  }, [active, stories.length]);
+
+  // Early return if no stories (after hooks)
+  if (!stories || stories.length === 0) {
+    return null;
+  }
 
   const handleSlideClick = (index: number) => {
     if (index !== activeIndex) {
@@ -72,19 +79,18 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
         setAccordionProgress(0); // Reset progress when user manually changes accordion
       }
     };
-
   return (
     <>
       <div className="hidden xl:block relative w-full h-[calc(100dvh-64px)] overflow-hidden bg-black mt-20 lg:mt-40">
         {/* Background Images with Fade Effect */}
         <div className="absolute inset-0">
-          {items.map((item, index) => (
+          {stories?.map((item, index) => (
             <div
               key={`bg-${item.id}`}
               className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
               style={{
                 opacity: index === activeIndex ? 1 : 0,
-                backgroundImage: `url(${item.image.url})`,
+                backgroundImage: item.image?.url ? `url(${item.image.url})` : 'none',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
@@ -104,7 +110,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
             </div>
             {/* Slides Grid */}
             <div className="flex h-full">
-              {items.map((story, index) => {
+              {stories?.map((story, index) => {
                 const isActive = index === activeIndex;
                 const slideProgress = isActive ? progress : 0;
                 return (
@@ -177,12 +183,12 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
           </div>
         </div>
       </div>
-      {items?.length > 0 && (
+      {stories?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
           <H3 className='my-5'>
                 {title}
               </H3>
-          {items?.map((item, index) => (
+          {stories?.map((item, index) => (
             <div key={item.id} className="relative">
               <FaqAccordion
               imageClassName="min-w-[28px]"

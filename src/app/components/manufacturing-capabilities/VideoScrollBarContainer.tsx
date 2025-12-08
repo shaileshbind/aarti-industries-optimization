@@ -6,12 +6,38 @@ import clsx from "clsx";
 import { ScaleInReveal } from "../ScrollReveal";
 import Button from "../Button";
 import { useMediaQuery } from "@mui/material";
-import { VideoScrollBarContainerProps } from "@/app/types/manufacturing-capabilities.type";
+import { VideoScrollBarContainerProps, WebinarApiItem } from "@/app/types/manufacturing-capabilities.type";
+import { ImageProps } from "@/app/types/global.type";
 
 export default function VideoScrollBarContainer({
   data,
+  webinarsData,
 }: VideoScrollBarContainerProps) {
-  const { title, card } = data;
+  // Transform pressData to match the expected card structure
+  // getData returns the array directly, so check if it's already an array first
+  let webinarsArray: WebinarApiItem[] = [];
+  
+  if (Array.isArray(webinarsData)) {
+    // getData returns array directly
+    webinarsArray = webinarsData;
+  } else if (webinarsData && 'pressData' in webinarsData) {
+    // Wrapped in pressData (from getPageData)
+    webinarsArray = webinarsData.pressData?.data || [];
+  }
+  
+  const transformedPressData = webinarsArray.map((item: WebinarApiItem) => ({
+    title: item?.title || "",
+    date: item?.date,
+    image: item?.image || { url: "", alternativeText: "" },
+    media: {
+      url: item?.media?.url || "",
+      mime: item?.media?.mime,
+    },
+  }));
+
+  // Use pressData if available, otherwise use the original card data
+  const { title, card: originalCard } = data;
+  const card = transformedPressData.length > 0 ? transformedPressData : originalCard;
 
   const [activeCard, setactiveCard] = useState<number>(0);
   const isMobile = useMediaQuery("(max-width:820px)");
@@ -26,7 +52,7 @@ export default function VideoScrollBarContainer({
           <div className=" relative lg:w-[40%] xl:w-[35%] after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:shadow-[0px_0px_21px_20px_rgba(255,255,255,1)] after:bg-white " >
             <div className="relative lg:max-h-[470px] lg:overflow-y-auto scrollbar w-full flex flex-col gap-4 lg:gap-6 " data-lenis-prevent>
             {(isMobile ? (showAll ? card : card?.slice(0, 5)) : card)?.map(
-              (item, index) => (
+              (item: { title: string; date?: string; image: ImageProps; media: { url: string; mime?: string } }, index: number) => (
                 <div
                   key={"item_" + index}
                   className={clsx(
@@ -71,16 +97,26 @@ export default function VideoScrollBarContainer({
 
           {card?.[activeCard]?.media?.url && (
             <ScaleInReveal className="w-1/2 xl:w-[60%] h-[470px] rounded-[20px] overflow-hidden hidden lg:block">
-              <video
-                width="600"
-                height="470"
-                className="w-full h-full rounded-[20px] object-cover "
-                key={activeCard}
-                controls
-              >
-                <source src={card?.[activeCard]?.media?.url} type="video/mp4" />
-                <source src={card?.[activeCard]?.media?.url} type="video/ogg" />
-              </video>
+              {card?.[activeCard]?.media?.mime?.startsWith('image/') ? (
+                <Image
+                  src={card?.[activeCard]?.media?.url}
+                  alt={card?.[activeCard]?.title || "media"}
+                  width={600}
+                  height={470}
+                  className="w-full h-full rounded-[20px] object-cover"
+                />
+              ) : (
+                <video
+                  width="600"
+                  height="470"
+                  className="w-full h-full rounded-[20px] object-cover "
+                  key={activeCard}
+                  controls
+                >
+                  <source src={card?.[activeCard]?.media?.url} type="video/mp4" />
+                  <source src={card?.[activeCard]?.media?.url} type="video/ogg" />
+                </video>
+              )}
             </ScaleInReveal>
           )}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { SubH2, BodyText1 } from "../Typography2";
+import { BodyText1, SubH1 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -42,9 +42,9 @@ const EventPopup = ({ event }: EventPopupProps) => {
     <div className="w-full" data-lenis-prevent>
       {/* Title */}
       {title && (
-        <SubH2 className="text-blue-200 mb-[16px] pr-8">
+        <SubH1 className="text-blue-200 mb-[16px] pr-8">
           {title}
-        </SubH2>
+        </SubH1>
       )}
 
       {/* Description */}
@@ -56,7 +56,7 @@ const EventPopup = ({ event }: EventPopupProps) => {
 
       {/* Image Gallery */}
       {imagesToShow && imagesToShow.length > 0 && (
-        <div className="mt-[24px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
+        <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
           <Swiper
             modules={[FreeMode]}
             freeMode={{

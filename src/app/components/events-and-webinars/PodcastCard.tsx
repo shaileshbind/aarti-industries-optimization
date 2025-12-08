@@ -34,14 +34,14 @@ const PodcastCard = ({ podcast }: PodcastCardProps) => {
         {/* Episode Label & Duration */}
         <div className="flex items-center gap-2">
           {episodeLabel && (
-            <BodyText3 className="text-grey-400">
+            <BodyText3 className="text-blue-200">
               {episodeLabel}
             </BodyText3>
           )}
           {duration && (
             <>
-              <span className="text-grey-400">|</span>
-              <BodyText3 className="text-grey-400">
+              <span className="text-blue-200">|</span>
+              <BodyText3 className="text-blue-200">
                 {duration}
               </BodyText3>
             </>
@@ -50,7 +50,7 @@ const PodcastCard = ({ podcast }: PodcastCardProps) => {
         
         {/* Date */}
         {date && (
-          <BodyText3 className="text-grey-400">
+          <BodyText3 className="text-blue-200">
             {date}
           </BodyText3>
         )}
@@ -66,7 +66,7 @@ const PodcastCard = ({ podcast }: PodcastCardProps) => {
       {/* Speaker Info */}
       <div className="flex items-center gap-2 justify-between mb-[5px]">
       {speakerInfo && (
-        <BodyText2 className="text-grey-400 ">
+        <BodyText2 className="text-blue-200 ">
           {speakerInfo}
         </BodyText2>
       )}

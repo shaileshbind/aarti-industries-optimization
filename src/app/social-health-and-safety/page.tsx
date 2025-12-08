@@ -15,7 +15,6 @@ import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactSt
 export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/social-health-safety");
-  // const data = await getPageData("/pages/by-slug/maha-super");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
@@ -58,7 +57,6 @@ const section_nine =[
         ]
     }
 ]
-
 
   return (
     <div>

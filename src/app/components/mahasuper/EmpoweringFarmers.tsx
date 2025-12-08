@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
-import React from "react";
-import { BodyText2, H2, H3, BodyText3 } from "../Typography2";
-import Button from "../Button";
+import React, { useState } from "react";
+import { BodyText2, H2, H3, BodyText3, BodyText1 } from "../Typography2";
 import { EmpoweringFarmersProps } from "@/app/types/mahasuper.type";
+import clsx from "clsx";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
-    const { title, description, states, subtitle, stats, ctaLink, ctaTitle,  image } = data;
+    const { title, description, states, subtitle, stats, ctaTitle,  image } = data;
+    const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   return (
     <section className=" md:py-20 py-[30px] overflow-hidden ">
         <div className="container">
@@ -21,8 +23,8 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                     )}
                     {states && (
                         <ul className="flex flex-col gap-2 mt-5">
-                            {states.map((state) => (
-                                <li key={state.id} className="flex items-center gap-2">
+                            {states.map((state, index) => (
+                                <li key={index} className={clsx("flex items-center gap-2 font-light mb-1", index == 0 ? "text-orange-200" : "")}>
                                     <i className="w-[18px] h-[18px] rounded-full bg-orange-100 border-[4px] border-[#F9C095]"></i> 
                                     {state.title}
                                 </li>
@@ -30,7 +32,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                         </ul>
                     )}
                     {subtitle && (
-                        <BodyText3 className="text-blue-100 mt-11">{subtitle}</BodyText3>
+                        <BodyText1 className="text-blue-100 mt-11">{subtitle}</BodyText1>
                     )}
                     {stats && (
                         <ul className="grid grid-cols-2 gap-2 mt-3 max-w-[620px]">
@@ -43,7 +45,15 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                         </ul>
                     )}
                     {ctaTitle && (
-                        <Button title={ctaTitle} className="mt-7" secondary href={ctaLink} />
+                        // <Button title={ctaTitle} className="mt-7" secondary href={ctaLink} />
+                        <button
+                                  onClick={() => {
+                                    setshowGeneralPopup(true);
+                                  }}
+                                  className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
+                                >
+                                  Read More
+                                </button>
                     )}
                 </div>
                 </div>
@@ -60,6 +70,13 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                 
             </div>
         </div>
+        <GeneralPopup
+        isOpen={showGeneralPopup}
+        setshowGeneralPopup={setshowGeneralPopup}
+        // document={document}
+        prefillCategory="Business Products / Services"
+        prefillSubCategory="LAB Testing (Analytical/ Safety)"
+      />
     </section>
   );
 };
