@@ -54,7 +54,7 @@ export type UpcomingEventsResponse = {
 
 export type EventsListingProps = {
   pastEvent?: boolean;
-  upcomingEventsData: UpcomingEventsResponse | { pressData?: UpcomingEventsResponse['pressData']; data?: UpcomingEventData[] } | null;
+  upcomingEventsData: UpcomingEventData[] | UpcomingEventsResponse | { pressData?: UpcomingEventsResponse['pressData']; data?: UpcomingEventData[] } | null;
   data: {
     title: string;
     events: {
@@ -132,7 +132,7 @@ export type Podcast = {
 };
 
 export type PodcastListingProps = {
-  podcastsData: PodcastApiResponse | PodcastsResponse;
+  podcastsData: PodcastApiItem[] | PodcastApiResponse | PodcastsResponse;
   data: {
     title: string;
   };

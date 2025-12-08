@@ -59,7 +59,7 @@ export type VideoScrollBarContainerProps = {
       };
     }[];
   };
-  webinarsData: WebinarsResponse;
+  webinarsData: WebinarApiItem[] | WebinarsResponse;
 };
 
 export type ExploreProps = {
