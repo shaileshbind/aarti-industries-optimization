@@ -90,12 +90,17 @@ const EventsListing = ({ data, pastEvent = false, upcomingEventsData }: EventsLi
   const [selectedEvent, setSelectedEvent] = useState<DisplayEvent | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  console.log("upcomingEventsData::::innnnn", upcomingEventsData);
   // Transform upcoming events data if available
   // Handle both direct API response structure and getPageData wrapped structure
   const transformedEvents = useMemo(() => {
     // Check if data is wrapped in pressData (from getPageData)
     let eventsData: UpcomingEventData[] | undefined;
-    if (upcomingEventsData && 'pressData' in upcomingEventsData) {
+    
+    // getData returns the array directly, so check if it's already an array
+    if (Array.isArray(upcomingEventsData)) {
+      eventsData = upcomingEventsData;
+    } else if (upcomingEventsData && 'pressData' in upcomingEventsData) {
       eventsData = upcomingEventsData.pressData?.data;
     } else if (upcomingEventsData && 'data' in upcomingEventsData) {
       eventsData = upcomingEventsData.data;

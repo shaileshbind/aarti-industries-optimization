@@ -14,7 +14,18 @@ export default function VideoScrollBarContainer({
   webinarsData,
 }: VideoScrollBarContainerProps) {
   // Transform pressData to match the expected card structure
-  const transformedPressData = webinarsData?.pressData?.data?.map((item: WebinarApiItem) => ({
+  // getData returns the array directly, so check if it's already an array first
+  let webinarsArray: WebinarApiItem[] = [];
+  
+  if (Array.isArray(webinarsData)) {
+    // getData returns array directly
+    webinarsArray = webinarsData;
+  } else if (webinarsData && 'pressData' in webinarsData) {
+    // Wrapped in pressData (from getPageData)
+    webinarsArray = webinarsData.pressData?.data || [];
+  }
+  
+  const transformedPressData = webinarsArray.map((item: WebinarApiItem) => ({
     title: item?.title || "",
     date: item?.date,
     image: item?.image || { url: "", alternativeText: "" },
@@ -22,7 +33,7 @@ export default function VideoScrollBarContainer({
       url: item?.media?.url || "",
       mime: item?.media?.mime,
     },
-  })) || [];
+  }));
 
   // Use pressData if available, otherwise use the original card data
   const { title, card: originalCard } = data;
