@@ -10,12 +10,11 @@ import CDMOExp from "../components/cdmo/CDMOExp";
 import DrivingEmpowerment from "../components/social-health-and-safety/DrivingEmpowerment";
 import GridCardsSocial from "../components/social-health-and-safety/GridCardsSocial";
 import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
-// import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
+import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/social-health-safety");
-  // const data = await getPageData("/pages/by-slug/maha-super");
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
@@ -24,7 +23,7 @@ const page = async () => {
     section_two,
     section_three,
     section_four,
-    
+    section_five,
     section_six,
     section_seven,
   } = data?.data;
@@ -85,9 +84,9 @@ const section_nine =[
         <DrivingEmpowerment data={section_four} />
       )}
 
-      {/* {section_five && <ImpactStoriesSlider
+      {section_five && <ImpactStoriesSlider
         data={section_five}
-        />} */}
+        />}
        {section_six && <GridCardsSocial data={section_six} />}
       {section_seven && (
         <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
