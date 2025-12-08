@@ -9,12 +9,12 @@ const InvestorExplore = ({ data }: InvestorExpProps) => {
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
           title={exploreMore[0]?.title}
-          items={exploreMore[0]?.ctaButton}
+          ctaButton={exploreMore[0]?.ctaButton}
         />
         <ExploreCard
           lightVariant
-          title={exploreMore[0]?.title}
-          items={exploreMore[0]?.ctaButton}
+          title={exploreMore[1]?.title}
+          ctaButton={exploreMore[1]?.ctaButton}
         />
       </div>
     </div>

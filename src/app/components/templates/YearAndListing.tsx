@@ -6,7 +6,13 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from "react";
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
@@ -129,34 +135,34 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
   // // helper to measure active item relative to yearsRowRef
   const measure = useCallback(
-  (year: string | number = activeYear) => {
-    const row = yearsRowRef.current;
-    const item = itemRefs.current.get(year);
-    if (!row || !item) return;
+    (year: string | number = activeYear) => {
+      const row = yearsRowRef.current;
+      const item = itemRefs.current.get(year);
+      if (!row || !item) return;
 
-    const rowRect = row.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
+      const rowRect = row.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
 
-    const left = itemRect.left - rowRect.left;
-    const width = Math.round(itemRect.width);
+      const left = itemRect.left - rowRect.left;
+      const width = Math.round(itemRect.width);
 
-    setUnderline({ left: Math.round(left), width });
-  },
-  [activeYear]
-);
+      setUnderline({ left: Math.round(left), width });
+    },
+    [activeYear]
+  );
 
-// measure after layout and when activeYear changes
-useLayoutEffect(() => {
-  measure(activeYear);
+  // measure after layout and when activeYear changes
+  useLayoutEffect(() => {
+    measure(activeYear);
 
-  const onResize = () => measure(activeYear);
-  window.addEventListener("resize", onResize);
-  return () => window.removeEventListener("resize", onResize);
-}, [activeYear, measure]);
+    const onResize = () => measure(activeYear);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeYear, measure]);
 
   return (
     <div>
-      <div className="fluid-container pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
+      <div className="fluid-container pt-6 md:pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
         {/* Left Sidebar - Subcategories (Desktop) */}
         <div className="w-[20%] hidden lg:block">
           {reportLayout?.map((subCat, idx) => (
@@ -237,7 +243,7 @@ useLayoutEffect(() => {
                 {/* Animated underline */}
                 {!dropdownClicked && (
                   <div
-                    className="absolute bottom-0 h-[2px] bg-[#002F50] transition-all duration-300 ease-out"
+                    className="absolute bottom-0 h-[2px] bg-[#DC4C03] lg:bg-[#002F50] transition-all duration-300 ease-out"
                     style={{
                       width: `${underline.width + 5}px`,
                       transform: `translateX(${underline.left}px)`,

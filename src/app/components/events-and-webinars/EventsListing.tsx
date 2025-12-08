@@ -6,6 +6,7 @@ import EventPopup from "./EventPopup";
 import Popup from "../Popup";
 import { H2 } from "../Typography2";
 import clsx from "clsx";
+import { ButtonProps } from "@/app/types/global.type";
 
 // Helper function to format date from ISO string to readable format
 const formatDate = (dateString: string): string => {
@@ -17,7 +18,7 @@ const formatDate = (dateString: string): string => {
       day: 'numeric' 
     };
     return date.toLocaleDateString('en-US', options);
-  } catch (error) {
+  } catch {
     return dateString;
   }
 };
@@ -30,7 +31,7 @@ type DisplayEvent = {
   description: string;
   image: { url: string; alternativeText: string };
   mobImage: { url: string; alternativeText: string };
-  ctaButton?: { title: string; link: string; externalLink?: string };
+  ctaButton?: ButtonProps;
   gallery?: { url: string; alternativeText: string }[];
 };
 
@@ -53,18 +54,18 @@ const transformEventData = (event: UpcomingEventData): DisplayEvent => {
     : fallbackImage;
 
   // Create CTA button from available CTA fields
-  let ctaButton: { title: string; link: string; externalLink?: string } | undefined = undefined;
+  let ctaButton: ButtonProps | undefined = undefined; 
   if (event.galleryCtaTitle && event.galleryCtaLink) {
     ctaButton = {
       title: event.galleryCtaTitle,
-      link: event.galleryCtaLink,
-      externalLink: "false"
+      link: { link: event.galleryCtaLink, target: "_blank" },
+      hasExternalLink: "false"
     };
   } else if (event.globalTeamCtaTitle && event.globalTeamCtaLink) {
     ctaButton = {
       title: event.globalTeamCtaTitle,
-      link: event.globalTeamCtaLink,
-      externalLink: "false"
+      link: { link: event.globalTeamCtaLink, target: "_blank" },
+      hasExternalLink: "false"
     };
   }
 
@@ -118,14 +119,18 @@ const EventsListing = ({ data, pastEvent = false, upcomingEventsData }: EventsLi
       return transformedEvents;
     }
     // Transform legacy events to DisplayEvent format
-    return (data?.events || []).map(event => ({
+    return (data?.events || []).map(event => ({ 
       title: event.title,
       date: event.date || '',
       location: event.location || '',
       description: event.description || '',
       image: event.image,
       mobImage: event.mobImage,
-      ctaButton: event.ctaButton,
+      ctaButton: event.ctaButton ? {
+        title: event.ctaButton.title,
+        link: event.ctaButton.link,
+        externalLink: event.ctaButton.hasExternalLink == "true" ? event.ctaButton.externalLink : event.ctaButton.link?.link
+      } : undefined,
       gallery: undefined // Legacy events might not have gallery
     }));
   }, [transformedEvents, data?.events]);
@@ -149,7 +154,15 @@ const EventsListing = ({ data, pastEvent = false, upcomingEventsData }: EventsLi
             {eventsToDisplay.map((event, index) => (
               <EventCard 
                 key={event.title + index} 
-                event={event} 
+                event={{
+                  title: event.title,
+                  date: event.date,
+                  location: event.location,
+                  description: event.description,
+                  image: event.image,
+                  mobImage: event.mobImage,
+                  ctaButton: event.ctaButton as ButtonProps
+                }} 
                 pastEvent={pastEvent}
                 onButtonClick={!pastEvent ? undefined : () => handleButtonClick(event)}
               />

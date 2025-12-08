@@ -5,6 +5,7 @@ import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";
 import clsx from "clsx";
 import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
 
 export default function WorksWithPartners({
   data,
@@ -86,16 +87,23 @@ export default function WorksWithPartners({
   return (
     <div className="fluid-container">
       <div className="lg:flex justify-between items-center">
-        {sectionTitle && <H2>{sectionTitle}</H2>}
+        {sectionTitle && (
+          <FadeInReveal>
+            <H2>{sectionTitle}</H2>
+          </FadeInReveal>
+        )}
 
         {ctaTitle && ctaLink && (
-          <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
+          <FadeInReveal>
+            <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
+          </FadeInReveal>
         )}
       </div>
 
       {/* Desktop */}
       {card?.length > 0 && (
-        <div
+        <FadeInReveal
+          delay={0.2}
           className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}
         >
           {card?.map((item, index) => (
@@ -148,7 +156,7 @@ export default function WorksWithPartners({
               </div>
             </div>
           ))}
-        </div>
+        </FadeInReveal>
       )}
 
       {/* Mobile */}

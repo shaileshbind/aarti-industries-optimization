@@ -9,6 +9,7 @@ import Logos from "./Logos";
 import BrandGuidelines from "./BrandGuidelines";
 import Brochures from "./Brochures";
 import { MediaContainerProps, TabProps } from "@/app/types/media-kit.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,9 +144,11 @@ export default function MediaContainer({ data }: MediaContainerProps) {
         />
 
         {/* Cards container */}
-        <div className="mt-[30px] lg:mt-[12px]" ref={cardsWrapRef}>
-          {renderContent()}
-        </div>
+        <FadeInReveal>
+          <div className="mt-[30px] lg:mt-[12px]" ref={cardsWrapRef}>
+            {renderContent()}
+          </div>
+        </FadeInReveal>
       </div>
     </div>
   );

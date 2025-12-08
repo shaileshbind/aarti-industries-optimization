@@ -435,7 +435,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                               ))}
                             </div>
                           )}
-                          {slide?.ctaButton?.link && (
+                          {/* {slide?.ctaButton?.link?.link && slide?.ctaButton?.hasExternalLink && ( */}
                             <div className="mt-[40px]">
                               <button
                                 onClick={() => {
@@ -446,7 +446,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                 Read More
                               </button>
                             </div>
-                          )}
+                          {/* )} */}
                         </div>
                       </div>
                     </SwiperSlide>

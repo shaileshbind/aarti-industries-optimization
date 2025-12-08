@@ -17,6 +17,7 @@ import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
 import clsx from "clsx";
 import StickyShare from "@/app/components/blogs/StickyShare";
+import { FadeInReveal } from "@/app/components/ScrollReveal";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,10 @@ export default async function page({ params }: BlogInnerProps) {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? `https://www.aarti-industries.com/blogs/${blogInner}`}
+        canonical={
+          seo?.canonical ??
+          `https://www.aarti-industries.com/blogs/${blogInner}`
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -79,7 +83,7 @@ export default async function page({ params }: BlogInnerProps) {
             {title && <H3 className="py-1">{title}</H3>}
 
             {bannerImageDesktop?.url && (
-              <div className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
+              <FadeInReveal className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
                 <Image
                   src={bannerImageDesktop?.url}
                   width={872}
@@ -87,21 +91,25 @@ export default async function page({ params }: BlogInnerProps) {
                   alt={bannerImageDesktop?.all || "banner"}
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </FadeInReveal>
             )}
 
-            {bannerDescription && <BodyText2>{bannerDescription}</BodyText2>}
+            {bannerDescription && (
+              <FadeInReveal delay={0.1}>
+                <BodyText2>{bannerDescription}</BodyText2>
+              </FadeInReveal>
+            )}
 
             {pointers?.length > 0 && (
               <div className="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 md:mb-16">
                 {pointers?.map((item: PointerProps, index: number) => (
-                  <div key={"num" + index}>
+                  <FadeInReveal delay={index * 0.1} key={"num" + index}>
                     {item?.title && (
                       <H2 className="text-[#DC4C03] pb-1">{item?.title}</H2>
                     )}
 
                     <BodyText2>{item?.description}</BodyText2>
-                  </div>
+                  </FadeInReveal>
                 ))}
               </div>
             )}
@@ -124,7 +132,9 @@ export default async function page({ params }: BlogInnerProps) {
 
           <div className="block md:hidden">
             <div className="mt-6">
-              <p className="text-[#002F50] text-base pb-4">{shareViaSocials?.title}</p>
+              <p className="text-[#002F50] text-base pb-4">
+                {shareViaSocials?.title}
+              </p>
               <div className="flex gap-4 items-start">
                 <Share />
                 <CopyLink />
@@ -143,7 +153,11 @@ export default async function page({ params }: BlogInnerProps) {
                 {relatedBlogs?.data
                   ?.slice(0, 4)
                   ?.map((item: RelatedBogsProps, index: number) => (
-                    <div key={"item_" + index} className="relative">
+                    <FadeInReveal
+                      delay={index * 0.2}
+                      key={"item_" + index}
+                      className="relative"
+                    >
                       <DateCard
                         imageSrc={item?.thumbnailImageDesktop?.url}
                         date={formatDate(item?.date)}
@@ -156,7 +170,7 @@ export default async function page({ params }: BlogInnerProps) {
                         animate
                         useTargetBlank={false}
                       />
-                    </div>
+                    </FadeInReveal>
                   ))}
               </div>
             )}

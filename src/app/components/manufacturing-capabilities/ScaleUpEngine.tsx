@@ -111,11 +111,11 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                         </p>
                       )}
 
-                      {item?.ctaButton?.title && item?.ctaButton?.link && (
+                      {item?.ctaButton?.title && item?.ctaButton?.link?.link && (
                         <Button
                           secondary
                           title={item?.ctaButton?.title}
-                          href={item?.ctaButton?.link}
+                          href={item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}
                         />
                       )}
                     </div>
@@ -273,11 +273,11 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                     </p>
                   )}
 
-                  {item?.ctaButton?.title && item?.ctaButton?.link && (
+                  {item?.ctaButton?.title && item?.ctaButton?.link?.link && (
                     <Button
                       secondary
                       title={item?.ctaButton?.title}
-                      href={item?.ctaButton?.link}
+                      href={item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}
                     />
                   )}
                 </div>

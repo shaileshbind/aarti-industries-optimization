@@ -2,6 +2,7 @@ import React from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { AilEdgeProps } from "@/app/types/aarti-advantage.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 export default function AilEdge({ data }: AilEdgeProps) {
   const { heading, cards } = data;
@@ -20,7 +21,8 @@ export default function AilEdge({ data }: AilEdgeProps) {
         {cards?.map(
           (item, index) =>
             item?.image?.url && (
-              <div
+              <FadeInReveal
+                delay={index * 0.2}
                 className="h-auto md:h-[226px] flex flex-col gap-8 md:gap-4 justify-between bg-[#EFF3F5] p-5 md:p-8 rounded-[20px]"
                 key={"tab_" + index}
               >
@@ -33,7 +35,7 @@ export default function AilEdge({ data }: AilEdgeProps) {
                 />
 
                 <SubH2>{item?.title}</SubH2>
-              </div>
+              </FadeInReveal>
             )
         )}
         <div className="hidden lg:block" />

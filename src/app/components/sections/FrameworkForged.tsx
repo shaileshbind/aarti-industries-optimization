@@ -71,7 +71,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
   const secondaryImageClasses =
-    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-42px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
   const imageTransitionClasses = "transition-all duration-700 ease-out";
   const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
@@ -251,10 +251,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </div>
           )}
 
-          {partnerWithUsCta?.title && (
+          {partnerWithUsCta?.title && partnerWithUsCta?.link?.link && (
             <div className="mt-[40px]">
               <Button
-                href={partnerWithUsCta?.link}
+                href={partnerWithUsCta?.link?.link}
                 title={partnerWithUsCta?.title}
               />
             </div>
@@ -343,10 +343,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                 alt="img"
                 width={72}
                 height={72}
-                className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+                className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
               />
               <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
-              <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
+              <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
             </div>
           )}
         </div>

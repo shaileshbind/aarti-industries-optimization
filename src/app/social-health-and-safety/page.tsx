@@ -11,6 +11,7 @@ import DrivingEmpowerment from "../components/social-health-and-safety/DrivingEm
 import GridCardsSocial from "../components/social-health-and-safety/GridCardsSocial";
 import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
 import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
+import { CDMOExpProps } from "@/app/types/cdmo.type";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -28,31 +29,26 @@ const page = async () => {
     section_seven,
   } = data?.data;
   const seo = data?.seo;
-const section_nine =[
+const section_nine: CDMOExpProps['data'] = [
     {
-        "id": 1,
-        "title": "Looking for R&D Solutions?",
-        "ctaButton": [
+        title: "Looking for R&D Solutions?",
+        ctaButton: [
             {
-                "id": 405,
-                "title": "Inquire Now",
-                "link": "#"
+                title: "Inquire Now",
+                link: { link: "#", target: "_self" }
             }
         ]
     },
     {
-        "id": 2,
-        "title": "Your CDMO Partner Awaits",
-        "ctaButton": [
+        title: "Your CDMO Partner Awaits",
+        ctaButton: [
             {
-                "id": 406,
-                "title": "Product Portfolio",
-                "link": "#"
+                title: "Product Portfolio",
+                link: { link: "#", target: "_self" }
             },
             {
-                "id": 407,
-                "title": "Partner with us",
-                "link": "#"
+                title: "Partner with us",
+                link: { link: "#", target: "_self" }
             }
         ]
     }

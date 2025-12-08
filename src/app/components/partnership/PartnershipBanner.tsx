@@ -15,9 +15,9 @@ const PartnershipBanner: React.FC<PartnershipBannerProps> = ({ data }) => {
         alt={image?.alternativeText || "banner"}
         mobAlt={image?.alternativeText || "banner"}
         secondaryBtnLeftTitle={ctaButtons?.[0]?.title}
-        secondaryBtnLeftLink={ctaButtons?.[0]?.link || "#"}
+        secondaryBtnLeftLink={ctaButtons?.[0]?.link?.link}
         secondaryBtnRightTitle={ctaButtons?.[1]?.title}
-        secondaryBtnRightLink={ctaButtons?.[1]?.link || "#"}
+        secondaryBtnRightLink={ctaButtons?.[1]?.link?.link}
       />
     </div>
   );

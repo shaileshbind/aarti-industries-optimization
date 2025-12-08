@@ -365,7 +365,7 @@ export default function ParallaxCardSection({
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
-                        href={item?.ctaButton?.link || "#"}
+                        href={`${item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}`}
                         className=" mb-2"
                       />
                     )}

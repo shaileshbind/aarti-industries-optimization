@@ -371,7 +371,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     <div className="mt-5">
                       <Button
                         title={ctaButton?.title}
-                        href={ctaButton?.link ? ctaButton?.link : "/"}
+                        href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
                         secondary
                       />
                     </div>
@@ -526,7 +526,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               <div className="mt-5">
                 <Button
                   title={ctaButton?.title}
-                  href={ctaButton?.link ? ctaButton?.link : "/"}
+                  href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
                   secondary
                 />
               </div>

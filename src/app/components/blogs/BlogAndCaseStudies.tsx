@@ -10,6 +10,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import { BlogAndCaseStudiesProps, BlogDataProps } from "@/app/types/blogs.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,47 +105,47 @@ export default function BlogAndCaseStudies({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchBlogData = useCallback(
-  async (type: string, page: number) => {
-    setLoading(true);
-    setError(null);
+    async (type: string, page: number) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const params = new URLSearchParams({
-        type,
-        page: page.toString(),
-        ...(type === "blogs" && lastestBlogId
-          ? { excludeId: lastestBlogId }
-          : {}),
-      });
+      try {
+        const params = new URLSearchParams({
+          type,
+          page: page.toString(),
+          ...(type === "blogs" && lastestBlogId
+            ? { excludeId: lastestBlogId }
+            : {}),
+        });
 
-      const response = await fetch(`/api/fetchBlogsCasestudies?${params}`);
+        const response = await fetch(`/api/fetchBlogsCasestudies?${params}`);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        setBlogData(result.data || []);
+        setTotalPages(result.meta?.pagination?.pageCount || 1);
+      } catch (error) {
+        console.error("Error fetching blog data:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to load content"
+        );
+        setBlogData([]);
+      } finally {
+        setLoading(false);
       }
+    },
+    [lastestBlogId]
+  );
 
-      const result = await response.json();
-
-      setBlogData(result.data || []);
-      setTotalPages(result.meta?.pagination?.pageCount || 1);
-    } catch (error) {
-      console.error("Error fetching blog data:", error);
-      setError(
-        error instanceof Error ? error.message : "Failed to load content"
-      );
-      setBlogData([]);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (active) {
+      fetchBlogData(active, currentPage);
     }
-  },
-  [lastestBlogId]
-);
-
-useEffect(() => {
-  if (active) {
-    fetchBlogData(active, currentPage);
-  }
-}, [active, currentPage, fetchBlogData]);
+  }, [active, currentPage, fetchBlogData]);
 
   // Reset to page 1 when tab changes
   useEffect(() => {
@@ -260,18 +261,26 @@ useEffect(() => {
         {loading ? (
           // Loading state
           [...Array(12)].map((_, index) => (
-            <div key={`loading_${index}`} className="relative">
+            <FadeInReveal
+              delay={index * 0.2}
+              key={`loading_${index}`}
+              className="relative"
+            >
               <div className="animate-pulse">
                 <div className="bg-gray-200 h-48 rounded-lg mb-4"></div>
                 <div className="bg-gray-200 h-4 rounded w-3/4 mb-2"></div>
                 <div className="bg-gray-200 h-4 rounded w-1/2"></div>
               </div>
-            </div>
+            </FadeInReveal>
           ))
         ) : blogData.length > 0 ? (
           // Render actual blog data
           blogData?.map((item, index) => (
-            <div key={item?.id || `item_${index}`} className="relative">
+            <FadeInReveal
+              delay={index * 0.2}
+              key={item?.id || `item_${index}`}
+              className="relative"
+            >
               <DateCard
                 imageSrc={item?.thumbnailImageDesktop?.url}
                 date={formatDate(item?.date) || ""}
@@ -282,7 +291,7 @@ useEffect(() => {
                 animate
                 useTargetBlank={false}
               />
-            </div>
+            </FadeInReveal>
           ))
         ) : (
           // No data state
