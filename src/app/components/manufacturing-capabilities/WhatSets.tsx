@@ -31,10 +31,10 @@ export default function WhatSets({ data }: WhatSetsProps) {
             </H2>
           )}
 
-          {ctaButton?.title && ctaButton?.link && (
+          {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
             <Button
               title={ctaButton?.title}
-              href={ctaButton?.link}
+              href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
               className="mt-6"
             />
           )}

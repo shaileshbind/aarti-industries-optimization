@@ -9,13 +9,13 @@ const AdvExplore: React.FC<AdvExploreProps> = ({ data }) => {
       <FadeInReveal className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={data?.[0]?.exploreMore?.title}
-          items={data?.[0]?.exploreMore?.ctaButton}
+          ctaButton={data?.[0]?.exploreMore?.ctaButton}
         />
 
         <ExploreCard
           lightVariant
           title={data?.[1]?.exploreMore?.title}
-          items={data?.[1]?.exploreMore?.ctaButton}
+          ctaButton={data?.[1]?.exploreMore?.ctaButton}
         />
       </FadeInReveal>
     </div>

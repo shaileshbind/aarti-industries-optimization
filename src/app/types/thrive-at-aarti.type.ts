@@ -32,6 +32,6 @@ export type ComprehensiveCareProps = {
       image: ImageProps;
       mobImage: ImageProps;
     }[];
-    ctaButton: ButtonProps[];
+    ctaButton: ButtonProps;
   };
 };

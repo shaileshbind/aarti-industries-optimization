@@ -100,9 +100,10 @@ export type PodcastApiItem = {
   title: string;
   slug: string;
   speakerInfo?: string;
-  ctaTitle?: string;
-  ctaLink?: string | null;
-  externalLink?: string | null;
+  // ctaTitle?: string;
+  // ctaLink?: string | null;
+  ctaButton?: ButtonProps;
+    externalLink?: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

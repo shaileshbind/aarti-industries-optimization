@@ -12,7 +12,7 @@ const ShapedBy: React.FC<ShapedByProps> = ({ data }) => {
       mobImage={mobImage?.url}
       title={title}
       description={description}
-      ctaLink={ctaButton?.link}
+      ctaLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
       ctaTitle={ctaButton?.title}
     />
   );

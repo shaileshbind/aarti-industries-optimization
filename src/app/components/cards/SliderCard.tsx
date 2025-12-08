@@ -4,16 +4,14 @@ import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import clsx from "clsx";
+import { ButtonProps } from "@/app/types/global.type";
 
 interface SliderValue {
   value?: string;
   description?: string;
 }
 
-interface CTAButton {
-  title?: string;
-  link?: string;
-}
+
 interface bulletProp {
   id?: number;
   title?: string;
@@ -26,7 +24,7 @@ interface SliderCardProps {
   heading?: string;
   description?: string;
   values?: SliderValue[];
-  ctaButton?: CTAButton;
+  ctaButton?: ButtonProps;
   bullets?: bulletProp[];
 }
 
@@ -107,8 +105,8 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           ))}
         </div>
-        {ctaButton?.title && ctaButton?.link && (
-          <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
+        {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
+          <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
         )}
       </div>
       {/* Desktop Version */}
@@ -179,8 +177,8 @@ const SliderCard: FC<SliderCardProps> = ({
               ))}
             </div>
           ) : null}
-          {ctaButton?.title && ctaButton?.link && (
-            <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
+          {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
+            <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
           )}
         </div>
       </div>

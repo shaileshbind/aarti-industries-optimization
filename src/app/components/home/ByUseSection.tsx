@@ -173,7 +173,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
             {data?.[active]?.ctaButton?.title && (
               <Button
                 secondary
-                href={data?.[active]?.ctaButton?.link || "#"}
+                href={data?.[active]?.ctaButton?.hasExternalLink == "true" ? data?.[active]?.ctaButton?.externalLink : data?.[active]?.ctaButton?.link?.link}
                 title={data?.[active]?.ctaButton?.title}
               />
             )}

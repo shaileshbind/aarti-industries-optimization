@@ -8,7 +8,7 @@ export type HomeHeroProps = {
         description: string;
         image: ImageProps;
         mobImage: ImageProps;
-        ctaButton: ButtonProps;
+        ctaButton: ButtonProps[];
       }[];
       category: string;
     }[];

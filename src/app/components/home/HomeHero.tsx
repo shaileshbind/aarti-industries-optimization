@@ -280,10 +280,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                         </BodyText2>
                       )}
 
-                      {items?.card?.[0]?.ctaButton?.title && (
+                      {items?.card?.[0]?.ctaButton?.[0]?.title && (
                         <Button
-                          href={items?.card?.[0]?.ctaButton?.link || "#"}
-                          title={items?.card?.[0]?.ctaButton?.title}
+                          href={items?.card?.[0]?.ctaButton?.[0]?.hasExternalLink == "true" ? items?.card?.[0]?.ctaButton?.[0]?.externalLink : items?.card?.[0]?.ctaButton?.[0]?.link?.link}
+                          title={items?.card?.[0]?.ctaButton?.[0]?.title}
                         />
                       )}
                     </div>

@@ -1,5 +1,5 @@
 import { ReportsProps } from "./annual-reports.type";
-import { ImageProps } from "./global.type";
+import { ButtonProps, ImageProps } from "./global.type";
 
 export type CorporateBannerProps = {
   data: {
@@ -26,12 +26,7 @@ export type OurCodeAndPoliciesProps = {
     title: string;
     sectionTitle: string;
     code_and_policy_reports?: ReportsProps[];
-    ctaButton1: {
-      title: string;
-      link: {
-        link: string;
-      };
-    };
+    ctaButton1: ButtonProps;
   };
 };
 

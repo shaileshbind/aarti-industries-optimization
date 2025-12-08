@@ -106,10 +106,11 @@ const transformPodcastData = (apiPodcast: PodcastApiItem | Podcast): Podcast | n
     speakerInfo: item.speakerInfo,
     image: transformImage(item.image),
     mobImage: transformImage(item.mobImage || item.image),
-    ctaButton: item.ctaTitle ? {
-      title: item.ctaTitle,
-      link: item.ctaLink || item.externalLink || "#",
-      externalLink: item.externalLink || undefined
+    ctaButton: item.ctaButton ? {
+      title: item.ctaButton.title,
+      link: item.ctaButton.link,
+      externalLink: item.ctaButton.hasExternalLink == "true" ? item.ctaButton.externalLink : item.ctaButton.link?.link,
+      hasExternalLink: item.ctaButton.hasExternalLink
     } : undefined
   };
 };

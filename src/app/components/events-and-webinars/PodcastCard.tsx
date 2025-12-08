@@ -72,9 +72,9 @@ const PodcastCard = ({ podcast }: PodcastCardProps) => {
       )}
 
       {/* CTA Link - Listen Now */}
-      {ctaButton?.title && ctaButton?.link && (
+      {ctaButton?.title && ctaButton?.link?.link && (
         <div className="mt-auto min-w-[85px]">
-          <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
+          <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
            
         </div>
       )}

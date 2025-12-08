@@ -10,12 +10,12 @@ const Explore: React.FC<ExploreProps> = ({ data }) => {
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={exploreMore?.[0]?.title}
-          items={exploreMore?.[0]?.ctaButton}
+          ctaButton={exploreMore?.[0]?.ctaButton}
         />
         <ExploreCard
           lightVariant
           title={exploreMore?.[1]?.title}
-          items={exploreMore?.[1]?.ctaButton}
+          ctaButton={exploreMore?.[1]?.ctaButton}
         />
       </div>
     </div>

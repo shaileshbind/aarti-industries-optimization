@@ -23,7 +23,7 @@ const ContactExp = ({ data }: ContactExpProps) => {
           </FadeInReveal>
           <FadeInReveal delay={0.2}>
             <Link
-              href={ctaButton?.link ? ctaButton?.link : "#"}
+              href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
               target="_blank"
             >
               <div className="w-fit bg-white button-subtle-scale rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">

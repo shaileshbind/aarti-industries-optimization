@@ -13,7 +13,7 @@ const SusBanner = ({data}:SusBannerProps) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
-      btnLink={ctaButton?.link}
+      btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
       btnTitle={ctaButton?.title}
     />
     </div>

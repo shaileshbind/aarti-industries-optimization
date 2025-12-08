@@ -250,11 +250,11 @@ const DrivingTabsSection = ({
                           )}
                       </div>
 
-                      {tabItem.cards[0]?.ctaButton?.link && (
+                      {tabItem.cards[0]?.ctaButton?.link?.link && tabItem.cards[0]?.ctaButton?.hasExternalLink && (
                         <div className="mt-[18px] pointer-events-auto">
                           <Button
                             title={tabItem.cards[0].ctaButton.title}
-                            href={tabItem.cards[0].ctaButton.link}
+                            href={tabItem.cards[0]?.ctaButton?.hasExternalLink == "true" ? tabItem.cards[0]?.ctaButton?.externalLink : tabItem.cards[0]?.ctaButton?.link?.link}
                             secondary
                           />
                         </div>

@@ -8,13 +8,13 @@ const IndustryExp: React.FC<IndustryExpProps> = ({ data }) => {
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
         <ExploreCard
           title={data?.exploreMore?.[0]?.title}
-          items={data?.exploreMore?.[0]?.ctaButton}
+          ctaButton={data?.exploreMore?.[0]?.ctaButton}
         />
 
         <ExploreCard
           lightVariant
           title={data?.exploreMore?.[1]?.title}
-          items={data?.exploreMore?.[1]?.ctaButton}
+          ctaButton={data?.exploreMore?.[1]?.ctaButton}
         />
       </div>
     </div>

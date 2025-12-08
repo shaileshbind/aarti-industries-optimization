@@ -250,11 +250,11 @@ const TabsAutoplaySection = ({
                           )}
                       </div>
 
-                      {tabItem.card[0]?.ctaButton?.link && (
+                      {tabItem.card[0]?.ctaButton?.link?.link && tabItem.card[0]?.ctaButton?.hasExternalLink && (
                         <div className="mt-[18px] pointer-events-auto">
                           <Button
                             title={tabItem.card[0].ctaButton.title}
-                            href={tabItem.card[0].ctaButton.link}
+                            href={tabItem.card[0]?.ctaButton?.hasExternalLink == "true" ? tabItem.card[0]?.ctaButton?.externalLink : tabItem.card[0]?.ctaButton?.link?.link}
                             secondary
                           />
                         </div>

@@ -251,10 +251,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </div>
           )}
 
-          {partnerWithUsCta?.title && (
+          {partnerWithUsCta?.title && partnerWithUsCta?.link?.link && (
             <div className="mt-[40px]">
               <Button
-                href={partnerWithUsCta?.link}
+                href={partnerWithUsCta?.link?.link}
                 title={partnerWithUsCta?.title}
               />
             </div>

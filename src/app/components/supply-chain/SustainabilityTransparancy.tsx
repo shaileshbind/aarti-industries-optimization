@@ -33,8 +33,8 @@ export default function SustainabilityTransparancy({
           </div>
         )}
 
-        {ctaButton?.title && ctaButton?.link && (
-          <Button title={ctaButton?.title} href={ctaButton?.link} secondary />
+        {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
+          <Button title={ctaButton?.title} href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`} secondary />
         )}
       </div>
     </div>

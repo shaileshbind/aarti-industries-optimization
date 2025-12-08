@@ -34,7 +34,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
           <Button
             className="mt-12"
             title={ctaButton.title}
-            href={ctaButton.link}
+            href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
             secondary
           />
         )}
