@@ -21,7 +21,7 @@ type FeaturedPodcastCardProps = {
 const FeaturedPodcastCard = ({ podcast }: FeaturedPodcastCardProps) => {
   return (
     <Link
-      href={podcast.ctaButton?.link || "#"}
+      href={`${podcast.ctaButton?.hasExternalLink == "true" ? podcast.ctaButton?.externalLink : podcast.ctaButton?.link?.link}`}
       className="block h-full"
     >
       <div className="relative rounded-[10px] overflow-hidden bg-grey-100 h-full flex flex-col group cursor-pointer">

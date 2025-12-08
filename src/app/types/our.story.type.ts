@@ -1,4 +1,4 @@
-import { ImageProps } from "./global.type";
+import { ButtonProps, ImageProps } from "./global.type";
 
 export type OurStoryHeroProps = {
     data: {
@@ -15,11 +15,7 @@ export type AboutCompanyProps = {
         id: number;
         sectionTitle: string;
         description: string;
-        ctaButton?: {
-            id: number;
-            title: string;
-            link: string;
-        };
+        ctaButton: ButtonProps;
     };
 };
 

@@ -12,7 +12,7 @@ const LifeAtBanner = ({ data }: LAABannerProps) => {
         title={title}
         desc={description}
         btnTitle={ctaButton?.title}
-        btnLink={ctaButton?.link}
+        btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`} 
         image={image?.url}
         mobImage={mobImage?.url}
         alt={image?.alternativeText}

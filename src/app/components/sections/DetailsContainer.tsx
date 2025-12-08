@@ -103,7 +103,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
               <div className="my-[36px]">
                 <Button
                   title={ctaButton?.title}
-                  href={ctaButton?.link || "#"}
+                  href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
                 />
                 {/* </FadeInReveal> */}
               </div>

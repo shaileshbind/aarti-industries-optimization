@@ -257,11 +257,11 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
               </div>
             </div>
           </div>
-          {cardWithCategory[active]?.content?.ctaButton?.link &&
+          {cardWithCategory[active]?.content?.ctaButton?.link?.link && cardWithCategory[active]?.content?.ctaButton?.hasExternalLink && 
             cardWithCategory[active]?.content?.ctaButton?.title && (
               <Button
                 secondary
-                href={cardWithCategory[active]?.content?.ctaButton?.link}
+                href={cardWithCategory[active]?.content?.ctaButton?.hasExternalLink == "true" ? cardWithCategory[active]?.content?.ctaButton?.externalLink : cardWithCategory[active]?.content?.ctaButton?.link?.link}
                 title={cardWithCategory[active]?.content?.ctaButton?.title}
                 className="mt-[12px]"
               />
@@ -408,11 +408,11 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                             </div>
                           ))}
                           {/* CTA BUTTON STAYS SAME */}
-                          {item?.content?.ctaButton?.link &&
+                          {item?.content?.ctaButton?.link?.link && item?.content?.ctaButton?.hasExternalLink && 
                             item?.content?.ctaButton?.title && (
                               <Button
                                 secondary
-                                href={item?.content?.ctaButton?.link}
+                                href={item?.content?.ctaButton?.hasExternalLink == "true" ? item?.content?.ctaButton?.externalLink : item?.content?.ctaButton?.link?.link}
                                 title={item?.content?.ctaButton?.title}
                                 className="mt-[12px]"
                               />

@@ -5,8 +5,12 @@ export type ImageProps = {
 
 export type ButtonProps = {
   title: string;
-  link: string;
+  link: {
+    link: string;
+    target: string;
+  };
   externalLink?:string;
+  hasExternalLink?: "true" | "false";
 };
 
 export type ValueProps = {

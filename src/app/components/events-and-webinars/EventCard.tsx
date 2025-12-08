@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, BodyText3, SubH3 } from "../Typography2";
 import Button from "../Button";
+import { ButtonProps } from "@/app/types/global.type";
 
 type EventCardProps = {
   pastEvent?: boolean;
@@ -18,11 +19,12 @@ type EventCardProps = {
       url: string;
       alternativeText: string;
     };
-    ctaButton?: {
-      title: string;
-      link: string;
-      externalLink?: string;
-    };
+    ctaButton: ButtonProps; 
+    // ctaButton?: {
+    //   title: string;
+    //   link: string;
+    //   externalLink?: string;
+    // };
   };
   onButtonClick?: () => void;
 };
@@ -99,7 +101,7 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
           : null
         )}
         {!pastEvent && (
-          <Button title={ctaButton?.title || ''} href={ctaButton?.link || ''} secondary />
+          <Button title={ctaButton?.title || ''} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
         )}
       </div>
     </div>

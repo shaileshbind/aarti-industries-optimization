@@ -2,18 +2,21 @@ import React from "react";
 import Image from "next/image";
 import { Cta, SubH2 } from "../Typography2";
 import Link from "next/link";
+import { ButtonProps } from "@/app/types/global.type";
 
 type ExploreCardProps = {
   title?: string;
-  items?: {
-    id?: number;
-    title?: string;
-    link?: string;
-  }[];
+  // items?: {
+  //   id?: number;
+  //   title?: string;
+  //   link?: string;
+  // }[];
+
+  ctaButton?: ButtonProps[];
   lightVariant?: boolean;
 };
 
-const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
+const ExploreCard = ({ title, ctaButton, lightVariant }: ExploreCardProps) => {
   return (
     <div
       className={`relative w-full min-h-[100px] lg:min-h-[unset] rounded-[16px] lg:rounded-[20px] py-5 px-6 lg:py-7 lg:px-9 overflow-hidden ${
@@ -28,15 +31,15 @@ const ExploreCard = ({ title, items, lightVariant }: ExploreCardProps) => {
         className="absolute top-[-35px] md:top-[-40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
       />
       <SubH2 className="text-white">{title}</SubH2>
-      {items && items?.length > 0 && (
+      {ctaButton && ctaButton?.length > 0 && (
         <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px] xl:gap-x-[50px]">
-          {items?.map((item) => {
-            if (!item?.link) return null;
+          {ctaButton?.map((item) => {
+            if (!item?.link?.link) return null;
             return (
               <Link
-                href={item?.link || "#"}
+                href={ `${item?.hasExternalLink == "true" ? item?.externalLink : item?.link?.link}`}
                 target="_blank"
-                key={item?.id}
+                key={item?.title}
                 className="flex gap-x-[12px] items-center cursor-pointer"
               >
                 {item?.title && (

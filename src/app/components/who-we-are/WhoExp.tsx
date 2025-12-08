@@ -9,12 +9,12 @@ const WhoExp: React.FC<WhoExpProps> = ({ data }) => {
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={ExlporeCard?.[0]?.title}
-          items={ExlporeCard?.[0]?.ctaButton}
+          ctaButton={ExlporeCard?.[0]?.ctaButton}
         />
         <ExploreCard
           lightVariant
           title={ExlporeCard?.[1]?.title}
-          items={ExlporeCard?.[1]?.ctaButton}
+          ctaButton={ExlporeCard?.[1]?.ctaButton}
         />
       </div>
     </div>

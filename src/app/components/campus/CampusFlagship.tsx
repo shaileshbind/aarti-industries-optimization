@@ -215,7 +215,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
           {partnerWithUsCta?.title && (
             <div className="mt-[40px]">
               <Button
-                href={partnerWithUsCta?.link}
+                href={`${partnerWithUsCta?.hasExternalLink == "true" ? partnerWithUsCta?.externalLink : partnerWithUsCta?.link?.link}`}
                 title={partnerWithUsCta?.title}
               />
             </div>

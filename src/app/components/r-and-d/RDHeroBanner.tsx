@@ -10,7 +10,7 @@ const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
       tag={pageHeading}
       title={title}
       desc={description}
-      btnLink={ctaButton?.link || "#"}
+      btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
       btnTitle={ctaButton?.title}
       image={image?.url}
       mobImage={mobImage?.url}

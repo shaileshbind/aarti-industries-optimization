@@ -258,7 +258,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         {ctaButton?.title && (
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
-              <Button href={ctaButton?.link || "#"} title={ctaButton?.title} />
+              <Button href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} title={ctaButton?.title} />
             </div>
           </FadeInRevealBlur>
         )}

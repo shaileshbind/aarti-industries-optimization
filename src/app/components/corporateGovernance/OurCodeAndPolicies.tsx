@@ -25,7 +25,7 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
         </div>
         {ctaButton1?.title && ctaButton1?.link?.link && (
           <div className="hidden lg:block">
-            <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+            <Button title={ctaButton1?.title} href={ctaButton1?.hasExternalLink == "true" ? ctaButton1?.externalLink : ctaButton1?.link?.link} />
           </div>
         )}
       </div>
@@ -44,7 +44,7 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
 
       {ctaButton1?.title && ctaButton1?.link?.link && (
         <div className="flex justify-center mt-10 lg:hidden">
-          <Button title={ctaButton1?.title} href={ctaButton1?.link?.link} />
+          <Button title={ctaButton1?.title} href={ctaButton1?.hasExternalLink == "true" ? ctaButton1?.externalLink : ctaButton1?.link?.link} />
         </div>
       )}
     </div>
