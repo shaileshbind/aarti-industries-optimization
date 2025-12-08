@@ -26,6 +26,7 @@ type FormValues = {
   jobRole: string;
   country: string | null;
   message: string;
+  otherEnquiry:string;
   hearAboutAil: string;
   category: string;
   subCategory: string;
@@ -94,6 +95,7 @@ export default function GeneralForm({
       jobRole: "",
       country: "",
       message: "",
+      otherEnquiry:"",
       hearAboutAil: "",
       category: "",
       subCategory: "",
@@ -220,6 +222,7 @@ export default function GeneralForm({
       job_role: cleanedData.jobRole,
       country: cleanedData.country,
       message: cleanedData.message,
+      otherEnquiry: cleanedData.otherEnquiry,
       enquiry_source: cleanedData.hearAboutAil,
       category: cleanedData.category,
       sub_category: cleanedData.subCategory,
@@ -579,6 +582,31 @@ export default function GeneralForm({
               )}
             </FormControl>
           )}
+
+           {/* Other - Msg Box */}
+           {selectedSubcategory === "Other" && (
+            <div className="flex flex-col">
+            <textarea
+              id="otherEnquiry"
+              {...register("otherEnquiry", {
+                required: "Message is required",
+              })}
+              rows={5}
+              cols={40}
+              placeholder="Other Enquiries *"
+              className={clsx(
+                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+              )}
+            ></textarea>
+            {errors.otherEnquiry && (
+              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                {errors.otherEnquiry.message}
+              </p>
+            )}
+          </div>
+          )}
+
         </div>
 
         <Button title={"Submit"} className="mt-6" />
