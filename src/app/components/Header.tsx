@@ -53,10 +53,14 @@ const Header = ({ data }: HeaderProps) => {
         );
         if (firstMenuWithDropdown !== -1) {
           setMobileExpandedMenu(firstMenuWithDropdown);
-          // Also expand the first submenu within that menu
-          const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
-          if (firstSubMenu?.id !== undefined) {
-            setMobileExpandedSubMenu(firstSubMenu.id);
+          // Only expand the first submenu if it's the first dropdown (index 0)
+          if (firstMenuWithDropdown === 0) {
+            const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
+            if (firstSubMenu?.id !== undefined) {
+              setMobileExpandedSubMenu(firstSubMenu.id);
+            }
+          } else {
+            setMobileExpandedSubMenu(null);
           }
         }
       }
@@ -104,15 +108,18 @@ const Header = ({ data }: HeaderProps) => {
       setMobileExpandedMenu(null);
       setMobileExpandedSubMenu(null);
     } else {
-      // Opening the menu - expand it and also expand the first submenu
+      // Opening the menu - expand it
       setMobileExpandedMenu(menuIndex);
 
-      // Find and expand the first submenu within this menu item
-      if (menu && menu[menuIndex]?.subMenu && menu[menuIndex].subMenu.length > 0) {
+      // Only auto-expand the first submenu for the first dropdown (index 0)
+      if (menuIndex === 0 && menu && menu[menuIndex]?.subMenu && menu[menuIndex].subMenu.length > 0) {
         const firstSubMenu = menu[menuIndex].subMenu[0];
         if (firstSubMenu?.id !== undefined) {
           setMobileExpandedSubMenu(firstSubMenu.id);
         }
+      } else {
+        // For other dropdowns, don't use accordion
+        setMobileExpandedSubMenu(null);
       }
     }
   };
@@ -140,13 +147,19 @@ const Header = ({ data }: HeaderProps) => {
     }
   }, [pathname]);
 
-  // When a dropdown opens, expand the first submenu by default
+  // When a dropdown opens, expand the first submenu by default (only for first dropdown)
   useEffect(() => {
     if (openDropdown !== null && menu) {
-      const currentMenu = menu[openDropdown];
-      if (currentMenu?.subMenu && currentMenu.subMenu.length > 0) {
-        const firstSubMenuId = currentMenu.subMenu[0].id ?? 0;
-        setExpandedSubMenuId(firstSubMenuId);
+      // Only auto-expand for the first dropdown (index 0)
+      if (openDropdown === 0) {
+        const currentMenu = menu[openDropdown];
+        if (currentMenu?.subMenu && currentMenu.subMenu.length > 0) {
+          const firstSubMenuId = currentMenu.subMenu[0].id ?? 0;
+          setExpandedSubMenuId(firstSubMenuId);
+        }
+      } else {
+        // For other dropdowns, don't use accordion
+        setExpandedSubMenuId(null);
       }
     } else {
       // When dropdown closes, reset expanded submenu
@@ -259,19 +272,88 @@ const Header = ({ data }: HeaderProps) => {
                               {item.subMenu.map((subMenuItem, subMenuIndex) => {
                                 const subMenuId = subMenuItem.id ?? subMenuIndex;
                                 const isExpanded = expandedSubMenuId === subMenuId;
-                                return (
-                                  <div key={subMenuId}>
-                                    <button
-                                      onClick={() => toggleSubMenu(subMenuId)}
-                                      className="w-full flex items-center justify-between text-sm font-medium py-2 text-orange-200 hover:text-orange-300 transition-colors cursor-pointer"
-                                    >
-                                      <BodyText3 className="text-orange-200">{subMenuItem.title}</BodyText3>
+                                const isFirstDropdown = index === 0;
+                                
+                                // For first dropdown: use accordion, for others: show items directly
+                                if (isFirstDropdown) {
+                                  return (
+                                    <div key={subMenuId}>
+                                      <button
+                                        onClick={() => toggleSubMenu(subMenuId)}
+                                        className="w-full flex items-center justify-between text-sm font-medium py-2 text-orange-200 hover:text-orange-300 transition-colors cursor-pointer"
+                                      >
+                                        <BodyText3 className="text-orange-200">{subMenuItem.title}</BodyText3>
+                                        {subMenuItem.item && subMenuItem.item.length > 0 && (
+                                          <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                                        )}
+                                      </button>
                                       {subMenuItem.item && subMenuItem.item.length > 0 && (
-                                        <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                                        <div className={`mb-2 last:mb-0 overflow-hidden transition-all duration-600 ease-in-out max-h-0 ${isExpanded ? "!max-h-[500px] opacity-100" : ""}`}>
+                                          <div className="pt-1">
+                                            {subMenuItem.item.map((item) => {
+                                              // Get href from cta_link.link first, then fall back to externalLink
+                                              const href = item.cta_link?.link || item.externalLink;
+                                              
+                                              // Handle items without a valid link - show as disabled
+                                              if (!href || href === "#") {
+                                                return (
+                                                  <div
+                                                    key={item.id}
+                                                    className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed"
+                                                  >
+                                                    {item.title}
+                                                  </div>
+                                                );
+                                              }
+
+                                              const isExternal = href.startsWith("http://") || href.startsWith("https://");
+                                              const target = item.target || (isExternal ? "_blank" : "_self");
+
+                                              // For external links, use regular <a> tag, for internal use Next.js Link
+                                              if (isExternal) {
+                                                return (
+                                                  <a
+                                                    key={item.id}
+                                                    href={href}
+                                                    target={target}
+                                                    rel="noopener noreferrer"
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                    onClick={() => setOpenDropdown(null)}
+                                                  >
+                                                    {item.title}
+                                                  </a>
+                                                );
+                                              }
+
+                                              return (
+                                                <Link
+                                                  key={item.id}
+                                                  href={href}
+                                                  target={target}
+                                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                  onClick={() => {
+                                                    setsearchedValue("");
+                                                    setIsSearchOpen(false);
+                                                    setOpenDropdown(null);
+                                                  }}
+                                                >
+                                                  {item.title}
+                                                </Link>
+                                              );
+                                            })}
+                                          </div>
+                                        </div>
                                       )}
-                                    </button>
-                                    {subMenuItem.item && subMenuItem.item.length > 0 && (
-                                      <div className={`mb-2 last:mb-0 overflow-hidden transition-all duration-600 ease-in-out max-h-0 ${isExpanded ? "!max-h-[500px] opacity-100" : ""}`}>
+                                    </div>
+                                  );
+                                } else {
+                                  // For other dropdowns: show items directly without accordion
+                                  return (
+                                    <div key={subMenuId} className="mb-2 last:mb-0">
+                                      <div className="py-2">
+                                        <BodyText3 className="text-orange-200">{subMenuItem.title}</BodyText3>
+                                      </div>
+                                      {subMenuItem.item && subMenuItem.item.length > 0 && (
                                         <div className="pt-1">
                                           {subMenuItem.item.map((item) => {
                                             // Get href from cta_link.link first, then fall back to externalLink
@@ -325,10 +407,10 @@ const Header = ({ data }: HeaderProps) => {
                                             );
                                           })}
                                         </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                );
+                                      )}
+                                    </div>
+                                  );
+                                }
                               })}
                             </div>
                             {item.image && item.image.url && (
@@ -562,79 +644,148 @@ const Header = ({ data }: HeaderProps) => {
                       const subMenuId = subMenuItem.id ?? subMenuIndex;
                       const isSubMenuExpanded = mobileExpandedSubMenu === subMenuId;
                       const hasItems = subMenuItem.item && subMenuItem.item.length > 0;
+                      const isFirstDropdown = index === 0;
 
-                      return (
-                        <div key={subMenuId} className="border-b border-gray-200 last:border-b-0">
-                          {/* SubMenu Section Header */}
-                          <button
-                            onClick={() => toggleMobileSubMenu(subMenuId)}
-                            className="w-full flex items-center justify-between pl-2 py-3 text-left hover:bg-gray-100 transition-colors"
-                          >
-                            <Typography variant="body-l" className="text-orange-200 font-medium">
-                              {subMenuItem.title}
-                            </Typography>
-                            {hasItems && (
-                              <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isSubMenuExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
-                            )}
-                          </button>
-
-                          {/* SubMenu Items */}
-                          {hasItems && (
-                            <div
-                              className={` transition-all duration-400 overflow-hidden pl-7 ${isSubMenuExpanded ? "max-h-[500px]" : "max-h-0"
-                                }`}
+                      // For first dropdown: use accordion, for others: show items directly
+                      if (isFirstDropdown) {
+                        return (
+                          <div key={subMenuId} className="border-b border-gray-200 last:border-b-0">
+                            {/* SubMenu Section Header */}
+                            <button
+                              onClick={() => toggleMobileSubMenu(subMenuId)}
+                              className="w-full flex items-center justify-between pl-2 py-3 text-left hover:bg-gray-100 transition-colors"
                             >
-                              {subMenuItem.item?.map((item) => {
-                                // Get href from cta_link.link first, then fall back to externalLink
-                                const href = item.cta_link?.link || item.externalLink;
-                                
-                                // Handle items without a valid link - show as disabled
-                                if (!href || href === "#") {
-                                  return (
-                                    <div
-                                      key={item.id}
-                                      className="block   py-2 text-sm text-gray-400 cursor-not-allowed"
-                                    >
-                                      {item.title}
-                                    </div>
-                                  );
-                                }
+                              <Typography variant="body-l" className="text-orange-200 font-medium">
+                                {subMenuItem.title}
+                              </Typography>
+                              {hasItems && (
+                                <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isSubMenuExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
+                              )}
+                            </button>
 
-                                const isExternal = href.startsWith("http://") || href.startsWith("https://");
-                                const target = item.target || (isExternal ? "_blank" : "_self");
+                            {/* SubMenu Items */}
+                            {hasItems && (
+                              <div
+                                className={` transition-all duration-400 overflow-hidden pl-7 ${isSubMenuExpanded ? "max-h-[500px]" : "max-h-0"
+                                  }`}
+                              >
+                                {subMenuItem.item?.map((item) => {
+                                  // Get href from cta_link.link first, then fall back to externalLink
+                                  const href = item.cta_link?.link || item.externalLink;
+                                  
+                                  // Handle items without a valid link - show as disabled
+                                  if (!href || href === "#") {
+                                    return (
+                                      <div
+                                        key={item.id}
+                                        className="block   py-2 text-sm text-gray-400 cursor-not-allowed"
+                                      >
+                                        {item.title}
+                                      </div>
+                                    );
+                                  }
 
-                                // For external links, use regular <a> tag, for internal use Next.js Link
-                                if (isExternal) {
+                                  const isExternal = href.startsWith("http://") || href.startsWith("https://");
+                                  const target = item.target || (isExternal ? "_blank" : "_self");
+
+                                  // For external links, use regular <a> tag, for internal use Next.js Link
+                                  if (isExternal) {
+                                    return (
+                                      <a
+                                        key={item.id}
+                                        href={href}
+                                        target={target}
+                                        rel="noopener noreferrer"
+                                        className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                      >
+                                        {item.title}
+                                      </a>
+                                    );
+                                  }
+
                                   return (
-                                    <a
+                                    <Link
                                       key={item.id}
                                       href={href}
                                       target={target}
-                                      rel="noopener noreferrer"
-                                      className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                      className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
                                       onClick={() => setIsMenuOpen(false)}
                                     >
                                       {item.title}
-                                    </a>
+                                    </Link>
                                   );
-                                }
-
-                                return (
-                                  <Link
-                                    key={item.id}
-                                    href={href}
-                                    target={target}
-                                    className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                                    onClick={() => setIsMenuOpen(false)}
-                                  >
-                                    {item.title}
-                                  </Link>
-                                );
-                              })}
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      } else {
+                        // For other dropdowns: show items directly without accordion
+                        return (
+                          <div key={subMenuId} className="border-b border-gray-200 last:border-b-0">
+                            {/* SubMenu Section Header - Non-clickable */}
+                            <div className="w-full flex items-center justify-between pl-2 py-3">
+                              <Typography variant="body-l" className="text-orange-200 font-medium">
+                                {subMenuItem.title}
+                              </Typography>
                             </div>
-                          )}
-                        </div>
-                      );
+
+                            {/* SubMenu Items - Always visible */}
+                            {hasItems && (
+                              <div className="pl-7">
+                                {subMenuItem.item?.map((item) => {
+                                  // Get href from cta_link.link first, then fall back to externalLink
+                                  const href = item.cta_link?.link || item.externalLink;
+                                  
+                                  // Handle items without a valid link - show as disabled
+                                  if (!href || href === "#") {
+                                    return (
+                                      <div
+                                        key={item.id}
+                                        className="block   py-2 text-sm text-gray-400 cursor-not-allowed"
+                                      >
+                                        {item.title}
+                                      </div>
+                                    );
+                                  }
+
+                                  const isExternal = href.startsWith("http://") || href.startsWith("https://");
+                                  const target = item.target || (isExternal ? "_blank" : "_self");
+
+                                  // For external links, use regular <a> tag, for internal use Next.js Link
+                                  if (isExternal) {
+                                    return (
+                                      <a
+                                        key={item.id}
+                                        href={href}
+                                        target={target}
+                                        rel="noopener noreferrer"
+                                        className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                      >
+                                        {item.title}
+                                      </a>
+                                    );
+                                  }
+
+                                  return (
+                                    <Link
+                                      key={item.id}
+                                      href={href}
+                                      target={target}
+                                      className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                      onClick={() => setIsMenuOpen(false)}
+                                    >
+                                      {item.title}
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                     })}
                   </div>
                 )}
