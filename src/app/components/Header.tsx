@@ -26,10 +26,16 @@ const Header = ({ data }: HeaderProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const mobileNavRef = useRef<HTMLDivElement>(null);
+  const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const subMenuRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const desktopDropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const desktopSubMenuRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const searchBackdropRef = useRef<HTMLDivElement>(null);
 
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
       setIsMenuOpen(false);
+      setIsSearchOpen(false);
       // Reset expanded menus when closing
       setMobileExpandedMenu(null);
       setMobileExpandedSubMenu(null);
@@ -46,6 +52,7 @@ const Header = ({ data }: HeaderProps) => {
       );
     } else {
       setIsMenuOpen(true);
+      setIsSearchOpen(false);
       // Find first menu item with dropdown and expand it
       if (menu && menu.length > 0) {
         const firstMenuWithDropdown = menu.findIndex(
@@ -91,6 +98,22 @@ const Header = ({ data }: HeaderProps) => {
 
   const handleSearchToggle = () => {
     setIsSearchOpen(!isSearchOpen);
+     if (isMenuOpen) {
+      setIsMenuOpen(false);
+    
+    gsap.fromTo(
+      mobileNavRef.current,
+      {
+        top: "0%",
+      },
+      {
+        top: "-100%",
+        duration: 0.6,
+        ease: "power3.inOut",
+      }
+    );
+  }
+   
   };
 
   const toggleSubMenu = (subMenuId: number) => {
@@ -166,6 +189,220 @@ const Header = ({ data }: HeaderProps) => {
       setExpandedSubMenuId(null);
     }
   }, [openDropdown, menu]);
+
+  // Initialize dropdown heights on mount
+  useEffect(() => {
+    dropdownRefs.current.forEach((element) => {
+      if (element) {
+        gsap.set(element, { height: 0, opacity: 0 });
+      }
+    });
+    subMenuRefs.current.forEach((element) => {
+      if (element) {
+        gsap.set(element, { height: 0, opacity: 0 });
+      }
+    });
+    desktopDropdownRefs.current.forEach((element) => {
+      if (element) {
+        gsap.set(element, { opacity: 0, y: -8, visibility: "hidden" });
+      }
+    });
+    desktopSubMenuRefs.current.forEach((element) => {
+      if (element) {
+        gsap.set(element, { height: 0, opacity: 0 });
+      }
+    });
+  }, []);
+
+  // GSAP animation for mobile dropdown menus
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      dropdownRefs.current.forEach((element, menuIndex) => {
+        if (element) {
+          const isExpanded = mobileExpandedMenu === menuIndex;
+          
+          if (isExpanded) {
+            // Animate to auto height
+            // gsap.to(element, {
+            //   height: "auto",
+            //   opacity: 1,
+            //   duration: 0.5,
+            //   ease: "power3.out",
+            // });
+            gsap.fromTo(
+              element,
+              { 
+                opacity: 0, 
+                 
+                height: 0
+              },
+              {
+                opacity: 1,
+                 
+                height: 'auto',
+                duration: 0.4,
+                 
+                ease: 'sine.inOut'
+              }
+            );
+          } else {
+            // Animate to closed
+            gsap.to(element, {
+              height: 0,
+              opacity: 0,
+              duration: 0.4,
+              ease: 'sine.inOut'
+            });
+          }
+        }
+      });
+    });
+  }, [mobileExpandedMenu]);
+
+  // GSAP animation for mobile submenu items
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      subMenuRefs.current.forEach((element, subMenuId) => {
+        if (element) {
+          const isExpanded = mobileExpandedSubMenu === subMenuId;
+          
+          if (isExpanded) {
+            // Animate to auto height
+            // gsap.to(element, {
+            //   height: "auto",
+            //   opacity: 1,
+            //   duration: 0.4,
+            //   ease: "power3.out",
+            // });
+            gsap.fromTo(
+              element,
+              { 
+                opacity: 0, 
+                 
+                height: 0
+              },
+              {
+                opacity: 1,
+                 
+                height: 'auto',
+                duration: 0.4,
+                 
+                ease: 'sine.inOut'
+              }
+            );
+            
+          } else {
+            // Animate to closed
+            gsap.to(element, {
+              height: 0,
+              opacity: 0,
+              duration: 0.3,
+              ease: 'sine.inOut'
+            });
+          }
+        }
+      });
+    });
+  }, [mobileExpandedSubMenu]);
+
+  // GSAP animation for desktop dropdown menus
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      desktopDropdownRefs.current.forEach((element, dropdownIndex) => {
+        if (element) {
+          const isOpen = openDropdown === dropdownIndex;
+          
+          if (isOpen) {
+            gsap.fromTo(
+              element,
+              { 
+                opacity: 0, 
+                y: -8,
+                visibility: "hidden"
+              },
+              {
+                opacity: 1,
+                y: 0,
+                visibility: "visible",
+                duration: 0.4,
+                ease: 'sine.inOut'
+              }
+            );
+          } else {
+            gsap.to(element, {
+              opacity: 0,
+              y: -8,
+              visibility: "hidden",
+              duration: 0.3,
+              ease: 'sine.inOut'
+            });
+          }
+        }
+      });
+    });
+  }, [openDropdown]);
+
+  // GSAP animation for desktop submenu accordion items
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      desktopSubMenuRefs.current.forEach((element, subMenuId) => {
+        if (element) {
+          const isExpanded = expandedSubMenuId === subMenuId;
+          
+          if (isExpanded) {
+            gsap.fromTo(
+              element,
+              { 
+                opacity: 0, 
+                height: 0
+              },
+              {
+                opacity: 1,
+                height: 'auto',
+                duration: 0.4,
+                ease: 'sine.inOut'
+              }
+            );
+          } else {
+            gsap.to(element, {
+              height: 0,
+              opacity: 0,
+              duration: 0.3,
+              ease: 'sine.inOut'
+            });
+          }
+        }
+      });
+    });
+  }, [expandedSubMenuId]);
+
+  // GSAP animation for search backdrop fade in/out
+  useEffect(() => {
+    if (searchBackdropRef.current) {
+      if (isSearchOpen) {
+        gsap.fromTo(
+          searchBackdropRef.current,
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 0.3,
+            ease: 'sine.inOut',
+          }
+        );
+      } else {
+        gsap.to(searchBackdropRef.current, {
+          opacity: 0,
+          duration: 0.3,
+          ease: 'sine.inOut',
+        });
+      }
+    }
+  }, [isSearchOpen]);
+
   const handleSearch = (e?: React.FormEvent | React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
@@ -262,10 +499,14 @@ const Header = ({ data }: HeaderProps) => {
 
                       {item.subMenu && item.subMenu.length > 0 && (
                         <div
-                          className={`absolute top-full left-0 translate-x-[-30%] mt-2  w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 transition-all duration-500 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] ${openDropdown === index
-                            ? "opacity-100 visible transform translate-y-0"
-                            : "opacity-0 invisible transform -translate-y-2"
-                            }`}
+                          ref={(el) => {
+                            if (el) {
+                              desktopDropdownRefs.current.set(index, el);
+                            } else {
+                              desktopDropdownRefs.current.delete(index);
+                            }
+                          }}
+                          className="absolute top-full left-0 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                         >
                           <div className="grid grid-cols-2   gap-2">
                             <div className="max-h-[500px] overflow-y-auto col-span-1">
@@ -288,7 +529,16 @@ const Header = ({ data }: HeaderProps) => {
                                         )}
                                       </button>
                                       {subMenuItem.item && subMenuItem.item.length > 0 && (
-                                        <div className={`mb-2 last:mb-0 overflow-hidden transition-all duration-600 ease-in-out max-h-0 ${isExpanded ? "!max-h-[500px] opacity-100" : ""}`}>
+                                        <div
+                                          ref={(el) => {
+                                            if (el) {
+                                              desktopSubMenuRefs.current.set(subMenuId, el);
+                                            } else {
+                                              desktopSubMenuRefs.current.delete(subMenuId);
+                                            }
+                                          }}
+                                          className="mb-2 last:mb-0 overflow-hidden"
+                                        >
                                           <div className="pt-1">
                                             {subMenuItem.item.map((item) => {
                                               // Get href from cta_link.link first, then fall back to externalLink
@@ -414,7 +664,7 @@ const Header = ({ data }: HeaderProps) => {
                               })}
                             </div>
                             {item.image && item.image.url && (
-                              <div className="overflow-y-auto col-span-1 p-7">
+                              <div className="overflow-y-auto col-span-1 p-7 overflow-hidden">
                                 <div className="w-[250px] h-[240px] relative">
                                   <div className="absolute inset-0 overflow-hidden w-full h-full rounded-[10px]">
                                     <Image
@@ -514,19 +764,31 @@ const Header = ({ data }: HeaderProps) => {
               )}
               {/* Mobile Search */}
               {pathname !== "/search-results" && (
-                <div className="h-[100%] block lg:hidden">
+                 <div className="h-[100%] lg:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
+                 onClick={handleSearchToggle}
+                 >
                   <div
-                    className="w-[20px] h-[20px] absolute  right-[100px]md:right-[120px] top-1/2 -translate-y-1/2"
-                    onClick={handleSearchToggle}
+                    className="w-[20px] h-[20px] relative"
+                    
                   >
                     <Image
-                      src="/images/search.svg"
-                      alt="icon"
-                      width={20}
-                      height={20}
-                    />
+                        src="/images/search.svg"
+                        alt="icon"
+                        width={20}
+                        height={20}
+                      />
+                      <Image
+                        src="/images/search-close.svg"
+                        alt="icon"
+                        width={20}
+                        height={20}
+                        className={clsx(
+                          "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300",
+                          isSearchOpen ? "opacity-100" : ""
+                        )}
+                      />
                   </div>
-                </div>
+                 </div>
               )}
               {/* Extra div only for mobile */}
               <div className="block lg:hidden w-[50px]" />
@@ -612,24 +874,9 @@ const Header = ({ data }: HeaderProps) => {
                   {hasDropdown && (
                     <button
                       onClick={() => toggleMobileMenu(index)}
-                      className=" flex ml-2 hover:bg-gray-100 rounded-full transition-colors w-[14px] h-[14px] relative"
+                      className=" flex ml-2 hover:bg-gray-100 rounded-full transition-colors w-[40px] h-full p-3 relative"
                     >
                       <i className={clsx(" h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ", isMenuExpanded ? "before:rotate-90" : "before:rotate-0")}></i>
-                      {/* <svg
-                        className={`h-4 w-4 text-gray-600 transition-transform duration-200 ${
-                          isMenuExpanded ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg> */}
                     </button>
                   )}
                 </div>
@@ -637,8 +884,14 @@ const Header = ({ data }: HeaderProps) => {
                 {/* Mobile Dropdown - SubMenu Sections */}
                 {hasDropdown && (
                   <div
-                    className={` border-t border-gray-100 transition-all duration-400 overflow-hidden pl-3 ${isMenuExpanded ? "max-h-[1000px]" : "max-h-0"
-                      }`}
+                    ref={(el) => {
+                      if (el) {
+                        dropdownRefs.current.set(index, el);
+                      } else {
+                        dropdownRefs.current.delete(index);
+                      }
+                    }}
+                    className="border-t border-gray-100 overflow-hidden pl-3"
                   >
                     {item.subMenu?.map((subMenuItem, subMenuIndex) => {
                       const subMenuId = subMenuItem.id ?? subMenuIndex;
@@ -666,8 +919,14 @@ const Header = ({ data }: HeaderProps) => {
                             {/* SubMenu Items */}
                             {hasItems && (
                               <div
-                                className={` transition-all duration-400 overflow-hidden pl-7 ${isSubMenuExpanded ? "max-h-[500px]" : "max-h-0"
-                                  }`}
+                                ref={(el) => {
+                                  if (el) {
+                                    subMenuRefs.current.set(subMenuId, el);
+                                  } else {
+                                    subMenuRefs.current.delete(subMenuId);
+                                  }
+                                }}
+                                className="overflow-hidden pl-7"
                               >
                                 {subMenuItem.item?.map((item) => {
                                   // Get href from cta_link.link first, then fall back to externalLink
@@ -795,15 +1054,15 @@ const Header = ({ data }: HeaderProps) => {
         </nav>
       </div>
 
-      {isSearchOpen && (
-        <div
-          className="bg-black/50 fixed w-full h-full top-0 left-0 transition-all duration-300 z-[10]"
-          onClick={() => {
-            setIsSearchOpen(false);
-            setsearchedValue("");
-          }}
-        />
-      )}
+      <div
+        ref={searchBackdropRef}
+        className="bg-black/50 fixed w-full h-full top-0 left-0 z-[10] opacity-0 pointer-events-none"
+        style={{ pointerEvents: isSearchOpen ? 'auto' : 'none' }}
+        onClick={() => {
+          setIsSearchOpen(false);
+          setsearchedValue("");
+        }}
+      />
 
       {/* Spacer to prevent content from hiding under fixed header */}
       <div className="h-16 lg:h-18 block lg:hidden"></div>
