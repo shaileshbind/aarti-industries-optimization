@@ -4,7 +4,6 @@ import { BodyText1 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";
 import Link from "next/link";
-import { useMediaQuery } from "@mui/material";
 
 type ProductListProps = {
   title: string;
