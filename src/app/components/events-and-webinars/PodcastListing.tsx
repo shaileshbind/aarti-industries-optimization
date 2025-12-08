@@ -121,13 +121,21 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   
   // Check if podcastsData is in the new API format (pressData) or old format (data.podcasts)
-  const isApiFormat = podcastsData && 'pressData' in podcastsData;
-  const podcastsArray: (PodcastApiItem | Podcast)[] = isApiFormat 
-    ? ('pressData' in podcastsData ? podcastsData.pressData?.data || [] : [])
-    : ('data' in podcastsData && podcastsData.data ? podcastsData.data.podcasts || [] : []);
+  // getData returns the array directly, so check if it's already an array first
+  let podcastsArray: (PodcastApiItem | Podcast)[] = [];
+  
+  if (Array.isArray(podcastsData)) {
+    // getData returns array directly
+    podcastsArray = podcastsData;
+  } else if (podcastsData && 'pressData' in podcastsData) {
+    // Wrapped in pressData (from getPageData)
+    podcastsArray = podcastsData.pressData?.data || [];
+  } else if (podcastsData && 'data' in podcastsData && podcastsData.data) {
+    // Old format with data.podcasts
+    podcastsArray = podcastsData.data.podcasts || [];
+  }
   
   console.log("podcastsData::::", podcastsData);
-  console.log("isApiFormat::::", isApiFormat);
   console.log("podcastsArray::::", podcastsArray);
   
   // Calculate total pages based on podcasts count (excluding featured podcast)
