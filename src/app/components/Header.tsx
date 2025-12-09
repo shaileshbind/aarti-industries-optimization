@@ -455,19 +455,22 @@ const Header = ({ data }: HeaderProps) => {
               >
                 {menu?.map((item, index) => {
                   const hasDropdown = item.subMenu && item.subMenu.length > 0;
+                  // Collect ALL inner submenu links
+                  const allInnerLinks =
+                  item.subMenu?.flatMap((sub) =>
+                    sub.item?.map((i) => i.cta_link?.link || i.externalLink || "")
+                  ) || [];
+                  // Check if ANY link is active
+                  const isMenuActive = allInnerLinks.some((link) => link && isActive(link)) || false;
                   return (
                     <div
                       key={item.id}
                       className="relative group h-[100%] grid "
-                      onMouseEnter={() =>
-                        hasDropdown && setOpenDropdown(index)
-                      }
-                      onMouseLeave={() =>
-                        hasDropdown && setOpenDropdown(null)
-                      }
+                      onMouseEnter={() => hasDropdown && setOpenDropdown(index)}
+                      onMouseLeave={() => hasDropdown && setOpenDropdown(null)}
                     >
                       <button
-                        className={`flex items-center transition-colors hover:text-orange-500 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
+                        className={`flex items-center transition-colors hover:text-orange-500 ${isMenuActive
                           ? "text-orange-500 font-medium"
                           : "text-gray-700"
                           }`}
@@ -477,6 +480,7 @@ const Header = ({ data }: HeaderProps) => {
                           activeHover={isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")}
                           className="text-sm font-medium"
                         >
+                          {/* {item.subMenu?.[0]?.item?.map((item) => item.cta_link?.link || item.externalLink || "").join(", ")} */}
                           {item.menuTitle}
                         </AnimateTextOnHover>
                         {item.subMenu && item.subMenu.length > 0 && (
@@ -497,7 +501,7 @@ const Header = ({ data }: HeaderProps) => {
                         )}
                       </button>
 
-                      {item.subMenu && item.subMenu.length > 0 && (
+                      {item.subMenu && hasDropdown && openDropdown === index && (
                         <div
                           ref={(el) => {
                             if (el) {
@@ -508,6 +512,7 @@ const Header = ({ data }: HeaderProps) => {
                           }}
                           className="absolute top-full left-0 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                         >
+                          {/* {openDropdown} */}
                           <div className="grid grid-cols-2   gap-2">
                             <div className="max-h-[500px] overflow-y-auto col-span-1">
                               {item.subMenu.map((subMenuItem, subMenuIndex) => {
@@ -580,7 +585,7 @@ const Header = ({ data }: HeaderProps) => {
                                                   key={item.id}
                                                   href={href}
                                                   target={target}
-                                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                  className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                   onClick={() => {
                                                     setsearchedValue("");
                                                     setIsSearchOpen(false);
@@ -632,7 +637,7 @@ const Header = ({ data }: HeaderProps) => {
                                                   href={href}
                                                   target={target}
                                                   rel="noopener noreferrer"
-                                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                  className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                   onClick={() => setOpenDropdown(null)}
                                                 >
                                                   {item.title}
@@ -645,7 +650,7 @@ const Header = ({ data }: HeaderProps) => {
                                                 key={item.id}
                                                 href={href}
                                                 target={target}
-                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                 onClick={() => {
                                                   setsearchedValue("");
                                                   setIsSearchOpen(false);
@@ -841,6 +846,12 @@ const Header = ({ data }: HeaderProps) => {
           data-lenis-prevent>
           {menu?.map((item, index) => {
             const hasDropdown = item.subMenu && item.subMenu.length > 0;
+            const allInnerLinks =
+            item.subMenu?.flatMap((sub) =>
+              sub.item?.map((i) => i.cta_link?.link || i.externalLink || "")
+            ) || [];
+            // Check if ANY link is active
+            const isMenuActive = allInnerLinks.some((link) => link && isActive(link)) || false;
             const isMenuExpanded = mobileExpandedMenu === index;
 
             return (
@@ -852,7 +863,7 @@ const Header = ({ data }: HeaderProps) => {
                   {hasDropdown ? (
                     <button
                       onClick={() => toggleMobileMenu(index)}
-                      className={`flex-1 text-left transition-all duration-200 py-3 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
+                      className={`flex-1 text-left transition-all duration-200 py-3 ${  isMenuActive
                           ? "text-orange-500 font-medium"
                           : "text-gray-700"
                         }`}
@@ -862,7 +873,7 @@ const Header = ({ data }: HeaderProps) => {
                   ) : (
                     <Link
                       href={item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "#"}
-                      className={`flex-1 transition-all duration-200 py-3 ${isActive(item.subMenu?.[0]?.item?.[0]?.cta_link?.link || item.subMenu?.[0]?.item?.[0]?.externalLink || "")
+                      className={`flex-1 transition-all duration-200 py-3 ${isMenuActive
                           ? "text-orange-500 font-medium"
                           : "text-gray-700"
                         }`}
@@ -968,7 +979,7 @@ const Header = ({ data }: HeaderProps) => {
                                       key={item.id}
                                       href={href}
                                       target={target}
-                                      className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                      className={clsx("block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                       onClick={() => setIsMenuOpen(false)}
                                     >
                                       {item.title}
@@ -1020,7 +1031,7 @@ const Header = ({ data }: HeaderProps) => {
                                         href={href}
                                         target={target}
                                         rel="noopener noreferrer"
-                                        className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                        className={clsx("block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                         onClick={() => setIsMenuOpen(false)}
                                       >
                                         {item.title}
@@ -1033,7 +1044,7 @@ const Header = ({ data }: HeaderProps) => {
                                       key={item.id}
                                       href={href}
                                       target={target}
-                                      className="block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                      className={clsx("block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                       onClick={() => setIsMenuOpen(false)}
                                     >
                                       {item.title}
