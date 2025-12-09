@@ -259,7 +259,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="block lg:hidden object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
                 {/* Content box */}
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[20vh] w-full z-10">
@@ -279,11 +279,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                           {items?.card?.[0]?.description}
                         </BodyText2>
                       )}
-
-                      {items?.card?.[0]?.ctaButton?.[0]?.title && (
+                      {items?.card?.[0]?.ctaButton?.title && (
                         <Button
-                          href={items?.card?.[0]?.ctaButton?.[0]?.hasExternalLink == "true" ? items?.card?.[0]?.ctaButton?.[0]?.externalLink : items?.card?.[0]?.ctaButton?.[0]?.link?.link}
-                          title={items?.card?.[0]?.ctaButton?.[0]?.title}
+                          href={items?.card?.[0]?.ctaButton?.hasExternalLink == "true" ? items?.card?.[0]?.ctaButton?.externalLink : items?.card?.[0]?.ctaButton?.link?.link}
+                          title={items?.card?.[0]?.ctaButton?.title}
                         />
                       )}
                     </div>
