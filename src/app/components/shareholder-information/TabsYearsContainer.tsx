@@ -8,6 +8,7 @@ import YearQuarterListing from "../templates/YearQuarterListing";
 import ContactDetails from "./ContactDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import OrangeCardListing from "../templates/OrangeCardListing";
+import { DynamicReportsData } from "@/app/types/annual-reports.type";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -83,7 +84,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         return <YearQuarterListing reportLayout={yearQuarterLayouts} />;
 
       case "reports.simple-list":
-        // Orange Card listing template
+        // Filter simple-list layouts
         const simpleListReports = currentCategory.reportLayout.filter(
           (
             layout
@@ -95,26 +96,12 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
 
         // Construct data in the format OrangeCardListing expects
         // OrangeCardListing accesses: data[reportKey][0].reportLayout[0].reports
-        const wrappedData: Record<
-          string,
-          Array<{
-            reportLayout: Array<{
-              id?: number;
-              reports?: Array<{
-                id: string | number;
-                heading: string;
-                link: string;
-                date?: string | null;
-                file?: string | null;
-              }>;
-            }>;
-          }>
-        > = {
+        const wrappedData: DynamicReportsData = {
           [currentCategory.category]: [
             {
               reportLayout: simpleListReports.map((layout) => ({
                 id: layout.id,
-                reports: layout.reports,
+                reports: layout.reports || [],
               })),
             },
           ],

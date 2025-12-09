@@ -92,5 +92,20 @@ export type TabsYearsContainerProps = {
   }[];
 };
 
+export type DynamicReportsData = {
+  [key: string]: Array<{
+    reportLayout: Array<{
+      id?: number;
+      reports?: Array<{
+        id: string | number;
+        heading: string;
+        link: string;
+        date?: string | null;
+        file?: string | null;
+      }>;
+    }>;
+  }>;
+};
+
 // Legacy type for backwards compatibility
 export type ReportsProps = YearAndReportLayout;
