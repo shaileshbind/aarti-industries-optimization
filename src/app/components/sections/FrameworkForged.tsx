@@ -20,7 +20,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   data,
   layout,
 }) => {
-  const { title, card, partnerWithUsCta } = data;
+  const { title, card } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -118,7 +118,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
           {title}
         </H2>
       )}
-
       <div
         className={clsx(
           `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${
@@ -220,7 +219,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       <BodyText2 className="mt-[12px] text-[#585858]">
                         {items?.description}
                       </BodyText2>
-
                       <div className="flex flex-col gap-2 mt-3">
                         {items?.BulletPoints?.length > 0 &&
                           items?.BulletPoints?.map(
@@ -244,19 +242,22 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                               )
                           )}
                       </div>
+                      {items?.ctaButton?.title && (
+                        <div className="mt-[40px]">
+                          <Button
+                            href={
+                              items?.ctaButton?.hasExternalLink == "true"
+                                ? items?.ctaButton?.externalLink
+                                : items?.ctaButton?.link?.link
+                            }
+                            title={items?.ctaButton?.title}
+                          />
+                        </div>
+                      )}
                     </SwiperSlide>
                   );
                 })}
               </Swiper>
-            </div>
-          )}
-
-          {partnerWithUsCta?.title && partnerWithUsCta?.link?.link && (
-            <div className="mt-[40px]">
-              <Button
-                href={partnerWithUsCta?.link?.link}
-                title={partnerWithUsCta?.title}
-              />
             </div>
           )}
         </div>
@@ -311,7 +312,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
+                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} 
                 />
               )}
               {card?.[currentImageIndex]?.image?.url && (
@@ -330,7 +331,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
                 />
               )}
-
               <Image
                 src="/images/home/star-white.svg"
                 alt="img"

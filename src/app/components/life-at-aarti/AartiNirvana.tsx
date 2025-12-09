@@ -19,7 +19,7 @@ const AartiNirvana = ({ data,
   const { title, description, cards } = data;
 
   return (
-    <div className="pb-[72px]">
+    <div className="pb-[72px] lg:pb-[unset]">
       {title && (
         <H2 className="max-w-[600px] mx-[20px] lg:mx-auto text-left lg:text-center">
           {title}

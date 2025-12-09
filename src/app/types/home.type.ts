@@ -8,7 +8,7 @@ export type HomeHeroProps = {
         description: string;
         image: ImageProps;
         mobImage: ImageProps;
-        ctaButton: ButtonProps[];
+        ctaButton: ButtonProps;
       }[];
       category: string;
     }[];
@@ -90,8 +90,9 @@ export type FrameworkForgedProps = {
       BulletPoints: {
         title: string;
       }[];
+      ctaButton:ButtonProps;
     }[];
-    partnerWithUsCta: ButtonProps;
+    // partnerWithUsCta: ButtonProps;
   };
 };
 
