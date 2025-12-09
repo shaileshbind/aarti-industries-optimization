@@ -23,7 +23,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
         {title && <H3 className="max-w-[424px]">{title}</H3>}
 
         {description && (
-          <p className="text-sm md:text-base xl:max-w-[536px]">{description}</p>
+          <p className="text-sm md:text-base xl:max-w-[536px] text-[#4C5861]">{description}</p>
         )}
       </div>
 

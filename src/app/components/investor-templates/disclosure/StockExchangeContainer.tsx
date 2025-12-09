@@ -123,6 +123,9 @@ export default function StockExchangeContainer({
         onChange={handleChange}
         handleSearch={handleSearch}
         placeholder="Search by Document Name or Quarter"
+        showStar3={false}
+        lineClassName="hidden md:block"
+        bottomMiddleStarClassName="hidden md:block"
       />
 
       <DisclosureTabs categories={categories} />
