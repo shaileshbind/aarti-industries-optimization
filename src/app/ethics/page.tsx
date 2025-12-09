@@ -2,11 +2,11 @@ import React from "react";
 import EthicsAndCode from "../components/ethics/EthicsAndCode";
 import WhoBanner from "../components/who-we-are/WhoBanner";
 import GloballyCertified from "../components/GloballyCertified";
-import WhoExp from "../components/who-we-are/WhoExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import GlobalInnovation from "../components/sections/GlobalInnovation";
 import SEO from "../components/SEO";
+import SocialExplore from "../components/social-health-and-safety/SocialExplore";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +48,8 @@ const page = async () => {
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {section_four && <WhoExp data={section_four} />} 
+      {/* {section_four && <WhoExp data={section_four} />}  */}
+      {section_four && <SocialExplore data={section_four} />}
     </div>
   );
 };
