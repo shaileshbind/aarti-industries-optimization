@@ -108,3 +108,12 @@ export type GridCardsSocialProps = {
   };
   headingClassName?: string;
 };
+
+export type SocialExploreProps = {
+  data: {
+    exploreMore: {
+      title: string;
+      ctaButton: ButtonProps[];
+    }[];
+  };
+};
