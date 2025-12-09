@@ -17,7 +17,7 @@ export default function DisclosureListingPage({
     <div className="container">
       {reports?.length > 0 ? (
         <>
-          <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto py-[42px] lg:py-[70px]">
+          <div className="grid lg:grid-cols-2 gap-x-[64px] lg:gap-y-[20px] mx-auto py-[42px] lg:py-[70px] lg:pt-10">
             {reports?.slice(0, visibleCount)?.map((item: ReportItemProps) => (
               <OrangeTabCard
                 key={item?.id}

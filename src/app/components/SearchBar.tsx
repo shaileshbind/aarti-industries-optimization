@@ -26,7 +26,7 @@ export default function SearchBar({
         "flex items-center w-full bg-white rounded-full shadow-sm overflow-hidden  max-w-[85%]  z-10 ",
         headerSearch
           ? "mr-0 max-w-[90%] lg:max-w-[760px] mt-4"
-          : "mx-auto md:max-w-[560px] mt-9",
+          : "mx-auto md:max-w-[560px] mt-5 md:mt-9",
         className
       )}
     >
@@ -41,8 +41,8 @@ export default function SearchBar({
       />
       <button
         type="submit"
-        className="bg-orange-500 cursor-pointer text-white p-3 flex items-center justify-center rounded-full m-2 disabled:opacity-40"
-        disabled={value?.length < 3}
+        className="bg-orange-500 cursor-pointer text-white p-3 flex items-center justify-center rounded-full m-1 md:m-2 disabled:opacity-40"
+        disabled={value?.length < 2}
       >
         <div className="w-[20px] h-[20px] relative">
           <Image src="/images/search-white.svg" alt="search" fill />

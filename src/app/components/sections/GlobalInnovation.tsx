@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import AnimatedText from "../AnimatedText";
-import { BodyText1, H3, SubH2 } from "../Typography2";
+import { BodyText1, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 
@@ -12,10 +12,10 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
-    <section className="fluid-container flex flex-col justify-between my-[72px] lg:my-[120px]">
+    <section className="fluid-container flex flex-col justify-between my-[60px] lg:my-[120px]">
       {/* Animated Heading */}
-      <AnimatedText className="lg:w-[60%] w-full mb-16">
-        <H3>{title}</H3>
+      <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-6">
+        <H2>{title}</H2>
       </AnimatedText>
 
       <div className="flex flex-col lg:flex-row justify-between items-center">

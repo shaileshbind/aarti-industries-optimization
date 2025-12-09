@@ -52,7 +52,7 @@ export default async function page() {
         <DetailsContainer data={section_two} showBottomLine={false} />
       )}
       {section_three && (
-        <div className="mt-[40px] mb-[72px] lg:mb-[140px]">
+        <div className="pt-[40px] pb-[72px] lg:pb-[140px]">
           <ScaleUpEngine data={section_three} />
         </div>
       )}

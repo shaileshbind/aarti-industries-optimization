@@ -231,9 +231,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   <Image
                                     src={"/images/star-orange.svg"}
                                     alt={"star"}
-                                    className="object-cover object-top w-5 h-5"
-                                    width={20}
-                                    height={20}
+                                    className="object-cover object-top w-[16px] h-[16px] mt-[3px]"
+                                    width={16}
+                                    height={16}
                                   />
                                   <p className="text-[#4C5861]">
                                     {item?.title}
