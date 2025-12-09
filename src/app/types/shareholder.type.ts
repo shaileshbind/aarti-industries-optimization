@@ -16,6 +16,12 @@ export type Report = {
   link: string;
 };
 
+export type SimpleListLayout = {
+  __component: "reports.simple-list";
+  id: number;
+  reports: Report[];
+};
+
 // Simple List Layout
 export type SubCategoryWithReportLayout = {
   __component: "reports.sub-category-with-report";
@@ -73,7 +79,8 @@ export type YearAndQuarterLayout = {
 export type ReportLayout =
   | SubCategoryWithReportLayout
   | YearAndReportLayout
-  | YearAndQuarterLayout;
+  | YearAndQuarterLayout
+  | SimpleListLayout;
 
 // Main container props
 export type TabsYearsContainerProps = {

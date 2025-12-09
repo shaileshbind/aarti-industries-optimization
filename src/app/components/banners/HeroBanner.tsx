@@ -245,7 +245,7 @@ const HeroBanner = ({
                 <div
                   ref={lineHorizontal}
                   className={clsx(
-                    `absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5`
+                    `absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5`
                   )}
                 />
               )}
@@ -351,7 +351,7 @@ const HeroBanner = ({
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5"
+              className="absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5"
             />
             <div
               ref={starRef}
