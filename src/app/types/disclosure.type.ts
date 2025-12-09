@@ -73,7 +73,10 @@ export type SearchBannerProps = {
   secondaryBtnRightTitle?: string;
   secondaryBtnRightLink?: string;
   placeholder?: string;
+  lineClassName?: string;
+  bottomMiddleStarClassName?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: () => void;
+  showStar3?: boolean;
 };

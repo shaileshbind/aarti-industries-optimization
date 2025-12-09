@@ -10,15 +10,15 @@ export type AnnualRBannerProps = {
 };
 
 export type ReportItemProps = {
-  id?: number;
+  id?: string | number;
   heading?: string;
   link?: string;
 };
 
 export type ReportsProps = {
-  id?: number;
+  id?: string | number;
   reportLayout?: {
-    id?: number;
+    id?: string | number;
     reports?: ReportItemProps[];
   }[];
 };

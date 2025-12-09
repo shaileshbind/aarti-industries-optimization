@@ -7,6 +7,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
 import { SearchBannerProps } from "@/app/types/disclosure.type";
 import SearchBar from "../SearchBar";
+import clsx from "clsx";
 
 const SearchBanner = ({
   centerText,
@@ -14,6 +15,7 @@ const SearchBanner = ({
   title,
   tag,
   desc,
+  showStar3 = true,
   btnTitle,
   btnLink,
   image,
@@ -25,10 +27,12 @@ const SearchBanner = ({
   secondaryBtnLeftLink,
   secondaryBtnRightTitle,
   secondaryBtnRightLink,
+  lineClassName,
   value,
   onChange,
   handleSearch,
   placeholder,
+  bottomMiddleStarClassName,
 }: SearchBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -120,7 +124,7 @@ const SearchBanner = ({
             <div
               ref={wrapperRef}
               className={`relative overflow-hidden ${
-                centerText ? "h-[440px]" : "h-[490px] lg:h-[640px]"
+                centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
               {image && (
@@ -156,7 +160,12 @@ const SearchBanner = ({
                 )}
                 {title && (
                   <div>
-                    <H2 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
+                    <H2
+                      className={clsx(
+                        `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
+                        centerText && "pr-0 lg:pr-[0]"
+                      )}
+                    >
                       {title}
                     </H2>
                   </div>
@@ -170,7 +179,7 @@ const SearchBanner = ({
                 )}
                 {desc && centerText && (
                   <div>
-                    <BodyText1 className="text-white mt-[20px] max-w-[480px]">
+                    <BodyText1 className="text-white mt-3 md:mt-[20px] max-w-[260px] md:max-w-[480px]">
                       {desc}
                     </BodyText1>
                   </div>
@@ -250,7 +259,10 @@ const SearchBanner = ({
               </div> */}
               <div
                 ref={lineVertical}
-                className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
+                className={clsx(
+                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5`,
+                  lineClassName
+                )}
               />
               {!centerText && (
                 <div
@@ -260,17 +272,20 @@ const SearchBanner = ({
               )}
               <div
                 ref={starRef}
-                className="absolute 
+                className={clsx(
+                  `"absolute 
               bottom-[34px] lg:bottom-[84px] 
-              right-[57px] lg:right-[177px] 
+              right-[57px] lg:right-[166px] 
               w-[38px] lg:w-[72px] 
-              z-5 "
+              z-5 `,
+                  bottomMiddleStarClassName
+                )}
               >
                 <Image
                   src="/images/home/star-white.svg"
                   alt="star"
-                  width={72}
-                  height={72}
+                  width={52}
+                  height={52}
                 />
               </div>
               <div className="absolute bottom-[-22px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 ">
@@ -281,17 +296,20 @@ const SearchBanner = ({
                   height={72}
                 />
               </div>
-              <div
-                ref={starRef3}
-                className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
-              >
-                <Image
-                  src="/images/home/star-white.svg"
-                  alt="img"
-                  width={72}
-                  height={72}
-                />
-              </div>
+
+              {showStar3 && (
+                <div
+                  ref={starRef3}
+                  className="absolute bottom-[-22px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                >
+                  <Image
+                    src="/images/home/star-white.svg"
+                    alt="img"
+                    width={72}
+                    height={72}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </>

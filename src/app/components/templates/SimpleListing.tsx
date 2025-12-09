@@ -82,7 +82,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
   return (
     <div className="fluid-container pt-6 md:pt-10 pb-10 md:pb-[80px] lg:flex justify-between">
       {/* Left Sidebar - Subcategories (Desktop) */}
-      {reportLayout?.length > 1 && (
+      {reportLayout?.length > 0 && (
         <div className="w-[20%] hidden lg:block">
           {reportLayout?.map((subCat, idx) => (
             <div
@@ -102,7 +102,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
       )}
 
       {/* Subcategory dropdown for mobile */}
-      {reportLayout?.length > 1 && (
+      {reportLayout?.length > 0 && (
         <div className="block lg:hidden mb-6">
           <FormControl fullWidth>
             <Select
@@ -129,7 +129,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
       <div
         className={clsx(
           "lg:p-10 lg:bg-[#F7F9FA] w-full rounded-[12px]",
-          reportLayout?.length > 1 ? "lg:w-[75%]" : "lg:w-full"
+          reportLayout?.length > 0 ? "lg:w-[75%]" : "lg:w-full"
         )}
       >
         {/* Report list */}

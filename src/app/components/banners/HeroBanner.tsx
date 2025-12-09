@@ -27,6 +27,7 @@ type HeroBannerProps = {
   showStar2?: boolean;
   showStar3?: boolean;
   lineClassName?: string;
+  centerTitleClassName?: string;
   bottomMiddleStarClassName?: string;
 };
 const HeroBanner = ({
@@ -48,6 +49,7 @@ const HeroBanner = ({
   secondaryBtnRightLink,
   showStar2 = true,
   showStar3 = true,
+  centerTitleClassName,
   lineClassName,
   bottomMiddleStarClassName,
 }: HeroBannerProps) => {
@@ -176,7 +178,8 @@ const HeroBanner = ({
                     <H2
                       className={clsx(
                         `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
-                        centerText && "pr-0 md:pr-[70px]"
+                        centerText && "pr-0 lg:pr-[0]",
+                        centerTitleClassName
                       )}
                     >
                       {title}
@@ -192,7 +195,7 @@ const HeroBanner = ({
                 )}
                 {desc && centerText && (
                   <FadeInRevealBlur delay={0.1}>
-                    <BodyText1 className="text-white mt-[20px] max-w-[260px] md:max-w-[480px]">
+                    <BodyText1 className="text-white mt-3 md:mt-[20px] max-w-[260px] md:max-w-[480px]">
                       {desc}
                     </BodyText1>
                   </FadeInRevealBlur>
@@ -242,7 +245,7 @@ const HeroBanner = ({
                 <div
                   ref={lineHorizontal}
                   className={clsx(
-                    `absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5`
+                    `absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5`
                   )}
                 />
               )}
@@ -348,7 +351,7 @@ const HeroBanner = ({
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-5"
+              className="absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5"
             />
             <div
               ref={starRef}
