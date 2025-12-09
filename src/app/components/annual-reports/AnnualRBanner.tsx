@@ -18,6 +18,7 @@ const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
       showStar3={false}
       lineClassName="hidden md:block"
       bottomMiddleStarClassName="hidden md:block"
+      centerTitleClassName="lg:max-w-[900px]"
     />
   );
 };
