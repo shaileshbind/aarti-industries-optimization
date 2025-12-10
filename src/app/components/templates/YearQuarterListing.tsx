@@ -325,7 +325,13 @@ export default function YearQuarterListing({
                       <div className="md:pb-4" key={item.id}>
                         <OrangeTabCard
                           title={item?.heading}
-                          link={item?.link}
+                          link={
+                            item?.link
+                              ? item?.link
+                              : item?.file?.url
+                              ? item?.file?.url
+                              : ""
+                          }
                           scale={false}
                         />
                       </div>
@@ -346,7 +352,13 @@ export default function YearQuarterListing({
                         <div className="lg:pb-4" key={item.id}>
                           <OrangeTabCard
                             title={item?.heading}
-                            link={item?.link}
+                            link={
+                              item?.link
+                                ? item?.link
+                                : item?.file?.url
+                                ? item?.file?.url
+                                : ""
+                            }
                             scale={false}
                           />
                         </div>

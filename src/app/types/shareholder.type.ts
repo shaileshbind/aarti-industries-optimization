@@ -14,6 +14,7 @@ export type Report = {
   id: string | number;
   heading: string;
   link: string;
+  file?: { url: string };
 };
 
 export type SimpleListLayout = {

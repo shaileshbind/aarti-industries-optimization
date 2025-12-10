@@ -30,7 +30,7 @@ export default function ContactDetails() {
       subCategory: "Registrars & Share Transfer Agent",
       address: {
         name: "MUFG Intime India Pvt. Ltd.",
-        position: "Company Secretary & Compliance Officer",
+        position: "",
         address:
           "C-101, 247 Park, L.B.S Marg,Vikhroli (W), Mumbai - 400083,Maharashtra, India",
         phone: "+91 22 4918 6000",

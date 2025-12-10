@@ -226,13 +226,13 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               <SwiperSlide key={`${active}-${idx}`}>
                 <div className="award-card-anim">
                   {item?.image?.url && (
-                    <div className="bg-[#EFF3F5] rounded-[20px] p-[60px] grid place-items-center h-[230px] md:h-auto">
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-[60px] grid place-items-center h-[230px] md:h-auto">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}
                         width={70}
                         height={190}
-                        className="object-contain w-[70px] h-[130px] md:h-[190px]"
+                        className="object-cover w-full h-full"
                       />
                     </div>
                   )}
