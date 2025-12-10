@@ -24,7 +24,6 @@ export default async function page({ params }: PageProps) {
     "annual-report",
     "code-and-policies",
     "subsidiaries-and-reports",
-    "sustainability-report",
     "credit-ratings",
     "memorandum-and-articles-of-association",
   ];

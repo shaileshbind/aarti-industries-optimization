@@ -57,7 +57,11 @@ const page = async () => {
       {section_three && <ScrollableCardWithImage data={section_three} />}
       <RDAnalyticalExc data={section_four} sliderData={section_five} />
       <RDDiverseChem data={section_six} data2={section_seven} />
-      {section_eight && <RDSafety data={section_eight} />}
+      {section_eight && (
+        <div className="pb-[22px] md:pb-[140px]">
+          <RDSafety data={section_eight} />
+        </div>
+      )}
       {section_nine && (
         <GloballyCertified
           title={section_nine?.certified?.[0]?.title}
