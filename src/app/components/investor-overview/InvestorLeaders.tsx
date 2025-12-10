@@ -148,7 +148,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                   );
                 })}
               </Swiper>
-
+              {testimonials && testimonials.length > 1 && (
               <div className="mt-[8px] flex gap-x-4 justify-end ">
                 <button
                   className={`swiper-button-prev-aartiWorld transition-opacity ${
@@ -182,8 +182,9 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                     width={34}
                     height={34}
                   />
-                </button>
-              </div>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
