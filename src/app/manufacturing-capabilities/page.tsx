@@ -27,7 +27,7 @@ export default async function page() {
     //section_six,
     section_seven,
   } = data?.data;
- const seo = data?.seo;
+  const seo = data?.seo;
   return (
     <div>
       <SEO
@@ -35,7 +35,10 @@ export default async function page() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/manufacturing-capabilities"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/manufacturing-capabilities"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

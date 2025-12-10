@@ -94,7 +94,7 @@ export type FrameworkForgedProps = {
       BulletPoints: {
         title: string;
       }[];
-      ctaButton:ButtonProps;
+      ctaButton: ButtonProps;
     }[];
     // partnerWithUsCta: ButtonProps;
   };
@@ -130,6 +130,7 @@ export type ContactBannerProps = {
     title: string;
     ctaButton: ButtonProps;
   };
+  titleClassName?: string;
   src?: string;
   className?: string;
 };

@@ -6,7 +6,7 @@ import Button from "../Button";
 import { ReportItemProps } from "@/app/types/annual-reports.type";
 
 const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
-  const { title, sectionTitle, code_and_policy_reports, ctaButton1 } = data;
+  const { title, sectionTitle, code_and_policy_reports, ctaButton } = data;
 
   return (
     <div className="lg:max-w-[1320px] mx-auto px-[15px] lg:pt-[70px]">
@@ -23,14 +23,14 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
             </div>
           )}
         </div>
-        {ctaButton1?.title && ctaButton1?.link?.link && (
+        {ctaButton?.title && ctaButton?.link?.link && (
           <div className="hidden lg:block">
             <Button
-              title={ctaButton1?.title}
+              title={ctaButton?.title}
               href={
-                ctaButton1?.hasExternalLink == "true"
-                  ? ctaButton1?.externalLink
-                  : ctaButton1?.link?.link
+                ctaButton?.hasExternalLink == "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link
               }
             />
           </div>
@@ -55,14 +55,14 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
           )}
       </div>
 
-      {ctaButton1?.title && ctaButton1?.link?.link && (
-        <div className="flex justify-center mt-10 lg:hidden">
+      {ctaButton?.title && ctaButton?.link?.link && (
+        <div className="flex lg:justify-center mt-10 lg:hidden">
           <Button
-            title={ctaButton1?.title}
+            title={ctaButton?.title}
             href={
-              ctaButton1?.hasExternalLink == "true"
-                ? ctaButton1?.externalLink
-                : ctaButton1?.link?.link
+              ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link
             }
           />
         </div>

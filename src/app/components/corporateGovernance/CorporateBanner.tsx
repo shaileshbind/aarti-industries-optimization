@@ -18,6 +18,7 @@ const CorporateBanner: React.FC<CorporateBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      showStar3={false}
     />
   );
 };

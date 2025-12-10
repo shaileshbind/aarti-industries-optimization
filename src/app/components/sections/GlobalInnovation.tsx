@@ -7,7 +7,14 @@ import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
-  const { title, focusSectionTitle, focus_item, image } = data;
+  const {
+    title,
+    focusSectionTitle,
+    ctaButton,
+    focus_item,
+    image,
+    description,
+  } = data;
 
   const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
   const displayAlt = image?.alternativeText || "innovation-banner";
@@ -71,13 +78,17 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
             </div>
           ))}
 
-          <BodyText1>
-            This robust manufacturing infrastructure forms the backbone that
-            helps pilot-validated processes scale smoothly into commercial
-            campaigns.
-          </BodyText1>
+          {description && <BodyText1>{description}</BodyText1>}
 
-          <Button secondary title="Request more details" />
+          <Button
+            secondary
+            title={ctaButton?.title || ""}
+            href={
+              ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link
+            }
+          />
         </div>
       </div>
     </section>

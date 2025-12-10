@@ -26,7 +26,7 @@ type FormValues = {
   jobRole: string;
   country: string | null;
   message: string;
-  otherEnquiry:string;
+  otherEnquiry: string;
   hearAboutAil: string;
   category: string;
   subCategory: string;
@@ -95,7 +95,7 @@ export default function GeneralForm({
       jobRole: "",
       country: "",
       message: "",
-      otherEnquiry:"",
+      otherEnquiry: "",
       hearAboutAil: "",
       category: "",
       subCategory: "",
@@ -176,8 +176,9 @@ export default function GeneralForm({
   // 🔹 Get subcategories based on selected category
   const availableSubcategories = useMemo(
     () =>
-      categorySubcategoryData?.find((item) => item.category === selectedCategory)
-        ?.subCategories || [],
+      categorySubcategoryData?.find(
+        (item) => item.category === selectedCategory
+      )?.subCategories || [],
     [categorySubcategoryData, selectedCategory]
   );
 
@@ -293,6 +294,12 @@ export default function GeneralForm({
             {...register("fullName", { required: "Full Name is required" })}
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
+            onKeyDown={(e) => {
+              // Prevent numbers and special characters, allow only letters and space
+              if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
 
           {/* Email */}
@@ -369,6 +376,12 @@ export default function GeneralForm({
               })}
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
+              onKeyDown={(e) => {
+                // Prevent numbers and special characters, allow only letters and space
+                if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
 
             {/* Country */}
@@ -586,30 +599,29 @@ export default function GeneralForm({
             </FormControl>
           )}
 
-           {/* Other - Msg Box */}
-           {selectedSubcategory === "Other" && (
+          {/* Other - Msg Box */}
+          {selectedSubcategory === "Other" && (
             <div className="flex flex-col">
-            <textarea
-              id="otherEnquiry"
-              {...register("otherEnquiry", {
-                required: "Message is required",
-              })}
-              rows={5}
-              cols={40}
-              placeholder="Other Enquiries *"
-              className={clsx(
-                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+              <textarea
+                id="otherEnquiry"
+                {...register("otherEnquiry", {
+                  required: "Message is required",
+                })}
+                rows={5}
+                cols={40}
+                placeholder="Other Enquiries *"
+                className={clsx(
+                  "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                )}
+              ></textarea>
+              {errors.otherEnquiry && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.otherEnquiry.message}
+                </p>
               )}
-            ></textarea>
-            {errors.otherEnquiry && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.otherEnquiry.message}
-              </p>
-            )}
-          </div>
+            </div>
           )}
-
         </div>
 
         <Button title={"Submit"} className="mt-6" />
