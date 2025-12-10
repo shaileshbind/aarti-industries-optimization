@@ -27,6 +27,7 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
               key={"accordion" + index}
               expanded={expanded === index}
               onChange={() => setexpanded(index)}
+              borderBottom={index === products?.length - 1 ? "none" : "1px solid #e8e8e8"}
               icon={
                 <Image
                   src={"/images/accordian-down.svg"}
@@ -37,28 +38,26 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
               }
               title={
                 <SubH2
-                  className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
-                    expanded === index && "opacity-100"
-                  }`}
+                  className={`text-lg md:text-2xl text-[#002F50] `}
                 >
                   {item?.productName}
                 </SubH2>
               }
             >
-              <div className="border-[1px] rounded-[20px] overflow-hidden border-[#e8e8e8]">
-                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] ">
+              <div className="border-[1px] rounded-[20px] overflow-hidden border-[#e8e8e8] ">
+                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">Technical Name :</p>
                   <p className="text-[#4C5861]">
                     {item?.productDetails?.commonName || "-"}
                   </p>
                 </div>
-                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] ">
+                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">CAS No. :</p>
                   <p className="text-[#4C5861]">
                     {item?.productDetails?.casNo || "-"}
                   </p>
                 </div>
-                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] ">
+                <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">Molecular Formula :</p>
                   <p className="text-[#4C5861]">
                     {item?.productDetails?.chemicalFormula || "-"}

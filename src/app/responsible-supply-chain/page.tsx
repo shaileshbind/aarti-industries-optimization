@@ -70,7 +70,7 @@ export default async function page() {
       )}
 
       {section_five && (
-        <div className="my-[72px] lg:my-[140px]">
+        <div className="my-[72px] lg:my-[120px]">
           <FrameworkForged data={section_five} />
         </div>
       )}

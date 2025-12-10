@@ -9,7 +9,7 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
   const { description, image, mobImage, heading } = data;
 
   return (
-    <div className=" max-w-[1030px] mx-auto pb-[20px] md:pb-[70px] px-[15px]">
+    <div className=" max-w-[1030px] mx-auto pb-[20px] md:pb-[40px] px-[15px]">
         <div className="flex w-full py-[70px]">
         {description && (
           <AnimatedText>
@@ -21,7 +21,7 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
         </div>
       <div className=" flex flex-col md:flex-row justify-between items-center">
        
-        <div className=" w-full md:w-[60%] pr-10">
+        <div className=" w-full md:w-[60%] md:pr-10 order-2 md:order-1">
           {description && (
             <FadeInReveal>
               <BodyText1>
@@ -30,11 +30,11 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
             </FadeInReveal>
           )}
           </div>
-          <div className="w-full md:w-[40%] mt-10 md:mt-0">
+          <div className="w-full md:w-[40%] mb-10 md:mt-0 order-1 md:order-2">
 
           {image && (
             <FadeInReveal>
-              <div className="hidden lg:block relative w-full pt-[100%] rounded-2xl overflow-hidden">
+              <div className="hidden lg:block relative w-full pt-[100%] rounded-[30px] overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                    
@@ -59,7 +59,7 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
           )}
           {mobImage && (
             <FadeInReveal>
-              <div className="block lg:hidden relative w-full pt-[100%] rounded-2xl overflow-hidden">
+              <div className="block lg:hidden relative w-full pt-[100%] rounded-[20px] overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                    

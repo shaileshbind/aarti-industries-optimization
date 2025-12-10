@@ -80,10 +80,10 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
           />
         </div>
         {/* Text content */}
-        <div className="max-w-[unset] lg:max-w-[780px] mx-auto text-center mt-4">
+        <div className="max-w-[unset] lg:max-w-[880px] mx-auto text-center mt-4">
           {sectionTitle && (
             <FadeInRevealBlur>
-              {<H2 className="text-orange-100">{sectionTitle}</H2>}
+              {<H2 className="text-blue-200 font-light">{sectionTitle}</H2>}
             </FadeInRevealBlur>
           )}
 

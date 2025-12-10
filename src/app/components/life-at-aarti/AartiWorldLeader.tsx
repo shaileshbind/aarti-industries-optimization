@@ -32,7 +32,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
         </H2>
       )}
       <div className="mt-[28px] lg:mt-[48px] container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[500px_1fr] container gap-y-[16px] lg:gap-x-[80px]">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] xl:grid-cols-[500px_1fr] container gap-y-[16px] md:gap-x-[20px] xl:gap-x-[80px]">
           {/* image section */}
           <div className="w-[100%] h-[300px] lg:h-[450px] overflow-hidden rounded-[14px] lg:rounded-[20px] relative">
             {leadersCard?.[active]?.image?.url && (
@@ -103,7 +103,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
               })}
             </div>
 
-            <div className="mt-[30px] max-w-[560px]">
+            <div className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]">
               <Swiper
                 slidesPerView={1}
                 spaceBetween={24}
