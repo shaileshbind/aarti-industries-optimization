@@ -8,6 +8,10 @@ export type HomeHeroProps = {
         description: string;
         image: ImageProps;
         mobImage: ImageProps;
+        bannerVideo: {
+          url: string;
+          alternativeText: string;
+        };
         ctaButton: ButtonProps;
       }[];
       category: string;
