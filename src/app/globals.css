@@ -595,11 +595,10 @@ body {
 }
 
 .inverted-radius:hover {
-  --r: 20px; /* the radius */
+  --r: 16px; /* the radius */
   --s: 30px; /* size of inner curve */
   --x: 20px; /* horizontal offset (no percentage) */
   --y: 10px; /* vertical offset (no percentage) */
-
   border-radius: var(--r);
   --_m: /calc(2 * var(--r)) calc(2 * var(--r)) radial-gradient(#000 70%, #0000
         72%);
@@ -735,7 +734,7 @@ body {
     height: 400px;
   }
 
-  .button-subtle-scale:hover{
+  .button-subtle-scale:hover {
     transform: scale(1);
   }
 }
@@ -800,14 +799,14 @@ body {
     overflow-x: unset;
   }
   p {
-   font-family: "Alte Hans Grotesk";
+    font-family: "Alte Hans Grotesk";
     font-weight: 400;
     font-size: 16px;
     color: #363940;
     margin-bottom: 16px;
   }
   h4 {
-   font-family: "Alte Hans Grotesk";
+    font-family: "Alte Hans Grotesk";
     font-weight: 600;
     line-height: 150%;
     font-size: 18px;
@@ -818,7 +817,7 @@ body {
     color: #f36633;
   }
   ul li {
-   font-family: "Alte Hans Grotesk";
+    font-family: "Alte Hans Grotesk";
     font-weight: 400;
     font-size: 16px;
     line-height: 160%;
@@ -837,7 +836,7 @@ body {
     font-weight: bold;
   }
   ol li {
-   font-family: "Alte Hans Grotesk";
+    font-family: "Alte Hans Grotesk";
     font-weight: 400;
     font-size: 16px;
     line-height: 160%;

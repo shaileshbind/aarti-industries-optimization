@@ -78,21 +78,21 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 // Custom arrow components
 const PreviousIcon = () => (
   <Image
-    src="/images/accordian-down.svg"
+    src="/images/pagination-arrow.svg"
     alt="arrow"
     width={34}
     height={34}
-    className="rotate-90 w-5 h-5 md:w-[34px] md:h-[34px]"
+    className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
   />
 );
 
 const NextIcon = () => (
   <Image
-    src="/images/accordian-down.svg"
+    src="/images/pagination-arrow.svg"
     alt="arrow"
     width={34}
     height={34}
-    className="rotate-270 w-5 h-5 md:w-[34px] md:h-[34px]"
+    className="w-5 h-5 md:w-[34px] md:h-[34px]"
   />
 );
 
@@ -119,10 +119,7 @@ const NewsListing = () => {
         const data = await fetchNews(url);
         const results = data?.results || [];
         const pagination = data?.pagination || {};
-        console.log("Page Count::::", pagination.pageCount);
-        console.log("Current Page::::", currentPage);
-        console.log("R::::", results);
-        console.log("Raw Result counts", results.length);
+
         // Calculate how many items should actually be shown on this page
         let itemsToShow = results;
         if (pagination.total && currentPage && pagination.pageSize) {
@@ -179,7 +176,7 @@ const NewsListing = () => {
   const handleTabClick = (index: number, slug: string) => {
     setActiveTab(index);
     setActiveCat(slug);
-    setCurrentPage(1); 
+    setCurrentPage(1);
     setTotalPages(1);
     setHasMore(false);
   };
@@ -188,7 +185,6 @@ const NewsListing = () => {
     _event: React.ChangeEvent<unknown>,
     page: number
   ) => {
-    console.log("Page changed to:", page); 
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -222,7 +218,7 @@ const NewsListing = () => {
   }, [measureIndicator]);
 
   return (
-    <div className="fluid-container py-[50px]">
+    <div className="fluid-container py-[50px] pb-[72px] lg:pb-[100px]">
       <div>
         {/* Tabs */}
         <div className="overflow-x-auto w-full ">
@@ -281,7 +277,7 @@ const NewsListing = () => {
             {/* <div className="mt-[20px] text-sm text-grey-400">
               Showing {listingData.length} items on page {currentPage}
             </div> */}
-            <div className="mt-[20px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[24px] gap-y-[50px]">
+            <div className="mt-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[24px] gap-y-6 lg:gap-y-[50px]">
               {listingData?.length > 0 ? (
                 listingData?.map((item: Item1, index: number) => (
                   <div
@@ -293,7 +289,7 @@ const NewsListing = () => {
                       date={item?.date}
                       desc={item?.newsDescription}
                       link={item?.ctaButton?.externalLink || "#"}
-                      animate={true}
+                      animate
                       icon={item?.tagIconDesktop?.url}
                       tag={item?.tag}
                     />

@@ -63,21 +63,21 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 // Custom arrow components
 const PreviousIcon = () => (
   <Image
-    src="/images/accordian-down.svg"
+    src="/images/pagination-arrow.svg"
     alt="arrow"
     width={34}
     height={34}
-    className="rotate-90 w-5 h-5 md:w-[34px] md:h-[34px]"
+    className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
   />
 );
 
 const NextIcon = () => (
   <Image
-    src="/images/accordian-down.svg"
+    src="/images/pagination-arrow.svg"
     alt="arrow"
     width={34}
     height={34}
-    className="rotate-270 w-5 h-5 md:w-[34px] md:h-[34px]"
+    className="w-5 h-5 md:w-[34px] md:h-[34px]"
   />
 );
 
