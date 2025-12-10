@@ -23,7 +23,6 @@ const page = async () => {
   return (
     <div>
       {BannerData.title ? <PrivacyPolicyBanner data={BannerData} /> : null}
-
       {data?.data && <PrivacyPolicyContent data={data?.data} />}
     </div>
   );

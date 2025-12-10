@@ -4,8 +4,14 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { BodyText2, BodyText3, SubH2 } from "../Typography2";
-import type { PrivacyContent } from "@/app/types/privacyPolicy.types";
+
+interface PrivacyContent {
+  content: Array<{
+    title?: string;
+    description?: string;
+    additional?: string;
+  }>;
+}
 
 interface PrivacyPolicyProps {
   data?: PrivacyContent;
@@ -35,15 +41,30 @@ const StarIcon: React.FC = () => (
   </svg>
 );
 
+// Typography components
+const BodyText2: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
+  <p className={`text-base font-normal ${className || ''}`}>{children}</p>
+);
+
+const BodyText3: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
+  <p className={`text-sm font-normal ${className || ''}`}>{children}</p>
+);
+
+const SubH2: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
+  <h2 className={`text-2xl font-semibold ${className || ''}`}>{children}</h2>
+);
+
 const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [lineHeight, setLineHeight] = useState<number>(0);
   const [navigationItems, setNavigationItems] = useState<NavItem[]>([]);
   const sidebarRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isClickScrolling = useRef<boolean>(false);
   const navListRef = useRef<HTMLUListElement>(null);
   const navItemsRef = useRef<(HTMLLIElement | null)[]>([]);
+  const pinTriggerRef = useRef<ScrollTrigger | null>(null);
 
   useEffect(() => {
     if (data?.content && data.content.length > 0) {
@@ -93,6 +114,48 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
     return 0;
   }, []);
 
+  // Pin the sidebar using GSAP ScrollTrigger
+  useEffect(() => {
+    if (typeof window === "undefined" || !sidebarRef.current || !containerRef.current) return;
+    const sidebar = sidebarRef.current;
+    const container = containerRef.current;
+    // Kill existing pin trigger
+    if (pinTriggerRef.current) {
+      pinTriggerRef.current.kill();
+    }
+    // Only pin on desktop (above 900px)
+    const mediaQuery = window.matchMedia("(min-width: 900px)");
+    const setupPin = () => {
+      if (mediaQuery.matches) {
+        pinTriggerRef.current = ScrollTrigger.create({
+          trigger: container,
+          start: "top 100px",
+          end: "bottom bottom",
+          pin: sidebar,
+          pinSpacing: false,
+          markers: false,
+        });
+      }
+    };
+
+    setupPin();
+    // Re-setup on resize
+    const handleResize = () => {
+      if (pinTriggerRef.current) {
+        pinTriggerRef.current.kill();
+      }
+      setupPin();
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (pinTriggerRef.current) {
+        pinTriggerRef.current.kill();
+      }
+    };
+  }, [navigationItems]);
+
+  // Section scroll triggers for active state
   useEffect(() => {
     if (typeof window === "undefined" || navigationItems.length === 0) return;
 
@@ -197,11 +260,14 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
 
   return (
     <section className="w-full bg-white pt-10 pb-20 max-md:pt-6 max-md:pb-[60px]">
-      <div className="max-w-[1200px] mx-auto px-6 flex gap-[60px] max-[900px]:flex-col max-[900px]:gap-8 max-sm:px-4">
+      <div 
+        ref={containerRef}
+        className="max-w-[1200px] mx-auto px-6 flex gap-[60px] max-[900px]:flex-col max-[900px]:gap-8 max-sm:px-4 relative"
+      >
         {/* Sidebar Navigation */}
         <aside
           ref={sidebarRef}
-          className="shrink-0 w-60 sticky top-[100px] h-fit self-start max-[900px]:w-full max-[900px]:relative max-[900px]:top-0 max-[900px]:border-b max-[900px]:border-[#e2e8f0] max-[900px]:pb-6"
+          className="shrink-0 w-60 h-fit max-[900px]:w-full max-[900px]:relative max-[900px]:top-0 max-[900px]:border-b max-[900px]:border-[#e2e8f0] max-[900px]:pb-6"
         >
           <nav className="relative">
             <ul
@@ -223,13 +289,13 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
                   <li
                     key={item.id}
                     ref={setNavItemRef(index)}
-                    className="group m-0 relative flex items-start py-2 max-[900px]:py-1"
+                    className="group m-0 relative flex items-center py-2 max-[900px]:py-1"
                   >
                     <div
                       className={`
-                                                w-[15px] h-4 flex items-center justify-center shrink-0 mr-3 ml-px mt-0.5 relative z-[2] bg-transparent transition-transform duration-300
-                                                max-[900px]:w-3 max-[900px]:h-3 max-[900px]:mr-1.5
-                                            `}
+                        w-[15px] h-4 flex items-center justify-center shrink-0 mr-3 ml-px mt-0.5 relative z-[2] bg-transparent transition-transform duration-300
+                        max-[900px]:w-3 max-[900px]:h-3 max-[900px]:mr-1.5
+                      `}
                     >
                       {state === "active" ? (
                         <StarIcon />
@@ -250,7 +316,6 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
             </ul>
           </nav>
         </aside>
-
         {/* Main Content */}
         <div
           ref={contentRef}
@@ -263,20 +328,20 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
               className="mb-12 pt-2 opacity-100 transition-opacity duration-300"
             >
               {section.title && (
-                <SubH2 className="text-[var(--color-blue-200)] mb-4">
+                <SubH2 className="text-blue-200 mb-4">
                   {section.title}
                 </SubH2>
               )}
 
               {section.description && (
-                <BodyText2 className="text-[var(--color-grey-400)] mb-4">
+                <BodyText2 className="text-grey-400 mb-4">
                   {section.description}
                 </BodyText2>
               )}
 
               {section.additional && (
                 <div
-                  className="privacy-html-content text-[var(--color-grey-400)] mb-4 last:mb-0"
+                  className="privacy-html-content text-grey-400 mb-4 last:mb-0"
                   dangerouslySetInnerHTML={{ __html: section.additional }}
                 />
               )}
