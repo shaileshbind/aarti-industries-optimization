@@ -137,9 +137,6 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
     return [];
   }, [podcastsData]);
   
-  console.log("podcastsData::::", podcastsData);
-  console.log("podcastsArray::::", podcastsArray);
-  
   // Calculate total pages based on podcasts count (excluding featured podcast)
   useEffect(() => {
     if (podcastsArray && podcastsArray.length > 0) {

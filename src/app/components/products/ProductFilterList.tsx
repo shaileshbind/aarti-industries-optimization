@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import SmoothCollapseGSAP from "./SmoothCollapse";
 import { BodyText1 } from "../Typography2";
@@ -71,12 +71,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       } else {
         params.delete("subcategory");
       }
-
-      // Navigate with new params
-      // const newUrl = params.toString()
-      //   ? `${pathname}?${params.toString()}`
-      //   : pathname;
-      // router.push(newUrl, { scroll: false });
     },
     [searchParams]
   );

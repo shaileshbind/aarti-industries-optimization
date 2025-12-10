@@ -21,7 +21,6 @@ export const getDisclosureData = async (slug: string) => {
     const data = await response.json();
 
     if (data) {
-      // console.log("%cDIsclosure Data", "color : yellow", data);
       return data;
     }
   } catch (error) {

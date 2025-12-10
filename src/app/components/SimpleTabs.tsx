@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import { useLayoutEffect, useRef, useState, useCallback } from "react";
 
 type SimpleTab = {
   title: string;
