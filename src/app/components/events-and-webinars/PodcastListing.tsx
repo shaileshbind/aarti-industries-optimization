@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { PodcastListingProps, Podcast, PodcastApiItem } from "@/app/types/events-and-webinars.type";
 import { ImageProps } from "@/app/types/global.type";
 import PodcastCard from "./PodcastCard";
@@ -123,21 +123,19 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
   
   // Check if podcastsData is in the new API format (pressData) or old format (data.podcasts)
   // getData returns the array directly, so check if it's already an array first
-  let podcastsArray: (PodcastApiItem | Podcast)[] = [];
-  
-  if (Array.isArray(podcastsData)) {
-    // getData returns array directly
-    podcastsArray = podcastsData;
-  } else if (podcastsData && 'pressData' in podcastsData) {
-    // Wrapped in pressData (from getPageData)
-    podcastsArray = podcastsData.pressData?.data || [];
-  } else if (podcastsData && 'data' in podcastsData && podcastsData.data) {
-    // Old format with data.podcasts
-    podcastsArray = podcastsData.data.podcasts || [];
-  }
-  
-  console.log("podcastsData::::", podcastsData);
-  console.log("podcastsArray::::", podcastsArray);
+  const podcastsArray: (PodcastApiItem | Podcast)[] = useMemo(() => {
+    if (Array.isArray(podcastsData)) {
+      // getData returns array directly
+      return podcastsData;
+    } else if (podcastsData && 'pressData' in podcastsData) {
+      // Wrapped in pressData (from getPageData)
+      return podcastsData.pressData?.data || [];
+    } else if (podcastsData && 'data' in podcastsData && podcastsData.data) {
+      // Old format with data.podcasts
+      return podcastsData.data.podcasts || [];
+    }
+    return [];
+  }, [podcastsData]);
   
   // Calculate total pages based on podcasts count (excluding featured podcast)
   useEffect(() => {
@@ -156,7 +154,7 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(1);
     }
-  }, [totalPages]);
+  }, [totalPages, currentPage]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);

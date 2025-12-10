@@ -409,7 +409,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeTabMob, mainSection.length]);
+  }, [activeTabMob, mainSection.length, setMarginBottom]);
 
 
 

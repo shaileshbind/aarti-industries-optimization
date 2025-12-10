@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import SmoothCollapseGSAP from "./SmoothCollapse";
 import { BodyText1 } from "../Typography2";
@@ -13,7 +13,7 @@ import {
 import { ProductData } from "@/app/types/product.inner.type";
 import MobileFilter from "./MobileFilter";
 import Button from "../Button";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
@@ -23,8 +23,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   clearSearch,
 }) => {
   const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
 
@@ -53,7 +51,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       const subCats = subcategoryFromUrl.split(",").filter(Boolean);
       setSelectedSubCategories(subCats);
     }
-  }, []); // Run only on mount
+  }, [searchParams, activeTab, setActiveTab]); // Run only on mount
 
   // Update URL when filters change
   const updateURL = useCallback(
@@ -73,14 +71,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       } else {
         params.delete("subcategory");
       }
-
-      // Navigate with new params
-      // const newUrl = params.toString()
-      //   ? `${pathname}?${params.toString()}`
-      //   : pathname;
-      // router.push(newUrl, { scroll: false });
     },
-    [pathname, router, searchParams]
+    [searchParams]
   );
 
   // Reset visible count when filters change

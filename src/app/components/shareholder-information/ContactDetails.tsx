@@ -1,50 +1,52 @@
 "use client";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import clsx from "clsx";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { BodyText2, SubH3 } from "../Typography2";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const CONTACT_DATA = [
+  {
+    subCategory: "Shareholder Grievances & Nodal Officer",
+    address: {
+      name: "Mr. Raj Sarraf",
+      position: "Company Secretary & Compliance Officer",
+      address:
+        "Embassy 247 Park, Tower C,4th Floor, Gandhi Nagar, Vikhroli West, Mumbai - 400083, Maharashtra, India",
+      phone: "+91 22 6943 6100",
+      email: "investorrelations@aarti-industries.com",
+      fax: "",
+      website: "",
+      unit: "",
+    },
+  },
+  {
+    subCategory: "Registrars & Share Transfer Agent",
+    address: {
+      name: "MUFG Intime India Pvt. Ltd.",
+      position: "Company Secretary & Compliance Officer",
+      address:
+        "C-101, 247 Park, L.B.S Marg,Vikhroli (W), Mumbai - 400083,Maharashtra, India",
+      phone: "+91 22 4918 6000",
+      email: "rnt.helpdesk@linkintime.co.in",
+      fax: "+91 22 4918 6060",
+      website: "http://linkintime.co.in",
+      unit: "Unit: Aarti Industries Limited",
+    },
+  },
+];
+
 export default function ContactDetails() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const data = [
-    {
-      subCategory: "Shareholder Grievances & Nodal Officer",
-      address: {
-        name: "Mr. Raj Sarraf",
-        position: "Company Secretary & Compliance Officer",
-        address:
-          "Embassy 247 Park, Tower C,4th Floor, Gandhi Nagar, Vikhroli West, Mumbai - 400083, Maharashtra, India",
-        phone: "+91 22 6943 6100",
-        email: "investorrelations@aarti-industries.com",
-        fax: "",
-        website: "",
-        unit: "",
-      },
-    },
-    {
-      subCategory: "Registrars & Share Transfer Agent",
-      address: {
-        name: "MUFG Intime India Pvt. Ltd.",
-        position: "",
-        address:
-          "C-101, 247 Park, L.B.S Marg,Vikhroli (W), Mumbai - 400083,Maharashtra, India",
-        phone: "+91 22 4918 6000",
-        email: "rnt.helpdesk@linkintime.co.in",
-        fax: "+91 22 4918 6060",
-        website: "http://linkintime.co.in",
-        unit: "Unit: Aarti Industries Limited",
-      },
-    },
-  ];
+  const data = useMemo(() => CONTACT_DATA, []);
 
   const [activeSubCategory, setActiveSubCategory] = useState<string>("");
   const [activeData, setactiveData] = useState<
-    (typeof data)[0]["address"] | null
+    (typeof CONTACT_DATA)[0]["address"] | null
   >(null);
 
   // Initialize from URL or default to first subcategory
@@ -65,7 +67,7 @@ export default function ContactDetails() {
       setActiveSubCategory(data[0].subCategory);
       setactiveData(data[0].address);
     }
-  }, [searchParams]);
+  }, [searchParams, data]);
 
   const menuProps = {
     PaperProps: {
