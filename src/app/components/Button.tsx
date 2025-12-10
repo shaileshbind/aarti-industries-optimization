@@ -6,15 +6,28 @@ interface ButtonProps {
   href?: string;
   secondary?: boolean;
   className?: string;
+  useTargetBlank?: boolean;
 }
 
-const Button = ({ href, title, secondary, className }: ButtonProps) => {
+const Button = ({
+  href,
+  title,
+  secondary,
+  className,
+  useTargetBlank = true,
+}: ButtonProps) => {
   return (
     <>
       {secondary ? (
         <>
-          <Link href={href || "#"} target="_blank" className="w-fit">
-            <button className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under] ${className}`}>
+          <Link
+            href={href || "#"}
+            target={useTargetBlank ? "_blank" : "_self"}
+            className="w-fit"
+          >
+            <button
+              className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under] ${className}`}
+            >
               {title}
             </button>
           </Link>
@@ -22,7 +35,7 @@ const Button = ({ href, title, secondary, className }: ButtonProps) => {
       ) : (
         <Link
           href={href || "#"}
-          target="_blank"
+          target={useTargetBlank ? "_blank" : "_self"}
           className="w-fit group relative inline-block"
         >
           <button

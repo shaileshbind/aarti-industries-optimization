@@ -14,18 +14,18 @@ const HomeMap = () => {
     { id: 2, percent: "18%", title: "North America" },
     { id: 3, percent: "4%", title: "Europe" },
     { id: 4, percent: "6%", title: "Rest of Asia" },
-    { id: 5, percent: "6%", title: "Rest of the world" },
+    { id: 5, percent: "3%", title: "Rest of the world" },
   ];
   return (
     <div 
-      className="w-full lg:h-screen relative z-10 bg-white pt-20"
+      className="w-full relative z-10 bg-white pt-20"
       style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
     >
       <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
           Growing Across Markets and Beyond Borders
         </H2>
-        <div className="relative w-full h-[180px] lg:h-[550px] ">
+        <div className="relative w-full h-[180px] lg:h-[550px] mb-[100px]">
           <div className="w-fit h-full mx-auto hidden lg:block relative ">
             <DesktopMapSvg
               hoverRestWorld={() => setActiveBlip(0)}
@@ -57,7 +57,7 @@ const HomeMap = () => {
                     activeBlip === 0 ? "text-white" : "text-orange-100"
                   } !text-[28px]`}
                 >
-                  6%
+                  3%
                 </SubH1>
                 <BodyText3
                   className={`${

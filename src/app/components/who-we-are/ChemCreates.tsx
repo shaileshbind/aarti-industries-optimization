@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { H2 } from "../Typography2";
 import DateCard from "../cards/DateCard";
 import "swiper/css";
@@ -11,9 +11,16 @@ import { ChemCreatesProps } from "@/app/types/who-we-are.type";
 import Image from "next/image";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
-  const { sectionTitle, card } = data;
+  const { sectionTitle, blog_case_studies } = data;
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const getSlidesPerView = (): number => {
+    const slidesPerView = swiperRef.current?.params.slidesPerView;
+    return typeof slidesPerView === "number" ? Math.floor(slidesPerView) : 1;
+  };
+  const totalSlides = blog_case_studies?.length ?? 0;
+  const isAtEnd = activeIndex >= totalSlides - getSlidesPerView();
 
   return (
     <div className="mt-[0] mb-[72px] lg:mb-[100px] lg:mt-0">
@@ -21,13 +28,14 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
         <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
       )}
 
-      {card?.length > 0 && (
+      {blog_case_studies && blog_case_studies.length > 0 && (
         <>
           <div className="mt-[36px] lg:mt-[40px]">
             <Swiper
               slidesPerView={1.2}
               spaceBetween={24}
               breakpoints={{
+                500: { slidesPerView: 2 },
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
               }}
@@ -46,14 +54,14 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               className="w-full !px-[20px] lg:!px-[60px] "
             >
-              {card.map((item) => {
+              {blog_case_studies?.map((item) => {
                 return (
                   <SwiperSlide key={item?.id}>
                     <DateCard
-                      imageSrc={item?.image?.url}
+                      imageSrc={item?.thumbnailImageDesktop?.url}
                       date={item?.date}
                       desc={item?.title}
-                      link={item?.link || "#"}
+                      link={`/blogs/${item?.slug}`}
                     />
                   </SwiperSlide>
                 );
@@ -67,7 +75,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
               <div className="whoweare-chem-creates-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
             </div>
             {/* Navigation Buttons */}
-            {card.length > 4 && (
+            {blog_case_studies?.length > 4 && (
               <div className="hidden lg:flex gap-x-[12px] flex-shrink-0">
                 <button
                   className={`transition-opacity ${
@@ -89,28 +97,12 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                 </button>
                 <button
                   className={`transition-opacity ${
-                    activeIndex >=
-                    card.length -
-                      Math.floor(
-                        typeof swiperRef.current?.params.slidesPerView ===
-                          "number"
-                          ? swiperRef.current.params.slidesPerView
-                          : 1
-                      )
+                    isAtEnd
                       ? "pointer-events-none opacity-30"
                       : "cursor-pointer opacity-100"
                   }`}
                   aria-label="Next slide"
-                  aria-disabled={
-                    activeIndex >=
-                    card.length -
-                      Math.floor(
-                        typeof swiperRef.current?.params.slidesPerView ===
-                          "number"
-                          ? swiperRef.current.params.slidesPerView
-                          : 1
-                      )
-                  }
+                  aria-disabled={isAtEnd}
                   onClick={() => swiperRef.current?.slideNext()}
                 >
                   <Image

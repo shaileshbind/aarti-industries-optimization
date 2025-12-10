@@ -81,7 +81,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
     { id: 2, percent: "18%", title: "North America" },
     { id: 3, percent: "4%", title: "Europe" },
     { id: 4, percent: "6%", title: "Rest of Asia" },
-    { id: 5, percent: "6%", title: "Rest of the world" },
+    { id: 5, percent: "3%", title: "Rest of the world" },
   ];
 
   return (
@@ -129,7 +129,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       activeBlip === 0 ? "text-white" : "text-orange-100"
                     } !text-[28px]`}
                   >
-                    6%
+                    3%
                   </SubH1>
                   <BodyText3
                     className={`${

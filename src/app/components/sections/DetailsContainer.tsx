@@ -69,13 +69,14 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         {/* Top Line */}
         <div
           ref={topLineRef}
-          className="mx-auto h-[64px] md:h-[120px] w-[1px] mb-20 lg:mb-0"
+          className="mx-auto h-[64px] md:h-[120px] w-[1px] mb-6 lg:mb-0"
         >
           <Image
             src="/images/home/line.svg"
             alt="line"
-            width={1}
+            width={2}
             height={120}
+            className="h-full"
           />
         </div>
         {/* Text content */}

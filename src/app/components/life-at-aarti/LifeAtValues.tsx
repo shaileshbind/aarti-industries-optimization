@@ -19,7 +19,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
         </H2>
       )}
       {/* Desktop Layout */}
-      <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
+      <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container !z-[50]">
         {/* Left Tabs + Progress Bar */}
         <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
           <div className="relative flex gap-4">
@@ -46,7 +46,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
                     >
                       <H2
                         className={clsx(
-                          "block text-left transition-all duration-300 cursor-pointer  ",
+                          "block text-left transition-all duration-300 cursor-pointer z-[20] ",
                           active === index
                             ? "text-white "
                             : "text-white/40 !text-[36px] hover:text-white/80"
@@ -102,7 +102,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
               {tab?.value && (
                 <button
                   className={clsx(
-                    "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative ",
+                    "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative !z-[50] ",
                     isOpen
                       ? "bg-gradient-orange-1 text-white pt-5"
                       : "text-gray-700 hover:bg-gray-50"

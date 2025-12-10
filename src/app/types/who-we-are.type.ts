@@ -91,14 +91,14 @@ export type IndustryAccoladesProps = {
 
 export type ChemCreatesProps = {
   data: {
-    sectionTitle: string;
-    card: {
-      date: string;
-      id: string;
-      title: string;
-      image: ImageProps;
-      mobImage: ImageProps;
-      link: string;
+    sectionTitle?: string;
+    blog_case_studies?: {
+      id?: number;
+      title?: string;
+      slug?: string;
+      date?: string;
+      thumbnailImageDesktop?:ImageProps;
+      thumbnailImageMobile?:ImageProps
     }[];
   };
 };

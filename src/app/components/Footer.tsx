@@ -72,10 +72,12 @@ const Footer = ({ data }: FooterProps) => {
                     </div>
                   )}
                   {menu?.[0]?.subMenu?.[0]?.item?.map((items) => {
+                    const link = items?.cta_link?.link ?? items?.externalLink;
+                    if (!link) return null;
                     return (
                       <a
-                        key={items.id}
-                        href={items?.subMenuLink}
+                        key={items?.id}
+                        href={link}
                         className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                       >
                         {items?.subMenuTitle}
@@ -88,10 +90,12 @@ const Footer = ({ data }: FooterProps) => {
                     {menu?.[0]?.subMenu?.[1]?.title}
                   </div>
                   {menu?.[0]?.subMenu?.[1]?.item?.map((items) => {
+                    const link = items?.cta_link?.link ?? items?.externalLink;
+                    if (!link) return null;
                     return (
                       <a
                         key={items.id}
-                        href={items?.subMenuLink}
+                        href={link}
                         className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                       >
                         {items?.subMenuTitle}
@@ -122,10 +126,13 @@ const Footer = ({ data }: FooterProps) => {
                           {item?.title}
                           <div className="grid">
                             {item?.item?.map((items) => {
+                              const link =
+                                items?.cta_link?.link ?? items?.externalLink;
+                              if (!link) return null;
                               return (
                                 <a
                                   key={items.id}
-                                  href={items?.subMenuLink}
+                                  href={link}
                                   className="text-[14px] my-[5px] font-roboto font-normal text-[#585858] footer-animated-underline"
                                 >
                                   {items?.subMenuTitle}
@@ -184,6 +191,7 @@ const Footer = ({ data }: FooterProps) => {
         )}
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1 justify-between">
           {Legal?.data?.map((items) => {
+            if (!items?.link) return null;
             return (
               <a
                 key={items?.id}
