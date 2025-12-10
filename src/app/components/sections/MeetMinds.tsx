@@ -88,7 +88,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                       }}
                     >
                       {item?.image?.url && (
-                        <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)]">
+                        <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)] border-[1px] border-grey-200">
                           <Image
                             src={item?.image?.url}
                             alt={item?.image?.alternativeText || "leader"}
@@ -98,14 +98,14 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                         </div>
                       )}
                       {item?.name && (
-                        <BodyText2 className="mt-[18px] text-blue-200">
+                        <BodyText1 className="mt-[18px] text-blue-200">
                           {item?.name}
-                        </BodyText2>
+                        </BodyText1>
                       )}
                       {item?.designation && (
-                        <BodyText1 className="mt-[4px] text-grey-300">
+                        <BodyText2 className="mt-[4px] text-grey-300">
                           {item?.designation}
-                        </BodyText1>
+                        </BodyText2>
                       )}
                     </div>
                   </CustomCursorTrigger>

@@ -30,7 +30,10 @@ export default async function ProductInner({ params }: ProductPageProps) {
         metaTitle={seo?.metaTitle ?? `${mainData?.productName}`}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? `https://www.aarti-industries.com/products/${mainData?.slug}`}
+        canonical={
+          seo?.canonical ??
+          `https://www.aarti-industries.com/products/${mainData?.slug}`
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -42,7 +45,9 @@ export default async function ProductInner({ params }: ProductPageProps) {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
       <MainComponent data={mainData} relatedData={relatedData} />
+
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

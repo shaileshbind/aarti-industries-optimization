@@ -10,6 +10,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
   data,
   src,
   className,
+  titleClassName,
 }) => {
   const { title, ctaButton } = data;
 
@@ -26,14 +27,24 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
           />
 
           {title && (
-            <FadeInReveal delay={0.2} className="md:w-[60%] ">
+            <FadeInReveal
+              delay={0.2}
+              className={clsx(`md:w-[60%]`, titleClassName)}
+            >
               <SubH1 className="text-white">{title}</SubH1>
             </FadeInReveal>
           )}
 
           {ctaButton?.title && (
             <FadeInReveal delay={0.2}>
-              <Link href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`} target="_blank">
+              <Link
+                href={`${
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }`}
+                target="_blank"
+              >
                 <div
                   className={clsx(
                     `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px]  cursor-pointer relative z-10 w-fit md:w-full text-center flex`,

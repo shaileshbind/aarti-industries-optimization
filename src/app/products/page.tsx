@@ -12,16 +12,18 @@ export default async function Product() {
     "/globally-certified-datas?populate=*"
   );
   const { section_one, product_categories } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
 
   return (
     <>
-     <SEO
+      <SEO
         title={seo?.title ?? "Products"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/products"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/products"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -33,10 +35,12 @@ export default async function Product() {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
       <ProductWrapper
         section_one={section_one}
         product_categories={product_categories}
       />
+
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

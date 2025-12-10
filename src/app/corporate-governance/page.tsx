@@ -26,15 +26,18 @@ const page = async () => {
     section_six,
     section_seven,
   } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Corporate Governance"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/corporate-governance"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/corporate-governance"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -46,19 +49,31 @@ const page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
       {section_one && <CorporateBanner data={section_one} />}
+
       {section_two && <OurPhilosophy data={section_two} />}
+
       {section_three && <OurCodeAndPolicies data={section_three} />}
+
       {section_four && (
         <div className="mt-[72px] lg:mt-[120px]">
           <MeetMinds data={section_four} />
         </div>
       )}
-      {section_five && <ContactBanner data={section_five} />}
+
+      {section_five && (
+        <ContactBanner data={section_five} titleClassName="md:!w-[48%]" />
+      )}
+
       {section_six && <DirectorsNcommittees data={section_six} />}
-      <section className="pb-[72px] lg:pb-30 w-full">
-        {section_seven && <ContactBanner data={section_seven} />}
-      </section>
+
+      {section_seven && (
+        <section className="pb-[72px] lg:pb-30 w-full">
+          <ContactBanner data={section_seven} titleClassName="md:!w-[48%]" />
+        </section>
+      )}
+
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
