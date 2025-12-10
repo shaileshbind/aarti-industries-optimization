@@ -82,7 +82,7 @@ const ProductList = ({
             href={pdfLink}
             download
             className={clsxN(
-              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full",
+              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer z-[1]",
               isHovered ? "text-white" : "text-gray-800"
             )}
             target="_blank"
