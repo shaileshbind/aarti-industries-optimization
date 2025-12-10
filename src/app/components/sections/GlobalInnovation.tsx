@@ -4,9 +4,10 @@ import AnimatedText from "../AnimatedText";
 import { BodyText1, H3, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
+import Button from "../Button";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
-  const { title,  focusSectionTitle, focus_item, image } = data;
+  const { title, focusSectionTitle, focus_item, image } = data;
 
   const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
   const displayAlt = image?.alternativeText || "innovation-banner";
@@ -46,7 +47,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
         </div>
 
         {/* Focus Items */}
-        <div className="lg:w-[40%] w-full flex flex-col gap-4 lg:gap-8 mt-[30px] lg:mt-0">
+        <div className="lg:w-[40%] w-full flex flex-col gap-4 lg:gap-5 mt-[30px] lg:mt-0">
           {focusSectionTitle && (
             <SubH2 className="lg:mb-6 mb-4">{focusSectionTitle}</SubH2>
           )}
@@ -56,7 +57,11 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
               key={item.id}
               className={`
                 flex gap-6 lg:gap-[53px] 
-                ${index !== focus_item.length - 1 ? "border-b border-b-[#E6EBEE] lg:pb-8 pb-4" : ""}
+                ${
+                  index !== focus_item.length - 1
+                    ? "border-b border-b-[#E6EBEE] lg:pb-5 pb-4"
+                    : ""
+                }
               `}
             >
               <BodyText1 className="text-[#DC4C03]">
@@ -65,6 +70,14 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
               <BodyText1 className="lg:w-[60%]">{item.description}</BodyText1>
             </div>
           ))}
+
+          <BodyText1>
+            This robust manufacturing infrastructure forms the backbone that
+            helps pilot-validated processes scale smoothly into commercial
+            campaigns.
+          </BodyText1>
+
+          <Button secondary title="Request more details" />
         </div>
       </div>
     </section>

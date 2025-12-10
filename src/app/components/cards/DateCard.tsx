@@ -72,7 +72,7 @@ const DateCard = ({
       className="block cursor-pointer"
     >
       {animate && (
-        <div className="absolute right-3 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500">
+        <div className="absolute right-3 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500 pointer-events-none">
           <Image
             src={"/images/arrow-up-right-o.svg"}
             alt={"arrow"}
