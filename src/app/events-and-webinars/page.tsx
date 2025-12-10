@@ -21,7 +21,6 @@ export default async function page() {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*"
   );
-  console.log("upcomingEventsData::::", upcomingEventsData);
 
   const { 
     section_one, 

@@ -8,7 +8,9 @@ export type CDMOBannerProps = {
     ctaButton: ButtonProps;
     image: ImageProps;
     mobImage: ImageProps;
+    popupButtonTitle: string;
   };
+  popupButton?: boolean;
 };
 
 export type CDMOPartnerProps = {

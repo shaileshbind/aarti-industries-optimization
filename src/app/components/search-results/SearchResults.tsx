@@ -178,7 +178,6 @@ export default function SearchResults() {
         `/api/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
       );
       const data = await response.json();
-      console.log("API Response:", data?.data);
       setsearchedData(data?.data);
     } catch (error) {
       console.error("Search error:", error);

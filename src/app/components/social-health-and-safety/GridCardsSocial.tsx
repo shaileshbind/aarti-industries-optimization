@@ -49,9 +49,7 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
             >
               <BodyText3 className="text-orange-200">{'0' + (i + 1)}</BodyText3>
 
-              <div className=" mt-3 md:mt-3 space-y-3">
-                {/* {title && <SubH2>{title}</SubH2>} */}
-
+              <div className="mt-3 md:mt-3 space-y-3">
                 {title && <BodyText2>{title}</BodyText2>}
               </div>
             </div>

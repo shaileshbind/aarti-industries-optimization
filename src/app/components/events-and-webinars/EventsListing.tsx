@@ -91,7 +91,6 @@ const EventsListing = ({ data, pastEvent = false, upcomingEventsData }: EventsLi
   const [selectedEvent, setSelectedEvent] = useState<DisplayEvent | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  console.log("upcomingEventsData::::innnnn", upcomingEventsData);
   // Transform upcoming events data if available
   // Handle both direct API response structure and getPageData wrapped structure
   const transformedEvents = useMemo(() => {

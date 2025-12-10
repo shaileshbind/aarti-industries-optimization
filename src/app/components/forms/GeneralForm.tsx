@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle"; // Assuming path is correct
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -26,16 +26,18 @@ type FormValues = {
   jobRole: string;
   country: string | null;
   message: string;
-  otherEnquiry:string;
+  otherEnquiry: string;
   hearAboutAil: string;
   category: string;
   subCategory: string;
   productName: string;
+  recievedEmail?:string;
 };
 
 type CategorySubcategoryItem = {
   category: string;
   subCategories: string[];
+  subCatEmails: (string | undefined)[];
 };
 
 type GeneralFormProps = {
@@ -57,6 +59,7 @@ type productsDataType = {
 type formSubCategories = {
   id?: number;
   name?: string;
+  reciverEmail?:string;
 };
 type productsDataCatSubcatType = {
   id?: number;
@@ -95,11 +98,12 @@ export default function GeneralForm({
       jobRole: "",
       country: "",
       message: "",
-      otherEnquiry:"",
+      otherEnquiry: "",
       hearAboutAil: "",
       category: "",
       subCategory: "",
       productName: "",
+      recievedEmail:"",
     },
   });
 
@@ -129,6 +133,10 @@ export default function GeneralForm({
               item?.form_sub_categories?.map(
                 (sub: formSubCategories) => sub?.name
               ) || [],
+            subCatEmails:
+              item?.form_sub_categories?.map(
+                (item: formSubCategories) => item?.reciverEmail
+              ) || [],       
           })) || [];
         setCategorySubcategoryData(transformedData);
 
@@ -174,9 +182,30 @@ export default function GeneralForm({
   const selectedSubcategory = watch("subCategory");
 
   // 🔹 Get subcategories based on selected category
-  const availableSubcategories =
-    categorySubcategoryData?.find((item) => item.category === selectedCategory)
-      ?.subCategories || [];
+  const availableSubcategories = useMemo(
+    () =>
+      categorySubcategoryData?.find(
+        (item) => item.category === selectedCategory
+      )?.subCategories || [],
+    [categorySubcategoryData, selectedCategory]
+  );
+
+  // 🔹 Update receiver email when subcategory changes
+  useEffect(() => {
+    if (selectedCategory && selectedSubcategory) {
+      const categoryData = categorySubcategoryData.find(
+        (item) => item.category === selectedCategory
+      );
+      if (categoryData) {
+        const subCategoryIndex =
+          categoryData.subCategories.indexOf(selectedSubcategory);
+        if (subCategoryIndex !== -1) {
+          const receiverEmail = categoryData.subCatEmails[subCategoryIndex];
+          setValue("recievedEmail", receiverEmail || "");
+        }
+      }
+    }
+  }, [selectedCategory, selectedSubcategory, categorySubcategoryData, setValue]);
 
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
@@ -196,7 +225,7 @@ export default function GeneralForm({
     }
   }, [
     selectedCategory,
-    availableSubcategories.length,
+    availableSubcategories,
     setValue,
     watch,
     prefillSubCategory,
@@ -204,6 +233,7 @@ export default function GeneralForm({
 
   const onSubmit = async (data: FormValues) => {
     // Determine if Salesforce lead applies
+    const sendEmail = true
     const hasSalesforceLead =
       data.subCategory === "Chemicals Products" &&
       data.productName !== "" &&
@@ -213,6 +243,7 @@ export default function GeneralForm({
     const cleanedData = {
       ...data,
       productName: hasSalesforceLead ? data.productName : "",
+      sendEmail: true,
     };
 
     const formattedData = {
@@ -227,7 +258,9 @@ export default function GeneralForm({
       category: cleanedData.category,
       sub_category: cleanedData.subCategory,
       product_name: cleanedData.productName,
+      reciverEmail: cleanedData.recievedEmail,
       hasSalesforceLead,
+      sendEmail,
     };
 
     try {
@@ -290,6 +323,12 @@ export default function GeneralForm({
             {...register("fullName", { required: "Full Name is required" })}
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
+            onKeyDown={(e) => {
+              // Prevent numbers and special characters, allow only letters and space
+              if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
 
           {/* Email */}
@@ -366,6 +405,12 @@ export default function GeneralForm({
               })}
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
+              onKeyDown={(e) => {
+                // Prevent numbers and special characters, allow only letters and space
+                if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
 
             {/* Country */}
@@ -583,30 +628,29 @@ export default function GeneralForm({
             </FormControl>
           )}
 
-           {/* Other - Msg Box */}
-           {selectedSubcategory === "Other" && (
+          {/* Other - Msg Box */}
+          {selectedSubcategory === "Other" && (
             <div className="flex flex-col">
-            <textarea
-              id="otherEnquiry"
-              {...register("otherEnquiry", {
-                required: "Message is required",
-              })}
-              rows={5}
-              cols={40}
-              placeholder="Other Enquiries *"
-              className={clsx(
-                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+              <textarea
+                id="otherEnquiry"
+                {...register("otherEnquiry", {
+                  required: "Message is required",
+                })}
+                rows={5}
+                cols={40}
+                placeholder="Other Enquiries *"
+                className={clsx(
+                  "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                )}
+              ></textarea>
+              {errors.otherEnquiry && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.otherEnquiry.message}
+                </p>
               )}
-            ></textarea>
-            {errors.otherEnquiry && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.otherEnquiry.message}
-              </p>
-            )}
-          </div>
+            </div>
           )}
-
         </div>
 
         <Button title={"Submit"} className="mt-6" />

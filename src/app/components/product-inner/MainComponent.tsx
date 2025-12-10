@@ -62,7 +62,7 @@ export default function ProductInnerPage({
   }, [product?.product_sub_categories]);
   return (
     <div className="w-full min-h-screen">
-      <div className="w-full container my-[70px] lg:my-[100px]">
+      <div className="w-full container my-[70px] mt-[30px] lg:my-[100px]">
         <Breadcrumb
           breadcrumbArr={[
             { title: "Home", href: "/" },
@@ -96,13 +96,50 @@ export default function ProductInnerPage({
               )}
 
               {/* Documents */}
-              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 mt-7">
+              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 mt-7 lg:w-[80%]">
                 {product?.productDetails?.documentSection?.sectionTitle && (
                   <p className="text-[#002F50] text-base md:text-lg">
                     {product?.productDetails?.documentSection?.sectionTitle}
                   </p>
                 )}
 
+                {/* product list */}
+                <div className="flex flex-col gap-[10px] mt-[14px]">
+                  <div
+                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    onClick={() => {
+                      setshowGeneralPopup(true);
+                      setdocument("/reports/product-list.pdf");
+                    }}
+                  >
+                    Product List
+                    <Image
+                      src="/images/download-icon-grey2.svg"
+                      alt="globe"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </div>
+                {/* company brochure */}
+                <div className="flex flex-col gap-[10px] mt-[14px]">
+                  <div
+                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    onClick={() => {
+                      setshowGeneralPopup(true);
+                      setdocument("/reports/company-brochure.pdf");
+                    }}
+                  >
+                    Company Brochure
+                    <Image
+                      src="/images/download-icon-grey2.svg"
+                      alt="globe"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </div>
+                {/* msds only - via cms */}
                 {product?.productDetails?.documentSection?.documents
                   ?.length && (
                   <div className="flex flex-col gap-[10px] mt-[14px]">
@@ -133,7 +170,6 @@ export default function ProductInnerPage({
                     )}
                   </div>
                 )}
-
                 <button
                   className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
                   onClick={() => {
@@ -256,7 +292,6 @@ export default function ProductInnerPage({
         <FadeInReveal>
           <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 lg:p-10 w-full">
             <SubH1 className="text-blue-100">Related Products</SubH1>
-
             {relatedProducts?.length && (
               <div className="mt-2 lg:mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] lg:gap-y-[20px]">
                 {relatedProducts?.map((item) => (

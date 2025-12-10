@@ -134,6 +134,12 @@ export default function MSDSForm({
               {...register("fullName", { required: "Full Name is required" })}
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
+              onKeyDown={(e) => {
+                // Prevent numbers and special characters, allow only letters and space
+                if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             {/* Email */}
             <TextField

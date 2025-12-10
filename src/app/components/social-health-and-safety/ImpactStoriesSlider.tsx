@@ -35,7 +35,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
       clearInterval(progressInterval);
       clearTimeout(autoplayTimeout);
     };
-  }, [activeIndex, stories.length]);
+  }, [activeIndex, stories]);
 
   useEffect(() => {
     if (!stories || stories.length === 0) return;
@@ -57,7 +57,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     return () => {
       clearInterval(progressInterval);
     };
-  }, [active, stories.length]);
+  }, [active, stories]);
 
   // Early return if no stories (after hooks)
   if (!stories || stories.length === 0) {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import { ImageProps } from "../types/global.type";
 
 type Tab = {
@@ -59,7 +59,7 @@ const Tabs: React.FC<TabsProps> = ({
     visible: false,
   });
 
-  const measureIndicator = () => {
+  const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -76,7 +76,7 @@ const Tabs: React.FC<TabsProps> = ({
     const left = activeButton.offsetLeft - (container.scrollLeft || 0);
     const width = activeButton.offsetWidth;
     setIndicator({ left, width, visible: true });
-  };
+  }, [activeId, tabs]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -97,7 +97,7 @@ const Tabs: React.FC<TabsProps> = ({
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeId, tabs.length, indicatorColor, indicatorTransition]);
+  }, [activeId, tabs.length, indicatorColor, indicatorTransition, measureIndicator]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${

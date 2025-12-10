@@ -211,13 +211,13 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
           <div className="relative w-full h-full">
             <div className="h-full w-[1px] bg-gray-300/30 absolute left-[90px]" />
             {sectionTitle && (
-              <H2 className="text-white left-[120px] mt-[150px] absolute mr-[20px] lg:mr-[20px]">
+              <H2 className="text-white left-[120px] mt-[100px] xl:mt-[120px] absolute mr-[20px] lg:mr-[20px]">
                 {sectionTitle}
               </H2>
             )}
             <div
               ref={scrollContainerRef}
-              className="mt-[250px] absolute left-[40px]"
+              className="mt-[200px] absolute left-[40px]"
             >
               <div
                 ref={lineRef}
@@ -235,7 +235,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                   height={20}
                 />
               </div>
-              <div className="grid row-cols-4 items-start gap-y-[20px]">
+              <div className="grid row-cols-4 items-start gap-y-[40px] xl:gap-y-[25px]">
                 {leftSection?.map((items, index) => (
                   <div
                     key={items.id}
@@ -250,7 +250,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                         {items.title}
                       </SubH2>
                       <BodyText2
-                        className={`mt-[2px] text-white transition-opacity duration-300 ${
+                        className={`mt-[2px] text-white transition-opacity duration-300 max-w-[unset] md:max-w-[300px] xl:max-w-[350px] ${
                           index === active ? "opacity-100" : "opacity-0"
                         }`}
                       >
@@ -263,7 +263,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             </div>
             {/* Desktop grey box */}
             {rightSectionData && (
-              <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
+              <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
                 <Image src="/images/sustainability/grey-bg.png" alt="img" fill className="object-cover z-[-2]" />
                 {rightSectionData.heading && (
                   <SubH3 className="text-white">
@@ -274,13 +274,14 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                   {rightSectionData.bulletPoints?.map((items) => (
                     <div
                       key={items?.id}
-                      className="flex gap-4 mb-2 items-center"
+                      className="flex gap-4 mb-2 items-start"
                     >
                       <Image
                         src="/images/home/star-white.svg"
                         alt="star"
                         width={12}
                         height={12}
+                        className="mt-[6px]"
                       />
                       <BodyText2 className="text-white">
                         {items?.title}
@@ -310,6 +311,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                           alt="star"
                           width={12}
                           height={12}
+                          className="mt-[6px]"
                         />
                         <BodyText2 className="text-white">
                           {items?.title}

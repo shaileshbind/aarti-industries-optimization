@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
@@ -225,10 +226,12 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
               key={index}
               className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
             >
-            {imageData?.src &&  <img
+            {imageData?.src &&  <Image
                 src={imageData?.src}
                 alt={imageData?.alt || ""}
                 className="swiper-lazy w-full h-full object-cover"
+                width={800}
+                height={600}
               />}
             </div>
           ))}

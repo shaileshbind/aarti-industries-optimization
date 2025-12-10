@@ -34,6 +34,7 @@ const Header = ({ data }: HeaderProps) => {
 
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
+      console.log("isMenuOpen", isMenuOpen);
       setIsMenuOpen(false);
       setIsSearchOpen(false);
       // Reset expanded menus when closing
@@ -51,26 +52,27 @@ const Header = ({ data }: HeaderProps) => {
         }
       );
     } else {
+      console.log("isMenuOpen", isMenuOpen);
       setIsMenuOpen(true);
       setIsSearchOpen(false);
       // Find first menu item with dropdown and expand it
-      if (menu && menu.length > 0) {
-        const firstMenuWithDropdown = menu.findIndex(
-          (item) => item.subMenu && item.subMenu.length > 0
-        );
-        if (firstMenuWithDropdown !== -1) {
-          setMobileExpandedMenu(firstMenuWithDropdown);
-          // Only expand the first submenu if it's the first dropdown (index 0)
-          if (firstMenuWithDropdown === 0) {
-            const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
-            if (firstSubMenu?.id !== undefined) {
-              setMobileExpandedSubMenu(firstSubMenu.id);
-            }
-          } else {
-            setMobileExpandedSubMenu(null);
-          }
-        }
-      }
+      // if (menu && menu.length > 0) {
+      //   const firstMenuWithDropdown = menu.findIndex(
+      //     (item) => item.subMenu && item.subMenu.length > 0
+      //   );
+      //   if (firstMenuWithDropdown !== -1) {
+      //     setMobileExpandedMenu(firstMenuWithDropdown);
+      //     // Only expand the first submenu if it's the first dropdown (index 0)
+      //     if (firstMenuWithDropdown === 0) {
+      //       const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
+      //       if (firstSubMenu?.id !== undefined) {
+      //         setMobileExpandedSubMenu(firstSubMenu.id);
+      //       }
+      //     } else {
+      //       setMobileExpandedSubMenu(null);
+      //     }
+      //   }
+      // }
       gsap.fromTo(
         mobileNavRef.current,
         {
@@ -408,7 +410,6 @@ const Header = ({ data }: HeaderProps) => {
     e?.stopPropagation();
 
     if (searchedValue.trim()) {
-      console.log(encodeURIComponent(searchedValue.trim()));
       router.push(
         `/search-results?search=${encodeURIComponent(searchedValue.trim())}`
       );
@@ -430,8 +431,8 @@ const Header = ({ data }: HeaderProps) => {
       >
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
-          <div className="ml-[20px] lg:ml-[60px] w-full h-auto relative z-10">
-            <div className="flex items-center justify-between lg:justify-between h-16 lg:h-18 pr-[24px] relative">
+          <div className="ml-[0px] lg:ml-[60px] w-full h-auto relative z-10">
+            <div className="flex items-center justify-start lg:justify-between h-16 lg:h-18 pr-[24px] relative">
               {/* Logo desktop */}
               {Logo?.Logo?.url && (
                 <Link
@@ -728,7 +729,7 @@ const Header = ({ data }: HeaderProps) => {
               </nav>
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
-                className="lg:hidden relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
+                className="lg:hidden relative w-14 h-10 flex items-center justify-center focus:outline-none z-50"
                 onClick={mobileMenuToggle}
                 aria-label="Toggle menu"
               >
@@ -773,7 +774,7 @@ const Header = ({ data }: HeaderProps) => {
                  onClick={handleSearchToggle}
                  >
                   <div
-                    className="w-[20px] h-[20px] relative"
+                    className="w-[20px] mx-3 h-[20px] relative"
                     
                   >
                     <Image

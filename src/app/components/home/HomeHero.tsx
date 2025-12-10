@@ -11,12 +11,14 @@ import Button from "../Button";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
+import { isMobile } from "react-device-detect";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
-  const [, setActive] = useState(0);
+  const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -155,6 +157,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       activeIndexRef.current = index;
       setActive(index);
       resetProgressBar();
+      controlVideos(index);
+
+      // Update autoplay delay based on target slide
+      const delay = index === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
+      if (swiperRef.current.params.autoplay && typeof swiperRef.current.params.autoplay === 'object') {
+        swiperRef.current.params.autoplay.delay = delay;
+      }
 
       swiperRef.current.slideToLoop(index);
 
@@ -180,8 +189,25 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const bar = progressBarRef.current;
     if (!bar) return;
 
-    bar.style.transition = "transform 5s linear";
+    const delay = activeIndexRef.current === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
+    bar.style.transition = `transform ${delay}ms linear`;
     bar.style.transform = "scaleX(1)";
+  };
+
+  // Control video playback based on active slide
+  const controlVideos = (activeIndex: number) => {
+    videoRefs.current.forEach((video, index) => {
+      if (video) {
+        if (index === activeIndex) {
+          video.play().catch(() => {
+            // Handle play promise rejection silently
+          });
+        } else {
+          video.pause();
+          video.currentTime = 0; // Reset to start
+        }
+      }
+    });
   };
 
   return (
@@ -189,12 +215,27 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       ref={wrapperRef}
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-black/20 z-[1]" />
+      
+      {/* Conditional overlay - lighter for video slides on desktop */}
+      {(() => {
+        const currentSlide = data?.banner?.[active];
+        const hasVideo = currentSlide?.card?.[0]?.bannerVideo?.url && !isMobile;
+        return (
+          <div 
+            className={`absolute inset-0 z-[1] transition-opacity duration-500 ${
+              hasVideo ? 'bg-black/5' : 'bg-black/20'
+            }`} 
+          />
+        );
+      })()}
       {data?.banner?.length > 0 && (
         <Swiper
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
-            setTimeout(() => startProgressBar(), 100);
+            setTimeout(() => {
+              startProgressBar();
+              controlVideos(activeIndexRef.current);
+            }, 100);
           }}
           onSlideChangeTransitionStart={(swiper) => {
             const realIndex =
@@ -204,9 +245,23 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             activeIndexRef.current = realIndex;
             setActive(realIndex);
             resetProgressBar();
+            controlVideos(realIndex);
+            
+            // Update autoplay delay based on current slide
+            const delay = realIndex === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
+            if (swiperRef.current && swiperRef.current.autoplay) {
+              swiperRef.current.autoplay.stop();
+              if (swiperRef.current.params.autoplay && typeof swiperRef.current.params.autoplay === 'object') {
+                swiperRef.current.params.autoplay.delay = delay;
+              }
+            }
           }}
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
+            // Restart autoplay with updated delay
+            if (swiperRef.current && swiperRef.current.autoplay) {
+              swiperRef.current.autoplay.start();
+            }
           }}
           on={{
             transitionStart: (swiper: SwiperType) => {
@@ -226,7 +281,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           loop={true}
           speed={800}
           autoplay={{
-            delay: 5000,
+            delay: data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
             waitForTransition: true,
@@ -259,8 +314,30 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="block lg:hidden object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
+                {items?.card?.[0]?.bannerVideo?.url && !isMobile && (
+                  <video
+                    ref={(el) => {
+                      videoRefs.current[index] = el;
+                    }}
+                    playsInline
+                    width={1000}
+                    height={1000}
+                    src={items?.card?.[0]?.bannerVideo?.url}
+                    muted
+                    loop
+                    className="object-cover w-full h-full absolute top-0 left-0"
+                  />
+                )}
+                {/* Lighter gradient overlay for video slides on desktop */}
+                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                  <></>
+                ) : (
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
+                )}
                 {/* Content box */}
+                { items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                  <></>
+                ) : (
                 <FadeInReveal delay={0.2}>
                   <div className="absolute mt-[20vh] w-full z-10">
                     <div className="fluid-container">
@@ -288,6 +365,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     </div>
                   </div>
                 </FadeInReveal>
+                )}
               </div>
             </SwiperSlide>
           ))}

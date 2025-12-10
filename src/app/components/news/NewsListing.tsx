@@ -130,9 +130,7 @@ const NewsListing = () => {
           const itemsForThisPage = Math.min(remainingItems, pageSize);
           // Slice results to show only what should be on this page
           itemsToShow = results.slice(0, itemsForThisPage);
-          console.log("Items to show on this page:", itemsForThisPage);
         }
-        console.log("Final Result counts", itemsToShow.length);
         setListingData(itemsToShow);
         // Check if there are more pages based on what API returns
         let calculatedTotalPages = currentPage;
