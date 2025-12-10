@@ -10,12 +10,14 @@ const CDMOBanner: React.FC<CDMOBannerProps> = ({ data }) => {
       tag={sectionTitle}
       title={title}
       desc={description}
-      btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
-      btnTitle={ctaButton?.title}
+      // btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
+      // btnTitle={ctaButton?.title}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      popupButtonTitle={ctaButton?.title}
+      popupButton={true}
     />
   );
 };
