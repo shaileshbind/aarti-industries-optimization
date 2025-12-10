@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect, useCallback } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
@@ -143,7 +143,7 @@ export default function YearQuarterListing({
   };
 
   // helper to measure active item relative to yearsRowRef
-  const measure = (year: string | number = activeYear) => {
+  const measure = useCallback((year: string | number = activeYear) => {
     const row = yearsRowRef.current;
     const item = itemRefs.current.get(year);
     if (!row || !item) return;
@@ -155,7 +155,7 @@ export default function YearQuarterListing({
     const width = Math.round(itemRect.width);
 
     setUnderline({ left: Math.round(left), width });
-  };
+  }, [activeYear]);
 
   // measure after layout and when activeYear changes
   useLayoutEffect(() => {
@@ -164,7 +164,7 @@ export default function YearQuarterListing({
     const onResize = () => measure(activeYear);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [activeYear]);
+  }, [activeYear, measure]);
 
   return (
     <div>

@@ -70,13 +70,14 @@ const SmoothCollapse: React.FC<SmoothCollapseProps> = ({
       }
     });
 
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
+    const content = contentRef.current;
+    if (content) {
+      resizeObserver.observe(content);
     }
 
     return () => {
-      if (contentRef.current) {
-        resizeObserver.unobserve(contentRef.current);
+      if (content) {
+        resizeObserver.unobserve(content);
       }
     };
   }, [isOpen, children, height]);

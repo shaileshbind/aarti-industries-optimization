@@ -43,7 +43,7 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
     }
 
     return [];
-  } catch (error) {
+  } catch {
     return [];
   }
 }

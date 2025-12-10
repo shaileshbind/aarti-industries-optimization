@@ -168,7 +168,7 @@ const Header = ({ data }: HeaderProps) => {
         }
       );
     }
-  }, [pathname]);
+  }, [pathname, isMenuOpen]);
 
   // When a dropdown opens, expand the first submenu by default (only for first dropdown)
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import { BodyText3 } from "../Typography2";
 
 interface ProductSubCategory {
@@ -40,7 +40,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
     visible: false,
   });
 
-  const measure = () => {
+  const measure = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -57,7 +57,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
     const left = btn.offsetLeft - (container.scrollLeft || 0);
     const width = btn.offsetWidth;
     setIndicator({ left, width, visible: true });
-  };
+  }, [activeTab, tabs]);
 
   useLayoutEffect(() => {
     measure();
@@ -72,7 +72,7 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
       ro.disconnect();
       window.removeEventListener("resize", onResize);
     };
-  }, [activeTab, tabs.length]);
+  }, [activeTab, tabs.length, measure]);
 
   return (
     <div

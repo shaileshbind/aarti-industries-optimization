@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
@@ -43,7 +43,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     startAutoRotation();
   };
 
-  const startAutoRotation = () => {
+  const startAutoRotation = useCallback(() => {
     intervalRef.current = setInterval(() => {
       setExpanded((prevExpanded) => {
         const nextIndex = (prevExpanded + 1) % content.length;
@@ -63,7 +63,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         return nextIndex;
       });
     }, 5000);
-  };
+  }, [content]);
 
   useEffect(() => {
     // Start progress bar animation

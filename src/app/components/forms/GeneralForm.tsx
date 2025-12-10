@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle"; // Assuming path is correct
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -174,9 +174,12 @@ export default function GeneralForm({
   const selectedSubcategory = watch("subCategory");
 
   // 🔹 Get subcategories based on selected category
-  const availableSubcategories =
-    categorySubcategoryData?.find((item) => item.category === selectedCategory)
-      ?.subCategories || [];
+  const availableSubcategories = useMemo(
+    () =>
+      categorySubcategoryData?.find((item) => item.category === selectedCategory)
+        ?.subCategories || [],
+    [categorySubcategoryData, selectedCategory]
+  );
 
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
@@ -196,7 +199,7 @@ export default function GeneralForm({
     }
   }, [
     selectedCategory,
-    availableSubcategories.length,
+    availableSubcategories,
     setValue,
     watch,
     prefillSubCategory,
