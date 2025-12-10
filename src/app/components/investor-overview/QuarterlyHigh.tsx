@@ -5,7 +5,7 @@ import { InvestorQuarterlyProps } from "@/app/types/investor-overview.type";
 const QuarterlyHigh = ({ data }: InvestorQuarterlyProps) => {
   const { title, description, card } = data;
   return (
-    <div className="mb-[72px] lg:mb-[100px]">
+    <div className="mb-[72px] lg:mb-[140px]">
       <div className="grid xl:grid-cols-[400px_1fr] gap-y-[36px] gap-x-[100px] fluid-container">
         <div>
           {title && <H3 className="text-blue-100">{title}</H3>}
@@ -15,12 +15,12 @@ const QuarterlyHigh = ({ data }: InvestorQuarterlyProps) => {
             </BodyText2>
           )}
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-1 gap-[30px]">
+        <div className="grid grid-cols-2 lg:grid-cols-1 gap-[40px]">
           {card?.map((items) => {
             return (
               <div
                 key={items?.id}
-                className="pb-[40px] lg:flex gap-x-[50px] justify-between border-b border-grey-200 items-center"
+                className="pb-[unset] xl:pb-[40px] lg:flex gap-x-[50px] justify-between xl:border-b xl:border-grey-200 items-center"
               >
                 <BodyText2>{items?.title}</BodyText2>
                 <H2 className="text-orange-200">{items?.value}</H2>
