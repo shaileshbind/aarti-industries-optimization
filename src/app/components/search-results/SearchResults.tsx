@@ -12,7 +12,10 @@ import { styled } from "@mui/material/styles";
 interface HitProps {
   title: string;
   slug: string;
+  searchUrl: string;
+  type: string;
   productName?: string;
+  category?: string;
   _index?: string;
 }
 
@@ -132,9 +135,13 @@ export default function SearchResults() {
   };
 
   const getUrl = (hit: HitProps) => {
-    return hit?._index === "products"
-      ? "/products/" + hit?.slug
-      : "/" + hit?.slug;
+    if (hit?._index === "products") return `/products/${hit.slug}`;
+    if (hit?._index === "disclosures_reports")
+      return `/investors/disclosures/${hit.slug}`;
+    if (hit?.type === "case-study") return `/case-studies/${hit.slug}`;
+    if (hit?.type === "blog") return `/blogs/${hit.slug}`;
+
+    return `/${hit?.searchUrl}`;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,6 +236,8 @@ export default function SearchResults() {
         )}
       </div>
 
+      {console.log("searchedData", searchedData)}
+
       <div className="flex flex-col gap-4 pb-20">
         {isLoading && (
           <SubH1 className="text-center w-full py-10">Searching...</SubH1>
@@ -239,7 +248,7 @@ export default function SearchResults() {
           searchedData?.hits?.map((hit, resultIndex) => (
             <OrangeTabCard
               key={`result-${searchedData.page}-${resultIndex}`}
-              title={hit?.title || hit?.productName || ""}
+              title={hit?.title || hit?.productName || hit?.category || ""}
               link={getUrl(hit)}
               useTargetBlank={false}
             />
