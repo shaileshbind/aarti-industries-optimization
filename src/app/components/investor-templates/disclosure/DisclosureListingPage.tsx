@@ -22,7 +22,13 @@ export default function DisclosureListingPage({
               <OrangeTabCard
                 key={item?.id}
                 title={item?.heading ? item?.heading : ""}
-                link={item?.link ? item?.link : ""}
+                link={
+                  item?.link
+                    ? item?.link
+                    : item?.file?.url
+                    ? item?.file?.url
+                    : ""
+                }
               />
             ))}
           </div>

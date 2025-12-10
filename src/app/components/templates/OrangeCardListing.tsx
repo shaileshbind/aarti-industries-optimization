@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
-import { DynamicReportsData, ReportItemProps } from "@/app/types/annual-reports.type";
+import {
+  DynamicReportsData,
+  ReportItemProps,
+} from "@/app/types/annual-reports.type";
 
 type OrangeCardListingProps = {
   data: DynamicReportsData;
@@ -24,7 +27,9 @@ const OrangeCardListing = ({ data, reportKey }: OrangeCardListingProps) => {
           <OrangeTabCard
             key={item?.id}
             title={item?.heading ? item?.heading : ""}
-            link={item?.link ? item?.link : ""}
+            link={
+              item?.link ? item?.link : item?.file?.url ? item?.file?.url : ""
+            }
           />
         ))}
       </div>
