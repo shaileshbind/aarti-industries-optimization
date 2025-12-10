@@ -11,7 +11,6 @@ interface SliderValue {
   description?: string;
 }
 
-
 interface bulletProp {
   id?: number;
   title?: string;
@@ -49,22 +48,26 @@ const SliderCard: FC<SliderCardProps> = ({
           )}
         >
           <div className="absolute inset-0 overflow-hidden">
-           {imgSrc && <Image
-              src={imgSrc}
-              alt={imgAlt ? imgAlt : "img"}
-              fill
-              className="object-cover scale-110"
-            />}
-            <div className="absolute inset-0 bg-black/40 z-[1]" />
-
-            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-            <span className="absolute bottom-0 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
-             {imgSrc && <Image
+            {imgSrc && (
+              <Image
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
                 fill
                 className="object-cover scale-110"
-              />}
+              />
+            )}
+            <div className="absolute inset-0 bg-black/40 z-[1]" />
+
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+            <span className="absolute bottom-0 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
+              {imgSrc && (
+                <Image
+                  src={imgSrc}
+                  alt={imgAlt ? imgAlt : "img"}
+                  fill
+                  className="object-cover scale-110"
+                />
+              )}
             </span>
           </div>
           {title && (
@@ -73,14 +76,23 @@ const SliderCard: FC<SliderCardProps> = ({
             </h2>
           )}
         </div>
-        {heading && <SubH1 className="mb-[10px] lg:mb-[14px] mt-[14px] lg:mt-[unset]">{heading}</SubH1>}
+        {heading && (
+          <SubH1 className="mb-[10px] lg:mb-[14px] mt-[14px] lg:mt-[unset]">
+            {heading}
+          </SubH1>
+        )}
         {description && (
-          <BodyText1 className="mt-[unset] lg:mt-[20px]">{description}</BodyText1>
+          <BodyText1 className="mt-[unset] lg:mt-[20px]">
+            {description}
+          </BodyText1>
         )}
         {bullets && (
           <div className="mt-[16px] lg:mt-[18px]">
-            {bullets?.map((bp:bulletProp ) => (
-              <div key={bp?.id} className="mb-[10px] flex gap-x-[10px] items-start">
+            {bullets?.map((bp: bulletProp) => (
+              <div
+                key={bp?.id}
+                className="mb-[10px] flex gap-x-[10px] items-start"
+              >
                 <Image
                   src="/images/star-orange.svg"
                   alt="icon"
@@ -105,31 +117,45 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           ))}
         </div>
-        {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
-          <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
-        )}
+        {ctaButton?.title &&
+          ctaButton?.link?.link &&
+          ctaButton?.hasExternalLink && (
+            <Button
+              title={ctaButton?.title}
+              href={
+                ctaButton?.hasExternalLink == "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link
+              }
+              secondary
+            />
+          )}
       </div>
       {/* Desktop Version */}
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
           <div className="w-full pt-[100%] relative">
             <div className="absolute inset-0 overflow-hidden">
-             {imgSrc && <Image
-                src={imgSrc}
-                alt={imgAlt ? imgAlt : "img"}
-                fill
-                className="object-cover scale-110"
-              />}
-              <div className="absolute inset-0 bg-black/30 z-[1]" />
-
-              <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-              <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
-               {imgSrc && <Image
+              {imgSrc && (
+                <Image
                   src={imgSrc}
                   alt={imgAlt ? imgAlt : "img"}
                   fill
                   className="object-cover scale-110"
-                />}
+                />
+              )}
+              <div className="absolute inset-0 bg-black/30 z-[1]" />
+
+              <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+              <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
+                {imgSrc && (
+                  <Image
+                    src={imgSrc}
+                    alt={imgAlt ? imgAlt : "img"}
+                    fill
+                    className="object-cover scale-110"
+                  />
+                )}
               </span>
             </div>
 
@@ -146,7 +172,10 @@ const SliderCard: FC<SliderCardProps> = ({
           {bullets && (
             <div className="mt-[18px]">
               {bullets?.map((bp: bulletProp) => (
-                <div key={bp?.id} className="mb-[10px] flex gap-x-[10px] items-start">
+                <div
+                  key={bp?.id}
+                  className="mb-[10px] flex gap-x-[10px] items-start"
+                >
                   <Image
                     src="/images/star-orange.svg"
                     alt="icon"
@@ -177,9 +206,19 @@ const SliderCard: FC<SliderCardProps> = ({
               ))}
             </div>
           ) : null}
-          {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
-            <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
-          )}
+          {ctaButton?.title &&
+            ctaButton?.link?.link &&
+            ctaButton?.hasExternalLink && (
+              <Button
+                title={ctaButton?.title}
+                href={
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }
+                secondary
+              />
+            )}
         </div>
       </div>
     </>

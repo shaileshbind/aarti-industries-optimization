@@ -256,7 +256,6 @@ export default function ProductInnerPage({
         <FadeInReveal>
           <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 lg:p-10 w-full">
             <SubH1 className="text-blue-100">Related Products</SubH1>
-
             {relatedProducts?.length && (
               <div className="mt-2 lg:mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] lg:gap-y-[20px]">
                 {relatedProducts?.map((item) => (
