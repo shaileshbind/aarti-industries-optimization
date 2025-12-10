@@ -168,7 +168,7 @@ const Header = ({ data }: HeaderProps) => {
         }
       );
     }
-  }, [pathname]);
+  }, [pathname, isMenuOpen]);
 
   // When a dropdown opens, expand the first submenu by default (only for first dropdown)
   useEffect(() => {
@@ -408,7 +408,6 @@ const Header = ({ data }: HeaderProps) => {
     e?.stopPropagation();
 
     if (searchedValue.trim()) {
-      console.log(encodeURIComponent(searchedValue.trim()));
       router.push(
         `/search-results?search=${encodeURIComponent(searchedValue.trim())}`
       );

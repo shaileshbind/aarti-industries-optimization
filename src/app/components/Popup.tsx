@@ -37,9 +37,13 @@ export default function Popup({
   }, [isOpen]);
 
   useLayoutEffect(() => {
+    // Capture refs at the start of the effect
+    const popup = popupRef.current;
+    const overlay = overlayRef.current;
+
     // Prevent multiple animations from running simultaneously
     if (isAnimatingRef.current) {
-      gsap.killTweensOf([popupRef.current, overlayRef.current]);
+      gsap.killTweensOf([popup, overlay]);
     }
 
     if (isOpen) {
@@ -48,17 +52,17 @@ export default function Popup({
 
       // Use requestAnimationFrame to ensure DOM is ready
       requestAnimationFrame(() => {
-        if (popupRef.current && overlayRef.current) {
+        if (popup && overlay) {
           // Animate overlay
           gsap.fromTo(
-            overlayRef.current,
+            overlay,
             { opacity: 0 },
             { opacity: 1, duration: 0.3, ease: "power2.out" }
           );
 
           // Animate popup
           gsap.fromTo(
-            popupRef.current,
+            popup,
             { scale: 0.8, opacity: 0 },
             {
               scale: 1,
@@ -75,16 +79,16 @@ export default function Popup({
     } else if (isVisible) {
       isAnimatingRef.current = true;
 
-      if (popupRef.current && overlayRef.current) {
+      if (popup && overlay) {
         // Animate overlay out
-        gsap.to(overlayRef.current, {
+        gsap.to(overlay, {
           opacity: 0,
           duration: 0.3,
           ease: "power2.inOut",
         });
 
         // Animate popup out
-        gsap.to(popupRef.current, {
+        gsap.to(popup, {
           scale: 0.8,
           opacity: 0,
           duration: 0.3,
@@ -103,7 +107,9 @@ export default function Popup({
 
     // Cleanup function
     return () => {
-      gsap.killTweensOf([popupRef.current, overlayRef.current]);
+      if (popup || overlay) {
+        gsap.killTweensOf([popup, overlay]);
+      }
     };
   }, [isOpen, isVisible]);
 

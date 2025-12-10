@@ -77,7 +77,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(newUrl, 301);
       }
     }
-  } catch (error) {
+  } catch {
     // Continue with normal request if redirect check fails
   }
 
