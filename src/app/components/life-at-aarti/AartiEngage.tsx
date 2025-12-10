@@ -8,7 +8,7 @@ const AartiEngage = ({ data }: LAAEngageProps) => {
   return (
     <div className="py-[72px] lg:py-[120px]">
       {title && (
-        <H2 className="max-w-[520px] mx-[20px] lg:mx-auto text-center">
+        <H2 className="max-w-[unset] xl:max-w-[520px] mx-[20px] lg:mx-auto text-center">
           {title}
         </H2>
       )}

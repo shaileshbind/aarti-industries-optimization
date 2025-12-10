@@ -41,39 +41,42 @@ export type HeaderProps = {
 };
 export type FooterProps = {
   data: {
-      Logo: {
-        link?: string;
-        Logo?: ImageProps;
-      };
-      menu: {
+    Logo: {
+      link?: string;
+      Logo?: ImageProps;
+    };
+    menu: {
+      id?: number;
+      category?: string;
+      subMenu?: {
         id?: number;
-        category?: string;
-        subMenu?: {
+        title?: string;
+        externalLink?: string;
+        item?: {
           id?: number;
-          title?: string;
-          link?: string;
-          item?:{
-            id?:number;
-            subMenuTitle?:string;
-            subMenuLink?:string;
-          }[]
+          subMenuTitle?: string;
+          externalLink?: string;
+          cta_link?: {
+            link?: string;
+          };
         }[];
       }[];
-      FollowUs: {
+    }[];
+    FollowUs: {
+      id?: number;
+      icon?: string;
+      link?: string;
+      image?: ImageProps;
+      mobImage?: ImageProps;
+    }[];
+    Legal: {
+      id?: number;
+      leftText?: string;
+      data: {
         id?: number;
-        icon?: string;
+        text?: string;
         link?: string;
-        image?: ImageProps;
-        mobImage?: ImageProps;
-      }[]
-      Legal: {
-        id?: number;
-        leftText?: string;
-        data: {
-          id?: number;
-          text?: string;
-          link?: string;
-        }[]
-      };
+      }[];
+    };
   };
 };
