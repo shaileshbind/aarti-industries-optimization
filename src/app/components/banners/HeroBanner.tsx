@@ -1,11 +1,12 @@
 "use client";
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
 import clsx from "clsx";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -29,6 +30,8 @@ type HeroBannerProps = {
   lineClassName?: string;
   centerTitleClassName?: string;
   bottomMiddleStarClassName?: string;
+  popupButton?: boolean;
+  popupButtonTitle?: string;
 };
 const HeroBanner = ({
   centerText,
@@ -52,6 +55,8 @@ const HeroBanner = ({
   centerTitleClassName,
   lineClassName,
   bottomMiddleStarClassName,
+  popupButton = false,
+  popupButtonTitle,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -59,7 +64,7 @@ const HeroBanner = ({
   const starRef3 = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
-
+  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -323,6 +328,17 @@ const HeroBanner = ({
                 </div>
               </FadeInRevealBlur>
             )}
+            {popupButton && (
+              <FadeInRevealBlur delay={0.1}>
+                <div className="mt-[10px] lg:mt-[35px]">
+                  <button className="group relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300 " onClick={() => {
+                    setshowGeneralPopup(true);
+                  }}>
+                    <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
+                    <span className="relative z-10 text-white">{popupButtonTitle}</span></button>
+                </div>
+              </FadeInRevealBlur>
+            )}
           </div>
           <div
             ref={wrapperRef}
@@ -397,6 +413,13 @@ const HeroBanner = ({
           </div>
         </div>
       )}
+      <GeneralPopup
+        isOpen={showGeneralPopup}
+        setshowGeneralPopup={setshowGeneralPopup}
+        // document={document}
+        prefillCategory="Business Products / Services"
+        prefillSubCategory="LAB Testing (Analytical/ Safety)"
+      />
     </>
   );
 };

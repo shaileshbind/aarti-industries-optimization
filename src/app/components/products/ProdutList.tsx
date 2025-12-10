@@ -82,7 +82,7 @@ const ProductList = ({
             href={pdfLink}
             download
             className={clsxN(
-              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer ",
+              "hidden md:flex items-center space-x-1 text-sm  cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full",
               isHovered ? "text-white" : "text-gray-800"
             )}
             target="_blank"
@@ -110,7 +110,7 @@ const ProductList = ({
           <Link
             href={"/products" + link}
             className={clsxN(
-              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer",
+              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full",
               isHovered
                 ? "border-white text-white hover:text-orange-600"
                 : "border-orange-800 text-orange-800 hover:bg-orange-800"
