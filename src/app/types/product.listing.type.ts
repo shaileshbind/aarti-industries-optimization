@@ -63,6 +63,11 @@ export interface ProductSubCategory {
 interface CatagoriesData {
   productCategory: string;
   slug: string;
+   tdsDocument?: {
+    file?: {
+      url?: string;
+    };
+  };
   product_sub_categories: ProductSubCategory[];
 }
 

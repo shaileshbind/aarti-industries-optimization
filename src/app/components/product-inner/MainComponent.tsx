@@ -103,6 +103,43 @@ export default function ProductInnerPage({
                   </p>
                 )}
 
+                {/* product list */}
+                <div className="flex flex-col gap-[10px] mt-[14px]">
+                  <div
+                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    onClick={() => {
+                      setshowGeneralPopup(true);
+                      setdocument("/reports/product-list.pdf");
+                    }}
+                  >
+                    Product List
+                    <Image
+                      src="/images/download-icon-grey2.svg"
+                      alt="globe"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </div>
+                {/* company brochure */}
+                <div className="flex flex-col gap-[10px] mt-[14px]">
+                  <div
+                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    onClick={() => {
+                      setshowGeneralPopup(true);
+                      setdocument("/reports/company-brochure.pdf");
+                    }}
+                  >
+                    Company Brochure
+                    <Image
+                      src="/images/download-icon-grey2.svg"
+                      alt="globe"
+                      width={20}
+                      height={20}
+                    />
+                  </div>
+                </div>
+                {/* msds only - via cms */}
                 {product?.productDetails?.documentSection?.documents
                   ?.length && (
                   <div className="flex flex-col gap-[10px] mt-[14px]">
@@ -133,7 +170,6 @@ export default function ProductInnerPage({
                     )}
                   </div>
                 )}
-
                 <button
                   className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
                   onClick={() => {

@@ -31,11 +31,13 @@ type FormValues = {
   category: string;
   subCategory: string;
   productName: string;
+  recievedEmail?:string;
 };
 
 type CategorySubcategoryItem = {
   category: string;
   subCategories: string[];
+  subCatEmails: (string | undefined)[];
 };
 
 type GeneralFormProps = {
@@ -57,6 +59,7 @@ type productsDataType = {
 type formSubCategories = {
   id?: number;
   name?: string;
+  reciverEmail?:string;
 };
 type productsDataCatSubcatType = {
   id?: number;
@@ -100,6 +103,7 @@ export default function GeneralForm({
       category: "",
       subCategory: "",
       productName: "",
+      recievedEmail:"",
     },
   });
 
@@ -129,6 +133,10 @@ export default function GeneralForm({
               item?.form_sub_categories?.map(
                 (sub: formSubCategories) => sub?.name
               ) || [],
+            subCatEmails:
+              item?.form_sub_categories?.map(
+                (item: formSubCategories) => item?.reciverEmail
+              ) || [],       
           })) || [];
         setCategorySubcategoryData(transformedData);
 
@@ -182,6 +190,23 @@ export default function GeneralForm({
     [categorySubcategoryData, selectedCategory]
   );
 
+  // 🔹 Update receiver email when subcategory changes
+  useEffect(() => {
+    if (selectedCategory && selectedSubcategory) {
+      const categoryData = categorySubcategoryData.find(
+        (item) => item.category === selectedCategory
+      );
+      if (categoryData) {
+        const subCategoryIndex =
+          categoryData.subCategories.indexOf(selectedSubcategory);
+        if (subCategoryIndex !== -1) {
+          const receiverEmail = categoryData.subCatEmails[subCategoryIndex];
+          setValue("recievedEmail", receiverEmail || "");
+        }
+      }
+    }
+  }, [selectedCategory, selectedSubcategory, categorySubcategoryData, setValue]);
+
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
     // Only auto-select if a category is already chosen and there are subcategories
@@ -208,6 +233,7 @@ export default function GeneralForm({
 
   const onSubmit = async (data: FormValues) => {
     // Determine if Salesforce lead applies
+    const sendEmail = true
     const hasSalesforceLead =
       data.subCategory === "Chemicals Products" &&
       data.productName !== "" &&
@@ -217,6 +243,7 @@ export default function GeneralForm({
     const cleanedData = {
       ...data,
       productName: hasSalesforceLead ? data.productName : "",
+      sendEmail: true,
     };
 
     const formattedData = {
@@ -231,7 +258,9 @@ export default function GeneralForm({
       category: cleanedData.category,
       sub_category: cleanedData.subCategory,
       product_name: cleanedData.productName,
+      reciverEmail: cleanedData.recievedEmail,
       hasSalesforceLead,
+      sendEmail,
     };
 
     try {

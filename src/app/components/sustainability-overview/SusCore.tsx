@@ -77,7 +77,7 @@ const SusCore = ({ data }: SusCoreData) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto my-[100px]">
+      <div ref={wrapperRef} className="container mx-auto mb-[72px] lg:mb-[120px] mt-[50px]">
         {/* Top Line */}
         <div
           ref={topLineRef}
@@ -94,7 +94,7 @@ const SusCore = ({ data }: SusCoreData) => {
         <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">
           {sectionTitle && (
             <AnimatedText>
-              <H3 className="max-w-[600px] text-center mx-auto">
+              <H3 className="max-w-[600px] text-center mx-auto !text-[28px] md:!text-[36px] xl:!text-[44px]">
                 {sectionTitle}
               </H3>
             </AnimatedText>
