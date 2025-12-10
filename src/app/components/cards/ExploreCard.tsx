@@ -34,7 +34,7 @@ const ExploreCard = ({ title, ctaButton, lightVariant }: ExploreCardProps) => {
       {ctaButton && ctaButton?.length > 0 && (
         <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px] xl:gap-x-[50px]">
           {ctaButton?.map((item) => {
-            if (!item?.link?.link) return null;
+            if (!item?.link?.link && !item?.hasExternalLink) return null;
             return (
               <Link
                 href={ `${item?.hasExternalLink == "true" ? item?.externalLink : item?.link?.link}`}
