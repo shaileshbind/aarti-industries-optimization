@@ -56,6 +56,11 @@ export interface ProductData {
   productMobImage?: string | null;
   productDetails?: ProductDetails;
   product_sub_categories?: ProductSubcategory[];
+   tdsDocument?: {
+    file?: {
+      url?: string;
+    };
+  };
 }
 
 export interface RelatedProduct {

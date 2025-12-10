@@ -475,6 +475,27 @@ body {
   pointer-events: none !important;
 }
 
+/* Investor overview - mobile [Progress Bar] */
+.in-headlines-section-progressbar .swiper-pagination-progressbar-fill {
+  background-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+}
+.in-headlines-section-progressbar {
+  --swiper-pagination-progressbar-bg-color: #e6e6e6 !important;
+  --swiper-theme-color: #f36633 !important;
+  border-radius: 10px !important;
+  height: 2px !important;
+  top: unset !important;
+}
+.in-headlines-section-progressbar .swiper-pagination-progressbar {
+  background: var(--swiper-pagination-progressbar-bg-color) !important;
+  height: 2px !important;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-inline: 20px !important;
+}
+
 /* Phone Input */
 .phone_input .search-box {
   width: 94%;

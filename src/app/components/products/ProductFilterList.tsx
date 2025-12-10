@@ -293,12 +293,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                   link={`/${product.slug}${
                     queryString ? `?${queryString}` : ""
                   }`}
-                  pdfLink={
-                    typeof product?.productDetails?.documentSection === "string"
-                      ? product.productDetails.documentSection
-                      : ""
-                  }
-                  pdfTitle={product?.productDetails?.abbreviation || ""}
+                   pdfLink={product?.tdsDocument?.file?.url}
+                    pdfTitle="View TDS"           
                 />
               </div>
             ))}

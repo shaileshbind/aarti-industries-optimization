@@ -7,7 +7,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
   const { sectionTitle, image, investor_contacts } = data;
   return (
     <div>
-      <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-[60px]  gap-y-[36px]  fluid-container mb-[72px] lg:mb-[120px]">
+      <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-[50px]  gap-y-[36px]  fluid-container mb-[72px] lg:mb-[120px]">
         {sectionTitle && (
           <H3 className="!text-[24px] block lg:hidden">{sectionTitle}</H3>
         )}
@@ -46,29 +46,32 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                     {items?.address}
                   </BodyText3>
                 )}
-                <div className="grid lg:grid-cols-2 items-start ">
+                <div className="grid lg:grid-cols-2 gap-x-[5px] items-start">
                   {items?.mobile && (
-                    <div className="mt-[10px] flex gap-x-[4px] items-center">
+                    <a
+                      href={`tel:${items?.mobile}`}
+                      className="mt-[10px] flex gap-x-[4px] items-start"
+                    >
                       <Image
                         src="/images/phone.svg"
                         alt="img"
                         width={16}
                         height={16}
-                        className="h-4 w-4 object-cover shrink-0"
+                        className="h-4 w-4 object-cover shrink-0  mt-[5px]"
                       />
                       <BodyText2 className="!text-[14px] lg:!text-[16px]">
                         {items?.mobile}
                       </BodyText2>
-                    </div>
+                    </a>
                   )}
                   {items?.fax && (
-                    <div className="mt-[10px] flex gap-x-[4px] items-center">
+                    <div className="mt-[10px] flex gap-x-[4px] items-start">
                       <Image
                         src="/images/fax.svg"
                         alt="img"
                         width={16}
                         height={16}
-                        className="h-4 w-4 object-contain shrink-0"
+                        className="h-4 w-4 object-contain shrink-0 mt-[5px]"
                       />
                       <BodyText2 className="!text-[14px] lg:!text-[16px]">
                         {items?.fax}
@@ -76,32 +79,44 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                     </div>
                   )}
                   {items?.website && (
-                    <div className="mt-[10px] flex gap-x-[4px] items-center">
+                    <a
+                      href={
+                        items?.website.startsWith("http")
+                          ? items?.website
+                          : `https://${items?.website}`
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-[10px] flex gap-x-[4px] items-start"
+                    >
                       <Image
                         src="/images/website.svg"
                         alt="img"
                         width={16}
                         height={16}
-                        className="h-4 w-4 object-cover shrink-0"
+                        className="h-4 w-4 object-cover shrink-0 mt-[5px]"
                       />
                       <BodyText2 className="!text-[14px] lg:!text-[16px]">
                         {items?.website}
                       </BodyText2>
-                    </div>
+                    </a>
                   )}
                   {items?.email && (
-                    <div className="mt-[10px] flex gap-x-[4px] items-center">
+                    <a
+                      href={`mailto:${items?.email}`}
+                      className="mt-[10px] flex gap-x-[4px] items-start"
+                    >
                       <Image
                         src="/images/mail.svg"
                         alt="img"
                         width={16}
                         height={16}
-                        className="h-4 w-4 object-contain shrink-0"
+                        className="h-4 w-4 object-contain shrink-0 mt-[5px]"
                       />
                       <BodyText2 className="!text-[14px] lg:!text-[16px]">
                         {items?.email}
                       </BodyText2>
-                    </div>
+                    </a>
                   )}
                 </div>
               </div>

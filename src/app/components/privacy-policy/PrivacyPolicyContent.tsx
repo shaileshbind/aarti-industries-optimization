@@ -259,7 +259,7 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
   }
 
   return (
-    <section className="w-full bg-white pt-10 pb-20 max-md:pt-6 max-md:pb-[60px]">
+    <section className="w-full bg-white pt-20 pb-20 max-md:pt-6 max-md:pb-[60px]">
       <div 
         ref={containerRef}
         className="max-w-[1200px] mx-auto px-6 flex gap-[60px] max-[900px]:flex-col max-[900px]:gap-8 max-sm:px-4 relative"
