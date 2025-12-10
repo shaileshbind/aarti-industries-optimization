@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 export default function SimpleListing({ reportLayout }: SimpleListingProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
   const [activeSubCategory, setActiveSubCategory] = useState<string>("");
 
@@ -61,7 +61,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
   const handleSubCategoryClick = (subCat: string) => {
     setActiveSubCategory(subCat);
     setMobileVisibleCount(5);
-    
+
     // Update URL with query parameter
     const params = new URLSearchParams(searchParams.toString());
     params.set("subCategory", subCat);
@@ -140,7 +140,13 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
               <div className="pb-4" key={item.id}>
                 <OrangeTabCard
                   title={item?.heading}
-                  link={item?.link}
+                  link={
+                    item?.link
+                      ? item?.link
+                      : item?.file?.url
+                      ? item?.file?.url
+                      : ""
+                  }
                   scale={false}
                 />
               </div>
@@ -156,7 +162,13 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
               <div className="pb-4" key={item.id}>
                 <OrangeTabCard
                   title={item?.heading}
-                  link={item?.link}
+                  link={
+                    item?.link
+                      ? item?.link
+                      : item?.file?.url
+                      ? item?.file?.url
+                      : ""
+                  }
                   scale={false}
                 />
               </div>
