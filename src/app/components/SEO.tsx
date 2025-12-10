@@ -71,18 +71,23 @@ const SEO = ({
       {twtImg && <meta property="twitter:image" content={twtImg} />}
       {twtTitle && <meta property="twitter:title" content={twtTitle} />}
       {twtDesc && <meta property="twitter:description" content={twtDesc} />}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=GT-NNZ3VBMJ"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
+
+      {process.env.NEXT_PUBLIC_IS_PRODUCTION === "true" && (
+        <>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=GT-NNZ3VBMJ"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'GT-NNZ3VBMJ');
         `}
-      </Script>
+          </Script>
+        </>
+      )}
     </>
   );
 };
