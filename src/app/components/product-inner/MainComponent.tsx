@@ -62,7 +62,7 @@ export default function ProductInnerPage({
   }, [product?.product_sub_categories]);
   return (
     <div className="w-full min-h-screen">
-      <div className="w-full container my-[70px] lg:my-[100px]">
+      <div className="w-full container my-[70px] mt-[30px] lg:my-[100px]">
         <Breadcrumb
           breadcrumbArr={[
             { title: "Home", href: "/" },
@@ -96,7 +96,7 @@ export default function ProductInnerPage({
               )}
 
               {/* Documents */}
-              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 mt-7">
+              <div className="bg-[#F7F9FA] rounded-[20px] py-5 px-6 mt-7 lg:w-[80%]">
                 {product?.productDetails?.documentSection?.sectionTitle && (
                   <p className="text-[#002F50] text-base md:text-lg">
                     {product?.productDetails?.documentSection?.sectionTitle}
