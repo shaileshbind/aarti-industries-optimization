@@ -9,6 +9,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { Mousewheel, Pagination } from "swiper/modules";
 import { ChemCreatesProps } from "@/app/types/who-we-are.type";
 import Image from "next/image";
+import { formatDate } from "../../../../utils/formatDate";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const { sectionTitle, blog_case_studies } = data;
@@ -59,7 +60,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                   <SwiperSlide key={item?.id}>
                     <DateCard
                       imageSrc={item?.thumbnailImageDesktop?.url}
-                      date={item?.date}
+                      date={formatDate(item?.date || "")}
                       desc={item?.title}
                       link={`/blogs/${item?.slug}`}
                     />

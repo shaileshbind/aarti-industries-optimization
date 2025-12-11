@@ -65,7 +65,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
     };
 
   return (
-    <div className="py-[50px] md:pb-[140px] md:pt-0 fluid-container">
+    <div className="pb-[50px] md:pb-[140px] md:pt-0 fluid-container">
       {sectionTitle && <H2>{sectionTitle}</H2>}
 
       {content?.length > 0 && (

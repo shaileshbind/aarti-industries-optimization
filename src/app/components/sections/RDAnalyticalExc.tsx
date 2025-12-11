@@ -25,7 +25,8 @@ interface ScrollTriggerInstance {
 const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   data,
   sliderData,
-  className
+  className,
+  showButton = true,
 }) => {
   const { leftText, rightText, image } = data;
   const { details } = sliderData;
@@ -276,14 +277,20 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 
   return (
     <>
-      <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]">
+      <div
+        ref={triggerRef}
+        className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]"
+      >
         <div
           ref={titleSection}
           className="absolute top-0 w-full flex justify-center items-center z-20 bg-white  "
         >
           <div className=" flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  lg:pt-[unset] ">
             {leftText && (
-              <span className={clsx(`lg:min-w-[366px]`, className)} ref={headinLeft}>
+              <span
+                className={clsx(`lg:min-w-[366px]`, className)}
+                ref={headinLeft}
+              >
                 <H2>{leftText}</H2>
               </span>
             )}
@@ -438,7 +445,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   </div>
                                 ))}
                               </div>
-                            )}                    
+                            )}
+                            {showButton && (
                               <div className="mt-[20px] lg:mt-[40px]">
                                 <button
                                   onClick={() => {
@@ -449,7 +457,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   Read More
                                 </button>
                               </div>
-                         
+                            )}
                           </div>
                         </div>
                       </SwiperSlide>
