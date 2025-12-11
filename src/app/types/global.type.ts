@@ -5,7 +5,7 @@ export type ImageProps = {
 
 export type ButtonProps = {
   title: string;
-  link: {
+  link?: {
     link: string;
     target: string;
   };

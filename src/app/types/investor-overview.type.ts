@@ -85,19 +85,11 @@ export type InvestorHeadlines = {
           };
         }[];
       }[];
-      ctaButton?: {
-        id?: number;
-        title?: string;
-        externalLink?: string;
-      };
+      ctaButton?: ButtonProps;
     };
     mediaCoverage?: {
       title?: string;
-      ctaButton?: {
-        id?: number;
-        title?: string;
-        externalLink?: string;
-      }[]
+      ctaButton?: ButtonProps[];
       news?: {
         id?: number;
         newsDescription?: string;

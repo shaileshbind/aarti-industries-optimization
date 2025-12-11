@@ -38,7 +38,8 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
             pressRelease?.ctaButton?.title && (
               <Button
                 secondary
-                href={pressRelease?.ctaButton?.externalLink}
+                // href={pressRelease?.ctaButton?.externalLink}  
+                href={pressRelease.ctaButton?.hasExternalLink == "true" ? pressRelease.ctaButton?.externalLink : pressRelease.ctaButton?.link?.link}
                 title={pressRelease?.ctaButton?.title}
                 className="mt-[10px] lg:mt-[30px]"
               />
@@ -51,10 +52,11 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 {mediaCoverage?.title}
               </H2>
             )}
+            {/* {console.log(mediaCoverage?.ctaButton?.[0])} */}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              mediaCoverage?.ctaButton?.[0]?.externalLink && (
+              (mediaCoverage?.ctaButton?.[0]?.externalLink || mediaCoverage?.ctaButton?.[0]?.link?.link && mediaCoverage?.ctaButton?.[0]?.link?.link !== "#") && (
                 <Button
-                  href={mediaCoverage?.ctaButton?.[0]?.externalLink}
+                  href={mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true" ? mediaCoverage?.ctaButton?.[0]?.externalLink : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"}
                   title={mediaCoverage?.ctaButton?.[0]?.title}
                   secondary
                 />
