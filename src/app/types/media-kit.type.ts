@@ -30,6 +30,7 @@ export type CardImageProps = {
 export type CorporateVideoProps = {
   data: {
     sectionVideos: VideoProps[];
+    title: string;
   };
 };
 
