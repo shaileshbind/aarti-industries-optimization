@@ -111,13 +111,20 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                         </p>
                       )}
 
-                      {item?.ctaButton?.title && item?.ctaButton?.link?.link && (
-                        <Button
-                          secondary
-                          title={item?.ctaButton?.title}
-                          href={item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}
-                        />
-                      )}
+                      {item?.ctaButton?.title &&
+                        (item?.ctaButton?.externalLink ||
+                          item?.ctaButton?.link?.link) && (
+                          <Button
+                            secondary
+                            title={item?.ctaButton?.title}
+                            href={
+                              item?.ctaButton?.hasExternalLink === "true"
+                                ? item?.ctaButton?.externalLink
+                                : item?.ctaButton?.link?.link
+                            }
+                            useTargetBlank={item?.ctaButton?.hasExternalLink === "true"}
+                          />
+                        )}
                     </div>
                   </div>
                 </SwiperSlide>
@@ -273,11 +280,17 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                     </p>
                   )}
 
-                  {item?.ctaButton?.title && item?.ctaButton?.link?.link && (
+                  {item?.ctaButton?.title &&
+                        (item?.ctaButton?.externalLink ||
+                          item?.ctaButton?.link?.link) && (
                     <Button
                       secondary
                       title={item?.ctaButton?.title}
-                      href={item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}
+                      href={
+                        item?.ctaButton?.hasExternalLink == "true"
+                          ? item?.ctaButton?.externalLink
+                          : item?.ctaButton?.link?.link
+                      }
                     />
                   )}
                 </div>

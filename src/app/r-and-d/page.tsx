@@ -1,15 +1,14 @@
 import React from "react";
 import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
 import RDInfo from "../components/sections/RDInfo";
-import RDDiverseChem from "../components/r-and-d/RDDiverseChem";
 import RDSafety from "../components/r-and-d/RDSafety";
-import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
 import GloballyCertified from "../components/GloballyCertified";
 import RDExplore from "../components/r-and-d/RDExplore";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
 import SEO from "../components/SEO";
+import RDSections from "../components/r-and-d/RDSections";
 
 export const dynamic = "force-dynamic";
 
@@ -55,8 +54,12 @@ const page = async () => {
       {section_one && <RDHeroBanner data={section_one} />}
       {section_two && <RDInfo data={section_two} />}
       {section_three && <ScrollableCardWithImage data={section_three} />}
-      <RDAnalyticalExc data={section_four} sliderData={section_five} />
-      <RDDiverseChem data={section_six} data2={section_seven} />
+      <RDSections
+        analyticalExcData={section_four}
+        analyticalExcSliderData={section_five}
+        diverseChemData={section_six}
+        diverseChemData2={section_seven}
+      />
       {section_eight && (
         <div className="pb-[22px] md:pb-[140px]">
           <RDSafety data={section_eight} />

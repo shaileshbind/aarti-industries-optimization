@@ -2,11 +2,14 @@ import React from "react";
 import { BodyText1, H2 } from "../Typography2";
 import Image from "next/image";
 import { LAAEngageProps } from "@/app/types/life-at-aarti.type";
-
+import { useMargin } from "@/app/contexts/MarginContext";
 const AartiEngage = ({ data }: LAAEngageProps) => {
   const { title, description, image, mobImage } = data;
+  const { marginBottom } = useMargin();
   return (
-    <div className="py-[72px] lg:py-[120px]">
+    <div className="py-[72px] lg:py-[120px]"
+    style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    >
       {title && (
         <H2 className="max-w-[unset] xl:max-w-[520px] mx-[20px] lg:mx-auto text-center">
           {title}

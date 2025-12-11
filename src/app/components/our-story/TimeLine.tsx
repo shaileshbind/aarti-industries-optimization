@@ -100,7 +100,7 @@ export default function TimeLine({
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}
             </BodyText2>
-            <SubH2>{content.title}</SubH2>
+            <SubH2 className="capitalize">{content.title}</SubH2>
             <BodyText1>{content.description}</BodyText1>
           </FadeInRevealBlur>
         </div>

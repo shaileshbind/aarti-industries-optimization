@@ -3,12 +3,14 @@ import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { AilEdgeProps } from "@/app/types/aarti-advantage.type";
 import { FadeInReveal } from "../ScrollReveal";
-
+import { useMargin } from "@/app/contexts/MarginContext";
 export default function AilEdge({ data }: AilEdgeProps) {
   const { heading, cards } = data;
-
+  const { marginBottom } = useMargin();
   return (
-    <div className="relative fluid-container xl:flex items-start">
+    <div className="relative fluid-container xl:flex items-start"
+    style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    >
       {heading && (
         <H2 className="xl:absolute xl:top-0 xl:max-w-[412px] pb-6 xl:pb-0">
           {heading}
