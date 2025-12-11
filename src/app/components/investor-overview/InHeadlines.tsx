@@ -92,15 +92,15 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               }}
               className="!px-[20px] lg:!px-[0px]"
             >
-              {[0, 1, 2].map((index) => {
+              {mediaCoverage?.news?.map((news, index) => {
                 return (
                   <SwiperSlide key={index}>
                     <DateCard
-                      key={index}
-                      imageSrc="/images/home/hero-banner1.png"
-                      date="May 21, 2025"
-                      desc="Lorem ipsum dolor sit amet consectetur. Urna at mi nunc sit cursus eu diam congue. "
-                      link="#"
+                      key={news?.id}
+                      imageSrc={news?.image?.url}
+                      date={news?.date}
+                      desc={news?.newsDescription}
+                      link={news?.ctaButton?.externalLink}
                     />
                   </SwiperSlide>
                 );

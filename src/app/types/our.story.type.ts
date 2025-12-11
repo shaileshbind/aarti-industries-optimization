@@ -47,6 +47,7 @@ interface Milestone {
   id: number;
   name: string;
   date_range: string;
+  images: ImageProps[];
   timeline_milestones: TimelineMilestone[];
 }
 
