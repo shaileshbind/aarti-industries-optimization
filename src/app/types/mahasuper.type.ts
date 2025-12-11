@@ -6,8 +6,8 @@ export type MahasuperBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
-    btnTitle: string;
-    btnLink: string;
+    ctaTitle: string;
+    ctaLink: string;
   };
 };
 

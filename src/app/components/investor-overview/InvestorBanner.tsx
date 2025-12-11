@@ -19,6 +19,7 @@ const InvestorBanner = ({ data }: InvestorBannerProps) => {
         fullBg
         showStar2={false}
         showStar3={false}
+        useTargetBlank={ctaButton?.hasExternalLink === "true"}
       />
     </div>
   );

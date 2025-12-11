@@ -15,6 +15,7 @@ const SusBanner = ({data}:SusBannerProps) => {
       mobAlt={mobImage?.alternativeText}
       btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
       btnTitle={ctaButton?.title}
+      useTargetBlank={ctaButton?.hasExternalLink === "true"}
     />
     </div>
   )
