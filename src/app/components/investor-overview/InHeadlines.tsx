@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { InvestorHeadlines } from "@/app/types/investor-overview.type";
+import Link from "next/link";
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
@@ -21,18 +22,19 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.map((release) =>
-            release?.report?.map((item) => (
-              <div
-                key={item?.id}
+          {pressRelease?.press_releases?.slice(0, 4).map((release) =>
+            // release?.report?.map((item) => (
+                <Link href={release?.file?.url || '#'} target="_blank">
+                <div
+                key={release?.id}
                 className="pb-[14px] border-b border-grey-200 mb-[14px]"
               >
-                <BodyText2>{item?.heading}</BodyText2>
+                <BodyText2>{release?.heading}</BodyText2>
                 <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                  November 11, 2025
+                  {release?.date}
                 </BodyText2>
               </div>
-            ))
+            </Link>
           )}
           {pressRelease?.ctaButton?.externalLink &&
             pressRelease?.ctaButton?.title && (
