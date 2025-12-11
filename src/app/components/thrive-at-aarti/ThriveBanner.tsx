@@ -16,6 +16,7 @@ const ThriveBanner: React.FC<ThriveBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      useTargetBlank={ctaButton?.hasExternalLink === "true"}
     />
   );
 };

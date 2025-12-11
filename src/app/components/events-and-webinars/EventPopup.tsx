@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { BodyText1, SubH1 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode } from "swiper/modules";
+import { FreeMode, Mousewheel } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -58,7 +58,7 @@ const EventPopup = ({ event }: EventPopupProps) => {
       {imagesToShow && imagesToShow.length > 0 && (
         <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
           <Swiper
-            modules={[FreeMode]}
+            modules={[FreeMode,Mousewheel]}
             freeMode={{
               enabled: true,
               momentum: true,
@@ -80,11 +80,16 @@ const EventPopup = ({ event }: EventPopupProps) => {
                 spaceBetween: 20,
               },
             }}
-            className="event-gallery-swiper"
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            }}
+            className="event-gallery-swiper !px-5"
           >
             {imagesToShow.map((image, index) => (
               <SwiperSlide key={index} className="!w-auto">
-                <div className="relative w-[280px] h-[200px] md:w-[320px] md:h-[240px]   rounded-lg overflow-hidden">
+                <div className="relative w-[280px] h-[200px] md:w-[320px] md:h-[240px] rounded-lg">
                   <Image
                     src={image.url}
                     alt={image.alternativeText || `Event image ${index + 1}`}

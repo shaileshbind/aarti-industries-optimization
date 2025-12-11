@@ -16,6 +16,7 @@ const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      useTargetBlank={ctaButton?.hasExternalLink === "true"}
     />
   );
 };

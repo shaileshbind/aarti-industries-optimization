@@ -21,7 +21,7 @@ const Button = ({
       {secondary ? (
         <>
           <Link
-            href={href || "#"}
+            href={href || ""}
             target={useTargetBlank ? "_blank" : "_self"}
             className="w-fit"
           >
@@ -34,7 +34,7 @@ const Button = ({
         </>
       ) : (
         <Link
-          href={href || "#"}
+          href={href || ""}
           target={useTargetBlank ? "_blank" : "_self"}
           className="w-fit group relative inline-block"
         >
