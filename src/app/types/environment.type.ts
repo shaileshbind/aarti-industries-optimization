@@ -107,6 +107,11 @@ export type EnvLifeProps = {
 
 export type EnvExpProps = {
   data: {
-    title: string;
+    title?: string;
+    link?:string;
+    buttonTitle?:string;
+    reportFile?:{
+      url?:string;
+    }
   };
 };

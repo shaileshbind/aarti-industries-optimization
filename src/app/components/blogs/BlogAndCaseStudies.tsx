@@ -85,8 +85,16 @@ export default function BlogAndCaseStudies({
   data,
   lastestBlogId,
 }: BlogAndCaseStudiesProps) {
+  // const tabs =
+  //   data?.toggleTabs?.map((item) => ({
+  //     title: item?.title,
+  //     slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
+  //     id: item?.id,
+  //   })) || [];
   const tabs =
-    data?.toggleTabs?.map((item) => ({
+  data?.toggleTabs
+    ?.filter((item) => item?.title?.toLowerCase() !== "blogs") 
+    .map((item) => ({
       title: item?.title,
       slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
       id: item?.id,
@@ -284,7 +292,7 @@ export default function BlogAndCaseStudies({
               <DateCard
                 imageSrc={item?.thumbnailImageDesktop?.url}
                 date={formatDate(item?.date) || ""}
-                desc={item?.excerpt}
+                desc={item?.title}
                 link={`/${active === "blogs" ? "blogs" : "case-studies"}/${
                   item?.slug
                 }`}

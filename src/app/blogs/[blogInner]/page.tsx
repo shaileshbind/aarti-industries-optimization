@@ -161,7 +161,7 @@ export default async function page({ params }: BlogInnerProps) {
                       <DateCard
                         imageSrc={item?.thumbnailImageDesktop?.url}
                         date={formatDate(item?.date)}
-                        desc={item?.excerpt}
+                        desc={item?.title}
                         link={
                           type === "blog"
                             ? `/blogs/${item?.slug}`
