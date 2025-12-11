@@ -12,6 +12,7 @@ import { Navigation, Mousewheel } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -43,8 +44,11 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const envSlider = useRef<HTMLDivElement>(null);
   const titleSection = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTriggerInstance | null>(null);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
 
   const isScrollingProgrammatically = useRef<boolean>(false);
+  const { setMarginBottom } = useMargin();
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -274,6 +278,102 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     };
   }, []);
 
+  // useLayoutEffect(() => {
+  //   const calculateMarginBottom = () => {
+  //     // Measure the actual content container, not the fixed h-screen container
+  //     const contentContainer = contentContainerRef.current;
+  //     const sliderContainer = sliderContainerRef.current;
+      
+  //     if (!contentContainer || !sliderContainer) {
+  //       setMarginBottom(0);
+  //       return;
+  //     }
+      
+  //     // Get the actual content height - use scrollHeight for accurate measurement
+  //     const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+  //     const screenHeight = window.innerHeight;
+
+  //     // Only calculate if content is actually taller than screen
+  //     if (contentHeight > screenHeight) {
+  //       const margin = contentHeight - screenHeight;
+  //       setMarginBottom(margin);
+  //     } else {
+  //       setMarginBottom(0);
+  //     }
+  //   };
+
+  //   // Calculate immediately
+  //   calculateMarginBottom();
+
+  //   // Also calculate after a delay to catch any delayed renders
+  //   const timeoutId = setTimeout(() => {
+  //     calculateMarginBottom();
+  //   }, 500);
+
+  //   const resizeObserver = new ResizeObserver(() => {
+  //     // Debounce resize calculations
+  //     setTimeout(calculateMarginBottom, 100);
+  //   });
+    
+  //   if (contentContainerRef.current) {
+  //     resizeObserver.observe(contentContainerRef.current);
+  //   }
+  //   if (sliderContainerRef.current) {
+  //     resizeObserver.observe(sliderContainerRef.current);
+  //   }
+
+  //   const handleResize = () => {
+  //     setTimeout(calculateMarginBottom, 100);
+  //   };
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //     resizeObserver.disconnect();
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, [active, details?.length, setMarginBottom]);
+
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = sliderContainerRef.current;
+      const contentContainer = contentContainerRef.current;
+      if (!sliderContainer || !contentContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const sliderHeight = sliderContainer.offsetHeight;
+      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const totalHeight = sliderHeight + contentHeight;
+
+      if (totalHeight > screenHeight) {
+        const margin = totalHeight - screenHeight;
+        setMarginBottom(margin);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (sliderContainerRef.current) {
+      resizeObserver.observe(sliderContainerRef.current);
+    }
+    if (contentContainerRef.current) {
+      resizeObserver.observe(contentContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [active, details?.length, setMarginBottom]);
+  
   return (
     <>
       <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]">
@@ -319,8 +419,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
         >
-          <div className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
-            <div className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
+          <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
+            <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
               <div className="relative w-full randdImageHeight h-[250px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
