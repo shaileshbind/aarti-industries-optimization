@@ -60,6 +60,7 @@ export default async function page() {
           className="lg:!min-w-[0]"
           data={section_three}
           sliderData={section_four}
+          showButton={false}
         />
       </div>
 

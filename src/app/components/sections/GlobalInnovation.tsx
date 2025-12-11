@@ -80,15 +80,18 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
 
           {description && <BodyText1>{description}</BodyText1>}
 
-          <Button
-            secondary
-            title={ctaButton?.title || ""}
-            href={
-              ctaButton?.hasExternalLink == "true"
-                ? ctaButton?.externalLink
-                : ctaButton?.link?.link
-            }
-          />
+          {ctaButton?.title &&
+            (ctaButton?.externalLink || ctaButton?.link?.link) && (
+              <Button
+                secondary
+                title={ctaButton?.title}
+                href={
+                  ctaButton?.hasExternalLink === "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }
+              />
+            )}
         </div>
       </div>
     </section>

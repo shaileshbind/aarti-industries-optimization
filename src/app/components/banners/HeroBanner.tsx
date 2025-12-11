@@ -32,6 +32,7 @@ type HeroBannerProps = {
   bottomMiddleStarClassName?: string;
   popupButton?: boolean;
   popupButtonTitle?: string;
+  useTargetBlank?:boolean;
 };
 const HeroBanner = ({
   centerText,
@@ -57,6 +58,7 @@ const HeroBanner = ({
   bottomMiddleStarClassName,
   popupButton = false,
   popupButtonTitle,
+  useTargetBlank = true,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -233,7 +235,7 @@ const HeroBanner = ({
                 {btnTitle && btnLink && (
                   <FadeInRevealBlur delay={0.1}>
                     <div className="mt-[10px] lg:mt-[35px] fluid-container">
-                      <Button title={btnTitle} href={btnLink} />
+                      <Button title={btnTitle} href={btnLink}  useTargetBlank={useTargetBlank}/>
                     </div>
                   </FadeInRevealBlur>
                 )}
@@ -324,7 +326,7 @@ const HeroBanner = ({
             {btnTitle && btnLink && (
               <FadeInRevealBlur delay={0.1}>
                 <div className="mt-[35px]">
-                  <Button title={btnTitle} href={btnLink} />
+                  <Button title={btnTitle} href={btnLink} useTargetBlank={useTargetBlank} />
                 </div>
               </FadeInRevealBlur>
             )}
@@ -367,7 +369,7 @@ const HeroBanner = ({
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5"
+              className="absolute w-full bg-white bottom-[52px] lg:bottom-[120px] h-[1px] z-5"
             />
             <div
               ref={starRef}
@@ -416,9 +418,6 @@ const HeroBanner = ({
       <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-        // document={document}
-        prefillCategory="Business Products / Services"
-        prefillSubCategory="LAB Testing (Analytical/ Safety)"
       />
     </>
   );

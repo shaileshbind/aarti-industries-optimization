@@ -3,22 +3,22 @@ import HeroBanner from "../banners/HeroBanner";
 import { CorporateBannerProps } from "@/app/types/corporate-governance.type";
 
 const CorporateBanner: React.FC<CorporateBannerProps> = ({ data }) => {
-  const { title, description, image,mobImage, btnTitle, btnLink } = data;
+  const { title, description, image,mobImage, ctaButton } = data;
 
   return (
     <HeroBanner
-      // tag={title}
       leftDesc={true}
       title={title}
       desc={description}
-      btnTitle={btnTitle}
-      btnLink={btnLink}
+      btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`} 
+      btnTitle={ctaButton?.title}
       fullBg
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
       showStar3={false}
+      useTargetBlank={ctaButton?.hasExternalLink === "true"}
     />
   );
 };

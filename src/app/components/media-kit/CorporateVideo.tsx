@@ -7,7 +7,7 @@ import {
 } from "@/app/types/media-kit.type";
 
 export default function CorporateVideo({ data }: CorporateVideoProps) {
-  const { sectionVideos } = data;
+  const { sectionVideos, title } = data;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -24,7 +24,7 @@ export default function CorporateVideo({ data }: CorporateVideoProps) {
         doc.mozFullScreenElement ||
         doc.msFullscreenElement
       );
-      
+
       setIsFullscreen(isCurrentlyFullscreen);
 
       // If exiting fullscreen and video is paused, hide controls to show play button
@@ -92,7 +92,9 @@ export default function CorporateVideo({ data }: CorporateVideoProps) {
 
   return (
     <div>
-      <SubH2 className="pb-[24px] text-center lg:text-left">Corporate Video Name</SubH2>
+      {title && (
+        <SubH2 className="pb-[24px] text-center lg:text-left">{title}</SubH2>
+      )}
 
       <div className="relative w-full h-[220px] md:h-[628px] rounded-[20px] overflow-hidden">
         <video

@@ -16,6 +16,7 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 import clsx from "clsx";
+import Button from "../Button";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -107,6 +108,17 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                           {item?.designation}
                         </BodyText2>
                       )}
+
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setshowPopup(true);
+                          setpopupDetails(item);
+                        }}
+                        className="block lg:hidden mt-3"
+                      >
+                        <Button title="Read Bio" useTargetBlank={false} />
+                      </div>
                     </div>
                   </CustomCursorTrigger>
                 </SwiperSlide>

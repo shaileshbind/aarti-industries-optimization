@@ -17,6 +17,7 @@ const LifeAtBanner = ({ data }: LAABannerProps) => {
         mobImage={mobImage?.url}
         alt={image?.alternativeText}
         mobAlt={mobImage?.alternativeText}
+        useTargetBlank={ctaButton?.hasExternalLink === "true"}
       />
     </div>
   );
