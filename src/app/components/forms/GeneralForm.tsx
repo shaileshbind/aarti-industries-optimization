@@ -159,7 +159,7 @@ export default function GeneralForm({
             }
           }
         }
-        if (prefillProduct && transformedProducts.includes(prefillProduct)) {
+        if (prefillProduct && (transformedProducts.includes(prefillProduct) || prefillProduct === "Others")) {
           updatedDefaults.productName = prefillProduct;
         }
         // Use reset to apply the prefilled values reliably
@@ -188,6 +188,12 @@ export default function GeneralForm({
         (item) => item.category === selectedCategory
       )?.subCategories || [],
     [categorySubcategoryData, selectedCategory]
+  );
+
+  // 🔹 Add "Others" as static last option to products list
+  const productsWithOthers = useMemo(
+    () => [...(productsData || []), "Others"],
+    [productsData]
   );
 
   // 🔹 Update receiver email when subcategory changes
@@ -598,7 +604,7 @@ export default function GeneralForm({
                 render={({ field }) => (
                   <Autocomplete
                     {...field}
-                    options={productsData || []}
+                    options={productsWithOthers}
                     getOptionLabel={(option) => option}
                     onChange={(_, value) => field.onChange(value)}
                     value={field.value || null}
