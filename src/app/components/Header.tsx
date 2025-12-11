@@ -55,24 +55,49 @@ const Header = ({ data }: HeaderProps) => {
       console.log("isMenuOpen", isMenuOpen);
       setIsMenuOpen(true);
       setIsSearchOpen(false);
-      // Find first menu item with dropdown and expand it
-      // if (menu && menu.length > 0) {
-      //   const firstMenuWithDropdown = menu.findIndex(
-      //     (item) => item.subMenu && item.subMenu.length > 0
-      //   );
-      //   if (firstMenuWithDropdown !== -1) {
-      //     setMobileExpandedMenu(firstMenuWithDropdown);
-      //     // Only expand the first submenu if it's the first dropdown (index 0)
-      //     if (firstMenuWithDropdown === 0) {
-      //       const firstSubMenu = menu[firstMenuWithDropdown].subMenu?.[0];
-      //       if (firstSubMenu?.id !== undefined) {
-      //         setMobileExpandedSubMenu(firstSubMenu.id);
-      //       }
-      //     } else {
-      //       setMobileExpandedSubMenu(null);
-      //     }
-      //   }
-      // }
+      // Find menu item with active page and expand it
+      if (menu && menu.length > 0) {
+        let activeMenuIndex: number | null = null;
+        let activeSubMenuId: number | null = null;
+
+        // Find which menu item contains the active page
+        menu.forEach((item, index) => {
+          if (item.subMenu && item.subMenu.length > 0) {
+            const allInnerLinks = item.subMenu.flatMap((sub) =>
+              sub.item?.map((i) => i.cta_link?.link || i.externalLink || "") || []
+            );
+            const isMenuActive = allInnerLinks.some((link) => link && isActive(link));
+
+            if (isMenuActive && activeMenuIndex === null) {
+              activeMenuIndex = index;
+              
+              // Find which submenu contains the active page
+              item.subMenu.forEach((subMenuItem) => {
+                if (subMenuItem.item) {
+                  const subMenuLinks = subMenuItem.item.map(
+                    (i) => i.cta_link?.link || i.externalLink || ""
+                  );
+                  const isSubMenuActive = subMenuLinks.some(
+                    (link) => link && isActive(link)
+                  );
+                  
+                  if (isSubMenuActive && activeSubMenuId === null) {
+                    activeSubMenuId = subMenuItem.id ?? null;
+                  }
+                }
+              });
+            }
+          }
+        });
+
+        // Expand the active menu and submenu if found
+        if (activeMenuIndex !== null) {
+          setMobileExpandedMenu(activeMenuIndex);
+          if (activeSubMenuId !== null) {
+            setMobileExpandedSubMenu(activeSubMenuId);
+          }
+        }
+      }
       gsap.fromTo(
         mobileNavRef.current,
         {
@@ -563,7 +588,6 @@ const Header = ({ data }: HeaderProps) => {
                                               }
 
                                               const isExternal = href.startsWith("http://") || href.startsWith("https://");
-                                              const target = item.target || (isExternal ? "_blank" : "_self");
 
                                               // For external links, use regular <a> tag, for internal use Next.js Link
                                               if (isExternal) {
@@ -571,7 +595,7 @@ const Header = ({ data }: HeaderProps) => {
                                                   <a
                                                     key={item.id}
                                                     href={href}
-                                                    target={target}
+                                                    target="_self"
                                                     rel="noopener noreferrer"
                                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
                                                     onClick={() => setOpenDropdown(null)}
@@ -585,7 +609,6 @@ const Header = ({ data }: HeaderProps) => {
                                                 <Link
                                                   key={item.id}
                                                   href={href}
-                                                  target={target}
                                                   className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                   onClick={() => {
                                                     setsearchedValue("");
@@ -628,7 +651,6 @@ const Header = ({ data }: HeaderProps) => {
                                             }
 
                                             const isExternal = href.startsWith("http://") || href.startsWith("https://");
-                                            const target = item.target || (isExternal ? "_blank" : "_self");
 
                                             // For external links, use regular <a> tag, for internal use Next.js Link
                                             if (isExternal) {
@@ -636,7 +658,7 @@ const Header = ({ data }: HeaderProps) => {
                                                 <a
                                                   key={item.id}
                                                   href={href}
-                                                  target={target}
+                                                  target="_self"
                                                   rel="noopener noreferrer"
                                                   className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                   onClick={() => setOpenDropdown(null)}
@@ -650,7 +672,6 @@ const Header = ({ data }: HeaderProps) => {
                                               <Link
                                                 key={item.id}
                                                 href={href}
-                                                target={target}
                                                 className={clsx("block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                                 onClick={() => {
                                                   setsearchedValue("");
@@ -957,7 +978,6 @@ const Header = ({ data }: HeaderProps) => {
                                   }
 
                                   const isExternal = href.startsWith("http://") || href.startsWith("https://");
-                                  const target = item.target || (isExternal ? "_blank" : "_self");
 
                                   // For external links, use regular <a> tag, for internal use Next.js Link
                                   if (isExternal) {
@@ -965,7 +985,7 @@ const Header = ({ data }: HeaderProps) => {
                                       <a
                                         key={item.id}
                                         href={href}
-                                        target={target}
+                                        target="_self"
                                         rel="noopener noreferrer"
                                         className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
                                         onClick={() => setIsMenuOpen(false)}
@@ -979,7 +999,6 @@ const Header = ({ data }: HeaderProps) => {
                                     <Link
                                       key={item.id}
                                       href={href}
-                                      target={target}
                                       className={clsx("block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                       onClick={() => setIsMenuOpen(false)}
                                     >
@@ -1022,7 +1041,6 @@ const Header = ({ data }: HeaderProps) => {
                                   }
 
                                   const isExternal = href.startsWith("http://") || href.startsWith("https://");
-                                  const target = item.target || (isExternal ? "_blank" : "_self");
 
                                   // For external links, use regular <a> tag, for internal use Next.js Link
                                   if (isExternal) {
@@ -1030,7 +1048,7 @@ const Header = ({ data }: HeaderProps) => {
                                       <a
                                         key={item.id}
                                         href={href}
-                                        target={target}
+                                        target="_self"
                                         rel="noopener noreferrer"
                                         className={clsx("block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                         onClick={() => setIsMenuOpen(false)}
@@ -1044,7 +1062,6 @@ const Header = ({ data }: HeaderProps) => {
                                     <Link
                                       key={item.id}
                                       href={href}
-                                      target={target}
                                       className={clsx("block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors", isActive(href) ? "text-orange-500 bg-orange-50 font-medium" : "text-gray-700")}
                                       onClick={() => setIsMenuOpen(false)}
                                     >
