@@ -29,12 +29,14 @@ const page = async () => {
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Environment"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/environment"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/environment"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -46,17 +48,17 @@ const page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-      <EnvBanner data={section_one} />
-      <EnvInfo data={section_two} />
-      <EnvCards data={section_two} />
-      <EnvResp data={section_three} />
-      <EnvStrong data={section_four} />
-      <EnvLatest data={section_five} />
+      {section_one && <EnvBanner data={section_one} />}
+      {section_two && <EnvInfo data={section_two} />}
+      {section_two && <EnvCards data={section_two} />}
+      {section_three && <EnvResp data={section_three} />}
+      {section_four && <EnvStrong data={section_four} />}
+      {section_five && <EnvLatest data={section_five} />}
       <GloballyCertified
         title="Globally Certified"
         itemsData={globallyCertifiedData}
       />
-      <EnvExp data={section_six} />
+      {section_six && <EnvExp data={section_six} />}
     </div>
   );
 };
