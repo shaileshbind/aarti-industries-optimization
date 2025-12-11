@@ -22,11 +22,11 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.slice(0, 4).map((release) =>
+          {pressRelease?.press_releases?.slice(0, 4).map((release, index) =>
             // release?.report?.map((item) => (
-                <Link href={release?.file?.url || '#'} target="_blank">
+                <Link href={release?.file?.url || '#'} target="_blank" key={index}>
                 <div
-                key={release?.id}
+                key={index}
                 className="pb-[14px] border-b border-grey-200 mb-[14px]"
               >
                 <BodyText2>{release?.heading}</BodyText2>
