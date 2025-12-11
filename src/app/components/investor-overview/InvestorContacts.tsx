@@ -50,7 +50,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                   {items?.mobile && (
                     <a
                       href={`tel:${items?.mobile}`}
-                      className="mt-[10px] flex gap-x-[4px] items-start"
+                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline"
                     >
                       <Image
                         src="/images/phone.svg"
@@ -87,7 +87,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-[10px] flex gap-x-[4px] items-start"
+                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline"
                     >
                       <Image
                         src="/images/website.svg"
@@ -104,7 +104,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                   {items?.email && (
                     <a
                       href={`mailto:${items?.email}`}
-                      className="mt-[10px] flex gap-x-[4px] items-start"
+                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline"
                     >
                       <Image
                         src="/images/mail.svg"

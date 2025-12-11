@@ -98,6 +98,14 @@ export type InvestorHeadlines = {
         title?: string;
         externalLink?: string;
       }[]
+      news?: {
+        id?: number;
+        newsDescription?: string;
+        image: ImageProps;
+        mobImage: ImageProps;
+        date?: string;
+        ctaButton?: ButtonProps;
+      }[];
     };
   };
 };
