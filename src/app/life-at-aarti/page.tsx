@@ -1,8 +1,7 @@
 import React from "react";
 import LifeAtBanner from "../components/life-at-aarti/LifeAtBanner";
 import LifeAtValues from "../components/life-at-aarti/LifeAtValues";
-import PeopleVision from "../components/life-at-aarti/PeopleVision";
-import AartiEngage from "../components/life-at-aarti/AartiEngage";
+import LifeAtSections from "../components/life-at-aarti/LifeAtSections";
 import AartiNirvana from "../components/life-at-aarti/AartiNirvana";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
@@ -51,8 +50,10 @@ const page = async () => {
       />
       {section_one && <LifeAtBanner data={section_one} />}
       {section_two && <LifeAtValues data2={section_two} />}
-      {section_three && <PeopleVision data={section_three} />}
-      {section_four && <AartiEngage data={section_four} />}
+      <LifeAtSections
+        peopleVisionData={section_three}
+        aartiEngageData={section_four}
+      />
       {section_five && <AartiNirvana data={section_five}  dataImg={gallery}/>}
       {section_six && <AartiWorldLeader data={section_six} />}
       <GloballyCertified

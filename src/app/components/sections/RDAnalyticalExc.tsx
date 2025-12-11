@@ -278,75 +278,17 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       isScrollingProgrammatically.current = false;
     };
   }, []);
-
-  // useLayoutEffect(() => {
-  //   const calculateMarginBottom = () => {
-  //     // Measure the actual content container, not the fixed h-screen container
-  //     const contentContainer = contentContainerRef.current;
-  //     const sliderContainer = sliderContainerRef.current;
-      
-  //     if (!contentContainer || !sliderContainer) {
-  //       setMarginBottom(0);
-  //       return;
-  //     }
-      
-  //     // Get the actual content height - use scrollHeight for accurate measurement
-  //     const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
-  //     const screenHeight = window.innerHeight;
-
-  //     // Only calculate if content is actually taller than screen
-  //     if (contentHeight > screenHeight) {
-  //       const margin = contentHeight - screenHeight;
-  //       setMarginBottom(margin);
-  //     } else {
-  //       setMarginBottom(0);
-  //     }
-  //   };
-
-  //   // Calculate immediately
-  //   calculateMarginBottom();
-
-  //   // Also calculate after a delay to catch any delayed renders
-  //   const timeoutId = setTimeout(() => {
-  //     calculateMarginBottom();
-  //   }, 500);
-
-  //   const resizeObserver = new ResizeObserver(() => {
-  //     // Debounce resize calculations
-  //     setTimeout(calculateMarginBottom, 100);
-  //   });
-    
-  //   if (contentContainerRef.current) {
-  //     resizeObserver.observe(contentContainerRef.current);
-  //   }
-  //   if (sliderContainerRef.current) {
-  //     resizeObserver.observe(sliderContainerRef.current);
-  //   }
-
-  //   const handleResize = () => {
-  //     setTimeout(calculateMarginBottom, 100);
-  //   };
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => {
-  //     clearTimeout(timeoutId);
-  //     resizeObserver.disconnect();
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, [active, details?.length, setMarginBottom]);
-
   useLayoutEffect(() => {
     const calculateMarginBottom = () => {
-      const sliderContainer = sliderContainerRef.current;
+      const sliderContainer = envSlider.current;
       const contentContainer = contentContainerRef.current;
       if (!sliderContainer || !contentContainer) {
         setMarginBottom(0);
         return;
       }
-      const sliderHeight = sliderContainer.offsetHeight;
       const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
       const screenHeight = window.innerHeight;
-      const totalHeight = sliderHeight + contentHeight;
+      const totalHeight = contentHeight + 100;
 
       if (totalHeight > screenHeight) {
         const margin = totalHeight - screenHeight;
@@ -359,8 +301,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     calculateMarginBottom();
 
     const resizeObserver = new ResizeObserver(calculateMarginBottom);
-    if (sliderContainerRef.current) {
-      resizeObserver.observe(sliderContainerRef.current);
+    if (envSlider.current) {
+      resizeObserver.observe(envSlider.current);
     }
     if (contentContainerRef.current) {
       resizeObserver.observe(contentContainerRef.current);
@@ -388,7 +330,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           <div className=" flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  lg:pt-[unset] ">
             {leftText && (
               <span
-                className={clsx(`lg:min-w-[366px]`, className)}
+                className={clsx(`lg:min-w-[366px] lg:text-right`, className)}
                 ref={headinLeft}
               >
                 <H2>{leftText}</H2>
