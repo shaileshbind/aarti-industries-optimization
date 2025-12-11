@@ -12,6 +12,7 @@ import { Navigation, Mousewheel } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -44,8 +45,11 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const envSlider = useRef<HTMLDivElement>(null);
   const titleSection = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTriggerInstance | null>(null);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
 
   const isScrollingProgrammatically = useRef<boolean>(false);
+  const { setMarginBottom } = useMargin();
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -274,7 +278,45 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       isScrollingProgrammatically.current = false;
     };
   }, []);
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = envSlider.current;
+      const contentContainer = contentContainerRef.current;
+      if (!sliderContainer || !contentContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const totalHeight = contentHeight + 100;
 
+      if (totalHeight > screenHeight) {
+        const margin = totalHeight - screenHeight;
+        setMarginBottom(margin);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (envSlider.current) {
+      resizeObserver.observe(envSlider.current);
+    }
+    if (contentContainerRef.current) {
+      resizeObserver.observe(contentContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [active, details?.length, setMarginBottom]);
+  
   return (
     <>
       <div
@@ -288,7 +330,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           <div className=" flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]  lg:pt-[unset] ">
             {leftText && (
               <span
-                className={clsx(`lg:min-w-[366px]`, className)}
+                className={clsx(`lg:min-w-[366px] lg:text-right`, className)}
                 ref={headinLeft}
               >
                 <H2>{leftText}</H2>
@@ -326,8 +368,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
         >
-          <div className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
-            <div className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
+          <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
+            <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
               <div className="relative w-full randdImageHeight h-[250px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
