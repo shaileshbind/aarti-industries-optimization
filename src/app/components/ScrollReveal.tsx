@@ -57,6 +57,7 @@ interface ScrollGroupProps extends ScrollRevealConfig {
   as?: React.ElementType;
   disabled?: boolean;
   groupSelector?: string;
+  y?: number;
 }
 
 export const ScrollGroup = ({
@@ -102,6 +103,30 @@ export const FadeInReveal = ({ children, className = '', delay = 0, duration = 1
     {children}
   </ScrollReveal>
 );
+
+// Fade in with slide up + blur effect
+export const FadeInRevealBlur = ({
+  children,
+  className = '',
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+  <ScrollReveal
+    from={{ autoAlpha: 0, y: 50, filter: 'blur(8px)' }} // start slightly blurred
+    to={{ autoAlpha: 1, y: 0, filter: 'blur(0px)' }} // animate to normal
+    duration={duration}
+    delay={delay}
+    stagger={stagger}
+    ease="power3.out"
+    className={className}
+    {...props}
+  >
+    {children}
+  </ScrollReveal>
+);
+
 
 // Scale in animation
 export const ScaleInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
@@ -184,9 +209,9 @@ export const BounceInReveal = ({ children, className = '', delay = 0, duration =
 );
 
 // Group animations
-export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, y = 50,...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
   <ScrollGroup
-    from={{ autoAlpha: 0, y: 50 }}
+    from={{ autoAlpha: 0, y: y }}
     to={{ autoAlpha: 1, y: 0 }}
     duration={duration}
     delay={delay}

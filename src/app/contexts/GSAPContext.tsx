@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -32,6 +33,7 @@ interface GSAPProviderProps {
 
 export const GSAPProvider = ({ children }: GSAPProviderProps) => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
 
   const createTimeline = () => {
     const timeline = gsap.timeline();
@@ -40,6 +42,25 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
   };
 
   useEffect(() => {
+    // Initialize Lenis Smooth Scroll with optimal settings
+    const lenis = new Lenis({
+      duration: 1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    });
+    lenisRef.current = lenis;
+
+    // Connect Lenis to ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Add Lenis to GSAP ticker
+    const raf = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(raf);
+    gsap.ticker.lagSmoothing(0);
+
     // Refresh ScrollTrigger on mount and when window resizes
     const handleResize = () => {
       ScrollTrigger.refresh();
@@ -48,6 +69,9 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
     window.addEventListener('resize', handleResize);
     
     return () => {
+      // Clean up
+      gsap.ticker.remove(raf);
+      lenis.destroy();
       window.removeEventListener('resize', handleResize);
       // Clean up ScrollTrigger instances
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());

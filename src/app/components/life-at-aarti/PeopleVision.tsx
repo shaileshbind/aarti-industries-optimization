@@ -1,0 +1,605 @@
+/* eslint-disable */
+"use client";
+import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import gsap from "gsap";
+import ScrollTriggerModule from "gsap/ScrollTrigger";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
+import "swiper/css";
+import SliderCard from "../cards/SliderCard";
+import { H2 } from "../Typography2";
+import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
+import { useMargin } from "@/app/contexts/MarginContext";
+
+const ScrollTrigger = ScrollTriggerModule;
+gsap.registerPlugin(ScrollTrigger);
+
+const PeopleVision = ({ data }: LAAVisionProps) => {
+  const { title, content, images } = data;
+
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  const sustainbleLogo = useRef<HTMLDivElement>(null);
+  const susLogotl = useRef<HTMLElement>(null);
+  const susLogotr = useRef<HTMLElement>(null);
+  const susLogobl = useRef<HTMLElement>(null);
+  const susLogobr = useRef<HTMLElement>(null);
+  const sustainInner = useRef<HTMLSpanElement>(null);
+
+  const envSlider = useRef<HTMLDivElement>(null);
+  const titleSection = useRef<HTMLDivElement>(null);
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTabMob, setActiveTabMob] = useState<number>(0);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+
+  const { setMarginBottom } = useMargin();
+
+  const [indicator, setIndicator] = useState({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
+
+  const indicatorColor = "#F97316";
+  const indicatorTransition =
+    "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
+
+  const measureIndicator = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const activeButton = tabRefs.current[activeTab] ?? null;
+
+    if (!activeButton) {
+      setIndicator((prev) =>
+        prev.visible ? { ...prev, visible: false } : prev
+      );
+      return;
+    }
+
+    const left = activeButton.offsetLeft - (container.scrollLeft || 0);
+    const width = activeButton.offsetWidth;
+
+    setIndicator((prev) => {
+      if (prev.left === left && prev.width === width && prev.visible)
+        return prev;
+      return { left, width, visible: true };
+    });
+  }, [activeTab]);
+
+  const handleTabClick = useCallback(
+    (index: number, e?: React.MouseEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
+      if (index === activeTab) return;
+
+      const swiper = swiperRef.current;
+      if (swiper && !swiper.destroyed) {
+        swiper.slideTo(index);
+        setActiveTab(index);
+      }
+    },
+    [activeTab]
+  );
+
+  useLayoutEffect(() => {
+    const isMobile = window.innerWidth < 1024;
+
+    const ctx = gsap.context(() => {
+      if (isMobile) {
+        gsap.set(sustainbleLogo.current, {
+          left: "50%",
+          top: "50%",
+          y: "-50%",
+          x: "-50%",
+          width: "206px",
+          height: "0px",
+        });
+      } else {
+        gsap.set(sustainbleLogo.current, {
+          left: "52%",
+          top: "50%",
+          y: "-50%",
+          x: "-50%",
+        });
+      }
+
+      gsap.set(envSlider.current, { opacity: 0 });
+
+      const animationEndProgress = 0.55;
+      const animationScrollDistance = isMobile
+        ? window.innerHeight * 1.5
+        : window.innerHeight * 4;
+
+      const mainTl = gsap.timeline({
+        scrollTrigger: {
+          id: "respGrowthTrigger11",
+          trigger: triggerRef.current,
+          start: "top 50%",
+          end: `+=${animationScrollDistance}`,
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          refreshPriority: 0,
+          onUpdate: (self) => {
+            if (
+              self.progress >= animationEndProgress &&
+              swiperRef.current &&
+              content && content.length > 0
+            ) {
+              const slides = content.length;
+
+              const slideProgress =
+                (self.progress - animationEndProgress) /
+                (1 - animationEndProgress);
+              const progress = slideProgress * (slides - 1);
+              const index = Math.round(progress);
+
+              if (
+                swiperRef.current &&
+                !swiperRef.current.destroyed &&
+                index !== swiperRef.current.activeIndex
+              ) {
+                swiperRef.current.slideTo(index);
+                setActiveTab(index);
+              }
+            }
+          },
+          onLeave: () => {
+            if (!isMobile && tabsRef.current) {
+              gsap.to(tabsRef.current, {
+                opacity: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                delay: 0.2,
+              });
+            }
+          },
+          onEnterBack: () => {
+            if (!isMobile && tabsRef.current) {
+              gsap.to(tabsRef.current, {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.in",
+              });
+            }
+          },
+        },
+      });
+
+      if (isMobile) {
+        mainTl
+          .fromTo(
+            sustainbleLogo.current,
+            { height: "0px" },
+            { height: "203px", duration: 6 }
+          )
+          .fromTo(
+            susLogotl.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 1 }
+          )
+          .fromTo(
+            susLogobl.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 1 },
+            "<"
+          )
+          .fromTo(
+            susLogobr.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 1 },
+            "<"
+          )
+          .fromTo(
+            susLogotr.current,
+            { width: "100px", right: 0, top: 0 },
+            { width: window.innerWidth - 40, right: 20, duration: 1 }
+          )
+          .fromTo(
+            sustainbleLogo.current,
+            {
+              width: "206px",
+              height: "206px",
+              left: "50%",
+              top: "50%",
+              y: "-50%",
+              x: "-50%",
+            },
+            {
+              width: "100%",
+              height: "500px",
+              left: "0%",
+              top: "50%",
+              y: "-50%",
+              x: "0%",
+              duration: 1,
+            },
+            "<"
+          )
+          .to(titleSection.current, { opacity: 0, duration: 0.5 })
+          .fromTo(
+            envSlider.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<"
+          )
+          .fromTo(
+            ".sectionSpacing",
+            { opacity: 0 },
+            { opacity: 1, duration: 5 },
+            "<"
+          );
+      } else {
+        mainTl
+          .fromTo(
+            sustainbleLogo.current,
+            { width: "0px" },
+            { width: "206px", duration: 1 }
+          )
+          .fromTo(
+            susLogotl.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 0.5 }
+          )
+          .fromTo(
+            susLogobl.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 0.5 },
+            "<"
+          )
+          .fromTo(
+            susLogobr.current,
+            { opacity: 1 },
+            { opacity: 0, duration: 0.5 },
+            "<"
+          )
+          .fromTo(
+            susLogotr.current,
+            { width: "100px" },
+            { width: "500px", duration: 1 }
+          )
+          .fromTo(
+            sustainbleLogo.current,
+            {
+              width: "206px",
+              height: "206px",
+              left: "52%",
+              top: "50%",
+              y: "-50%",
+              x: "-50%",
+            },
+            {
+              width: "500px",
+              height: "500px",
+              left: "0%",
+              top: "50%",
+              y: "-50%",
+              x: "0%",
+              duration: 1,
+            },
+            "<"
+          )
+          .to(titleSection.current, {
+            opacity: 0,
+            duration: 1,
+            filter: "blur(50px)",
+          })
+          .fromTo(
+            envSlider.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<"
+          )
+          .fromTo(
+            ".sectionSpacing",
+            { opacity: 0 },
+            { opacity: 1, duration: 5 },
+            "<"
+          );
+      }
+    });
+
+    return () => {
+      ctx.revert();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+  }, [content]);
+
+  useLayoutEffect(() => {
+    measureIndicator();
+
+    const resizeObserver = new ResizeObserver(measureIndicator);
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+      tabRefs.current.forEach((button) => {
+        if (button) resizeObserver.observe(button);
+      });
+    }
+
+    const handleResize = () => measureIndicator();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeTab, content, measureIndicator]);
+
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = envSlider.current;
+      const contentContainer = contentContainerRef.current;
+      if (!sliderContainer || !contentContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const totalHeight = contentHeight + 100;
+
+      if (totalHeight > screenHeight) {
+        const margin = totalHeight - screenHeight;
+        setMarginBottom(margin);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (envSlider.current) {
+      resizeObserver.observe(envSlider.current);
+    }
+    if (contentContainerRef.current) {
+      resizeObserver.observe(contentContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeTab, content?.length, setMarginBottom]);
+
+  
+  return (
+    <>
+      {title && (
+        <H2 className="text-center max-w-[780px] mx-[20px] lg:mx-auto ">
+          {title}
+        </H2>
+      )}
+      <div
+        ref={triggerRef}
+        className="w-full relative min-h-[40vh] mt-[200px] lg:mt-[100px] "
+      >
+        {/* Title Section */}
+        <div
+          ref={titleSection}
+          className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
+        >
+          <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
+            {/* LEAF LOGOs */}
+            <div
+              ref={sustainbleLogo}
+              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+            >
+              <span
+                ref={sustainInner}
+                className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
+              >
+                {images?.leftTop?.url && (
+                  <i ref={susLogotl} className="absolute top-0 left-0">
+                    <Image
+                      src={images.leftTop.url}
+                      alt={images.leftTop.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+                {images?.rightTop?.url && (
+                  <i ref={susLogotr} className="absolute top-0 right-0">
+                    <Image
+                      src={images.rightTop.url}
+                      alt={images.rightTop.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                      className="w-full h-full"
+                    />
+                  </i>
+                )}
+                {images?.leftBottom?.url && (
+                  <i ref={susLogobl} className="absolute bottom-0 left-0">
+                    <Image
+                      src={images.leftBottom.url}
+                      alt={images.leftBottom.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+                {images?.rightBottom?.url && (
+                  <i ref={susLogobr} className="absolute bottom-0 right-0">
+                    <Image
+                      src={images.rightBottom.url}
+                      alt={images.rightBottom.alternativeText || "icon"}
+                      width={99}
+                      height={101}
+                      priority
+                    />
+                  </i>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* Slider Section */}
+        <div
+          ref={envSlider}
+          className="w-full  bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
+        >
+          {/* Desktop Slider */}
+          <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
+            <div>
+              <Swiper
+                slidesPerView={1.2}
+                spaceBetween={32}
+                loop={false}
+                allowTouchMove={false}
+                speed={600}
+                watchSlidesProgress={true}
+                updateOnWindowResize={true}
+                className="w-full h-auto"
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  swiper.on("resize", () => {
+                    swiper.updateSize();
+                    swiper.updateSlides();
+                    swiper.updateProgress();
+                    swiper.updateSlidesClasses();
+                  });
+                }}
+                onSlideChange={(swiper) => {
+                  setActiveTab(swiper.activeIndex);
+                }}
+              >
+                {content?.map((section: any) =>
+                  section?.card?.map((slide: any) => (
+                    <SwiperSlide key={slide?.id}>
+                      <SliderCard
+                        imgSrc={slide?.image?.url}
+                        imgAlt={slide?.image?.alternativeText || "banner"}
+                        title={section?.category} // parent category
+                        description={slide?.description}
+                        values={slide?.values}
+                        ctaButton={slide?.ctaButton}
+                        heading={slide?.title}
+                        bullets={slide?.BulletPoints}
+                      />
+                    </SwiperSlide>
+                  ))
+                )}
+              </Swiper>
+            </div>
+
+            {/* Tabs */}
+            <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
+              <div className="w-fit mx-auto">
+                <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+                  <div
+                    ref={containerRef}
+                    className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                  >
+                    {/* Indicator */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: indicator.visible ? indicator.left : 0,
+                        top: 0,
+                        height: "100%",
+                        borderRadius: 9999,
+                        background: indicatorColor,
+                        width: indicator.visible ? indicator.width : 0,
+                        transition: indicatorTransition,
+                        zIndex: 0,
+                        pointerEvents: "none",
+                      }}
+                    />
+                    {/* Buttons */}
+                    {content?.map(
+                      (items: any, index: number) =>
+                        items?.category && (
+                          <div
+                            key={index}
+                            ref={(element) => {
+                              tabRefs.current[index] = element;
+                            }}
+                            onClick={(e) => handleTabClick(index, e)}
+                            className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
+                              activeTab === index
+                                ? "text-white"
+                                : "hover:bg-grey-200"
+                            }`}
+                          >
+                            {items?.category}
+                          </div>
+                        )
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Mobile */}
+          <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh] ">
+            <div className="relative" ref={contentContainerRef}>
+              <div className="w-full absolute mt-[70px]">
+                <div className="overflow-x-auto mb-6">
+                  <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-full justify-between md:w-[50%] mx-[unset] md:mx-auto">
+                    {content?.map((item: any, index: number) =>
+                      item?.category ? (
+                        <div
+                          key={index}
+                          onClick={() => setActiveTabMob(index)}
+                          className={`text-grey-400 text-[12px] sm:text-[14px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                            activeTabMob === index
+                              ? "text-white bg-gradient-orange-3"
+                              : "hover:bg-grey-200"
+                          }`}
+                        >
+                          {item?.category}
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </div>
+                <div className="grid items-center gap-6">
+                  {content
+                    ?.filter((_: any, index: number) => index === activeTabMob)
+                    ?.map((section: any) =>
+                      section?.card?.map((slide: any) => (
+                        <SwiperSlide key={slide?.id}>
+                          <SliderCard
+                            imgSrc={slide?.image?.url}
+                            imgAlt={slide?.image?.alternativeText || "banner"}
+                            title={section?.category} // parent category
+                            description={slide?.description}
+                            values={slide?.values}
+                            ctaButton={slide?.ctaButton}
+                            heading={slide?.title}
+                            bullets={slide?.BulletPoints}
+                          />
+                        </SwiperSlide>
+                      ))
+                    )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default PeopleVision;

@@ -1,44 +1,44 @@
-import type { Metadata } from "next";
-import { Work_Sans, PT_Serif, Inter } from "next/font/google";
 import "./globals.css";
+import { Roboto } from "next/font/google";
 import Header from "@/app/components/Header";
+import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
+import { GlobalCursor } from "./GlobalCursor";
+import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
+import SEO from "./components/SEO";
+import type { Metadata } from "next";
 
-const workSans = Work_Sans({
-  variable: "--font-work-sans",
-  subsets: ["latin"],
-});
-
-const ptSerif = PT_Serif({
-  variable: "--font-pt-serif",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+export const revalidate = 1;
 
 export const metadata: Metadata = {
-  title: "Aarti Industries",
-  description: "",
+  icons: {
+    icon: "/images/favicon.png",
+  },
 };
 
-export default function RootLayout({
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-roboto",
+  display: "swap",
+});
+
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const data = await fetchHeaderFooterData();
+
   return (
     <html lang="en">
-      <body
-        className={`${workSans.variable} ${ptSerif.variable} ${inter.variable} antialiased min-h-screen`}
-      >
+      <SEO/>
+      <body className={roboto.variable}>
         <GSAPProvider>
-          <Header />
+          <GlobalCursor />
+          <Header data={data?.Header} />
           <main>{children}</main>
-           
+          <Footer data={data?.Footer}/>
         </GSAPProvider>
       </body>
     </html>
