@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { InvestorHeadlines } from "@/app/types/investor-overview.type";
+import Link from "next/link";
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
@@ -21,24 +22,26 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.map((release) =>
-            release?.report?.map((item) => (
-              <div
-                key={item?.id}
+          {pressRelease?.press_releases?.slice(0, 4).map((release) =>
+            // release?.report?.map((item) => (
+                <Link href={release?.file?.url || '#'} target="_blank">
+                <div
+                key={release?.id}
                 className="pb-[14px] border-b border-grey-200 mb-[14px]"
               >
-                <BodyText2>{item?.heading}</BodyText2>
+                <BodyText2>{release?.heading}</BodyText2>
                 <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                  November 11, 2025
+                  {release?.date}
                 </BodyText2>
               </div>
-            ))
+            </Link>
           )}
           {pressRelease?.ctaButton?.externalLink &&
             pressRelease?.ctaButton?.title && (
               <Button
                 secondary
-                href={pressRelease?.ctaButton?.externalLink}
+                // href={pressRelease?.ctaButton?.externalLink}  
+                href={pressRelease.ctaButton?.hasExternalLink == "true" ? pressRelease.ctaButton?.externalLink : pressRelease.ctaButton?.link?.link}
                 title={pressRelease?.ctaButton?.title}
                 className="mt-[10px] lg:mt-[30px]"
               />
@@ -51,10 +54,11 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 {mediaCoverage?.title}
               </H2>
             )}
+            {/* {console.log(mediaCoverage?.ctaButton?.[0])} */}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              mediaCoverage?.ctaButton?.[0]?.externalLink && (
+              (mediaCoverage?.ctaButton?.[0]?.externalLink || mediaCoverage?.ctaButton?.[0]?.link?.link && mediaCoverage?.ctaButton?.[0]?.link?.link !== "#") && (
                 <Button
-                  href={mediaCoverage?.ctaButton?.[0]?.externalLink}
+                  href={mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true" ? mediaCoverage?.ctaButton?.[0]?.externalLink : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"}
                   title={mediaCoverage?.ctaButton?.[0]?.title}
                   secondary
                 />
@@ -92,15 +96,15 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               }}
               className="!px-[20px] lg:!px-[0px]"
             >
-              {[0, 1, 2].map((index) => {
+              {mediaCoverage?.news?.map((news, index) => {
                 return (
                   <SwiperSlide key={index}>
                     <DateCard
-                      key={index}
-                      imageSrc="/images/home/hero-banner1.png"
-                      date="May 21, 2025"
-                      desc="Lorem ipsum dolor sit amet consectetur. Urna at mi nunc sit cursus eu diam congue. "
-                      link="#"
+                      key={news?.id}
+                      imageSrc={news?.image?.url}
+                      date={news?.date}
+                      desc={news?.newsDescription}
+                      link={news?.ctaButton?.externalLink}
                     />
                   </SwiperSlide>
                 );

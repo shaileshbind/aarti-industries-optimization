@@ -86,7 +86,7 @@ export default function WorksWithPartners({
 
   return (
     <div className="fluid-container">
-      <div className="lg:flex justify-between items-center">
+      <div className="lg:flex justify-between items-center hidden">
         {sectionTitle && (
           <FadeInReveal>
             <H2>{sectionTitle}</H2>
@@ -97,6 +97,14 @@ export default function WorksWithPartners({
           <FadeInReveal>
             <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
           </FadeInReveal>
+        )}
+      </div>
+      <div className="flex justify-between items-center lg:hidden">
+        {sectionTitle && (
+            <H2>{sectionTitle}</H2>
+        )}
+        {ctaTitle && ctaLink && ( 
+            <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
         )}
       </div>
 

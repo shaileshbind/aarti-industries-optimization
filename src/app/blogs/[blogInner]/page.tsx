@@ -127,13 +127,13 @@ export default async function page({ params }: BlogInnerProps) {
           </div>
 
           <div className="hidden md:block">
-            <StickyShare title={shareViaSocials?.title} />{" "}
+            <StickyShare title={shareViaSocials?.title || "Share Now"} />{" "}
           </div>
 
           <div className="block md:hidden">
             <div className="mt-6">
               <p className="text-[#002F50] text-base pb-4">
-                {shareViaSocials?.title}
+                {shareViaSocials?.title || "Share Now"}
               </p>
               <div className="flex gap-4 items-start">
                 <Share />
@@ -161,7 +161,7 @@ export default async function page({ params }: BlogInnerProps) {
                       <DateCard
                         imageSrc={item?.thumbnailImageDesktop?.url}
                         date={formatDate(item?.date)}
-                        desc={item?.excerpt}
+                        desc={item?.title}
                         link={
                           type === "blog"
                             ? `/blogs/${item?.slug}`

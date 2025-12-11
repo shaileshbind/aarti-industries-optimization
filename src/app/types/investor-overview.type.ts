@@ -76,28 +76,27 @@ export type InvestorHeadlines = {
       title?: string;
       press_releases?: {
         id?: number;
-        report?: {
+        heading?: string;
+        date?: string;
+        // link?: string;
+        file?: {
           id?: number;
-          heading?: string;
-          link?: string;
-          file?: {
-            url?: string;
-          };
-        }[];
+          url?: string;
+        };
       }[];
-      ctaButton?: {
-        id?: number;
-        title?: string;
-        externalLink?: string;
-      };
+      ctaButton?: ButtonProps;
     };
     mediaCoverage?: {
       title?: string;
-      ctaButton?: {
+      ctaButton?: ButtonProps[];
+      news?: {
         id?: number;
-        title?: string;
-        externalLink?: string;
-      }[]
+        newsDescription?: string;
+        image: ImageProps;
+        mobImage: ImageProps;
+        date?: string;
+        ctaButton?: ButtonProps;
+      }[];
     };
   };
 };

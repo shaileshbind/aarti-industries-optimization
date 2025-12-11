@@ -18,13 +18,8 @@ export default function TimeLine({
     years: milestone.timeline_milestones.map((item) =>
       parseInt(item.year.slice(0, 4))
     ),
-    images: [
-      "/images/our-story/old1.png",
-      "/images/our-story/old2.png",
-      "/images/our-story/old3.png",
-    ],
+    images: milestone.images?.map((image) => image?.url) || [],
   })) || [];
-
   const yearContent = data?.milestone?.reduce((acc, milestone) => {
     milestone.timeline_milestones.forEach((item) => {
       const numericYear = parseInt(item.year.slice(0, 4));
