@@ -76,14 +76,13 @@ export type InvestorHeadlines = {
       title?: string;
       press_releases?: {
         id?: number;
-        report?: {
+        heading?: string;
+        date?: string;
+        // link?: string;
+        file?: {
           id?: number;
-          heading?: string;
-          link?: string;
-          file?: {
-            url?: string;
-          };
-        }[];
+          url?: string;
+        };
       }[];
       ctaButton?: ButtonProps;
     };
