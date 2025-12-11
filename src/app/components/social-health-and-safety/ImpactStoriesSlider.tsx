@@ -103,7 +103,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
         <div className="relative h-full flex ">
           <div className="w-full">
             {/* Decorative Header */}
-            <div className="absolute top-0 left-0 p-20 z-10">
+            <div className="absolute top-0 left-0 px-20 py-10 z-10">
               <H3 className='text-white'>
                 {title}
               </H3>
@@ -130,7 +130,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                       h-full  relative overflow-hidden transition-all duration-700 ease-out`}
                     >
                       {/* Content */}
-                      <div className="relative h-full p-8 flex flex-col justify-between pt-50">
+                      <div className="relative h-full p-8 flex flex-col justify-between pt-35">
 
                         <div className={`flex flex-col ${isActive ? 'px-10' : ''}`}>
                           <div className={`text-white text-xs tracking-widest ${isActive ? 'opacity-100' : 'opacity-60'}`}>
