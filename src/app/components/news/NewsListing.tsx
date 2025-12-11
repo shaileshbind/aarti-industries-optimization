@@ -7,6 +7,7 @@ import Image from "next/image";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import { styled } from "@mui/material/styles";
+import { formatDate } from "../../../../utils/formatDate";
 
 const tabs = [
   { id: 0, category: "Interviews", slug: "Interviews" },
@@ -284,7 +285,7 @@ const NewsListing = () => {
                   >
                     <NewsCard
                       imageSrc={item?.image?.url}
-                      date={item?.date}
+                      date={formatDate(item?.date || "")}
                       desc={item?.newsDescription}
                       link={item?.ctaButton?.externalLink || "#"}
                       animate
