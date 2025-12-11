@@ -10,6 +10,7 @@ import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { H2 } from "../Typography2";
 import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
@@ -37,6 +38,9 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+
+  const { setMarginBottom } = useMargin();
 
   const [indicator, setIndicator] = useState({
     left: 0,
@@ -333,6 +337,46 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     };
   }, [activeTab, content, measureIndicator]);
 
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = envSlider.current;
+      const contentContainer = contentContainerRef.current;
+      if (!sliderContainer || !contentContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const totalHeight = contentHeight + 100;
+
+      if (totalHeight > screenHeight) {
+        const margin = totalHeight - screenHeight;
+        setMarginBottom(margin);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (envSlider.current) {
+      resizeObserver.observe(envSlider.current);
+    }
+    if (contentContainerRef.current) {
+      resizeObserver.observe(contentContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeTab, content?.length, setMarginBottom]);
+
+  
   return (
     <>
       {title && (
@@ -411,7 +455,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
         {/* Slider Section */}
         <div
           ref={envSlider}
-          className="w-full max-h-[100vh] bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
+          className="w-full  bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
         >
           {/* Desktop Slider */}
           <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
@@ -507,8 +551,8 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             </div>
           </div>
           {/* Mobile */}
-          <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 overflow-y-auto left-0 w-full !h-[100%] min-h-[100vh] ">
-            <div className="relative">
+          <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh] ">
+            <div className="relative" ref={contentContainerRef}>
               <div className="w-full absolute mt-[70px]">
                 <div className="overflow-x-auto mb-6">
                   <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-full justify-between md:w-[50%] mx-[unset] md:mx-auto">

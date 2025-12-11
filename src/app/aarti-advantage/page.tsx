@@ -3,8 +3,7 @@ import AartiAdvantageBanner from "../components/aarti-advantage/AartiAdvantageBa
 import DetailsContainer from "../components/sections/DetailsContainer";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
-import RDAnalyticalExc from "../components/sections/RDAnalyticalExc";
-import AilEdge from "../components/aarti-advantage/AilEdge";
+import AdvantageSections from "../components/aarti-advantage/AdvantageSections";
 import WorksWithPartners from "../components/sections/WorksWithPartners";
 import AdvExplore from "../components/aarti-advantage/AdvExplore";
 import SEO from "../components/SEO";
@@ -55,20 +54,11 @@ export default async function page() {
 
       {section_two && <DetailsContainer data={section_two} />}
 
-      <div>
-        <RDAnalyticalExc
-          className="lg:!min-w-[0]"
-          data={section_three}
-          sliderData={section_four}
-          showButton={false}
-        />
-      </div>
-
-      {section_five && (
-        <div className="pt-[180px] pb-[72px] lg:py-[140px]">
-          <AilEdge data={section_five} />
-        </div>
-      )}
+      <AdvantageSections
+        ExcdData={section_three}
+        ExcdSliderData={section_four}
+        ailEdgeData={section_five}
+      />
 
       {section_six && (
         <div className="pb-[72px] lg:pb-[140px]">

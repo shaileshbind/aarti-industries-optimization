@@ -6,7 +6,7 @@ import Chip from "../cards/Chip";
 import FaqAccordion from "../FaqAccordian";
 import Image from "next/image";
 import { RDDiverseChemProps } from "@/app/types/r-and-d.type";
-
+import { useMargin } from "@/app/contexts/MarginContext";
 const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
   const { title, description } = data;
   const { newChemistries, existingChemistries } = data2;
@@ -14,7 +14,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
   const [swapped, setSwapped] = useState(false);
   const [expanded, setExpanded] = React.useState<string | false>("panel0");
   const gridRef = useRef<HTMLDivElement | null>(null);
-
+  const { marginBottom } = useMargin();
   useLayoutEffect(() => {
     if (!gridRef.current) return;
 
@@ -61,8 +61,12 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
       setExpanded(isExpanded ? panel : false);
     };
 
+    console.log("marginBottom", marginBottom);
+
   return (
-    <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]">
+    <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]"
+    style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    >
       <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[50px] ">
         {title && (
           <div>
