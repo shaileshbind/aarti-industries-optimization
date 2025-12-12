@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { H2 } from "../Typography2";
+import { BodyText1, BodyText2, BodyText3, H2 } from "../Typography2";
 import { IndependentDirectorsProps } from "@/app/types/corporate-governance.type";
 import MeetMinds from "../sections/MeetMinds";
 import gsap from "gsap";
@@ -16,6 +16,108 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const committees = [
+    {
+      committee: "Audit Committee",
+      members: [
+        {
+          name: "Shri Lalitkumar S. Naik",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Shekhar S. Khanolkar",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Nikhil J. Bhatia",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Ashok Kumar Barat",
+          role1: "Independent Director",
+          role2: null,
+        },
+      ],
+    },
+    {
+      committee: "Nomination & Remuneration Committee",
+      members: [
+        {
+          name: "Prof. Aniruddha B. Pandit",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Belur K. Sethuram",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Smt. Rupa Devi Singh",
+          role1: "Independent Director",
+          role2: null,
+        },
+      ],
+    },
+    {
+      committee: "CSR Committee",
+      members: [
+        {
+          name: "Smt. Hetal Gogri Gala",
+          role1: "Non-Executive",
+          role2: "Non-Independent Director",
+        },
+        {
+          name: "Smt. Rupa Devi Singh",
+          role1: "Independent Director",
+          role2: null,
+        },
+      ],
+    },
+    {
+      committee: "Stakeholders’ Relationship Committee",
+      members: [
+        {
+          name: "Smt. Hetal Gogri Gala",
+          role1: "Non-Executive",
+          role2: "Non-Independent Director",
+        },
+        {
+          name: "Prof. Aniruddha B. Pandit",
+          role1: "Independent Director",
+          role2: null,
+        },
+      ],
+    },
+    {
+      committee: "Risk Management Committee",
+      members: [
+        {
+          name: "Smt. Hetal Gogri Gala",
+          role1: "Non-Executive",
+          role2: "Non-Independent Director",
+        },
+        {
+          name: "Shri Belur K. Sethuram",
+          role1: "Independent Director",
+          role2: null,
+        },
+      ],
+    },
+    {
+      committee: "Finance & Investment Committee",
+      members: [
+        {
+          name: "Smt. Hetal Gogri Gala",
+          role1: "Non-Executive",
+          role2: "Non-Independent Director",
+        },
+      ],
+    },
+  ];
 
   // Transform data structure to match MeetMinds component expectations
   const tabs = [
@@ -154,14 +256,57 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
         ))}
       </div>
       <div ref={contentRef}>
-        {tabs?.[active] && (
-          <MeetMinds
-            data={tabs[active]?.meetMindsData}
-            hideTitle={true}
-            progressClassName="leader-section-swiper-2"
-            navigationNextClass="swiper-button-next-leaderSection-2"
-            navigationPrevClass="swiper-button-prev-leaderSection-2"
-          />
+        {active === 0 ? (
+          tabs?.[active] && (
+            <MeetMinds
+              data={tabs[active]?.meetMindsData}
+              hideTitle={true}
+              progressClassName="leader-section-swiper-2"
+              navigationNextClass="swiper-button-next-leaderSection-2"
+              navigationPrevClass="swiper-button-prev-leaderSection-2"
+            />
+          )
+        ) : (
+          <div className="fluid-container grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 mt-10 pb-[52px] lg:pb-[140px]">
+            {committees?.map((item, index) => (
+              <div
+                key={"committee_" + index}
+                className="border-[1px] bg-[#EFF3F5] border-grey-200 rounded-[20px] p-4 md:p-6"
+              >
+                <BodyText1 className="text-[#002F50] text-[16px] xl:text-[18px]">
+                  {item?.committee}
+                </BodyText1>
+
+                <div className="w-8 h-[2px] bg-[#DC4C03] mt-1 mb-6 md:mb-8"></div>
+
+                <div className="flex flex-col gap-3">
+                  {item?.members?.map((member, idx) => (
+                    <div key={"member_" + idx}>
+                      {member?.name && (
+                        <BodyText2 className="text-[#002F50]">
+                          {member?.name}
+                        </BodyText2>
+                      )}
+
+                      <div>
+                        {member?.role1 && (
+                          <BodyText3 className="py-1 text-[#9997A2]">
+                            {member?.role1} {member?.role2 && <span>,</span>}{" "}
+                          </BodyText3>
+                        )}
+
+                        {member?.role2 && (
+                          <BodyText3 className="text-[#9997A2]">
+                            {member?.role2}
+                          </BodyText3>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
