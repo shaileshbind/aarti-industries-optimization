@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { InvestorHeadlines } from "@/app/types/investor-overview.type";
 import Link from "next/link";
+import { formatDate } from "../../../../utils/formatDate";
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
@@ -22,26 +23,28 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.slice(0, 4).map((release, index) =>
-            // release?.report?.map((item) => (
-                <Link href={release?.file?.url || '#'} target="_blank" key={index}>
-                <div
+          {pressRelease?.press_releases?.slice(0, 4).map((release, index) => (
+            <Link href={release?.file?.url || "#"} target="_blank" key={index}>
+              <div
                 key={index}
                 className="pb-[14px] border-b border-grey-200 mb-[14px]"
               >
-                <BodyText2>{release?.heading}</BodyText2>
-                <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                  {release?.date}
-                </BodyText2>
+               {release?.heading && <BodyText2>{release?.heading}</BodyText2>}
+               {release?.date && <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
+                  {formatDate(release?.date)}
+                </BodyText2>}
               </div>
             </Link>
-          )}
+          ))}
           {pressRelease?.ctaButton?.externalLink &&
             pressRelease?.ctaButton?.title && (
               <Button
                 secondary
-                // href={pressRelease?.ctaButton?.externalLink}  
-                href={pressRelease.ctaButton?.hasExternalLink == "true" ? pressRelease.ctaButton?.externalLink : pressRelease.ctaButton?.link?.link}
+                href={
+                  pressRelease.ctaButton?.hasExternalLink == "true"
+                    ? pressRelease.ctaButton?.externalLink
+                    : pressRelease.ctaButton?.link?.link
+                }
                 title={pressRelease?.ctaButton?.title}
                 className="mt-[10px] lg:mt-[30px]"
               />
@@ -55,9 +58,15 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               </H2>
             )}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              (mediaCoverage?.ctaButton?.[0]?.externalLink || mediaCoverage?.ctaButton?.[0]?.link?.link && mediaCoverage?.ctaButton?.[0]?.link?.link !== "#") && (
+              (mediaCoverage?.ctaButton?.[0]?.externalLink ||
+                (mediaCoverage?.ctaButton?.[0]?.link?.link &&
+                  mediaCoverage?.ctaButton?.[0]?.link?.link !== "#")) && (
                 <Button
-                  href={mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true" ? mediaCoverage?.ctaButton?.[0]?.externalLink : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"}
+                  href={
+                    mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                      ? mediaCoverage?.ctaButton?.[0]?.externalLink
+                      : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"
+                  }
                   title={mediaCoverage?.ctaButton?.[0]?.title}
                   secondary
                 />
@@ -101,7 +110,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                     <DateCard
                       key={news?.id}
                       imageSrc={news?.image?.url}
-                      date={news?.date}
+                      date={formatDate(news?.date ?? "")}
                       desc={news?.newsDescription}
                       link={news?.ctaButton?.externalLink}
                     />
