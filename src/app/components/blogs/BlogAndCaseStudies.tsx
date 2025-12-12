@@ -291,7 +291,7 @@ export default function BlogAndCaseStudies({
             >
               <DateCard
                 imageSrc={item?.thumbnailImageDesktop?.url}
-                date={formatDate(item?.date) || ""}
+                date={formatDate(item?.date)}
                 desc={item?.title}
                 link={`/${active === "blogs" ? "blogs" : "case-studies"}/${
                   item?.slug

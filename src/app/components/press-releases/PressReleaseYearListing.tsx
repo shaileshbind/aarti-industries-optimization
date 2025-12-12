@@ -21,6 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BodyText2, BodyText3, SubH1 } from "../Typography2";
 import Button from "../Button";
 import Link from "next/link";
+import { formatDate } from "../../../../utils/formatDate";
 
 export type PressItem = {
   id?: number;
@@ -151,9 +152,9 @@ export default function PressReleaseYearListing({
               {latestReleases.slice(0, 2).map((item, index) => (
                 <div key={`latest_${index}`} className="flex flex-col gap-5">
                   <div className="flex flex-col gap-3">
-                    <BodyText3 className="text-[#9997A2]">
-                      {item?.date}
-                    </BodyText3>
+                   {item?.date && <BodyText3 className="text-[#9997A2]">
+                      {formatDate(item?.date)}
+                    </BodyText3>}
                     <BodyText2 className="text-[#10456A] text-base leading-[1.54]">
                       {item?.shortDescription}
                     </BodyText2>
@@ -257,9 +258,9 @@ export default function PressReleaseYearListing({
                         {item?.heading}
                       </p>
                     </Link>
-                    <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item?.date}
-                    </p>
+                  {item?.date &&  <p className="text-[#9997A2] text-sm leading-[1.4]">
+                      {formatDate(item?.date)}
+                    </p>}
                   </div>
                   {item?.file?.url && (
                     <a
@@ -300,9 +301,9 @@ export default function PressReleaseYearListing({
                         {item?.heading}
                       </p>
                     </Link>
-                    <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item?.date}
-                    </p>
+                   {item?.date && <p className="text-[#9997A2] text-sm leading-[1.4]">
+                      {formatDate(item?.date)}
+                    </p>}
                   </div>
                   {item?.file?.url && (
                     <a

@@ -8,6 +8,7 @@ import Button from "../Button";
 import { useMediaQuery } from "@mui/material";
 import { VideoScrollBarContainerProps, WebinarApiItem } from "@/app/types/manufacturing-capabilities.type";
 import { ImageProps } from "@/app/types/global.type";
+import { formatDate } from "../../../../utils/formatDate";
 
 export default function VideoScrollBarContainer({
   data,
@@ -78,7 +79,7 @@ export default function VideoScrollBarContainer({
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                  <BodyText3 className="text-orange-200">{item?.date}</BodyText3>
+                 {item?.date && <BodyText3 className="text-orange-200">{formatDate(item?.date)}</BodyText3>}
                   {item?.title && item?.date && (
                     <SubH3
                         className={clsx(
