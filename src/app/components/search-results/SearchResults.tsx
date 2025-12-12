@@ -186,8 +186,7 @@ export default function SearchResults() {
       );
       const data = await response.json();
       setsearchedData(data?.data);
-    } catch (error) {
-      console.error("Search error:", error);
+    } catch {
       setsearchedData(null);
     } finally {
       setIsLoading(false);
@@ -235,8 +234,6 @@ export default function SearchResults() {
           </div>
         )}
       </div>
-
-      {console.log("searchedData", searchedData)}
 
       <div className="flex flex-col gap-4 pb-20">
         {isLoading && (

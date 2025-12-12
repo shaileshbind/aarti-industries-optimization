@@ -31,10 +31,10 @@ const Header = ({ data }: HeaderProps) => {
   const desktopDropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const desktopSubMenuRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const searchBackdropRef = useRef<HTMLDivElement>(null);
+  const prevPathnameRef = useRef<string>(pathname);
 
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
-      console.log("isMenuOpen", isMenuOpen);
       setIsMenuOpen(false);
       setIsSearchOpen(false);
       // Reset expanded menus when closing
@@ -52,7 +52,6 @@ const Header = ({ data }: HeaderProps) => {
         }
       );
     } else {
-      console.log("isMenuOpen", isMenuOpen);
       setIsMenuOpen(true);
       setIsSearchOpen(false);
       // Find menu item with active page and expand it
@@ -181,20 +180,24 @@ const Header = ({ data }: HeaderProps) => {
   };
   // Close mobile menu when route changes
   useEffect(() => {
-    if (isMenuOpen && mobileNavRef.current) {
+    // Check if pathname actually changed (skip initial render)
+    if (prevPathnameRef.current !== pathname && mobileNavRef.current) {
+      // Always close menu when route changes, regardless of state
+      // This handles cases where onClick set state but didn't trigger animation
       setIsMenuOpen(false);
-      gsap.fromTo(
-        mobileNavRef.current,
-        {
-          top: "0%",
-        },
-        {
-          top: "-100%",
-          duration: 0.6,
-          ease: "power3.inOut",
-        }
-      );
+      // Reset expanded menus when closing
+      setMobileExpandedMenu(null);
+      setMobileExpandedSubMenu(null);
+      
+      // Animate menu close
+      gsap.to(mobileNavRef.current, {
+        top: "-100%",
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
     }
+    // Update the ref for next comparison
+    prevPathnameRef.current = pathname;
   }, [pathname]);
 
   // When a dropdown opens, expand the first submenu by default (only for first dropdown)
