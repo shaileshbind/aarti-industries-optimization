@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Mousewheel, Pagination, Navigation } from "swiper/modules";
+import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
 import {
@@ -64,7 +64,11 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                 sensitivity: 1,
                 releaseOnEdges: true,
               }}
-              modules={[Pagination, Mousewheel, Navigation]}
+              modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
               pagination={{
                 el: `.${progressClassName || "leader-section-swiper"}`,
                 type: "progressbar",

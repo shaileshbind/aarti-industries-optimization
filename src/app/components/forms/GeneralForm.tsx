@@ -11,6 +11,7 @@ import {
   MenuItem,
   Autocomplete,
   Paper,
+  Popper,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
@@ -313,14 +314,18 @@ export default function GeneralForm({
 
   // --- Form JSX ---
   return (
-    <div  data-lenis-prevent className="w-full">
+    <div data-lenis-prevent className="w-full">
       {showTitle && (
         <div>
           <p className="text-xl text-[#002F50]">Recipient Information</p>
           <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
         </div>
       )}
-      <form data-lenis-prevent className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        data-lenis-prevent
+        className="w-full popup"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
@@ -634,7 +639,6 @@ export default function GeneralForm({
                 rules={{ required: "Product Name is required" }}
                 render={({ field }) => (
                   <Autocomplete
-                  
                     {...field}
                     options={productsWithOthers}
                     getOptionLabel={(option) => option}
@@ -647,6 +651,9 @@ export default function GeneralForm({
                           bgcolor: "#fffdf8",
                         }}
                       />
+                    )}
+                    PopperComponent={(props) => (
+                      <Popper {...props} data-lenis-prevent />
                     )}
                     renderInput={(params) => (
                       <TextField
