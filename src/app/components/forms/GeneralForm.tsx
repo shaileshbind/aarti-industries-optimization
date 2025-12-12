@@ -31,7 +31,7 @@ type FormValues = {
   category: string;
   subCategory: string;
   productName: string;
-  recievedEmail?:string;
+  recievedEmail?: string;
 };
 
 type CategorySubcategoryItem = {
@@ -59,7 +59,7 @@ type productsDataType = {
 type formSubCategories = {
   id?: number;
   name?: string;
-  reciverEmail?:string;
+  reciverEmail?: string;
 };
 type productsDataCatSubcatType = {
   id?: number;
@@ -103,7 +103,7 @@ export default function GeneralForm({
       category: "",
       subCategory: "",
       productName: "",
-      recievedEmail:"",
+      recievedEmail: "",
     },
   });
 
@@ -136,7 +136,7 @@ export default function GeneralForm({
             subCatEmails:
               item?.form_sub_categories?.map(
                 (item: formSubCategories) => item?.reciverEmail
-              ) || [],       
+              ) || [],
           })) || [];
         setCategorySubcategoryData(transformedData);
 
@@ -159,7 +159,11 @@ export default function GeneralForm({
             }
           }
         }
-        if (prefillProduct && (transformedProducts.includes(prefillProduct) || prefillProduct === "Others")) {
+        if (
+          prefillProduct &&
+          (transformedProducts.includes(prefillProduct) ||
+            prefillProduct === "Others")
+        ) {
           updatedDefaults.productName = prefillProduct;
         }
         // Use reset to apply the prefilled values reliably
@@ -211,7 +215,12 @@ export default function GeneralForm({
         }
       }
     }
-  }, [selectedCategory, selectedSubcategory, categorySubcategoryData, setValue]);
+  }, [
+    selectedCategory,
+    selectedSubcategory,
+    categorySubcategoryData,
+    setValue,
+  ]);
 
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
@@ -239,7 +248,7 @@ export default function GeneralForm({
 
   const onSubmit = async (data: FormValues) => {
     // Determine if Salesforce lead applies
-    const sendEmail = true
+    const sendEmail = true;
     const hasSalesforceLead =
       data.subCategory === "Chemicals Products" &&
       data.productName !== "" &&
@@ -328,6 +337,18 @@ export default function GeneralForm({
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
             onKeyDown={(e) => {
+              if (
+                e.key === "Backspace" ||
+                e.key === "Delete" ||
+                e.key === "ArrowLeft" ||
+                e.key === "ArrowRight" ||
+                e.key === "Tab" ||
+                e.ctrlKey ||
+                e.metaKey
+              ) {
+                return;
+              }
+
               // Prevent numbers and special characters, allow only letters and space
               if (!/^[a-zA-Z\s]$/.test(e.key)) {
                 e.preventDefault();
@@ -410,6 +431,18 @@ export default function GeneralForm({
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
               onKeyDown={(e) => {
+                if (
+                  e.key === "Backspace" ||
+                  e.key === "Delete" ||
+                  e.key === "ArrowLeft" ||
+                  e.key === "ArrowRight" ||
+                  e.key === "Tab" ||
+                  e.ctrlKey ||
+                  e.metaKey
+                ) {
+                  return;
+                }
+
                 // Prevent numbers and special characters, allow only letters and space
                 if (!/^[a-zA-Z\s]$/.test(e.key)) {
                   e.preventDefault();

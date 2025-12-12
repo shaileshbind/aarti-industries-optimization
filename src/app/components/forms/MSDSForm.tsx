@@ -133,6 +133,18 @@ export default function MSDSForm({
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
               onKeyDown={(e) => {
+                if (
+                  e.key === "Backspace" ||
+                  e.key === "Delete" ||
+                  e.key === "ArrowLeft" ||
+                  e.key === "ArrowRight" ||
+                  e.key === "Tab" ||
+                  e.ctrlKey ||
+                  e.metaKey
+                ) {
+                  return;
+                }
+
                 // Prevent numbers and special characters, allow only letters and space
                 if (!/^[a-zA-Z\s]$/.test(e.key)) {
                   e.preventDefault();
