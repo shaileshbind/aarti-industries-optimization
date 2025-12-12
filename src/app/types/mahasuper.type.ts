@@ -54,7 +54,7 @@ export type ProductPortfolioProps = {
       description: string;
       states: { id: string | number; title: string }[];
       subtitle: string;
-      stats: { id: string | number; value: string; label: string }[];
+      stats: { id: string | number; value: string; description: string }[];
       ctaLink: string;
       ctaTitle: string;
       image: ImageProps;

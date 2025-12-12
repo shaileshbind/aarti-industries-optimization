@@ -39,7 +39,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                             {stats.map((stat) => (
                                 <li key={stat.id} className="flex flex-col gap-2 bg-grey-100 p-5 rounded-2xl"> 
                                     <H2 className="text-orange-100 !text-[40px] md:!text-[60px]">{stat.value}</H2>
-                                    <BodyText3 className="text-[#4C5861]">{stat.label}</BodyText3>
+                                    <BodyText3 className="text-[#4C5861]">{stat.description}</BodyText3>
                                 </li>
                             ))}
                         </ul>
@@ -50,9 +50,9 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                                   onClick={() => {
                                     setshowGeneralPopup(true);
                                   }}
-                                  className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
+                                  className={`animated-underline w-fit mt-7 cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
                                 >
-                                  Read More
+                                  {ctaTitle || "Read More"}
                                 </button>
                     )}
                 </div>
