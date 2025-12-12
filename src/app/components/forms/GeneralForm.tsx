@@ -313,14 +313,14 @@ export default function GeneralForm({
 
   // --- Form JSX ---
   return (
-    <div className="w-full">
+    <div  data-lenis-prevent className="w-full">
       {showTitle && (
         <div>
           <p className="text-xl text-[#002F50]">Recipient Information</p>
           <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
         </div>
       )}
-      <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
+      <form data-lenis-prevent className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
         <div
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
@@ -634,6 +634,7 @@ export default function GeneralForm({
                 rules={{ required: "Product Name is required" }}
                 render={({ field }) => (
                   <Autocomplete
+                  
                     {...field}
                     options={productsWithOthers}
                     getOptionLabel={(option) => option}

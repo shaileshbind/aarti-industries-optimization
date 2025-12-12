@@ -252,12 +252,11 @@ export default function PressReleaseYearListing({
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1">
-                    {/* commented on purpose */}
-                    {/* <Link href={`/press-releases/${item?.slug}`} target="_blank"> */}
+                    <Link href={`/press-releases/${item?.slug}`} target="_blank">
                       <p className="text-[#0F3557] text-lg leading-[1.6]">
                         {item?.heading}
                       </p>
-                    {/* </Link> */}
+                    </Link>
                     <p className="text-[#9997A2] text-sm leading-[1.4]">
                       {item?.date}
                     </p>
