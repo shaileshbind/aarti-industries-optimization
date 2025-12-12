@@ -142,7 +142,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </H2>
           )}
 
-          <div className="mt-6 md:mt-[65px] mb-[27px] flex justify-between items-center max-w-[100%] lg:max-w-[440px] lg:block hidden">
+          <div className="mt-6 md:mt-[65px] mb-[27px] justify-between items-center max-w-[100%] lg:max-w-[440px] lg:flex hidden">
             <BodyText2 className="text-orange-200">
               0{activeIndex + 1}-<span>0{card?.length}</span>
             </BodyText2>
