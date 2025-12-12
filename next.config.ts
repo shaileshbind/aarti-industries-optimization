@@ -16,7 +16,7 @@ const nextConfig: NextConfig = async () => {
   // const secrets = await getSecret(secretName as string);
   // console.log("Fetched Secrets:", secrets);
 
-  let nextConfigObject: Partial<NextConfig> = {
+  const nextConfigObject: Partial<NextConfig> = {
     images: {
       unoptimized: true,
     },
@@ -39,7 +39,7 @@ const nextConfig: NextConfig = async () => {
   }
 
   if (environment === "true" && awsSecrets) { 
-    nextConfigObject.env = { ...awsSecrets };
+    nextConfigObject.env = { ...(awsSecrets as Record<string, string>) };
   }
 
   console.log("Final nextConfigObject:", nextConfigObject);

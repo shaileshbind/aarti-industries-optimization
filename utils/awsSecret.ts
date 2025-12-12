@@ -13,7 +13,7 @@ const client = new SecretsManagerClient({
  * @param secretName - The name of the secret in AWS Secrets Manager.
  * @returns The secret as a parsed object.
  */
-export async function getSecret(secretName: string): Promise<any> {
+export async function getSecret(secretName: string): Promise<Record<string, unknown>> {
     console.log(`[AWS Secrets Manager] Fetching secret: ${secretName}`);
     try {
         const response = await client.send(

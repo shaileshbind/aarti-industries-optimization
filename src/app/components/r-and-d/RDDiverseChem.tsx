@@ -61,8 +61,6 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
       setExpanded(isExpanded ? panel : false);
     };
 
-    console.log("marginBottom", marginBottom);
-
   return (
     <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]"
     style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
