@@ -9,6 +9,7 @@ import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { formatDate } from "../../../../utils/formatDate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -213,7 +214,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                     <div className="date-card-anim">
                       <DateCard
                         imageSrc={item?.image?.url}
-                        date={item?.date}
+                        date={formatDate(item?.date)}
                         desc={item?.description}
                         link={item?.link}
                         animate
