@@ -280,8 +280,6 @@ export default function GeneralForm({
       });
 
       if (response.ok) {
-      //  const result = await response.json();
-      // console.log("Success:", result);
         setshowGeneralPopup?.(false);
         reset(); // Reset form fields to default after successful submission
         if (document) {

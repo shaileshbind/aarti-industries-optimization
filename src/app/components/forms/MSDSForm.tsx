@@ -82,8 +82,6 @@ export default function MSDSForm({
       });
 
       if (response.ok) {
-        // const result = await response.json();
-        // console.log("Success:", result);
         setshowMSDSPopup?.(false);
         reset();
         if (document) {

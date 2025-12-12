@@ -54,7 +54,6 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 {mediaCoverage?.title}
               </H2>
             )}
-            {/* {console.log(mediaCoverage?.ctaButton?.[0])} */}
             {mediaCoverage?.ctaButton?.[0]?.title &&
               (mediaCoverage?.ctaButton?.[0]?.externalLink || mediaCoverage?.ctaButton?.[0]?.link?.link && mediaCoverage?.ctaButton?.[0]?.link?.link !== "#") && (
                 <Button
