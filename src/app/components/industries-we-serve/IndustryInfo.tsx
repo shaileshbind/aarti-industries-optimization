@@ -22,7 +22,7 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
                   className="object-cover scale-110"
                 />
                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+                <span className="absolute right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[94%] h-[100%]">
                   <Image
                     src={image?.url}
                     alt={image?.alternativeText || "banner"}
@@ -51,7 +51,7 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
                     className="object-cover scale-110"
                   />
                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                  <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+                  <span className="absolute right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[94%] h-[100%]">
                     <Image
                       src={mobImage?.url}
                       alt={mobImage?.alternativeText || "banner"}
