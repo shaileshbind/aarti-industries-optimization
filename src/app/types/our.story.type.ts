@@ -59,3 +59,11 @@ export interface TimelineData {
     milestone: Milestone[];
   };
 }
+
+
+export type OurExpProps = {
+  data: {
+    title: string;
+    ctaButton: ButtonProps[];
+  }[];
+};

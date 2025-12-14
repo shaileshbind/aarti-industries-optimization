@@ -10,11 +10,13 @@ const InvestorExplore = ({ data }: InvestorExpProps) => {
         <ExploreCard
           title={exploreMore[0]?.title}
           ctaButton={exploreMore[0]?.ctaButton}
+          formTitle=""
         />
         <ExploreCard
           lightVariant
           title={exploreMore[1]?.title}
           ctaButton={exploreMore[1]?.ctaButton}
+          formTitle=""
         />
       </div>
     </div>

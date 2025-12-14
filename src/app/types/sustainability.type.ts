@@ -35,6 +35,7 @@ export type AILRoadmapData = {
       bulletPoints?: {
         id?: number;
         title?: string;
+        bulletImg?:string;
       }[];
     }[];
   };

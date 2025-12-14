@@ -281,13 +281,23 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       key={items?.id}
                       className="flex gap-4 mb-2 items-start"
                     >
-                      <Image
-                        src="/images/home/star-white.svg"
-                        alt="star"
-                        width={12}
-                        height={12}
-                        className="mt-[6px]"
-                      />
+                      {items?.bulletImg ? (
+                        <Image
+                          src={items?.bulletImg}
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      ) : (
+                        <Image
+                          src="/images/home/star-white.svg"
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      )}
                       <BodyText2 className="text-white">
                         {items?.title}
                       </BodyText2>
@@ -311,13 +321,23 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                         key={items?.id}
                         className="flex gap-4 mb-2 items-center"
                       >
-                        <Image
-                          src="/images/home/star-white.svg"
-                          alt="star"
-                          width={12}
-                          height={12}
-                          className="mt-[6px]"
-                        />
+                        {items?.bulletImg ? (
+                          <Image
+                            src={items?.bulletImg}
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        ) : (
+                          <Image
+                            src="/images/home/star-white.svg"
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        )}
                         <BodyText2 className="text-white">
                           {items?.title}
                         </BodyText2>
