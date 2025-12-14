@@ -200,7 +200,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             spaceBetween={24}
             breakpoints={{
               768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              1024:{ slidesPerView: 3.2},
+              1280: { slidesPerView: 4 },
             }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             observer={true}
@@ -226,7 +227,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               <SwiperSlide key={`${active}-${idx}`}>
                 <div className="award-card-anim">
                   {item?.image?.url && (
-                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-[60px] grid place-items-center h-[230px] md:h-auto">
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-[60px] grid place-items-center h-[230px] overflow-hidden lg:h-[320px] 2xl:h-[400px] ">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}
