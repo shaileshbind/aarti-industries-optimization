@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH1, SubH2 } from "../Typography2";
@@ -16,24 +15,27 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
+  const pausedAtRef = useRef<number>(0);
 
-  const startProgress = () => {
+  const startProgress = (resumeFrom: number = 0) => {
     // Cancel any existing animation
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
 
-    setProgress(0);
     startTimeRef.current = performance.now();
-
     const duration = 10000;
 
     const animate = (time: number) => {
       const elapsed = time - startTimeRef.current;
-      const progressPercent = Math.min((elapsed / duration) * 100, 100);
+      const progressPercent = Math.min(
+        resumeFrom + (elapsed / duration) * 100,
+        100
+      );
       setProgress(progressPercent);
 
       if (progressPercent < 100) {
@@ -52,9 +54,32 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     rafRef.current = requestAnimationFrame(animate);
   };
 
+  const pauseProgress = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    pausedAtRef.current = progress;
+  };
+
+  const resumeProgress = () => {
+    startProgress(pausedAtRef.current);
+  };
+
+  // Handle hover state changes
+  useEffect(() => {
+    if (isHovered) {
+      pauseProgress();
+    } else if (pausedAtRef.current > 0) {
+      resumeProgress();
+    }
+  }, [isHovered]);
+
   // Start autoplay on mount and when active changes
   useEffect(() => {
-    startProgress();
+    pausedAtRef.current = 0;
+    setProgress(0);
+    startProgress(0);
 
     return () => {
       if (rafRef.current) {
@@ -72,12 +97,12 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       cancelAnimationFrame(rafRef.current);
     }
 
+    pausedAtRef.current = 0;
     setActive(index);
     setExpanded(`panel${index}`);
     if (swiperRef.current) {
       swiperRef.current.slideToLoop(index);
     }
-    // Progress will restart via useEffect
   };
 
   const handleChange =
@@ -87,10 +112,12 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
         if (rafRef.current) {
           cancelAnimationFrame(rafRef.current);
         }
+        pausedAtRef.current = 0;
         setActive(panelIndex);
         setExpanded(panel);
       }
     };
+
   return (
     <div className="my-[50px] lg:my-[100px] container mx-[auto]">
       <H2 className="max-w-[760px] ">{title}</H2>
@@ -99,7 +126,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
         {/* Tabs */}
         {cardWithCategory?.length > 0 && (
           <div className="mt-[14px]">
-            {cardWithCategory?.map((item: any, index: number) => (
+            {cardWithCategory?.map((item, index: number) => (
               <div
                 key={item.id}
                 onClick={() => handleTabClick(index)}
@@ -124,7 +151,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                     className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
                     style={{
                       width: `${progress}%`,
-                      transition: "none", // Remove transition to prevent glitches
+                      transition: "none",
                     }}
                   />
                 )}
@@ -132,7 +159,11 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
             ))}
           </div>
         )}
-        <div className="relative">
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <div className="relative h-[330px] w-[full]">
             <div className="absolute right-0 top-0 w-full h-[330px] rounded-[20px] overflow-hidden">
               {cardWithCategory[active]?.content?.image?.url && (
@@ -186,16 +217,18 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                 <div className="flex gap-x-[40px] mt-[10px] mb-[30px]">
                   {cardWithCategory[
                     active
-                  ]?.content?.content?.[0]?.sdgPlay?.images?.map((img: any) => (
-                    <Image
-                      key={img?.id}
-                      src={img?.url}
-                      alt="icon"
-                      width={64}
-                      height={64}
-                      className="object-cover"
-                    />
-                  ))}
+                  ]?.content?.content?.[0]?.sdgPlay?.images?.map(
+                    (img, index) => (
+                      <Image
+                        key={"img?.id" + index}
+                        src={img?.url || ""}
+                        alt="icon"
+                        width={64}
+                        height={64}
+                        className="object-cover"
+                      />
+                    )
+                  )}
                 </div>
                 {cardWithCategory[active]?.content?.content?.map((item) => (
                   <div key={item?.id}>
@@ -278,10 +311,10 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
             )}
         </div>
       </div>
-      {/* Mobile Accordion */}
+      {/* Mobile Accordion - remains unchanged */}
       {cardWithCategory?.length > 0 && (
         <div className="block xl:hidden w-full py-[30px]">
-          {cardWithCategory?.map((item: any, index: number) => (
+          {cardWithCategory?.map((item, index: number) => (
             <div key={item.id} className="relative">
               <FaqAccordion
                 faqTitle={
@@ -302,14 +335,18 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                         <div className="relative w-full h-[300px] rounded-[14px] overflow-hidden">
                           <div className="absolute right-0 top-0 w-full h-[300px] rounded-[14px] overflow-hidden">
                             <Image
-                              src={item.content?.image.url}
-                              alt={item.content?.image.alternativeText || "img"}
+                              src={item.content?.image?.url || ""}
+                              alt={
+                                item.content?.image?.alternativeText || "img"
+                              }
                               fill
                               className="absolute object-cover blur-md"
                             />
                             <Image
-                              src={item.content?.image.url}
-                              alt={item.content?.image.alternativeText || "img"}
+                              src={item.content?.image?.url || ""}
+                              alt={
+                                item.content?.image?.alternativeText || "img"
+                              }
                               width={500}
                               height={300}
                               className="absolute object-cover h-[calc(100%-39px)] w-[calc(100%-66px)]"
@@ -331,7 +368,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                           </BodyText2>
                         )}
                         <div className="mt-[28px]">
-                          {item?.content?.content?.map((section: any) => (
+                          {item?.content?.content?.map((section) => (
                             <div key={section?.id}>
                               {/* SDGs at play */}
                               {section?.sdgPlay?.sdgPlayTitle && (
@@ -339,10 +376,10 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                   <BodyText2>SDGs at play</BodyText2>
                                   <div className="flex gap-x-[12px] mt-[10px] mb-[28px]">
                                     {section?.sdgPlay?.images?.map(
-                                      (img: any) => (
+                                      (img, index2) => (
                                         <Image
-                                          key={img?.id}
-                                          src={img?.url}
+                                          key={"i" + index2}
+                                          src={img?.url || ""}
                                           alt={img?.alternativeText || "icon"}
                                           width={50}
                                           height={50}
@@ -398,7 +435,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                   </BodyText2>
 
                                   {section?.performance?.bulletPoints?.map(
-                                    (bp: any) => (
+                                    (bp) => (
                                       <div
                                         key={bp?.id}
                                         className="mb-[10px] flex gap-x-[10px]"

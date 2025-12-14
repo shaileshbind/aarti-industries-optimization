@@ -41,7 +41,9 @@ export default async function page() {
       {section_one && <HeroBanner data={section_one} />}
       {section_two && <AboutCompany data={section_two} />}
       {section_three && <TimeLine data={section_three} />}
-      {section_four && <GlobalInnovation data={section_four} />}
+      {section_four && (
+        <GlobalInnovation data={section_four} useBulletes={false} />
+      )}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

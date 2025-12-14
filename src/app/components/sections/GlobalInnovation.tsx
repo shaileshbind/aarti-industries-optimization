@@ -6,7 +6,10 @@ import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
 
-const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
+const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
+  data,
+  useBulletes = true,
+}) => {
   const {
     title,
     focusSectionTitle,
@@ -59,10 +62,11 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
             <SubH2 className="lg:mb-6 mb-4">{focusSectionTitle}</SubH2>
           )}
 
-          {focus_item.map((item, index) => (
-            <div
-              key={item.id}
-              className={`
+          {focus_item.map((item, index) =>
+            useBulletes ? (
+              <div
+                key={item.id}
+                className={`
                 flex gap-6 lg:gap-[53px] 
                 ${
                   index !== focus_item.length - 1
@@ -70,13 +74,30 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({ data }) => {
                     : ""
                 }
               `}
-            >
-              <BodyText1 className="text-[#DC4C03]">
-                {item.order.padStart(2, "0")}
-              </BodyText1>
-              <BodyText1 className="lg:w-[60%]">{item.description}</BodyText1>
-            </div>
-          ))}
+              >
+                <BodyText1 className="text-[#DC4C03]">
+                  {item.order.padStart(2, "0")}
+                </BodyText1>
+                <BodyText1 className="lg:w-[60%]">{item.description}</BodyText1>
+              </div>
+            ) : (
+              <ul
+                key={item.id}
+                className={`
+                flex gap-6 lg:gap-[53px] ml-5 
+                ${
+                  index !== focus_item.length - 1
+                    ? "border-b border-b-[#E6EBEE] lg:pb-5 pb-4"
+                    : ""
+                }
+              `}
+              >
+                <li className="lg:w-[60%] list-disc pl-1 lg:pl-3">
+                  {item.description}
+                </li>
+              </ul>
+            )
+          )}
 
           {description && <BodyText1>{description}</BodyText1>}
 

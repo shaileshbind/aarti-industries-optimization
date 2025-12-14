@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
@@ -18,10 +18,48 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   const [activeImage, setactiveImage] = useState<string>(
     content[0]?.image?.url
   );
-  const [progress, setProgress] = useState<boolean>(false);
+  const [progressWidth, setProgressWidth] = useState<number>(0);
   const [imageFade, setImageFade] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef<number>(0);
+  const pausedProgressRef = useRef<number>(0);
   const isMobile = useMediaQuery("(max-width:820px)");
+
+  const startProgressAnimation = (startFrom: number = 0) => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+
+    startTimeRef.current = Date.now();
+    const duration = 5000; // 5 seconds
+    const updateInterval = 16; // ~60fps
+
+    progressIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(startFrom + (elapsed / duration) * 100, 100);
+      setProgressWidth(progress);
+
+      if (progress >= 100) {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+        }
+      }
+    }, updateInterval);
+  };
+
+  const stopProgressAnimation = () => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    pausedProgressRef.current = progressWidth;
+  };
+
+  const resumeProgressAnimation = () => {
+    startProgressAnimation(pausedProgressRef.current);
+  };
 
   const handleAccordion = (index: number) => {
     setExpanded(index);
@@ -32,18 +70,30 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       setImageFade(true);
     }, 300);
 
-    // Reset progress bar
-    setProgress(false);
-    setTimeout(() => setProgress(true), 10);
+    // Reset progress
+    setProgressWidth(0);
+    pausedProgressRef.current = 0;
 
-    // Clear existing interval and restart
+    // Clear existing intervals
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    startAutoRotation();
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+
+    // Start auto rotation and progress if not hovered
+    if (!isHovered) {
+      startAutoRotation();
+      startProgressAnimation(0);
+    }
   };
 
-  const startAutoRotation = useCallback(() => {
+  const startAutoRotation = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
     intervalRef.current = setInterval(() => {
       setExpanded((prevExpanded) => {
         const nextIndex = (prevExpanded + 1) % content.length;
@@ -56,26 +106,58 @@ export default function WhyAarti({ data }: WhyAartiProps) {
           setImageFade(true);
         }, 300);
 
-        // Reset progress bar
-        setProgress(false);
-        setTimeout(() => setProgress(true), 10);
+        // Reset progress
+        setProgressWidth(0);
+        pausedProgressRef.current = 0;
+
+        // Start new progress animation
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+        }
+        startProgressAnimation(0);
 
         return nextIndex;
       });
     }, 5000);
-  }, [content]);
+  };
 
+  const stopAutoRotation = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Handle hover state
   useEffect(() => {
-    // Start progress bar animation
-    setProgress(true);
+    if (isHovered) {
+      stopAutoRotation();
+      stopProgressAnimation();
+    } else {
+      // Resume when not hovered
+      startAutoRotation();
+      if (pausedProgressRef.current > 0) {
+        resumeProgressAnimation();
+      } else {
+        startProgressAnimation(0);
+      }
+    }
+  }, [isHovered]);
+
+  // Initial setup
+  useEffect(() => {
+    startProgressAnimation(0);
     startAutoRotation();
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
     };
-  }, [startAutoRotation]);
+  }, []);
 
   return (
     <div className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">
@@ -84,7 +166,11 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         <LayoutImage src={activeImage} imageFade={imageFade} />
       </div>
 
-      <div className="xl:w-[80%] relative">
+      <div
+        className="xl:w-[80%] relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {title && <H2>{title}</H2>}
 
         {content?.length > 0 && (
@@ -148,9 +234,8 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
                 {expanded === index && (
                   <div
-                    className={`h-[2px] bg-[#DC4C03] absolute bottom-0 transition-all duration-[5000ms] ease-linear ${
-                      progress ? "w-full" : "w-0"
-                    }`}
+                    className="h-[2px] bg-[#DC4C03] absolute bottom-0 transition-none"
+                    style={{ width: `${progressWidth}%` }}
                   />
                 )}
               </div>

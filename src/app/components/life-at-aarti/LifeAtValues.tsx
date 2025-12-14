@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { BodyText1, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
@@ -10,6 +10,55 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
   const { title, data } = data2;
   const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (data) {
+        setActive((prevActive) => (prevActive + 1) % data.length);
+      }
+    }, 5000);
+  };
+
+  const stopAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Handle hover state
+  useEffect(() => {
+    if (isHovered) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
+    }
+  }, [isHovered, data && data.length]);
+
+  // Initial autoplay setup
+  useEffect(() => {
+    startAutoplay();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [data && data.length]);
+
+  const handleTabClick = (index: number) => {
+    setActive(index);
+    // Restart autoplay after manual click
+    if (!isHovered) {
+      startAutoplay();
+    }
+  };
 
   return (
     <section className="max-w-5xl mx-auto md:py-[100px] pt-[0px] pb-[50px] ">
@@ -19,7 +68,11 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
         </H2>
       )}
       {/* Desktop Layout */}
-      <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container !z-[10]">
+      <div
+        className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container !z-[10]"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {/* Left Tabs + Progress Bar */}
         <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
           <div className="relative flex gap-4">
@@ -41,7 +94,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
                   tab?.value && (
                     <button
                       key={tab.id}
-                      onClick={() => setActive(index)}
+                      onClick={() => handleTabClick(index)}
                       className="relative"
                     >
                       <H2
@@ -80,7 +133,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
         {/* Right Content */}
         <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
           {data?.[active]?.description && (
-            <FadeInReveal>
+            <FadeInReveal key={active}>
               <SubH2>{data?.[active].description}</SubH2>
             </FadeInReveal>
           )}

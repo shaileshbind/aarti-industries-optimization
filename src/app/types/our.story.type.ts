@@ -34,6 +34,7 @@ export type GlobalInnovationProps = {
       description: string;
     }[];
   };
+  useBulletes?: boolean;
 };
 
 export interface TimelineMilestone {
