@@ -201,7 +201,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
                   </div>
                 )
             )}
@@ -264,7 +264,12 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             {/* Desktop grey box */}
             {rightSectionData && (
               <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
-                <Image src="/images/sustainability/grey-bg.png" alt="img" fill className="object-cover z-[-2]" />
+                <Image
+                  src="/images/sustainability/grey-bg.png"
+                  alt="img"
+                  fill
+                  className="object-cover z-[-2]"
+                />
                 {rightSectionData.heading && (
                   <SubH3 className="text-white">
                     {rightSectionData.heading}

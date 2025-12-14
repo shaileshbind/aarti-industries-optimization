@@ -5,7 +5,7 @@ import { BodyText2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -205,10 +205,14 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Mousewheel]}
+                    modules={[Pagination, Navigation, Mousewheel, Autoplay]}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
                       nextEl: ".swiper-button-next-useBySection",
+                    }}
+                    autoplay={{
+                      delay: 3000,
+                      disableOnInteraction: false,
                     }}
                     pagination={{
                       el: ".home-by-use-section-swiper",

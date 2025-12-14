@@ -30,7 +30,7 @@ const NumberCard = ({
           src={imageSrc}
           alt={imageAlt ? imageAlt : "img"}
           fill
-          className="object-cover absolute object-top transition-transform duration-500 ease-out group-hover:scale-105"
+          className="object-cover absolute object-top transition-all duration-500 group-hover:scale-105"
         />
       ) : (
         <>
