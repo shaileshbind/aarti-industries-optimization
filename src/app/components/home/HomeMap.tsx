@@ -273,6 +273,8 @@ const HomeMap = () => {
             );
           })}
         </div>
+
+        <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px]">*% indicate revenue breakup by market share.</p>
       </div>
     </div>
   );

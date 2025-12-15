@@ -149,41 +149,44 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                 })}
               </Swiper>
 
-              <div className="mt-[8px] flex gap-x-4 justify-end ">
-                <button
-                  className={`swiper-button-prev-aartiWorld transition-opacity ${
-                    isBeginning
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Previous slide"
-                  aria-disabled={isBeginning}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Previous"
-                    width={34}
-                    height={34}
-                    className="rotate-180"
-                  />
-                </button>
-                <button
-                  className={`swiper-button-next-aartiWorld transition-opacity ${
-                    isEnd
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Next slide"
-                  aria-disabled={isEnd}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Next"
-                    width={34}
-                    height={34}
-                  />
-                </button>
-              </div>
+              {/* Arrows */}
+              {leadersCard && leadersCard?.length > 1 && (
+                <div className="mt-[8px] flex gap-x-4 justify-end ">
+                  <button
+                    className={`swiper-button-prev-aartiWorld transition-opacity ${
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Previous slide"
+                    aria-disabled={isBeginning}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Previous"
+                      width={34}
+                      height={34}
+                      className="rotate-180"
+                    />
+                  </button>
+                  <button
+                    className={`swiper-button-next-aartiWorld transition-opacity ${
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Next slide"
+                    aria-disabled={isEnd}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Next"
+                      width={34}
+                      height={34}
+                    />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

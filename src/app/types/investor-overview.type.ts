@@ -133,6 +133,7 @@ export type InvestorExpProps = {
       id?: number;
       title?: string;
       ctaButton?: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

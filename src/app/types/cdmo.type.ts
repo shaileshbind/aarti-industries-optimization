@@ -85,7 +85,8 @@ export type CDMOSafegreenProps = {
 
 export type CDMOExpProps = {
   data: {
-    title: string;
-    ctaButton: ButtonProps[];
+    title?: string;
+    ctaButton?: ButtonProps[];
+    formTitle?:string;
   }[];
 };

@@ -116,6 +116,7 @@ export type RDExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?:string;
     };
   }[];
 };

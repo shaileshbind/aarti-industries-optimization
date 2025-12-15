@@ -34,6 +34,7 @@ export type GlobalInnovationProps = {
       description: string;
     }[];
   };
+  useBulletes?: boolean;
 };
 
 export interface TimelineMilestone {
@@ -58,3 +59,12 @@ export interface TimelineData {
     milestone: Milestone[];
   };
 }
+
+
+export type OurExpProps = {
+  data: {
+    title: string;
+    ctaButton: ButtonProps[];
+    formTitle?:string;
+  }[];
+};

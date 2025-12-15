@@ -184,7 +184,7 @@ export default function InvestingInPotential({
                       className="object-cover object-top"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-black/30 z-[1]" />
+                    <div className="absolute inset-0 bg-black/60 z-[1]" />
                   </div>
                 )
             )}

@@ -47,11 +47,11 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               nextEl: ".swiper-button-next-people",
               prevEl: ".swiper-button-prev-people",
             }}
-               mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+            mousewheel={{
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            }}
             className="people-swiper !overflow-visible"
             breakpoints={{
               1024: {
@@ -66,13 +66,15 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               >
                 <div className="slide-box  bg-[#EFF3F5] shadow-lg rounded-xl overflow-hidden flex text-left w-full flex-col md:flex-row ">
                   <div className="w-full md:w-[35%] relative mt-auto md:pt-8 order-2 md:order-1 h-[278px] md:h-full">
-                  {person?.image?.url &&  <Image
-                      src={person?.image?.url}
-                      alt={person?.name}
-                      width={326}
-                      height={350}
-                      className="w-full md:w-full  h-full object-contain object-bottom"
-                    />}
+                    {person?.image?.url && (
+                      <Image
+                        src={person?.image?.url}
+                        alt={person?.name}
+                        width={326}
+                        height={350}
+                        className="w-full md:w-full  h-full object-contain object-bottom"
+                      />
+                    )}
                   </div>
                   <div className="w-full md:w-[65%] self-center p-5 md:px-8 md:py-8 order-1 md:order-2">
                     {person?.testimonialText && (

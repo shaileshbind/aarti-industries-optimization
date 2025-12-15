@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import clsx from "clsx";
-import { BodyText1, H2, SubH2 } from "../Typography2";
+import { H2 } from "../Typography2";
 import Image from "next/image";
-import { FadeInReveal } from "../ScrollReveal";
 import { WhoPrinciplesProps } from "@/app/types/who-we-are.type";
 
 const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
@@ -19,7 +18,6 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           {description}
         </H2>
       )}
-
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
         {/* Left Tabs + Progress Bar */}
@@ -84,17 +82,16 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             )}
           </div>
         </div>
-
         {/* Right Content */}
         <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
           {content[active]?.description && (
-            <FadeInReveal>
-              <SubH2>{content[active].description}</SubH2>
-            </FadeInReveal>
+            <div
+              dangerouslySetInnerHTML={{ __html: content[active].description }}
+              className="font-normal text-[18px] md:text-[22px] xl:text-[24px] leading-[140%] text-blue-200 font-alte-hans"
+            />
           )}
         </div>
       </div>
-
       {/* Mobile Accordion */}
       {content?.length > 0 && (
         <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
@@ -149,9 +146,10 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                       isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                     )}
                   >
-                    <div className="p-5 text-[#0D2B3E]">
-                      <BodyText1>{tab?.description}</BodyText1>
-                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: tab?.description }}
+                      className="p-5 text-[#0D2B3E] font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto"
+                    />
                   </div>
                 )}
               </div>

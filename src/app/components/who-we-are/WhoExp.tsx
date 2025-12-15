@@ -10,11 +10,13 @@ const WhoExp: React.FC<WhoExpProps> = ({ data }) => {
         <ExploreCard
           title={ExlporeCard?.[0]?.title}
           ctaButton={ExlporeCard?.[0]?.ctaButton}
+          formTitle={ExlporeCard?.[0]?.formTitle}
         />
         <ExploreCard
           lightVariant
           title={ExlporeCard?.[1]?.title}
           ctaButton={ExlporeCard?.[1]?.ctaButton}
+           formTitle={ExlporeCard?.[1]?.formTitle}
         />
       </div>
     </div>

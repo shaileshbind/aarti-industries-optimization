@@ -95,7 +95,7 @@ export default function TimeLine({
       </FadeInGroup>
 
       <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-center lg:items-end fluid-container">
-        <div className="lg:w-[320px] h-fit lg:mb-9">
+        <div className="lg:w-[420px] h-fit lg:mb-6">
           <FadeInRevealBlur delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}

@@ -5,7 +5,7 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
+import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -179,10 +179,14 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
           {card?.length > 0 && (
             <div ref={containerRef} className="w-full">
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel]}
+                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
                 navigation={{
                   nextEl: ".swiper-button-next",
                   prevEl: ".swiper-button-prev",
+                }}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
                 }}
                 slidesOffsetAfter={offsetAfter}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
@@ -195,7 +199,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   768: {
                     slidesPerView: slidesPerView,
                     spaceBetween: 80,
-                    allowTouchMove: false,
+                    allowTouchMove: true,
                   },
                 }}
                 scrollbar={{ draggable: true }}
@@ -205,7 +209,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   sensitivity: 1,
                   releaseOnEdges: true,
                 }}
-                className="framework-forged-swiper"
+                className="framework-forged-swiper cursor-grab"
               >
                 {card?.map((items, index) => {
                   return (
@@ -216,99 +220,93 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       }`}
                     >
                       <div
-          className={clsx(
-            ` relative w-full overflow-hidden ${
-              layout === "imgLeftContentRight"
-                ? " order-1 lg:order-1"
-                : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px]  lg:hidden block"
-            }`
-          )}
-        >
-          {layout === "imgLeftContentRight" ? (
-            <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={card?.[currentImageIndex]?.image?.url}
-                  alt={
-                    card?.[currentImageIndex]?.image?.alternativeText ||
-                    "banner"
-                  }
-                  fill
-                  className="object-cover scale-110"
-                />
-                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
-                  <Image
-                    src={card?.[currentImageIndex]?.image?.url}
-                    alt={
-                      card?.[currentImageIndex]?.image?.alternativeText ||
-                      "banner"
-                    }
-                    fill
-                    className="object-cover scale-110"
-                  />
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
-            >
-              {items?.image?.url && (
-                <Image
-                  key={`outer-${currentImageIndex}`}
-                  src={items?.image?.url}
-                  alt={
-                    items?.image?.alternativeText ||
-                    "banner"
-                  }
-                  fill
-                  sizes="(max-width: 768px) 768px, 
+                        className={clsx(
+                          ` relative w-full overflow-hidden ${
+                            layout === "imgLeftContentRight"
+                              ? " order-1 lg:order-1"
+                              : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px]  lg:hidden block"
+                          }`
+                        )}
+                      >
+                        {layout === "imgLeftContentRight" ? (
+                          <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+                            <div className="absolute inset-0 overflow-hidden">
+                              <Image
+                                src={card?.[currentImageIndex]?.image?.url}
+                                alt={
+                                  card?.[currentImageIndex]?.image
+                                    ?.alternativeText || "banner"
+                                }
+                                fill
+                                className="object-cover scale-110"
+                              />
+                              <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                              <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+                                <Image
+                                  src={card?.[currentImageIndex]?.image?.url}
+                                  alt={
+                                    card?.[currentImageIndex]?.image
+                                      ?.alternativeText || "banner"
+                                  }
+                                  fill
+                                  className="object-cover scale-110"
+                                />
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+                          >
+                            {items?.image?.url && (
+                              <Image
+                                key={`outer-${currentImageIndex}`}
+                                src={items?.image?.url}
+                                alt={items?.image?.alternativeText || "banner"}
+                                fill
+                                sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} 
-                />
-              )}
-              {items?.image?.url && (
-                <Image
-                  key={`main-${currentImageIndex}`}
-                  src={items?.image?.url}
-                  alt={
-                    items?.image?.alternativeText ||
-                    "banner"
-                  }
-                  width={500}
-                  height={548}
-                  sizes="(max-width: 768px) 768px, 
+                                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
+                              />
+                            )}
+                            {items?.image?.url && (
+                              <Image
+                                key={`main-${currentImageIndex}`}
+                                src={items?.image?.url}
+                                alt={items?.image?.alternativeText || "banner"}
+                                width={500}
+                                height={548}
+                                sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                  className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
-                />
-              )}
-              <Image
-                src="/images/home/star-white.svg"
-                alt="img"
-                width={72}
-                height={72}
-                className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-              />
-              <Image
-                src="/images/home/star-white.svg"
-                alt="img"
-                width={72}
-                height={72}
-                className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-              />
-              <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
-              <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
-            </div>
-          )}
-        </div>
-        <div className="lg:hidden block mt-5">
-        <BodyText2 className="text-orange-200">
-              0{index + 1}-<span>0{card?.length}</span>
-            </BodyText2>
-            </div>
+                                className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
+                              />
+                            )}
+                            <Image
+                              src="/images/home/star-white.svg"
+                              alt="img"
+                              width={72}
+                              height={72}
+                              className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+                            />
+                            <Image
+                              src="/images/home/star-white.svg"
+                              alt="img"
+                              width={72}
+                              height={72}
+                              className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+                            />
+                            <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
+                            <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="lg:hidden block mt-5">
+                        <BodyText2 className="text-orange-200">
+                          0{index + 1}-<span>0{card?.length}</span>
+                        </BodyText2>
+                      </div>
                       <SubH1 className={`text-blue-200`}>{items?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
                         {items?.description}
@@ -406,7 +404,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} 
+                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
                 />
               )}
               {card?.[currentImageIndex]?.image?.url && (

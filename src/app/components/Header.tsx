@@ -472,8 +472,7 @@ const Header = ({ data }: HeaderProps) => {
                     alt={Logo?.Logo?.alternativeText || "logo"}
                     width={112}
                     height={46}
-                    className="w-[112px]"
-                    objectPosition="center"
+                    className="w-[112px] object-center"
                   />
                 </Link>
               )}
@@ -787,8 +786,7 @@ const Header = ({ data }: HeaderProps) => {
                     alt={Logo?.Logo?.alternativeText || "logo"}
                     width={112}
                     height={46}
-                    className="w-[112px]"
-                    objectPosition="center"
+                    className="w-[112px] object-center"
                   />
                 </Link>
               )}

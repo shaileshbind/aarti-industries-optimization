@@ -201,7 +201,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
                   </div>
                 )
             )}
@@ -264,7 +264,12 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             {/* Desktop grey box */}
             {rightSectionData && (
               <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
-                <Image src="/images/sustainability/grey-bg.png" alt="img" fill className="object-cover z-[-2]" />
+                <Image
+                  src="/images/sustainability/grey-bg.png"
+                  alt="img"
+                  fill
+                  className="object-cover z-[-2]"
+                />
                 {rightSectionData.heading && (
                   <SubH3 className="text-white">
                     {rightSectionData.heading}
@@ -276,13 +281,23 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       key={items?.id}
                       className="flex gap-4 mb-2 items-start"
                     >
-                      <Image
-                        src="/images/home/star-white.svg"
-                        alt="star"
-                        width={12}
-                        height={12}
-                        className="mt-[6px]"
-                      />
+                      {items?.bulletImg ? (
+                        <Image
+                          src={items?.bulletImg}
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      ) : (
+                        <Image
+                          src="/images/home/star-white.svg"
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      )}
                       <BodyText2 className="text-white">
                         {items?.title}
                       </BodyText2>
@@ -306,13 +321,23 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                         key={items?.id}
                         className="flex gap-4 mb-2 items-center"
                       >
-                        <Image
-                          src="/images/home/star-white.svg"
-                          alt="star"
-                          width={12}
-                          height={12}
-                          className="mt-[6px]"
-                        />
+                        {items?.bulletImg ? (
+                          <Image
+                            src={items?.bulletImg}
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        ) : (
+                          <Image
+                            src="/images/home/star-white.svg"
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        )}
                         <BodyText2 className="text-white">
                           {items?.title}
                         </BodyText2>
