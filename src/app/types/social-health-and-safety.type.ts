@@ -114,6 +114,7 @@ export type SocialExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

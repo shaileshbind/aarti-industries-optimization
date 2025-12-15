@@ -1,9 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import { BodyText1, H2, SubH2 } from "../Typography2";
+import { H2 } from "../Typography2";
 import Image from "next/image";
-import { FadeInReveal } from "../ScrollReveal";
 import { LAAValueProps } from "@/app/types/life-at-aarti.type";
 
 const LifeAtValues = ({ data2 }: LAAValueProps) => {
@@ -133,9 +132,14 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
         {/* Right Content */}
         <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
           {data?.[active]?.description && (
-            <FadeInReveal key={active}>
-              <SubH2>{data?.[active].description}</SubH2>
-            </FadeInReveal>
+            <div key={active}>
+              <div
+                className="font-normal text-[18px] md:text-[22px] xl:text-[24px] leading-[140%] text-blue-200 font-alte-hans"
+                dangerouslySetInnerHTML={{
+                  __html: data?.[active]?.description,
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -191,9 +195,10 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
                     isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
                   )}
                 >
-                  <div className="p-5 text-[#0D2B3E]">
-                    <BodyText1>{tab?.description}</BodyText1>
-                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: tab?.description }}
+                    className="font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto p-5 text-[#0D2B3E]"
+                  />
                 </div>
               )}
             </div>

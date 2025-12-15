@@ -9,13 +9,13 @@ const RDExplore: React.FC<RDExploreProps> = ({ data }) => {
         <ExploreCard
           title={data?.[0]?.exploreMore?.title}
           ctaButton={data?.[0]?.exploreMore?.ctaButton}
-          formTitle=""
+          formTitle={data?.[0]?.exploreMore?.formTitle}
         />
         <ExploreCard
           lightVariant
           title={data?.[1]?.exploreMore?.title}
           ctaButton={data?.[1]?.exploreMore?.ctaButton}
-          formTitle="Partnet With Us"
+          formTitle={data?.[1]?.exploreMore?.formTitle}
         />
       </div>
     </div>

@@ -9,14 +9,14 @@ const IndustryExp: React.FC<IndustryExpProps> = ({ data }) => {
         <ExploreCard
           title={data?.exploreMore?.[0]?.title}
           ctaButton={data?.exploreMore?.[0]?.ctaButton}
-          formTitle=""
+          formTitle={data?.exploreMore?.[0]?.formTitle}
         />
 
         <ExploreCard
           lightVariant
           title={data?.exploreMore?.[1]?.title}
           ctaButton={data?.exploreMore?.[1]?.ctaButton}
-          formTitle=""
+          formTitle={data?.exploreMore?.[1]?.formTitle}
         />
       </div>
     </div>

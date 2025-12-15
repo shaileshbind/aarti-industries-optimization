@@ -39,6 +39,7 @@ export type GRExpProps = {
       id?: number;
       title?: string;
       ctaButton?: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };
