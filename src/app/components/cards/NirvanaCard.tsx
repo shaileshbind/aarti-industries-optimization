@@ -63,7 +63,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
               fill
               src={image}
               alt="img"
-              className="hidden lg:block object-cover"
+              className="hidden lg:block object-cover hover:scale-105 transition-all duration-500"
             />
           )}
 

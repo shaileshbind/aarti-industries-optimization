@@ -16,6 +16,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [showMore, setshowMore] = useState<boolean>(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -45,6 +46,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
         const nextIndex = (active + 1) % cardWithCategory.length;
         setActive(nextIndex);
         setExpanded(`panel${nextIndex}`);
+        setshowMore(false);
         if (swiperRef.current) {
           swiperRef.current.slideToLoop(nextIndex);
         }
@@ -103,6 +105,8 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     if (swiperRef.current) {
       swiperRef.current.slideToLoop(index);
     }
+
+    setshowMore(false);
   };
 
   const handleChange =
@@ -205,90 +209,105 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
             <BodyText2>
               {cardWithCategory?.[active]?.content?.description}
             </BodyText2>
-            <div className="w-full grid grid-cols-[300px_1fr] gap-x-[60px] mt-[30px]">
-              <div>
-                {/* SDG */}
-                <BodyText2>
-                  {
-                    cardWithCategory[active]?.content?.content?.[0]?.sdgPlay
-                      ?.sdgPlayTitle
-                  }
-                </BodyText2>
-                <div className="flex gap-x-[40px] mt-[10px] mb-[30px]">
-                  {cardWithCategory[
-                    active
-                  ]?.content?.content?.[0]?.sdgPlay?.images?.map(
-                    (img, index) => (
-                      <Image
-                        key={"img?.id" + index}
-                        src={img?.url || ""}
-                        alt="icon"
-                        width={64}
-                        height={64}
-                        className="object-cover"
-                      />
-                    )
-                  )}
-                </div>
-                {cardWithCategory[active]?.content?.content?.map((item) => (
-                  <div key={item?.id}>
-                    {/* Material Topics */}
-                    {item?.materialTopics?.label && (
-                      <BodyText2 className="text-grey-300">
-                        {item.materialTopics.label}
-                      </BodyText2>
-                    )}
-                    {item?.materialTopics?.value && (
-                      <BodyText2>{item.materialTopics.value}</BodyText2>
-                    )}
 
-                    {/* Capital Impacted */}
-                    {item?.capitalImpacted?.title && (
-                      <BodyText2 className="text-grey-300 mt-[30px]">
-                        {item.capitalImpacted.title}
-                      </BodyText2>
-                    )}
-                    {item?.capitalImpacted?.value && (
-                      <BodyText2>{item.capitalImpacted.value}</BodyText2>
-                    )}
-                  </div>
-                ))}
+            {!showMore && (
+              <div
+                onClick={() => setshowMore(true)}
+                className="mt-2 cursor-pointer"
+              >
+                <BodyText2 className="text-[#9997A2]">{"Read More"}</BodyText2>
               </div>
-              <div>
-                {cardWithCategory[active]?.content?.content?.map((item) => (
-                  <div key={item.id}>
-                    {/* Target */}
-                    {item.target?.label && (
-                      <BodyText2>{item.target.label}</BodyText2>
-                    )}
-                    {item.target?.value && (
-                      <BodyText2 className="text-grey-300">
-                        {item.target.value}
-                      </BodyText2>
-                    )}
+            )}
 
-                    {/* Performance */}
-                    {item.performance?.label && (
-                      <BodyText2 className="mt-[30px] mb-[12px]">
-                        {item.performance.label}
-                      </BodyText2>
-                    )}
-
-                    {item.performance?.bulletPoints?.map((bp) => (
-                      <div key={bp.id} className="mb-[10px] flex gap-x-[10px]">
+            {showMore && (
+              <div className="w-full grid grid-cols-[300px_1fr] gap-x-[60px] mt-[30px]">
+                <div>
+                  {/* SDG */}
+                  <BodyText2>
+                    {
+                      cardWithCategory[active]?.content?.content?.[0]?.sdgPlay
+                        ?.sdgPlayTitle
+                    }
+                  </BodyText2>
+                  <div className="flex gap-x-[40px] mt-[10px] mb-[30px]">
+                    {cardWithCategory[
+                      active
+                    ]?.content?.content?.[0]?.sdgPlay?.images?.map(
+                      (img, index) => (
                         <Image
-                          src="/images/star-orange.svg"
+                          key={"img?.id" + index}
+                          src={img?.url || ""}
                           alt="icon"
-                          width={14}
-                          height={14}
+                          width={64}
+                          height={64}
+                          className="object-cover"
                         />
-                        <BodyText2>{bp.title}</BodyText2>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
-                ))}
+                  {cardWithCategory[active]?.content?.content?.map((item) => (
+                    <div key={item?.id}>
+                      {/* Material Topics */}
+                      {item?.materialTopics?.label && (
+                        <BodyText2 className="text-grey-300">
+                          {item.materialTopics.label}
+                        </BodyText2>
+                      )}
+                      {item?.materialTopics?.value && (
+                        <BodyText2>{item.materialTopics.value}</BodyText2>
+                      )}
+
+                      {/* Capital Impacted */}
+                      {item?.capitalImpacted?.title && (
+                        <BodyText2 className="text-grey-300 mt-[30px]">
+                          {item.capitalImpacted.title}
+                        </BodyText2>
+                      )}
+                      {item?.capitalImpacted?.value && (
+                        <BodyText2>{item.capitalImpacted.value}</BodyText2>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  {cardWithCategory[active]?.content?.content?.map((item) => (
+                    <div key={item.id}>
+                      {/* Target */}
+                      {item.target?.label && (
+                        <BodyText2>{item.target.label}</BodyText2>
+                      )}
+                      {item.target?.value && (
+                        <BodyText2 className="text-grey-300">
+                          {item.target.value}
+                        </BodyText2>
+                      )}
+
+                      {/* Performance */}
+                      {item.performance?.label && (
+                        <BodyText2 className="mt-[30px] mb-[12px]">
+                          {item.performance.label}
+                        </BodyText2>
+                      )}
+
+                      {item.performance?.bulletPoints?.map((bp) => (
+                        <div
+                          key={bp.id}
+                          className="mb-[10px] flex gap-x-[10px]"
+                        >
+                          <Image
+                            src="/images/star-orange.svg"
+                            alt="icon"
+                            width={14}
+                            height={14}
+                          />
+                          <BodyText2>{bp.title}</BodyText2>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           {cardWithCategory[active]?.content?.ctaButton?.title &&
             (cardWithCategory[active]?.content?.ctaButton?.externalLink ||
