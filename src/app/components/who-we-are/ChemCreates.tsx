@@ -63,6 +63,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                       date={formatDate(item?.date || "")}
                       desc={item?.title}
                       link={`/blogs/${item?.slug}`}
+                      animate
                     />
                   </SwiperSlide>
                 );

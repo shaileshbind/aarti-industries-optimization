@@ -38,7 +38,7 @@ const TabsAutoplaySection = ({
     }
     setProgress(0);
     startTimeRef.current = performance.now();
-    const duration = 8000;
+    const duration = 15000;
 
     const animate = (time: number) => {
       const elapsed = time - startTimeRef.current;
