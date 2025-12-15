@@ -67,6 +67,7 @@ export type ExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

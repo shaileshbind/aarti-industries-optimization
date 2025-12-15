@@ -9,13 +9,13 @@ const CDMOExp: React.FC<CDMOExpProps> = ({ data }) => {
         <ExploreCard
           title={data?.[0]?.title}
           ctaButton={data?.[0]?.ctaButton}
-          formTitle=""
+          formTitle={data?.[0]?.formTitle}
         />
         <ExploreCard
           lightVariant
           title={data?.[1]?.title}
           ctaButton={data?.[1]?.ctaButton}
-          formTitle="Partner With Us"
+          formTitle={data?.[1]?.formTitle}
         />
       </div>
     </div>

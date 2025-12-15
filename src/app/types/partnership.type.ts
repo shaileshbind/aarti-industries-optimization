@@ -67,6 +67,7 @@ export type PartneshipExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?:string;
     };
   }[];
 };
