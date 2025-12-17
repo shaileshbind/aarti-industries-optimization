@@ -42,8 +42,9 @@ export type OurPortfolioProps = {
 export type IndustryExpProps = {
   data: {
     exploreMore: {
-      title: string;
-      ctaButton: ButtonProps[];
+      title?: string;
+      ctaButton?: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

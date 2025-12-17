@@ -9,13 +9,13 @@ const GRExplore = ({ data }: GRExpProps) => {
         <ExploreCard
           title={exploreMore[0]?.title}
           ctaButton={exploreMore[0]?.ctaButton}
-          formTitle=""
+          formTitle={exploreMore?.[0]?.formTitle}
         />
         <ExploreCard
           lightVariant
           title={exploreMore[1]?.title}
           ctaButton={exploreMore[1]?.ctaButton}
-          formTitle=""
+          formTitle={exploreMore?.[1]?.formTitle}
         />
       </div>
     </div>

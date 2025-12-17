@@ -65,5 +65,6 @@ export type OurExpProps = {
   data: {
     title: string;
     ctaButton: ButtonProps[];
+    formTitle?:string;
   }[];
 };

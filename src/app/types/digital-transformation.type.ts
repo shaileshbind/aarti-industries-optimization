@@ -73,7 +73,8 @@ export type DrivingCrossFunctionalProps = {
 
 export type ExploreCardsProps = {
   data: {
-    title: string;
-    ctaButton: ButtonProps[];
+    title?: string;
+    ctaButton?: ButtonProps[];
+    formTitle?:string;
   }[];
 };

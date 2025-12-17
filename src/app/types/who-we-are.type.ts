@@ -108,6 +108,7 @@ export type WhoExpProps = {
     ExlporeCard: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

@@ -27,7 +27,8 @@ export type CampusFlagshipProps = {
 
 export type CampusExpProps = {
   data: {
-    title: string;
-    ctaButton: ButtonProps[];
+    title?: string;
+    ctaButton?: ButtonProps[];
+    formTitle?:string;
   }[];
 };
