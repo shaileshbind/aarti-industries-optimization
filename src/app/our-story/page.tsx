@@ -1,4 +1,3 @@
-import React from "react";
 import HeroBanner from "../components/our-story/HeroBanner";
 import AboutCompany from "../components/our-story/AboutCompany";
 import TimeLine from "../components/our-story/TimeLine";

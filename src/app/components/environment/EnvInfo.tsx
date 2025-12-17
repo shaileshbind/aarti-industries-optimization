@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText1, H3 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import { FadeInReveal } from "../ScrollReveal";

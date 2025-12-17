@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText1, H2 } from "../Typography2";
 import Image from "next/image";
 import { LAAEngageProps } from "@/app/types/life-at-aarti.type";

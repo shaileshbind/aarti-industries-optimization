@@ -1,4 +1,3 @@
-import React from "react";
 import InvestorBanner from "../components/investor-overview/InvestorBanner";
 import InvestorBlueSection from "../components/investor-overview/InvestorBlueSection";
 import InvestorLeaders from "../components/investor-overview/InvestorLeaders";

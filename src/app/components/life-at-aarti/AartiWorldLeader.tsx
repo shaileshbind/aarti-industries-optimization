@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import "swiper/css";

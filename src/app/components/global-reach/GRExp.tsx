@@ -1,4 +1,3 @@
-import React from "react";
 import ExploreCard from "../cards/ExploreCard";
 import { GRExpProps } from "@/app/types/global-reach.type";
 

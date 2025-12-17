@@ -1,4 +1,3 @@
-import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import ShareHolderBanner from "../shareholder-information/ShareHolderBanner";
 import TabsYearsContainer from "../shareholder-information/TabsYearsContainer";

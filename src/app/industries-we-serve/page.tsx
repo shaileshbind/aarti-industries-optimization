@@ -1,4 +1,3 @@
-import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import IndustryExp from "../components/industries-we-serve/IndustryExp";
 import OurPortfolio from "../components/industries-we-serve/OurPortfolio";

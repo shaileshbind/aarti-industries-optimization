@@ -1,4 +1,3 @@
-import React from "react";
 import RDHeroBanner from "../components/r-and-d/RDHeroBanner";
 import RDInfo from "../components/sections/RDInfo";
 import RDSafety from "../components/r-and-d/RDSafety";

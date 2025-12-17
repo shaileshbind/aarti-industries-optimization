@@ -3,7 +3,6 @@ import GloballyCertified from "@/app/components/GloballyCertified";
 import IntimationOfStockExchange from "@/app/components/investor-templates/disclosure/IntimationOfStockExchange";
 import OrangeCardCategoryListingPage from "@/app/components/investor-templates/disclosure/OrangeCardCategoryListingPage";
 import { notFound } from "next/navigation";
-import React from "react";
 
 type PageProps = {
   params: Promise<{

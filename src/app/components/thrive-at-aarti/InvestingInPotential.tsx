@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState } from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import MainAccordion from "../Accordion";

@@ -1,4 +1,3 @@
-import React from "react";
 import ExploreCard from "../cards/ExploreCard";
 import { CampusExpProps } from "@/app/types/campus.type";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import MahasuperBanner from "../components/mahasuper/MahasuperBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";

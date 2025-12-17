@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText2, BodyText3, Cta, H3, SubH3 } from "../Typography2";
 import Image from "next/image";
 import { InvestorContactProps } from "@/app/types/investor-overview.type";

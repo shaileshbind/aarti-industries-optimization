@@ -1,4 +1,3 @@
-import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import ProductWrapper from "../components/products/ProductWrapper";
 import { getData } from "@/_lib/getData.fetch";
