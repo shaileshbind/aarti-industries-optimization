@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Link from "next/link";
 import { fetchNews } from "@/_lib/fetchNews";

@@ -2,7 +2,6 @@
 import { DisclosureTabsProps } from "@/app/types/disclosure.type";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
 
 export default function DisclosureTabs({ categories }: DisclosureTabsProps) {
   const pathname = usePathname();

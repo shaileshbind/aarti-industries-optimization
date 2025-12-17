@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, {
+import {
   useLayoutEffect,
   useRef,
   useState,

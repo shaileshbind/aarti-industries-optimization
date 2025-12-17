@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BodyText1, BodyText2, H3, SubH2 } from '../Typography2'
 import { FadeInGroup, FadeInRevealBlur, WordReveal } from '../ScrollReveal'
 import Image from 'next/image'

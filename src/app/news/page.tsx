@@ -1,4 +1,3 @@
-import React from "react";
 import NewsBanner from "../components/news/NewsBanner";
 import NewsListing from "../components/news/NewsListing";
 import { getData } from "@/_lib/getData.fetch";

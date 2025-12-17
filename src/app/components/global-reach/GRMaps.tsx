@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BodyText2, BodyText3, H2, H3, SubH1, SubH3 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";

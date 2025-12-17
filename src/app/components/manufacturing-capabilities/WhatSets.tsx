@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 import { H2 } from "../Typography2";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";

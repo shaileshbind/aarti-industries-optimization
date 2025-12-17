@@ -1,5 +1,4 @@
 import { getPageData } from "@/_lib/pageData.fetch";
-import React from "react";
 import ManufacturingBanner from "../components/manufacturing-capabilities/ManufacturingBanner";
 import DetailsContainer from "../components/sections/DetailsContainer";
 import ScaleUpEngine from "../components/manufacturing-capabilities/ScaleUpEngine";

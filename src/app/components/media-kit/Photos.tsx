@@ -1,4 +1,3 @@
-import React from "react";
 import { H3 } from "../Typography2";
 import DownloadCard from "./DownloadCard";
 import { PhotosProps } from "@/app/types/media-kit.type";

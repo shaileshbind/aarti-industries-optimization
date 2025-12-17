@@ -1,4 +1,3 @@
-import React from "react";
 import CDMOBanner from "../components/cdmo/CDMOBanner";
 import CDMODriving from "../components/cdmo/CDMODriving";
 import CDMOE2E from "../components/cdmo/CDMOE2E";

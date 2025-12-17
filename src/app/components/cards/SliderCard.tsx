@@ -1,4 +1,3 @@
-import React from "react";
 import type { FC } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH1 } from "../Typography2";

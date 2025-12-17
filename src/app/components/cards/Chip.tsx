@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 import { BodyText2 } from "../Typography2";
 
 type ChipProps = {

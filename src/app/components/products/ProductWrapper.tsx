@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import Banner from "./Banner";
 import ProductFilterList from "./ProductFilterList";
 import { ProductWrapperProps } from "@/app/types/product.listing.type";

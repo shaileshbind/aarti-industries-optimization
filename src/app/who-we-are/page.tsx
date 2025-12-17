@@ -1,4 +1,3 @@
-import React from "react";
 import WhoBanner from "../components/who-we-are/WhoBanner";
 import WhoInfo from "../components/who-we-are/WhoInfo";
 import WhoCards from "../components/who-we-are/WhoCards";

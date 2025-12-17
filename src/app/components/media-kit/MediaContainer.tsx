@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import SimpleTabs from "../SimpleTabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

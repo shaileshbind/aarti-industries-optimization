@@ -1,4 +1,3 @@
-import React from "react";
 import GRBanner from "../components/global-reach/GRBanner";
 import GRInfo from "../components/global-reach/GRInfo";
 import GloballyCertified from "../components/GloballyCertified";

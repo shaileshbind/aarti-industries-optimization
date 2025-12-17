@@ -1,5 +1,4 @@
 import { getData } from "@/_lib/getData.fetch";
-import React from "react";
 import StockExchangeContainer from "./StockExchangeContainer";
 import { getDisclosureData } from "@/_lib/getDisclosureData.fetch";
 import { IntimationOfStockExchangeProps } from "@/app/types/disclosure.type";

@@ -1,4 +1,3 @@
-import React from "react";
 export const dynamic = "force-dynamic";
 import PrivacyPolicyBanner from "@/app/components/privacy-policy/privacyPolicyBanner";
 import PrivacyPolicyContent from "../components/privacy-policy/PrivacyPolicyContent";

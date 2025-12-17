@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";

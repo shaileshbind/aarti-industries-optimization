@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText2, H2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import { ContactMapProps } from "@/app/types/contact.type";

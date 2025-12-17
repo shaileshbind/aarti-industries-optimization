@@ -1,6 +1,5 @@
 import { getData } from "@/_lib/getData.fetch";
 import { getPageData } from "@/_lib/pageData.fetch";
-import React from "react";
 import DigitalBanner from "../components/digital-transformation/DigitalBanner";
 import TitleCardsContainer from "../components/TitleCardsContainer";
 import MiddleBanner from "../components/digital-transformation/MiddleBanner";
