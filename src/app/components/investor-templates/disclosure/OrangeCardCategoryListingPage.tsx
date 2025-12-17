@@ -1,4 +1,3 @@
-import React from "react";
 import { getDisclosureData } from "@/_lib/getDisclosureData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import { OrangeCardCategoryListingPageProps } from "@/app/types/disclosure.type";

@@ -1,4 +1,3 @@
-import React from "react";
 import EventsBanner from "../components/events-and-webinars/eventsBanner";
 import EventsListing from "../components/events-and-webinars/EventsListing";
 import SEO from "../components/SEO";

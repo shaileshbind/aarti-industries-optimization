@@ -1,4 +1,3 @@
-import React from "react";
 import DownloadCard from "./DownloadCard";
 import { BrandGuidelinesProps } from "@/app/types/media-kit.type";
 import { FadeInReveal } from "../ScrollReveal";

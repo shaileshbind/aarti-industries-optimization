@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { EventsListingProps, UpcomingEventData } from "@/app/types/events-and-webinars.type";
 import EventCard from "./EventCard";
 import EventPopup from "./EventPopup";

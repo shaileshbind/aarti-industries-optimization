@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText1, H3 } from "../Typography2";
 import Button from "../Button";
 import { SustainabilityTransparancyProps } from "@/app/types/supply-chain.type";

@@ -1,5 +1,4 @@
 import { getPageData } from "@/_lib/pageData.fetch";
-import React from "react";
 import FinancialBanner from "../financial-information/FinancialBanner";
 import YearQuarterListing from "../templates/YearQuarterListing";
 import SEO from "../SEO";

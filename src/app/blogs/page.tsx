@@ -1,5 +1,4 @@
 import { getData } from "@/_lib/getData.fetch";
-import React from "react";
 import BlogBanner from "../components/blogs/BlogBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";

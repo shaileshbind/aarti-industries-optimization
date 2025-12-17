@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BodyText2, BodyText3, H2, SubH1 } from "../Typography2";
 import DesktopMapSvg from "../global-reach/DesktopMapSvg";
 import Image from "next/image";

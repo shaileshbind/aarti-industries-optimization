@@ -1,4 +1,3 @@
-import React from "react";
 import BlackInfoSection from "../sections/BlackInfoSection";
 import { MiddleBannerProps } from "@/app/types/digital-transformation.type";
 

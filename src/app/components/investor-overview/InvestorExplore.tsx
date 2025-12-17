@@ -1,4 +1,3 @@
-import React from "react";
 import ExploreCard from "../cards/ExploreCard";
 import { InvestorExpProps } from "@/app/types/investor-overview.type";
 

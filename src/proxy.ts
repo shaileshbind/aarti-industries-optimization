@@ -19,7 +19,7 @@ async function getCachedRedirects(): Promise<RedirectMapping[]> {
   return redirectCache;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   // Skip redirect check for API routes, static files, and Next.js internals
   if (

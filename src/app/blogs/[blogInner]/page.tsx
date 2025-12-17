@@ -12,7 +12,6 @@ import {
   RelatedBogsProps,
 } from "@/app/types/blogs.type";
 import Image from "next/image";
-import React from "react";
 import { formatDate } from "../../../../utils/formatDate";
 import SEO from "@/app/components/SEO";
 import clsx from "clsx";

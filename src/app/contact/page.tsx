@@ -1,4 +1,3 @@
-import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import ContactBanner from "../components/Contact/ContactBanner";

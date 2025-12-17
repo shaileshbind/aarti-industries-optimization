@@ -1,4 +1,3 @@
-import React from "react";
 import OurPhilosophy from "../components/corporateGovernance/OurPhilosophy";
 import CorporateBanner from "../components/corporateGovernance/CorporateBanner";
 import GloballyCertified from "../components/GloballyCertified";

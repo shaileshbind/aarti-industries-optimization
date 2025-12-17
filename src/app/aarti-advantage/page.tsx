@@ -1,4 +1,3 @@
-import React from "react";
 import AartiAdvantageBanner from "../components/aarti-advantage/AartiAdvantageBanner";
 import DetailsContainer from "../components/sections/DetailsContainer";
 import { getData } from "@/_lib/getData.fetch";

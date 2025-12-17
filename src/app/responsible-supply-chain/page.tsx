@@ -1,4 +1,3 @@
-import React from "react";
 import SustainabilityTransparancy from "../components/supply-chain/SustainabilityTransparancy";
 import KeyRawMaterials from "../components/supply-chain/KeyRawMaterials";
 import SupplyChainBanner from "../components/supply-chain/SupplyBanner";

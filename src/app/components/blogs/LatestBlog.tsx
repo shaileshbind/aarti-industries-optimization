@@ -1,4 +1,3 @@
-import React from "react";
 import { H2, SubH1 } from "../Typography2";
 import Image from "next/image";
 import Button from "../Button";

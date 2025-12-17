@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BodyText1 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";
