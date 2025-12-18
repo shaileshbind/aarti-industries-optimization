@@ -29,9 +29,13 @@ const DesktopMapSvg = ({
 }: NewMapProps) => {
   return (
     <svg
-      width="1262"
-      height="623"
+      // width="1262"
+      // height="623"
+      // viewBox="0 0 1262 623"
+      width="100%"
+      height="auto"
       viewBox="0 0 1262 623"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
