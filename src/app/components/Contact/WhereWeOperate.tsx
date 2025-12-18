@@ -6,7 +6,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "swiper/css/grid";
-import { Mousewheel, Pagination, Grid, Navigation } from "swiper/modules";
+import { Mousewheel, Pagination, Grid, Navigation, Autoplay } from "swiper/modules";
 import Tabs from "../Tabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -224,7 +224,11 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                     prevEl: ".swiper-button-prev-where-we-operate",
                     nextEl: ".swiper-button-next-where-we-operate",
                   }}
-                  modules={[Pagination, Mousewheel, Grid, Navigation]}
+                  modules={[Pagination, Mousewheel, Grid, Navigation, Autoplay]}
+                    autoplay={{
+                  delay: 15000,
+                  disableOnInteraction: false,
+                  }}
                   direction="horizontal"
                   pagination={
                     showProgressBar
