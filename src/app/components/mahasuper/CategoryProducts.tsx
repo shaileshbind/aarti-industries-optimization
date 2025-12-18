@@ -7,7 +7,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Pagination, Navigation, Mousewheel } from "swiper/modules";
+import { Pagination, Navigation, Mousewheel, Autoplay } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import CategoryCard from "../cards/CategoryCard";
 
@@ -50,7 +50,11 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                                                 spaceBetween: 24,
                                             },
                                         }}
-                                        modules={[Pagination, Navigation, Mousewheel]}
+                                        modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                                        autoplay={{
+                                            delay: 5000,
+                                            disableOnInteraction: false
+                                        }}
                                         navigation={{
                                             prevEl: ".swiper-button-prev-useBySection",
                                             nextEl: ".swiper-button-next-useBySection",

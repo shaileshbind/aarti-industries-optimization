@@ -425,7 +425,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         height={18}
                         className="object-cover h-[18px] w-[18px]"
                       />
-                      <SubH3 className="!text-[16px]">R&D Centers</SubH3>
+                      <SubH3 className="!text-[16px]">R&D Centres</SubH3>
                     </div>
                     <div className="mt-[20px] grid grid-cols-2">
                       <BodyText2
@@ -636,7 +636,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   height={18}
                   className="object-cover h-[18px] w-[18px]"
                 />
-                <SubH3 className="!text-[18px]">R&D Centers</SubH3>
+                <SubH3 className="!text-[18px]">R&D Centres</SubH3>
               </div>
               <div className="mt-[20px] grid grid-cols-2">
                 <BodyText2

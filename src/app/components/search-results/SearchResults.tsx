@@ -248,6 +248,7 @@ export default function SearchResults() {
               title={hit?.title || hit?.productName || hit?.category || ""}
               link={getUrl(hit)}
               useTargetBlank={false}
+              titleClassName="capitalize"
             />
           ))}
 

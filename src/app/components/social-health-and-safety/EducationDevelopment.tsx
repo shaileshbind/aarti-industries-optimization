@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { BodyText2, SubH1 } from "../Typography2"; 
+import { BodyText2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
+import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,16 +12,15 @@ import clsx from "clsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
-
 const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   data,
 }) => {
-  const { cards } = data;  
+  const { cards } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
   const [isImageAnimating, setIsImageAnimating] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const slidesPerView = 1.2;
   const spaceBetween = 80;
@@ -110,8 +109,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
     <div ref={frameworkForgedRef}>
       <div
         className={clsx(
-          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"
-          }`
+          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`
         )}
       >
         <div
@@ -128,8 +126,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                 key={`outer-${currentImageIndex}`}
                 src={cards?.[currentImageIndex]?.image?.url}
                 alt={
-                  cards?.[currentImageIndex]?.image?.alternativeText ||
-                  "banner"
+                  cards?.[currentImageIndex]?.image?.alternativeText || "banner"
                 }
                 fill
                 sizes="(max-width: 768px) 768px, 
@@ -143,8 +140,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                 key={`main-${currentImageIndex}`}
                 src={cards?.[currentImageIndex]?.image?.url}
                 alt={
-                  cards?.[currentImageIndex]?.image?.alternativeText ||
-                  "banner"
+                  cards?.[currentImageIndex]?.image?.alternativeText || "banner"
                 }
                 width={500}
                 height={548}
@@ -172,14 +168,8 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
             <div className="absolute min-h-screen bg-white w-[1px] left-[68.5px] lg:left-[206.5px]" />
             <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
           </div>
-
         </div>
-        <div
-          className={clsx(
-            `${"lg:pl-20"
-            }`
-          )}
-        >
+        <div className={clsx(`${"lg:pl-20"}`)}>
           <div className="mt-6 md:mt-[65px] mb-[27px] flex justify-between items-center max-w-[100%] lg:max-w-[80%]">
             <BodyText2 className="text-orange-200">
               0{activeIndex + 1}-<span>0{cards?.length}</span>
@@ -192,10 +182,11 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${activeIndex > 0
-                    ? "cursor-pointer opacity-100"
-                    : "pointer-events-none opacity-30"
-                    }`}
+                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                    activeIndex > 0
+                      ? "cursor-pointer opacity-100"
+                      : "pointer-events-none opacity-30"
+                  }`}
                 />
 
                 <Image
@@ -203,10 +194,11 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${activeIndex < cards?.length - 1
-                    ? "cursor-pointer opacity-100"
-                    : "pointer-events-none opacity-30"
-                    }`}
+                  className={`swiper-button-next transition-opacity ${
+                    activeIndex < cards?.length - 1
+                      ? "cursor-pointer opacity-100"
+                      : "pointer-events-none opacity-30"
+                  }`}
                 />
               </div>
             </div>
@@ -215,7 +207,11 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
           {cards?.length > 0 && (
             <div ref={containerRef} className="w-full">
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel]}
+                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                autoplay={{
+                  delay: 15000,
+                  disableOnInteraction: false,
+                }}
                 navigation={{
                   nextEl: ".swiper-button-next",
                   prevEl: ".swiper-button-prev",
@@ -247,21 +243,23 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   return (
                     <SwiperSlide
                       key={item?.id}
-                      className={`transition-all duration-500  ${index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
-                        }`}
+                      className={`transition-all duration-500  ${
+                        index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
+                      }`}
                     >
-                        <SubH1 className={`text-blue-200`}>{item?.title}</SubH1>
+                      <SubH1 className={`text-blue-200`}>{item?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
                         {item?.description}
                       </BodyText2>
                       {item?.bulletPointsTitle && (
-                        <BodyText2 className="mt-[20px] mb-[5px] text-blue-200">{item?.bulletPointsTitle}</BodyText2>
+                        <BodyText2 className="mt-[20px] mb-[5px] text-blue-200">
+                          {item?.bulletPointsTitle}
+                        </BodyText2>
                       )}
                       <ul className="mt-2 space-y-2">
                         {item?.bulletPoints?.length > 0 &&
                           item?.bulletPoints?.map((item, idx) => (
                             <>
-
                               <li
                                 key={`${idx}-${item?.title}`}
                                 className="text-sm text-gray-300 flex items-center gap-2"
@@ -273,10 +271,10 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                                   width={15}
                                 />
 
-                                <BodyText2 key={item?.title}>{item?.title}</BodyText2>
-
+                                <BodyText2 key={item?.title}>
+                                  {item?.title}
+                                </BodyText2>
                               </li>
-
                             </>
                           ))}
                       </ul>
@@ -286,10 +284,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
               </Swiper>
             </div>
           )}
-
-
         </div>
-
       </div>
     </div>
   );

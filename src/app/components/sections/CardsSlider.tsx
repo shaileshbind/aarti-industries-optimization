@@ -4,7 +4,7 @@ import Image from "next/image";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 import { WordReveal } from "../ScrollReveal";
@@ -73,7 +73,11 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     slidesOffsetBefore: 40,
                   },
                 }}
-                modules={[Pagination, Navigation, Mousewheel]}
+                modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
                 navigation={{
                   prevEl: ".swiper-button-prev-simplified",
                   nextEl: ".swiper-button-next-simplified",

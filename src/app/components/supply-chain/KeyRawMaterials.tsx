@@ -1,18 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BodyText2, H3, SubH2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import Image from "next/image";
 import { KeyRawMaterialsProps } from "@/app/types/supply-chain.type";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
   const { title, description, products } = data;
 
   const [expanded, setexpanded] = useState(0);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !stickyRef.current) return;
+
+    // Media query for large screens (Tailwind's lg breakpoint = 1024px)
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 1024px)", () => {
+      // Only create ScrollTrigger on desktop
+      ScrollTrigger.create({
+        trigger: containerRef.current,
+        start: "top 120px",
+        end: "bottom center",
+        pin: stickyRef.current,
+        pinSpacing: false,
+        markers: false, // Set to true for debugging
+      });
+    });
+
+    return () => {
+      mm.revert(); // Clean up all matchMedia instances
+    };
+  }, [products]);
+
   return (
-    <div className="lg:flex justify-between fluid-container">
-      <div className="lg:w-[40%] ">
+    <div ref={containerRef} className="lg:flex justify-between fluid-container">
+      <div ref={stickyRef} className="lg:w-[40%]">
         {title && <H3>{title}</H3>}
 
         {description && (
@@ -27,7 +60,9 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
               key={"accordion" + index}
               expanded={expanded === index}
               onChange={() => setexpanded(index)}
-              borderBottom={index === products?.length - 1 ? "none" : "1px solid #e8e8e8"}
+              borderBottom={
+                index === products?.length - 1 ? "none" : "1px solid #e8e8e8"
+              }
               icon={
                 <Image
                   src={"/images/accordian-down.svg"}
@@ -37,9 +72,7 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
                 />
               }
               title={
-                <SubH2
-                  className={`text-lg md:text-2xl text-[#002F50] `}
-                >
+                <SubH2 className={`text-lg md:text-2xl text-[#002F50] `}>
                   {item?.productName}
                 </SubH2>
               }

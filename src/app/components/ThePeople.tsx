@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { BodyText1, BodyText2, H2 } from "./Typography2";
@@ -38,7 +38,11 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             centeredSlides={true}
             autoHeight={false}
             loop={false}
-            modules={[Navigation, Pagination, Mousewheel]}
+            modules={[Navigation, Pagination, Mousewheel, Autoplay]}
+            autoplay={{
+              delay: 15000,
+              disableOnInteraction: false
+            }}
             pagination={{
               el: ".home-by-use-section-swiper",
               type: "progressbar",

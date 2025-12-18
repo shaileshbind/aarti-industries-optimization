@@ -5,7 +5,6 @@ import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";
 import clsx from "clsx";
 import Button from "../Button";
-import { FadeInReveal } from "../ScrollReveal";
 
 export default function WorksWithPartners({
   data,
@@ -88,30 +87,29 @@ export default function WorksWithPartners({
     <div className="fluid-container">
       <div className="lg:flex justify-between items-center hidden">
         {sectionTitle && (
-          <FadeInReveal>
+          <div className="lg:w-1/2">
             <H2>{sectionTitle}</H2>
-          </FadeInReveal>
+          </div>
         )}
 
         {ctaTitle && ctaLink && (
-          <FadeInReveal>
+          <div>
             <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
-          </FadeInReveal>
+          </div>
         )}
       </div>
-      <div className="flex justify-between items-center lg:hidden">
-        {sectionTitle && (
-            <H2>{sectionTitle}</H2>
-        )}
-        {ctaTitle && ctaLink && ( 
-            <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
+
+      {/* Mobile */}
+      <div className="md:flex justify-between items-center lg:hidden">
+        {sectionTitle && <H2  className="md:w-[70%]">{sectionTitle}</H2>}
+        {ctaTitle && ctaLink && (
+          <Button title={ctaTitle} href={ctaLink} className="mt-6 lg:mt-0" />
         )}
       </div>
 
       {/* Desktop */}
       {card?.length > 0 && (
-        <FadeInReveal
-          delay={0.2}
+        <div
           className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}
         >
           {card?.map((item, index) => (
@@ -119,13 +117,13 @@ export default function WorksWithPartners({
               {index !== card?.length - 1 && (
                 <>
                   {/* Background progress line */}
-                  <div className="top-progress absolute left-0 top-[10px] h-[1px] w-full bg-[#E1E1E1]" />
+                  <div className="top-progress absolute left-0 top-[10.5px] h-[1px] w-full bg-[#E1E1E1]" />
 
                   {/* Animated progress bar */}
                   {activeCard === index && (
                     <div
                       key={`progress-${activeCard}`}
-                      className="absolute left-4 top-[10px] h-[2px] bg-[#DC4C03]"
+                      className="absolute left-4 top-[10.5px] h-[2px] bg-[#DC4C03]"
                       style={{
                         animation: "fillProgress 5s linear forwards",
                       }}
@@ -134,7 +132,7 @@ export default function WorksWithPartners({
 
                   {/* Completed progress bar for previous card */}
                   {activeCard > index && (
-                    <div className="absolute left-4 top-[10px] h-[2px] w-full bg-[#DC4C03]" />
+                    <div className="absolute left-4 top-[10.5px] h-[2px] w-full bg-[#DC4C03]" />
                   )}
                 </>
               )}
@@ -142,8 +140,8 @@ export default function WorksWithPartners({
               <Image
                 src={"/images/star-orange.svg"}
                 alt="banner"
-                width={20}
-                height={20}
+                width={22}
+                height={22}
                 className="relative z-[1]"
               />
 
@@ -164,7 +162,7 @@ export default function WorksWithPartners({
               </div>
             </div>
           ))}
-        </FadeInReveal>
+        </div>
       )}
 
       {/* Mobile */}

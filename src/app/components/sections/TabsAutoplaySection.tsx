@@ -28,27 +28,41 @@ const TabsAutoplaySection = ({
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
+  const pausedProgressRef = useRef<number>(0);
+  const pauseTimeRef = useRef<number>(0);
 
   const startProgress = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
-    setProgress(0);
+
+    const initialProgress = pausedProgressRef.current;
+    setProgress(initialProgress);
     startTimeRef.current = performance.now();
     const duration = 15000;
 
     const animate = (time: number) => {
+      if (isPaused) {
+        pauseTimeRef.current = time;
+        return;
+      }
+
       const elapsed = time - startTimeRef.current;
-      const progressPercent = Math.min((elapsed / duration) * 100, 100);
+      const progressPercent = Math.min(
+        initialProgress + (elapsed / duration) * 100,
+        100
+      );
       setProgress(progressPercent);
 
       if (progressPercent < 100) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
         // Move to next slide
+        pausedProgressRef.current = 0;
         const nextIndex = (active + 1) % data.length;
         setActive(nextIndex);
         setExpanded(`panel${nextIndex}`);
@@ -59,17 +73,31 @@ const TabsAutoplaySection = ({
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, [active, data.length]);
+  }, [active, data.length, isPaused]);
 
   useEffect(() => {
-    startProgress();
+    if (!isPaused) {
+      startProgress();
+    }
 
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, startProgress]);
+  }, [active, startProgress, isPaused]);
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+    pausedProgressRef.current = progress;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+  };
 
   const handleTabClick = (index: number) => {
     if (index === active) return;
@@ -78,6 +106,7 @@ const TabsAutoplaySection = ({
       cancelAnimationFrame(rafRef.current);
     }
 
+    pausedProgressRef.current = 0;
     setActive(index);
     setExpanded(`panel${index}`);
     if (swiperRef.current) {
@@ -91,6 +120,7 @@ const TabsAutoplaySection = ({
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
+      pausedProgressRef.current = 0;
       setActive(realIndex);
       setExpanded(`panel${realIndex}`);
     }
@@ -103,6 +133,7 @@ const TabsAutoplaySection = ({
         if (rafRef.current) {
           cancelAnimationFrame(rafRef.current);
         }
+        pausedProgressRef.current = 0;
         setActive(panelIndex);
         setExpanded(panel);
       }
@@ -216,7 +247,10 @@ const TabsAutoplaySection = ({
                         </>
                       )}
                     </div>
-                    <div>
+                    <div
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       {tabItem.card[0]?.title && (
                         <SubH2 className="mt-[24px]">
                           {tabItem.card[0].title}
@@ -250,15 +284,21 @@ const TabsAutoplaySection = ({
                           )}
                       </div>
 
-                      {tabItem.card[0]?.ctaButton?.link?.link && tabItem.card[0]?.ctaButton?.hasExternalLink && (
-                        <div className="mt-[18px] pointer-events-auto">
-                          <Button
-                            title={tabItem.card[0].ctaButton.title}
-                            href={tabItem.card[0]?.ctaButton?.hasExternalLink == "true" ? tabItem.card[0]?.ctaButton?.externalLink : tabItem.card[0]?.ctaButton?.link?.link}
-                            secondary
-                          />
-                        </div>
-                      )}
+                      {tabItem.card[0]?.ctaButton?.link?.link &&
+                        tabItem.card[0]?.ctaButton?.hasExternalLink && (
+                          <div className="mt-[18px] pointer-events-auto">
+                            <Button
+                              title={tabItem.card[0].ctaButton.title}
+                              href={
+                                tabItem.card[0]?.ctaButton?.hasExternalLink ==
+                                "true"
+                                  ? tabItem.card[0]?.ctaButton?.externalLink
+                                  : tabItem.card[0]?.ctaButton?.link?.link
+                              }
+                              secondary
+                            />
+                          </div>
+                        )}
                     </div>
                   </>
                 )}
@@ -288,7 +328,13 @@ const TabsAutoplaySection = ({
                   <div className="mt-[20px] mb-[30px]">
                     {item?.card?.[0] && (
                       <>
-                        <div className={`relative w-full ${starImgEffect ? 'h-[300px] md:h-[400px]' : 'h-[200px] md:h-[400px]'}  rounded-[14px] overflow-hidden`}>
+                        <div
+                          className={`relative w-full ${
+                            starImgEffect
+                              ? "h-[300px] md:h-[400px]"
+                              : "h-[200px] md:h-[400px]"
+                          }  rounded-[14px] overflow-hidden`}
+                        >
                           {item.card[0]?.image?.url && (
                             <>
                               {starImgEffect ? (
@@ -348,23 +394,23 @@ const TabsAutoplaySection = ({
 
                         <div className="flex flex-col gap-2 mt-5">
                           {item.card[0]?.BulletPoints?.length > 0 &&
-                            item.card[0]?.BulletPoints?.map(
-                              (items, index2) => (
-                                <div
-                                  className="flex gap-2 items-start"
-                                  key={"pointerss_" + index2}
-                                >
-                                  <Image
-                                    src={"/images/star-orange.svg"}
-                                    alt={"star"}
-                                    className="object-cover object-top w-4 h-4 mt-[2px]"
-                                    width={14}
-                                    height={14}
-                                  />
-                                  <p className="text-[#4C5861] text-sm">{items?.title}</p>
-                                </div>
-                              )
-                            )}
+                            item.card[0]?.BulletPoints?.map((items, index2) => (
+                              <div
+                                className="flex gap-2 items-start"
+                                key={"pointerss_" + index2}
+                              >
+                                <Image
+                                  src={"/images/star-orange.svg"}
+                                  alt={"star"}
+                                  className="object-cover object-top w-4 h-4 mt-[2px]"
+                                  width={14}
+                                  height={14}
+                                />
+                                <p className="text-[#4C5861] text-sm">
+                                  {items?.title}
+                                </p>
+                              </div>
+                            ))}
                         </div>
                       </>
                     )}
