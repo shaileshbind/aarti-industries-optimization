@@ -1,4 +1,3 @@
-import React from "react";
 import EnvBanner from "../components/environment/EnvBanner";
 import EnvInfo from "../components/environment/EnvInfo";
 import EnvCards from "../components/environment/EnvCards";

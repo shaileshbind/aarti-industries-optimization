@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import {  Cta,  } from "../Typography2";
 import Image from "next/image";
 import { InvestorsBlueProps } from "@/app/types/investor-overview.type";

@@ -1,4 +1,3 @@
-import React from "react";
 import LifeAtBanner from "../components/life-at-aarti/LifeAtBanner";
 import LifeAtValues from "../components/life-at-aarti/LifeAtValues";
 import LifeAtSections from "../components/life-at-aarti/LifeAtSections";

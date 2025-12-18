@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { BodyText2, H2, SubH2 } from "../Typography2";
 import Button from "../Button";
 import DateCard from "../cards/DateCard";

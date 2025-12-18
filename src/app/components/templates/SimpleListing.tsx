@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import clsx from "clsx";

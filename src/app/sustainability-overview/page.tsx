@@ -1,4 +1,3 @@
-import React from "react";
 import SusBanner from "../components/sustainability-overview/SusBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";

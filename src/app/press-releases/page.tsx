@@ -1,4 +1,3 @@
-import React from "react";
 import PressReleaseBanner from "../components/press-releases/PressReleaseBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 import PressReleaseYearListing from "../components/press-releases/PressReleaseYearListing";

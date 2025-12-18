@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
 import { BodyText1, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import NirvanaCard from "../cards/NirvanaCard";

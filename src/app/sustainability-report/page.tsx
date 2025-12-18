@@ -1,7 +1,6 @@
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "@/app/components/GloballyCertified";
 import OrangeCardListingPage from "@/app/components/investor-templates/OranegCardListingPage";
-import React from "react";
 
 export const dynamic = "force-dynamic";
 

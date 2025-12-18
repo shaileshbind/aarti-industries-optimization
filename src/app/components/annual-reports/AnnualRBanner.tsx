@@ -1,4 +1,3 @@
-import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { AnnualRBannerProps } from "@/app/types/annual-reports.type";
 

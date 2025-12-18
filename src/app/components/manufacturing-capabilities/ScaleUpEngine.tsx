@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { H3, SubH3 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";

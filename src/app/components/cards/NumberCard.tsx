@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText2, H2 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";

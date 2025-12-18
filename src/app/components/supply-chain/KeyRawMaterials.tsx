@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BodyText2, H3, SubH2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";

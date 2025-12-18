@@ -1,4 +1,3 @@
-import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { SocialHealthAndSafetyBannerProps } from "@/app/types/social-health-and-safety.type";
 

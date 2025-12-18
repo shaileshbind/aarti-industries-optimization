@@ -1,4 +1,3 @@
-import React from "react";
 import { BodyText2, H2, H3 } from "../Typography2";
 import { InvestorQuarterlyProps } from "@/app/types/investor-overview.type";
 

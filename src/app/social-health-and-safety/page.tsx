@@ -1,4 +1,3 @@
-import React from "react";
 import SocialHealthAndSafetyBanner from "../components/social-health-and-safety/SocialHealthAndSafetyBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";

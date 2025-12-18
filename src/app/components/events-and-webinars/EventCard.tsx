@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, BodyText3, SubH3 } from "../Typography2";
 import Button from "../Button";
