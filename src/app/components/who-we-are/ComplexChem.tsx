@@ -23,7 +23,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       setProgress(0);
 
-      const duration = 8000;
+      const duration = 15000;
       const startTime = performance.now();
 
       const animate = (time: number) => {

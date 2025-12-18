@@ -9,6 +9,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
 
   return (
     <div className="relative lg:h-[calc(100vh-70px)] ">
+      <div className="absolute inset-0 bg-black/60 z-[1]" />
       {/* Desktop */}
       {image?.url && (
         <div className="lg:absolute w-full h-full hidden lg:block">
@@ -30,13 +31,19 @@ export default function WhatSets({ data }: WhatSetsProps) {
             </H2>
           )}
 
-          {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
-            <Button
-              title={ctaButton?.title}
-              href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
-              className="mt-6"
-            />
-          )}
+          {ctaButton?.title &&
+            ctaButton?.link?.link &&
+            ctaButton?.hasExternalLink && (
+              <Button
+                title={ctaButton?.title}
+                href={`${
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }`}
+                className="mt-6"
+              />
+            )}
 
           {/* Mobile */}
           {mobImage?.url && (

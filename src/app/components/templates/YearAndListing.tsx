@@ -281,7 +281,10 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
           </div>
 
           {/* Report list */}
-          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+          <div
+            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+            data-lenis-prevent
+          >
             {/* Desktop - show all */}
             <div className="hidden lg:block">
               {currentReports?.map((item) => (

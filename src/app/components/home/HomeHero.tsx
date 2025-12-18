@@ -332,7 +332,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
                   <></>
                 ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
                 )}
                 {/* Content box */}
                 { items?.card?.[0]?.bannerVideo?.url && !isMobile ? (

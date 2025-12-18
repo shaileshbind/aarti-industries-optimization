@@ -133,7 +133,10 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
         )}
       >
         {/* Report list */}
-        <div className="lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+        <div
+          className="lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+          data-lenis-prevent
+        >
           {/* Desktop - show all */}
           <div className="hidden lg:block">
             {allReports?.map((item) => (
