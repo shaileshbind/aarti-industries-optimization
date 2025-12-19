@@ -27,7 +27,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const [isImageAnimating, setIsImageAnimating] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Holds the index of the image being displayed
 
-  const slidesPerView = 1.5;
+  const slidesPerView = 1;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
 
@@ -120,7 +120,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
       )}
       <div
         className={clsx(
-          `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${
+          `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset] gap-x-[40px]  ${
             layout === "imgLeftContentRight"
               ? "lg:grid-cols-[45%_55%]"
               : "lg:grid-cols-[45%_55%]"
@@ -185,7 +185,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   prevEl: ".swiper-button-prev",
                 }}
                 autoplay={{
-                  delay: 5000,
+                  delay: 15000,
                   disableOnInteraction: false,
                 }}
                 slidesOffsetAfter={offsetAfter}

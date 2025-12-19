@@ -33,7 +33,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     }
 
     startTimeRef.current = Date.now();
-    const duration = 5000; // 5 seconds
+    const duration = 15000; // 5 seconds
     const updateInterval = 16; // ~60fps
 
     progressIntervalRef.current = setInterval(() => {
@@ -118,7 +118,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
         return nextIndex;
       });
-    }, 5000);
+    }, 15000);
   };
 
   const stopAutoRotation = () => {

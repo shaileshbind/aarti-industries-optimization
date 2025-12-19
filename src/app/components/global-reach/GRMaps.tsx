@@ -97,7 +97,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {sectionTitle}
             </H2>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px] overflow-scroll ">
+          <div className="relative w-full h-[180px] lg:h-[550px]">
             <div className="w-fit h-full mx-auto hidden lg:block relative ">
               <DesktopMapSvg
                 hoverRestWorld={() => setActiveBlip(0)}
@@ -115,7 +115,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               />
               <div
                 onMouseEnter={() => setActiveBlip(0)}
-                className="absolute top-[78%] left-[5.5%]  cursor-pointer"
+                 className="absolute !top-[61%] !left-[3.8%] xl:!top-[67%] xl:!left-[4.9%]  cursor-pointer"
               >
                 <div
                   className={`${
@@ -150,7 +150,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {/* North America */}
               <div
                 onMouseEnter={() => setActiveBlip(1)}
-                className="absolute top-[21.5%] left-[12.5%] cursor-pointer"
+                  className="absolute top-[20.5%] left-[10.7%] xl:top-[17.5%] xl:left-[11.9%] cursor-pointer"
               >
                 <div
                   className={`${
@@ -185,7 +185,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {/* Europe */}
               <div
                 onMouseEnter={() => setActiveBlip(2)}
-                className="absolute top-[20.5%] left-[43%] cursor-pointer"
+                 className="absolute top-[19.5%] left-[41.2%] xl:top-[16.5%] xl:left-[42.3%] cursor-pointer"
               >
                 <div
                   className={`${
@@ -220,7 +220,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {/* Middle East */}
               <div
                 onMouseEnter={() => setActiveBlip(3)}
-                className="absolute top-[33%] left-[53%] cursor-pointer"
+                 className="absolute top-[28.8%] left-[51.2%] xl:top-[27%] xl:left-[52.3%] cursor-pointer"           
               >
                 <div
                   className={`${
@@ -255,7 +255,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {/* India */}
               <div
                 onMouseEnter={() => setActiveBlip(4)}
-                className="absolute top-[36%] left-[64.5%] cursor-pointer"
+                 className="absolute top-[31%] left-[62.6%] xl:top-[30%] xl:left-[64%] cursor-pointer"
               >
                 <div
                   className={`${
@@ -290,7 +290,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               {/* Rest of Asia */}
               <div
                 onMouseEnter={() => setActiveBlip(5)}
-                className="absolute top-[19%] left-[76.3%] cursor-pointer"
+                className="absolute top-[18%] left-[74.6%] xl:top-[15%] xl:left-[75.5%] cursor-pointer"
               >
                 <div
                   className={`${
@@ -425,7 +425,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         height={18}
                         className="object-cover h-[18px] w-[18px]"
                       />
-                      <SubH3 className="!text-[16px]">R&D Centers</SubH3>
+                      <SubH3 className="!text-[16px]">R&D Centres</SubH3>
                     </div>
                     <div className="mt-[20px] grid grid-cols-2">
                       <BodyText2
@@ -636,7 +636,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   height={18}
                   className="object-cover h-[18px] w-[18px]"
                 />
-                <SubH3 className="!text-[18px]">R&D Centers</SubH3>
+                <SubH3 className="!text-[18px]">R&D Centres</SubH3>
               </div>
               <div className="mt-[20px] grid grid-cols-2">
                 <BodyText2

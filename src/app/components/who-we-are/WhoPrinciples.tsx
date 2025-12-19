@@ -19,7 +19,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
         </H2>
       )}
       {/* Desktop Layout */}
-      <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
+     {content?.length > 0 && <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
         {/* Left Tabs + Progress Bar */}
         <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
           <div className="relative flex gap-4">
@@ -91,7 +91,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             />
           )}
         </div>
-      </div>
+      </div>}
       {/* Mobile Accordion */}
       {content?.length > 0 && (
         <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">

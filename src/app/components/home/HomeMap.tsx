@@ -43,7 +43,7 @@ const HomeMap = () => {
             />
             <div
               onMouseEnter={() => setActiveBlip(0)}
-              className="absolute top-[78%] left-[5.5%]  cursor-pointer"
+              className="absolute !top-[61%] !left-[3.8%] xl:!top-[67%] xl:!left-[4.9%]  cursor-pointer"
             >
               <div
                 className={`${
@@ -78,7 +78,7 @@ const HomeMap = () => {
             {/* North America */}
             <div
               onMouseEnter={() => setActiveBlip(1)}
-              className="absolute top-[21.5%] left-[12.5%] cursor-pointer"
+              className="absolute top-[20.5%] left-[10.7%] xl:top-[17.5%] xl:left-[11.9%] cursor-pointer"
             >
               <div
                 className={`${
@@ -113,7 +113,7 @@ const HomeMap = () => {
             {/* Europe */}
             <div
               onMouseEnter={() => setActiveBlip(2)}
-              className="absolute top-[20.5%] left-[43%] cursor-pointer"
+              className="absolute top-[19.5%] left-[41.2%] xl:top-[16.5%] xl:left-[42.3%] cursor-pointer"
             >
               <div
                 className={`${
@@ -148,7 +148,7 @@ const HomeMap = () => {
             {/* Middle East */}
             <div
               onMouseEnter={() => setActiveBlip(3)}
-              className="absolute top-[33%] left-[53%] cursor-pointer"
+              className="absolute top-[28.8%] left-[51.2%] xl:top-[27%] xl:left-[52.3%] cursor-pointer"
             >
               <div
                 className={`${
@@ -183,7 +183,7 @@ const HomeMap = () => {
             {/* India */}
             <div
               onMouseEnter={() => setActiveBlip(4)}
-              className="absolute top-[36%] left-[64.5%] cursor-pointer"
+              className="absolute top-[31%] left-[62.6%] xl:top-[30%] xl:left-[64%] cursor-pointer"
             >
               <div
                 className={`${
@@ -218,7 +218,7 @@ const HomeMap = () => {
             {/* Rest of Asia */}
             <div
               onMouseEnter={() => setActiveBlip(5)}
-              className="absolute top-[19%] left-[76.3%] cursor-pointer"
+              className="absolute top-[18%] left-[74.6%] xl:top-[15%] xl:left-[75.5%] cursor-pointer"
             >
               <div
                 className={`${

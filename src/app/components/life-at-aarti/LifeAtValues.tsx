@@ -66,83 +66,89 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
           {title}
         </H2>
       )}
-      {/* Desktop Layout */}
-      <div
-        className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container !z-[10]"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Left Tabs + Progress Bar */}
-        <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
-          <div className="relative flex gap-4">
-            {/* Progress Bar */}
-            <div className="relative flex flex-col items-center justify-center">
-              {data?.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-[3px] rounded-full transition-all duration-300 my-1 ${
-                    index === active ? "bg-amber-600 h-12" : "bg-gray-300 h-7"
-                  }`}
-                ></div>
-              ))}
-            </div>
-            {/* Tabs */}
-            <div className="space-y-6 w-full bg-gradient-orange-1 p-8 rounded-2xl relative flex flex-col">
-              {data?.map(
-                (tab, index) =>
-                  tab?.value && (
-                    <button
-                      key={tab.id}
-                      onClick={() => handleTabClick(index)}
-                      className="relative"
-                    >
-                      <H2
-                        className={clsx(
-                          "block text-left transition-all duration-300 cursor-pointer z-[20] ",
-                          active === index
-                            ? "text-white "
-                            : "text-white/40 !text-[36px] hover:text-white/80"
-                        )}
-                      >
-                        {tab?.value}
-                      </H2>
-                      {active === index && (
-                        <Image
-                          src="/images/home/star-white.svg"
-                          alt="img"
-                          width={42}
-                          height={42}
-                          className="absolute z-10 right-[-60px] top-[50%] translate-y-[-50%] w-[42px] md:w-[52px]"
-                        />
-                      )}
-                    </button>
-                  )
-              )}
+      {/* Desktop Layout - Only renders if data exists and has valid content */}
+      {data &&
+        data.length > 0 &&
+        data.some((item) => item?.value || item?.description) && (
+          <div
+            className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container !z-[10]"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {/* Left Tabs + Progress Bar */}
+            <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
+              <div className="relative flex gap-4">
+                {/* Progress Bar */}
+                <div className="relative flex flex-col items-center justify-center">
+                  {data.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-[3px] rounded-full transition-all duration-300 my-1 ${
+                        index === active
+                          ? "bg-amber-600 h-12"
+                          : "bg-gray-300 h-7"
+                      }`}
+                    ></div>
+                  ))}
+                </div>
+                {/* Tabs */}
+                <div className="space-y-6 w-full bg-gradient-orange-1 p-8 rounded-2xl relative flex flex-col">
+                  {data.map(
+                    (tab, index) =>
+                      tab?.value && (
+                        <button
+                          key={tab.id}
+                          onClick={() => handleTabClick(index)}
+                          className="relative"
+                        >
+                          <H2
+                            className={clsx(
+                              "block text-left transition-all duration-300 cursor-pointer z-[20] ",
+                              active === index
+                                ? "text-white "
+                                : "text-white/40 !text-[36px] hover:text-white/80"
+                            )}
+                          >
+                            {tab?.value}
+                          </H2>
+                          {active === index && (
+                            <Image
+                              src="/images/home/star-white.svg"
+                              alt="img"
+                              width={42}
+                              height={42}
+                              className="absolute z-10 right-[-60px] top-[50%] translate-y-[-50%] w-[42px] md:w-[52px]"
+                            />
+                          )}
+                        </button>
+                      )
+                  )}
 
-              <Image
-                src="/images/home/flower-t.svg"
-                alt="img"
-                width={151}
-                height={151}
-                className="absolute bottom-[35px] md:bottom-[-30px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
-              />
+                  <Image
+                    src="/images/home/flower-t.svg"
+                    alt="img"
+                    width={151}
+                    height={151}
+                    className="absolute bottom-[35px] md:bottom-[-30px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Right Content */}
+            <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
+              {data[active]?.description && (
+                <div key={active}>
+                  <div
+                    className="font-normal text-[18px] md:text-[22px] xl:text-[24px] leading-[140%] text-blue-200 font-alte-hans"
+                    dangerouslySetInnerHTML={{
+                      __html: data[active]?.description,
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
-        </div>
-        {/* Right Content */}
-        <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
-          {data?.[active]?.description && (
-            <div key={active}>
-              <div
-                className="font-normal text-[18px] md:text-[22px] xl:text-[24px] leading-[140%] text-blue-200 font-alte-hans"
-                dangerouslySetInnerHTML={{
-                  __html: data?.[active]?.description,
-                }}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+        )}
       {/* Mobile Accordion */}
       <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
         {data?.map((tab, index) => {

@@ -8,7 +8,7 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { Navigation, Mousewheel } from "swiper/modules";
+import { Navigation, Mousewheel, Autoplay } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
@@ -370,7 +370,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         >
           <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
             <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
-              <div className="relative w-full randdImageHeight h-[250px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+              <div className="relative w-full randdImageHeight h-[300px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
                     <Image
@@ -380,7 +380,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       className="object-cover scale-110"
                     />
                     <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                    <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[94%] h-[97%]">
+                    <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
                       <Image
                         src={details[active]?.image?.url}
                         alt={details[active]?.image?.url}
@@ -434,7 +434,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     loop={false}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     speed={800}
-                    modules={[Navigation, Mousewheel]}
+
+                    modules={[Navigation, Mousewheel,Autoplay]}
+                    autoplay={{
+                    delay: 15000,
+                    disableOnInteraction: false,
+                }}
                     className="w-full relative"
                     navigation={{
                       nextEl: ".swiper-button-next-analytical",

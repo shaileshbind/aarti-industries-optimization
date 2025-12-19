@@ -10,6 +10,7 @@ type ProductListProps = {
   link: string;
   scale?: boolean;
   useTargetBlank?: boolean;
+  titleClassName?: string;
 };
 
 const OrangeTabCard = ({
@@ -17,6 +18,7 @@ const OrangeTabCard = ({
   link,
   scale = true,
   useTargetBlank = true,
+  titleClassName
 }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,8 +39,9 @@ const OrangeTabCard = ({
         {title && (
           <BodyText1
             className={clsxN(
-              "text-sm lg:text-lg font-medium pr-4",
-              isHovered ? "text-white" : "text-blue-200"
+              "text-sm lg:text-lg font-medium pr-4 ",
+              isHovered ? "text-white" : "text-blue-200",
+              titleClassName
             )}
           >
             {title}

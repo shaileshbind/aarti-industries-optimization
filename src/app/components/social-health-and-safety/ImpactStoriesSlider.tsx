@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { BodyText1, BodyText2, H3, SubH1, SubH2 } from '../Typography2';
-import { ImpactStoriesSliderProps } from '@/app/types/social-health-and-safety.type';
-import FaqAccordion from '../FaqAccordian';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { BodyText1, BodyText2, H3, SubH1, SubH2 } from "../Typography2";
+import { ImpactStoriesSliderProps } from "@/app/types/social-health-and-safety.type";
+import FaqAccordion from "../FaqAccordian";
 
 const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const { title, stories = [] } = data || {};
@@ -12,18 +12,18 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [active, setActive] = useState(0);
   const [accordionProgress, setAccordionProgress] = useState(0);
-  const AUTOPLAY_DURATION = 4500;
-  const ACCORDION_AUTOPLAY_DURATION = 4500;
+  const AUTOPLAY_DURATION = 15000;
+  const ACCORDION_AUTOPLAY_DURATION = 15000;
 
   // Desktop slider progress
   useEffect(() => {
     if (!stories || stories.length === 0) return;
-    
+
     setProgress(0);
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) return 100;
-        return prev + (100 / (AUTOPLAY_DURATION / 50));
+        return prev + 100 / (AUTOPLAY_DURATION / 50);
       });
     }, 50);
 
@@ -39,7 +39,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
 
   useEffect(() => {
     if (!stories || stories.length === 0) return;
-    
+
     setAccordionProgress(0);
     const progressInterval = setInterval(() => {
       setAccordionProgress((prev) => {
@@ -50,7 +50,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
           setExpanded(`panel${nextIndex}`);
           return 0; // Reset progress
         }
-        return prev + (100 / (ACCORDION_AUTOPLAY_DURATION / 50));
+        return prev + 100 / (ACCORDION_AUTOPLAY_DURATION / 50);
       });
     }, 50);
 
@@ -90,12 +90,14 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
               className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
               style={{
                 opacity: index === activeIndex ? 1 : 0,
-                backgroundImage: item.image?.url ? `url(${item.image.url})` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundImage: item.image?.url
+                  ? `url(${item.image.url})`
+                  : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black/80" />
             </div>
           ))}
         </div>
@@ -104,9 +106,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
           <div className="w-full">
             {/* Decorative Header */}
             <div className="absolute top-0 left-0 px-20 py-10 z-10">
-              <H3 className='text-white'>
-                {title}
-              </H3>
+              <H3 className="text-white">{title}</H3>
             </div>
             {/* Slides Grid */}
             <div className="flex h-full">
@@ -120,9 +120,8 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                     className={`
                     relative cursor-pointer group
                     transition-all duration-700 ease-out
-                    ${isActive ? 'w-[40%]' : 'w-[20%]'}
+                    ${isActive ? "w-[40%]" : "w-[20%]"}
                   `}
-
                   >
                     {/* Slide Card */}
                     <div
@@ -131,26 +130,45 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                     >
                       {/* Content */}
                       <div className="relative h-full p-8 flex flex-col justify-between pt-35">
-
-                        <div className={`flex flex-col ${isActive ? 'px-10' : ''}`}>
-                          <div className={`text-white text-xs tracking-widest ${isActive ? 'opacity-100' : 'opacity-60'}`}>
-                            {String(index + 1).padStart(2, '0')}
+                        <div
+                          className={`flex flex-col ${isActive ? "px-10" : ""}`}
+                        >
+                          <div
+                            className={`text-white text-xs tracking-widest ${
+                              isActive ? "opacity-100" : "opacity-60"
+                            }`}
+                          >
+                            {String(index + 1).padStart(2, "0")}
                           </div>
-                          <SubH2 className={`text-white mt-5 mb-4 ${isActive ? 'opacity-100' : 'opacity-60'}`}>{story.title}</SubH2>
+                          <SubH2
+                            className={`text-white mt-5 mb-4 ${
+                              isActive ? "opacity-100" : "opacity-60"
+                            }`}
+                          >
+                            {story.title}
+                          </SubH2>
 
                           <div
                             className={`
                             transition-all duration-700 overflow-hidden
-                            ${isActive ? 'max-h-none opacity-100' : 'max-h-0 opacity-0'}
+                            ${
+                              isActive
+                                ? "max-h-none opacity-100"
+                                : "max-h-0 opacity-0"
+                            }
                           `}
                           >
                             <p className="text-white/80 leading-relaxed text-sm mb-6">
                               {story.description}
                             </p>
-                            {story.items?.map((item) => (  
+                            {story.items?.map((item) => (
                               <div key={item.id}>
-                                <BodyText1 className="text-white">{item.title}</BodyText1>
-                                <BodyText2 className="text-white/80 leading-relaxed text-sm mb-6 mt-2">{item.description}</BodyText2> 
+                                <BodyText1 className="text-white">
+                                  {item.title}
+                                </BodyText1>
+                                <BodyText2 className="text-white/80 leading-relaxed text-sm mb-6 mt-2">
+                                  {item.description}
+                                </BodyText2>
                               </div>
                             ))}
                           </div>
@@ -185,13 +203,11 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
       </div>
       {stories?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
-          <H3 className='my-5'>
-                {title}
-              </H3>
+          <H3 className="my-5">{title}</H3>
           {stories?.map((item, index) => (
             <div key={item.id} className="relative">
               <FaqAccordion
-              imageClassName="min-w-[28px]"
+                imageClassName="min-w-[28px]"
                 faqTitle={
                   <SubH1
                     className={
@@ -208,16 +224,12 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                     <div className="relative w-full h-[190px] xl:h-[200px] rounded-[14px] overflow-hidden">
                       {item?.image?.url && (
                         <>
-
                           <Image
                             src={item.image.url}
-                            alt={
-                              item.image.alternativeText || "img"
-                            }
+                            alt={item.image.alternativeText || "img"}
                             fill
                             className="object-cover object-top"
                           />
-
                         </>
                       )}
                     </div>
@@ -226,21 +238,22 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                         {item.description}
                       </BodyText1>
                     )}
-                      <div className="flex flex-col gap-2 mt-5">
-                        {item.items?.length > 0 &&
-                          item.items?.map(
-                            (item, index2) => (
-                              <div
-                                className="flex gap-2 flex-col"
-                                key={"pointerss_" + index2}
-                              >
-
-                                <SubH2 className=" text-blue-200">{item.title}</SubH2>
-                                <BodyText1 className="text-[#4C5861] text-sm">{item.description}</BodyText1>
-                              </div>
-                            )
-                          )}
-                      </div>
+                    <div className="flex flex-col gap-2 mt-5">
+                      {item.items?.length > 0 &&
+                        item.items?.map((item, index2) => (
+                          <div
+                            className="flex gap-2 flex-col"
+                            key={"pointerss_" + index2}
+                          >
+                            <SubH2 className=" text-blue-200">
+                              {item.title}
+                            </SubH2>
+                            <BodyText1 className="text-[#4C5861] text-sm">
+                              {item.description}
+                            </BodyText1>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 }
                 showIcon
@@ -264,7 +277,6 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
           ))}
         </div>
       )}
-
     </>
   );
 };

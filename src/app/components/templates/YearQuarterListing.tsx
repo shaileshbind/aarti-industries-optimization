@@ -6,7 +6,13 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import { useLayoutEffect, useRef, useState, useEffect, useCallback } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
@@ -143,19 +149,22 @@ export default function YearQuarterListing({
   };
 
   // helper to measure active item relative to yearsRowRef
-  const measure = useCallback((year: string | number = activeYear) => {
-    const row = yearsRowRef.current;
-    const item = itemRefs.current.get(year);
-    if (!row || !item) return;
+  const measure = useCallback(
+    (year: string | number = activeYear) => {
+      const row = yearsRowRef.current;
+      const item = itemRefs.current.get(year);
+      if (!row || !item) return;
 
-    const rowRect = row.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
+      const rowRect = row.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
 
-    const left = itemRect.left - rowRect.left;
-    const width = Math.round(itemRect.width);
+      const left = itemRect.left - rowRect.left;
+      const width = Math.round(itemRect.width);
 
-    setUnderline({ left: Math.round(left), width });
-  }, [activeYear]);
+      setUnderline({ left: Math.round(left), width });
+    },
+    [activeYear]
+  );
 
   // measure after layout and when activeYear changes
   useLayoutEffect(() => {
@@ -288,7 +297,10 @@ export default function YearQuarterListing({
           </div>
 
           {/* Report list - All quarters displayed in reverse order */}
-          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+          <div
+            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+            data-lenis-prevent
+          >
             {quarters?.length > 0 ? (
               quarters.map((quarterItem, qIdx) => (
                 <div

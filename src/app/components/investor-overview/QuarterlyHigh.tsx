@@ -21,9 +21,13 @@ const QuarterlyHigh = ({ data }: InvestorQuarterlyProps) => {
                 key={items?.id}
                 className="pb-[unset] xl:pb-[40px] lg:flex gap-x-[50px] justify-between xl:border-b xl:border-grey-200 items-center"
               >
-                <BodyText2>{items?.title}</BodyText2>
-                <H2 className="text-orange-200">{items?.value}</H2>
-                <BodyText2>{items?.description}</BodyText2>
+                {items?.title && <BodyText2>{items?.title}</BodyText2>}
+                {items?.value && (
+                  <H2 className="text-orange-200">{items?.value}</H2>
+                )}
+                {items?.description && (
+                  <BodyText2>{items?.description}</BodyText2>
+                )}
               </div>
             );
           })}

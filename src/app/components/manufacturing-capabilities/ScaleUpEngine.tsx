@@ -9,6 +9,7 @@ import "swiper/css";
 import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";
+import { Autoplay } from "swiper/modules";
 
 export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const { title, description, card } = data;
@@ -23,7 +24,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
         {title && <H3 className="max-w-[424px]">{title}</H3>}
 
         {description && (
-          <p className="text-sm md:text-base xl:max-w-[536px] text-[#4C5861]">{description}</p>
+          <p className="text-sm md:text-base xl:max-w-[536px] text-[#4C5861]">
+            {description}
+          </p>
         )}
       </div>
 
@@ -66,6 +69,11 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
           <div className="grid grid-cols-2 gap-[60px]">
             <Swiper
               effect="fade"
+              modules={[Autoplay]}
+              autoplay={{
+                delay: 15000,
+                disableOnInteraction: false,
+              }}
               speed={800}
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
@@ -122,7 +130,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                                 ? item?.ctaButton?.externalLink
                                 : item?.ctaButton?.link?.link
                             }
-                            useTargetBlank={item?.ctaButton?.hasExternalLink === "true"}
+                            useTargetBlank={
+                              item?.ctaButton?.hasExternalLink === "true"
+                            }
                           />
                         )}
                     </div>
@@ -281,18 +291,18 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   )}
 
                   {item?.ctaButton?.title &&
-                        (item?.ctaButton?.externalLink ||
-                          item?.ctaButton?.link?.link) && (
-                    <Button
-                      secondary
-                      title={item?.ctaButton?.title}
-                      href={
-                        item?.ctaButton?.hasExternalLink == "true"
-                          ? item?.ctaButton?.externalLink
-                          : item?.ctaButton?.link?.link
-                      }
-                    />
-                  )}
+                    (item?.ctaButton?.externalLink ||
+                      item?.ctaButton?.link?.link) && (
+                      <Button
+                        secondary
+                        title={item?.ctaButton?.title}
+                        href={
+                          item?.ctaButton?.hasExternalLink == "true"
+                            ? item?.ctaButton?.externalLink
+                            : item?.ctaButton?.link?.link
+                        }
+                      />
+                    )}
                 </div>
               </div>
             </MainAccordion>
