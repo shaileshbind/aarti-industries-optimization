@@ -121,8 +121,19 @@ const Header = ({ data }: HeaderProps) => {
       );
     }
   };
+
   const isActive = (href: string) => {
-    return pathname === href || pathname.startsWith(href + "/");
+    // Handle empty or invalid hrefs
+    if (!href || href === "#") {
+      return false;
+    }
+
+    if (href === "/investors/disclosures") {
+      return pathname.trim() === href.trim() + "/" + pathname?.split("/").pop();
+    }
+
+    // Only exact match - no sub-route matching
+    return pathname.trim() === href.trim();
   };
 
   // const handleDropdownToggle = (index: number) => {
