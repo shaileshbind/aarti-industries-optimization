@@ -1,51 +1,11 @@
-import MapBlip from "../MapBlip";
+"use client";
+import { useState } from "react";
+import ContactMapCard from "./ContactMapCard";
 
-interface NewMapProps {
-  hoverNorthAmerica?: () => void;
-  hoverRestWorld?: () => void;
-  hoverEurope?: () => void;
-  hoverMiddleE?: () => void;
-  hoverIndia?: () => void;
-  hoverAsia?: () => void;
-  fillRestOfWorld?: string;
-  fillIndia?: string;
-  fillMiddleEast?: string;
-  fillRestOfAsia?: string;
-  fillEurope?: string;
-  fillNorthAmerica?: string;
-  isActive0?: boolean;
-  isActive1?: boolean;
-  isActive2?: boolean;
-  isActive3?: boolean;
-  isActive4?: boolean;
-  isActive5?: boolean;
-}
-
-const DesktopMapSvg = ({
-  hoverNorthAmerica,
-  hoverRestWorld,
-  hoverEurope,
-  hoverMiddleE,
-  hoverIndia,
-  hoverAsia,
-  fillRestOfWorld,
-  fillIndia,
-  fillMiddleEast,
-  fillRestOfAsia,
-  fillEurope,
-  fillNorthAmerica,
-  isActive0,
-  isActive1,
-  isActive2,
-  isActive3,
-  isActive4,
-  isActive5,
-}: NewMapProps) => {
+const ContactMapSvg = () => {
+  const [active, setActive] = useState(3);
   return (
     <svg
-      // width="1262"
-      // height="623"
-      // viewBox="0 0 1262 623"
       width="100%"
       height="auto"
       viewBox="0 0 1262 623"
@@ -55,7 +15,7 @@ const DesktopMapSvg = ({
     >
       {/* Rest of world */}
       <g
-        fill={fillRestOfWorld}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -103,7 +63,7 @@ const DesktopMapSvg = ({
       </g>
       {/* India */}
       <g
-        fill={fillIndia}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -113,7 +73,7 @@ const DesktopMapSvg = ({
       </g>
       {/* Middle East */}
       <g
-        fill={fillMiddleEast}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -130,7 +90,7 @@ const DesktopMapSvg = ({
       </g>
       {/* Rest of Asia */}
       <g
-        fill={fillRestOfAsia}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -195,7 +155,7 @@ const DesktopMapSvg = ({
       </g>
       {/* Europe */}
       <g
-        fill={fillEurope}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -236,7 +196,7 @@ const DesktopMapSvg = ({
       </g>
       {/* North America */}
       <g
-        fill={fillNorthAmerica}
+        fill="#E7EBED"
         style={{
           transition: "fill 1s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
@@ -289,158 +249,143 @@ const DesktopMapSvg = ({
         <path d="M156.306 213.776C155.297 212.686 152.655 212.919 152.267 211.906C151.879 210.901 149.47 207.248 148.15 207.322C146.829 207.401 145.12 207.477 143.566 206.313C142.014 205.148 141.002 205.071 139.916 205.768C138.828 206.469 141.08 206.626 141.002 207.401C140.924 208.176 141.701 208.644 142.635 208.489C143.566 208.336 144.109 210.276 145.041 210.355C145.975 210.434 146.283 211.906 147.37 211.906C148.459 211.906 148.692 213.153 149.236 213.852C149.779 214.557 151.024 213.93 151.024 214.631C151.024 215.26 152.266 215.822 152.577 216.61C154.705 216.862 156.527 217.065 158.111 216.623C158.127 216.133 158.253 215.597 158.477 215.172C159.022 214.163 157.313 214.864 156.306 213.776Z" />
         <path d="M123.554 190.674C120.758 192.165 127.479 199.26 128.882 198.369C129.84 197.758 127.221 194.785 127.221 192.95C127.22 191.116 126.345 189.188 123.554 190.674Z" />
       </g>
-      {/* North America */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverNorthAmerica}
-        cx="219"
-        cy="220"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverNorthAmerica}
-        cx="219"
-        cy="220"
-        r="6"
-        fill="#F36633"
-      />
-      {/* Rest of the world */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverRestWorld}
-        cx="132"
-        cy="530"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverRestWorld}
-        cx="132"
-        cy="530"
-        r="6"
-        fill="#F36633"
-      />
-      {/* Europe */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverEurope}
-        cx="603"
-        cy="210"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverEurope}
-        cx="603"
-        cy="210"
-        r="6"
-        fill="#F36633"
-      />
-      {/* Middle East */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverMiddleE}
-        cx="730"
-        cy="279"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverMiddleE}
-        cx="730"
-        cy="279"
-        r="6"
-        fill="#F36633"
-      />
+      {/* USA - Blip  */}
+      <svg
+        x="304"
+        y="238"
+        width="32"
+        height="32"
+        viewBox="0 0 22 22"
+        className="cursor-pointer"
+        onMouseEnter={() => setActive(0)}
+        onClick={() => setActive(0)}
+      >
+        <path
+          d="M11 0C6.4515 0 2.75 3.72717 2.75 8.30958C2.75 14.8207 10.2245 21.5435 10.5426 21.8258C10.6737 21.9422 10.8368 22 11 22C11.1632 22 11.3263 21.9423 11.4574 21.8268C11.7755 21.5435 19.25 14.8207 19.25 8.30958C19.25 3.72717 15.5485 0 11 0ZM11 12.8333C8.47275 12.8333 6.41667 10.7773 6.41667 8.25C6.41667 5.72275 8.47275 3.66667 11 3.66667C13.5273 3.66667 15.5833 5.72275 15.5833 8.25C15.5833 10.7773 13.5273 12.8333 11 12.8333Z"
+          fill="#F36633"
+        />
+      </svg>
+      {/* Europe - Blip  */}
+      <svg
+        x="576"
+        y="177"
+        width="32"
+        height="32"
+        viewBox="0 0 22 22"
+        className="cursor-pointer"
+        onMouseEnter={() => setActive(1)}
+        onClick={() => setActive(1)}
+      >
+        <path
+          d="M11 0C6.4515 0 2.75 3.72717 2.75 8.30958C2.75 14.8207 10.2245 21.5435 10.5426 21.8258C10.6737 21.9422 10.8368 22 11 22C11.1632 22 11.3263 21.9423 11.4574 21.8268C11.7755 21.5435 19.25 14.8207 19.25 8.30958C19.25 3.72717 15.5485 0 11 0ZM11 12.8333C8.47275 12.8333 6.41667 10.7773 6.41667 8.25C6.41667 5.72275 8.47275 3.66667 11 3.66667C13.5273 3.66667 15.5833 5.72275 15.5833 8.25C15.5833 10.7773 13.5273 12.8333 11 12.8333Z"
+          fill="#F36633"
+        />
+      </svg>
+      {/* Dubai - Blip  */}
+      <svg
+        x="770"
+        y="297"
+        width="32"
+        height="32"
+        viewBox="0 0 22 22"
+        className="cursor-pointer"
+        onMouseEnter={() => setActive(2)}
+        onClick={() => setActive(2)}
+      >
+        <path
+          d="M11 0C6.4515 0 2.75 3.72717 2.75 8.30958C2.75 14.8207 10.2245 21.5435 10.5426 21.8258C10.6737 21.9422 10.8368 22 11 22C11.1632 22 11.3263 21.9423 11.4574 21.8268C11.7755 21.5435 19.25 14.8207 19.25 8.30958C19.25 3.72717 15.5485 0 11 0ZM11 12.8333C8.47275 12.8333 6.41667 10.7773 6.41667 8.25C6.41667 5.72275 8.47275 3.66667 11 3.66667C13.5273 3.66667 15.5833 5.72275 15.5833 8.25C15.5833 10.7773 13.5273 12.8333 11 12.8333Z"
+          fill="#F36633"
+        />
+      </svg>
+      {/* India - Blip  */}
+      <svg
+        x="845"
+        y="325"
+        width="32"
+        height="32"
+        viewBox="0 0 22 22"
+        className="cursor-pointer"
+        onMouseEnter={() => setActive(3)}
+        onClick={() => setActive(3)}
+      >
+        <path
+          d="M11 0C6.4515 0 2.75 3.72717 2.75 8.30958C2.75 14.8207 10.2245 21.5435 10.5426 21.8258C10.6737 21.9422 10.8368 22 11 22C11.1632 22 11.3263 21.9423 11.4574 21.8268C11.7755 21.5435 19.25 14.8207 19.25 8.30958C19.25 3.72717 15.5485 0 11 0ZM11 12.8333C8.47275 12.8333 6.41667 10.7773 6.41667 8.25C6.41667 5.72275 8.47275 3.66667 11 3.66667C13.5273 3.66667 15.5833 5.72275 15.5833 8.25C15.5833 10.7773 13.5273 12.8333 11 12.8333Z"
+          fill="#F36633"
+        />
+      </svg>
+      {/* USA Card */}
+      {active === 0 && (
+        <ContactMapCard
+          x={5}
+          y={90}
+          width={350}
+          cardData={[
+            {
+              title: "USA",
+              subTitle: "Aarti Chem Trade USA Inc.",
+              description:
+                "16192 Coastal Highway, Lewes, Delaware, 19958, County of Sussex",
+            },
+          ]}
+        />
+      )}
+      {/* Europe  */}
+      {active === 1 && (
+        <ContactMapCard
+          x={400}
+          y={46}
+          width={350}
+          cardData={[
+            {
+              title: "Europe",
+              subTitle: "Alchemie Europe Ltd.",
+              description: "15a St. Marys  Place , Bury, Lancs., BL9 0DZ, UK",
+            },
+          ]}
+        />
+      )}
+      {/* Dubai */}
+      {active === 2 && (
+        <ContactMapCard
+          x={760}
+          y={128}
+          width={350}
+          cardData={[
+            {
+              title: "Dubai",
+              subTitle: "Aarti Chemical Trading - FZCO",
+              description:
+                "Unit Number: C-10, Floor: L2, Building: Techno Hub 1 Building, DSO-IFZA, IFZA Properties, Dubai Silicon Oasis, Dubai",
+            },
+          ]}
+        />
+      )}
       {/* India */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverIndia}
-        cx="876"
-        cy="299"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverIndia}
-        cx="876"
-        cy="299"
-        r="6"
-        fill="#F36633"
-      />
-      {/* Rest of Asia */}
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverAsia}
-        cx="1024"
-        cy="202"
-        r="10"
-        fill="#F9C095"
-      />
-      <circle
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverAsia}
-        cx="1024"
-        cy="202"
-        r="6"
-        fill="#F36633"
-      />
-      <MapBlip
-        x="71"
-        y="428"
-        title="3%"
-        subtitle="Rest of the world"
-        isActive={isActive0}
-        onMouseEnter={hoverRestWorld}
-      />
-      <MapBlip
-        x="158"
-        y="120"
-        title="18%"
-        subtitle="North America"
-        isActive={isActive1}
-        onMouseEnter={hoverNorthAmerica}
-      />
-      <MapBlip
-        x="542"
-        y="112"
-        title="4%"
-        subtitle="Europe"
-        isActive={isActive2}
-        onMouseEnter={hoverEurope}
-      />
-      <MapBlip
-        x="670"
-        y="180"
-        title="23%"
-        subtitle="Middle East"
-        isActive={isActive3}
-        onMouseEnter={hoverMiddleE}
-      />
-      <MapBlip
-        x="815"
-        y="199"
-        title="46%"
-        subtitle="India"
-        isActive={isActive4}
-        onMouseEnter={hoverIndia}
-      />
-      <MapBlip
-        x="963"
-        y="104"
-        title="6%"
-        subtitle="Rest of Asia"
-        isActive={isActive5}
-        onMouseEnter={hoverAsia}
-      />
+      {active === 3 && (
+        <ContactMapCard
+          x={880}
+          y={200}
+          width={350}
+          cardData={[
+            {
+              tag: "registered office",
+              title: "Vapi",
+              subTitle: "Aarti Industries Limited",
+              description:
+                "Plot No.-801/23, G.I.D.C Estate, Phase III, Vapi-396 195, Dist.-Valsad, Gujarat, India",
+            },
+            {
+              tag: "R&D centre",
+              title: "Navi Mumbai",
+              subTitle: "Aarti Research & Technology Centre",
+              description:
+                "Plot No.A-94/1 & A-94/1/1, MIDC, TTC Industrial Area, Kopar Khairane, Navi Mumbai - 400 710.",
+            },
+          ]}
+        />
+      )}
     </svg>
   );
 };
 
-export default DesktopMapSvg;
+export default ContactMapSvg;
