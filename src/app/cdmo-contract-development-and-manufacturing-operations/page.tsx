@@ -27,15 +27,18 @@ const Page = async () => {
     section_seven,
     section_eight,
   } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "CDMO"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/cdmo-contract-development-and-manufacturing-operations"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/cdmo-contract-development-and-manufacturing-operations"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -51,7 +54,7 @@ const Page = async () => {
       {section_two && <GridCardsContainer data={section_two} />}
       {section_three && <CDMODriving data={section_three} />}
       {section_four && <CDMOE2E data={section_four} />}
-      {section_five && <CardsSlider data={section_five} />}
+      {section_five && <CardsSlider data={section_five} useLink />}
       {section_six && <CDMOSafegreen data={section_six} />}
       {section_seven && (
         <GloballyCertified

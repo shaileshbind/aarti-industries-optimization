@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
+import { createContext, useContext, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 // Register GSAP plugins
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -15,6 +15,8 @@ interface GSAPContextType {
   ScrollTrigger: typeof ScrollTrigger;
   timeline: gsap.core.Timeline | null;
   createTimeline: () => gsap.core.Timeline;
+  stopLenis: () => void;
+  startLenis: () => void;
 }
 
 const GSAPContext = createContext<GSAPContextType | null>(null);
@@ -22,7 +24,7 @@ const GSAPContext = createContext<GSAPContextType | null>(null);
 export const useGSAP = () => {
   const context = useContext(GSAPContext);
   if (!context) {
-    throw new Error('useGSAP must be used within a GSAPProvider');
+    throw new Error("useGSAP must be used within a GSAPProvider");
   }
   return context;
 };
@@ -52,7 +54,7 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
     lenisRef.current = lenis;
 
     // Connect Lenis to ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on("scroll", ScrollTrigger.update);
 
     // Add Lenis to GSAP ticker
     const raf = (time: number) => {
@@ -66,28 +68,34 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
       ScrollTrigger.refresh();
     };
 
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener("resize", handleResize);
+
     return () => {
       // Clean up
       gsap.ticker.remove(raf);
       lenis.destroy();
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       // Clean up ScrollTrigger instances
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
+  const stopLenis = () => {
+    lenisRef.current?.stop();
+  };
+
+  const startLenis = () => {
+    lenisRef.current?.start();
+  };
 
   const value: GSAPContextType = {
     gsap,
     ScrollTrigger,
     timeline: timelineRef.current,
     createTimeline,
+    stopLenis,
+    startLenis,
   };
 
-  return (
-    <GSAPContext.Provider value={value}>
-      {children}
-    </GSAPContext.Provider>
-  );
+  return <GSAPContext.Provider value={value}>{children}</GSAPContext.Provider>;
 };

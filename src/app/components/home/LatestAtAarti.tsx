@@ -10,6 +10,7 @@ import { LatestAtAartiProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
+import Button from "../Button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,6 +28,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   });
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const measureIndicator = useCallback(() => {
     const activeButton = tabRefs.current[activeTab];
     if (!activeButton || !containerRef.current) {
@@ -40,6 +42,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const width = activeButton.offsetWidth;
     setIndicator({ left, width, visible: true });
   }, [activeTab]);
+
   useEffect(() => {
     measureIndicator();
     window.addEventListener("resize", measureIndicator);
@@ -123,20 +126,38 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   }, [activeTab]);
 
   const currentCard = card[activeTab];
+  console.log("sdwdf", card);
   const postsContent = Array.isArray(currentCard?.postContent)
     ? currentCard.postContent
     : currentCard?.postContent
     ? [currentCard.postContent]
     : [];
   const postsCount = postsContent.length;
+
   const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
+
   return (
     <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
-      {sectionTitle && (
-        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
-          <H2 className="text-blue-200">{sectionTitle}</H2>
+      <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
+        {sectionTitle && (
+          <div className="max-w-[100%] md:max-w-fit">
+            <H2 className="text-blue-200">{sectionTitle}</H2>
+          </div>
+        )}
+
+        <div className="hidden lg:block">
+          <Button
+            title={currentCard?.ctaButton?.title || ""}
+            href={
+              currentCard?.ctaButton?.hasExternalLink == "true"
+                ? currentCard?.ctaButton?.externalLink
+                : currentCard?.ctaButton?.link?.link
+            }
+            useTargetBlank={false}
+          />
         </div>
-      )}
+      </div>
+
       <div className="mt-[18px] md:mt-[30px] w-full ">
         <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
           <div className="overflow-x-auto w-full ">
@@ -231,6 +252,18 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
             )}
           </>
         )}
+
+        <div className="flex lg:hidden justify-center mt-10">
+          <Button
+            title={currentCard?.ctaButton?.title || ""}
+            href={
+              currentCard?.ctaButton?.hasExternalLink == "true"
+                ? currentCard?.ctaButton?.externalLink
+                : currentCard?.ctaButton?.link?.link
+            }
+            useTargetBlank={false}
+          />
+        </div>
       </div>
     </div>
   );
