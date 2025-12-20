@@ -890,3 +890,12 @@ body {
     }
   }
 }
+
+.svg-map {
+  width: auto;
+  max-width: 100%;
+  /* aspect-ratio: 1262 / 623; */
+  display: block;
+  height: calc(100vh - 200px);
+  object-fit: contain;
+}
