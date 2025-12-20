@@ -157,6 +157,7 @@ const HeroBanner = ({
                   className="object-cover hidden lg:block"
                 />
               )}
+              
               {mobImage && (
                 <Image
                   src={mobImage}

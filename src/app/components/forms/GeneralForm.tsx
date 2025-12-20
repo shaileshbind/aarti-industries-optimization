@@ -467,6 +467,15 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="country"
                     IconComponent={KeyboardArrowDownIcon}
+                    MenuProps={{
+                      disableScrollLock: true,
+                      PaperProps: {
+                        "data-lenis-prevent": true,
+                        sx: {
+                          maxHeight: 300,
+                        },
+                      },
+                    }}
                   >
                     {Countries.map((country) => (
                       <MenuItem key={country.code} value={country.name}>
@@ -478,74 +487,6 @@ export default function GeneralForm({
               />
             </FormControl>
           </div>
-
-          {/* Message */}
-          <div className="flex flex-col">
-            <textarea
-              id="message"
-              {...register("message", {
-                required: "Message is required",
-              })}
-              rows={5}
-              cols={40}
-              placeholder="Write your message here *"
-              className={clsx(
-                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]"
-              )}
-            ></textarea>
-            {errors.message && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.message.message}
-              </p>
-            )}
-          </div>
-
-          {/* Hear About AIL - MANDATORY */}
-          <FormControl
-            fullWidth
-            sx={MaterialInputStyle(!!errors.hearAboutAil)}
-            error={!!errors.hearAboutAil}
-          >
-            <InputLabel id="hearAboutAil">
-              How did you hear about AIL? *
-            </InputLabel>
-            <Controller
-              name="hearAboutAil"
-              control={control}
-              rules={{ required: "Selection is required" }}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  value={field.value || ""}
-                  labelId="hearAboutAil"
-                  IconComponent={KeyboardArrowDownIcon}
-                >
-                  {[
-                    "Articles",
-                    "Events",
-                    "Search Engine",
-                    "Weblinks",
-                    "LinkedIn",
-                    "Recommendation",
-                    "Advertisement",
-                    "Industry Reports",
-                    "Employees",
-                    "Other",
-                  ].map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-            {errors.hearAboutAil && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.hearAboutAil.message}
-              </p>
-            )}
-          </FormControl>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Category */}
@@ -672,6 +613,74 @@ export default function GeneralForm({
               )}
             </FormControl>
           )}
+
+          {/* Message */}
+          <div className="flex flex-col">
+            <textarea
+              id="message"
+              {...register("message", {
+                required: "Message is required",
+              })}
+              rows={5}
+              cols={40}
+              placeholder="Write your message here *"
+              className={clsx(
+                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]"
+              )}
+            ></textarea>
+            {errors.message && (
+              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                {errors.message.message}
+              </p>
+            )}
+          </div>
+
+          {/* Hear About AIL - MANDATORY */}
+          <FormControl
+            fullWidth
+            sx={MaterialInputStyle(!!errors.hearAboutAil)}
+            error={!!errors.hearAboutAil}
+          >
+            <InputLabel id="hearAboutAil">
+              How did you hear about AIL? *
+            </InputLabel>
+            <Controller
+              name="hearAboutAil"
+              control={control}
+              rules={{ required: "Selection is required" }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  value={field.value || ""}
+                  labelId="hearAboutAil"
+                  IconComponent={KeyboardArrowDownIcon}
+                >
+                  {[
+                    "Articles",
+                    "Events",
+                    "Search Engine",
+                    "Weblinks",
+                    "LinkedIn",
+                    "Recommendation",
+                    "Advertisement",
+                    "Industry Reports",
+                    "Employees",
+                    "Other",
+                  ].map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+            {errors.hearAboutAil && (
+              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                {errors.hearAboutAil.message}
+              </p>
+            )}
+          </FormControl>
 
           {/* Other - Msg Box */}
           {selectedSubcategory === "Other" && (

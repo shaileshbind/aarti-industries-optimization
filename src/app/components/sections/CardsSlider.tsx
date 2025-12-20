@@ -10,11 +10,13 @@ import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 import { WordReveal } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
+import Link from "next/link";
 
 const CardsSlider: React.FC<CDMOSplchemProps> = ({
   data,
   className,
   headingClassName,
+  useLink = false,
 }) => {
   const { sectionTitle, cards } = data;
   const [, setActiveIndex] = useState(0);
@@ -104,23 +106,21 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
                     <SwiperSlide key={index}>
-                      <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
-                        <SubH2 className="text-blue-200 py-[24px] px-[26px]">
-                          {item?.title}
-                        </SubH2>
-
-                        {item?.image?.url && (
-                          <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] md:h-[220px] xl:h-[272px] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
-                            <Image
-                              src={item?.image?.url}
-                              alt={item?.image?.alternativeText || item?.title}
-                              fill
-                              className="rounded-b-[20px] object-cover object-top"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          </div>
-                        )}
-                      </div>
+                      {useLink ? (
+                        <Link href={item?.link || "#"}>
+                          <Card
+                            title={item?.title}
+                            src={item?.image?.url}
+                            alt={item?.image?.alternativeText}
+                          />
+                        </Link>
+                      ) : (
+                        <Card
+                          title={item?.title}
+                          src={item?.image?.url}
+                          alt={item?.image?.alternativeText}
+                        />
+                      )}
                     </SwiperSlide>
                   ))}
               </Swiper>
@@ -172,3 +172,33 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
 };
 
 export default CardsSlider;
+
+const Card = ({
+  title,
+  src,
+  alt,
+}: {
+  title: string;
+  src: string;
+  alt: string;
+}) => {
+  return (
+    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
+      {title && (
+        <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
+      )}
+
+      {src && (
+        <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] md:h-[220px] xl:h-[272px] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
+          <Image
+            src={src}
+            alt={alt || title}
+            fill
+            className="rounded-b-[20px] object-cover object-top"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      )}
+    </div>
+  );
+};

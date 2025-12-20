@@ -65,14 +65,16 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   };
   const { isDesktop } = useIsDesktop();
 
-  type ImageArrayType = {
-    image?: ImageProps;
-  }[] | undefined;
+  type ImageArrayType =
+    | {
+        image?: ImageProps;
+      }[]
+    | undefined;
 
   // if not enough images on mobile add one -
   const generateMobileSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
     if (!imageArray || imageArray.length === 0) return [];
-    
+
     const pattern = [2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -141,7 +143,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
 
   const generateSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
     if (!imageArray || imageArray.length === 0) return [];
-    
+
     const pattern = [1, 2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -226,13 +228,15 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
               key={index}
               className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
             >
-            {imageData?.src &&  <Image
-                src={imageData?.src}
-                alt={imageData?.alt || ""}
-                className="swiper-lazy w-full h-full object-cover"
-                width={800}
-                height={600}
-              />}
+              {imageData?.src && (
+                <Image
+                  src={imageData?.src}
+                  alt={imageData?.alt || ""}
+                  className="swiper-lazy w-full h-full object-cover"
+                  width={800}
+                  height={600}
+                />
+              )}
             </div>
           ))}
       </SwiperSlide>
@@ -261,7 +265,14 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         {ctaButton?.title && (
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
-              <Button href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} title={ctaButton?.title} />
+              <Button
+                href={
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }
+                title={ctaButton?.title}
+              />
             </div>
           </FadeInRevealBlur>
         )}

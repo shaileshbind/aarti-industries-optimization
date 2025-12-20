@@ -13,7 +13,7 @@ const TitleCard = ({ imageAlt, imageSrc, title }: TitleCardProps) => {
       {title && (
         <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
       )}
-      <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px] overflow-hidden rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
+      <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px] overflow-hidden rounded-tl-[20px] rounded-tr-[20px]">
         {imageSrc && (
           <Image
             src={imageSrc}
