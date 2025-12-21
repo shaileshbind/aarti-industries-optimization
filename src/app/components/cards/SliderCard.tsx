@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useRef, type FC } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
@@ -24,6 +24,8 @@ interface SliderCardProps {
   values?: SliderValue[];
   ctaButton?: ButtonProps;
   bullets?: bulletProp[];
+  imageWrapperRef?: React.RefObject<HTMLDivElement>;
+  index?: number;
 }
 
 const SliderCard: FC<SliderCardProps> = ({
@@ -35,7 +37,10 @@ const SliderCard: FC<SliderCardProps> = ({
   values,
   ctaButton,
   bullets,
+  imageWrapperRef,
+  index,
 }) => {
+  // const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   return (
     <>
       {/* Mobile Version */}
@@ -133,7 +138,7 @@ const SliderCard: FC<SliderCardProps> = ({
       {/* Desktop Version */}
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
-          <div className="w-full pt-[100%] relative">
+          <div className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
             <div className="absolute inset-0 overflow-hidden">
               {imgSrc && (
                 <Image
@@ -143,7 +148,7 @@ const SliderCard: FC<SliderCardProps> = ({
                   className="object-cover scale-110"
                 />
               )}
-              <div className="absolute inset-0 bg-black/30 z-[1]" />
+              <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
 
               <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
               <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
@@ -166,14 +171,14 @@ const SliderCard: FC<SliderCardProps> = ({
           </div>
         </div>
         <div className="w-[60%]">
-          {heading && <SubH1 className="mb-[14px]">{heading}</SubH1>}
-          {description && <BodyText1>{description}</BodyText1>}
+          {heading && <SubH1 className="mb-[14px] sliderStagger">{heading}</SubH1>}
+          {description && <BodyText1 className="sliderStagger">{description}</BodyText1>}
           {bullets && (
             <div className="mt-[18px]">
               {bullets?.map((bp: bulletProp) => (
                 <div
                   key={bp?.id}
-                  className="mb-[10px] flex gap-x-[10px] items-start"
+                  className="mb-[10px] flex gap-x-[10px] items-start sliderStagger"
                 >
                   <Image
                     src="/images/star-orange.svg"
@@ -188,7 +193,7 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           )}
           {values?.length ? (
-            <div className=" gap-6 lg:gap-5 my-8 grid grid-cols-3 items-start gap-x-[10px]">
+            <div className=" gap-6 lg:gap-5 my-8 grid grid-cols-3 items-start gap-x-[10px] sliderStagger">
               {values.map((stat, idx) => (
                 <div key={idx}>
                   {stat?.value && (
@@ -210,6 +215,7 @@ const SliderCard: FC<SliderCardProps> = ({
             ctaButton?.hasExternalLink && (
               <Button
                 title={ctaButton?.title}
+                className="sliderStagger"
                 href={
                   ctaButton?.hasExternalLink == "true"
                     ? ctaButton?.externalLink
