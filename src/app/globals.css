@@ -758,6 +758,10 @@ body {
   .button-subtle-scale:hover {
     transform: scale(1);
   }
+
+  .accordionWidth #accordion .MuiAccordionSummary-content {
+    width: 80% !important;
+  }
 }
 
 @media (max-width: 768px) {

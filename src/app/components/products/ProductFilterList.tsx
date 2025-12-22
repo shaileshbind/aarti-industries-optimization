@@ -222,13 +222,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                     type="button"
                     onClick={() => toggleSubCategory(sub.slug)}
                     className={clsx(
-                      "px-4 py-2 border rounded-[10px] transition inline-flex items-center",
+                      "px-4 py-2 border rounded-[10px] transition inline-flex gap-2 items-center text-center cursor-pointer",
                       selected
                         ? "border-[#DC4C03] text-[#DC4C03]"
                         : "border-[#4C5861] hover:bg-gray-100"
                     )}
                   >
-                    <span className="mr-2">{sub.subCategory}</span>
+                    <span className="">{sub.subCategory}</span>
                     {selected && (
                       <div
                         onClick={(e) => {
@@ -306,8 +306,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
             ))}
           </div>
           {filteredProducts.length > visibleCount && (
-            <div className="flex justify-center mt-8">
-              <div onClick={handleLoadMore} className="mt-8">
+            <div className="flex justify-center mt-10 lg:mt-[60px]">
+              <div onClick={handleLoadMore} className="">
                 <Button secondary title="View More" href="#" />
               </div>
             </div>
