@@ -80,8 +80,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           // Animation complete, allow next transition
         },
       });
-      gsap.set(cards, { transformOrigin: "50% 50%" });
-      tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
+      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "0%" });
+      tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 }, 0);
 
       switchAnimRef.current = tl;
       return index;
@@ -139,8 +139,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
     const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
     if (cards && cards.length > 0) {
-      gsap.set(cards, { scale: 0, transformOrigin: "50% 50%" });
-      tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 }, 0);
+      gsap.set(cards, { translateY: "100%", transformOrigin: "50% 50%" });
+      tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 }, 0);
     }
     tl.eventCallback("onComplete", () => {
       setIsTransitioning(false);

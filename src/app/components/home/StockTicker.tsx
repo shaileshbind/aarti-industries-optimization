@@ -24,13 +24,13 @@ export default function StockTicker() {
       <div className="marquee">
         <div className="container lg:mx-auto flex items-center gap-[110px]">
           {/* News */}
-          <div className="flex gap-[110px]">
+          <div className="flex gap-[110px] items-center">
             {tickerData?.slice(0,3)?.map((item: ItemProps) => {
               if (!item?.slug) return null;
               return (
                 <Link
                   href={`/press-releases/${item?.slug}`}
-                  className="text-sm lg:text-base text-[#FFF]"
+                  className="text-sm text-[#FFF]"
                   key={item.id}
                   target="_blank"
                 >
