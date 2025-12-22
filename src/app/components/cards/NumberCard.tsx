@@ -33,7 +33,7 @@ const NumberCard = ({
         />
       ) : (
         <>
-          {title && <H2 className="text-orange-200">{title}</H2>}
+          {title && <H2 className="text-orange-200 text-[40px] lg:text-[44px]">{title}</H2>}
           {desc && <BodyText2>{desc}</BodyText2>}
         </>
       )}

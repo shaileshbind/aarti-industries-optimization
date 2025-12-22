@@ -107,7 +107,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         setActiveTab(index);
       },
     });
-    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
+    tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 });
     switchAnimRef.current = tl;
   };
 
@@ -117,8 +117,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     if (!cards || cards.length === 0) return;
 
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
-    tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 });
+    gsap.set(cards, { transformOrigin: "50% 50%", translateY: "100%" });
+    tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 });
 
     return () => {
       tl.kill();
@@ -190,7 +190,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                       }
                     }}
                     onClick={() => handleTabClick(index)}
-                    className={`text-grey-400 cursor-pointer font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
+                    className={`text-grey-400 cursor-pointer text-[14px] font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
                       activeTab === index ? "text-white" : "hover:bg-grey-200"
                     }`}
                   >
