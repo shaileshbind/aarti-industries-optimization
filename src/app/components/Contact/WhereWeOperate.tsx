@@ -147,7 +147,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
         setShowAll(false);
       },
     });
-    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
+    tl.to(cards, { translateY: "200%", duration: 0.2, stagger: 0.05 });
     switchAnimRef.current = tl;
   };
 
@@ -157,8 +157,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     if (!cards || cards.length === 0) return;
 
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
-    tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 });
+    gsap.set(cards, { transformOrigin: "50% 50%", translateY: "200%" });
+    tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 });
 
     return () => {
       tl.kill();
