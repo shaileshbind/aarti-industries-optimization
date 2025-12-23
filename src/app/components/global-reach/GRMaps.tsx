@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { BodyText2, BodyText3, H2, H3, SubH1, SubH3 } from "../Typography2";
+import { BodyText2, H2, H3, SubH3 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import DesktopMapSvg from "./DesktopMapSvg";
@@ -20,16 +20,15 @@ const GRMaps = ({ data }: GRMapsProps) => {
   const revealCircle = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(4);
   const [activeMob, setActiveMob] = useState(0);
-  const [activeBlip, setActiveBlip] = useState(4);
+  const [activeBlip, setActiveBlip] = useState<number | null>(4);
   const totalCities = 5;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveMob((prev) => (prev + 1) % totalCities);
-    }, 1500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setActiveMob((prev) => (prev + 1) % totalCities);
+  }, 4000);
+  return () => clearInterval(interval);
+}, [activeMob]); 
 
   useEffect(() => {
     if (
@@ -98,7 +97,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
             </H2>
           )}
           <div className="relative w-full h-[180px] lg:h-[550px]">
-            <div className="w-fit h-full mx-auto hidden lg:block relative ">
+            <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
               <DesktopMapSvg
                 hoverRestWorld={() => setActiveBlip(0)}
                 hoverNorthAmerica={() => setActiveBlip(1)}
@@ -112,216 +111,13 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
                 fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
                 fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
+                isActive0={activeBlip === 0 ? true : false}
+                isActive1={activeBlip === 1 ? true : false}
+                isActive2={activeBlip === 2 ? true : false}
+                isActive3={activeBlip === 3 ? true : false}
+                isActive4={activeBlip === 4 ? true : false}
+                isActive5={activeBlip === 5 ? true : false}
               />
-              <div
-                onMouseEnter={() => setActiveBlip(0)}
-                 className="absolute !top-[61%] !left-[3.8%] xl:!top-[67%] xl:!left-[4.9%]  cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 0
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  }    transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 0 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    3%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 0 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Rest of the world
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 0
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* North America */}
-              <div
-                onMouseEnter={() => setActiveBlip(1)}
-                  className="absolute top-[20.5%] left-[10.7%] xl:top-[17.5%] xl:left-[11.9%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 1
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 1 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    18%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 1 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    North America
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 1
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Europe */}
-              <div
-                onMouseEnter={() => setActiveBlip(2)}
-                 className="absolute top-[19.5%] left-[41.2%] xl:top-[16.5%] xl:left-[42.3%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 2
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 2 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    4%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 2 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Europe
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 2
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Middle East */}
-              <div
-                onMouseEnter={() => setActiveBlip(3)}
-                 className="absolute top-[28.8%] left-[51.2%] xl:top-[27%] xl:left-[52.3%] cursor-pointer"           
-              >
-                <div
-                  className={`${
-                    activeBlip === 3
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 3 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    23%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 3 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Middle East
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 3
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* India */}
-              <div
-                onMouseEnter={() => setActiveBlip(4)}
-                 className="absolute top-[31%] left-[62.6%] xl:top-[30%] xl:left-[64%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 4
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 4 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    46%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 4 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    India
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 4
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Rest of Asia */}
-              <div
-                onMouseEnter={() => setActiveBlip(5)}
-                className="absolute top-[18%] left-[74.6%] xl:top-[15%] xl:left-[75.5%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 5
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 5 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    6%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 5 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Rest of Asia
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 5
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
             </div>
             <Image
               src="/images/global-reach/gr-map-m.svg"
@@ -371,7 +167,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     <div className="mt-5">
                       <Button
                         title={ctaButton?.title}
-                        href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
+                        href={
+                          ctaButton?.hasExternalLink == "true"
+                            ? ctaButton?.externalLink
+                            : ctaButton?.link?.link
+                        }
                         secondary
                       />
                     </div>
@@ -392,28 +192,47 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       </SubH3>
                     </div>
                     <div className="mt-[20px] grid grid-cols-2">
-                      <BodyText2
-                        className={`${
-                          active === 2 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                      <div
+                        onClick={() => setActive(2)}
+                        className="cursor-pointer w-fit"
                       >
-                        Tarapur
-                      </BodyText2>
-                      <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 0 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 2 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Tarapur
+                        </BodyText2>
+                      </div>
+                      <div className="w-fit">
+                        <BodyText2 className="text-grey-300">
+                          Jhagadia
+                        </BodyText2>
+                      </div>
+                      <div
+                        onClick={() => setActive(0)}
+                        className="cursor-pointer w-fit"
                       >
-                        Bhachau
-                      </BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 1 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 0 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Bhachau
+                        </BodyText2>
+                      </div>
+                      <div
+                        onClick={() => setActive(1)}
+                        className="cursor-pointer w-fit"
                       >
-                        Dahej
-                      </BodyText2>
+                        <BodyText2
+                          className={`${
+                            active === 1 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Dahej
+                        </BodyText2>
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -428,20 +247,30 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       <SubH3 className="!text-[16px]">R&D Centres</SubH3>
                     </div>
                     <div className="mt-[20px] grid grid-cols-2">
-                      <BodyText2
-                        className={`${
-                          active === 4 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                      <div
+                        onClick={() => setActive(4)}
+                        className="cursor-pointer w-fit"
                       >
-                        Vapi
-                      </BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 3 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 4 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Vapi
+                        </BodyText2>
+                      </div>
+                      <div
+                        onClick={() => setActive(3)}
+                        className="cursor-pointer w-fit"
                       >
-                        Navi Mumbai
-                      </BodyText2>
+                        <BodyText2
+                          className={`${
+                            active === 3 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Navi Mumbai
+                        </BodyText2>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -457,7 +286,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   hoverNaviM={() => setActive(3)}
                   hoverVapi={() => setActive(4)}
                 />
-                <div className="bg-blue-100 p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]">
+                <div
+                  className={`${
+                    [0, 1, 2].includes(active) ? "bg-[#e55e2d]" : "bg-blue-100"
+                  }  p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]`}
+                >
                   <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                     <div className="absolute inset-0 overflow-hidden">
                       <Image
@@ -526,7 +359,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
               <div className="mt-5">
                 <Button
                   title={ctaButton?.title}
-                  href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
+                  href={
+                    ctaButton?.hasExternalLink == "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link
+                  }
                   secondary
                 />
               </div>
@@ -535,7 +372,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
             <StateMapSvg width="100%" height="300" />
-            <div className="bg-blue-100 p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]">
+            <div
+              className={`${
+                [0, 1, 2].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
+              }  p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]`}
+            >
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
@@ -603,28 +444,45 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 <SubH3 className="!text-[18px]">Manufacturing Facilities</SubH3>
               </div>
               <div className="mt-[20px] grid grid-cols-2">
-                <BodyText2
-                  className={`${
-                    active === 2 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                <div
+                  onClick={() => setActiveMob(2)}
+                  className="cursor-pointer w-fit"
                 >
-                  Tarapur
-                </BodyText2>
-                <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 0 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 2 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Tarapur
+                  </BodyText2>
+                </div>
+                <div className="w-fit">
+                  <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(0)}
+                  className="cursor-pointer w-fit"
                 >
-                  Bhachau
-                </BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 1 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 0 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Bhachau
+                  </BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(1)}
+                  className="cursor-pointer w-fit"
                 >
-                  Dahej
-                </BodyText2>
+                  <BodyText2
+                    className={`${
+                      activeMob === 1 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Dahej
+                  </BodyText2>
+                </div>
               </div>
             </div>
             <div>
@@ -639,20 +497,30 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 <SubH3 className="!text-[18px]">R&D Centres</SubH3>
               </div>
               <div className="mt-[20px] grid grid-cols-2">
-                <BodyText2
-                  className={`${
-                    active === 4 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                <div
+                  onClick={() => setActiveMob(4)}
+                  className="cursor-pointer w-fit"
                 >
-                  Vapi
-                </BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 3 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 4 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Vapi
+                  </BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(3)}
+                  className="cursor-pointer w-fit"
                 >
-                  Navi Mumbai
-                </BodyText2>
+                  <BodyText2
+                    className={`${
+                      activeMob === 3 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Navi Mumbai
+                  </BodyText2>
+                </div>
               </div>
             </div>
           </div>

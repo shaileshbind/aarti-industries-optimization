@@ -70,7 +70,9 @@ const Page = async () => {
         />
       )}
       {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
+        <div className="mt-4 lg:mt-0">
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        </div>
       )}
       {section_eight && <PartneshipExplore data={section_eight} />}
     </div>

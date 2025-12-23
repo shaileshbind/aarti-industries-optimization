@@ -18,8 +18,9 @@ const Banner: React.FC<
 
   return (
     <div className="relative overflow-hidden w-full h-[360px] md:h-[440px] flex items-center justify-center flex-col text-center py-8">
+      <div className="bg-[#ffffff] opacity-50 rounded-[646px] w-[80%] md:w-[35%] h-[90%] absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl z-[1]" />
       {/* Text Content */}
-      <div className="h-auto max-w-[65%] md:max-w-[30%] mt-20 z-10">
+      <div className="h-auto max-w-[65%] md:max-w-[30%] lg:mt-20 z-10">
         <H2 className="text-h2-l text-blue-100">{title}</H2>
         <BodyText1 className="text-body-m mt-1 mb-5 lg:mb-9 text-[#646464]">{description}</BodyText1>
       </div>

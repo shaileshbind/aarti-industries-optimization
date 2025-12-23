@@ -594,7 +594,7 @@ body {
   display: flex;
   width: fit-content;
   white-space: nowrap;
-  animation: marquee 20s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 
 @keyframes marquee {
@@ -758,6 +758,10 @@ body {
   .button-subtle-scale:hover {
     transform: scale(1);
   }
+
+  .accordionWidth #accordion .MuiAccordionSummary-content {
+    width: 80% !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -889,4 +893,13 @@ body {
       margin-bottom: 8px;
     }
   }
+}
+
+.svg-map {
+  width: auto;
+  max-width: 100%;
+  /* aspect-ratio: 1262 / 623; */
+  display: block;
+  height: calc(100vh - 200px);
+  object-fit: contain;
 }

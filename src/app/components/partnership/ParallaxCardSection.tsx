@@ -217,7 +217,9 @@ export default function ParallaxCardSection({
 
           {description && (
             <AnimatedText className="w-[90%] lg:w-[70%] text-center mx-auto">
-              <SubH2 className="text-blue-200">{description}</SubH2>
+              <SubH2 className="text-blue-200 text-[20px] md:text-[22px] xl:text-[24px]">
+                {description}
+              </SubH2>
             </AnimatedText>
           )}
 
@@ -303,7 +305,7 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[64px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}
@@ -319,13 +321,28 @@ export default function ParallaxCardSection({
           </FadeInReveal>
 
           {accordion?.length > 0 && (
-            <FadeInReveal className="pt-6 xl:pt-18">
+            <FadeInReveal className="pt-6 xl:pt-18 accordionWidth">
               {accordion?.map((item, index) => (
                 <MainAccordion
                   key={`accordion-${index}`}
-                  borderBottom={accordion?.length - 1 === index ? "border-b-0" : "1px solid #D9D9D9"}
+                  borderBottom={
+                    accordion?.length - 1 === index
+                      ? "border-b-0"
+                      : "1px solid #D9D9D9"
+                  }
                   expanded={expanded === index}
                   onChange={() => setExpanded(index)}
+                  icon={
+                    isMobile && (
+                      <Image
+                        src="/images/accordian-down.svg"
+                        alt="arrow"
+                        width={34}
+                        height={34}
+                        className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
+                      />
+                    )
+                  }
                   title={
                     <h2 className="text-base md:text-xl text-[#002F50]">
                       {item?.title}
@@ -349,7 +366,9 @@ export default function ParallaxCardSection({
                               width={20}
                               height={20}
                             />
-                            <BodyText2 className="w-[96%]">{item?.title}</BodyText2>
+                            <BodyText2 className="w-[96%]">
+                              {item?.title}
+                            </BodyText2>
                           </div>
                         ))}
                       </div>
@@ -365,7 +384,11 @@ export default function ParallaxCardSection({
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
-                        href={`${item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}`}
+                        href={`${
+                          item?.ctaButton?.hasExternalLink == "true"
+                            ? item?.ctaButton?.externalLink
+                            : item?.ctaButton?.link?.link
+                        }`}
                         className=" mb-2"
                       />
                     )}

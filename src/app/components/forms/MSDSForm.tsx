@@ -225,6 +225,15 @@ export default function MSDSForm({
                     value={field.value || ""}
                     labelId="country"
                     IconComponent={KeyboardArrowDownIcon}
+                    MenuProps={{
+                      disableScrollLock: true,
+                      PaperProps: {
+                        "data-lenis-prevent": true,
+                        sx: {
+                          maxHeight: 300,
+                        },
+                      },
+                    }}
                   >
                     {Countries.map((country) => (
                       <MenuItem key={country.code} value={country.name}>

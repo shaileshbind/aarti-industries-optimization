@@ -104,7 +104,7 @@ export default function ProductInnerPage({
                 )}
 
                 {/* product list */}
-                <div className="flex flex-col gap-[10px] mt-[14px]">
+                <div className="flex flex-col gap-[10px] mt-[0]">
                   <div
                     className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
@@ -122,7 +122,7 @@ export default function ProductInnerPage({
                   </div>
                 </div>
                 {/* company brochure */}
-                <div className="flex flex-col gap-[10px] mt-[14px]">
+                <div className="flex flex-col gap-[10px] mt-[10px]">
                   <div
                     className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
@@ -142,7 +142,7 @@ export default function ProductInnerPage({
                 {/* msds only - via cms */}
                 {product?.productDetails?.documentSection?.documents
                   ?.length && (
-                  <div className="flex flex-col gap-[10px] mt-[14px]">
+                  <div className="flex flex-col gap-[10px] mt-[10px]">
                     {product?.productDetails?.documentSection?.documents?.map(
                       (item, index) =>
                         item?.documentName && (
@@ -171,7 +171,7 @@ export default function ProductInnerPage({
                   </div>
                 )}
                 <button
-                  className="text-[#DC4C03] text-base pt-6 group cursor-pointer"
+                  className="text-[#DC4C03] text-base pt-4 md:pt-6 group cursor-pointer"
                   onClick={() => {
                     setshowGeneralPopup(true);
                     setdocument("");
@@ -220,7 +220,7 @@ export default function ProductInnerPage({
                     </div>
                   )}
                 </div>
-                <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-4 xl:my-0" />
+                <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
                 {/* Applications */}
                 <div>
                   {product?.productDetails?.application?.length && (
@@ -290,7 +290,7 @@ export default function ProductInnerPage({
 
         {/* Related Products */}
         <FadeInReveal>
-          <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 lg:p-10 w-full">
+          <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 py-7 lg:p-10 w-full">
             <SubH1 className="text-blue-100">Related Products</SubH1>
             {relatedProducts?.length && (
               <div className="mt-2 lg:mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] lg:gap-y-[20px]">

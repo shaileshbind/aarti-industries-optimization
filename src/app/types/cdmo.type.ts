@@ -69,10 +69,12 @@ export type CDMOSplchemProps = {
     cards: {
       title: string;
       image: ImageProps;
+      link: string;
     }[];
   };
   headingClassName?: string;
   className?: string;
+  useLink?: boolean;
 };
 
 export type CDMOSafegreenProps = {
@@ -87,6 +89,6 @@ export type CDMOExpProps = {
   data: {
     title?: string;
     ctaButton?: ButtonProps[];
-    formTitle?:string;
+    formTitle?: string;
   }[];
 };

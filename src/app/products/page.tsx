@@ -41,7 +41,9 @@ export default async function Product() {
       />
 
       {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
+        <div className="pt-[10px] lg:pt-[80px]">
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        </div>
       )}
     </>
   );

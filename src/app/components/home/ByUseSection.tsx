@@ -13,6 +13,7 @@ import TitleCard from "../cards/TitleCard";
 gsap.registerPlugin(ScrollTrigger);
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
+import Link from "next/link";
 
 const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   const [active, setActive] = useState(0);
@@ -71,8 +72,8 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
 
     // Scale down cards
     if (cards && cards.length > 0) {
-      gsap.set(cards, { transformOrigin: "50% 50%" });
-      tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
+      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "0%" });
+      tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 }, 0);
     }
 
     switchAnimRef.current = tl;
@@ -119,8 +120,8 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
 
     // Scale up cards
     if (cards && cards.length > 0) {
-      gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
-      tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 }, 0);
+      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "100%" });
+      tl.to(cards, { translateY: '0%', duration: 0.3, stagger: 0.05 }, 0);
     }
 
     tl.eventCallback("onComplete", () => {
@@ -133,9 +134,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div ref={tabsRef} className="mt-[72px] md:mt-2 lg:mt-[50px] overflow-hidden ">
+    <div
+      ref={tabsRef}
+      className="mt-[72px] md:mt-2 lg:mt-[50px] overflow-hidden "
+    >
       {/* Tabs */}
-      <div  className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
+      <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
           <div className="flex overflow-x-auto whitespace-nowrap gap-x-6 lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
             {data?.map(
@@ -159,7 +163,10 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
       <div ref={contentRef} className="mt-[40px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
           {/* Left Content */}
-          <div ref={leftContentRef} className="px-5 lg:pl-[60px] lg:pr-8 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0">
+          <div
+            ref={leftContentRef}
+            className="px-5 lg:pl-[60px] lg:pr-20 lg:w-[450px] xl:w-[500px] flex-shrink-0 mb-8 lg:mb-0"
+          >
             {data?.[active]?.title && (
               <SubH1 className="text-blue-200">{data?.[active]?.title}</SubH1>
             )}
@@ -173,7 +180,11 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
             {data?.[active]?.ctaButton?.title && (
               <Button
                 secondary
-                href={data?.[active]?.ctaButton?.hasExternalLink == "true" ? data?.[active]?.ctaButton?.externalLink : data?.[active]?.ctaButton?.link?.link}
+                href={
+                  data?.[active]?.ctaButton?.hasExternalLink == "true"
+                    ? data?.[active]?.ctaButton?.externalLink
+                    : data?.[active]?.ctaButton?.link?.link
+                }
                 title={data?.[active]?.ctaButton?.title}
               />
             )}
@@ -248,10 +259,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     {data?.[active]?.card?.map((item, index) => (
                       <SwiperSlide key={`${active}-${index}`}>
                         <div className="title-card-anim">
-                          <TitleCard
-                            imageSrc={item?.image?.url}
-                            title={item?.title}
-                          />
+                          <Link href={item?.link || "#"}>
+                            <TitleCard
+                              imageSrc={item?.image?.url}
+                              title={item?.title}
+                            />
+                          </Link>
                         </div>
                       </SwiperSlide>
                     ))}
@@ -260,8 +273,10 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
               )}
 
               {/* Navigation Buttons */}
-              <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
-                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-2 right-[100px]">
+              <div className="relative py-[30px] mx-[20px] lg:mx-[unset] mt-[12px] flex justify-between items-center lg:pr-[50px]">
+                
+                <div className="home-by-use-section-swiper  h-[2px] w-[100%] lg:w-[calc(100%-150px)] !relative" />
+                <div className="hidden lg:flex w-fit gap-3 px-5 lg:px-0 ml-5">
                   <button
                     className={`swiper-button-prev-useBySection transition-opacity ${
                       isBeginning
@@ -296,7 +311,6 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
                     />
                   </button>
                 </div>
-                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[78%] relative" />
               </div>
             </div>
           </div>
