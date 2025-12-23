@@ -10,7 +10,6 @@ import Button from "../Button";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
-import { isMobile } from "react-device-detect";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -306,7 +305,7 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[64px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}
