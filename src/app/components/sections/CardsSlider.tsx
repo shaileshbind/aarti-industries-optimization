@@ -36,7 +36,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   }, []);
 
   return (
-    <div className="pt-[50px] pb-[25px] lg:py-[75px] overflow-hidden">
+    <div className="pt-[50px] pb-[25px] lg:pt-[140px] lg:pb-[110px] overflow-hidden">
       {/* Content Section */}
       <div className={clsx(`mt-[0px] lg:mt-[62px]`, className)}>
         <div className="flex flex-col w-full">
@@ -183,7 +183,7 @@ const Card = ({
   alt: string;
 }) => {
   return (
-    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
+    <div className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
       {title && (
         <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
       )}

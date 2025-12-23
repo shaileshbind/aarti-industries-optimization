@@ -166,21 +166,33 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         <LayoutImage src={activeImage} imageFade={imageFade} />
       </div>
 
-      <div
-        className="xl:w-[80%] relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div className="xl:w-[80%] relative">
         {title && <H2>{title}</H2>}
 
         {content?.length > 0 && (
-          <div className="pt-10 xl:pt-[62px]">
+          <div className="pt-[14px] xl:pt-[62px]">
             {content?.map((item, index) => (
-              <div key={`accordion-${index}`} className="relative">
+              <div
+                key={`accordion-${index}`}
+                className="relative"
+                onMouseEnter={() => !isMobile && setIsHovered(true)}
+                onMouseLeave={() => !isMobile && setIsHovered(false)}
+              >
                 <MainAccordion
                   expanded={expanded === index}
                   showIcon={isMobile ? true : false}
                   onChange={() => handleAccordion(index)}
+                  icon={
+                    isMobile && (
+                      <Image
+                        src="/images/accordian-down.svg"
+                        alt="arrow"
+                        width={34}
+                        height={34}
+                        className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
+                      />
+                    )
+                  }
                   title={
                     <h2
                       className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
@@ -215,13 +227,14 @@ export default function WhyAarti({ data }: WhyAartiProps) {
                             listItem?.title && (
                               <div
                                 key={"list_" + listIndex}
-                                className="flex gap-2"
+                                className="flex gap-2 items-start"
                               >
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt="banner"
                                   width={20}
                                   height={20}
+                                  className="w-[14px] h-[14px] mt-1 md:w-5 md:h-5 md:mt-0"
                                 />
                                 <BodyText2>{listItem?.title}</BodyText2>
                               </div>
