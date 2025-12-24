@@ -167,7 +167,7 @@ export default function WorksWithPartners({
 
       {/* Mobile */}
       {card?.length > 0 && (
-        <div className="mt-9 lg:hidden">
+        <div className="mt-10 lg:hidden">
           {card?.map((item, index) => (
             <div
               key={"card_" + index}
@@ -213,7 +213,7 @@ export default function WorksWithPartners({
                     index === 0 || mobileProgress[index - 1] >= 100 ? 1 : 0.4,
                 }}
               >
-                {item?.title && <SubH2 className="pb-2">{item?.title}</SubH2>}
+                {item?.title && <SubH2 className="pb-[6px]">{item?.title}</SubH2>}
 
                 {item?.description && (
                   <p className="text-sm text-[#4C5861]">{item?.description}</p>

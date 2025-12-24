@@ -61,7 +61,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
           return (
             <label
               key={sub.id}
-              className="flex items-center justify-between gap-3 cursor-pointer select-none"
+              className="flex items-center justify-between gap-5 cursor-pointer select-none"
             >
               <BodyText2 className="text-gray-800">{sub.subCategory}</BodyText2>
               <input
