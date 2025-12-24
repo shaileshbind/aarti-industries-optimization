@@ -2,7 +2,7 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import ScrollTriggerModule from "gsap/ScrollTrigger";
+import ScrollTriggerModule, { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,12 +10,15 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
+import { isMobile } from "react-device-detect";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
 
+const ANIMATION_END_PROGRESS = 0.55;
+
 const SustainableChem = ({ data }: RespGrowthProps) => {
-  const { leftText, rightText, images, mainSection } = data;
+  const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
@@ -33,12 +36,18 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const scrollTriggerRef = useRef<ScrollTriggerType | null>(null);
+  const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
+  const sliderContainerRef = useRef<HTMLDivElement>(null);
+  const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
     visible: false,
   });
+  const [slideWidth] = useState((window.innerWidth / 1.27)*40/100);
   const indicatorColor = "#F97316";
+  const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
@@ -64,20 +73,30 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     });
   }, [activeTab]);
 
-  const handleTabClick = useCallback(
-    (index: number, e?: React.MouseEvent) => {
-      e?.preventDefault();
-      e?.stopPropagation();
-      if (index === activeTab) return;
+  const handleTabClick = (index: number) => {
+    const st = scrollTriggerRef.current;
+    if (!st || !mainSection.length) return;
 
-      const swiper = swiperRef.current;
-      if (swiper && !swiper.destroyed) {
-        swiper.slideTo(index);
-        setActiveTab(index);
-      }
-    },
-    [activeTab]
-  );
+    const total = mainSection.length;
+    const clampedIndex = Math.max(0, Math.min(index, total - 1));
+
+    // Map tab index (0 → last) into ScrollTrigger progress space
+    const slideProgress = total > 1 ? clampedIndex / (total - 1) : 0;
+    const progress =
+      ANIMATION_END_PROGRESS +
+      slideProgress * (1 - ANIMATION_END_PROGRESS);
+
+    const start =
+      typeof st.start === "number" ? st.start : (st.start as number) || 0;
+    const end = typeof st.end === "number" ? st.end : (st.end as number) || 0;
+    const distance = end - start;
+    const targetY = start + distance * progress;
+
+    window.scrollTo({
+      top: targetY,
+      behavior: "smooth",
+    });
+  };
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -100,95 +119,75 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         });
       }
       gsap.set(envSlider.current, { opacity: 0 });
+      gsap.set(".leafStag", { opacity: 0, scale: 0.5, transformOrigin: "center center" });
       const animationEndProgress = 0.55;
       const animationScrollDistance = isMobile
         ? window.innerHeight * 1.5
         : window.innerHeight * 4;
 
-      const mainTl = gsap.timeline({
-        scrollTrigger: {
-          id: "respGrowthTrigger11",
-          trigger: triggerRef.current,
-          start: "top 50%",
-          end: `+=${animationScrollDistance}`,
-          scrub: 1,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          refreshPriority: 0,
-          onUpdate: (self) => {
-            // Sync slides after animation phase (55% progress) - similar to test slider logic
-            if (
-              self.progress >= animationEndProgress &&
-              swiperRef.current &&
-              mainSection.length > 0
-            ) {
-              const slides = mainSection.length;
-              // Map progress from 0.55 to 1.0 to slide indices 0 to slides-1
-              const slideProgress =
-                (self.progress - animationEndProgress) /
-                (1 - animationEndProgress);
-              const progress = slideProgress * (slides - 1);
-              const index = Math.round(progress);
-
+        const mainTl = gsap.timeline({
+          scrollTrigger: {
+            id: "mainTrigger",
+            trigger: triggerRef.current,
+            start: isMobile ? "top top" : "top 50%",
+            end: `+=${animationScrollDistance}`,
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              // Sync slides after animation phase (55% progress) - similar to test slider logic
+              if(!isMobile) {
               if (
+                self.progress >= animationEndProgress &&
                 swiperRef.current &&
-                !swiperRef.current.destroyed &&
-                index !== swiperRef.current.activeIndex
+                mainSection.length > 0
               ) {
-                swiperRef.current.slideTo(index);
-                setActiveTab(index);
+                const slides = mainSection.length;
+                // Map progress from 0.55 to 1.0 to slide indices 0 to slides-1
+                const slideProgress =
+                  (self.progress - animationEndProgress) /
+                  (1 - animationEndProgress);
+                const progress = slideProgress * (slides - 1);
+                const index = Math.round(progress);
+  
+                if (
+                  swiperRef.current &&
+                  !swiperRef.current.destroyed &&
+                  index !== swiperRef.current.activeIndex
+                ) {
+                  swiperRef.current.slideTo(index);
+                  setActiveTab(index);
+                }
               }
             }
+            },
+            onLeave: () => {
+              if (!isMobile && tabsRef.current) {
+                gsap.to(tabsRef.current, {
+                  opacity: 0,
+                  duration: 0.6,
+                  ease: "power2.out",
+                  delay: 0.2,
+                });
+              }
+            },
+            onEnterBack: () => {
+              if (!isMobile && tabsRef.current) {
+                gsap.to(tabsRef.current, {
+                  opacity: 1,
+                  duration: 0.6,
+                  ease: "power2.in",
+                });
+              }
+            },
           },
-          onLeave: () => {
-            if (!isMobile && tabsRef.current) {
-              gsap.to(tabsRef.current, {
-                opacity: 0,
-                duration: 0.6,
-                ease: "power2.out",
-                delay: 0.2,
-              });
-            }
-          },
-          onEnterBack: () => {
-            if (!isMobile && tabsRef.current) {
-              gsap.to(tabsRef.current, {
-                opacity: 1,
-                duration: 0.6,
-                ease: "power2.in",
-              });
-            }
-          },
-          // onLeave: () => {
-          //   if (!isMobile && tabsRef.current) {
-          //     gsap.to(tabsRef.current, {
-          //       opacity: 0,
-          //       duration: 0.6,
-          //       ease: "power2.out",
-          //       delay: 0.2,
-          //     });
-          //   }
-          //   // Refresh ScrollTrigger after leaving
-          //   requestAnimationFrame(() => {
-          //     ScrollTrigger.refresh();
-          //   });
-          // },
-          // onEnterBack: () => {
-          //   if (!isMobile && tabsRef.current) {
-          //     gsap.to(tabsRef.current, {
-          //       opacity: 1,
-          //       duration: 0.6,
-          //       ease: "power2.in",
-          //     });
-          //   }
-          //   requestAnimationFrame(() => {
-          //     ScrollTrigger.refresh();
-          //   });
-          // },
-        },
-      });
+        });
+  
+        // Store ScrollTrigger instance for tab click handling
+        if (mainTl.scrollTrigger) {
+          scrollTriggerRef.current = mainTl.scrollTrigger;
+        }
 
       if (isMobile) {
         mainTl
@@ -204,6 +203,13 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             { height: "0px" },
             { height: "203px", duration: 6 },
             "<"
+          )
+          .fromTo(
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 1, stagger: 0.1, ease:"power4.inOut",  
+            },
+             "<4"
           )
           .fromTo(
             susLogotl.current,
@@ -236,8 +242,14 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px", right: 0, top: 0 },
-            { width: window.innerWidth - 40, right: 20, duration: 1 }
+            { width: "100px", height: "100px", right: 0, top: 0 },
+            { width: window.innerWidth - 40, height: '250px', right: 20, top: '170px',  duration: 1 }
+          )
+          .fromTo(
+            '.leafBigImg',
+            { scale: '2' },
+            { scale: '1', duration: 1 },
+            "<"
           )
           .fromTo(
             sustainbleLogo.current,
@@ -251,7 +263,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             },
             {
               width: "100%",
-              height: "500px",
+              height: "100vh",
               left: "0%",
               top: "50%",
               y: "-50%",
@@ -260,11 +272,22 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             },
             "<"
           )
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+          )
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
-            envSlider.current,
+            mobileSliderContainerRef.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<"
+          )
+          .fromTo(
+            '.sliderStagger',
+            { opacity: 0, x : 100 },
+            { opacity: 1, x : 0, duration: 0.7, stagger: 0.1, ease:"power4.inOut",   },
             "<"
           )
           .fromTo(
@@ -278,19 +301,26 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           .fromTo(
             headinLeft.current,
             { x: 0, y: "unset" },
-            { x: -150, duration: 1 }
+            { x: -150, duration: 0.5 }
           )
           .fromTo(
             headinRight.current,
             { x: 0, y: "unset" },
-            { x: 150, duration: 1 },
+            { x: 150, duration: 0.5 },
             "<"
           )
           .fromTo(
             sustainbleLogo.current,
             { width: "0px" },
-            { width: "206px", duration: 1 },
+            { width: "206px", duration: 0.5 },
             "<"
+          )
+          .fromTo(
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 0.3, stagger: 0.1, ease:"power4.inOut",  
+            },
+             "<0.2"
           )
           .fromTo(
             susLogotl.current,
@@ -323,9 +353,16 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px" },
-            { width: "500px", duration: 1 }
+            { width: "100px", height: "100px" },
+            { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
+          .fromTo(
+            '.leafBigImg',
+            { scale: '2' },
+            { scale: '1', duration: 1 },
+            "<"
+          )
+         
           .fromTo(
             sustainbleLogo.current,
             {
@@ -337,8 +374,9 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               x: "-50%",
             },
             {
-              width: "500px",
-              height: "500px",
+              width:  () => `${slideWidth}px`,
+              height:  () => `${slideWidth}px`,
+
               left: "0%",
               top: "50%",
               y: "-50%",
@@ -347,15 +385,22 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             },
             "<"
           )
-          .to(titleSection.current, {
-            opacity: 0,
-            duration: 1,
-            filter: "blur(50px)",
-          })
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+             
+          )
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<0.3"
+          )
+          .fromTo(
+            '.sliderStagger',
+            { opacity: 0, x : 100 },
+            { opacity: 1, x : 0, duration: 0.7, stagger: 0.1, ease:"power4.inOut",   },
             "<"
           )
           .fromTo(
@@ -395,12 +440,22 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [activeTab, mainSection.length, measureIndicator]);
-
+  const handlMobileTabClick = (index: number) => {
+    if(index === activeTabMob) return;
+    const swiper = swiperRef.current;
+    if(swiper && !swiper.destroyed) {
+        swiper.slideTo(index);
+        setActiveTabMob(index);
+    }
+};
   return (
-    <div ref={triggerRef} className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[100px]">
+    <div
+      ref={triggerRef}
+      className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
+    >
       <div
         ref={titleSection}
-        className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
+        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
           {leftText && (
@@ -409,7 +464,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             </span>
           )}
 
-          {images?.length > 0 && (
+          {mainSection?.[0]?.image?.url && (
             <div
               ref={sustainbleLogo}
               className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
@@ -418,72 +473,76 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 ref={sustainInner}
                 className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
               >
-                {images?.[2]?.url && (
-                  <i ref={susLogotl} className="absolute top-0 left-0">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogotl} className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden">
                     <Image
-                      src={images?.[2]?.url}
-                      alt={images?.[2]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
+                      className="scale-200 object-cover"
                     />
                   </i>
                 )}
 
-                {images?.[1]?.url && (
-                  <i ref={susLogotr} className="absolute top-0 right-0">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogotr} className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]">
+                    <span ref={susLogoinnerblurtr}  className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0">
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className="leafBigImg object-cover blur"
+                      />
+                    </span>
+                    <span className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className="leafBigImg scale-200 object-cover "
+                      />
+                    </span>
+                </i>
+                )}
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogobr} className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
-                      src={images?.[1]?.url}
-                      alt={images?.[1]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
-                      className="w-full h-full"
+                      className="scale-200 object-cover"
                     />
                   </i>
                 )}
-
-                {images?.[0]?.url && (
-                  <i ref={susLogobl} className="absolute bottom-0 left-0">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogobl} className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
-                      src={images?.[0]?.url}
-                      alt={images?.[0]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
-                    />
-                  </i>
-                )}
-
-                {images?.[3]?.url && (
-                  <i ref={susLogobr} className="absolute bottom-0 right-0">
-                    <Image
-                      src={images?.[3]?.url}
-                      alt={images?.[3]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
-                      priority
+                      className="scale-200 object-cover"
                     />
                   </i>
                 )}
               </span>
             </div>
           )}
-
           {rightText && (
             <span ref={headinRight}>
               <H2>{rightText}</H2>
             </span>
           )}
         </div>
-      </div>
-      <div
+        <div
         ref={envSlider}
-        className="w-full max-h-[100vh] bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
-      >
-        {/* desktop */}
-        <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
-          {mainSection?.length > 0 && (
+        className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0">
+        <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
+          {mainSection?.length > 0 && !isMobile && (
             <div>
               <Swiper
                 slidesPerView={1.2}
@@ -507,7 +566,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                   setActiveTab(swiper.activeIndex);
                 }}
               >
-                {mainSection.map((slide: any) => (
+                {mainSection.map((slide, index) => (
                   <SwiperSlide key={slide.id}>
                     <SliderCard
                       imgSrc={slide?.image?.url}
@@ -516,6 +575,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
+                      imageWrapperRef={imageWrapperRef as React.RefObject<HTMLDivElement>}  
+                      index={index}
                     />
                   </SwiperSlide>
                 ))}
@@ -524,7 +585,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           )}
           <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
             <div className="w-fit mx-auto">
-              {mainSection?.length > 0 && (
+              {mainSection?.length > 0 && !isMobile && (
                 <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                   <div
                     ref={containerRef}
@@ -549,14 +610,14 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
                     {/* Tab Buttons */}
                     {mainSection?.map(
-                      (items: any, index: number) =>
+                      (items, index) =>
                         items?.category && (
                           <div
                             key={index}
                             ref={(element) => {
                               tabRefs.current[index] = element;
                             }}
-                            onClick={(e) => handleTabClick(index, e)}
+                            onClick={() => handleTabClick(index)}
                             className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
                               activeTab === index
                                 ? "text-white"
@@ -573,52 +634,101 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             </div>
           </div>
         </div>
-        {/* Mobile Only */}
-        <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 overflow-y-auto left-0 w-full !h-[100%] min-h-[100vh] ">
-          <div className="relative">
-            <div className="w-full absolute mt-[70px]">
-              {/* Tabs */}
-              {mainSection?.length > 0 && (
-                <div className="overflow-x-auto mb-6">
-                  <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-full justify-between md:w-[50%] mx-[unset] md:mx-auto">
-                    {mainSection.map((item: any, index: number) =>
-                      item?.category ? (
-                        <div
-                          key={index}
-                          onClick={() => setActiveTabMob(index)}
-                          className={`text-grey-400 text-[12px] sm:text-[14px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                            activeTabMob === index
-                              ? "text-white bg-gradient-orange-3"
-                              : "hover:bg-grey-200"
-                          }`}
-                        >
-                          {item?.category}
-                        </div>
-                      ) : null
+      </div>
+      </div>
+      <div ref={mobileSliderContainerRef} className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
+          <div className="pt-[110px]" >
+            {mainSection?.length > 0 && isMobile && (
+                <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+                  <div
+                    ref={containerRef}
+                    className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                  >
+                    {/* Animated Indicator */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: indicator.visible ? indicator.left : 0,
+                        top: 0,
+                        height: "100%",
+                        borderRadius: 9999,
+                        background: indicatorColor,
+                        width: indicator.visible ? indicator.width : 0,
+                        transition: indicatorTransition,
+                        zIndex: 0,
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    {/* Tab Buttons */}
+                    {mainSection?.map(
+                      (items, index) =>
+                        items?.category && (
+                          <div
+                            key={index}
+                            ref={(element) => {
+                              tabRefs.current[index] = element;
+                            }}
+                            onClick={() => handlMobileTabClick(index)}
+                            className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                              activeTab === index
+                                ? "text-white"
+                                : "hover:bg-grey-200"
+                            }`}
+                          >
+                            {items?.category}
+                          </div>
+                        )
                     )}
                   </div>
                 </div>
               )}
-              {/* Content */}
-              <div className="grid items-center gap-6">
-                {mainSection
-                  .filter((_, index) => index === activeTabMob)
-                  .map((slide, index) => (
+          </div>
+          <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
+            <div className="grid items-center">
+                {isMobile && (
+                  <Swiper
+                slidesPerView={1}
+                loop={false}
+                allowTouchMove={true}
+                speed={600}
+                watchSlidesProgress={true}
+                updateOnWindowResize={true}
+                className="w-full h-auto"
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  swiper.on("resize", () => {
+                    swiper.updateSize();
+                    swiper.updateSlides();
+                    swiper.updateProgress();
+                    swiper.updateSlidesClasses();
+                     
+                  });
+                }}
+                onSlideChange={(swiper) => {
+                  setActiveTab(swiper.activeIndex);
+                }}
+              >
+                {mainSection.map((slide, index) => (
+                  <SwiperSlide key={slide.id}>
                     <SliderCard
-                      key={index}
                       imgSrc={slide?.image?.url}
                       imgAlt={slide?.image?.alternativeText || "banner"}
                       title={slide?.category}
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
+                      imageWrapperRef={imageWrapperRef as React.RefObject<HTMLDivElement>}  
+                      index={index}
                     />
-                  ))}
-              </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+                )}
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };

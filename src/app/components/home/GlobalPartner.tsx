@@ -71,7 +71,7 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
   }, []);
 
   return (
-    <div className="container mx-auto my-[100px]">
+    <div className="container mx-auto lg:my-[100px] mt-[100px]">
       <div
         ref={wrapperRef}
         className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[312px_1fr] gap-[6px]"
