@@ -24,6 +24,7 @@ export type CDMOPartnerProps = {
     }[];
   };
   headingClassName?: string;
+  className?: string;
 };
 
 export type CDMODrivingProps = {

@@ -721,6 +721,11 @@ body {
   font-size: 16px;
 }
 
+.valueDescription p {
+  line-height: 1.2;
+  font-family: "Alte Hans Grotesk";
+}
+
 @media (max-width: 1024px) {
   .potential-accordion:nth-child(3)::after {
     right: 5.5%;

@@ -70,6 +70,7 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
                       desc={items?.description}
                       imageSrc={items?.image?.url}
                       className="stat-box"
+                      titleClassName={"text-[28px] lg:text-[44px]"}
                     />
                   );
                 })}
@@ -83,6 +84,7 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
                       desc={items?.description}
                       imageSrc={items?.image?.url}
                       className="stat-box"
+                      titleClassName={"text-[28px] lg:text-[44px]"}
                     />
                   );
                 })}

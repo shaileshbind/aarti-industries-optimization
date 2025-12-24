@@ -286,7 +286,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         setMarginBottom(0);
         return;
       }
-      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const contentHeight =
+        contentContainer.scrollHeight || contentContainer.offsetHeight;
       const screenHeight = window.innerHeight;
       const totalHeight = contentHeight + 100;
 
@@ -316,7 +317,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, [active, details?.length, setMarginBottom]);
-  
+
   return (
     <>
       <div
@@ -368,8 +369,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
         >
-          <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
-            <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
+          <div
+            ref={sliderContainerRef}
+            className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]"
+          >
+            <div
+              ref={contentContainerRef}
+              className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center"
+            >
               <div className="relative w-full randdImageHeight h-[300px] md:[400px] xl:h-[500px] 2xl:h-[600px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
@@ -431,15 +438,15 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                         ? 1
                         : 1.2
                     }
+                    spaceBetween={80}
                     loop={false}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     speed={800}
-
-                    modules={[Navigation, Mousewheel,Autoplay]}
+                    modules={[Navigation, Mousewheel, Autoplay]}
                     autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                }}
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
                     className="w-full relative"
                     navigation={{
                       nextEl: ".swiper-button-next-analytical",

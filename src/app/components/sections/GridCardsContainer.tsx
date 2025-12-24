@@ -9,11 +9,17 @@ import clsx from "clsx";
 const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
   data,
   headingClassName,
+  className,
 }) => {
   const { description, card, title } = data;
 
   return (
-    <section className="fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative">
+    <section
+      className={clsx(
+        `fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative`,
+        className
+      )}
+    >
       <div className="lg:w-[46%] static lg:absolute top-42 left-0 mb-8">
         {title && (
           <div className="w-full">
