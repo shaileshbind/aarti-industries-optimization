@@ -1,4 +1,4 @@
-import { useRef, type FC } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
@@ -37,10 +37,8 @@ const SliderCard: FC<SliderCardProps> = ({
   values,
   ctaButton,
   bullets,
-  imageWrapperRef,
   index,
 }) => {
-  // const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   return (
     <>
       {/* Mobile Version */}

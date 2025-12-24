@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ANIMATION_END_PROGRESS = 0.55;
 
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
-  const { leftText, rightText, images, mainSection } = data;
+  const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     visible: false,
   });
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [slideWidth, setSlideWidth] = useState((window.innerWidth / 1.27)*40/100);
+  const [slideWidth] = useState((window.innerWidth / 1.27)*40/100);
   console.log("slideWidth", slideWidth );  
   const { setMarginBottom } = useMargin();
   const indicatorColor =
@@ -509,7 +509,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             </span>
           )}
 
-          {images?.length > 0 && (
+          {mainSection?.[0]?.image?.url && (
             <div
               ref={sustainbleLogo}
               className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
@@ -518,7 +518,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 ref={sustainInner}
                 className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
               >
-                {images?.[2]?.url && (
+                {mainSection?.[0]?.image?.url && (
                   <i ref={susLogotl} className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden">
                     <Image
                       src={mainSection?.[0]?.image?.url}
@@ -530,7 +530,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                   </i>
                 )}
 
-                {images?.[1]?.url && (
+                {mainSection?.[0]?.image?.url && (
                   <i ref={susLogotr} className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]">
                     <span ref={susLogoinnerblurtr}  className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0">
                       <Image
@@ -552,7 +552,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                     </span>
                 </i>
                 )}
-                {images?.[3]?.url && (
+                {mainSection?.[0]?.image?.url && (
                   <i ref={susLogobr} className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
                       src={mainSection?.[0]?.image?.url}
@@ -563,7 +563,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                     />
                   </i>
                 )}
-                {images?.[0]?.url && (
+                {mainSection?.[0]?.image?.url && (
                   <i ref={susLogobl} className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
                       src={mainSection?.[0]?.image?.url}
