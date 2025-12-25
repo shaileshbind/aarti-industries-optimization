@@ -221,7 +221,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                 }
                 faqContent={
                   <div className="mt-[20px] mb-[30px]">
-                    <div className="relative w-full h-[190px] xl:h-[200px] rounded-[14px] overflow-hidden">
+                    <div className="relative w-full h-[190px] md:h-[300px] xl:h-[400px] rounded-[14px] overflow-hidden">
                       {item?.image?.url && (
                         <>
                           <Image

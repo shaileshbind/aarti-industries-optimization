@@ -63,9 +63,9 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   }, [activeIndex]);
 
   const baseImageClasses =
-    "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
+    "absolute object-cover rounded-[20px] xl:rounded-l-[30px] xl:rounded-r-[unset]";
   const secondaryImageClasses =
-    "absolute top-0 right-0 object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+    "absolute top-0 right-0 object-cover rounded-tl-[20px] xl:rounded-tl-[30px] h-[calc(100%-71px)] xl:h-[calc(100%-93px)] w-[calc(100%-71px)] xl:w-[calc(100%-210px)]";
   const imageTransitionClasses = "transition-all duration-700 ease-out";
   const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
@@ -119,7 +119,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
           )}
         >
           <div
-            className={`absolute right-0 top-0 h-full w-[100%] lg:w-full rounded-[20px] overflow-hidden `}
+            className={`absolute right-0 top-0 h-full w-[100%] xl:w-full rounded-[20px] overflow-hidden `}
           >
             {cards?.[currentImageIndex]?.image?.url && (
               <Image
@@ -156,17 +156,17 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
               alt="img"
               width={72}
               height={72}
-              className="absolute top-[-21px] lg:top-[-36px] z-10 left-[48px] lg:left-[171px] w-[42px] lg:w-[72px]"
+              className="absolute top-[-21px] xl:top-[-36px] z-10 left-[48px] xl:left-[171px] w-[42px] xl:w-[72px]"
             />
             <Image
               src="/images/home/star-white.svg"
               alt="img"
               width={72}
               height={72}
-              className="absolute bottom-[50px] lg:bottom-[56px] z-10 left-[48px] lg:left-[171px] w-[42px] lg:w-[72px]"
+              className="absolute bottom-[48px] xl:bottom-[56px] z-10 left-[47.5px] xl:left-[171px] w-[42px] xl:w-[72px]"
             />
-            <div className="absolute min-h-screen bg-white w-[1px] left-[68.5px] lg:left-[206.5px]" />
-            <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
+            <div className="absolute min-h-screen bg-white w-[1px] left-[67.5px] xl:left-[206.5px]" />
+            <div className="absolute w-full bg-white bottom-[68px] xl:bottom-[90.5px] h-[1px]" />
           </div>
         </div>
         <div className={clsx(`${"lg:pl-20"}`)}>

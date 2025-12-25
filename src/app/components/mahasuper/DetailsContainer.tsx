@@ -34,13 +34,13 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
     }, []);
 
     return (
-        <div ref={wrapperRef} className=" max-w-[1030px] mx-auto pb-[20px] md:pb-[70px] px-[15px]">
+        <div ref={wrapperRef} className=" max-w-[1030px] mx-auto pb-[0px] md:pb-[80px] xl:pb-[120px] px-[15px]">
             <div
                 ref={topLineRef}
-                className="mx-auto h-[44px] md:h-[120px] w-[1px] mb-20 lg:mb-0 border-l border-orange-100 mt-[50px]"
+                className="mx-auto h-[80px] lg:h-[120px] w-[1px]  border-l border-orange-100 mt-[50px]"
             >
             </div>
-            <div className="flex w-full md:py-[70px] py-[30px]">
+            <div className="flex w-full md:pb-[0px] pt-[35px] py-[30px] ">
                 {description && (
                     <AnimatedText>
                         <H3 className="max-w-[unset] lg:max-w-[1000px] text-center mx-[unset] lg:mx-auto">

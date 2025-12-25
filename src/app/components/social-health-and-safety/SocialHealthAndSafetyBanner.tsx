@@ -15,6 +15,7 @@ const SocialHealthAndSafetyBanner = ({ data }: SocialHealthAndSafetyBannerProps)
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      showStar3={false}
     />
   );
 };
