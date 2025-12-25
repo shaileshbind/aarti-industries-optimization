@@ -25,7 +25,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
             )}
           </div>
         </div>
-        <div className="grid lg:grid-cols-2 gap-[50px]">
+        <div className="grid xl:grid-cols-2 gap-[50px]">
           {investor_contacts?.map((items) => {
             return (
               <div key={items?.id}>

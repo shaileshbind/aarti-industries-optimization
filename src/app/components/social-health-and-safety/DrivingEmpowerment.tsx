@@ -54,7 +54,7 @@ const DrivingEmpowerment: React.FC<DrivingEmpowermentProps> = ({
 
   return (
     <>
-      <div className="block w-full mt-40">
+      <div className="block w-full mt-[72px] md:mt-[100px] xl:mt-[140px]">
         <DrivingTabsSection data={mappedData} title={data?.heading} />
       </div>
     </>

@@ -68,19 +68,22 @@ interface InvestorBarChartProps {
   labels: string[];
   data: number[];
   backgroundColor?: string;
+  hoverColor?: string;
 }
 
 export default function InvestorBarChart({
   labels,
   data,
   backgroundColor = "#D9D9D9",
+  hoverColor = "#002F50",
 }: InvestorBarChartProps) {
   const chartData = {
     labels,
     datasets: [
       {
         data,
-        backgroundColor: [backgroundColor],
+        backgroundColor: backgroundColor,
+        hoverBackgroundColor: hoverColor,
         barThickness: 40,
       },
     ],
