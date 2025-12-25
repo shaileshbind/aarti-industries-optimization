@@ -118,8 +118,10 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               })}
             </Swiper>
           </div>
-          <div className="w-full pt-[24px] px-5 lg:px-0">
-            <div className="in-headlines-section-progressbar h-[2px] z-[1] w-full lg:hidden" />
+          <div className="w-full pt-[24px] lg:hidden">
+            <div className="mx-[20px] relative h-[2px]">
+               <div className="in-headlines-section-progressbar !static !w-full h-full" />
+            </div>
           </div>
         </div>
       </div>

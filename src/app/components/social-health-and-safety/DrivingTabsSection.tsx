@@ -111,7 +111,7 @@ const DrivingTabsSection = ({
   return (
     <>
       {title && (
-        <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-[30px] lg:mb-[50px]">
+        <div className="max-w-full lg:max-w-[740px] mx-5 lg:mx-[60px] mb-[30px] lg:mb-[50px]">
           <H2>{title}</H2>
         </div>
       )}
@@ -130,7 +130,7 @@ const DrivingTabsSection = ({
                   className={clsxN(
                     `${
                       index === active ? "text-orange-200" : "text-grey-300"
-                    } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
+                    } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200 !text-[18px] md:!text-[16px] `,
                     tabClass
                   )}
                 >
@@ -168,14 +168,14 @@ const DrivingTabsSection = ({
         >
           {data?.map((tabItem) => (
             <SwiperSlide key={tabItem.id}>
-              <div className="grid grid-cols-[1fr_500px] gap-x-[40px] min-h-[520px] h-full">
+              <div className="grid grid-cols-[1fr_500px] gap-x-[40px] min-h-[430px] h-full">
                 {tabItem?.cards?.[0] && (
                   <>
-                    <div className="relative min-h-[520px] h-full rounded-[16px] overflow-hidden">
+                    <div className="relative min-h-[430px] h-full rounded-[16px] overflow-hidden">
                       {tabItem.cards[0]?.image?.url && (
                         <>
                           {starImgEffect ? (
-                            <div className="absolute right-0 top-0 w-full min-h-[520px] rounded-[20px] overflow-hidden">
+                            <div className="absolute right-0 top-0 w-full min-h-[430px] rounded-[20px] overflow-hidden">
                               <Image
                                 src={tabItem.cards[0].image.url}
                                 alt={
@@ -240,9 +240,9 @@ const DrivingTabsSection = ({
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
-                                  className="object-cover object-top w-5 h-5 mt-[2px]"
-                                  width={20}
-                                  height={20}
+                                  className="object-cover object-top w-5 h-5 mt-[5px]"
+                                  width={14}
+                                  height={14}
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>

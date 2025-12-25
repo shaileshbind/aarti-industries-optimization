@@ -305,7 +305,7 @@ const HeroBanner = ({
           <div className="px-[20px] lg:pl-[60px] lg:pr-[unset] pt-[30px] lg:pt-[unset] self-center">
             {tag && (
               <FadeInRevealBlur delay={0.1}>
-                <BodyText2 className="text-orange-100 font-alte-hans">
+                <BodyText2 className="text-orange-100 font-alte-hans max-w-full lg:max-w-[480px] 2xl:max-w-full">
                   {tag}
                 </BodyText2>
               </FadeInRevealBlur>
