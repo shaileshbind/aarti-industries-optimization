@@ -5,6 +5,7 @@ import { BodyText2, H2, H3, BodyText3, BodyText1 } from "../Typography2";
 import { EmpoweringFarmersProps } from "@/app/types/mahasuper.type";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
+import { FadeInReveal } from "../ScrollReveal";
 
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
   const { title, description, states, subtitle, stats, ctaTitle, image } = data;
@@ -13,7 +14,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
     <section className="pb-[72px] overflow-hidden  ">
       <div className="container">
         <div className="grid grid-cols-12 w-full items-center">
-          <div className=" xl:col-span-6 col-span-12 xl:pr-20">
+          <FadeInReveal className=" xl:col-span-6 col-span-12 xl:pr-20">
             <div className="flex flex-col gap-2">
               {title && <H3>{title}</H3>}
               {description && (
@@ -71,8 +72,8 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                 </button>
               )}
             </div>
-          </div>
-          <div className=" xl:col-span-6 col-span-12 mt-20 xl:mt-0">
+          </FadeInReveal>
+          <FadeInReveal delay={0.4} className=" xl:col-span-6 col-span-12 mt-20 xl:mt-0">
             {image && (
               <Image
                 src={image.url}
@@ -81,7 +82,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                 height={779}
               />
             )}
-          </div>
+          </FadeInReveal>
         </div>
       </div>
       <GeneralPopup
