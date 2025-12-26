@@ -86,10 +86,10 @@ export default function TimeLine({
         stagger={0.2}
         className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0"
       >
-        <h1 className="font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]">
+        <h1 className="font-inter text-gray-200 font-extralight lg:text-[550px] text-[200px]">
           {String(currentYear).slice(2, 3)}
         </h1>
-        <h1 className="font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]">
+        <h1 className="font-inter text-gray-200 font-extralight lg:text-[550px] text-[200px]">
           {String(currentYear).slice(-1)}
         </h1>
       </FadeInGroup>

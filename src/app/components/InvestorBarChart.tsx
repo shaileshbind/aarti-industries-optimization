@@ -18,7 +18,7 @@ export const TopLinePlugin: Plugin<"bar"> = {
     const yScale = chart.scales.y;
 
     // Text placed safely inside chart (won't get cut off)
-    const textY = yScale.top ;
+    const textY = yScale.top;
 
     ctx.save();
     ctx.strokeStyle = "#D0D0D0";

@@ -160,8 +160,8 @@ const TabsAutoplaySection = ({
                 <BodyText1
                   className={clsxN(
                     `${
-                      index === active ? "text-orange-200" : "text-grey-300"
-                    } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
+                      index === active ? "text-orange-200" : "text-[#4C5861]"
+                    } py-4 relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
                     tabClass
                   )}
                 >
@@ -325,7 +325,7 @@ const TabsAutoplaySection = ({
                   </SubH1>
                 }
                 faqContent={
-                  <div className="mt-[20px] mb-[30px]">
+                  <div className="mt-0 lg:mt-[20px] mb-[30px]">
                     {item?.card?.[0] && (
                       <>
                         <div
@@ -392,26 +392,45 @@ const TabsAutoplaySection = ({
                           </BodyText2>
                         )}
 
-                        <div className="flex flex-col gap-2 mt-5">
-                          {item.card[0]?.BulletPoints?.length > 0 &&
-                            item.card[0]?.BulletPoints?.map((items, index2) => (
-                              <div
-                                className="flex gap-2 items-start"
-                                key={"pointerss_" + index2}
-                              >
-                                <Image
-                                  src={"/images/star-orange.svg"}
-                                  alt={"star"}
-                                  className="object-cover object-top w-4 h-4 mt-[2px]"
-                                  width={14}
-                                  height={14}
-                                />
-                                <p className="text-[#4C5861] text-sm">
-                                  {items?.title}
-                                </p>
-                              </div>
-                            ))}
-                        </div>
+                        {item.card[0]?.BulletPoints?.length > 0 && (
+                          <div className="flex flex-col gap-2 mt-5">
+                            {item.card[0]?.BulletPoints?.map(
+                              (items, index2) => (
+                                <div
+                                  className="flex gap-2 items-start"
+                                  key={"pointerss_" + index2}
+                                >
+                                  <Image
+                                    src={"/images/star-orange.svg"}
+                                    alt={"star"}
+                                    className="object-cover object-top w-4 h-4 mt-[2px]"
+                                    width={14}
+                                    height={14}
+                                  />
+                                  <p className="text-[#4C5861] text-sm">
+                                    {items?.title}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        )}
+
+                        {item.card[0]?.ctaButton?.link?.link &&
+                          item.card[0]?.ctaButton?.hasExternalLink && (
+                            <div className="mt-[18px] pointer-events-auto">
+                              <Button
+                                title={item.card[0].ctaButton.title}
+                                href={
+                                  item.card[0]?.ctaButton?.hasExternalLink ==
+                                  "true"
+                                    ? item.card[0]?.ctaButton?.externalLink
+                                    : item.card[0]?.ctaButton?.link?.link
+                                }
+                                secondary
+                              />
+                            </div>
+                          )}
                       </>
                     )}
                   </div>

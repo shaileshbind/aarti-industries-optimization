@@ -167,12 +167,12 @@ const HeroBanner = ({
                   className="object-cover block lg:hidden"
                 />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0)_70%)]" />
               <div
-                className={`w-full h-full absolute pt-[64px] z-[3] ${
+                className={`w-full h-full absolute z-[3] ${
                   centerText
                     ? "flex flex-col items-center justify-center !pt-0 lg:!pt-[50px] text-center"
-                    : "lg:pt-[150px]"
+                    : "pt-[54px] md:pt-0 flex flex-col md:justify-center items-start"
                 }`}
               >
                 {tag && (
@@ -250,7 +250,7 @@ const HeroBanner = ({
               <div
                 ref={lineVertical}
                 className={clsx(
-                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
+                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5`,
                   lineClassName
                 )}
               />

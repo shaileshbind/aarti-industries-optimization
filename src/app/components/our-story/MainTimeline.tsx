@@ -274,35 +274,37 @@ export default function MainTimeline({
         </div>
 
         {/* Desktop Navigation Arrows */}
-        <button
-          onClick={handlePrev}
-          disabled={activePhase === 0 && activeYear === phases[0].years[0]}
-          className="disabled:opacity-40"
-        >
-          <Image
-            src="/images/home/chevron-right-orange.svg"
-            alt="prev"
-            width={34}
-            height={34}
-            className={`-rotate-180 swiper-button-prev transition-opacity`}
-          />
-        </button>
+        <div className="flex items-center gap-4 lg:-mb-[10px]">
+          <button
+            onClick={handlePrev}
+            disabled={activePhase === 0 && activeYear === phases[0].years[0]}
+            className="disabled:opacity-40"
+          >
+            <Image
+              src="/images/home/chevron-right-orange.svg"
+              alt="prev"
+              width={34}
+              height={34}
+              className={`-rotate-180 swiper-button-prev transition-opacity`}
+            />
+          </button>
 
-        <button
-          onClick={handleNext}
-          disabled={
-            activePhase === phases.length - 1 &&
-            activeYear === phases[phases.length - 1].years.slice(-1)[0]
-          }
-          className="disabled:opacity-40"
-        >
-          <Image
-            src="/images/home/chevron-right-orange.svg"
-            alt="next"
-            width={34}
-            height={34}
-          />
-        </button>
+          <button
+            onClick={handleNext}
+            disabled={
+              activePhase === phases.length - 1 &&
+              activeYear === phases[phases.length - 1].years.slice(-1)[0]
+            }
+            className="disabled:opacity-40"
+          >
+            <Image
+              src="/images/home/chevron-right-orange.svg"
+              alt="next"
+              width={34}
+              height={34}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

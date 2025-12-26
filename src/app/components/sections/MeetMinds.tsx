@@ -33,6 +33,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   const [popupDetails, setpopupDetails] = useState<ManagementBoardProps | null>(
     null
   );
+  const [hoveredIndex, sethoveredIndex] = useState<number | null>(null);
 
   return (
     <div className="pb-[72px] lg:pb-[100px] lg:pt-0">
@@ -83,7 +84,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
               }}
               className="!pr-[20px] !lg:pr-[unset]"
             >
-              {management_boards?.map((item) => (
+              {management_boards?.map((item, index) => (
                 <SwiperSlide key={item?.id}>
                   <CustomCursorTrigger title="Read Bio">
                     <div
@@ -91,6 +92,14 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                         setshowPopup(true);
                         setpopupDetails(item);
                       }}
+                      onMouseOver={() => sethoveredIndex(index)}
+                      onMouseLeave={() => sethoveredIndex(null)}
+                      className={clsx(
+                        "transition-all duration-300",
+                        hoveredIndex === index || hoveredIndex === null
+                          ? "opacity-100"
+                          : "opacity-40"
+                      )}
                     >
                       {item?.image?.url && (
                         <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)] border-[1px] border-grey-200">
@@ -108,7 +117,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                         </BodyText1>
                       )}
                       {item?.designation && (
-                        <BodyText2 className="mt-[4px] text-grey-300">
+                        <BodyText2 className="mt-[4px] text-[#9997A2]">
                           {item?.designation}
                         </BodyText2>
                       )}
@@ -203,7 +212,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
         onOverlayClick={() => setshowPopup(false)}
       >
         <div className="max-h-[80vh] overflow-y-auto lg:flex gap-10 pr-2 md:pr-0">
-          <div className="md:w-[60%] lg:w-[40%] h-[350px] md:h-[500px] rounded-[20px] overflow-hidden">
+          <div className="md:w-[60%] lg:w-[45%] h-[350px] md:h-[500px] rounded-[20px] overflow-hidden">
             <Image
               src={popupDetails?.image?.url || ""}
               alt={popupDetails?.image?.alternativeText || "leader"}
@@ -213,10 +222,12 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
             />
           </div>
           <div className="lg:w-1/2 mt-2 md:mt-8 lg:mt-0">
-            <SubH3 className="text-[#17191E] font-semibold">
+            <SubH3 className="text-[#17191E] font-semibold !text-[20px] md:!text-[28px]">
               {popupDetails?.name}
             </SubH3>
-            <BodyText2>{popupDetails?.designation} </BodyText2>
+            <BodyText2 className="text-[#17191E]">
+              {popupDetails?.designation}{" "}
+            </BodyText2>
 
             <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto scrollbar md:pr-2">
               {`"${popupDetails?.bio}"`}
