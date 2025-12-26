@@ -29,7 +29,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
         <H2>{title}</H2>
       </AnimatedText>
 
-      <div className="flex flex-col lg:flex-row justify-between items-center">
+      <div className="flex flex-col lg:flex-row justify-between items-start">
         {/* Image Section */}
         <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden lg:w-[55%]">
           <div className="absolute right-0 top-0 min-h-[317px] lg:min-h-[600px] w-[100%] lg:w-full rounded-[20px]">

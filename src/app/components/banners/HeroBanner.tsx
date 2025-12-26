@@ -167,7 +167,7 @@ const HeroBanner = ({
                   className="object-cover block lg:hidden"
                 />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
               <div
                 className={`w-full h-full absolute z-[3] ${
                   centerText
@@ -250,7 +250,7 @@ const HeroBanner = ({
               <div
                 ref={lineVertical}
                 className={clsx(
-                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5`,
+                  `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
                   lineClassName
                 )}
               />
@@ -258,14 +258,14 @@ const HeroBanner = ({
                 <div
                   ref={lineHorizontal}
                   className={clsx(
-                    `absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5`
+                    `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`
                   )}
                 />
               )}
               <div
                 ref={starRef}
                 className={clsx(
-                  `absolute bottom-[34px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
+                  `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
                   bottomMiddleStarClassName
                 )}
               >
@@ -381,16 +381,16 @@ const HeroBanner = ({
             {/* starts & lines */}
             <div
               ref={lineVertical}
-              className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
+              className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white bottom-[52px] lg:bottom-[120px] h-[1px] z-5"
+              className="absolute w-full bg-white/40 bottom-[82px] lg:bottom-[120px] h-[1px] z-5"
             />
             <div
               ref={starRef}
               className="absolute 
-              bottom-[34px] lg:bottom-[84px] 
+              bottom-[64px] lg:bottom-[84px] 
               right-[57px] lg:right-[177px] 
               w-[38px] lg:w-[72px] 
               z-5 "

@@ -22,7 +22,7 @@ export default function TitleCardsContainer({
             {card.map(({ title, image, description }, i) => (
               <div
                 key={i}
-                className="sm:h-auto lg:min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-4 xl:p-8 flex flex-col justify-between"
+                className="sm:h-auto lg:min-h-[320px] w-full bg-[#EFF3F5] rounded-3xl p-5 xl:p-8 flex flex-col justify-between"
                 data-scroll
               >
                 {image?.url && (
@@ -31,10 +31,11 @@ export default function TitleCardsContainer({
                     alt={image?.alternativeText || "logo"}
                     width={48}
                     height={48}
+                    className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] "
                   />
                 )}
 
-                <div className="mt-3 md:mt-8 space-y-3">
+                <div className="mt-5 md:mt-8 space-y-3">
                   {title && <SubH2>{title}</SubH2>}
 
                   {description && <BodyText2>{description}</BodyText2>}

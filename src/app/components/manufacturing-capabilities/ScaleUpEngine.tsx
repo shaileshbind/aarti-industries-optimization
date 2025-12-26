@@ -19,7 +19,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const [expanded, setExpanded] = useState<number>(0);
 
   return (
-    <div className="fluid-container">
+    <div className="fluid-container lg:!mr-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-[60px]">
         {title && <H3 className="max-w-[424px]">{title}</H3>}
 
