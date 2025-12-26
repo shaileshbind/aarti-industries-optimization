@@ -60,7 +60,7 @@ const BlackInfoSection = ({
           <div className="grid mt-[12px] lg:mt-[90px] xl:justify-end">
             <FadeInReveal>
               {description && (
-                <BodyText1 className="xl:max-w-[620px] 2xl:max-w-[850px] text-grey-400 lg:text-white  2xl:!text-[24px] ">
+                <BodyText1 className="xl:max-w-[620px] 2xl:max-w-[850px] text-grey-400 lg:text-white">
                   {description}
                 </BodyText1>
               )}
