@@ -51,7 +51,12 @@ const Page = async () => {
         schemaData={seo?.schemaData}
       />
       {section_one && <CDMOBanner data={section_one} />}
-      {section_two && <GridCardsContainer data={section_two} />}
+      {section_two && (
+        <GridCardsContainer
+          data={section_two}
+          className="lg:py-[100px] py-[50px] pt-0"
+        />
+      )}
       {section_three && <CDMODriving data={section_three} />}
       {section_four && <CDMOE2E data={section_four} />}
       {section_five && <CardsSlider data={section_five} useLink />}

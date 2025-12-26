@@ -9,7 +9,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
 
   return (
     <div className="relative lg:h-[calc(100vh-70px)] ">
-      <div className="absolute inset-0 bg-black/60 z-[1]" />
+      <div className="absolute inset-0 bg-black/60 z-[1] hidden lg:block" />
       {/* Desktop */}
       {image?.url && (
         <div className="lg:absolute w-full h-full hidden lg:block">

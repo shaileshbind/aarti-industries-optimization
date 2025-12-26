@@ -251,7 +251,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         setMarginBottom(0);
         return;
       }
-      const contentHeight = contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const contentHeight =
+        contentContainer.scrollHeight || contentContainer.offsetHeight;
       const screenHeight = window.innerHeight;
       const totalHeight = contentHeight + 100;
 
@@ -281,7 +282,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       window.removeEventListener("resize", handleResize);
     };
   }, [active, details?.length, setMarginBottom]);
-  
+
   return (
     <>
       <div
@@ -396,15 +397,15 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                         ? 1
                         : 1.2
                     }
+                    spaceBetween={80}
                     loop={false}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     speed={800}
-
-                    modules={[Navigation, Mousewheel,Autoplay]}
+                    modules={[Navigation, Mousewheel, Autoplay]}
                     autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                }}
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
                     className="w-full relative"
                     navigation={{
                       nextEl: ".swiper-button-next-analytical",

@@ -51,7 +51,7 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       {section_one && <RDHeroBanner data={section_one} />}
-      {section_two && <RDInfo data={section_two} />}
+      {section_two && <RDInfo data={section_two} showLine />}
       {section_three && <ScrollableCardWithImage data={section_three} />}
       <RDSections
         analyticalExcData={section_four}

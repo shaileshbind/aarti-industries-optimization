@@ -1,6 +1,7 @@
 import { BodyText2, H2 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";
+import clsx from "clsx";
 
 type NumberCardProps = {
   imageSrc?: string;
@@ -8,6 +9,7 @@ type NumberCardProps = {
   title?: string;
   desc?: string;
   className?: string;
+  titleClassName?: string;
 };
 
 const NumberCard = ({
@@ -16,6 +18,7 @@ const NumberCard = ({
   desc,
   title,
   className,
+  titleClassName
 }: NumberCardProps) => {
   return (
     <div
@@ -33,7 +36,16 @@ const NumberCard = ({
         />
       ) : (
         <>
-          {title && <H2 className="text-orange-200 text-[40px] lg:text-[44px]">{title}</H2>}
+          {title && (
+            <H2
+              className={clsx(
+                `text-orange-200 text-[40px] lg:text-[44px]`,
+                titleClassName
+              )}
+            >
+              {title}
+            </H2>
+          )}
           {desc && <BodyText2>{desc}</BodyText2>}
         </>
       )}
