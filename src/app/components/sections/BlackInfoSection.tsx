@@ -46,7 +46,7 @@ const BlackInfoSection = ({
               fill
               className="hidden lg:block object-top object-cover"
             />
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
         )}
         <div className="lg:absolute w-full lg:py-[80px] px-[20px] lg:px-[60px] top-0 flex flex-col justify-between h-full">

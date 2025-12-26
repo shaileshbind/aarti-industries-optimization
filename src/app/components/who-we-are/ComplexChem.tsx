@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { isMobile } from "react-device-detect";
 import { BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
@@ -8,6 +7,7 @@ import "swiper/css/effect-fade";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
+import { useMediaQuery } from "@mui/material";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const { sectionTitle, content } = data;
@@ -17,6 +17,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const [progress, setProgress] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   const startProgress = useCallback(
     (index: number) => {

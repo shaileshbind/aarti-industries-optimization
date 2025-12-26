@@ -83,7 +83,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           </div>
         </div>
         {/* Right Content */}
-        <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-4 xl:p-8 flex items-center rounded-r-2xl">
+        <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-4 flex items-center rounded-r-2xl">
           {content[active]?.description && (
             <div
               dangerouslySetInnerHTML={{ __html: content[active].description }}
@@ -94,14 +94,14 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
       </div>}
       {/* Mobile Accordion */}
       {content?.length > 0 && (
-        <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
+        <div className="md:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
           {content?.map((tab, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={tab.id}
                 className={clsx(
-                  `border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out mx-[20px]`,
+                  `border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out mb-0`,
                   content?.length - 1 === index && "border-b-0"
                 )}
               >
@@ -109,7 +109,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                 {tab?.value && (
                   <button
                     className={clsx(
-                      "w-full text-left p-5 pt-2 rounded-2xl flex justify-between items-center transition-all duration-300 relative ",
+                      "w-full text-left p-5 rounded-2xl flex justify-between items-center transition-all duration-300 relative ",
                       isOpen
                         ? "bg-gradient-orange-1 text-white pt-5"
                         : "text-gray-700 hover:bg-gray-50"
@@ -148,7 +148,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   >
                     <div
                       dangerouslySetInnerHTML={{ __html: tab?.description }}
-                      className="p-5 text-[#0D2B3E] font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto"
+                      className="p-5 px-[30px] text-[#0D2B3E] font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto valueDescription"
                     />
                   </div>
                 )}

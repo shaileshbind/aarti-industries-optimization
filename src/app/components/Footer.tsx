@@ -10,7 +10,7 @@ const Footer = ({ data }: FooterProps) => {
     <footer>
       <div className="bg-white container !py-[30px] lg:!py-[60px] grid lg:grid-cols-4 gap-x-[60px]">
         <div className="lg:col-span-1 grid content-between">
-          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset]">
+          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset] w-[124px] md:w-[190px] h-12 md:h-[74px]">
             {Logo?.Logo?.url && (
               <Image
                 src={Logo?.Logo?.url}
@@ -18,6 +18,7 @@ const Footer = ({ data }: FooterProps) => {
                 width={190}
                 height={73}
                 priority
+                className="w-full h-full"
               />
             )}
             <div

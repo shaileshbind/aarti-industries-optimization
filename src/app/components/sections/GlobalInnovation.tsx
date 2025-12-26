@@ -25,7 +25,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   return (
     <section className="fluid-container flex flex-col justify-between my-[60px] lg:my-[120px]">
       {/* Animated Heading */}
-      <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-6">
+      <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-10">
         <H2>{title}</H2>
       </AnimatedText>
 
@@ -59,7 +59,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
         {/* Focus Items */}
         <div className="lg:w-[40%] w-full flex flex-col gap-4 lg:gap-5 mt-[30px] lg:mt-0">
           {focusSectionTitle && (
-            <SubH2 className="lg:mb-6 mb-4">{focusSectionTitle}</SubH2>
+            <SubH2 className="lg:mb-6 mb-2">{focusSectionTitle}</SubH2>
           )}
 
           {focus_item.map((item, index) =>
@@ -78,7 +78,9 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 <BodyText1 className="text-[#DC4C03]">
                   {item.order.padStart(2, "0")}
                 </BodyText1>
-                <BodyText1 className="lg:w-[60%]">{item.description}</BodyText1>
+                <BodyText1 className="lg:w-[60%] text-[#4C5861]">
+                  {item.description}
+                </BodyText1>
               </div>
             ) : (
               <ul
@@ -92,7 +94,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 }
               `}
               >
-                <li className="lg:w-[60%] list-disc pl-1 lg:pl-3">
+                <li className="lg:w-[60%] list-disc pl-1 lg:pl-3 text-[#4C5861] text-[14px] md:text-[16px] xl:text-[18px]">
                   {item.description}
                 </li>
               </ul>

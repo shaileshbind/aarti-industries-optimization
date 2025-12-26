@@ -51,6 +51,7 @@
   /* Fonts */
   --font-alte-hans: var(--font-alte-hans);
   --font-roboto: var(--font-roboto);
+  --font-inter: var(--font-inter);
 
   /* Colors */
   --color-background: var(--background);
@@ -721,9 +722,11 @@ body {
   font-size: 16px;
 }
 
-.valueDescription p {
-  line-height: 1.2;
+.valueDescription p,
+.valueDescription span {
+  line-height: 154%;
   font-family: "Alte Hans Grotesk";
+  color: #002f50;
 }
 
 @media (max-width: 1024px) {
