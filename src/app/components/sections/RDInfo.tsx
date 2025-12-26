@@ -79,7 +79,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
     <div className="w-full">
       <div
         ref={wrapperRef}
-        className="container mx-auto mb-[72px] lg:mb-[140px] mt-[unset] lg:mt-[50px]"
+        className="container mx-auto mb-[72px] lg:mb-[140px] mt-[-24px] lg:mt-[55px]"
       >
         {/* Top Line */}
         {showLine && (
@@ -97,7 +97,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
         )}
         {/* Text content */}
         {description && (
-          <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">
+          <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-[36px]">
             <AnimatedText>
               <H3>{description}</H3>
             </AnimatedText>

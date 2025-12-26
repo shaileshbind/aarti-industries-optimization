@@ -57,7 +57,7 @@ const page = async () => {
       {section_five && <ImpactStoriesSlider
         data={section_five}
         />}
-       {section_six && <GridCardsSocial data={section_six} />}
+      {section_six && <GridCardsSocial data={section_six} headingClassName="!text-[36px]"/>}
       {section_seven && (
         <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
           <EducationDevelopment data={section_seven} />

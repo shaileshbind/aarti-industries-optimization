@@ -161,7 +161,7 @@ const TabsAutoplaySection = ({
                   className={clsxN(
                     `${
                       index === active ? "text-orange-200" : "text-[#4C5861]"
-                    } py-4 relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
+                    } py-4 relative z-10 transition-colors duration-300 group-hover:text-orange-200 !font-alte-hans`,
                     tabClass
                   )}
                 >
@@ -252,7 +252,7 @@ const TabsAutoplaySection = ({
                       onMouseLeave={handleMouseLeave}
                     >
                       {tabItem.card[0]?.title && (
-                        <SubH2 className="mt-[24px]">
+                        <SubH2 className="mt-[24px] !font-roboto">
                           {tabItem.card[0].title}
                         </SubH2>
                       )}
@@ -274,9 +274,9 @@ const TabsAutoplaySection = ({
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
-                                  className="object-cover object-top w-5 h-5 mt-[2px]"
-                                  width={16}
-                                  height={16}
+                                  className="object-cover object-top w-5 h-5 mt-[5px]"
+                                  width={14}
+                                  height={14}
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>
@@ -382,7 +382,7 @@ const TabsAutoplaySection = ({
                           )}
                         </div>
                         {item?.card[0]?.title && (
-                          <SubH2 className="mt-[14px]">
+                          <SubH2 className="mt-[14px] !font-roboto">
                             {item.card[0].title}
                           </SubH2>
                         )}
