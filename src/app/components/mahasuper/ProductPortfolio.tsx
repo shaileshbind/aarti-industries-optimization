@@ -60,7 +60,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                         alt="check-icon"
                         width={16}
                         height={16}
-                        className=""
+                        className="mt-[5px]"
                       />
                       <BodyText2 className="text-grey-400">
                         {item?.title}

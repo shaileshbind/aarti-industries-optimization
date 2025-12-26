@@ -107,42 +107,44 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                             )}
 
                             {/* Navigation Buttons */}
-                            <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
-                                <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-2 right-[100px]">
-                                    <button
-                                        className={`swiper-button-prev-useBySection transition-opacity ${isBeginning
-                                                ? "pointer-events-none opacity-30"
-                                                : "cursor-pointer opacity-100"
-                                            }`}
-                                        aria-label="Previous slide"
-                                        aria-disabled={isBeginning}
-                                    >
-                                        <Image
-                                            src="/images/home/chevron-right-orange.svg"
-                                            alt="Previous"
-                                            width={34}
-                                            height={34}
-                                            className="rotate-180"
-                                        />
-                                    </button>
-                                    <button
-                                        className={`swiper-button-next-useBySection transition-opacity ${isEnd
-                                                ? "pointer-events-none opacity-30"
-                                                : "cursor-pointer opacity-100"
-                                            }`}
-                                        aria-label="Next slide"
-                                        aria-disabled={isEnd}
-                                    >
-                                        <Image
-                                            src="/images/home/chevron-right-orange.svg"
-                                            alt="Next"
-                                            width={34}
-                                            height={34}
-                                        />
-                                    </button>
-                                </div>
-                                <div className="home-by-use-section-swiper mt-4 bottom-6 h-[2px] max-w-[100%] lg:max-w-[78%] relative" />
-                            </div>
+              <div className="flex items-center gap-5 lg:gap-10 py-[30px] ml-[20px] lg:ml-0 mr-[20px] lg:mr-[60px]">
+                <div className="flex-1 h-[2px] relative min-w-0">
+                  <div className="home-by-use-section-swiper w-full h-full" />
+                </div>
+                <div className="hidden lg:flex gap-3 shrink-0 items-center">
+                  <button
+                    className={`swiper-button-prev-useBySection transition-opacity ${
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Previous slide"
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Previous"
+                      width={34}
+                      height={34}
+                      className="rotate-180"
+                    />
+                  </button>
+                  <button
+                    className={`swiper-button-next-useBySection transition-opacity ${
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Next slide"
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Next"
+                      width={34}
+                      height={34}
+                    />
+                  </button>
+                </div>
+              </div>
                         </div>
                     </div>
                 </div>

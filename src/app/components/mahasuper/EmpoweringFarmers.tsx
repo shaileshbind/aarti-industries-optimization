@@ -10,10 +10,10 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
     const { title, description, states, subtitle, stats, ctaTitle,  image } = data;
     const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   return (
-    <section className=" md:py-20 py-[30px] overflow-hidden ">
+    <section className="pb-[72px] overflow-hidden  ">
         <div className="container">
             <div className="grid grid-cols-12 w-full items-center">
-                <div className=" md:col-span-6 col-span-12 md:pr-20">
+                <div className=" xl:col-span-6 col-span-12 xl:pr-20">
                     <div className="flex flex-col gap-2">
                     {title && (
                         <H3>{title}</H3>
@@ -57,7 +57,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                     )}
                 </div>
                 </div>
-                <div className=" md:col-span-6 col-span-12 mt-20 md:mt-0">
+                <div className=" xl:col-span-6 col-span-12 mt-20 xl:mt-0">
                     {image && (
                         <Image 
                             src={image.url} 
@@ -73,9 +73,8 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
         <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-        // document={document}
-        prefillCategory="Business Products / Services"
-        prefillSubCategory="LAB Testing (Analytical/ Safety)"
+        prefillCategory=""
+        prefillSubCategory=""
       />
     </section>
   );

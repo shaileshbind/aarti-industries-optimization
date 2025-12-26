@@ -60,7 +60,7 @@ const Footer = ({ data }: FooterProps) => {
               {menu?.[0]?.category && (
                 <Tags
                   title={menu[0]?.category}
-                  className="mb-[20px] uppercase"
+                  className="mb-[14px] uppercase"
                 />
               )}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
@@ -105,17 +105,17 @@ const Footer = ({ data }: FooterProps) => {
               </div>
             </div>
           </div>
-          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px] ">
+          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px]">
             {menu?.slice(1).map((section) => (
               <div key={section?.id}>
                 {section?.category && (
                   <Tags
                     title={section?.category}
-                    className="mb-[20px] uppercase"
+                    className="mb-[14px] uppercase"
                   />
                 )}
                 <div>
-                  <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
+                  <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999] ">
                     {section?.subMenu?.map((item) => {
                       return (
                         <div

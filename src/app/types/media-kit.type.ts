@@ -14,6 +14,7 @@ export type VideoProps = {
     url: string;
     alternativeText: string;
   };
+  videoThumbnail?:ImageProps
 };
 
 export type CardImageProps = {
