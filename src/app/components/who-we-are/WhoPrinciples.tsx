@@ -83,11 +83,11 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           </div>
         </div>
         {/* Right Content */}
-        <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-12 flex items-center rounded-r-2xl">
+        <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-4 xl:p-8 flex items-center rounded-r-2xl">
           {content[active]?.description && (
             <div
               dangerouslySetInnerHTML={{ __html: content[active].description }}
-              className="font-normal text-[18px] md:text-[22px] xl:text-[24px] leading-[140%] text-blue-200 font-alte-hans"
+              className="font-normal leading-[140%] text-blue-200 font-alte-hans valueDescription"
             />
           )}
         </div>

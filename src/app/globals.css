@@ -543,7 +543,7 @@ body {
   border-radius: 20px;
 }
 
-.potential-accordion:nth-child(3)::after {
+/* .potential-accordion:nth-child(2)::after {
   content: "";
   position: absolute;
   right: 6%;
@@ -558,12 +558,12 @@ body {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
   pointer-events: none;
-}
+} */
 
-.potential-accordion:nth-child(3)::before {
+.potential-accordion:nth-child(2)::before {
   content: "";
   position: absolute;
-  right: 6%;
+  right: 6.1%;
   top: -32px;
   width: 32px;
   height: 32px;
@@ -607,10 +607,10 @@ body {
 }
 
 @media (max-width: 1280px) {
-  .potential-accordion:nth-child(3)::after {
+  .potential-accordion:nth-child(2)::after {
     right: 5.8%;
   }
-  .potential-accordion:nth-child(3)::before {
+  .potential-accordion:nth-child(2)::before {
     right: 5.8%;
   }
 }
@@ -721,11 +721,16 @@ body {
   font-size: 16px;
 }
 
+.valueDescription p {
+  line-height: 1.2;
+  font-family: "Alte Hans Grotesk";
+}
+
 @media (max-width: 1024px) {
-  .potential-accordion:nth-child(3)::after {
+  .potential-accordion:nth-child(2)::after {
     right: 5.5%;
   }
-  .potential-accordion:nth-child(3)::before {
+  .potential-accordion:nth-child(2)::before {
     right: 5.5%;
   }
 }
@@ -735,10 +740,10 @@ body {
     margin-top: -90px !important;
   }
 
-  .potential-accordion:nth-child(3)::after {
+  .potential-accordion:nth-child(2)::after {
     right: 4.4%;
   }
-  .potential-accordion:nth-child(3)::before {
+  .potential-accordion:nth-child(2)::before {
     right: 4.4%;
   }
 
@@ -775,11 +780,11 @@ body {
 }
 
 @media (max-width: 480px) {
-  .potential-accordion:nth-child(3)::after {
+  .potential-accordion:nth-child(2)::after {
     right: 2.6%;
   }
-  .potential-accordion:nth-child(3)::before {
-    right: 2.6%;
+  .potential-accordion:nth-child(2)::before {
+    right: 2.2%;
   }
 
   .marquee {

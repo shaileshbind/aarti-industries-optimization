@@ -143,12 +143,12 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
               </div>
             </div>
             {rightSectionImage?.url && (
-              <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
+              <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden transition-all duration-700">
                 <Image
                   src={rightSectionImage?.url}
                   alt={rightSectionImage?.alternativeText || "img"}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-all duration-300 hover:scale-105"
                 />
               </div>
             )}

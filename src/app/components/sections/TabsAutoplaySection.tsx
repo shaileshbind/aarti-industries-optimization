@@ -199,7 +199,7 @@ const TabsAutoplaySection = ({
         >
           {data?.map((tabItem) => (
             <SwiperSlide key={tabItem.id}>
-              <div className="grid grid-cols-[1fr_500px] gap-x-[40px] min-h-[520px] h-full">
+              <div className="grid grid-cols-[1fr_500px] gap-x-[60px] min-h-[520px] h-full">
                 {tabItem?.card?.[0] && (
                   <>
                     <div className="relative min-h-[520px] h-full rounded-[16px] overflow-hidden">
