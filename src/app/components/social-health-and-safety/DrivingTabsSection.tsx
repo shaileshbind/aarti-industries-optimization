@@ -218,7 +218,7 @@ const DrivingTabsSection = ({
                     </div>
                     <div>
                       {tabItem.cards[0]?.title && (
-                        <SubH2 className="mt-[24px]">
+                        <SubH2 className="mt-[24px] !font-roboto">
                           {tabItem.cards[0].title}
                         </SubH2>
                       )}
