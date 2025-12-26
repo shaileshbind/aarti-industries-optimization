@@ -25,7 +25,7 @@ const HomeMap = () => {
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
           Growing Across Markets and Beyond Borders
         </H2>
-        <div className="relative w-full h-[180px] lg:h-[550px] mb-[100px] ">
+        <div className="relative w-full h-[180px] lg:h-[550px] mb-[50px] lg:mb-[100px] ">
           <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
             <DesktopMapSvg
               hoverRestWorld={() => setActiveBlip(0)}

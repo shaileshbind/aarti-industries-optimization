@@ -112,19 +112,19 @@ const Footer = ({ data }: FooterProps) => {
                 {section?.category && (
                   <Tags
                     title={section?.category}
-                    className="mb-[14px] uppercase"
+                    className="mb-[7px] lg:mb-[14px] uppercase"
                   />
                 )}
                 <div>
-                  <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999] ">
+                  <div className="text-[14px] lg:py-[5px] font-roboto font-normal text-[#999999] ">
                     {section?.subMenu?.map((item) => {
                       return (
                         <div
                           key={item?.id}
-                          className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]"
+                          className="text-[14px] lg:py-[5px] font-roboto font-normal text-[#999999]"
                         >
                           {item?.title}
-                          <div className="grid">
+                          <div className="grid mb-4 lg:mb-0">
                             {item?.item?.map((items) => {
                               const link =
                                 items?.cta_link?.link ?? items?.externalLink;

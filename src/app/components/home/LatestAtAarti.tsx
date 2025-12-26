@@ -126,7 +126,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   }, [activeTab]);
 
   const currentCard = card[activeTab];
-  console.log("sdwdf", card);
+  // console.log("sdwdf", card);
   const postsContent = Array.isArray(currentCard?.postContent)
     ? currentCard.postContent
     : currentCard?.postContent
@@ -137,7 +137,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
 
   return (
-    <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
+    <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
       <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
         {sectionTitle && (
           <div className="max-w-[100%] md:max-w-fit">
@@ -159,12 +159,12 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       </div>
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
-        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
-          <div className="overflow-x-auto w-full ">
+        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px] overflow-x-auto">
+          <div className=" w-full ">
             <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
               <div
                 ref={containerRef}
-                className="relative flex gap-x-[14px] z-10 px-1 w-max"
+                className="relative flex gap-x-[5px] md:gap-x-[10px] z-10 px-1 w-max"
               >
                 <div
                   aria-hidden="true"
@@ -190,7 +190,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                       }
                     }}
                     onClick={() => handleTabClick(index)}
-                    className={`text-grey-400 cursor-pointer text-[14px] font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
+                    className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
                       activeTab === index ? "text-white" : "hover:bg-grey-200"
                     }`}
                   >
@@ -221,12 +221,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   releaseOnEdges: true,
                 }}
                 pagination={
-                  showProgressBar
-                    ? {
-                        el: ".home-latest-at-swiper",
+                   
+                        {el: ".home-latest-at-swiper",
                         type: "progressbar",
                       }
-                    : undefined
                 }
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
@@ -245,11 +243,11 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ))}
               </Swiper>
             </div>
-            {showProgressBar && (
+            {/* {showProgressBar && ( */}
               <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
                 <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
               </div>
-            )}
+            {/* )} */}
           </>
         )}
 

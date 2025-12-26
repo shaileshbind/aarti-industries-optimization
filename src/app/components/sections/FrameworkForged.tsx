@@ -10,6 +10,7 @@ import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
+import { isMobile } from "react-device-detect";
 
 gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
@@ -71,7 +72,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
   const secondaryImageClasses =
-    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-42px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] !h-[calc(100%-42px)] lg:!h-[calc(100%-93px)] !w-[calc(100%-71px)] lg:!w-[calc(100%-210px)]";
   const imageTransitionClasses = "transition-all duration-700 ease-out";
   const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
@@ -224,7 +225,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                           ` relative w-full overflow-hidden ${
                             layout === "imgLeftContentRight"
                               ? " order-1 lg:order-1"
-                              : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px]  lg:hidden block"
+                              : "lg:mr-[60px] order-1 lg:order-2 pt-[100%] md:pt-[unset]  md:h-[317px] lg:h-[640px]  lg:hidden block"
                           }`
                         )}
                       >
@@ -256,7 +257,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                           </div>
                         ) : (
                           <div
-                            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+                            className={`absolute right-0 top-0 md:pt-[unset] pt-[100%]   md:min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
                           >
                             {items?.image?.url && (
                               <Image
@@ -275,12 +276,11 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                 key={`main-${currentImageIndex}`}
                                 src={items?.image?.url}
                                 alt={items?.image?.alternativeText || "banner"}
-                                width={500}
-                                height={548}
+                                fill
                                 sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                                className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
+                                className={`${secondaryImageClasses} ${isMobile ? "scale-100" : mainAnimationClasses}`} // Applied main classes
                               />
                             )}
                             <Image
@@ -297,7 +297,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                               height={72}
                               className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                             />
-                            <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
+                            <div className="absolute min-h-screen bg-white w-[1px] right-[69px] lg:right-[206.5px] top-0" />
                             <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
                           </div>
                         )}
@@ -307,7 +307,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                           0{index + 1}-<span>0{card?.length}</span>
                         </BodyText2>
                       </div>
-                      <SubH1 className={`text-blue-200`}>{items?.title}</SubH1>
+                      <SubH1 className={`text-blue-200 my-3`}>{items?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
                         {items?.description}
                       </BodyText2>
