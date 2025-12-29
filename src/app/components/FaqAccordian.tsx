@@ -51,7 +51,7 @@ const FaqAccordion = ({
                 alt="img"
                 width={28}
                 height={28}
-                className={clsx(imageClassName)}
+                className={clsx("flex-shrink-0", imageClassName)}
               />
             )
           ) : null

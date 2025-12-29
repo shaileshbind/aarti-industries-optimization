@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Roboto } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
 import Header from "@/app/components/Header";
 import Footer from "./components/Footer";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
@@ -9,6 +9,7 @@ import SEO from "./components/SEO";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import clsx from "clsx";
 
 export const revalidate = 1;
 
@@ -25,6 +26,13 @@ const roboto = Roboto({
   display: "swap",
 });
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export default async function RootLayout({
   children,
 }: {
@@ -35,8 +43,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <SEO />
-      <body className={roboto.variable}>
-        <Link href="/contact" className="fixed bottom-4 md:bottom-10 right-4 md:right-10 z-[100] transition-all duration-500 hover:scale-105 hover:rotate-10 w-12 h-12 md:w-[54px] md:h-[54px]">
+      <body className={clsx(roboto.variable, inter.variable)}>
+        <Link
+          href="/contact"
+          className="fixed bottom-4 md:bottom-10 right-4 md:right-10 z-[100] transition-all duration-500 hover:scale-105 hover:rotate-10 w-12 h-12 md:w-[54px] md:h-[54px]"
+        >
           <Image
             src={"/images/contact_phone.svg"}
             alt="phone"

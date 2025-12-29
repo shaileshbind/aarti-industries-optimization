@@ -79,12 +79,12 @@ const SliderCard: FC<SliderCardProps> = ({
           )}
         </div>
         {heading && (
-          <SubH1 className="mb-[10px] lg:mb-[14px] mt-[14px] lg:mt-[unset]">
+          <SubH1 className="lg:mb-[14px] mt-[14px] lg:mt-[unset]">
             {heading}
           </SubH1>
         )}
         {description && (
-          <BodyText1 className="mt-[unset] lg:mt-[20px]">
+          <BodyText1 className="mt-[20px] lg:mt-[20px]">
             {description}
           </BodyText1>
         )}

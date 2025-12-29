@@ -171,8 +171,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               } ${isTransitioning ? "pointer-events-none" : ""}`}
             >
               <BodyText2
-                className={`transition-all duration-300 whitespace-nowrap ${
-                  active === index ? "text-orange-200" : "text-grey-200"
+                className={`transition-all duration-300 whitespace-nowrap  ${
+                  active === index ? "text-orange-200" : "text-[#9997A2]"
                 }`}
               >
                 {items?.year}

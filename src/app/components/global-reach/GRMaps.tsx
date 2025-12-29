@@ -204,8 +204,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                           Tarapur
                         </BodyText2>
                       </div>
-                      <div className="w-fit">
-                        <BodyText2 className="text-grey-300">
+                      <div   onClick={() => setActive(5)}
+                        className="cursor-pointer w-fit">
+                        <BodyText2 className={`${
+                            active === 5 ? "text-grey-400" : "text-grey-300"
+                          }`}>
                           Jhagadia
                         </BodyText2>
                       </div>
@@ -285,10 +288,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   hoverTarapur={() => setActive(2)}
                   hoverNaviM={() => setActive(3)}
                   hoverVapi={() => setActive(4)}
+                  hoverJhagadia={()=> setActive(5)}
                 />
                 <div
                   className={`${
-                    [0, 1, 2].includes(active) ? "bg-[#e55e2d]" : "bg-blue-100"
+                    [0, 1, 2,5].includes(active) ? "bg-[#e55e2d]" : "bg-blue-100"
                   }  p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]`}
                 >
                   <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
@@ -296,14 +300,16 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       <Image
                         src={
                           active === 0
-                            ? "/images/global-reach/gr-banner.png"
+                            ? "/images/global-reach/Bachau.webp"
                             : active === 1
-                            ? "/images/rd/rd-banner.png"
+                            ? "/images/global-reach/Dahej.webp"
                             : active === 2
-                            ? "/images/cdmo/cdmo-driving-banner.png"
+                            ? "/images/global-reach/Tarapur.webp"
                             : active === 3
-                            ? "/images/home/blog1.png"
-                            : "/images/home/framework-forged-1.png"
+                            ? "/images/global-reach/NaviM.webp"
+                            : active === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
                         }
                         alt="img"
                         fill
@@ -313,16 +319,18 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                         <Image
                           src={
-                            active === 0
-                              ? "/images/global-reach/gr-banner.png"
-                              : active === 1
-                              ? "/images/rd/rd-banner.png"
-                              : active === 2
-                              ? "/images/cdmo/cdmo-driving-banner.png"
-                              : active === 3
-                              ? "/images/home/blog1.png"
-                              : "/images/home/framework-forged-1.png"
-                          }
+                          active === 0
+                            ? "/images/global-reach/Bachau.webp"
+                            : active === 1
+                            ? "/images/global-reach/Dahej.webp"
+                            : active === 2
+                            ? "/images/global-reach/Tarapur.webp"
+                            : active === 3
+                            ? "/images/global-reach/NaviM.webp"
+                            : active === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
+                        }
                           alt="img"
                           fill
                           className="object-cover scale-110"
@@ -339,7 +347,9 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       ? "Tarapur"
                       : active === 3
                       ? "Navi Mumbai"
-                      : "Vapi"}
+                      : active === 4
+                      ? "Vapi"
+                      : "Jhagadia"}
                   </BodyText2>
                 </div>
               </div>
@@ -374,24 +384,26 @@ const GRMaps = ({ data }: GRMapsProps) => {
             <StateMapSvg width="100%" height="300" />
             <div
               className={`${
-                [0, 1, 2].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
+                [0, 1, 2,5].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
               }  p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]`}
             >
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
                     key={activeMob}
-                    src={
-                      activeMob === 0
-                        ? "/images/global-reach/gr-banner.png"
-                        : activeMob === 1
-                        ? "/images/rd/rd-banner.png"
-                        : activeMob === 2
-                        ? "/images/cdmo/cdmo-driving-banner.png"
-                        : activeMob === 3
-                        ? "/images/home/blog1.png"
-                        : "/images/home/framework-forged-1.png"
-                    }
+                     src={
+                          activeMob === 0
+                            ? "/images/global-reach/Bachau.webp"
+                            : activeMob === 1
+                            ? "/images/global-reach/Dahej.webp"
+                            : activeMob === 2
+                            ? "/images/global-reach/Tarapur.webp"
+                            : activeMob === 3
+                            ? "/images/global-reach/NaviM.webp"
+                            : activeMob === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
+                        }
                     alt="img"
                     fill
                     className="object-cover scale-110"
@@ -400,17 +412,19 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                     <Image
                       key={`inner-${activeMob}`}
-                      src={
-                        activeMob === 0
-                          ? "/images/global-reach/gr-banner.png"
-                          : activeMob === 1
-                          ? "/images/rd/rd-banner.png"
-                          : activeMob === 2
-                          ? "/images/cdmo/cdmo-driving-banner.png"
-                          : activeMob === 3
-                          ? "/images/home/blog1.png"
-                          : "/images/home/framework-forged-1.png"
-                      }
+                       src={
+                          activeMob === 0
+                            ? "/images/global-reach/Bachau.webp"
+                            : activeMob === 1
+                            ? "/images/global-reach/Dahej.webp"
+                            : activeMob === 2
+                            ? "/images/global-reach/Tarapur.webp"
+                            : activeMob === 3
+                            ? "/images/global-reach/NaviM.webp"
+                            : activeMob === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
+                        }
                       alt="img"
                       fill
                       className="object-cover scale-110"
@@ -427,12 +441,14 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   ? "Tarapur"
                   : activeMob === 3
                   ? "Navi Mumbai"
-                  : "Vapi"}
+                  : activeMob === 4
+                  ? "Vapi"
+                  : "Jhagadia"}
               </BodyText2>
             </div>
           </div>
-          <div className="my-[62px] px-[20px] w-full grid lg:grid-cols-2 gap-y-[16px] gap-x-[5px] items-start lg:justify-between">
-            <div className="border-b  border-grey-200 pb-[16px] lg:pb-[unset]">
+          <div className="my-[62px] px-[20px] w-full grid lg:grid-cols-2 gap-y-[14px] gap-x-[5px] items-start lg:justify-between">
+            <div className="border-b  border-grey-200 pb-[14px] lg:pb-[unset]">
               <div className="flex gap-x-[12px] items-center w-full">
                 <Image
                   src="/images/global-reach/blip-orange.svg"
@@ -443,7 +459,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 />
                 <SubH3 className="!text-[18px]">Manufacturing Facilities</SubH3>
               </div>
-              <div className="mt-[20px] grid grid-cols-2">
+              <div className="mt-[12px] grid grid-cols-2">
                 <div
                   onClick={() => setActiveMob(2)}
                   className="cursor-pointer w-fit"
@@ -456,8 +472,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     Tarapur
                   </BodyText2>
                 </div>
-                <div className="w-fit">
-                  <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
+                <div    onClick={() => setActiveMob(5)}
+                  className="cursor-pointer w-fit">
+                  <BodyText2   className={`${
+                      activeMob === 5 ? "text-grey-400" : "text-grey-300"
+                    }`}>Jhagadia</BodyText2>
                 </div>
                 <div
                   onClick={() => setActiveMob(0)}
@@ -496,7 +515,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 />
                 <SubH3 className="!text-[18px]">R&D Centres</SubH3>
               </div>
-              <div className="mt-[20px] grid grid-cols-2">
+              <div className="mt-[12px] grid grid-cols-2">
                 <div
                   onClick={() => setActiveMob(4)}
                   className="cursor-pointer w-fit"

@@ -4,6 +4,7 @@ interface StateMapProps {
   hoverTarapur?: () => void;
   hoverNaviM?: () => void;
   hoverVapi?: () => void;
+  hoverJhagadia?: () => void;
   width?: string;
   height?: string;
 }
@@ -16,6 +17,7 @@ const StateMapSvg = ({
   hoverTarapur,
   hoverNaviM,
   hoverVapi,
+  hoverJhagadia,
 }: StateMapProps) => {
   return (
     <svg
@@ -60,20 +62,37 @@ const StateMapSvg = ({
       />
       {/* Dahej */}
       <circle
-        cx="271.984"
-        cy="172.387"
+        cx="255.984"
+        cy="178.387"
         r="10.8886"
         fill="#F9C095"
         className="hover:cursor-pointer"
         onMouseEnter={hoverDahej}
       />
       <circle
-        cx="271.984"
-        cy="172.387"
+        cx="255.984"
+        cy="178.387"
         r="6.53319"
         fill="#F36633"
         className="hover:cursor-pointer"
         onMouseEnter={hoverDahej}
+      />
+      {/* Jhagadia */}
+      <circle
+        cx="280.984"
+        cy="178.387"
+        r="10.8886"
+        fill="#F9C095"
+        className="hover:cursor-pointer"
+        onMouseEnter={hoverJhagadia}
+      />
+      <circle
+        cx="280.984"
+        cy="178.387"
+        r="6.53319"
+        fill="#F36633"
+        className="hover:cursor-pointer"
+        onMouseEnter={hoverJhagadia}
       />
       {/* Tarapur */}
       <circle

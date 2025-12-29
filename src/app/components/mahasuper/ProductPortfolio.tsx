@@ -5,8 +5,15 @@ import { BodyText2, SubH2, SubH3 } from "../Typography2";
 import ParallaxImage from "../ParallaxImage";
 import { ProductPortfolioProps } from "@/app/types/mahasuper.type";
 
-const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => { 
-  const { image, cardSectionOneTitle, cardSectionOneDescription, cardSectionTwoTitle, cardSectionOne, cardSectionTwo } = data;
+const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
+  const {
+    image,
+    cardSectionOneTitle,
+    cardSectionOneDescription,
+    cardSectionTwoTitle,
+    cardSectionOne,
+    cardSectionTwo,
+  } = data;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -14,7 +21,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
   };
 
   return (
-    <section className="h-auto min-h-[calc(100vh-100px)] md:py-[100px] py-[50px] relative w-full md:w-[calc(100%-120px)] md:mx-[60px] flex-col sm:flex-row flex items-center">
+    <section className="h-auto min-h-[calc(100vh-100px)] md:py-[100px] pt-[20px] pb-[50px] relative w-full md:w-[calc(100%-120px)] md:mx-[60px] flex-col sm:flex-row flex items-center">
       <div className="sm:absolute top-0 left-0 w-full h-full  rounded-[20px] overflow-hidden">
         {image?.url && (
           <Image
@@ -40,41 +47,43 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
           {/* Main Content Section - Always Visible */}
           <div className="sm:pt-[40px] sm:pb-[120px] pt-7  flex flex-col">
             {cardSectionOneTitle && (
-              <SubH2 className="w-full pb-6 px-[20px] sm:px-[42px] sm:!text-[30px]">
+              <SubH2 className="w-full pb-2 md:pb-6 md:px-[20px] sm:px-[42px] sm:!text-[30px]">
                 {cardSectionOneTitle}
               </SubH2>
             )}
 
             {cardSectionOneDescription && (
               <>
-              <BodyText2 className="pb-7 px-[20px] sm:px-[42px]">
-                {cardSectionOneDescription}
-              </BodyText2>
-              <div className="flex flex-col gap-2 px-[20px] sm:px-[40px]">
-              {cardSectionOne?.length > 0 && cardSectionOne?.map(
-                (item, index) =>
-                  item?.title && (
-                    <div key={index} className="flex items-start gap-3">
-                      <Image
-                        src="/images/star-orange.svg"
-                        alt="check-icon"
-                        width={16}
-                        height={16}
-                        className="mt-[5px]"
-                      />
-                      <BodyText2 className="text-grey-400">
-                        {item?.title}
-                      </BodyText2>
-                    </div>
-                  )
-              )}
-              </div>
-</>
+                <BodyText2 className="pb-7 md:px-[20px] sm:px-[42px]">
+                  {cardSectionOneDescription}
+                </BodyText2>
+                <div className="flex flex-col gap-2 md:px-[20px] sm:px-[40px]">
+                  {cardSectionOne?.length > 0 &&
+                    cardSectionOne?.map(
+                      (item, index) =>
+                        item?.title && (
+                          <div key={index} className="flex items-start gap-3">
+                            <Image
+                              src="/images/star-orange.svg"
+                              alt="check-icon"
+                              width={16}
+                              height={16}
+                              className="mt-[5px]"
+                            />
+                            <BodyText2 className="text-grey-400">
+                              {item?.title}
+                            </BodyText2>
+                          </div>
+                        )
+                    )}
+                </div>
+              </>
             )}
 
             <div
-              className={`hidden sm:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 overflow-hidden ${isOpen ? "rounded-2xl h-full" : "rounded-b-3xl h-[84px]"
-                }`}
+              className={`hidden sm:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 overflow-hidden ${
+                isOpen ? "rounded-2xl h-full" : "rounded-b-3xl h-[84px]"
+              }`}
             >
               {/* Accordion Header - Always Visible */}
               {cardSectionTwoTitle && (
@@ -82,12 +91,11 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                   onClick={toggleAccordion}
                   className="w-full py-6 px-[42px] flex justify-between items-center cursor-pointer"
                 >
-                  <SubH3 className="text-white">
-                    {cardSectionTwoTitle}
-                  </SubH3>
+                  <SubH3 className="text-white">{cardSectionTwoTitle}</SubH3>
                   <span
-                    className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
-                      }`}
+                    className={`text-white text-3xl font-light transition-transform duration-300 ${
+                      isOpen ? "rotate-45" : ""
+                    }`}
                   >
                     +
                   </span>
@@ -143,12 +151,11 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               onClick={toggleAccordion}
               className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
             >
-              <SubH2 className="text-white">
-                {cardSectionTwoTitle}
-              </SubH2>
+              <SubH2 className="text-white">{cardSectionTwoTitle}</SubH2>
               <span
-                className={`text-white text-3xl font-light transition-transform duration-300 ${isOpen ? "rotate-45" : ""
-                  }`}
+                className={`text-white text-3xl font-light transition-transform duration-300 ${
+                  isOpen ? "rotate-45" : ""
+                }`}
               >
                 +
               </span>
@@ -165,8 +172,8 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               `}
             >
               {/* Capabilities List */}
-              <div className="px-[22px] pb-9">
-                <div className="space-y-4 ">
+              <div className="px-[22px] pb-5 md:pb-9">
+                <div className="space-y-2 md:space-y-4">
                   {cardSectionTwo?.map(
                     (capability, index) =>
                       capability?.title && (
@@ -189,8 +196,6 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
             </div>
           )}
         </div>
-
-        
       </div>
     </section>
   );

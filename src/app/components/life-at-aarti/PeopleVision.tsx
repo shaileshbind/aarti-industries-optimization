@@ -41,7 +41,15 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
-  const [slideWidth] = useState((window.innerWidth / 1.27)*40/100);
+  const [slideWidth, setSlideWidth] = useState(0);
+  
+  // Calculate slideWidth after component mounts (client-side only)
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+    }
+  }, []);
+  
   const { setMarginBottom } = useMargin();
 
   const [indicator, setIndicator] = useState({
@@ -356,7 +364,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       ctx.revert();
       requestAnimationFrame(() => ScrollTrigger.refresh());
     };
-  }, [content]);
+  }, [content, slideWidth]);
 
   useLayoutEffect(() => {
     measureIndicator();

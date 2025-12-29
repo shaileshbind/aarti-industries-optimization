@@ -7,6 +7,7 @@ import { H2, BodyText1 } from "../Typography2";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import Button from "../Button";
 import { FourtyYearsProps } from "@/app/types/home.type";
+import isMobile from "react-device-detect";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,9 +26,9 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
     const ctx = gsap.context(() => {
       gsap.fromTo(
         topLineRef.current,
-        { scaleY: 0, transformOrigin: "top center" },
+        { height: '0px', transformOrigin: "top center" },
         {
-          scaleY: 1,
+          height: isMobile ? '64px' : '120px',
           ease: "power2.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
@@ -69,21 +70,15 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         {/* Top Line */}
         <div
           ref={topLineRef}
-          className="mx-auto h-[64px] md:h-[120px] w-[1px] mb-6 lg:mb-0"
+          className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100"
         >
-          <Image
-            src="/images/home/line.svg"
-            alt="line"
-            width={2}
-            height={120}
-            className="h-full"
-          />
+           
         </div>
         {/* Text content */}
         <div className="max-w-[unset] lg:max-w-[880px] mx-auto text-center mt-4">
           {sectionTitle && (
             <FadeInRevealBlur>
-              {<H2 className="text-blue-200 font-light">{sectionTitle}</H2>}
+              {<H2 className="text-orange-100 font-light">{sectionTitle}</H2>}
             </FadeInRevealBlur>
           )}
 

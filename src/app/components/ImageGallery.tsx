@@ -8,6 +8,7 @@ import { FadeInRevealBlur } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
 import Button from "./Button";
 import { ButtonProps, ImageProps } from "../types/global.type";
+import { isMobile } from "react-device-detect";
 
 type FosteringSafeProps = {
   data?: {
@@ -265,14 +266,18 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         {ctaButton?.title && (
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
-              <Button
-                href={
-                  ctaButton?.hasExternalLink == "true"
-                    ? ctaButton?.externalLink
-                    : ctaButton?.link?.link
-                }
-                title={ctaButton?.title}
-              />
+              {ctaButton?.title &&
+                ctaButton?.link?.link &&
+                ctaButton?.hasExternalLink && (
+                  <Button
+                    title={ctaButton?.title}
+                    href={
+                      ctaButton?.hasExternalLink == "true"
+                        ? ctaButton?.externalLink
+                        : ctaButton?.link?.link
+                    }
+                  />
+                )}
             </div>
           </FadeInRevealBlur>
         )}
@@ -280,7 +285,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
       <div className="mt-[100px] relative !pointer-events-none">
         <Swiper
           slidesPerView={1.8}
-          speed={3000}
+          speed={isMobile ? 16000 : 5000}
           allowTouchMove={false}
           freeMode={{ enabled: true, momentum: false }}
           spaceBetween={6}

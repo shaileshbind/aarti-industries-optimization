@@ -30,7 +30,7 @@ export default function AdvantageSections({
           </div>
         )}
         {ailEdgeData && (
-            <div className="pt-[180px] pb-[72px] lg:py-[140px]">
+            <div className="pt-[72px] pb-[72px] lg:py-[140px]">
             <AilEdge data={ailEdgeData} />
             </div>
         )}

@@ -3,6 +3,7 @@ import { H2 } from "../Typography2";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { WhatSetsProps } from "@/app/types/manufacturing-capabilities.type";
+import ParallaxImage from "../ParallaxImage";
 
 export default function WhatSets({ data }: WhatSetsProps) {
   const { title, image, mobImage, ctaButton, cards } = data;
@@ -13,12 +14,10 @@ export default function WhatSets({ data }: WhatSetsProps) {
       {/* Desktop */}
       {image?.url && (
         <div className="lg:absolute w-full h-full hidden lg:block">
-          <Image
+          <ParallaxImage
             src={image?.url}
             alt={"banner"}
-            width={1440}
-            height={720}
-            className="object-cover w-full h-full"
+            className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
           />
         </div>
       )}
@@ -32,8 +31,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
           )}
 
           {ctaButton?.title &&
-            ctaButton?.link?.link &&
-            ctaButton?.hasExternalLink && (
+            ctaButton?.link?.link && (
               <Button
                 title={ctaButton?.title}
                 href={`${

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, RefObject } from 'react';
 import { useGSAP } from '../contexts/GSAPContext';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type GsapTweenVars = Record<string, unknown>;
 
@@ -38,16 +39,25 @@ export interface ScrollRevealConfig {
  * Perfect for animating elements as they come into view
  */
 export const useScrollReveal = (
-  config: ScrollRevealConfig = {},
-  dependencies: React.DependencyList = []
+  config: ScrollRevealConfig = {}
 ): RefObject<HTMLElement | null> => {
   const elementRef = useRef<HTMLElement>(null);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const isInitializedRef = useRef(false);
+  const configRef = useRef(config);
   const { gsap: gsapInstance, ScrollTrigger: ST } = useGSAP();
 
+  // Update config ref when config changes, but don't re-initialize
   useEffect(() => {
-    if (!elementRef.current) return;
+    configRef.current = config;
+  }, [config]);
+
+  useEffect(() => {
+    if (!elementRef.current || isInitializedRef.current) return;
 
     const element = elementRef.current;
+    const currentConfig = configRef.current;
     const {
       from = { autoAlpha: 0, y: 50, scale: 0.9 },
       to = { autoAlpha: 1, y: 0, scale: 1 },
@@ -58,7 +68,7 @@ export const useScrollReveal = (
       trigger,
       start = 'top 80%',
       end,
-      toggleActions = 'play none none reverse',
+      toggleActions = 'play reverse play reverse', // Allow re-triggering on scroll
       scrub = false,
       pin = false,
       pinSpacing = true,
@@ -67,7 +77,7 @@ export const useScrollReveal = (
       onComplete,
       onStart,
       onUpdate,
-    } = config;
+    } = currentConfig;
 
     // Don't set initial styles inline to avoid visibility issues
     // Instead, we'll use fromTo animation which handles initial state properly
@@ -92,23 +102,35 @@ export const useScrollReveal = (
       onUpdate,
     });
 
-    // Create ScrollTrigger
+    // Create ScrollTrigger - allows re-triggering on scroll but prevents re-initialization on re-renders
     const scrollTrigger = ST.create({
       trigger: trigger || element,
       animation,
       start,
       end,
-      toggleActions,
+      toggleActions, // 'play reverse play reverse' allows animation to play again when scrolling
       scrub,
       pin,
       pinSpacing,
     });
 
+    // Store references
+    animationRef.current = animation;
+    scrollTriggerRef.current = scrollTrigger;
+    isInitializedRef.current = true;
+
     return () => {
-      animation.kill();
-      scrollTrigger.kill();
+      if (animationRef.current) {
+        animationRef.current.kill();
+        animationRef.current = null;
+      }
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+        scrollTriggerRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [ST, config, gsapInstance, dependencies]);
+  }, [ST, gsapInstance]); // Only depend on ST and gsapInstance, not config
 
   return elementRef;
 };
@@ -121,8 +143,7 @@ export const useScrollReveal = (
 export const useFadeInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, y: 50 },
@@ -131,15 +152,14 @@ export const useFadeInReveal = (
     delay,
     stagger,
     ease: 'power3.out',
-  }, dependencies);
+  });
 };
 
 // Scale in animation
 export const useScaleInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, scale: 0.8 },
@@ -148,15 +168,14 @@ export const useScaleInReveal = (
     delay,
     stagger,
     ease: 'back.out(1.7)',
-  }, dependencies);
+  });
 };
 
 // Slide in from left
 export const useSlideInLeftReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, x: -100 },
@@ -165,15 +184,14 @@ export const useSlideInLeftReveal = (
     delay,
     stagger,
     ease: 'power3.out',
-  }, dependencies);
+  });
 };
 
 // Slide in from right
 export const useSlideInRightReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, x: 100 },
@@ -182,15 +200,14 @@ export const useSlideInRightReveal = (
     delay,
     stagger,
     ease: 'power3.out',
-  }, dependencies);
+  });
 };
 
 // Rotate in animation
 export const useRotateInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, rotation: -180 },
@@ -199,15 +216,14 @@ export const useRotateInReveal = (
     delay,
     stagger,
     ease: 'power3.out',
-  }, dependencies);
+  });
 };
 
 // Bounce in animation
 export const useBounceInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, scale: 0.3 },
@@ -216,7 +232,7 @@ export const useBounceInReveal = (
     delay,
     stagger,
     ease: 'bounce.out',
-  }, dependencies);
+  });
 };
 
 // Group animation for multiple elements
@@ -224,8 +240,7 @@ export const useGroupReveal = (
   animationType: 'fadeIn' | 'scaleIn' | 'slideInLeft' | 'slideInRight' | 'rotateIn' | 'bounceIn' = 'fadeIn',
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2,
-  dependencies: React.DependencyList = []
+  stagger: number = 0.2
 ) => {
   const animations = {
     fadeIn: { from: { autoAlpha: 0, y: 50 }, to: { autoAlpha: 1, y: 0 } },
@@ -244,5 +259,5 @@ export const useGroupReveal = (
     isGroup: true,
     groupSelector: '[data-scroll]',
     ease: animationType === 'bounceIn' ? 'bounce.out' : 'power3.out',
-  }, dependencies);
+  });
 };

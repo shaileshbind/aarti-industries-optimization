@@ -4,7 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInRevealBlur } from "../ScrollReveal";
-import { BodyText2, H2, SubH1 } from "../Typography2";
+import { BodyText2, H2, SubH2 } from "../Typography2";
 import Button from "../Button";
 import { ComprehensiveCareProps } from "@/app/types/thrive-at-aarti.type";
 
@@ -84,12 +84,12 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
                 }}
               >
                 <div className="flex gap-x-4">
-                  <p className="mt-0 lg:mt-3 pl-6 text-[#DC4C03] text-base">{`0${
+                  <p className="mt-0 lg:mt-1 pl-6 text-[#DC4C03] text-base">{`0${
                     index + 1
                   }`}</p>
                   <div>
                     {item?.title && (
-                      <SubH1 className="text-blue-200">{item?.title}</SubH1>
+                      <SubH2 className="text-blue-200">{item?.title}</SubH2>
                     )}
 
                     {item?.description && (

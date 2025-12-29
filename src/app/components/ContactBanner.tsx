@@ -15,7 +15,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
   const { title, ctaButton } = data;
 
   return (
-    <div className="container">
+    <div className="container mb-14 lg:mb-0">
       <FadeInReveal>
         <div className="relative  w-full min-h-[186px] md:min-h-[158px] max-w-[full] lg:max-w-[920px] mx-auto rounded-[14px] md:rounded-[20px] py-[30px] md:py-[37px] px-[28px] md:px-[40px] grid md:flex justify-between items-center gap-y-[24px] bg-gradient-orange-1 overflow-hidden">
           <Image

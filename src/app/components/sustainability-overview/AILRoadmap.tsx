@@ -201,7 +201,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_65%)]" />
                   </div>
                 )
             )}
@@ -221,7 +221,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             >
               <div
                 ref={lineRef}
-                className="w-[1px] bg-white absolute left-[50px]"
+                className="w-[1px] bg-white/60 absolute left-[50px]"
                 style={{ height: "0px" }}
               />
               <div
@@ -263,7 +263,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             </div>
             {/* Desktop grey box */}
             {rightSectionData && (
-              <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
+              <div className="hidden lg:block overflow-hidden absolute opacity-90 rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
                 <Image
                   src="/images/sustainability/grey-bg.png"
                   alt="img"
@@ -271,7 +271,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                   className="object-cover z-[-2]"
                 />
                 {rightSectionData.heading && (
-                  <SubH3 className="text-white">
+                  <SubH3 className="text-white md:!text-[16px] lg:!text-[20px]">
                     {rightSectionData.heading}
                   </SubH3>
                 )}
@@ -309,7 +309,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             {/* Mobile grey box - Inside pinned section */}
             <div className="block lg:hidden absolute w-[100%] h-auto bottom-0">
               {rightSectionData && (
-                <div className=" bg-[#102533] absolute  left-0 w-full p-[24px] z-10">
+                <div className=" bg-[#102533] absolute left-0 w-full px-[24px] py-[40px] z-10">
                   {rightSectionData.heading && (
                     <SubH3 className="text-white">
                       {rightSectionData.heading}
