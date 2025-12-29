@@ -264,17 +264,17 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   </p>
                 )}
 
-                <div className="flex flex-col gap-2 mt-3">
+                <div className="flex flex-col gap-3 lg:gap-2 mt-3">
                   {item?.BulletPoints?.length > 0 &&
                     item?.BulletPoints?.map((items, index2) => (
                       <div
-                        className="flex gap-2 items-baseline"
+                        className="flex gap-2"
                         key={"pointers_" + index2}
                       >
                         <Image
                           src={"/images/star-orange.svg"}
                           alt={"star"}
-                          className="object-cover object-top w-[14px] h-[14px]"
+                          className="object-cover object-top w-[14px] h-[14px] mt-[3px]"
                           width={14}
                           height={14}
                         />

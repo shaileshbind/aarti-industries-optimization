@@ -29,8 +29,7 @@ export const ScrollReveal = ({
   ...config
 }: ScrollRevealProps) => {
   const ref = useScrollReveal(
-    disabled ? {} : config,
-    [config.from, config.to, config.duration, config.delay, config.stagger, config.ease]
+    disabled ? {} : config
   );
 
   return (
@@ -73,8 +72,7 @@ export const ScrollGroup = ({
       ...config,
       isGroup: true,
       groupSelector,
-    },
-    [config.from, config.to, config.duration, config.delay, config.stagger, config.ease]
+    }
   );
 
   return (
@@ -324,12 +322,14 @@ export const TypewriterReveal = ({
   trigger = true,
   start = 'top 80%',
   end = 'bottom 20%',
-  toggleActions = 'play none none reverse',
+  toggleActions = 'play reverse play reverse',
 }: TypewriterRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
+  const isInitializedRef = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    if (!textRef.current || !trigger) return;
+    if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
     
@@ -351,7 +351,7 @@ export const TypewriterReveal = ({
         trigger: text,
         start,
         end,
-        toggleActions,
+        toggleActions, // Only play once
       },
     });
 
@@ -364,10 +364,17 @@ export const TypewriterReveal = ({
       ease: 'power2.out',
     });
 
+    timelineRef.current = tl;
+    isInitializedRef.current = true;
+
     return () => {
-      tl.kill();
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [delay, duration, stagger, trigger, start, end, toggleActions]);
+  }, []); // Empty deps - only run once on mount
 
   return (
     <div ref={textRef} className={className}>
@@ -412,18 +419,17 @@ export const LineReveal = ({
   trigger = true,
   start = 'top 80%',
   end = 'bottom 20%',
-  toggleActions = 'play none none reverse',
+  toggleActions = 'play reverse play reverse',
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
+  const isInitializedRef = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    if (!textRef.current || !trigger) return;
+    if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    // Kill old splits before re-splitting
-    splitRef.current?.revert();
     
     const split = new SplitType(text, { types: 'lines' });
     splitRef.current = split;
@@ -437,7 +443,7 @@ export const LineReveal = ({
         trigger: text,
         start,
         end,
-        toggleActions,
+        toggleActions, // Only play once
       },
     });
 
@@ -451,12 +457,21 @@ export const LineReveal = ({
       ease,
     });
 
+    timelineRef.current = tl;
+    isInitializedRef.current = true;
+
     return () => {
-      tl.kill();
-      splitRef.current?.revert();
-      splitRef.current = null;
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      if (splitRef.current) {
+        splitRef.current.revert();
+        splitRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [delay, duration, stagger, fromY, ease, trigger, start, end, toggleActions]);
+  }, []); // Empty deps - only run once on mount
 
   return (
     <div ref={textRef} className={className}>
@@ -480,18 +495,17 @@ export const WordReveal = ({
   trigger = true,
   start = 'top 80%',
   end = 'bottom 20%',
-  toggleActions = 'play none none reverse',
+  toggleActions = 'play reverse play reverse',
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
+  const isInitializedRef = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    if (!textRef.current || !trigger) return;
+    if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    // Kill old splits before re-splitting
-    splitRef.current?.revert();
     
     const split = new SplitType(text, { types: 'words' });
     splitRef.current = split;
@@ -505,7 +519,7 @@ export const WordReveal = ({
         trigger: text,
         start,
         end,
-        toggleActions,
+        toggleActions, // Only play once
       },
     });
 
@@ -519,12 +533,21 @@ export const WordReveal = ({
       ease,
     });
 
+    timelineRef.current = tl;
+    isInitializedRef.current = true;
+
     return () => {
-      tl.kill();
-      splitRef.current?.revert();
-      splitRef.current = null;
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      if (splitRef.current) {
+        splitRef.current.revert();
+        splitRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [delay, duration, stagger, fromY, ease, trigger, start, end, toggleActions]);
+  }, []); // Empty deps - only run once on mount
 
   return (
     <div ref={textRef} className={className}>
@@ -548,18 +571,17 @@ export const LetterReveal = ({
   trigger = true,
   start = 'top 80%',
   end = 'bottom 20%',
-  toggleActions = 'play none none reverse',
+  toggleActions = 'play reverse play reverse',
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
+  const isInitializedRef = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    if (!textRef.current || !trigger) return;
+    if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    // Kill old splits before re-splitting
-    splitRef.current?.revert();
     
     const split = new SplitType(text, { types: 'chars' });
     splitRef.current = split;
@@ -573,7 +595,7 @@ export const LetterReveal = ({
         trigger: text,
         start,
         end,
-        toggleActions,
+        toggleActions, // Only play once
       },
     });
 
@@ -587,12 +609,21 @@ export const LetterReveal = ({
       ease,
     });
 
+    timelineRef.current = tl;
+    isInitializedRef.current = true;
+
     return () => {
-      tl.kill();
-      splitRef.current?.revert();
-      splitRef.current = null;
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      if (splitRef.current) {
+        splitRef.current.revert();
+        splitRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [delay, duration, stagger, fromY, ease, trigger, start, end, toggleActions]);
+  }, []); // Empty deps - only run once on mount
 
   return (
     <div ref={textRef} className={className}>
@@ -617,18 +648,17 @@ export const SplitTextReveal = ({
   trigger = true,
   start = 'top 80%',
   end = 'bottom 20%',
-  toggleActions = 'play none none reverse',
+  toggleActions = 'play reverse play reverse',
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
+  const isInitializedRef = useRef(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    if (!textRef.current || !trigger) return;
+    if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    // Kill old splits before re-splitting
-    splitRef.current?.revert();
     
     const split = new SplitType(text, { types: splitType });
     splitRef.current = split;
@@ -642,7 +672,7 @@ export const SplitTextReveal = ({
         trigger: text,
         start,
         end,
-        toggleActions,
+        toggleActions, // Only play once
       },
     });
 
@@ -656,12 +686,21 @@ export const SplitTextReveal = ({
       ease,
     });
 
+    timelineRef.current = tl;
+    isInitializedRef.current = true;
+
     return () => {
-      tl.kill();
-      splitRef.current?.revert();
-      splitRef.current = null;
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+      if (splitRef.current) {
+        splitRef.current.revert();
+        splitRef.current = null;
+      }
+      isInitializedRef.current = false;
     };
-  }, [splitType, delay, duration, stagger, fromY, ease, trigger, start, end, toggleActions]);
+  }, []); // Empty deps - only run once on mount
 
   return (
     <div ref={textRef} className={className}>

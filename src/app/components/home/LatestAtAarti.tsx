@@ -20,7 +20,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [, setIsMobile] = useState<boolean>(false);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
@@ -134,7 +134,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     : [];
   const postsCount = postsContent.length;
 
-  const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
+  // const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
 
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>

@@ -17,9 +17,9 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
   const slides = post_categories[0]?.posts || [];
 
   return (
-    <div className="my-[50px] lg:my-[100px]">
+    <div className="my-[50px] lg:my-[100px] mb-[80px] lg:mb-[100px]">
       <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
-      <div className="mt-[52px]">
+      <div className="lg:mt-[52px] mt-[30px]">
         <Swiper
           spaceBetween={24}
           slidesPerView={1.5}

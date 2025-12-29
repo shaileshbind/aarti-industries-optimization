@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CDMOPartnerProps } from "@/app/types/cdmo.type";
 import AnimatedText from "../AnimatedText";
 import { BodyText2, H3, SubH2 } from "../Typography2";
-import { ScaleInGroup } from "../ScrollReveal";
+import { FadeInGroup } from "../ScrollReveal";
 import clsx from "clsx";
 
 const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
@@ -38,13 +38,13 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
         {description && (
           <div className="lg:w-[70%] mt-[10px]">
             <AnimatedText>
-              <BodyText2 className="text-base">{description}</BodyText2>
+              <BodyText2 className="text-base leading-[1.7]">{description}</BodyText2>
             </AnimatedText>
           </div>
         )}
       </div>
 
-      <ScaleInGroup
+      <FadeInGroup
         delay={0.2}
         className="lg:mt-16 mt-2 grid grid-cols-1 sm:grid-cols-3 gap-[16px] sm:gap-[6px] lg:w-[70%] justify-items-center"
       >
@@ -78,7 +78,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
               </div>
             </div>
           ))}
-      </ScaleInGroup>
+      </FadeInGroup>
     </section>
   );
 };
