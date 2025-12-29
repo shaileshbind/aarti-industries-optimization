@@ -133,10 +133,12 @@ const ExploreCard = ({
           </div>
         )}
       </div>
-      <GeneralPopup
-        isOpen={showGeneralPopup}
-        setshowGeneralPopup={setshowGeneralPopup}
-      />
+      {showGeneralPopup && (
+        <GeneralPopup
+          isOpen={showGeneralPopup}
+          setshowGeneralPopup={setshowGeneralPopup}
+        />
+      )}
     </>
   );
 };

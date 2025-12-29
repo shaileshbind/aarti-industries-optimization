@@ -45,7 +45,15 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     width: 0,
     visible: false,
   });
-  const [slideWidth] = useState((window.innerWidth / 1.27)*40/100);
+  const [slideWidth, setSlideWidth] = useState(0);
+  
+  // Calculate slideWidth after component mounts (client-side only)
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+    }
+  }, []);
+  
   const indicatorColor = "#F97316";
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const indicatorTransition =
@@ -418,7 +426,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         ScrollTrigger.refresh();
       });
     };
-  }, [mainSection.length]);
+  }, [mainSection.length, slideWidth]);
 
   useLayoutEffect(() => {
     measureIndicator();

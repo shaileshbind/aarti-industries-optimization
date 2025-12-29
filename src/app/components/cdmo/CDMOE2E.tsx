@@ -84,9 +84,9 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                             src={item?.card?.[index]?.image?.url}
                             alt="active-img"
                             fill
-                            className="object-cover scale-110 w-full h-full "
+                            className="object-cover scale-120 w-full h-full "
                           />
-                          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md !rounded-[10px] overflow-hidden"></i>
+                          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl !rounded-[10px] overflow-hidden bg-black/10"></i>
                           <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-full h-full">
                             <Image
                               src={item?.card?.[index]?.image?.url}
@@ -99,7 +99,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                       </div>
 
                       {/* Pagination with 01 - 03 format */}
-                      <div className="flex items-center z-20 text-orange-200 text-[14px]">
+                      <div className="flex items-center z-20 text-orange-200 text-[14px] mb-4 mt-2">
                         <span>{(active + 1).toString().padStart(2, "0")}</span>
                         <span className="mx-1">-</span>
                         <span>
@@ -112,7 +112,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                         </SubH2>
                       )}
 
-                      <ul className="mt-2 space-y-1">
+                      <ul className="mt-2 space-y-2">
                         {item?.card?.length > 0 &&
                           item?.card?.map((feature, idx) => (
                             <>
@@ -126,7 +126,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                                     alt="star"
                                     height={15}
                                     width={15}
-                                    className="mt-[2px] lg:mt-1"
+                                    className="mt-[2px] lg:mt-[3px]"
                                   />
 
                                   <BodyText2 key={item?.title}>

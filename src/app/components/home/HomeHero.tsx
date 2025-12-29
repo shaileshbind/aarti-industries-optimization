@@ -377,11 +377,11 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       {/* stars + lines */}
       <div
         ref={lineVertical}
-        className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5"
+        className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5"
       />
       <div
         ref={lineHorizontal}
-        className="absolute w-full bg-white bottom-[105px] lg:bottom-[119px] h-[1px] z-5"
+        className="absolute w-full bg-white/40 bottom-[105px] lg:bottom-[119px] h-[1px] z-5"
       />
       <div
         ref={starRef}

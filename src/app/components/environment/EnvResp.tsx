@@ -229,7 +229,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                         ?.sdgPlayTitle
                     }
                   </BodyText2>
-                  <div className="flex gap-x-[40px] mt-[10px] mb-[30px]">
+                  <div className="flex gap-x-[20px] mt-[10px] mb-[30px]">
                     {cardWithCategory[
                       active
                     ]?.content?.content?.[0]?.sdgPlay?.images?.map(
@@ -490,7 +490,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                   item?.content?.ctaButton?.hasExternalLink ===
                                   "true"
                                 }
-                                className="mt-[12px]"
+                                className="mt-[12px] mb-[20px]"
                               />
                             )}
                         </div>

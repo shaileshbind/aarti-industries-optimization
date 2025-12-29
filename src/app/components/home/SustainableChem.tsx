@@ -47,7 +47,15 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     visible: false,
   });
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [slideWidth] = useState((window.innerWidth / 1.27)*40/100);
+  const [slideWidth, setSlideWidth] = useState(0);
+  
+  // Calculate slideWidth after component mounts (client-side only)
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+    }
+  }, []);
+  
   console.log("slideWidth", slideWidth );  
   const { setMarginBottom } = useMargin();
   const indicatorColor =
@@ -421,7 +429,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length]);
+  }, [mainSection.length, slideWidth]);
 
   useLayoutEffect(() => {
     measureIndicator();

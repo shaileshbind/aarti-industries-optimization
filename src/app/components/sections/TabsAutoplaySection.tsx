@@ -274,7 +274,7 @@ const TabsAutoplaySection = ({
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
-                                  className="object-cover object-top w-5 h-5 mt-[5px]"
+                                  className="object-cover object-top w-[14px] h-[14px] mt-[4px]"
                                   width={14}
                                   height={14}
                                 />
@@ -315,11 +315,11 @@ const TabsAutoplaySection = ({
               <FaqAccordion
                 faqTitle={
                   <SubH1
-                    className={
-                      expanded === `panel${index}`
+                    className={`min-h-[38px] flex items-center
+                      ${expanded === `panel${index}`
                         ? "text-orange-100"
-                        : "text-gray-300"
-                    }
+                        : "text-gray-300"}
+                    `}
                   >
                     {item.category}
                   </SubH1>

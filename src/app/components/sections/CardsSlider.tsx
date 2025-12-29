@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
-import { WordReveal } from "../ScrollReveal";
+import { FadeInGroup, WordReveal } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
 import Link from "next/link";
@@ -58,7 +58,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
 
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[22px] lg:mt-[40px]">
-            <div className="relative">
+            <FadeInGroup delay={0.2} className="relative">
               <Swiper
                 spaceBetween={14}
                 slidesPerView={1.2}
@@ -125,7 +125,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
+              <div className="relative py-[30px] mt-[40px] mb-[20px] lg:mx-[unset]">
                 {cards?.length > 4 && (
                   <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                     <button
@@ -163,7 +163,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 )}
                 <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
               </div>
-            </div>
+            </FadeInGroup>
           </div>
         </div>
       </div>
@@ -183,7 +183,7 @@ const Card = ({
   alt: string;
 }) => {
   return (
-    <div className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
+    <div className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0" data-scroll>
       {title && (
         <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
       )}
