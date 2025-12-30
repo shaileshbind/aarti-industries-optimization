@@ -176,7 +176,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
 
   return (
     <>
-      <div ref={wrapperRef} className="w-full h-screen relative">
+      <div ref={wrapperRef} className="w-full h-screen md:h-[60vh] lg:h-screen relative">
         {/* Background Images with clip-path animation */}
         {leftSection && leftSection?.length > 0 && (
           <div className="absolute inset-0 z-[0]">

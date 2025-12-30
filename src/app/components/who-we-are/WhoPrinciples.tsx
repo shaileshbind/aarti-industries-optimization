@@ -12,16 +12,16 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="max-w-5xl mx-auto md:py-[100px] py-[50px]">
+    <section className="max-w-5xl mx-auto lg:py-[100px] py-[50px]">
       {description && (
-        <H2 className="max-w-xl mx-auto text-center py-3 md:py-9">
+        <H2 className="max-w-xl mx-auto text-center py-3 lg:py-9">
           {description}
         </H2>
       )}
       {/* Desktop Layout */}
-     {content?.length > 0 && <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
+     {content?.length > 0 && <div className="hidden lg:flex flex-row items-stretch overflow-hidden relative fluid-container">
         {/* Left Tabs + Progress Bar */}
-        <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
+        <div className="relative bg-white text-white lg:w-[40%] flex flex-col justify-center">
           <div className="relative flex gap-4">
             {/* Progress Bar */}
             {content?.length > 0 && (
@@ -64,7 +64,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                             alt="img"
                             width={42}
                             height={42}
-                            className="absolute z-10 right-[-60px] top-[50%] translate-y-[-50%] w-[42px] md:w-[52px]"
+                            className="absolute z-10 right-[-60px] top-[50%] translate-y-[-50%] w-[42px] lg:w-[52px]"
                           />
                         )}
                       </button>
@@ -76,7 +76,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   alt="img"
                   width={151}
                   height={151}
-                  className="absolute bottom-[35px] md:bottom-[-30px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
+                  className="absolute bottom-[35px] lg:bottom-[-30px] -right-[18px] lg:-right-[30px] w-[93px] h-[93px] lg:w-[151px] lg:h-[151px] pointer-events-none"
                 />
               </div>
             )}
@@ -94,7 +94,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
       </div>}
       {/* Mobile Accordion */}
       {content?.length > 0 && (
-        <div className="md:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
+        <div className="lg:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
           {content?.map((tab, index) => {
             const isOpen = openIndex === index;
             return (
@@ -148,7 +148,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   >
                     <div
                       dangerouslySetInnerHTML={{ __html: tab?.description }}
-                      className="p-5 px-[30px] text-[#0D2B3E] font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto valueDescription"
+                      className="p-5 px-[30px] text-[#0D2B3E] font-normal text-[14px] lg:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] font-roboto valueDescription"
                     />
                   </div>
                 )}

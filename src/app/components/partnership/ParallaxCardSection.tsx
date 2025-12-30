@@ -428,7 +428,7 @@ const StickyImage: React.FC<StickyImageProps> = ({
             src={src}
             alt={"banner"}
             fill
-            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]"
+            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] blur-xs"
           />
 
           <Image
