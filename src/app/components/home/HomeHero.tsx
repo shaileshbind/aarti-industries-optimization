@@ -45,17 +45,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const star = starRef.current;
     const star2 = starRef2.current;
     const star3 = starRef3.current;
-    const stars = [star2, star3];
+    const stars = [star, star2, star3];
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
     const orangeBar = orangeScroll.current;
     const navTitle = navTitles.current;
 
     // Set initial state - all stars are completely hidden
-    gsap.set(star, {
-      opacity: 1,
-      scale: 200,
-    });
+    // gsap.set(star, {
+    //   opacity: 1,
+    //   scale: 200,
+    // });
     gsap.set(stars, {
       opacity: 0,
       scale: 0,
@@ -90,13 +90,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       duration: 0.5,
       ease: "power3.out",
     })
-      .to(star, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: "sine.out",
-        stagger: 0.2,
-      })
+      // .to(star, {
+      //   opacity: 1,
+      //   scale: 1,
+      //   duration: 0.6,
+      //   ease: "sine.out",
+      //   stagger: 0.2,
+      // })
       // Step 2: Lines draw in
       .to(
         vLine,
@@ -340,7 +340,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 ) : (
                 
                   <div className="absolute top-1/2 -translate-y-1/2 w-full z-10">
-                    <FadeInReveal delay={0.2}> 
+                    <FadeInReveal delay={0.5}> 
                     <div className="fluid-container">
                       {items?.card?.[0]?.title &&
                         (index === 0 ? (

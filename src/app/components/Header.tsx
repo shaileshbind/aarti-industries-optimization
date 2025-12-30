@@ -953,12 +953,13 @@ const Header = ({ data }: HeaderProps) => {
             href="/contact"
             className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18"
           >
-            Get in touch
+            <span className="hidden lg:block">Get in touch</span>
+            <span className="block lg:hidden">Contact</span>
           </Link>
 
           <div
             className={clsx(
-              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-[00px] overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
+              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
               isSearchOpen ? "!max-h-[320]" : ""
             )}
           >

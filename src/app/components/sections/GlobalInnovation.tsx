@@ -96,7 +96,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 }
               `}
               >
-                <li className="lg:w-[60%] list-disc pl-1 lg:pl-3 text-[#4C5861] text-[14px] md:text-[16px] xl:text-[18px]">
+                <li className="lg:w-[60%] marker:text-[#DC4C03] list-disc pl-1 lg:pl-3 text-[#4C5861] text-[14px] md:text-[16px] xl:text-[18px]">
                   {item.description}
                 </li>
               </ul>

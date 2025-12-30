@@ -164,7 +164,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       setShowSubCategories(false);
       setSelectedSubCategories([]);
     }
-    console.log("searchQuery", searchQuery)
+    // console.log("searchQuery", searchQuery)
 
   }, [searchQuery]);
 

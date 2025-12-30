@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
-
+import { FadeInReveal } from "../ScrollReveal";
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
 
@@ -152,7 +152,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
 
   return (
     <div className="py-[72px] lg:py-[100px]">
-      {title && <H2 className="text-left lg:text-center container">{title}</H2>}
+      {title && <FadeInReveal delay={0.6}><H2 className="text-left lg:text-center container">{title}</H2></FadeInReveal>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
         <div 
