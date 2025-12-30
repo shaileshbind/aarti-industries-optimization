@@ -52,7 +52,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   // Calculate slideWidth after component mounts (client-side only)
   useLayoutEffect(() => {
     if (typeof window !== 'undefined') {
-      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+      setSlideWidth((window.innerWidth / 1.28) * 40 / 100);
     }
   }, []);
   

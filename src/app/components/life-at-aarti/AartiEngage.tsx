@@ -19,14 +19,14 @@ const AartiEngage = ({ data }: LAAEngageProps) => {
           {description}
         </BodyText1>
       )}
-      <div className="mt-[44px] lg:mt-[60px] mx-[20px]">
-        <div className="w-full h-[200px] lg:h-[600px] relative">
+      <div className="mt-[44px] md:mt-[60px] mx-[20px]">
+        <div className="w-full h-[200px] md:h-[600px] relative">
           {image?.url && (
             <Image
               src={image?.url}
               alt={image?.alternativeText ? image?.alternativeText : "img"}
               fill
-              className="object-contain hidden lg:block"
+              className="object-contain hidden md:block"
             />
           )}
           {mobImage?.url && (
@@ -36,7 +36,7 @@ const AartiEngage = ({ data }: LAAEngageProps) => {
                 mobImage?.alternativeText ? mobImage?.alternativeText : "img"
               }
               fill
-              className="object-contain block lg:hidden"
+              className="object-contain block md:hidden"
             />
           )}
         </div>

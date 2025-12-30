@@ -11,6 +11,7 @@ import "swiper/css/effect-fade";
 import FaqAccordion from "../FaqAccordian";
 import clsxN from "../../../../utils/clsxN";
 import { RDCardProps } from "@/app/types/r-and-d.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 type TabsAutoplayProps = {
   data: RDCardProps[];
@@ -143,10 +144,13 @@ const TabsAutoplaySection = ({
     <>
       {title && (
         <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-[30px] lg:mb-[50px]">
+          <FadeInReveal delay={0.2}>
           <H2>{title}</H2>
+          </FadeInReveal>
         </div>
       )}
       {/* Desktop */}
+      <FadeInReveal delay={0.2}>
       <div className="mx-[20px] lg:mx-[60px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
         {/* Tabs */}
         {data?.length > 0 && (
@@ -307,6 +311,7 @@ const TabsAutoplaySection = ({
           ))}
         </Swiper>
       </div>
+      </FadeInReveal>
       {/* Mobile Accordion */}
       {data?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] xl:py-[70px]">

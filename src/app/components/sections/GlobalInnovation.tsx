@@ -31,9 +31,9 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
 
       <div className="flex flex-col lg:flex-row justify-between items-start">
         {/* Image Section */}
-        <div className="relative w-full overflow-hidden lg:w-[55%]">
+        <div className="relative w-full h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden lg:w-[55%]">
           <div className="relative w-full pt-[100%]">
-          <div className="absolute right-0 top-0 h-full w-[100%] lg:w-full rounded-[20px]">
+          <div className="absolute right-0 top-0 w-[100%] lg:w-full rounded-[20px] h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px]">
             <Image
               src={displayImage}
               alt={displayAlt}
@@ -96,7 +96,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 }
               `}
               >
-                <li className="lg:w-[60%] list-disc pl-1 lg:pl-3 text-[#4C5861] text-[14px] md:text-[16px] xl:text-[18px]">
+                <li className="lg:w-[60%] marker:text-[#DC4C03] list-disc pl-1 lg:pl-3 text-[#4C5861] text-[14px] md:text-[16px] xl:text-[18px]">
                   {item.description}
                 </li>
               </ul>

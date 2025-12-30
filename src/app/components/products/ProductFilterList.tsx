@@ -154,6 +154,20 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     fetchSearchResults,
   ]);
 
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim() !== "") {
+      if (activeTab !== "all") {
+        setActiveTabState("all");
+        setActiveTab("all");
+      }
+
+      setShowSubCategories(false);
+      setSelectedSubCategories([]);
+    }
+    // console.log("searchQuery", searchQuery)
+
+  }, [searchQuery]);
+
   // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
     setSelectedSubCategories((prev) => {

@@ -96,8 +96,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
       },
       {
         images: [
-          { marginTop: "mt-0", height: "h-[136px]" },
-          { marginTop: "mt-[4px]", height: "h-[139px]" },
+          { marginTop: "mt-0", height: "h-[154px]" },
+          { marginTop: "mt-[4px]", height: "h-[135px]" },
         ],
       },
     ];

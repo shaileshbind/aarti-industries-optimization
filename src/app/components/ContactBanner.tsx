@@ -5,6 +5,7 @@ import { Cta, SubH1 } from "./Typography2";
 import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
 import clsx from "clsx";
+import SplitText from "./SplitText";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({
   data,
@@ -46,12 +47,12 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
                   <Link href={link as string} target="_blank">
                     <div
                       className={clsx(
-                        `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px] cursor-pointer relative z-10 w-fit md:w-full text-center flex`,
+                        `bg-white group rounded-[6px] py-[14px] px-[22px] h-[47px] cursor-pointer relative z-10 w-fit md:w-full text-center flex`,
                         className
                       )}
                     >
                       <Cta className="text-orange-200 whitespace-nowrap">
-                        {ctaButton?.title}
+                     <SplitText text={ctaButton?.title}/> 
                       </Cta>
 
                       {src && (

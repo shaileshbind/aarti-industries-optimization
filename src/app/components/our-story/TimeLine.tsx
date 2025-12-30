@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { BodyText1, BodyText2, H3, SubH2 } from '../Typography2'
-import { FadeInGroup, FadeInRevealBlur, WordReveal } from '../ScrollReveal'
+import { WordReveal } from '../ScrollReveal'
 import Image from 'next/image'
 import MainTimeline from './MainTimeline'
 import MobilePhaseDropdown from './MobilePhaseDropdown'
@@ -40,6 +40,17 @@ export default function TimeLine({
   const image1Ref = useRef<HTMLDivElement>(null);
   const image2Ref = useRef<HTMLDivElement>(null);
   const image3Ref = useRef<HTMLDivElement>(null);
+  
+  // Refs for content animation
+  const yearRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const isInitialRender = useRef(true);
+  
+  // Refs for large background year numbers
+  const yearDigit1Ref = useRef<HTMLHeadingElement>(null);
+  const yearDigit2Ref = useRef<HTMLHeadingElement>(null);
+  const isInitialYearRender = useRef(true);
 
   const content = yearContent?.[currentYear] || { title: "", description: "" };
   const images = phases?.[currentPhase]?.images || [];
@@ -52,7 +63,7 @@ export default function TimeLine({
   const handleYearClick = (year: number) => setCurrentYear(year);
   const handleMobilePhaseSelect = (i: number) => handlePhaseClick(i);
 
-  // Animation
+  // Animation for images
   useEffect(() => {
     if (imagesContainerRef.current) {
       const tl = gsap.timeline();
@@ -74,6 +85,71 @@ export default function TimeLine({
     }
   }, [currentPhase]);
 
+  // Animation for content changes (year, title, description)
+  useEffect(() => {
+    if (yearRef.current && titleRef.current && descriptionRef.current) {
+      // Set initial state on first render (no animation)
+      if (isInitialRender.current) {
+        gsap.set([yearRef.current, titleRef.current, descriptionRef.current], {
+          autoAlpha: 1,
+          y: 0,
+          filter: 'blur(0px)',
+        });
+        isInitialRender.current = false;
+        return;
+      }
+
+      const tl = gsap.timeline();
+
+      // Fade out current content
+      tl.to([yearRef.current, titleRef.current, descriptionRef.current], {
+        autoAlpha: 0,
+        y: 20,
+        filter: 'blur(8px)',
+        duration: 0.3,
+        ease: "power2.in",
+      })
+      // Fade in new content
+      .to([yearRef.current, titleRef.current, descriptionRef.current], {
+        autoAlpha: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power3.out",
+      });
+    }
+  }, [currentYear, content.title, content.description]);
+
+  // Animation for large background year numbers
+  useEffect(() => {
+    if (yearDigit1Ref.current && yearDigit2Ref.current) {
+      // Set initial state on first render (no animation)
+      if (isInitialYearRender.current) {
+        gsap.set([yearDigit1Ref.current, yearDigit2Ref.current], {
+          autoAlpha: 1,
+        });
+        isInitialYearRender.current = false;
+        return;
+      }
+
+      const tl = gsap.timeline();
+
+      // Fade out and scale down current year digits
+      tl.to([yearDigit1Ref.current, yearDigit2Ref.current], {
+        autoAlpha: 0,
+        duration: 0.3,
+        ease: "power2.in",
+      })
+      // Fade in and scale up new year digits
+      .to([yearDigit1Ref.current, yearDigit2Ref.current], {
+        autoAlpha: 1,
+        duration: 0.3,
+        ease: "power3.out",
+      });
+    }
+  }, [currentYear]);
+
   return (
     <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
       <WordReveal className="fluid-container" stagger={0.1} fromY={10} duration={3}>
@@ -82,27 +158,28 @@ export default function TimeLine({
         </H3>
       </WordReveal>
 
-      <FadeInGroup
-        stagger={0.2}
-        className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0"
-      >
-        <h1 className="font-inter text-gray-200 font-extralight lg:text-[550px] text-[200px]">
+      <div className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0">
+        <h1 ref={yearDigit1Ref} className="font-inter text-gray-200  lg:text-[550px] text-[200px] font-bold">
           {String(currentYear).slice(2, 3)}
         </h1>
-        <h1 className="font-inter text-gray-200 font-extralight lg:text-[550px] text-[200px]">
+        <h1 ref={yearDigit2Ref} className="font-inter text-gray-200  lg:text-[550px] text-[200px] font-bold">
           {String(currentYear).slice(-1)}
         </h1>
-      </FadeInGroup>
+      </div>
 
       <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-center lg:items-end fluid-container">
         <div className="lg:w-[420px] h-fit lg:mb-6">
-          <FadeInRevealBlur delay={0.1}>
+          <div ref={yearRef}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}
             </BodyText2>
+          </div>
+          <div ref={titleRef}>
             <SubH2 className="capitalize">{content.title}</SubH2>
+          </div>
+          <div ref={descriptionRef}>
             <BodyText1>{content.description}</BodyText1>
-          </FadeInRevealBlur>
+          </div>
         </div>
 
         <div

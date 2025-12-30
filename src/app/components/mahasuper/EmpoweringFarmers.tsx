@@ -77,7 +77,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
             {image && (
               <Image
                 src={image.url}
-                alt={image.alternativeText}
+                alt={image.alternativeText ?? 'img'}
                 width={685}
                 height={779}
               />

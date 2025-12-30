@@ -79,4 +79,5 @@ export type SearchBannerProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearch: () => void;
   showStar3?: boolean;
+  showStar2?: boolean;
 };

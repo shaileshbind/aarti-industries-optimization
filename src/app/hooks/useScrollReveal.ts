@@ -54,72 +54,97 @@ export const useScrollReveal = (
   }, [config]);
 
   useEffect(() => {
-    if (!elementRef.current || isInitializedRef.current) return;
+    if (!ST || !gsapInstance) return;
+    if (isInitializedRef.current) return;
 
-    const element = elementRef.current;
-    const currentConfig = configRef.current;
-    const {
-      from = { autoAlpha: 0, y: 50, scale: 0.9 },
-      to = { autoAlpha: 1, y: 0, scale: 1 },
-      duration = 1,
-      delay = 0,
-      stagger = 0.2,
-      ease = 'power3.out',
-      trigger,
-      start = 'top 80%',
-      end,
-      toggleActions = 'play reverse play reverse', // Allow re-triggering on scroll
-      scrub = false,
-      pin = false,
-      pinSpacing = true,
-      isGroup = false,
-      groupSelector = '[data-scroll]',
-      onComplete,
-      onStart,
-      onUpdate,
-    } = currentConfig;
+    // Use requestAnimationFrame to ensure DOM is ready
+    const initAnimation = () => {
+      if (!elementRef.current || isInitializedRef.current) return;
 
-    // Don't set initial styles inline to avoid visibility issues
-    // Instead, we'll use fromTo animation which handles initial state properly
-    let elements: Element | NodeListOf<Element> = element;
-    
-    // If it's a group, get all child elements
-    if (isGroup) {
-      const nodeList = element.querySelectorAll(groupSelector);
-      if (nodeList.length === 0) return;
-      elements = nodeList;
-    }
+      const element = elementRef.current;
+      const currentConfig = configRef.current;
+      const {
+        from = { autoAlpha: 0, y: 50, scale: 0.9 },
+        to = { autoAlpha: 1, y: 0, scale: 1 },
+        duration = 1,
+        delay = 0,
+        stagger = 0.2,
+        ease = 'power3.out',
+        trigger,
+        start = 'top 80%',
+        end,
+        toggleActions = 'play reverse play reverse', // Allow re-triggering on scroll
+        scrub = false,
+        pin = false,
+        pinSpacing = true,
+        isGroup = false,
+        groupSelector = '[data-scroll]',
+        onComplete,
+        onStart,
+        onUpdate,
+      } = currentConfig;
 
-    // Create animation using fromTo to properly handle initial state
-    const animation = gsapInstance.fromTo(elements, from ?? {}, {
-      ...(to ?? {}),
-      duration,
-      delay,
-      stagger: isGroup ? stagger : undefined,
-      ease,
-      onComplete,
-      onStart,
-      onUpdate,
+      // Set initial state explicitly to ensure element is hidden before animation
+      let elements: Element | NodeListOf<Element> = element;
+      
+      // If it's a group, get all child elements
+      if (isGroup) {
+        const nodeList = element.querySelectorAll(groupSelector);
+        if (nodeList.length === 0) return;
+        elements = nodeList;
+      }
+
+      // Set initial state explicitly to ensure visibility is controlled
+      if (elements instanceof NodeList) {
+        Array.from(elements).forEach((el) => {
+          gsapInstance.set(el, from ?? {});
+        });
+      } else {
+        gsapInstance.set(elements, from ?? {});
+      }
+
+      // Create animation using fromTo to properly handle initial state
+      const animation = gsapInstance.fromTo(elements, from ?? {}, {
+        ...(to ?? {}),
+        duration,
+        delay,
+        stagger: isGroup ? stagger : undefined,
+        ease,
+        onComplete,
+        onStart,
+        onUpdate,
+      });
+
+      // Create ScrollTrigger - allows re-triggering on scroll but prevents re-initialization on re-renders
+      const scrollTrigger = ST.create({
+        trigger: trigger || element,
+        animation,
+        start,
+        end,
+        toggleActions, // 'play reverse play reverse' allows animation to play again when scrolling
+        scrub,
+        pin,
+        pinSpacing,
+      });
+
+      // Store references
+      animationRef.current = animation;
+      scrollTriggerRef.current = scrollTrigger;
+      isInitializedRef.current = true;
+
+      // Refresh ScrollTrigger after a brief delay to ensure it's properly initialized
+      requestAnimationFrame(() => {
+        ST.refresh();
+      });
+    };
+
+    // Use double requestAnimationFrame to ensure DOM is fully ready
+    const rafId = requestAnimationFrame(() => {
+      requestAnimationFrame(initAnimation);
     });
-
-    // Create ScrollTrigger - allows re-triggering on scroll but prevents re-initialization on re-renders
-    const scrollTrigger = ST.create({
-      trigger: trigger || element,
-      animation,
-      start,
-      end,
-      toggleActions, // 'play reverse play reverse' allows animation to play again when scrolling
-      scrub,
-      pin,
-      pinSpacing,
-    });
-
-    // Store references
-    animationRef.current = animation;
-    scrollTriggerRef.current = scrollTrigger;
-    isInitializedRef.current = true;
 
     return () => {
+      cancelAnimationFrame(rafId);
       if (animationRef.current) {
         animationRef.current.kill();
         animationRef.current = null;

@@ -114,8 +114,8 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
 
     // Fade in left content
     if (leftContent) {
-      gsap.set(leftContent, { opacity: 0 });
-      tl.to(leftContent, { opacity: 1, duration: 0.3 }, 0);
+      gsap.set(leftContent, { opacity: 0, y: 30 });
+      tl.to(leftContent, { opacity: 1, y: 0, duration: 0.3 }, 0);
     }
 
     // Scale up cards

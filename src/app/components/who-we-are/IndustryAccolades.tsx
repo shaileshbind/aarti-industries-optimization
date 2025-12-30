@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
-
+import { FadeInReveal } from "../ScrollReveal";
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
 
@@ -152,7 +152,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
 
   return (
     <div className="py-[72px] lg:py-[100px]">
-      {title && <H2 className="text-left lg:text-center container">{title}</H2>}
+      {title && <FadeInReveal delay={0.6}><H2 className="text-left lg:text-center container">{title}</H2></FadeInReveal>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
         <div 
@@ -227,7 +227,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               <SwiperSlide key={`${active}-${idx}`}>
                 <div className="award-card-anim">
                   {item?.image?.url && (
-                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-[60px] grid place-items-center h-[230px] overflow-hidden lg:h-[320px] 2xl:h-[400px] ">
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-10 grid place-items-center h-[230px] overflow-hidden lg:h-[320px] 2xl:h-[360px] ">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Cta, SubH1 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import { EnvExpProps } from "@/app/types/environment.type";
+import SplitText from "../SplitText";
 
 const EnvExp = ({ data }: EnvExpProps) => {
   const { title, link, buttonTitle, reportFile } = data;
@@ -26,9 +27,11 @@ const EnvExp = ({ data }: EnvExpProps) => {
             return (
               <FadeInReveal delay={0.2}>
                 <Link href={href} target="_blank">
-                  <div className="w-fit bg-white button-subtle-scale rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
+                  <div className="group w-fit bg-white  rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
                     {buttonTitle && (
-                      <Cta className="text-orange-200">{buttonTitle}</Cta>
+                      <Cta className="text-orange-200">
+                        <SplitText text={buttonTitle} />
+                      </Cta>
                     )}
                     <Image
                       src="/images/download-icon-orange.svg"

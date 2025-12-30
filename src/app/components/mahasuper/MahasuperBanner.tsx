@@ -14,7 +14,6 @@ const MahasuperBanner = ({ data }: MahasuperBannerProps) => {
       mobImage={mobImage?.url} 
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
-      showStar3={false}
     />
   );
 };

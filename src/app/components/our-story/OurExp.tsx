@@ -4,7 +4,7 @@ import { OurExpProps } from "@/app/types/our.story.type";
 
 const OurExp: React.FC<OurExpProps> = ({ data }) => {
   return (
-    <div className="py-[50px] lg:py-[100px] container">
+    <div className="py-[50px] lg:py-[100px] container max-w-[1130px]!">
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={data?.[0]?.title}

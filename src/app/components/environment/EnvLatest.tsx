@@ -49,7 +49,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
                 imageSrc={item?.image?.url}
                 date={item?.title}
                 desc={item?.description}
-                link={item?.slug}
+                link={"/blogs/" + item?.slug}
                 animate
               />
             </SwiperSlide>
