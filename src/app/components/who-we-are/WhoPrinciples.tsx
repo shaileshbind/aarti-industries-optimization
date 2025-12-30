@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { H2 } from "../Typography2";
 import Image from "next/image";
 import { WhoPrinciplesProps } from "@/app/types/who-we-are.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
   const { description, content } = data;
@@ -14,11 +15,14 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
   return (
     <section className="max-w-5xl mx-auto md:py-[100px] py-[50px]">
       {description && (
+        <FadeInReveal delay={0.6}>
         <H2 className="max-w-xl mx-auto text-center py-3 md:py-9">
           {description}
         </H2>
+        </FadeInReveal>
       )}
       {/* Desktop Layout */}
+      <FadeInReveal delay={0.6}>
      {content?.length > 0 && <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
         {/* Left Tabs + Progress Bar */}
         <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
@@ -92,8 +96,10 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           )}
         </div>
       </div>}
+      </FadeInReveal>
       {/* Mobile Accordion */}
       {content?.length > 0 && (
+        <FadeInReveal delay={0.6}>
         <div className="md:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
           {content?.map((tab, index) => {
             const isOpen = openIndex === index;
@@ -156,6 +162,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             );
           })}
         </div>
+        </FadeInReveal>
       )}
     </section>
   );

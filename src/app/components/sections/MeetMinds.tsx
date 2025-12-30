@@ -17,6 +17,7 @@ import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 import clsx from "clsx";
 import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -38,11 +39,14 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   return (
     <div className="pb-[72px] lg:pb-[100px] lg:pt-0">
       {!hideTitle && sectionTitle && (
+        <FadeInReveal delay={0.6}>
         <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
+        </FadeInReveal>
       )}
 
       <div className="mt-[44px]">
         {/* Swiper */}
+        <FadeInReveal delay={0.6}>
         {management_boards?.length > 0 && (
           <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
             <Swiper
@@ -139,7 +143,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
             </Swiper>
           </div>
         )}
-
+        </FadeInReveal>
         {/* Navigation */}
         <div
           className={clsx(

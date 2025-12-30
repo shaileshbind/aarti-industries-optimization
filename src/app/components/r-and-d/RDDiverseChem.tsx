@@ -7,6 +7,7 @@ import FaqAccordion from "../FaqAccordian";
 import Image from "next/image";
 import { RDDiverseChemProps } from "@/app/types/r-and-d.type";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { FadeInReveal } from "../ScrollReveal";
 const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
   const { title, description } = data;
   const { newChemistries, existingChemistries } = data2;
@@ -68,10 +69,12 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
       <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[100px] ">
         {title && (
           <div>
+            <FadeInReveal delay={0.2}>
             <H2>{title}</H2>
+            </FadeInReveal>
           </div>
         )}
-        <div>{description && <BodyText1>{description}</BodyText1>}</div>
+        <div> <FadeInReveal delay={0.2}>{description && <BodyText1>{description}</BodyText1>}</FadeInReveal></div>
       </div>
       <div className="hidden xl:block">
         <div

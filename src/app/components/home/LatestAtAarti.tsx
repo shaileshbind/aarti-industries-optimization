@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -138,6 +139,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
+      <FadeInReveal delay={0.6}>
       <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
         {sectionTitle && (
           <div className="max-w-[100%] md:max-w-fit">
@@ -157,8 +159,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           />
         </div>
       </div>
+      </FadeInReveal>
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
+        <FadeInReveal delay={0.6}>
         <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px] overflow-x-auto">
           <div className=" w-full ">
             <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
@@ -201,9 +205,9 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
             </div>
           </div>
         </div>
-
+        </FadeInReveal>
         {postsCount > 0 && (
-          <>
+          <FadeInReveal delay={0.6}>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
                 key={activeTab}
@@ -248,7 +252,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
               </div>
             {/* )} */}
-          </>
+          </FadeInReveal>
         )}
 
         <div className="flex lg:hidden justify-center mt-10">
