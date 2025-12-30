@@ -8,6 +8,7 @@ import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
 import { useMediaQuery } from "@mui/material";
+import { FadeInReveal } from "../ScrollReveal";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const { sectionTitle, content } = data;
@@ -67,9 +68,10 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
 
   return (
     <div className="pb-[50px] md:pb-[140px] md:pt-0 fluid-container">
-      {sectionTitle && <H2>{sectionTitle}</H2>}
+      {sectionTitle && <FadeInReveal delay={0.6}><H2>{sectionTitle}</H2></FadeInReveal>}
 
       {content?.length > 0 && (
+        <FadeInReveal delay={0.6}>
         <div className="mt-[30px] md:mt-[60px]">
           {content?.map((item, index) => (
             <div key={index} className="relative complex-chemistry">
@@ -148,6 +150,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
             </div>
           ))}
         </div>
+        </FadeInReveal>
       )}
     </div>
   );

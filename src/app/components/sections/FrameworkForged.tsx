@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { isMobile } from "react-device-detect";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
@@ -115,10 +116,13 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   return (
     <div ref={frameworkForgedRef}>
       {title && (
+        <FadeInReveal delay={0.6}>
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {title}
         </H2>
+        </FadeInReveal>
       )}
+      <FadeInReveal delay={0.6}>
       <div
         className={clsx(
           `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset] gap-x-[40px]  ${
@@ -443,6 +447,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
           )}
         </div>
       </div>
+      </FadeInReveal>
     </div>
   );
 };
