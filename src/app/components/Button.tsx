@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import SplitText from "./SplitText"
 interface ButtonProps {
   title: string;
   href?: string;
@@ -18,19 +18,19 @@ const Button = ({
   return (
     <>
       {secondary ? (
-        <>
-          <Link
-            href={href || ""}
-            target={useTargetBlank ? "_blank" : "_self"}
-            className="w-fit"
+        <Link
+          href={href || ""}
+          target={useTargetBlank ? "_blank" : "_self"}
+          className="w-fit"
+        >
+          <button
+            className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px]
+              font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
+              [text-underline-position:under] ${className}`}
           >
-            <button
-              className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under] ${className}`}
-            >
-              {title}
-            </button>
-          </Link>
-        </>
+            {title}
+          </button>
+        </Link>
       ) : (
         <Link
           href={href || ""}
@@ -38,10 +38,13 @@ const Button = ({
           className="w-fit group relative inline-block"
         >
           <button
-            className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300 ${className}`}
+            className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer
+              bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%]
+              font-alte-hans overflow-hidden transition-all duration-200 ${className}`}
           >
-            <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-            <span className="relative z-10 text-white">{title}</span>
+            <span className="relative z-10 text-white">
+              <SplitText text={title} />
+            </span>
           </button>
         </Link>
       )}

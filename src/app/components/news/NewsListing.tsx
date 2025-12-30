@@ -250,7 +250,7 @@ const NewsListing = () => {
                     }
                   }}
                   onClick={() => handleTabClick(index, item.slug)}
-                  className={`text-grey-400 cursor-pointer font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
+                  className={`text-grey-400 cursor-pointer font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all text-[14px] ${
                     activeTab === index ? "text-white" : "hover:bg-grey-200"
                   }`}
                 >

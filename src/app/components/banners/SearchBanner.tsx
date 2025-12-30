@@ -16,6 +16,7 @@ const SearchBanner = ({
   tag,
   desc,
   showStar3 = true,
+  showStar2= true,
   btnTitle,
   btnLink,
   image,
@@ -288,6 +289,7 @@ const SearchBanner = ({
                   height={52}
                 />
               </div>
+              {showStar2 && (
               <div className="absolute bottom-[-22px] lg:bottom-[-36px] right-[56px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 ">
                 <Image
                   src="/images/home/star-white.svg"
@@ -296,7 +298,7 @@ const SearchBanner = ({
                   height={72}
                 />
               </div>
-
+              )}
               {showStar3 && (
                 <div
                   ref={starRef3}
