@@ -6,7 +6,7 @@ const Explore: React.FC<ExploreProps> = ({ data }) => {
   const { exploreMore } = data;
   
   return (
-    <div className="py-[50px] md:py-[100px] container">
+    <div className="py-[50px] md:py-[100px] container !max-w-[1130px]">
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[24px]">
         <ExploreCard
           title={exploreMore?.[0]?.title}

@@ -14,7 +14,6 @@ const DigitalBanner: React.FC<DigitalBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
-      showStar3={false}
     />
   );
 };
