@@ -18,12 +18,12 @@ const NumberCard = ({
   desc,
   title,
   className,
-  titleClassName
+  titleClassName,
 }: NumberCardProps) => {
   return (
     <div
       className={clsxN(
-        `bg-[#EFF3F5] md:py-[27px] py-5 px-5 md:px-[24px] rounded-[20px] overflow-hidden relative group h-[170px] lg:h-[174px]`,
+        `bg-[#EFF3F5] md:py-[27px] py-5 px-5 md:px-[24px] rounded-[20px] overflow-hidden relative group h-auto lg:h-[174px]`,
         className
       )}
     >
@@ -39,14 +39,18 @@ const NumberCard = ({
           {title && (
             <H2
               className={clsx(
-                `text-orange-200 text-[40px] lg:text-[44px]`,
+                `text-orange-200 text-[40px] md:text-[44px]`,
                 titleClassName
               )}
             >
               {title}
             </H2>
           )}
-          {desc && <BodyText2>{desc}</BodyText2>}
+          {desc && (
+            <BodyText2 className=" text-[14px] md:text-[18px] lg:text-[16px]">
+              {desc}
+            </BodyText2>
+          )}
         </>
       )}
     </div>

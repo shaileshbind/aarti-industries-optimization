@@ -38,7 +38,7 @@ const ExploreCard = ({
         />
         <SubH2 className="text-white w-[80%]">{title}</SubH2>
         {ctaButton && ctaButton?.length > 0 && (
-          <div className="mt-[10px] lg:mt-[22px] flex gap-x-[12px] xl:gap-x-[50px]">
+          <div className="mt-[10px] lg:mt-[22px] flex flex-col md:flex-row gap-[12px] xl:gap-x-[50px]">
             {formTitle && (
               <div
                 onClick={() => {

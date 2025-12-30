@@ -173,9 +173,9 @@ export default function MainTimeline({
       </div>
 
       {/* Desktop View - Original Layout */}
-      <div className="hidden lg:flex items-end justify-center w-full gap-3 px-4 py-16 overflow-hidden">
+      <div className="flex items-end justify-start md:justify-center w-full gap-3 md:px-4 pt-6 md:py-16 overflow-hidden">
         {/* Timeline */}
-        <div className="flex w-full max-full mx-6 transition-all">
+        <div className="hidden lg:flex w-full max-full mx-6 transition-all">
           {phases.map((phase, i) => (
             <div
               key={i}
@@ -278,7 +278,7 @@ export default function MainTimeline({
           <button
             onClick={handlePrev}
             disabled={activePhase === 0 && activeYear === phases[0].years[0]}
-            className="disabled:opacity-40"
+            className="disabled:opacity-40 cursor-pointer"
           >
             <Image
               src="/images/home/chevron-right-orange.svg"
@@ -295,7 +295,7 @@ export default function MainTimeline({
               activePhase === phases.length - 1 &&
               activeYear === phases[phases.length - 1].years.slice(-1)[0]
             }
-            className="disabled:opacity-40"
+            className="disabled:opacity-40 cursor-pointer"
           >
             <Image
               src="/images/home/chevron-right-orange.svg"

@@ -191,7 +191,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         Manufacturing Facilities
                       </SubH3>
                     </div>
-                    <div className="mt-[20px] grid grid-cols-2">
+                    <div className="mt-[20px] grid grid-cols-2 gap-2">
                       <div
                         onClick={() => setActive(2)}
                         className="cursor-pointer w-fit"
@@ -459,7 +459,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 />
                 <SubH3 className="!text-[18px]">Manufacturing Facilities</SubH3>
               </div>
-              <div className="mt-[12px] grid grid-cols-2">
+              <div className="mt-[12px] grid grid-cols-2 gap-2">
                 <div
                   onClick={() => setActiveMob(2)}
                   className="cursor-pointer w-fit"
