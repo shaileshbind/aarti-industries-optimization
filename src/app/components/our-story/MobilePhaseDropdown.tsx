@@ -6,7 +6,7 @@ import { BodyText1 } from "../Typography2";
 
 interface Phase {
   title: string;
-  years: number[];
+  years: string[];
 }
 
 interface MobilePhaseDropdownProps {
@@ -47,7 +47,7 @@ export default function MobilePhaseDropdown({
         className="w-full px-4 py-3 flex items-center justify-between bg-gradient-orange-3 rounded-lg hover:border-orange-500 transition-colors"
       >
         <BodyText1 className="text-white">
-          {phases[activePhase].title}
+          {phases[activePhase]?.title}
         </BodyText1>
         <div className="border-1 border-white rounded-full p-1">
              <ChevronDown

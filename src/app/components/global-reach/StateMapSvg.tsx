@@ -7,6 +7,7 @@ interface StateMapProps {
   hoverJhagadia?: () => void;
   width?: string;
   height?: string;
+  active?: number | null;
 }
 
 const StateMapSvg = ({
@@ -18,6 +19,7 @@ const StateMapSvg = ({
   hoverNaviM,
   hoverVapi,
   hoverJhagadia,
+  active,
 }: StateMapProps) => {
   return (
     <svg
@@ -44,107 +46,65 @@ const StateMapSvg = ({
         mask="url(#path-2-inside-1_40_29)"
       />
       {/* Bachau */}
-      <circle
-        cx="96.4048"
-        cy="82.5554"
-        r="10.8886"
-        fill="#F9C095"
-        className="hover:cursor-pointer"
+      <g
         onMouseEnter={hoverBachau}
-      />
-      <circle
-        cx="96.4048"
-        cy="82.5553"
-        r="6.53319"
-        fill="#F36633"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverBachau}
-      />
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 0 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="96.4048" cy="82.5554" r="10.8886" fill="#F9C095" />
+        <circle cx="96.4048" cy="82.5553" r="6.53319" fill="#F36633" />
+      </g>
       {/* Dahej */}
-      <circle
-        cx="255.984"
-        cy="178.387"
-        r="10.8886"
-        fill="#F9C095"
-        className="hover:cursor-pointer"
+      <g
         onMouseEnter={hoverDahej}
-      />
-      <circle
-        cx="255.984"
-        cy="178.387"
-        r="6.53319"
-        fill="#F36633"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverDahej}
-      />
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 1 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="255.984" cy="178.387" r="10.8886" fill="#F9C095" />
+        <circle cx="255.984" cy="178.387" r="6.53319" fill="#F36633" />
+      </g>
       {/* Jhagadia */}
-      <circle
-        cx="280.984"
-        cy="178.387"
-        r="10.8886"
-        fill="#F9C095"
-        className="hover:cursor-pointer"
+      <g
         onMouseEnter={hoverJhagadia}
-      />
-      <circle
-        cx="280.984"
-        cy="178.387"
-        r="6.53319"
-        fill="#F36633"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverJhagadia}
-      />
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 5 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="280.984" cy="178.387" r="10.8886" fill="#F9C095" />
+        <circle cx="280.984" cy="178.387" r="6.53319" fill="#F36633" />
+      </g>
       {/* Tarapur */}
-      <circle
-        cx="281.512"
-        cy="327.55"
-        r="10.8886"
-        fill="#F9C095"
-        className="hover:cursor-pointer"
+      <g
         onMouseEnter={hoverTarapur}
-      />
-      <circle
-        cx="281.512"
-        cy="327.55"
-        r="6.53319"
-        fill="#F36633"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverTarapur}
-      />
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 2 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="281.512" cy="327.55" r="10.8886" fill="#F9C095" />
+        <circle cx="281.512" cy="327.55" r="6.53319" fill="#F36633" />
+      </g>
       {/* Navi Mumbai */}
-      <circle
-        cx="293.761"
-        cy="377.91"
-        r="10.8886"
-        fill="#9FB5C3"
-        className="hover:cursor-pointer"
+      <g
         onMouseEnter={hoverNaviM}
-      />
-      <circle
-        cx="293.761"
-        cy="377.909"
-        r="6.53319"
-        fill="#002F50"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverNaviM}
-      />
-      {/* vapi */}
-      <circle
-        cx="278.79"
-        cy="218.663"
-        r="10.8886"
-        fill="#9FB5C3"
-        className="hover:cursor-pointer"
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 3 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="293.761" cy="377.91" r="10.8886" fill="#9FB5C3" />
+        <circle cx="293.761" cy="377.909" r="6.53319" fill="#002F50" />
+      </g>
+      {/* Vapi */}
+      <g
         onMouseEnter={hoverVapi}
-      />
-      <circle
-        cx="278.79"
-        cy="218.663"
-        r="6.53319"
-        fill="#002F50"
-        className="hover:cursor-pointer"
-        onMouseEnter={hoverVapi}
-      />
+        className={`cursor-pointer transition-opacity duration-200 ${
+          active === 4 ? "opacity-100" : "opacity-40"
+        }`}
+      >
+        <circle cx="278.79" cy="218.663" r="10.8886" fill="#9FB5C3" />
+        <circle cx="278.79" cy="218.663" r="6.53319" fill="#002F50" />
+      </g>
     </svg>
   );
 };

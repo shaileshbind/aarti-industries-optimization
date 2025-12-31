@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { useEffect, useRef, useState } from 'react'
 import { BodyText1, BodyText2, H3, SubH2 } from '../Typography2'
 import { WordReveal } from '../ScrollReveal'
@@ -16,24 +16,26 @@ export default function TimeLine({
   const phases = data?.milestone?.map((milestone) => ({
     title: `${milestone.name} (${milestone.date_range})`,
     years: milestone.timeline_milestones.map((item) =>
-      parseInt(item.year.slice(0, 4))
+      // item.year.slice(0, 4) 
+    item.year
     ),
     images: milestone.images?.map((image) => image?.url) || [],
   })) || [];
   const yearContent = data?.milestone?.reduce((acc, milestone) => {
     milestone.timeline_milestones.forEach((item) => {
-      const numericYear = parseInt(item.year.slice(0, 4));
-      acc[numericYear] = {
+      // const yearStr = item.year.slice(0, 4);
+       const yearStr = item.year;
+      acc[yearStr] = {
         title: item.title,
         description: item.description || "",
       };
     });
     return acc;
-  }, {} as Record<number, { title: string; description: string }>);
+  }, {} as Record<string, { title: string; description: string }>);
 
   const [currentPhase, setCurrentPhase] = useState(0);
-  const [currentYear, setCurrentYear] = useState(
-    phases?.[0]?.years?.[0] || 0
+  const [currentYear, setCurrentYear] = useState<string>(
+    phases?.[0]?.years?.[0] || ""
   );
 
   const imagesContainerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,7 @@ export default function TimeLine({
     setCurrentPhase(index);
     setCurrentYear(phases[index].years[0]);
   };
-  const handleYearClick = (year: number) => setCurrentYear(year);
+  const handleYearClick = (year: string) => setCurrentYear(year);
   const handleMobilePhaseSelect = (i: number) => handlePhaseClick(i);
 
   // Animation for images
@@ -158,12 +160,13 @@ export default function TimeLine({
         </H3>
       </WordReveal>
 
-      <div className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0">
-        <h1 ref={yearDigit1Ref} className="font-inter text-gray-200  lg:text-[550px] text-[200px] font-bold">
-          {String(currentYear).slice(2, 3)}
+      {/* Large Background Numbers */}
+      <div className="absolute lg:right-[-170px] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0">
+        <h1 ref={yearDigit1Ref} className="font-inter text-gray-200 lg:text-[550px] text-[200px] font-bold">
+          {currentYear.slice(2, 3)}
         </h1>
-        <h1 ref={yearDigit2Ref} className="font-inter text-gray-200  lg:text-[550px] text-[200px] font-bold">
-          {String(currentYear).slice(-1)}
+        <h1 ref={yearDigit2Ref} className="font-inter text-gray-200 lg:text-[550px] text-[200px] font-bold">
+          {currentYear.slice(-1)}
         </h1>
       </div>
 
