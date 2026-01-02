@@ -7,17 +7,17 @@ import Image from "next/image";
 
 interface Phase {
   title: string;
-  years: number[];
+  years: string[];
 }
 
 interface TimelineProps {
   phases: Phase[];
-  onYearChange?: (year: number) => void;
+  onYearChange?: (year: string) => void;
   onPhaseChange?: (phase: number) => void;
   activePhase?: number;
-  activeYear?: number;
+  activeYear?: string;
   onPhaseClick?: (phaseIndex: number) => void;
-  onYearClick?: (year: number) => void;
+  onYearClick?: (year: string) => void;
 }
 
 export default function MainTimeline({
@@ -29,9 +29,9 @@ export default function MainTimeline({
   onPhaseClick: externalPhaseClick,
   onYearClick: externalYearClick,
 }: TimelineProps) {
-  // Use external state if provided, otherwise maintain internal state
+  // Updated: internal state handles strings
   const [internalActivePhase, setInternalActivePhase] = useState(0);
-  const [internalActiveYear, setInternalActiveYear] = useState(
+  const [internalActiveYear, setInternalActiveYear] = useState<string>(
     phases[0].years[0]
   );
 
@@ -39,7 +39,7 @@ export default function MainTimeline({
   const activeYear = externalActiveYear ?? internalActiveYear;
 
   const phaseRefs = useRef<HTMLDivElement[]>([]);
-  const dotRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const dotRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     if (onYearChange) {
@@ -80,7 +80,7 @@ export default function MainTimeline({
     }
   };
 
-  const handleYearClick = (year: number) => {
+  const handleYearClick = (year: string) => {
     if (externalYearClick) {
       externalYearClick(year);
     } else {
@@ -148,17 +148,13 @@ export default function MainTimeline({
                 className={`relative transition-all duration-300 z-10 w-1.5 h-1.5 rounded-full cursor-pointer bg-gray-200 `}
               >
                 <div
-                  className={`absolute inset-0 h-4 w-4 top-[-13] !z-50 -left-[12px] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
-                      ${
-                        activeYear === year
-                          ? "opacity-100 bg-white/0"
-                          : "opacity-0"
-                      }
+                  className={`absolute inset-0 h-4 w-4 top-[-13px] !z-50 -left-[12px] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
+                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
                     `}
                   style={{ backgroundImage: "url('/images/star-orange.svg')" }}
                 ></div>
                 <BodyText3
-                  className={`absolute top-6 left-1/2 transform -translate-x-1/2 !text-xs whitespace-nowrap transition-all duration-300 ${
+                  className={`absolute top-6 left-1/2 transform -translate-x-1/2 !text-xs transition-all duration-300 ${
                     activeYear === year
                       ? "text-orange-600 font-medium scale-120"
                       : "text-gray-600"
@@ -197,19 +193,10 @@ export default function MainTimeline({
 
               <div
                 className={`relative w-full flex justify-between items-center 
-                ${
-                  i === 0
-                    ? "pr-0"
-                    : // : i === phases.length - 1
-                      //   ? "pl-7"
-                      "pl-14"
-                } ${activePhase === i ? "!pl-0" : "z-10"}
-                    ${
-                      activePhase > 0 && activePhase === i + 1
-                        ? "!pr-14"
-                        : "z-10"
-                    }
-                  `}
+                ${i === 0 ? "pr-0" : "pl-14"} 
+                ${activePhase === i ? "!pl-0" : "z-10"}
+                ${activePhase > 0 && activePhase === i + 1 ? "!pr-14" : "z-10"}
+                `}
               >
                 <div
                   className={`absolute top-1/2 left-0 right-0 h-[1px] -translate-y-1/2 ${
@@ -228,7 +215,7 @@ export default function MainTimeline({
                       handlePhaseClick(i);
                       handleYearClick(year);
                     }}
-                    className={`relative z-30 w-1.5 h-1.5 bg-amber-500 rounded-full cursor-pointer transition-all duration-300
+                    className={`relative z-30 w-1.5 h-1.5 rounded-full cursor-pointer transition-all duration-300
                       ${
                         activePhase === i
                           ? activeYear === year
@@ -239,12 +226,8 @@ export default function MainTimeline({
                     `}
                   >
                     <div
-                      className={`absolute inset-0 h-3 w-3 top-[-10] !z-50 left-[-9] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
-                      ${
-                        activeYear === year
-                          ? "opacity-100 bg-white/0"
-                          : "opacity-0"
-                      }
+                      className={`absolute inset-0 h-3 w-3 top-[-10px] !z-50 left-[-9px] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
+                      ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
                     `}
                       style={{
                         backgroundImage: "url('/images/star-orange.svg')",
@@ -264,7 +247,7 @@ export default function MainTimeline({
                       }
                     >
                       {year}
-                      <span className="absolute left-0 bottom-0  w-full h-[50px] cursor-pointer "></span>
+                      <span className="absolute left-0 bottom-0 w-full h-[50px] cursor-pointer"></span>
                     </BodyText3>
                   </div>
                 ))}

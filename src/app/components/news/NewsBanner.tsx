@@ -1,3 +1,4 @@
+'use client'
 import HeroBanner from "../banners/HeroBanner";
 import { NewsBannerProps } from "@/app/types/news.type";
 
@@ -9,12 +10,11 @@ const NewsBanner = ({ data }: NewsBannerProps) => {
       <HeroBanner
         title={title}
         fullBg
-        centerText={true}
+         centerText={true}
         image={image?.url}
         mobImage={mobImage?.url}
         alt={image?.alternativeText}
         mobAlt={mobImage?.alternativeText}
-        showStar3={false}
       />
     </div>
   );

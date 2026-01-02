@@ -27,16 +27,18 @@ const NewsCard = ({
   const CardContent = () => (
     <>
       {animate ? (
-        <div className="group relative inverted-radius transition-all duration-300">
-          <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2] border-[1px] border-gray-300">
-            {imageSrc && (
-              <Image
-                src={imageSrc}
-                alt={imageAlt ? imageAlt : "img"}
-                fill
-                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
-              />
-            )}
+        <>
+          <div className="group relative inverted-radius transition-all duration-300 ">
+            <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2] border-[1px] border-gray-300 ">
+              {imageSrc && (
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt ? imageAlt : "img"}
+                  fill
+                  className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                />
+              )}
+            </div>
           </div>
           <div className="flex mt-[16px] gap-x-[14px] items-center">
             {tag && (
@@ -69,7 +71,7 @@ const NewsCard = ({
           <div className="mt-[8px] mb-1 font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
             {desc}
           </div>
-        </div>
+        </>
       ) : (
         <div className="group relative transition-all duration-300">
           <div className="relative  transition-all duration-300 rounded-[10px] w-full h-[230px] overflow-hidden z-[2]">

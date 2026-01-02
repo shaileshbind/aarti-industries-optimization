@@ -7,6 +7,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
+import SplitText from "../SplitText";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -254,14 +255,14 @@ const HeroBanner = ({
                   lineClassName
                 )}
               />
-              {!centerText && (
+              {/* {!centerText && ( */}
                 <div
                   ref={lineHorizontal}
                   className={clsx(
                     `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`
                   )}
                 />
-              )}
+              {/* )} */}
               <div
                 ref={starRef}
                 className={clsx(
@@ -279,7 +280,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -292,7 +293,7 @@ const HeroBanner = ({
               {showStar3 && (
                 <div
                   ref={starRef3}
-                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-19.5px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -349,10 +350,11 @@ const HeroBanner = ({
                       setshowGeneralPopup(true);
                     }}
                   >
-                    <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                    <span className="relative z-10 text-white">
-                      {popupButtonTitle}
-                    </span>
+                    {popupButtonTitle && (
+                      <span className="relative z-10 text-white">
+                        <SplitText text={popupButtonTitle} />
+                      </span>
+                    )}
                   </button>
                 </div>
               </FadeInRevealBlur>

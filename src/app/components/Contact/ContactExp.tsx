@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Cta, SubH1 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import { ContactExpProps } from "@/app/types/contact.type";
+import SplitText from "../SplitText";
 
 const ContactExp = ({ data }: ContactExpProps) => {
   const { title, ctaButton } = data;
@@ -25,8 +26,8 @@ const ContactExp = ({ data }: ContactExpProps) => {
               href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
               target="_blank"
             >
-              <div className="w-fit bg-white button-subtle-scale rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
-                <Cta className="text-orange-200 ">{ctaButton?.title}</Cta>
+              <div className="w-fit bg-white group rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
+                <Cta className="text-orange-200 "><SplitText text={ctaButton?.title}/></Cta>
                 <Image
                   src="/images/download-icon-orange.svg"
                   alt="icon"

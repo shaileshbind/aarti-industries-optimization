@@ -24,7 +24,6 @@ const PrivacyPolicyBanner: React.FC<PrivacyPolicyProps> = ({ data }) => {
             mobImage={mobImage?.url}
             alt={image?.alternativeText}
             mobAlt={mobImage?.alternativeText}
-            showStar3={false}
         />
     );
 };
