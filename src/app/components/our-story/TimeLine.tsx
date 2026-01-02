@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { BodyText1, BodyText2, H3, SubH2 } from "../Typography2";
-import { WordReveal } from "../ScrollReveal";
+import { FadeInRevealBlur } from "../ScrollReveal";
 import Image from "next/image";
 import MainTimeline from "./MainTimeline";
 import MobilePhaseDropdown from "./MobilePhaseDropdown";
 import { gsap } from "gsap";
 import { TimelineData } from "../../types/our.story.type"; // adjust import path if needed
-import AnimatedText from "../AnimatedText";
 
 export default function TimeLine({ data }: TimelineData) {
   const sectionTitle = data?.sectionTitle || "Our Journey";
@@ -155,16 +154,11 @@ export default function TimeLine({ data }: TimelineData) {
 
   return (
     <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
-      <WordReveal
-        className="fluid-container"
-        stagger={0.1}
-        fromY={10}
-        duration={3}
-      >
-        <AnimatedText className="lg:w-[35%] static lg:absolute lg:top-40 mb-5 lg:mb-[unset]">
+      <FadeInRevealBlur className="fluid-container">
+        <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
           <H3>{sectionTitle}</H3>
-        </AnimatedText>
-      </WordReveal>
+        </div>
+      </FadeInRevealBlur>
 
       {/* Large Background Numbers */}
       <div className="absolute lg:right-[-170px] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0">

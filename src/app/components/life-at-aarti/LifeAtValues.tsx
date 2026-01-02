@@ -78,6 +78,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
             {/* Left Tabs + Progress Bar */}
             <div className="relative bg-white text-white md:w-[40%] flex flex-col justify-center">
               <div className="relative flex gap-4">
+                <div className="bg-[#f5f8fa] h-[100%] w-[30px] absolute right-0"/>
                 {/* Progress Bar */}
                 <div className="relative flex flex-col items-center justify-center">
                   {data.map((_, index) => (
