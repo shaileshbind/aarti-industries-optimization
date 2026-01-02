@@ -76,11 +76,11 @@ const GloballyCertified = ({
 
   return (
     <div className={clsx(`w-full pb-[50px] lg:pb-[100px]`, className)}>
-      <FadeInRevealBlur delay={0.1}>
+      <div>
         <H3 className="text-[#002F50] mx-auto w-fit">
           {title || "Globally Certified"}
         </H3>
-      </FadeInRevealBlur>
+      </div>
       <div
         className="overflow-hidden relative mt-[24px] lg:mt-[35px]"
         ref={containerRef}
