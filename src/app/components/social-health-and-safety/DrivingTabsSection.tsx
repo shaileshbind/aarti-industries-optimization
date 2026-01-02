@@ -240,7 +240,7 @@ const DrivingTabsSection = ({
                                 <Image
                                   src={"/images/star-orange.svg"}
                                   alt={"star"}
-                                  className="object-cover object-top w-5 h-5 mt-[5px]"
+                                  className="object-cover w-[14px] h-[14px] mt-[5px]"
                                   width={14}
                                   height={14}
                                 />
@@ -357,7 +357,7 @@ const DrivingTabsSection = ({
                                   <Image
                                     src={"/images/star-orange.svg"}
                                     alt={"star"}
-                                    className="object-cover object-top w-4 h-4 mt-[2px]"
+                                    className="object-cover w-[14px] h-[14px] mt-[2px]"
                                     width={14}
                                     height={14}
                                   />

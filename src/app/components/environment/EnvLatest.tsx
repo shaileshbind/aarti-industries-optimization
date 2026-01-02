@@ -56,7 +56,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
           ))}
         </Swiper>
         {/* Progress + Navigation Flex Below Swiper */}
-        <div className="mt-[16px] flex items-center gap-x-[12px] mx-[20px] lg:mx-[60px]">
+        <div className="mt-[30px] lg:mt-[16px] flex items-center gap-x-[12px] mx-[20px] lg:mx-[60px]">
           {/* Progress Bar */}
           <div className="flex-1 relative h-[1px]">
             <div className="env-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
