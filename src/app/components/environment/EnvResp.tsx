@@ -213,9 +213,9 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
             {!showMore && (
               <div
                 onClick={() => setshowMore(true)}
-                className="mt-2 cursor-pointer"
+                className="mt-2 cursor-pointer inline-flex"
               >
-                <BodyText2 className="text-[#9997A2]">{"Read More"}</BodyText2>
+                <BodyText2 className="text-[#002F50] border-b mb-6">{"Read More"}</BodyText2>
               </div>
             )}
 

@@ -19,7 +19,7 @@ const ProductList = ({
   link,
   pdfLink,
   secondary,
-  scale=true,
+  scale=false,
 }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 

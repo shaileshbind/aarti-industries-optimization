@@ -29,7 +29,7 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                       key={index}
                       className={clsx(
                         "flex items-center gap-2 font-light mb-1",
-                        index == 0 ? "text-orange-200" : ""
+                        // index == 0 ? "text-orange-200" : ""
                       )}
                     >
                       <i className="w-[18px] h-[18px] rounded-full bg-orange-100 border-[4px] border-[#F9C095]"></i>

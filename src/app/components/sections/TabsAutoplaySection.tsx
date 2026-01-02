@@ -151,7 +151,7 @@ const TabsAutoplaySection = ({
       )}
       {/* Desktop */}
       <FadeInReveal delay={0.2}>
-      <div className="mx-[20px] lg:mx-[60px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px]">
+      <div className="mx-[20px] lg:mx-[60px] hidden xl:grid grid-cols-[20%_1fr] gap-x-[60px]">
         {/* Tabs */}
         {data?.length > 0 && (
           <div className="mt-[14px]">

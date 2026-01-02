@@ -41,13 +41,13 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
           {/* Main Content Section - Always Visible */}
           <div className="lg:pt-[40px] lg:pb-[85px] pt-7  flex flex-col">
             {leftSection?.title && (
-              <H2 className="lg:w-[85%] w-full pb-4 px-[20px] lg:px-[42px]">
+              <H2 className="lg:w-[85%] w-full pb-4 md:px-[20px] lg:px-[42px]">
                 {leftSection?.title}
               </H2>
             )}
 
             {leftSection?.description && (
-              <BodyText1 className="pb-7 px-[20px] lg:px-[42px]">
+              <BodyText1 className="pb-7 md:px-[20px] lg:px-[42px]">
                 {leftSection?.description}
               </BodyText1>
             )}
@@ -124,7 +124,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
         </FadeInReveal>
 
         <div
-          className={`block lg:hidden mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mb-9`}
+          className={`block lg:hidden md:mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mb-9`}
         >
           {/* Accordion Header - Always Visible */}
           {leftSection?.accordion?.title && (
