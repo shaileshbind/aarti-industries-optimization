@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { FadeInRevealBlur } from "../ScrollReveal";
-import { BodyText2, H3 } from "../Typography2";
+import { BodyText2 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import Button from "../Button";
 import { AboutCompanyProps } from "@/app/types/our.story.type";
@@ -26,7 +26,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
       <div className="w-full lg:w-[60%] mt-5 lg:mt-0">
         {description && (
           <AnimatedText>
-            <H3 className="whitespace-pre-line">{description}</H3>
+            <div className="font-normal text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%] text-blue-200 font-alte-hans whitespace-pre-line" dangerouslySetInnerHTML={{__html:description}}/>
           </AnimatedText>
         )}
 
