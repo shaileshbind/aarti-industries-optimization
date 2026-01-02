@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
-import { FadeInGroup, WordReveal } from "../ScrollReveal";
+import { FadeInGroup, FadeInRevealBlur } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
 import Link from "next/link";
@@ -42,10 +42,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
         <div className="flex flex-col w-full">
           {/* Left Content */}
           {sectionTitle && (
-            <WordReveal
-              stagger={0.1}
-              fromY={10}
-              duration={3}
+            <FadeInRevealBlur
               className={clsx(
                 `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`
               )}
@@ -53,7 +50,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               <H2 className={clsx(`text-blue-200`, headingClassName)}>
                 {sectionTitle}
               </H2>
-            </WordReveal>
+            </FadeInRevealBlur>
           )}
 
           {/* Right Swiper */}
@@ -125,7 +122,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px] mt-[40px] mb-[20px] lg:mx-[unset]">
+              <div className="relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]">
                 {cards?.length > 4 && (
                   <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                     <button
@@ -183,7 +180,10 @@ const Card = ({
   alt: string;
 }) => {
   return (
-    <div className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0" data-scroll>
+    <div
+      className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0"
+      data-scroll
+    >
       {title && (
         <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
       )}

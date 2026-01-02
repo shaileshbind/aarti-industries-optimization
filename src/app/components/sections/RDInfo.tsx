@@ -120,7 +120,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                         desc={items?.description}
                         imageSrc={items?.image?.url}
                         imageAlt={items?.image?.alternativeText}
-                        className="stat-box"
+                        className="stat-box !h-auto"
                       />
                     );
                   })}
@@ -136,7 +136,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                       desc={items?.description}
                       imageSrc={items?.image?.url}
                       imageAlt={items?.image?.alternativeText}
-                      className="stat-box"
+                      className="stat-box !h-auto"
                     />
                   );
                 })}

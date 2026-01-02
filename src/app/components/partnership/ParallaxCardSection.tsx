@@ -65,6 +65,7 @@ export default function ParallaxCardSection({
           { ref: leftImageRef, y: -400 },
           { ref: rightImageRef, y: -400 },
           { ref: bottomLeftImageRef, y: -250 },
+          { ref: bottomImageRef, y: -250 },
         ];
 
         images.forEach(({ ref, y }) => {
@@ -80,89 +81,89 @@ export default function ParallaxCardSection({
           });
         });
 
-        // --- DISTANCE CALCULATOR ---
-        const calculateDistance = () => {
-          if (bottomImageRef.current && stickyImageRef.current) {
-            const bottomRect = bottomImageRef.current.getBoundingClientRect();
-            const stickyRect = stickyImageRef.current.getBoundingClientRect();
-            return stickyRect.top - bottomRect.top + 116;
-          }
-          return 600; // fallback
-        };
+        // // --- DISTANCE CALCULATOR ---
+        // const calculateDistance = () => {
+        //   if (bottomImageRef.current && stickyImageRef.current) {
+        //     const bottomRect = bottomImageRef.current.getBoundingClientRect();
+        //     const stickyRect = stickyImageRef.current.getBoundingClientRect();
+        //     return stickyRect.top - bottomRect.top + 116;
+        //   }
+        //   return 600; // fallback
+        // };
 
-        // --- RESPONSIVE MATCH MEDIA ---
-        const mm = gsap.matchMedia();
+        // // --- RESPONSIVE MATCH MEDIA ---
+        // const mm = gsap.matchMedia();
 
-        mm.add(
-          {
-            isDesktop: "(min-width: 1281px)",
-            isMidScreen: "(min-width: 1025px) and (max-width: 1280px)",
-            is1024: "(max-width: 1024px)",
-          },
-          (context) => {
-            const { isDesktop, isMidScreen, is1024 } = context.conditions as {
-              isDesktop: boolean;
-              isMidScreen: boolean;
-              is1024: boolean;
-            };
+        // mm.add(
+        //   {
+        //     isDesktop: "(min-width: 1281px)",
+        //     isMidScreen: "(min-width: 1025px) and (max-width: 1280px)",
+        //     is1024: "(max-width: 1024px)",
+        //   },
+        //   (context) => {
+        //     const { isDesktop, isMidScreen, is1024 } = context.conditions as {
+        //       isDesktop: boolean;
+        //       isMidScreen: boolean;
+        //       is1024: boolean;
+        //     };
 
-            // Set responsive scale & x-offset
-            const scaleValue = isDesktop
-              ? 1.9 // large desktops
-              : isMidScreen
-              ? 1.55 // mid screens (like 1280px)
-              : is1024
-              ? 1.3 // small tablets / 1024px
-              : 1.9;
+        //     // Set responsive scale & x-offset
+        //     const scaleValue = isDesktop
+        //       ? 1.9 // large desktops
+        //       : isMidScreen
+        //       ? 1.55 // mid screens (like 1280px)
+        //       : is1024
+        //       ? 1.3 // small tablets / 1024px
+        //       : 1.9;
 
-            const xOffset = isDesktop
-              ? 50
-              : isMidScreen
-              ? 50
-              : is1024
-              ? 45
-              : 50;
+        //     const xOffset = isDesktop
+        //       ? 50
+        //       : isMidScreen
+        //       ? 50
+        //       : is1024
+        //       ? 45
+        //       : 50;
 
-            // --- SCROLL TRIGGER ANIMATION ---
-            const tl = gsap.timeline({
-              scrollTrigger: {
-                trigger: stickyImageRef.current,
-                start: "top 80%",
-                end: "top 24%",
-                scrub: 1,
-                // markers: true, // uncomment for debugging
-              },
-            });
+        //     // --- SCROLL TRIGGER ANIMATION ---
+        //     const tl = gsap.timeline({
+        //       scrollTrigger: {
+        //         trigger: stickyImageRef.current,
+        //         start: "top 80%",
+        //         end: "top 24%",
+        //         scrub: 1,
+        //         // markers: true, // uncomment for debugging
+        //       },
+        //     });
 
-            // Move + scale + fade cross animation
-            tl.to(
-              bottomImageRef.current,
-              {
-                y: calculateDistance,
-                ease: "none",
-                scale: scaleValue,
-                x: xOffset,
-              },
-              0
-            )
-              .to(
-                bottomImageRef.current,
-                {
-                  opacity: 0,
-                  ease: "none",
-                },
-                0.6
-              )
-              .to(
-                stickyImageRef.current,
-                {
-                  opacity: 1,
-                  ease: "none",
-                },
-                0.6
-              );
-          }
-        );
+        //     // Move + scale + fade cross animation
+        //     tl.to(
+        //       bottomImageRef.current,
+        //       {
+        //         y: calculateDistance,
+        //         ease: "none",
+        //         scale: scaleValue,
+        //         x: xOffset,
+        //       },
+        //       0
+        //     )
+        //       .to(
+        //         bottomImageRef.current,
+        //         {
+        //           opacity: 0,
+        //           ease: "none",
+        //         },
+        //         0.6
+        //       )
+        //       .to(
+        //         stickyImageRef.current,
+        //         {
+        //           opacity: 1,
+        //           ease: "none",
+        //         },
+        //         0.6
+        //       );
+        //   }
+        // );
       } else {
         gsap.fromTo(
           mobileBottomImageRef.current,
@@ -359,7 +360,10 @@ export default function ParallaxCardSection({
                     {item?.bulletPoints?.length > 0 && (
                       <div className="flex flex-col gap-2">
                         {item?.bulletPoints?.map((item, index) => (
-                          <div key={"list_" + index} className="flex gap-2">
+                          <div
+                            key={"list_" + index}
+                            className="flex items-start gap-2"
+                          >
                             <Image
                               src={"/images/star-orange.svg"}
                               alt="banner"
@@ -422,7 +426,7 @@ const StickyImage: React.FC<StickyImageProps> = ({
       <div className="order-1 lg:order-2 h-[317px] lg:h-[640px] w-full overflow-hidden relative lg:sticky lg:top-[100px]">
         <div
           ref={stickyImageRef}
-          className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-0`}
+          className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-100`}
         >
           <Image
             src={src}

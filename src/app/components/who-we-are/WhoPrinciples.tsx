@@ -113,7 +113,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                 <div
                   key={tab.id}
                   className={clsx(
-                    `border-b border-gray-200 overflow-hidden transition-all duration-500 ease-in-out mb-0`,
+                    `border-b border-gray-200 overflow-hidden transition-all duration-1000 ease-in-out mb-0`,
                     content?.length - 1 === index && "border-b-0"
                   )}
                 >
@@ -121,7 +121,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   {tab?.value && (
                     <button
                       className={clsx(
-                        "w-full text-left p-5 rounded-2xl flex justify-between items-center transition-all duration-300 relative ",
+                        "w-full text-left p-5 rounded-2xl flex justify-between items-center transition-all duration-1000 relative ",
                         isOpen
                           ? "bg-gradient-orange-1 text-white pt-5"
                           : "text-gray-700 hover:bg-gray-50"
@@ -130,7 +130,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                     >
                       <p
                         className={clsx(
-                          "transition-colors duration-100 text-[24px]",
+                          "transition-colors duration-300 text-[24px]",
                           isOpen ? "text-white" : "text-gray-700"
                         )}
                       >
@@ -154,7 +154,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   {tab?.description && (
                     <div
                       className={clsx(
-                        "transition-all duration-700 ease-in-out overflow-hidden",
+                        "transition-all duration-1000 ease-in-out overflow-hidden",
                         isOpen
                           ? "max-h-[500px] opacity-100"
                           : "max-h-0 opacity-0"

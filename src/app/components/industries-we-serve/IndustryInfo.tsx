@@ -37,12 +37,18 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
         <div>
           {description && (
             <AnimatedText>
-              <H3>{description}</H3>
+              <H3>
+                <div
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              />
+              </H3>
             </AnimatedText>
           )}
           {mobImage?.url && (
-          <div className="block lg:hidden">
-            <div className="my-[30px] relative w-full h-[350px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+            <div className="block lg:hidden">
+              <div className="my-[30px] relative w-full h-[350px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
                     src={mobImage?.url}
@@ -60,8 +66,8 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
                     />
                   </span>
                 </div>
+              </div>
             </div>
-          </div>
           )}
           {title && (
             <FadeInRevealBlur>

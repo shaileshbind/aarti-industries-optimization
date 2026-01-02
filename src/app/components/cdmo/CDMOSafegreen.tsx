@@ -8,7 +8,7 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
   const { title, description, image } = data?.[0];
 
   return (
-    <section className="flex gap-x-[10px] md:gap-x-[40px] md:flex-row flex-col justify-between lg:pt-[0px] lg:pb-[100px] pt-[22px] pb-[50px] pl-[20px] lg:pl-[40px]">
+    <section className="flex gap-x-[10px] md:gap-x-[40px] md:flex-row flex-col justify-between lg:pt-[0px] lg:pb-[100px] pt-[22px] pb-[72px] pl-[20px] lg:pl-[40px]">
       <div className="w-full md:w-1/2 flex flex-col items-start justify-center pr-[20px] lg:pr-0">
         {title && (<WordReveal
               stagger={0.1}
@@ -21,7 +21,7 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
           </FadeInReveal>
         )}
       </div>
-      <div className="w-full md:w-1/2 pr-[20px] lg:pr-0 mt-10 lg:mt-0 shrink-0">
+      <div className="w-full md:w-1/2 pr-[20px] lg:pr-0 mt-[30px] lg:mt-0 shrink-0">
         <FadeInReveal delay={0.2} className="order-1 lg:order-2 relative h-[317px] lg:h-[640px] w-full overflow-hidden ">
           <div
             className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}

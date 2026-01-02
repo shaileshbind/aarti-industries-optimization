@@ -61,7 +61,7 @@ const Footer = ({ data }: FooterProps) => {
               {menu?.[0]?.category && (
                 <Tags
                   title={menu[0]?.category}
-                  className="mb-[14px] uppercase"
+                  className="mb-[14px] uppercase !text-orange-200"
                 />
               )}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
@@ -112,7 +112,7 @@ const Footer = ({ data }: FooterProps) => {
                 {section?.category && (
                   <Tags
                     title={section?.category}
-                    className="mb-[7px] lg:mb-[14px] uppercase"
+                    className="mb-[7px] lg:mb-[14px] uppercase !text-orange-200"
                   />
                 )}
                 <div>

@@ -2,7 +2,6 @@
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { BodyText2, H3 } from "./Typography2";
-import { FadeInRevealBlur } from "./ScrollReveal";
 import { ImageProps } from "../types/global.type";
 import clsx from "clsx";
 import { gsap, Linear } from "gsap";
@@ -76,11 +75,11 @@ const GloballyCertified = ({
 
   return (
     <div className={clsx(`w-full pb-[50px] lg:pb-[100px]`, className)}>
-      <FadeInRevealBlur delay={0.1}>
+      <div>
         <H3 className="text-[#002F50] mx-auto w-fit">
           {title || "Globally Certified"}
         </H3>
-      </FadeInRevealBlur>
+      </div>
       <div
         className="overflow-hidden relative mt-[24px] lg:mt-[35px]"
         ref={containerRef}
