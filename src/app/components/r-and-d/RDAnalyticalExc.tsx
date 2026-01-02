@@ -472,7 +472,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       <GeneralPopup
                 isOpen={showGeneralPopup}
                 setshowGeneralPopup={setshowGeneralPopup}
-                // document={document}
                 prefillCategory="Business Products / Services"
                 prefillSubCategory="LAB Testing (Analytical/ Safety)"
               />

@@ -28,6 +28,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             {/* Left Tabs + Progress Bar */}
             <div className="relative bg-white text-white lg:w-[40%] flex flex-col justify-center">
               <div className="relative flex gap-4">
+                <div className="bg-[#f5f8fa] h-[100%] w-[30px] absolute right-0"/>
                 {/* Progress Bar */}
                 {content?.length > 0 && (
                   <div className="relative flex flex-col items-center justify-center">
