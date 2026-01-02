@@ -2,7 +2,6 @@
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { BodyText2, H3 } from "./Typography2";
-import { FadeInRevealBlur } from "./ScrollReveal";
 import { ImageProps } from "../types/global.type";
 import clsx from "clsx";
 import { gsap, Linear } from "gsap";

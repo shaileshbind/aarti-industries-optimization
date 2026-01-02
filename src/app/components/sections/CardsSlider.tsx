@@ -7,11 +7,10 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
-import { FadeInGroup, FadeInRevealBlur, WordReveal } from "../ScrollReveal";
+import { FadeInGroup, FadeInRevealBlur } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
 import Link from "next/link";
-import AnimatedText from "../AnimatedText";
 
 const CardsSlider: React.FC<CDMOSplchemProps> = ({
   data,
@@ -48,9 +47,9 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`
               )}
             >
-                <H2 className={clsx(`text-blue-200`, headingClassName)}>
-                  {sectionTitle}
-                </H2>
+              <H2 className={clsx(`text-blue-200`, headingClassName)}>
+                {sectionTitle}
+              </H2>
             </FadeInRevealBlur>
           )}
 
