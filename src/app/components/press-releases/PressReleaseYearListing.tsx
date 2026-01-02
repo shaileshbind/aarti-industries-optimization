@@ -209,7 +209,7 @@ export default function PressReleaseYearListing({
                       className={clsx(
                         "text-base",
                         year === activeYear
-                          ? "text-[#002F50] font-semibold"
+                          ? "text-[#002F50]"
                           : "text-[#4C5861]"
                       )}
                     >
@@ -220,7 +220,7 @@ export default function PressReleaseYearListing({
                 {/* Animated underline */}
                 {!dropdownClicked && (
                   <div
-                    className="absolute bottom-0 h-[2px] bg-[#DC4C03] md:bg-[#002F50] transition-all duration-300 ease-out rounded-[20px]"
+                    className="absolute bottom-[-2] h-[2px] bg-[#DC4C03] md:bg-[#002F50] transition-all duration-300 ease-out rounded-[20px]"
                     style={{
                       width: `${underline.width}px`,
                       transform: `translateX(${underline.left}px)`,
