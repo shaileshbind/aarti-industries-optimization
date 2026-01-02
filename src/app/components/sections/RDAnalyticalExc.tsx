@@ -332,7 +332,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         </div>
         <div
           ref={envSlider}
-          className="w-full opacity-0 absolute top-50% translate-y-[-50%] left-0 "
+          className="w-full opacity-0 absolute top-50% translate-y-[-45%] left-0 "
         >
           <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
             <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
