@@ -209,7 +209,7 @@ export default function PressReleaseYearListing({
                       className={clsx(
                         "text-base",
                         year === activeYear
-                          ? "text-[#002F50] font-semibold"
+                          ? "text-[#002F50]"
                           : "text-[#4C5861]"
                       )}
                     >

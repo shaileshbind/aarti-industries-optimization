@@ -16,7 +16,7 @@ type ProductListProps = {
 const OrangeTabCard = ({
   title,
   link,
-  scale = true,
+  scale = false,
   useTargetBlank = true,
   titleClassName
 }: ProductListProps) => {

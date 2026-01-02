@@ -68,7 +68,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                               alt="check-icon"
                               width={16}
                               height={16}
-                              className="mt-[5px]"
+                              className="mt-[2px] md:mt-[3px]"
                             />
                             <BodyText2 className="text-grey-400">
                               {item?.title}
@@ -151,7 +151,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               onClick={toggleAccordion}
               className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
             >
-              <SubH2 className="text-white">{cardSectionTwoTitle}</SubH2>
+              <SubH2 className="text-white text-left md:text-center">{cardSectionTwoTitle}</SubH2>
               <span
                 className={`text-white text-3xl font-light transition-transform duration-300 ${
                   isOpen ? "rotate-45" : ""
@@ -181,8 +181,8 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                           <Image
                             src="/images/star.png"
                             alt="check-icon"
-                            width={20}
-                            height={20}
+                            width={16}
+                            height={16}
                             className=""
                           />
                           <BodyText2 className="text-white">

@@ -231,7 +231,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                       className={clsx(
                         "text-base",
                         item?.year === activeYear
-                          ? "text-[#002F50] font-semibold"
+                          ? "text-[#002F50]"
                           : "text-[#4C5861]"
                       )}
                     >
@@ -243,7 +243,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                 {/* Animated underline */}
                 {!dropdownClicked && (
                   <div
-                    className="absolute bottom-0 h-[2px] bg-[#DC4C03] lg:bg-[#002F50] transition-all duration-300 ease-out"
+                    className="absolute -bottom-[1.5px] h-[2px] bg-[#DC4C03] lg:bg-[#002F50] transition-all duration-300 ease-out"
                     style={{
                       width: `${underline.width + 5}px`,
                       transform: `translateX(${underline.left}px)`,
@@ -256,7 +256,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
             {/* Archive dropdown - Desktop */}
             {yearAndReport?.length > 4 && (
-              <div className="w-[100px] hidden md:block">
+              <div className="w-[80px] hidden md:block">
                 <FormControl variant="standard" fullWidth>
                   <Select
                     sx={styles}
