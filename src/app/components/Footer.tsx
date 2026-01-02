@@ -27,11 +27,11 @@ const Footer = ({ data }: FooterProps) => {
                 __html: "Follow Us",
               }}
             />
-            <div className=" hidden lg:grid mt-[15px] lg:grid-cols-4 xl:grid-cols-5 w-fit gap-[8px] ">
+            <div className="hidden lg:grid mt-[15px] lg:grid-cols-4 2xl:grid-cols-5 w-fit gap-2">
               {FollowUs?.map((items) => (
-                <a
+                <Link
                   key={items?.id}
-                  href={items?.link}
+                  href={items?.link ? items?.link : ""}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -50,7 +50,7 @@ const Footer = ({ data }: FooterProps) => {
                       />
                     )}
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -155,7 +155,7 @@ const Footer = ({ data }: FooterProps) => {
             __html: "Follow Us",
           }}
         />
-        <div className=" mt-[15px] grid grid-cols-5 md:hidden w-fit gap-[8px]">
+        <div className="mt-[15px] grid grid-cols-4 md:grid-cols-5 lg:hidden w-fit gap-2">
           {FollowUs?.map((item) => (
             <Link
               key={item?.id}
