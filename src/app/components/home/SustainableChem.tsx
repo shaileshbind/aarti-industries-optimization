@@ -671,7 +671,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                               tabRefs.current[index] = element;
                             }}
                             onClick={() => handleTabClick(index)}
-                            className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
+                            className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${
                               activeTab === index
                                 ? "text-white"
                                 : "hover:bg-grey-200"
@@ -724,7 +724,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                               tabRefs.current[index] = element;
                             }}
                             onClick={() => handlMobileTabClick(index)}
-                            className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                            className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
                               activeTab === index
                                 ? "text-white"
                                 : "hover:bg-grey-200"

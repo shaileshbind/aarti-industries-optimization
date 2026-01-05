@@ -107,7 +107,7 @@ const SliderCard: FC<SliderCardProps> = ({
             ))}
           </div>
         )}
-        <div className="gap-[1%] mt-[10px] lg:mt-6  mb-[20px] lg:mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
+        <div className="gap-9 md:gap-[1%] mt-[10px] lg:mt-6  mb-[20px] lg:mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-5 md:gap-y-[10px]">
           {values?.map((stat, idx) => (
             <div key={idx}>
               {stat?.value && <H2 className="text-orange-200">{stat.value}</H2>}
