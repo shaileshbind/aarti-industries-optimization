@@ -5,6 +5,7 @@ import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
 import { FadeInGroup, FadeInReveal } from "../ScrollReveal";
+import Button from "../Button";
 
 const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
   const { image, leftSection, righSection } = data;
@@ -50,6 +51,22 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               <BodyText1 className="pb-7 md:px-[20px] lg:px-[42px]">
                 {leftSection?.description}
               </BodyText1>
+            )}
+
+            {leftSection?.ctaButton?.title && (
+              <Button
+                title={leftSection?.ctaButton?.title}
+                href={
+                  leftSection?.ctaButton?.externalLink
+                    ? leftSection?.ctaButton?.externalLink
+                    : leftSection?.ctaButton?.link?.link
+                }
+                useTargetBlank={
+                  leftSection?.ctaButton?.externalLink ? true : false
+                }
+                secondary
+                className="md:mx-[20px] lg:mx-[42px] mb-[40px]"
+              />
             )}
 
             <div
