@@ -319,7 +319,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                     {rightSectionData.bulletPoints?.map((items) => (
                       <div
                         key={items?.id}
-                        className="flex gap-4 mb-2 items-center"
+                        className="flex gap-4 mb-2 items-start"
                       >
                         {items?.bulletImg ? (
                           <Image

@@ -9,9 +9,9 @@ type TitleCardProps = {
 
 const TitleCard = ({ imageAlt, imageSrc, title }: TitleCardProps) => {
   return (
-    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[355px] bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden">
+    <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[380px] bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden">
       {title && (
-        <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
+        <SubH2 className="text-blue-200 py-[24px] px-[26px] line-clamp-2">{title}</SubH2>
       )}
       <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] lg:h-[272px] overflow-hidden rounded-tl-[20px] rounded-tr-[20px]">
         {imageSrc && (

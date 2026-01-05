@@ -178,7 +178,7 @@ const HeroBanner = ({
               >
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
-                    <BodyText2 className="text-white font-alte-hans fluid-container">
+                    <BodyText2 className="text-white font-alte-hans fluid-container w-[82%] lg:w-full">
                       {tag}
                     </BodyText2>
                   </FadeInRevealBlur>
