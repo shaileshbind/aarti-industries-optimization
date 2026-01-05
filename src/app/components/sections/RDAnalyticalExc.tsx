@@ -358,7 +358,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 )}
               </div>
               <div className="w-full overflow-hidden">
-                <div className="mt-[18px] mb-[10px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px] ">
+                <div className="mt-[18px] mb-[10px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
                   <BodyText2 className="text-orange-200">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>

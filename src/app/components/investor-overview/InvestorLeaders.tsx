@@ -34,7 +34,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
       <div className="mt-[28px] lg:mt-[48px] container mx-auto">
         <div className="grid grid-cols-1 xl:grid-cols-[500px_1fr] container gap-y-[16px] lg:gap-x-[80px]">
           {/* image section */}
-          <div className="w-[100%] h-[300px] lg:h-[450px] overflow-hidden rounded-[14px] lg:rounded-[20px] relative">
+          <div className="w-[100%] h-[300px] md:h-[450px] overflow-hidden rounded-[14px] lg:rounded-[20px] relative">
             {testimonials?.[active]?.image?.url && (
               <Image
                 src={testimonials?.[active]?.image?.url}
@@ -44,7 +44,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                     : "img"
                 }
                 fill
-                className="object-cover object-top"
+                className="object-cover md:object-contain xl:object-cover object-top"
               />
             )}
           </div>

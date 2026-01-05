@@ -24,7 +24,7 @@ const DateCard = ({
   const CardContent = () => (
     <>
       {animate ? (
-        <div className="group relative inverted-radius transition-all duration-300">
+        <div className="group relative inverted-radius transition-all duration-500 ease-in-out">
           <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2]">
             {imageSrc && (
               <Image
@@ -72,7 +72,7 @@ const DateCard = ({
       className="block cursor-pointer"
     >
       {animate && (
-        <div className="absolute right-3 top-2 z-[2] w-12 h-12  place-items-center transition-all duration-500 pointer-events-none hidden lg:block">
+        <div className="absolute right-3 top-4 z-[2] w-12 h-12  place-items-center transition-all duration-500 pointer-events-none hidden lg:block">
           <Image
             src={"/images/arrow-up-right-o.svg"}
             alt={"arrow"}

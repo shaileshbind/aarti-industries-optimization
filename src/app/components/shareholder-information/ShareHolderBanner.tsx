@@ -17,6 +17,8 @@ const ShareHolderBanner: React.FC<ShareHolderBannerProps> = ({ data }) => {
       mobAlt={mobImage?.alternativeText}
       lineClassName="hidden md:block"
       bottomMiddleStarClassName="hidden md:block"
+      showStar2={false}
+      showStar3={false}
     />
   );
 };

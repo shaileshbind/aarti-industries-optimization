@@ -35,7 +35,10 @@ const page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/social-health-and-safety"}  
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/social-health-and-safety"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -48,21 +51,19 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       {section_one && <SocialHealthAndSafetyBanner data={section_one} />}
-      {section_two && <OurResponsibility data={section_two} />} 
+      {section_two && <OurResponsibility data={section_two} />}
       {section_three && <WhoCards data={section_three} />}
-      {section_four && (
-        <DrivingEmpowerment data={section_four} />
-      )}
+      {section_four && <DrivingEmpowerment data={section_four} />}
 
-      {section_five && <ImpactStoriesSlider
-        data={section_five}
-        />}
-      {section_six && <GridCardsSocial data={section_six} headingClassName="!text-[36px]"/>}
+      {section_five && <ImpactStoriesSlider data={section_five} />}
+      {section_six && (
+        <GridCardsSocial data={section_six} headingClassName="!text-[36px]" />
+      )}
       {section_seven && (
         <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
           <EducationDevelopment data={section_seven} />
         </div>
-      )} 
+      )}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

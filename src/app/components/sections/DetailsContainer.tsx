@@ -26,9 +26,9 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
     const ctx = gsap.context(() => {
       gsap.fromTo(
         topLineRef.current,
-        { height: '0px', transformOrigin: "top center" },
+        { height: "0px", transformOrigin: "top center" },
         {
-          height: isMobile ? '64px' : '120px',
+          height: isMobile ? "64px" : "120px",
           ease: "power2.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
@@ -71,9 +71,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         <div
           ref={topLineRef}
           className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100"
-        >
-           
-        </div>
+        ></div>
         {/* Text content */}
         <div className="max-w-[unset] lg:max-w-[880px] mx-auto text-center mt-4">
           {sectionTitle && (
@@ -99,7 +97,12 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
               <div className="my-[36px]">
                 <Button
                   title={ctaButton?.title}
-                  href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
+                  href={`${
+                    ctaButton?.hasExternalLink == "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link
+                  }`}
+                  className="!px-2 md:!px-[22px]"
                 />
                 {/* </FadeInReveal> */}
               </div>
