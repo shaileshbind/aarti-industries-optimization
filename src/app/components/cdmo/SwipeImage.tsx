@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -45,51 +44,54 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full pt-[100%] overflow-hidden rounded-[1rem] hidden lg:block"
+      className="relative h-full w-full overflow-hidden rounded-3xl"
+      style={{
+        isolation: 'isolate', // Creates stacking context
+      }}
     >
       {/* Previous Image */}
       {prevImg && (
-        <div ref={previousRef} className="absolute inset-0">
+        <div
+          ref={previousRef}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
+            backfaceVisibility: 'hidden', // Firefox fix
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
           <Image
             src={prevImg}
-            alt="previous"
             fill
-            className="object-cover scale-110"
-            priority
+            alt="previous"
+            className="object-cover"
+            style={{
+              transform: 'translate3d(0, 0, 0)',
+            }}
           />
-          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-          <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
-            <Image
-              src={prevImg}
-              alt="previous"
-              fill
-              className="object-cover scale-110"
-              priority
-            />
-          </span>
         </div>
       )}
 
       {/* Current Image */}
       {activeImg && (
-        <div ref={currentRef} className="absolute inset-0">
+        <div
+          ref={currentRef}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
+            backfaceVisibility: 'hidden', // Firefox fix
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
           <Image
             src={activeImg}
-            alt="active"
             fill
-            className="object-cover scale-110"
-            priority
+            alt="current"
+            className="object-cover"
+            style={{
+              transform: 'translate3d(0, 0, 0)',
+            }}
           />
-          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-             <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
-            <Image
-              src={activeImg}
-              alt="previous"
-              fill
-              className="object-cover scale-110"
-              priority
-            />
-          </span>
         </div>
       )}
     </div>

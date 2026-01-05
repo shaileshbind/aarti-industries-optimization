@@ -288,7 +288,7 @@ const DrivingTabsSection = ({
                   <div className="mt-[20px] mb-[30px]">
                     {item?.cards?.[0] && (
                       <>
-                        <div className="relative w-full h-[400px] xl:h-[200px] rounded-[14px] overflow-hidden">
+                        <div className="relative w-full h-[300px] md:h-[500px] xl:h-[200px] rounded-[14px] overflow-hidden">
                           {item.cards[0]?.image?.url && (
                             <>
                               {starImgEffect ? (
