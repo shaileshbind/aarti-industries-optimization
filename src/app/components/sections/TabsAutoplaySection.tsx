@@ -35,6 +35,7 @@ const TabsAutoplaySection = ({
   const startTimeRef = useRef<number>(0);
   const pausedProgressRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
+  // const imageSize = 20;
 
   const startProgress = useCallback(() => {
     if (rafRef.current) {
@@ -302,15 +303,71 @@ const TabsAutoplaySection = ({
                               secondary
                             />
                           </div>
-                        )}
-                    </div>
-                  </>
-                )}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+                       )}
+                        {/* Arrow CTA - */}
+                        {/* {item?.card[0]?.repeatableCta?.map((cta) => {
+                          const href =
+                            cta?.hasExternalLink === "true"
+                              ? cta?.externalLink
+                              : cta?.link?.link;
+                          const target =
+                            cta?.hasExternalLink === "true"
+                              ? "_blank"
+                              : "_self";
+                          if (!cta?.title || !href) return null;
+                          return (
+                            <Link
+                              key={cta?.id}
+                              href={href}
+                              target={target}
+                              className="block"
+                            >
+                              <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
+                                <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
+                                  {cta.title}
+                                </Cta>
+
+                                <div
+                                  className="relative flex items-center shrink-0 justify-center 
+                     w-[24px] h-[24px] lg:w-[30px] lg:h-[30px] 
+                     rounded-full border border-orange-200 overflow-hidden"
+                                >
+                                  <Image
+                                    src="/images/arrow-up-right-o.svg"
+                                    alt="icon-primary"
+                                    width={imageSize}
+                                    height={imageSize}
+                                    className="absolute transition-transform duration-500 ease-in-out 
+                       w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
+                       group-hover:translate-x-[187.5%] group-hover:-translate-y-[187.5%] 
+                       lg:group-hover:translate-x-[150%] lg:group-hover:-translate-y-[150%]"
+                                  />
+
+                                  <Image
+                                    src="/images/arrow-up-right-o.svg"
+                                    alt="icon-secondary"
+                                    width={imageSize}
+                                    height={imageSize}
+                                    className="absolute transition-transform duration-500 ease-in-out 
+                       w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
+                       translate-x-[-187.5%] translate-y-[187.5%] 
+                       group-hover:translate-x-0 group-hover:translate-y-0
+                       lg:translate-x-[-150%] lg:translate-y-[150%] 
+                       lg:group-hover:translate-x-0 lg:group-hover:translate-y-0"
+                                  />
+                                </div>
+                              </div>
+                            </Link>
+                          );
+                        })} */}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </FadeInReveal>
       {/* Mobile Accordion */}
       {data?.length > 0 && (
@@ -436,6 +493,62 @@ const TabsAutoplaySection = ({
                               />
                             </div>
                           )}
+                        {/* Arrow Cta */}
+                        {/* {item?.card[0]?.repeatableCta?.map((cta) => {
+                          const href =
+                            cta?.hasExternalLink === "true"
+                              ? cta?.externalLink
+                              : cta?.link?.link;
+                          const target =
+                            cta?.hasExternalLink === "true"
+                              ? "_blank"
+                              : "_self";
+                          if (!cta?.title || !href) return null;
+                          return (
+                            <Link
+                              key={cta?.id}
+                              href={href}
+                              target={target}
+                              className="block"
+                            >
+                              <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
+                                <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
+                                  {cta.title}
+                                </Cta>
+
+                                <div
+                                  className="relative flex items-center shrink-0 justify-center 
+                     w-[24px] h-[24px] lg:w-[30px] lg:h-[30px] 
+                     rounded-full border border-orange-200 overflow-hidden"
+                                >
+                                  <Image
+                                    src="/images/arrow-up-right-o.svg"
+                                    alt="icon-primary"
+                                    width={imageSize}
+                                    height={imageSize}
+                                    className="absolute transition-transform duration-500 ease-in-out 
+                       w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
+                       group-hover:translate-x-[187.5%] group-hover:-translate-y-[187.5%] 
+                       lg:group-hover:translate-x-[150%] lg:group-hover:-translate-y-[150%]"
+                                  />
+
+                                  <Image
+                                    src="/images/arrow-up-right-o.svg"
+                                    alt="icon-secondary"
+                                    width={imageSize}
+                                    height={imageSize}
+                                    className="absolute transition-transform duration-500 ease-in-out 
+                       w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
+                       translate-x-[-187.5%] translate-y-[187.5%] 
+                       group-hover:translate-x-0 group-hover:translate-y-0
+                       lg:translate-x-[-150%] lg:translate-y-[150%] 
+                       lg:group-hover:translate-x-0 lg:group-hover:translate-y-0"
+                                  />
+                                </div>
+                              </div>
+                            </Link>
+                          );
+                        })} */}
                       </>
                     )}
                   </div>

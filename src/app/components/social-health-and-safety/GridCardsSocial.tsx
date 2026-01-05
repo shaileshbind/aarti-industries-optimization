@@ -9,7 +9,7 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
   data,
   headingClassName,
 }) => {
-  const { cards, title } = data;
+  const { cards, title, description } = data;
 
   return (
     <section className="fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative">
@@ -24,6 +24,11 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
               >
                 {title}
               </H3>
+                {description && (
+                <BodyText2 className="text-grey-400 mt-[10px] md:mt-[20px]">
+                  {description}
+                </BodyText2>
+              )}
             </AnimatedText>
           </div>
         )}

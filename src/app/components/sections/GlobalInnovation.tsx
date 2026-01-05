@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import AnimatedText from "../AnimatedText";
-import { BodyText1, H2, SubH2 } from "../Typography2";
+import { BodyText1, BodyText3, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
+//import GeneralPopup from "../Popups/GeneralPopup";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   data,
@@ -17,17 +18,26 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
     focus_item,
     image,
     description,
+    sectionTitle,
+   // formTitle,
   } = data;
 
+//  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
-    <section className="fluid-container flex flex-col justify-between my-[60px] lg:my-[120px]">
-      {/* Animated Heading */}
-      <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-10">
-        <H2>{title}</H2>
-      </AnimatedText>
+    <>
+      <section className="fluid-container flex flex-col justify-between my-[60px] lg:my-[120px]">
+        {sectionTitle && (
+          <BodyText3 className="text-orange-200 !text-[18px] md:!text-[20px] !font-alte-hans mb-[6px]">
+            {sectionTitle}
+          </BodyText3>
+        )}
+        {/* Animated Heading */}
+        <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-10">
+          <H2>{title}</H2>
+        </AnimatedText>
 
       <div className="flex flex-col lg:flex-row justify-between items-start">
         {/* Image Section */}
@@ -105,21 +115,39 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
 
           {description && <BodyText1 className="lg:mt-[unset] mt-4">{description}</BodyText1>}
 
-          {ctaButton?.title &&
-            (ctaButton?.externalLink || ctaButton?.link?.link) && (
-              <Button
-                secondary
-                title={ctaButton?.title}
-                href={
-                  ctaButton?.hasExternalLink === "true"
-                    ? ctaButton?.externalLink
-                    : ctaButton?.link?.link
-                }
-              />
-            )}
+            {/* FORM CTA */}
+            {/* {formTitle && (
+              <button
+                onClick={() => {
+                  setshowGeneralPopup(true);
+                }}
+                className={`animated-underline w-fit cursor-pointer  text-[16px]
+                      font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
+                      [text-underline-position:under] text-white white-btn-underline`}
+              >
+                {formTitle}
+              </button>
+            )} */}
+            {ctaButton?.title &&
+              (ctaButton?.externalLink || ctaButton?.link?.link) && (
+                <Button
+                  secondary
+                  title={ctaButton?.title}
+                  href={
+                    ctaButton?.hasExternalLink === "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link
+                  }
+                />
+              )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      {/* <GeneralPopup
+        isOpen={showGeneralPopup}
+        setshowGeneralPopup={setshowGeneralPopup}
+      /> */}
+    </>
   );
 };
 

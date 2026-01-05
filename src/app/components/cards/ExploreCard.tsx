@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import Image from "next/image";
 import { Cta, SubH2 } from "../Typography2";
@@ -37,7 +37,6 @@ const ExploreCard = ({
           className="absolute top-[-35px] md:top-[-40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
         />
         <SubH2 className="text-white w-[80%]">{title}</SubH2>
-        {ctaButton && ctaButton?.length > 0 && (
           <div className="mt-[10px] lg:mt-[22px] flex flex-col md:flex-row gap-[12px] xl:gap-x-[50px]">
             {formTitle && (
               <div
@@ -131,7 +130,6 @@ const ExploreCard = ({
               );
             })}
           </div>
-        )}
       </div>
       {showGeneralPopup && (
         <GeneralPopup
