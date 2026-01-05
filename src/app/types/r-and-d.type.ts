@@ -102,6 +102,7 @@ export type RDCardProps = {
     BulletPoints: {
       title: string;
     }[];
+    repeatableCta?:ButtonProps[];
   }[];
 };
 

@@ -114,28 +114,26 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
 
                       <ul className="mt-2 space-y-2">
                         {item?.card?.length > 0 &&
-                          item?.card?.map((feature, idx) => (
-                            <>
-                              {feature?.BulletPoints?.map((item) => (
-                                <li
-                                  key={`${idx}-${item?.title}`}
-                                  className="text-sm text-gray-300 flex items-start gap-2"
-                                >
-                                  <Image
-                                    src="/images/star-orange.svg"
-                                    alt="star"
-                                    height={15}
-                                    width={15}
-                                    className="mt-[2px] lg:mt-[3px]"
-                                  />
+                          item?.card?.map((feature, idx) =>
+                            feature?.BulletPoints?.map((item) => (
+                              <li
+                                key={`${idx}-${item?.title}`}
+                                className="text-sm text-gray-300 flex items-start gap-2"
+                              >
+                                <Image
+                                  src="/images/star-orange.svg"
+                                  alt="star"
+                                  height={15}
+                                  width={15}
+                                  className="mt-[2px] lg:mt-[3px]"
+                                />
 
-                                  <BodyText2 key={item?.title}>
-                                    {item?.title}
-                                  </BodyText2>
-                                </li>
-                              ))}
-                            </>
-                          ))}
+                                <BodyText2 key={item?.title}>
+                                  {item?.title}
+                                </BodyText2>
+                              </li>
+                            ))
+                          )}
                       </ul>
                     </div>
                   </SwiperSlide>

@@ -69,6 +69,7 @@ export type ByUseSectionProps = {
       link: string;
     }[];
   }[];
+  sectionFiveTitle?:string;
 };
 
 export type FosteringSafeProps = {

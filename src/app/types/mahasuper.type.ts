@@ -58,5 +58,6 @@ export type ProductPortfolioProps = {
       ctaLink: string;
       ctaTitle: string;
       image: ImageProps;
+      bottomText?:string;
     };
   };

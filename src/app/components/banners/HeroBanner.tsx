@@ -26,6 +26,7 @@ type HeroBannerProps = {
   secondaryBtnLeftLink?: string;
   secondaryBtnRightTitle?: string;
   secondaryBtnRightLink?: string;
+  secondaryBtnFormTitle?: string;
   showStar2?: boolean;
   showStar3?: boolean;
   lineClassName?: string;
@@ -60,6 +61,7 @@ const HeroBanner = ({
   popupButton = false,
   popupButtonTitle,
   useTargetBlank = true,
+  secondaryBtnFormTitle,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -211,11 +213,26 @@ const HeroBanner = ({
                   </FadeInRevealBlur>
                 )}
                 {/* buttons */}
-                {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
+                {(secondaryBtnLeftTitle ||
+                  secondaryBtnRightTitle ||
+                  secondaryBtnFormTitle) && (
                   <FadeInRevealBlur
                     delay={0.1}
                     className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-7"
                   >
+                    {/* form cta */}
+                    {secondaryBtnFormTitle && (
+                      <button
+                       onClick={() => {
+                      setshowGeneralPopup(true);
+                    }}
+                      className={`animated-underline w-fit cursor-pointer  text-[16px]
+                      font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
+                      [text-underline-position:under] text-white white-btn-underline`}
+                      >
+                      {secondaryBtnFormTitle}
+                      </button>
+                    )}
                     {secondaryBtnLeftTitle && (
                       <Button
                         className="text-white white-btn-underline"
@@ -224,7 +241,6 @@ const HeroBanner = ({
                         secondary
                       />
                     )}
-
                     {secondaryBtnRightTitle && (
                       <Button
                         className="text-white white-btn-underline"

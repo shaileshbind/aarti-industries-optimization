@@ -18,6 +18,7 @@ const PartnershipBanner: React.FC<PartnershipBannerProps> = ({ data }) => {
         secondaryBtnLeftLink={ctaButtons?.[0]?.link?.link}
         secondaryBtnRightTitle={ctaButtons?.[1]?.title}
         secondaryBtnRightLink={ctaButtons?.[1]?.link?.link}
+        secondaryBtnFormTitle="Partner With Us"
       />
     </div>
   );
