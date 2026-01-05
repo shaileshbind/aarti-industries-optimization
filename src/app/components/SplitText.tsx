@@ -30,7 +30,7 @@ const SplitText: React.FC<SplitTextProps> = ({ text, className }) => {
       >
         {/* Top text */}
         <span className="flex">
-          {text.split("").map((char, i) => (
+          {text?.split("").map((char, i) => (
             <span
               key={`top-${i}`}
               style={{ 
@@ -47,7 +47,7 @@ const SplitText: React.FC<SplitTextProps> = ({ text, className }) => {
 
         {/* Bottom text */}
         <span className="absolute left-0 top-0 flex">
-          {text.split("").map((char, i) => (
+          {text?.split("").map((char, i) => (
             <span
               key={`bottom-${i}`}
               style={{ 
