@@ -234,7 +234,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
             </BodyText2>
 
             <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto scrollbar md:pr-2">
-              {`"${popupDetails?.bio}"`}
+              {`${popupDetails?.bio}`}
             </p>
           </div>
         </div>

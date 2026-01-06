@@ -18,6 +18,7 @@ export type EnvInfoProps = {
       id?: number;
       value?: string;
       description?: string;
+      bottomText?: string;
       image?: ImageProps;
       mobImage?: ImageProps;
     }[];

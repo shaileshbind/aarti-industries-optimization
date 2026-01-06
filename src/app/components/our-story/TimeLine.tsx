@@ -14,13 +14,10 @@ export default function TimeLine({ data }: TimelineData) {
   const phases =
     data?.milestone?.map((milestone) => ({
       title: `${milestone.name} (${milestone.date_range})`,
-      years: milestone.timeline_milestones.map(
-        (item) =>
-          // item.year.slice(0, 4)
-          item.year
-      ),
+      years: milestone.timeline_milestones.map((item) => item.year),
       images: milestone.images?.map((image) => image?.url) || [],
     })) || [];
+
   const yearContent = data?.milestone?.reduce((acc, milestone) => {
     milestone.timeline_milestones.forEach((item) => {
       // const yearStr = item.year.slice(0, 4);
@@ -28,10 +25,11 @@ export default function TimeLine({ data }: TimelineData) {
       acc[yearStr] = {
         title: item.title,
         description: item.description || "",
+        note: item.note || "",
       };
     });
     return acc;
-  }, {} as Record<string, { title: string; description: string }>);
+  }, {} as Record<string, { title: string; description: string; note: string }>);
 
   const [currentPhase, setCurrentPhase] = useState(0);
   const [currentYear, setCurrentYear] = useState<string>(
@@ -54,7 +52,11 @@ export default function TimeLine({ data }: TimelineData) {
   const yearDigit2Ref = useRef<HTMLHeadingElement>(null);
   const isInitialYearRender = useRef(true);
 
-  const content = yearContent?.[currentYear] || { title: "", description: "" };
+  const content = yearContent?.[currentYear] || {
+    title: "",
+    description: "",
+    note: "",
+  };
   const images = phases?.[currentPhase]?.images || [];
 
   // Handlers
@@ -153,7 +155,7 @@ export default function TimeLine({ data }: TimelineData) {
   }, [currentYear]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[120px] relative lg:pt-0 pt-4">
+    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
       <FadeInRevealBlur className="fluid-container">
         <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
           <H3>{sectionTitle}</H3>
@@ -161,7 +163,7 @@ export default function TimeLine({ data }: TimelineData) {
       </FadeInRevealBlur>
 
       {/* Large Background Numbers */}
-      <div className="absolute lg:right-[-170px] right-10 top-33 lg:-top-10 z-0 pointer-events-none flex gap-0 opacity-40">
+      <div className="absolute lg:right-[-170px] right-10 top-33 lg:-top-10 z-0 pointer-events-none flex gap-0">
         <h1
           ref={yearDigit1Ref}
           className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
@@ -189,6 +191,13 @@ export default function TimeLine({ data }: TimelineData) {
           <div ref={descriptionRef}>
             <BodyText1>{content.description}</BodyText1>
           </div>
+
+          {content?.note && (
+            <div
+              dangerouslySetInnerHTML={{ __html: content?.note }}
+              className="ourStoryNote text-xs pt-2 text-grey-400 font-medium"
+            />
+          )}
         </div>
 
         <div
