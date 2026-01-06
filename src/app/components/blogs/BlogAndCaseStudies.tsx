@@ -251,7 +251,7 @@ export default function BlogAndCaseStudies({
 
   return (
     <div className="fluid-container" ref={containerRef}>
-      <SimpleTabs
+      {/* <SimpleTabs
         tabs={tabs}
         activeId={active}
         onChange={(slug, index) => {
@@ -260,7 +260,7 @@ export default function BlogAndCaseStudies({
         indicatorColor="var(--gradient-orange-1)"
         innerClassName="rounded-[40px]"
         leftAlign
-      />
+      /> */}
 
       <div
         className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-8 md:gap-y-14"

@@ -43,16 +43,18 @@ export default async function page() {
         schemaData={seo?.schemaData}
       />
 
+      {console.log("latestBlog", latestBlog)}
+
       {section_one && <BlogBanner data={section_one} />}
 
-      {latestBlog && (
+      {latestBlog?.data?.length > 0 && (
         <div className="py-[72px] lg:py-[100px]">
           <LatestBlog data={latestBlog} section_two={section_two} />
         </div>
       )}
 
       {section_three && (
-        <div className="pb-[72px] lg:pb-[100px]">
+        <div className="pb-[72px] lg:pb-[100px] md:pt-10">
           <BlogAndCaseStudies
             data={section_three}
             lastestBlogId={latestBlog?.data?.[0]?.documentId}
