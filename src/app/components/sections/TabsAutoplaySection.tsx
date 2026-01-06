@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
-import { BodyText1, BodyText2, H2, SubH1, SubH2 } from "../Typography2";
+import { BodyText1, BodyText2, Cta, H2, SubH1, SubH2 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -12,7 +12,17 @@ import FaqAccordion from "../FaqAccordian";
 import clsxN from "../../../../utils/clsxN";
 import { RDCardProps } from "@/app/types/r-and-d.type";
 import { FadeInReveal } from "../ScrollReveal";
+import Link from "next/link";
 
+interface ArrowCtaProps {
+  id?: string;
+  title?: string;
+  hasExternalLink?: string;
+  externalLink?: string;
+  link?: {
+    link?: string;
+  };
+}
 type TabsAutoplayProps = {
   data: RDCardProps[];
   tabClass?: string;
@@ -35,7 +45,7 @@ const TabsAutoplaySection = ({
   const startTimeRef = useRef<number>(0);
   const pausedProgressRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
-  // const imageSize = 20;
+  const imageSize = 20;
 
   const startProgress = useCallback(() => {
     if (rafRef.current) {
@@ -289,43 +299,48 @@ const TabsAutoplaySection = ({
                           )}
                       </div>
 
-                      {tabItem.card[0]?.ctaButton?.link?.link &&
-                        tabItem.card[0]?.ctaButton?.hasExternalLink && (
-                          <div className="mt-[18px] pointer-events-auto">
-                            <Button
-                              title={tabItem.card[0].ctaButton.title}
-                              href={
-                                tabItem.card[0]?.ctaButton?.hasExternalLink ==
-                                "true"
-                                  ? tabItem.card[0]?.ctaButton?.externalLink
-                                  : tabItem.card[0]?.ctaButton?.link?.link
-                              }
-                              secondary
-                            />
-                          </div>
-                       )}
+                        {tabItem?.card[0]?.ctaButton?.title &&
+                          (tabItem?.card[0]?.ctaButton?.link?.link ||
+                            tabItem?.card[0]?.ctaButton?.externalLink) && (
+                            <div className="mt-[18px] pointer-events-auto">
+                              <Button
+                                title={tabItem.card[0].ctaButton.title}
+                                href={
+                                  tabItem.card[0].ctaButton.link?.link ||
+                                  tabItem.card[0].ctaButton.externalLink
+                                }
+                                useTargetBlank={
+                                  tabItem.card[0]?.ctaButton
+                                    ?.hasExternalLink === "true"
+                                }
+                                secondary
+                                className="text-left"
+                              />
+                            </div>
+                          )}
                         {/* Arrow CTA - */}
-                        {/* {item?.card[0]?.repeatableCta?.map((cta) => {
-                          const href =
-                            cta?.hasExternalLink === "true"
-                              ? cta?.externalLink
-                              : cta?.link?.link;
-                          const target =
-                            cta?.hasExternalLink === "true"
-                              ? "_blank"
-                              : "_self";
-                          if (!cta?.title || !href) return null;
-                          return (
-                            <Link
-                              key={cta?.id}
-                              href={href}
-                              target={target}
-                              className="block"
-                            >
-                              <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
-                                <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
-                                  {cta.title}
-                                </Cta>
+                        {tabItem?.card[0]?.repeatableCta?.map(
+                          (cta: ArrowCtaProps) => {
+                            const href =
+                              cta?.hasExternalLink === "true"
+                                ? cta?.externalLink
+                                : cta?.link?.link;
+                            const target =
+                              cta?.hasExternalLink === "true"
+                                ? "_blank"
+                                : "_self";
+                            if (!cta?.title || !href) return null;
+                            return (
+                              <Link
+                                key={cta?.id}
+                                href={href}
+                                target={target}
+                                className="block"
+                              >
+                                <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
+                                  <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
+                                    {cta?.title}
+                                  </Cta>
 
                                 <div
                                   className="relative flex items-center shrink-0 justify-center 
@@ -359,7 +374,7 @@ const TabsAutoplaySection = ({
                               </div>
                             </Link>
                           );
-                        })} */}
+                        })}
                       </div>
                     </>
                   )}
@@ -478,77 +493,83 @@ const TabsAutoplaySection = ({
                           </div>
                         )}
 
-                        {item.card[0]?.ctaButton?.link?.link &&
-                          item.card[0]?.ctaButton?.hasExternalLink && (
+                        {item?.card[0]?.ctaButton?.title &&
+                          (item?.card[0]?.ctaButton?.link?.link ||
+                            item?.card[0]?.ctaButton?.externalLink) && (
                             <div className="mt-[18px] pointer-events-auto">
                               <Button
                                 title={item.card[0].ctaButton.title}
                                 href={
-                                  item.card[0]?.ctaButton?.hasExternalLink ==
+                                  item.card[0].ctaButton.link?.link ||
+                                  item.card[0].ctaButton.externalLink
+                                }
+                                useTargetBlank={
+                                  item?.card[0]?.ctaButton?.hasExternalLink ===
                                   "true"
-                                    ? item.card[0]?.ctaButton?.externalLink
-                                    : item.card[0]?.ctaButton?.link?.link
                                 }
                                 secondary
+                                className="text-left"
                               />
                             </div>
                           )}
                         {/* Arrow Cta */}
-                        {/* {item?.card[0]?.repeatableCta?.map((cta) => {
-                          const href =
-                            cta?.hasExternalLink === "true"
-                              ? cta?.externalLink
-                              : cta?.link?.link;
-                          const target =
-                            cta?.hasExternalLink === "true"
-                              ? "_blank"
-                              : "_self";
-                          if (!cta?.title || !href) return null;
-                          return (
-                            <Link
-                              key={cta?.id}
-                              href={href}
-                              target={target}
-                              className="block"
-                            >
-                              <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
-                                <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
-                                  {cta.title}
-                                </Cta>
+                        {item?.card[0]?.repeatableCta?.map(
+                          (cta: ArrowCtaProps) => {
+                            const href =
+                              cta?.hasExternalLink === "true"
+                                ? cta?.externalLink
+                                : cta?.link?.link;
+                            const target =
+                              cta?.hasExternalLink === "true"
+                                ? "_blank"
+                                : "_self";
+                            if (!cta?.title || !href) return null;
+                            return (
+                              <Link
+                                key={cta?.id}
+                                href={href}
+                                target={target}
+                                className="block"
+                              >
+                                <div className="flex gap-x-[40px] items-start justify-between cursor-pointer border-b py-4 border-grey-200 group">
+                                  <Cta className="bg-transparent !text-blue-200 text-[14px] lg:text-[16px]">
+                                    {cta.title}
+                                  </Cta>
 
-                                <div
-                                  className="relative flex items-center shrink-0 justify-center 
+                                  <div
+                                    className="relative flex items-center shrink-0 justify-center 
                      w-[24px] h-[24px] lg:w-[30px] lg:h-[30px] 
                      rounded-full border border-orange-200 overflow-hidden"
-                                >
-                                  <Image
-                                    src="/images/arrow-up-right-o.svg"
-                                    alt="icon-primary"
-                                    width={imageSize}
-                                    height={imageSize}
-                                    className="absolute transition-transform duration-500 ease-in-out 
+                                  >
+                                    <Image
+                                      src="/images/arrow-up-right-o.svg"
+                                      alt="icon-primary"
+                                      width={imageSize}
+                                      height={imageSize}
+                                      className="absolute transition-transform duration-500 ease-in-out 
                        w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                        group-hover:translate-x-[187.5%] group-hover:-translate-y-[187.5%] 
                        lg:group-hover:translate-x-[150%] lg:group-hover:-translate-y-[150%]"
-                                  />
+                                    />
 
-                                  <Image
-                                    src="/images/arrow-up-right-o.svg"
-                                    alt="icon-secondary"
-                                    width={imageSize}
-                                    height={imageSize}
-                                    className="absolute transition-transform duration-500 ease-in-out 
+                                    <Image
+                                      src="/images/arrow-up-right-o.svg"
+                                      alt="icon-secondary"
+                                      width={imageSize}
+                                      height={imageSize}
+                                      className="absolute transition-transform duration-500 ease-in-out 
                        w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                        translate-x-[-187.5%] translate-y-[187.5%] 
                        group-hover:translate-x-0 group-hover:translate-y-0
                        lg:translate-x-[-150%] lg:translate-y-[150%] 
                        lg:group-hover:translate-x-0 lg:group-hover:translate-y-0"
-                                  />
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </Link>
-                          );
-                        })} */}
+                              </Link>
+                            );
+                          }
+                        )}
                       </>
                     )}
                   </div>
