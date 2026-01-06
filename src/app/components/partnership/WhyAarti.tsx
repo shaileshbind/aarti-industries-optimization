@@ -262,7 +262,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
 const LayoutImage: React.FC<LayoutImageProps> = ({ src, imageFade }) => {
   return (
-    <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden rounded-[20px]">
+    <div className="relative h-[317px] lg:h-[600px] w-full overflow-hidden rounded-[20px]!">
       <div className="absolute right-0 top-0 min-h-[317px] lg:min-h-[500px] xl:min-h-[600px] w-[100%] lg:w-full rounded-[20px]">
         <Image
           src={src || ""}
@@ -276,7 +276,7 @@ const LayoutImage: React.FC<LayoutImageProps> = ({ src, imageFade }) => {
         {/* Decorative overlays */}
         <div className="absolute left-0 object-cover backdrop-blur-lg h-[calc(100%-71px)] lg:h-[calc(100%-70px)] w-[75px] lg:w-[110px]" />
 
-        <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg h-[calc(100%-245px)] lg:h-[calc(100%-530px)] w-full" />
+        <div className="absolute bottom-0 right-0 object-cover backdrop-blur-lg h-[calc(100%-245px)] lg:h-[70px] w-full rounded-bl-[20px] rounded-br-[20px]" />
 
         <Image
           src="/images/home/star-white.svg"

@@ -479,18 +479,18 @@ const Header = ({ data }: HeaderProps) => {
       <div
         className={clsx(
           `fixed left-0 right-0 z-50`,
-          pathname === "/" ? `top-9 lg:top-11` : `top-0`
+          pathname === "/" ? `top-9 lgx:top-11` : `top-0`
         )}
       >
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
-          <div className="ml-[0px] lg:ml-[60px] w-full h-auto relative z-10">
-            <div className="flex items-center justify-start lg:justify-between h-16 lg:h-18 pr-[24px] relative">
+          <div className="ml-[0px] lgx:ml-[60px] w-full h-auto relative z-10">
+            <div className="flex items-center justify-start lgx:justify-between h-16 lgx:h-18 pr-[24px] relative">
               {/* Logo desktop */}
               {Logo?.Logo?.url && (
                 <Link
                   href={Logo?.link || "/"}
-                  className="hidden lg:flex items-center space-x-2 z-50"
+                  className="hidden lgx:flex items-center space-x-2 z-50"
                 >
                   <Image
                     src={Logo?.Logo?.url}
@@ -503,7 +503,7 @@ const Header = ({ data }: HeaderProps) => {
               )}
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
-                className="hidden lg:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
+                className="hidden lgx:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
                 {menu?.map((item, index) => {
@@ -876,7 +876,7 @@ const Header = ({ data }: HeaderProps) => {
               </nav>
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
-                className="lg:hidden relative w-14 h-10 flex items-center justify-center focus:outline-none z-50"
+                className="lgx:hidden relative w-14 h-10 flex items-center justify-center focus:outline-none z-50"
                 onClick={mobileMenuToggle}
                 aria-label="Toggle menu"
               >
@@ -906,7 +906,7 @@ const Header = ({ data }: HeaderProps) => {
               {Logo?.Logo?.url && (
                 <Link
                   href={Logo?.link || "/"}
-                  className="block lg:hidden items-center space-x-2 z-50"
+                  className="block lgx:hidden items-center space-x-2 z-50"
                 >
                   <Image
                     src={Logo?.Logo?.url}
@@ -920,7 +920,7 @@ const Header = ({ data }: HeaderProps) => {
               {/* Mobile Search */}
               {pathname !== "/search-results" && (
                 <div
-                  className="h-[100%] lg:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
+                  className="h-[100%] lgx:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
                   onClick={handleSearchToggle}
                 >
                   <div className="w-[20px] mx-3 h-[20px] relative">
@@ -944,17 +944,17 @@ const Header = ({ data }: HeaderProps) => {
                 </div>
               )}
               {/* Extra div only for mobile */}
-              <div className="block lg:hidden w-[50px]" />
+              <div className="block lgx:hidden w-[50px]" />
             </div>
           </div>
 
           {/* Contact Button - Fixed on right */}
           <Link
             href="/contact"
-            className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18"
+            className="absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
           >
-            <span className="hidden lg:block">Get in touch</span>
-            <span className="block lg:hidden">Contact</span>
+            <span className="hidden lgx:block">Get in touch</span>
+            <span className="block lgx:hidden">Contact</span>
           </Link>
 
           <div
@@ -987,7 +987,7 @@ const Header = ({ data }: HeaderProps) => {
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
         ref={mobileNavRef}
-        className={`lg:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
+        className={`lgx:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
         style={{ paddingTop: `${pathname === "/" ? `99px` : `63px`}` }}
       >
         {/* Mobile/Tablet Navigation Links */}
@@ -1282,7 +1282,7 @@ const Header = ({ data }: HeaderProps) => {
       />
 
       {/* Spacer to prevent content from hiding under fixed header */}
-      <div className="h-16 lg:h-18 block lg:hidden"></div>
+      <div className="h-16 lgx:h-18 block lgx:hidden"></div>
 
       {/* Add CSS for menu item animations and header height variable */}
       <style jsx>{`

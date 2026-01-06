@@ -230,12 +230,12 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       height={50}
                       className="absolute -top-[24px] z-10 right-[60px] w-[42px] lg:w-[50px]"
                     />
-
+<i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
                     <Image
                       src={item?.image?.url}
                       alt={item?.image?.alternativeText || "banner"}
                       fill
-                      className="absolute object-cover opacity-40 blur-sm transition-opacity duration-700"
+                      className="absolute object-cover  blur-sm transition-opacity duration-700"
                     />
                     <Image
                       src={item?.image?.url}

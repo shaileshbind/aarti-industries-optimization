@@ -137,7 +137,7 @@ const SliderCard: FC<SliderCardProps> = ({
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
           <div className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
               {imgSrc && (
                 <Image
                   src={imgSrc}

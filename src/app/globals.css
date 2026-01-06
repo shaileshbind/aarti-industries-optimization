@@ -74,6 +74,10 @@
   --gradient-orange-3: var(--gradient-orange-3);
 }
 
+@theme {
+  --breakpoint-lgx: 71.875rem;
+}
+
 html {
   overflow-x: hidden;
   height: 100%;

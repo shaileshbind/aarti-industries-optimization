@@ -408,8 +408,8 @@ const TabsAutoplaySection = ({
                                       "img"
                                     }
                                     fill
-                                    className="absolute object-cover blur-md"
-                                  />
+                                    className="absolute object-cover"
+                                  /><i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg!"></i>
                                   <Image
                                     src={item.card[0].image.url}
                                     alt={

@@ -132,7 +132,7 @@ export default function MainTimeline({
   return (
     <div className="w-full">
       {/* Mobile View - Timeline Only (Dropdown will be in parent) */}
-      <div className="flex lg:hidden items-center justify-center w-full max-w-md mx-auto h-[100px]">
+      <div className="flex lgx:hidden items-center justify-center w-full max-w-xl mx-auto h-[100px]">
         {/* Mobile Timeline - Single Phase */}
         <div className="flex-1 relative">
           <div className="relative w-full flex justify-between items-center px-4">
@@ -154,7 +154,7 @@ export default function MainTimeline({
                   style={{ backgroundImage: "url('/images/star-orange.svg')" }}
                 ></div>
                 <BodyText3
-                  className={`absolute top-6 left-1/2 transform -translate-x-1/2 !text-xs transition-all duration-300 ${
+                  className={`absolute top-6 left-1/2  transform -translate-x-1/2 !text-xs transition-all duration-300 ${
                     activeYear === year
                       ? "text-orange-600 font-medium scale-120"
                       : "text-gray-600"
@@ -171,7 +171,7 @@ export default function MainTimeline({
       {/* Desktop View - Original Layout */}
       <div className="flex items-end justify-start md:justify-center w-full gap-3 md:px-4 pt-6 md:py-16 overflow-hidden">
         {/* Timeline */}
-        <div className="hidden lg:flex w-full max-full mx-6 transition-all">
+        <div className="hidden lgx:flex w-full max-full mx-6 transition-all">
           {phases.map((phase, i) => (
             <div
               key={i}
