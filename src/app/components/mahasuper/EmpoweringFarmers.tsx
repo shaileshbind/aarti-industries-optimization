@@ -8,7 +8,7 @@ import GeneralPopup from "../Popups/GeneralPopup";
 import { FadeInReveal } from "../ScrollReveal";
 
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
-  const { title, description, states, subtitle, stats, ctaTitle, image } = data;
+  const { title, description, states, subtitle, stats, ctaTitle, image, bottomText } = data;
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   return (
     <section className="pb-[72px] overflow-hidden  ">
@@ -60,13 +60,17 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                   ))}
                 </ul>
               )}
+              {bottomText && (
+                <BodyText2 className="text-grey-400 mt-[20px] md:mt-[40px]">
+                  {bottomText}
+                </BodyText2>
+              )}
               {ctaTitle && (
-                // <Button title={ctaTitle} className="mt-7" secondary href={ctaLink} />
                 <button
                   onClick={() => {
                     setshowGeneralPopup(true);
                   }}
-                  className={`animated-underline w-fit mt-7 cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
+                  className={`animated-underline w-fit mt-[16px] cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
                 >
                   {ctaTitle || "Read More"}
                 </button>

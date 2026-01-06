@@ -575,7 +575,7 @@ const Header = ({ data }: HeaderProps) => {
                                 desktopDropdownRefs.current.delete(index);
                               }
                             }}
-                            className="absolute top-full left-0 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
+                            className="absolute top-full -left-10 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                           >
                             {/* {openDropdown} */}
                             <div className="grid grid-cols-2   gap-2">
@@ -596,16 +596,16 @@ const Header = ({ data }: HeaderProps) => {
                                             onClick={() =>
                                               toggleSubMenu(subMenuId)
                                             }
-                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-orange-200 hover:text-orange-300 transition-colors cursor-pointer"
+                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-300 transition-colors cursor-pointer"
                                           >
-                                            <BodyText3 className="text-orange-200">
+                                            <BodyText3 className="text-[#DC4C03]">
                                               {subMenuItem.title}
                                             </BodyText3>
                                             {subMenuItem.item &&
                                               subMenuItem.item.length > 0 && (
                                                 <i
                                                   className={clsx(
-                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
+                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[1.5px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[1.5px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                                                     isExpanded
                                                       ? "before:rotate-90"
                                                       : "before:rotate-0"
@@ -669,7 +669,7 @@ const Header = ({ data }: HeaderProps) => {
                                                             href={href}
                                                             target="_self"
                                                             rel="noopener noreferrer"
-                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]"
                                                             onClick={() =>
                                                               setOpenDropdown(
                                                                 null
@@ -686,7 +686,7 @@ const Header = ({ data }: HeaderProps) => {
                                                           key={item.id}
                                                           href={href}
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#4C5861] transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
                                                               : "text-gray-700"
@@ -740,7 +740,7 @@ const Header = ({ data }: HeaderProps) => {
                                                       return (
                                                         <div
                                                           key={item.id}
-                                                          className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed"
+                                                          className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed rounded-[6px]"
                                                         >
                                                           {item.title}
                                                         </div>
@@ -764,7 +764,7 @@ const Header = ({ data }: HeaderProps) => {
                                                           target="_self"
                                                           rel="noopener noreferrer"
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
                                                               : "text-gray-700"
@@ -785,7 +785,7 @@ const Header = ({ data }: HeaderProps) => {
                                                         key={item.id}
                                                         href={href}
                                                         className={clsx(
-                                                          "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                          "block rounded-[6px]  px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[4C5861] transition-colors",
                                                           isActive(href)
                                                             ? "text-orange-500 bg-orange-50 font-medium"
                                                             : "text-gray-700"

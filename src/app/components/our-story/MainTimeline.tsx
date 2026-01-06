@@ -257,7 +257,7 @@ export default function MainTimeline({
         </div>
 
         {/* Desktop Navigation Arrows */}
-        <div className="flex items-center gap-4 lg:-mb-[10px]">
+        <div className="flex items-center gap-4 lg:-mb-[10px] relative z-[1]">
           <button
             onClick={handlePrev}
             disabled={activePhase === 0 && activeYear === phases[0].years[0]}

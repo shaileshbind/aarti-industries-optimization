@@ -30,6 +30,7 @@ export default async function Home() {
     sectionEight,
     sectionNine,
     sectionTen,
+    sectionFiveTitle,
   } = data?.data;
   const seo = data?.seo;
   return (
@@ -55,7 +56,7 @@ export default async function Home() {
       {sectionTwo && <DetailsContainer data={sectionTwo} />}
       {sectionThree && <GlobalPartner data={sectionThree} />}
       <HomeSections sustainableChemData={sectionFour} />
-      {sectionFive && <ByUseSection data={sectionFive} />}
+      {sectionFive && <ByUseSection data={sectionFive} sectionFiveTitle={sectionFiveTitle}/>}
       {sectionSix && <ImageGallery data={sectionSix} imgArr={sectionSeven} />}
       {sectionEight && <FrameworkForged data={sectionEight} />}
       {sectionNine && <LatestAtAarti data={sectionNine} />}

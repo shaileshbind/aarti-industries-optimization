@@ -6,7 +6,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import { IndustryInfoProps } from "@/app/types/industries-we-serve.type";
 
 const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
-  const { description, image, mobImage, title } = data;
+  const { description, image, mobImage, subDescription } = data;
 
   return (
     <div className="w-full pt-[72px] pb-[50px] lg:pt-[120px] md:pb-[70px] xl:pb-[150px]">
@@ -39,10 +39,10 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
             <AnimatedText>
               <H3>
                 <div
-                dangerouslySetInnerHTML={{
-                  __html: description,
-                }}
-              />
+                  dangerouslySetInnerHTML={{
+                    __html: description,
+                  }}
+                />
               </H3>
             </AnimatedText>
           )}
@@ -69,10 +69,10 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
               </div>
             </div>
           )}
-          {title && (
+          {subDescription && (
             <FadeInRevealBlur>
               <BodyText2 className="mt-[28px] lg:max-w-[670px]">
-                {title}
+                {subDescription}
               </BodyText2>
             </FadeInRevealBlur>
           )}
