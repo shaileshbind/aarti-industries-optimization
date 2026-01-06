@@ -13,7 +13,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="max-w-5xl mx-auto lg:py-[100px] py-[50px]">
+    <section className="max-w-5xl mx-auto lg:py-[140px] py-[50px]">
       {description && (
         <FadeInReveal delay={0.6}>
           <H2 className="max-w-xl mx-auto text-center py-3 md:py-9">

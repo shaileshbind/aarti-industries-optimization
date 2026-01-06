@@ -46,9 +46,11 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 
   const isScrollingProgrammatically = useRef<boolean>(false);
   const { setMarginBottom } = useMargin();
+  const triggerIdRef = useRef<string>("aartiAdvantageTrigger");
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
+    const triggerId = triggerIdRef.current;
     const ctx = gsap.context(() => {
       if (isMobile) {
         gsap.set(sustainbleLogo.current, {
@@ -69,9 +71,15 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       }
       gsap.set(envSlider.current, { opacity: 0 });
 
+      // Kill any existing ScrollTrigger with this ID before creating a new one
+      const existingTrigger = ScrollTrigger.getById(triggerId);
+      if (existingTrigger) {
+        existingTrigger.kill();
+      }
+
       const mainTl = gsap.timeline({
         scrollTrigger: {
-          id: "mainTrigger",
+          id: triggerId,
           trigger: triggerRef.current,
           start: "top 50%",
           end: "+=1200",
@@ -81,12 +89,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           invalidateOnRefresh: true,
           onEnter: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
+              triggerId
             ) as ScrollTriggerInstance | null;
           },
           onRefresh: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
+              triggerId
             ) as ScrollTriggerInstance | null;
           },
         },
@@ -239,6 +247,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     });
 
     return () => {
+      // Explicitly kill the ScrollTrigger instance
+      const triggerId = triggerIdRef.current;
+      const existingTrigger = ScrollTrigger.getById(triggerId);
+      if (existingTrigger) {
+        existingTrigger.kill();
+      }
       ctx.revert();
       isScrollingProgrammatically.current = false;
     };

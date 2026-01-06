@@ -37,7 +37,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   const [hoveredIndex, sethoveredIndex] = useState<number | null>(null);
 
   return (
-    <div className="pb-[72px] lg:pb-[100px] lg:pt-0">
+    <div className="pb-[72px] lg:pb-[140px] lg:pt-0">
       {!hideTitle && sectionTitle && (
         <FadeInReveal delay={0.6}>
         <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>

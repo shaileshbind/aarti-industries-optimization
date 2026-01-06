@@ -151,7 +151,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div className="py-[72px] lg:py-[100px]">
+    <div className="py-[72px] lg:pt-[140px] lg:pb-[100px]">
       {title && <FadeInReveal delay={0.6}><H2 className="text-left lg:text-center container">{title}</H2></FadeInReveal>}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
