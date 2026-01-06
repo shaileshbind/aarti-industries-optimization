@@ -8,6 +8,7 @@ import gsap from "gsap";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
 import SplitText from "../SplitText";
+import {useMediaQuery} from "@mui/material";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -70,7 +71,7 @@ const HeroBanner = ({
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
-
+  const isTablet = useMediaQuery("(max-width:768px)");
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -153,21 +154,21 @@ const HeroBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
-              {image && (
+              {image && !isTablet && (
                 <Image
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
-                  className="object-cover hidden lg:block"
+                  className="object-cover hidden md:block"
                 />
               )}
 
-              {mobImage && (
+              {mobImage && isTablet && (
                 <Image
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
-                  className="object-cover block lg:hidden"
+                  className="object-cover block md:hidden"
                 />
               )}
               <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
@@ -380,20 +381,20 @@ const HeroBanner = ({
             ref={wrapperRef}
             className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
           >
-            {image && (
+            {image && !isTablet && (
               <Image
                 src={image}
                 alt={alt ? alt : "img"}
                 fill
-                className="object-cover hidden lg:block"
+                className="object-cover hidden md:block"
               />
             )}
-            {mobImage && (
+            {mobImage && isTablet && (
               <Image
                 src={mobImage}
                 alt={mobAlt ? mobAlt : "img"}
                 fill
-                className="object-cover block lg:hidden"
+                className="object-cover block md:hidden"
               />
             )}
             {/* starts & lines */}
