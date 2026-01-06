@@ -43,8 +43,6 @@ export default async function page() {
         schemaData={seo?.schemaData}
       />
 
-      {console.log("latestBlog", latestBlog)}
-
       {section_one && <BlogBanner data={section_one} />}
 
       {latestBlog?.data?.length > 0 && (
