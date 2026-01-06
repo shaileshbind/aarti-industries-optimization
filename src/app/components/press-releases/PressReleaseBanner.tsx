@@ -1,16 +1,20 @@
+"use client";
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { PressReleaseBannerProps } from "@/app/types/press-release.type";
+import { useMediaQuery } from "@mui/material";
 
 const PressReleaseBanner: React.FC<PressReleaseBannerProps> = ({ data }) => {
   const { sectionTitle, description, image, mobImage } = data;
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   return (
     <HeroBanner
       title={sectionTitle}
       desc={description}
       fullBg
-      centerText={true}
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}

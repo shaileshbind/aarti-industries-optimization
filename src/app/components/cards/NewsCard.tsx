@@ -28,7 +28,7 @@ const NewsCard = ({
     <>
       {animate ? (
         <>
-          <div className="group relative inverted-radius transition-all duration-300 ">
+          <div className="group relative inverted-radius transition-all duration-500">
             <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2] border-[1px] border-gray-300 ">
               {imageSrc && (
                 <Image
