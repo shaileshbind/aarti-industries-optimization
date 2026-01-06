@@ -8,6 +8,7 @@ import StateMapSvg from "./StateMapSvg";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRMapsProps } from "@/app/types/global-reach.type";
+import { FadeInRevealBlur } from "../ScrollReveal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -92,12 +93,15 @@ const GRMaps = ({ data }: GRMapsProps) => {
       >
         <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
           {sectionTitle && (
+            <FadeInRevealBlur className="w-full">
             <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
               {sectionTitle}
             </H2>
+            </FadeInRevealBlur>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px]">
+          <div className="relative w-full h-[180px] lg:h-[550px]">  
             <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
+            <FadeInRevealBlur className="w-full">
               <DesktopMapSvg
                 hoverRestWorld={() => setActiveBlip(0)}
                 hoverNorthAmerica={() => setActiveBlip(1)}
@@ -118,13 +122,16 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 isActive4={activeBlip === 4}
                 isActive5={activeBlip === 5}
               />
+              </FadeInRevealBlur>
             </div>
+            {/* <FadeInRevealBlur className="w-full"> */}
             <Image
               src="/images/global-reach/gr-map-m.svg"
               alt="img"
               fill
               className="object-contain block lg:hidden"
             />
+            {/* </FadeInRevealBlur> */}
           </div>
           <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
             {mobileStatsData?.map((items, index) => {

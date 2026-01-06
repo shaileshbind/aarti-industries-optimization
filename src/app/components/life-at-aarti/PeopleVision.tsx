@@ -13,6 +13,7 @@ import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
 // import { isMobile } from "react-device-detect";
 import {useMediaQuery} from "@mui/material";
+import { FadeInReveal } from "../ScrollReveal";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
@@ -438,9 +439,11 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   return (
     <>
       {title && (
+        <FadeInReveal delay={0.6}>
         <H2 className="text-center max-w-[780px] mx-[20px] lg:mx-auto ">
           {title}
         </H2>
+        </FadeInReveal>
       )}
       <div
         ref={triggerRef}

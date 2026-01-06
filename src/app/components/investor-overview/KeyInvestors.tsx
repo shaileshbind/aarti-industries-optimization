@@ -5,13 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import InvestorBarChart from "../InvestorBarChart";
 import { InvestorKeyProps } from "@/app/types/investor-overview.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const KeyInvestors = ({ data }: InvestorKeyProps) => {
   const { leftSection, rightSection } = data;
   const [active, setActive] = useState(0);
 
   return (
-    <div>
+    <FadeInReveal>
       <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]  gap-y-[18px] gap-x-[24px] fluid-container">
         <div>
           {leftSection?.title && (
@@ -95,7 +96,7 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </FadeInReveal>
   );
 };
 

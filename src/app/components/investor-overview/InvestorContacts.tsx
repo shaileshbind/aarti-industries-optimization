@@ -2,11 +2,12 @@ import { BodyText2, BodyText3, Cta, H3, SubH3 } from "../Typography2";
 import Image from "next/image";
 import { InvestorContactProps } from "@/app/types/investor-overview.type";
 import clsx from "clsx";
+import { FadeInReveal } from "../ScrollReveal";
 
 const InvestorContacts = ({ data }: InvestorContactProps) => {
   const { sectionTitle, image, investor_contacts } = data;
   return (
-    <div>
+    <FadeInReveal>
       <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-[50px]  gap-y-[36px]  fluid-container mb-[72px] lg:mb-[120px]">
         {sectionTitle && (
           <H3 className="!text-[24px] block lg:hidden">{sectionTitle}</H3>
@@ -124,7 +125,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
           })}
         </div>
       </div>
-    </div>
+      </FadeInReveal>
   );
 };
 

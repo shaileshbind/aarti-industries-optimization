@@ -69,10 +69,10 @@ const DateCard = ({
     <Link
       href={link}
       target={useTargetBlank ? "_blank" : "_self"}
-      className="block cursor-pointer"
+      className="block cursor-pointer group"
     >
       {animate && (
-        <div className="absolute right-3 top-4 z-[2] w-12 h-12  place-items-center transition-all duration-500 pointer-events-none hidden lg:block">
+        <div className="absolute  opacity-0 group-hover:opacity-100 right-3 scale-0 group-hover:scale-100 top-4 z-[2] w-12 h-12  place-items-center transition-all duration-500 pointer-events-none hidden lg:block">
           <Image
             src={"/images/arrow-up-right-o.svg"}
             alt={"arrow"}

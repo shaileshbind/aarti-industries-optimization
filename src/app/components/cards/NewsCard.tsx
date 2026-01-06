@@ -99,10 +99,10 @@ const NewsCard = ({
     <Link
       href={link}
       target={useTargetBlank ? "_blank" : "_self"}
-      className="block cursor-pointer"
+      className="block cursor-pointer group"
     >
       {animate && (
-        <div className="absolute right-3 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500 pointer-events-none">
+        <div className="absolute  opacity-0 group-hover:opacity-100 right-3 scale-0 group-hover:scale-100 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500 pointer-events-none">
           <Image
             src="/images/arrow-up-right-o.svg"
             alt={"arrow"}

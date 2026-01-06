@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { H2 } from "../Typography2";
 import Image from "next/image";
 import { LAAValueProps } from "@/app/types/life-at-aarti.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const LifeAtValues = ({ data2 }: LAAValueProps) => {
   const { title, data } = data2;
@@ -62,11 +63,14 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
   return (
     <section className="max-w-5xl mx-auto md:py-[100px] pt-[0px] pb-[50px] ">
       {title && (
+        <FadeInReveal>
         <H2 className="max-w-xl mx-[20px] lg:mx-auto text-center py-[unset] md:py-9">
           {title}
         </H2>
+        </FadeInReveal>
       )}
       {/* Desktop Layout - Only renders if data exists and has valid content */}
+      <FadeInReveal delay={0.6} className="w-full">
       {data &&
         data.length > 0 &&
         data.some((item) => item?.value || item?.description) && (
@@ -150,8 +154,9 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
             </div>
           </div>
         )}
+        </FadeInReveal>
       {/* Mobile Accordion */}
-      <div className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
+      <FadeInReveal delay={0.6} className="md:hidden mt-6 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
         {data?.map((tab, index) => {
           const isOpen = openIndex === index;
           return (
@@ -211,7 +216,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
             </div>
           );
         })}
-      </div>
+      </FadeInReveal>
     </section>
   );
 };

@@ -5,6 +5,7 @@ import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
 import { WhyAartiProps } from "@/app/types/partnership.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 interface LayoutImageProps {
   src: string;
@@ -160,7 +161,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   }, []);
 
   return (
-    <div className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">
+    <FadeInReveal className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">
       {/* Desktop */}
       <div className="hidden lg:block">
         <LayoutImage src={activeImage} imageFade={imageFade} />
@@ -256,7 +257,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
           </div>
         )}
       </div>
-    </div>
+    </FadeInReveal>
   );
 }
 
