@@ -82,6 +82,7 @@ export default function GeneralForm({
     CategorySubcategoryItem[]
   >([]);
   const [productsData, setProductsData] = useState<string[]>([]);
+  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const {
     register,
@@ -290,7 +291,13 @@ export default function GeneralForm({
       });
 
       if (response.ok) {
-        setshowGeneralPopup?.(false);
+        setformSubmitted(true);
+
+        setTimeout(() => {
+          setshowGeneralPopup?.(false);
+          setformSubmitted(false);
+        }, 5000);
+
         reset(); // Reset form fields to default after successful submission
         if (document) {
           const link = window.document.createElement("a");
@@ -706,6 +713,12 @@ export default function GeneralForm({
             </div>
           )}
         </div>
+
+        {formSubmitted && (
+          <p className="pt-4 text-[#F36633] font-medium">
+            Form has been submitted successfully
+          </p>
+        )}
 
         <Button title={"Submit"} className="mt-6" />
       </form>
