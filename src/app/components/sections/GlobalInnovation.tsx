@@ -5,6 +5,8 @@ import { BodyText1, BodyText3, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
+//import GeneralPopup from "../Popups/GeneralPopup";
 import GeneralPopup from "../Popups/GeneralPopup";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
@@ -39,7 +41,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
           <H2>{title}</H2>
         </AnimatedText>
 
-      <div className="flex flex-col lg:flex-row justify-between items-start">
+      <FadeInReveal className="flex flex-col lg:flex-row justify-between items-start">
         {/* Image Section */}
         <div className="relative w-full h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden lg:w-[55%]">
           <div className="relative w-full pt-[100%]">
@@ -141,7 +143,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 />
               )}
           </div>
-        </div>
+        </FadeInReveal>
       </section>
       <GeneralPopup
         isOpen={showGeneralPopup}

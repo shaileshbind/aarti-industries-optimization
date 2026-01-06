@@ -11,6 +11,7 @@ import Button from "../Button";
 import { EnvRespChemProps } from "@/app/types/environment.type";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FadeInReveal } from "../ScrollReveal";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -182,7 +183,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     };
 
   return (
-    <div className="my-[50px] lg:my-[100px] container mx-[auto]">
+    <FadeInReveal className="my-[50px] lg:my-[100px] container mx-[auto]">
       <H2 className="max-w-[760px] ">{title}</H2>
       {/* Desktop */}
       <div ref={containerRef} className="my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px] relative items-start">
@@ -585,7 +586,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
           ))}
         </div>
       )}
-    </div>
+    </FadeInReveal>
   );
 };
 

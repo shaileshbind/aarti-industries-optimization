@@ -245,7 +245,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   };
 
   return (
-    <div className="w-full my-[72px] lg:my-[100px]">
+    <div className="w-full my-[72px] lg:my-[140px]">
       <div className="w-full container mx-auto">
         {title && (
           <FadeInRevealBlur>

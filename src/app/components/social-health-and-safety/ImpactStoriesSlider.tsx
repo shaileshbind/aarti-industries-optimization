@@ -97,7 +97,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                 backgroundPosition: "center",
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black/80" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/60" />
             </div>
           ))}
         </div>
@@ -129,7 +129,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
                       h-full  relative overflow-hidden transition-all duration-700 ease-out`}
                     >
                       {/* Content */}
-                      <div className="relative h-full p-8 flex flex-col justify-between pt-35">
+                      <div className="relative h-full p-8 flex flex-col justify-between pt-[19vh]">
                         <div
                           className={`flex flex-col ${isActive ? "px-10" : ""}`}
                         >

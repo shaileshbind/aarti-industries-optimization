@@ -11,6 +11,7 @@ import "swiper/css/effect-fade";
 import FaqAccordion from "../FaqAccordian";
 import clsxN from "../../../../utils/clsxN";
 import { DrivingTabsSectionProps as DrivingTabsSectionPropsType } from "@/app/types/social-health-and-safety.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 type DrivingTabsSectionProps = {
   data: DrivingTabsSectionPropsType[];
@@ -109,7 +110,7 @@ const DrivingTabsSection = ({
       }
     };
   return (
-    <>
+    <FadeInReveal>
       {title && (
         <div className="max-w-full lg:max-w-[740px] mx-5 lg:mx-[60px] mb-[30px] lg:mb-[50px]">
           <H2>{title}</H2>
@@ -391,7 +392,7 @@ const DrivingTabsSection = ({
           ))}
         </div>
       )}
-    </>
+    </FadeInReveal>
   );
 };
 

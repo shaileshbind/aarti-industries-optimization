@@ -321,7 +321,6 @@ export default function ProductInnerPage({
           isOpen={showGeneralPopup}
           setshowGeneralPopup={setshowGeneralPopup}
           document={document}
-          // document="https://example-files.online-convert.com/document/pdf/example.pdf"
           prefillCategory="Business Products / Services"
           prefillSubCategory="Chemicals Products"
           prefillProduct={product?.productName}

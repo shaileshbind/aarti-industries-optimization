@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   TextField,
@@ -50,6 +50,7 @@ export default function MSDSForm({
       message: "",
     },
   });
+  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const businessCategories = [
     "Chemical",
@@ -82,7 +83,13 @@ export default function MSDSForm({
       });
 
       if (response.ok) {
-        setshowMSDSPopup?.(false);
+        setformSubmitted(true);
+
+        setTimeout(() => {
+          setshowMSDSPopup?.(false);
+          setformSubmitted(false);
+        }, 5000);
+
         reset();
         if (document) {
           const link = window.document.createElement("a");
@@ -280,6 +287,13 @@ export default function MSDSForm({
             className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
           ></textarea>
         </div>
+
+        {formSubmitted && (
+          <p className="pt-4 text-[#F36633] font-medium">
+            Form has been submitted successfully
+          </p>
+        )}
+        
         <Button title={"Submit"} className="mt-6" />
       </form>
     </div>

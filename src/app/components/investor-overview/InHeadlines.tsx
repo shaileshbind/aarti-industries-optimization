@@ -9,11 +9,12 @@ import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { InvestorHeadlines } from "@/app/types/investor-overview.type";
 import Link from "next/link";
 import { formatDate } from "../../../../utils/formatDate";
+import { FadeInReveal } from "../ScrollReveal";
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
   return (
-    <div className="my-[72px] lg:my-[120px]">
+    <FadeInReveal className="my-[72px] lg:my-[120px]">
       {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
       <div className="mt-[30px] grid lg:grid-cols-[300px_1fr] gap-y-[50px] gap-x-[60px] mx-[unset] lg:mx-[60px]">
         <div className="mx-[20px] lg:mx-[unset]">
@@ -125,7 +126,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
           </div>
         </div>
       </div>
-    </div>
+    </FadeInReveal>
   );
 };
 

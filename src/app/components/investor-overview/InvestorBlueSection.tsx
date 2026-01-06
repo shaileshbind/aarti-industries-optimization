@@ -2,13 +2,14 @@ import Link from "next/link";
 import {  Cta,  } from "../Typography2";
 import Image from "next/image";
 import { InvestorsBlueProps } from "@/app/types/investor-overview.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   const { reports } = data;
   return (
     <div className="bg-blue-200">
       <div className="container">
-      <div className="py-[24px] lg:py-[40px] grid xl:grid-cols-4 gap-y-[40px] gap-x-[100px]">
+      <FadeInReveal className="py-[24px] lg:py-[40px] grid xl:grid-cols-4 gap-y-[40px] gap-x-[100px]">
         {/* <div className="grid gap-x-[10px] lg:gap-x-[50px] gap-y-[16px] lg:gap-y-[10px] xl:justify-between "> */}
           {reports?.map((items) => {
             const url = items?.file?.url ?? items?.link;
@@ -69,7 +70,7 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
             <BodyText2 className="text-white ">-11.50 (-0.34%)</BodyText2>
           </div>
         </div> */}
-      </div>
+      </FadeInReveal>
       </div>
     </div>
   );

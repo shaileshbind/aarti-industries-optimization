@@ -68,10 +68,12 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         className="container mx-auto mt-[54px] lg:mt-[42px] mb-[52px] lg:mb-[100px]"
       >
         {/* Top Line */}
-        <div
-          ref={topLineRef}
-          className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100"
-        ></div>
+        <div className="relative w-full h-[64px] md:h-[120px]">
+          <div
+            ref={topLineRef}
+            className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100"
+          ></div>
+        </div>
         {/* Text content */}
         <div className="max-w-[unset] lg:max-w-[880px] mx-auto text-center mt-4">
           {sectionTitle && (

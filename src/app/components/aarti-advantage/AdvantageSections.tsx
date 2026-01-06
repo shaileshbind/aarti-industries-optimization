@@ -1,7 +1,7 @@
 'use client';
 
 import { MarginProvider } from '@/app/contexts/MarginContext';
-import RDAnalyticalExc from '../sections/RDAnalyticalExc';
+import AartiAdvantage from '../sections/AartiAdvantage';
 import { RDAnalyticalExcProps } from '@/app/types/r-and-d.type';
 import { AilEdgeProps } from '@/app/types/aarti-advantage.type';
 import AilEdge from './AilEdge';
@@ -21,7 +21,7 @@ export default function AdvantageSections({
     <MarginProvider>
         {ExcdData && ExcdSliderData && (
           <div>
-            <RDAnalyticalExc
+            <AartiAdvantage
                
               data={ExcdData}
               sliderData={ExcdSliderData}

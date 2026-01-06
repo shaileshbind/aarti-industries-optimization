@@ -5,6 +5,7 @@ import Image from "next/image";
 import { WorksWithPartnersProps } from "@/app/types/partnership.type";
 import clsx from "clsx";
 import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
 
 export default function WorksWithPartners({
   data,
@@ -89,9 +90,9 @@ export default function WorksWithPartners({
       {/* Desktop Header */}
       <div className="lg:flex justify-between items-center hidden">
         {sectionTitle && (
-          <div className="lg:w-1/2">
+          <FadeInReveal className="lg:w-1/2">
             <H2>{sectionTitle}</H2>
-          </div>
+          </FadeInReveal>
         )}
 
         {ctaTitle && ctaLink && (
@@ -111,7 +112,7 @@ export default function WorksWithPartners({
 
       {/* Desktop Content */}
       {card?.length > 0 && (
-        <div className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}>
+        <FadeInReveal className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}>
           {card.map((item, index) => (
             <div key={"desktop_card_" + index} className="relative pr-[50px]">
               {index !== card.length - 1 && (
@@ -145,7 +146,7 @@ export default function WorksWithPartners({
               </div>
             </div>
           ))}
-        </div>
+        </FadeInReveal>
       )}
 
       {/* Mobile Content */}

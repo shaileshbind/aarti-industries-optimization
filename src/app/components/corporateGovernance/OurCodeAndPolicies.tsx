@@ -4,12 +4,13 @@ import { OurCodeAndPoliciesProps } from "@/app/types/corporate-governance.type";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import { ReportItemProps } from "@/app/types/annual-reports.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
   const { title, sectionTitle, code_and_policy_reports, ctaButton } = data;
 
   return (
-    <div className="lg:max-w-[1320px] mx-auto px-[15px] lg:pt-[70px]">
+    <FadeInReveal className="lg:max-w-[1320px] mx-auto px-[15px] lg:pt-[70px]">
       <div className="lg:flex justify-between items-center">
         <div className="md:max-w-[486px]">
           {title && <H2>{title}</H2>}
@@ -67,7 +68,7 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
           />
         </div>
       )}
-    </div>
+    </FadeInReveal>
   );
 };
 
