@@ -92,13 +92,13 @@ export default function BlogAndCaseStudies({
   //     id: item?.id,
   //   })) || [];
   const tabs =
-  data?.toggleTabs
-    ?.filter((item) => item?.title?.toLowerCase() !== "blogs") 
-    .map((item) => ({
-      title: item?.title,
-      slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
-      id: item?.id,
-    })) || [];
+    data?.toggleTabs
+      ?.filter((item) => item?.title?.toLowerCase() !== "blogs")
+      .map((item) => ({
+        title: item?.title,
+        slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
+        id: item?.id,
+      })) || [];
 
   const [active, setActive] = useState(tabs?.[0]?.slug || "");
   const [activeIndex, setactiveIndex] = useState(0);
@@ -251,16 +251,18 @@ export default function BlogAndCaseStudies({
 
   return (
     <div className="fluid-container" ref={containerRef}>
-      {/* <SimpleTabs
-        tabs={tabs}
-        activeId={active}
-        onChange={(slug, index) => {
-          handleTabChange(slug, index);
-        }}
-        indicatorColor="var(--gradient-orange-1)"
-        innerClassName="rounded-[40px]"
-        leftAlign
-      /> */}
+      <div className="hidden">
+        <SimpleTabs
+          tabs={tabs}
+          activeId={active}
+          onChange={(slug, index) => {
+            handleTabChange(slug, index);
+          }}
+          indicatorColor="var(--gradient-orange-1)"
+          innerClassName="rounded-[40px]"
+          leftAlign
+        />
+      </div>
 
       <div
         className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-8 md:gap-y-14"
