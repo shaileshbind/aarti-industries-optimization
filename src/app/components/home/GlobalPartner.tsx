@@ -74,11 +74,11 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
     <div className="container mx-auto lg:my-[100px] mt-[100px]">
       <div
         ref={wrapperRef}
-        className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[312px_1fr] gap-[6px]"
+        className="w-full min-h-[unset] lgx:min-h-[350px] h-auto grid lgx:grid-cols-[312px_1fr] gap-[6px]"
       >
         <FadeInReveal
           delay={0.6}
-          className="bg-gradient-orange-1 relative rounded-[14px] lg:rounded-[20px] py-[38px] px-[24px] min-h-[136px] lg:min-h-[350px] overflow-hidden"
+          className="bg-gradient-orange-1 relative rounded-[14px] lg:rounded-[20px] py-[38px] px-[24px] min-h-[136px] lgx:min-h-[350px] overflow-hidden"
         >
           {leftTitle && (
             <H3 className="text-white max-w-[230px] md:max-w-fit">

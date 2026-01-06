@@ -44,7 +44,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                     : "img"
                 }
                 fill
-                className="object-cover object-top"
+                className="object-contain object-top"
               />
             )}
           </div>

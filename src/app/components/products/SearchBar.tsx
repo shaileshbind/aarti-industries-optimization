@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <form
       onSubmit={handleSearch}
-      className="flex items-center w-full bg-white rounded-full shadow-sm overflow-hidden mx-auto max-w-[85%] md:max-w-[560px] z-10"
+      className="flex items-center w-full bg-white rounded-full shadow-sm overflow-hidden mx-auto max-w-[85%]  md:max-w-[460px] lgx:max-w-[560px] z-10"
     >
       <input
         type="text"

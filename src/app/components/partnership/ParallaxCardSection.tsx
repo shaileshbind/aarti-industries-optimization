@@ -30,9 +30,11 @@ export default function ParallaxCardSection({
   const containerRef = useRef<HTMLDivElement>(null);
   const leftImageRef = useRef<HTMLDivElement>(null);
   const rightImageRef = useRef<HTMLDivElement>(null);
+  const stickyImageRefWrapper = useRef<HTMLDivElement>(null);
   const bottomLeftImageRef = useRef<HTMLDivElement>(null);
   const bottomImageRef = useRef<HTMLDivElement>(null);
   const stickyImageRef = useRef<HTMLDivElement>(null!);
+  const stickyContainerRef = useRef<HTMLDivElement>(null);
   const topLineRef = useRef(null);
   const mobileBottomImageRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +82,22 @@ export default function ParallaxCardSection({
             },
           });
         });
+
+        // --- STICKY IMAGE PIN ---
+        if (stickyImageRefWrapper.current && stickyContainerRef.current) {
+          ScrollTrigger.create({
+            trigger: stickyContainerRef.current,
+            start: "top top+=100",
+            end: () => {
+              if (!stickyContainerRef.current || !stickyImageRefWrapper.current) return "+=0";
+              const containerHeight = stickyContainerRef.current.offsetHeight;
+              const stickyHeight = stickyImageRefWrapper.current.offsetHeight;
+              return `+=${Math.max(0, containerHeight - stickyHeight - 100)}`;
+            },
+            pin: stickyImageRefWrapper.current,
+            pinSpacing: false,
+          });
+        }
 
         // // --- DISTANCE CALCULATOR ---
         // const calculateDistance = () => {
@@ -244,7 +262,7 @@ export default function ParallaxCardSection({
           )}
         </div>
 
-        <div className="justify-around mt-[66px] hidden lg:flex">
+        <div className="justify-around mt-[46px] md:mt-[146px] lgx:mt-[66px] hidden lg:flex">
           {images?.[2]?.image?.url && (
             <div
               ref={bottomLeftImageRef}
@@ -306,7 +324,7 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
+      <div ref={stickyContainerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px] items-start">
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}
@@ -405,11 +423,13 @@ export default function ParallaxCardSection({
 
         {/* Sticky Image Desktop */}
         {image?.url && (
-          <StickyImage
-            stickyImageRef={stickyImageRef}
-            className="hidden lg:block"
-            src={image?.url}
-          />
+          <div ref={stickyImageRefWrapper}>
+            <StickyImage
+              stickyImageRef={stickyImageRef}
+              className="hidden lg:block"
+              src={image?.url}
+            />
+          </div>
         )}
       </div>
     </div>
@@ -423,10 +443,10 @@ const StickyImage: React.FC<StickyImageProps> = ({
 }) => {
   return (
     <div className={`lg:pr-0 mt-6 lg:mt-0 ${className}`}>
-      <div className="order-1 lg:order-2 h-[317px] lg:h-[640px] w-full overflow-hidden relative lg:sticky lg:top-[100px]">
+      <div className="order-1 lg:order-2 w-full overflow-hidden relative lg:sticky lg:top-[100px]">
         <div
           ref={stickyImageRef}
-          className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-100`}
+          className={`relative min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-100`}
         >
           <Image
             src={src}
