@@ -1,11 +1,11 @@
 "use client";
-import React from "react";
+import React,{useState} from "react";
 import AnimatedText from "../AnimatedText";
 import { BodyText1, BodyText3, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
-//import GeneralPopup from "../Popups/GeneralPopup";
+import GeneralPopup from "../Popups/GeneralPopup";
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   data,
@@ -19,10 +19,10 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
     image,
     description,
     sectionTitle,
-   // formTitle,
+    formTitle,
   } = data;
 
-//  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
+  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
   const displayAlt = image?.alternativeText || "innovation-banner";
 
@@ -116,18 +116,18 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
           {description && <BodyText1 className="lg:mt-[unset] mt-4">{description}</BodyText1>}
 
             {/* FORM CTA */}
-            {/* {formTitle && (
+            {formTitle && (
               <button
                 onClick={() => {
                   setshowGeneralPopup(true);
                 }}
                 className={`animated-underline w-fit cursor-pointer  text-[16px]
                       font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
-                      [text-underline-position:under] text-white white-btn-underline`}
+                      [text-underline-position:under] text-orange-200`}
               >
                 {formTitle}
               </button>
-            )} */}
+            )}
             {ctaButton?.title &&
               (ctaButton?.externalLink || ctaButton?.link?.link) && (
                 <Button
@@ -143,10 +143,10 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
           </div>
         </div>
       </section>
-      {/* <GeneralPopup
+      <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-      /> */}
+      />
     </>
   );
 };

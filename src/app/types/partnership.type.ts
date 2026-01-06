@@ -6,6 +6,7 @@ export type PartnershipBannerProps = {
     ctaButtons: ButtonProps[];
     image: ImageProps;
     mobImage: ImageProps;
+    sectionTitle?:string;
   };
 };
 
