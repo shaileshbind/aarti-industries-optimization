@@ -1,21 +1,18 @@
-'use client'
-import { useEffect, useState } from "react";
+"use client";
 import HeroBanner from "../banners/HeroBanner";
 import { BlogBannerProps } from "@/app/types/blogs.type";
-import { isMobile } from "react-device-detect";
+import { useMediaQuery } from "@mui/material";
 
 const BlogBanner = ({ data }: BlogBannerProps) => {
-   const [isClientMobile, setIsClientMobile] = useState(false);
-      useEffect(() => {
-        setIsClientMobile(isMobile);
-      }, []);
+  const isMobile = useMediaQuery("(max-width:820px)");
   const { title, image, mobImage } = data;
 
   return (
     <HeroBanner
       title={title}
       fullBg
-      centerText={!isClientMobile}
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}

@@ -11,6 +11,7 @@ import StockTicker from "./home/StockTicker";
 import { BodyText3, SubH1 } from "./Typography2";
 import SearchBar from "./SearchBar";
 import { HeaderProps } from "../types/header-footer.type";
+import SplitText from "./SplitText";
 
 const Header = ({ data }: HeaderProps) => {
   const { Logo, menu } = data || {};
@@ -951,10 +952,15 @@ const Header = ({ data }: HeaderProps) => {
           {/* Contact Button - Fixed on right */}
           <Link
             href="/contact"
-            className="absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
+            data-lenis-prevent
+            className="group absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
           >
-            <span className="hidden lgx:block">Get in touch</span>
-            <span className="block lgx:hidden">Contact</span>
+            <span className="hidden lgx:block">
+              <SplitText text="Get in touch" />
+            </span>
+            <span className="block lgx:hidden">
+              <SplitText text="Contact" />
+            </span>
           </Link>
 
           <div
