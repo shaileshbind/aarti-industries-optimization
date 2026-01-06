@@ -1,13 +1,10 @@
-'use client'
-import { useEffect, useState } from "react";
+"use client";
 import HeroBanner from "../banners/HeroBanner";
 import { AnnualRBannerProps } from "@/app/types/annual-reports.type";
-import { isMobile } from "react-device-detect";
+import { useMediaQuery } from "@mui/material";
+
 const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
-  const [isClientMobile, setIsClientMobile] = useState(false);
-    useEffect(() => {
-      setIsClientMobile(isMobile);
-    }, []);
+  const isMobile = useMediaQuery("(max-width:820px)");
   const { title, description, image, mobImage } = data;
 
   return (
@@ -15,7 +12,8 @@ const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
       title={title}
       desc={description}
       fullBg
-      centerText={!isClientMobile}
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}

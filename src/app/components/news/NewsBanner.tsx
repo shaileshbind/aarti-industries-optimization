@@ -1,16 +1,19 @@
-'use client'
+"use client";
+import { useMediaQuery } from "@mui/material";
 import HeroBanner from "../banners/HeroBanner";
 import { NewsBannerProps } from "@/app/types/news.type";
 
 const NewsBanner = ({ data }: NewsBannerProps) => {
   const { title, image, mobImage } = data;
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   return (
     <div>
       <HeroBanner
         title={title}
         fullBg
-         centerText={true}
+        leftDesc={isMobile}
+        centerText={!isMobile}
         image={image?.url}
         mobImage={mobImage?.url}
         alt={image?.alternativeText}

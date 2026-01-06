@@ -257,11 +257,12 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                         </BodyText2>
                       )}
                       <ul className="mt-2 space-y-2">
-                        {item?.bulletPoints?.length > 0 &&
-                          item?.bulletPoints?.map((item, idx) => (
-                            <>
+                        {((item?.bulletPoints?.length ?? 0) > 0 ||
+                          (item?.BulletPoints?.length ?? 0) > 0) &&
+                          (item?.bulletPoints || item?.BulletPoints)?.map(
+                            (bulletPoint, idx) => (
                               <li
-                                key={`${idx}-${item?.title}`}
+                                key={`${idx}-${bulletPoint?.title}`}
                                 className="text-sm text-gray-300 flex items-center gap-2"
                               >
                                 <Image
@@ -271,12 +272,10 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                                   width={15}
                                 />
 
-                                <BodyText2 key={item?.title}>
-                                  {item?.title}
-                                </BodyText2>
+                                <BodyText2>{bulletPoint?.title}</BodyText2>
                               </li>
-                            </>
-                          ))}
+                            )
+                          )}
                       </ul>
                     </SwiperSlide>
                   );
