@@ -34,7 +34,7 @@ export type GlobalInnovationProps = {
       description: string;
     }[];
     sectionTitle?:string;
-   // formTitle?:string;
+    formTitle?:string;
   };
   useBulletes?: boolean;
 };

@@ -56,8 +56,11 @@ export type EducationDevelopmentProps = {
       image: ImageProps;
       mobImage: ImageProps;
       bulletPointsTitle: string;
-      bulletPoints: {
-        title: string;
+      bulletPoints?: {
+        title?: string;
+      }[];
+      BulletPoints?: {
+        title?: string;
       }[];
     }[];
      
