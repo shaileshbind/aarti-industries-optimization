@@ -7,7 +7,7 @@ const ContactMapSvg = () => {
   return (
     <svg
       width="100%"
-      height="auto"
+      height="100%"
       viewBox="0 0 1262 623"
       preserveAspectRatio="xMidYMid meet"
       fill="none"

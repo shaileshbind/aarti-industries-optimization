@@ -201,7 +201,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_65%)]" />
+                   <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
                   </div>
                 )
             )}
@@ -246,12 +246,12 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       index + 1
                     }`}</BodyText2>
                     <div>
-                      <SubH2 className="text-white mt-[-3px]">
+                      <SubH2 className="text-white mt-[-3px] font-alte-hans">
                         {items.title}
                       </SubH2>
                       <BodyText2
-                        className={`mt-[2px] text-white transition-opacity duration-300 max-w-[unset] md:max-w-[300px] xl:max-w-[350px] ${
-                          index === active ? "opacity-100" : "opacity-0"
+                        className={`mt-[2px] text-white transition-opacity duration-300 max-w-[unset] md:max-w-[300px] xl:max-w-[350px] font-roboto pt-1 font-normal ${
+                          index === active ? "opacity-90" : "opacity-0"
                         }`}
                       >
                         {items.description}
@@ -319,7 +319,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                     {rightSectionData.bulletPoints?.map((items) => (
                       <div
                         key={items?.id}
-                        className="flex gap-4 mb-2 items-center"
+                        className="flex gap-4 mb-2 items-start"
                       >
                         {items?.bulletImg ? (
                           <Image

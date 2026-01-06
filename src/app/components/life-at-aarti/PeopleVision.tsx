@@ -11,14 +11,15 @@ import SliderCard from "../cards/SliderCard";
 import { H2 } from "../Typography2";
 import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
+import {useMediaQuery} from "@mui/material";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
 
 const PeopleVision = ({ data }: LAAVisionProps) => {
   const { title, content } = data;
-
+  const isMobile = useMediaQuery("(max-width:600px)");
   const triggerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);
   const sustainbleLogo = useRef<HTMLDivElement>(null);
@@ -318,8 +319,8 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
               height: "206px",
               left: "52%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width:  () => `${slideWidth}px`,
@@ -327,7 +328,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },

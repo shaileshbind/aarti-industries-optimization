@@ -101,7 +101,7 @@ const SusCore = ({ data }: SusCoreData) => {
           )}
         </div>
         <div className="mt-[40px] lg:mt-[60px] flex">
-          <div className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[312px_1fr] gap-[6px]">
+          <div className="w-full min-h-[unset] lg:min-h-[350px] h-auto grid lg:grid-cols-[1fr] lgx:grid-cols-[312px_1fr] gap-[6px]">
             <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[350px] overflow-hidden">
               {leftImage?.url && (
                 <Image

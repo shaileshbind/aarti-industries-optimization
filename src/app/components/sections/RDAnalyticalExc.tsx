@@ -358,7 +358,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 )}
               </div>
               <div className="w-full overflow-hidden">
-                <div className="mt-[18px] mb-[10px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[440px] ">
+                <div className="mt-[18px] mb-[10px] lg:mt-[65px] lg:mb-[27px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
                   <BodyText2 className="text-orange-200">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
@@ -420,7 +420,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
                         <div
-                          className={`grid gap-12 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                          className={`grid gap-12 pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
                             active !== index
                               ? "lg:blur-sm lg:opacity-70"
                               : "lg:blur-0 lg:opacity-100"

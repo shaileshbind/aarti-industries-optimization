@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { BodyText2, SubH1 } from "../Typography2";
+import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
@@ -10,23 +10,30 @@ import Button from "../Button";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TitleCard from "../cards/TitleCard";
-gsap.registerPlugin(ScrollTrigger);
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
 import Link from "next/link";
+gsap.registerPlugin(ScrollTrigger);
 
-const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
+const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) => {
   const [active, setActive] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [, setIsTransitioning] = useState(false);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
 
-  const contentRef = useRef(null);
-  const tabsRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const tabsRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
-  const cardsWrapRef = useRef<HTMLDivElement>(null);
-  const leftContentRef = useRef<HTMLDivElement>(null);
+  const cardsWrapRef = useRef<HTMLDivElement | null>(null);
+  const leftContentRef = useRef<HTMLDivElement | null>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [indicator, setIndicator] = useState({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
 
   useEffect(() => {
     const swiper = swiperRef.current;
@@ -37,7 +44,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
   }, [active]);
 
   const handleTabClick = (index: number) => {
-    if (index === active || isTransitioning) return;
+    if (index === active) return;
+    // Kill previous switch animation if running
+    if (switchAnimRef.current) {
+      switchAnimRef.current.kill();
+      switchAnimRef.current = null;
+    }
 
     setIsTransitioning(true);
 
@@ -50,12 +62,6 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
 
     const cards = cardsWrapRef.current?.querySelectorAll(".title-card-anim");
     const leftContent = leftContentRef.current;
-
-    // Kill previous switch animation if running
-    if (switchAnimRef.current) {
-      switchAnimRef.current.kill();
-      switchAnimRef.current = null;
-    }
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.in" },
@@ -105,7 +111,24 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
     };
   }, []);
 
-  // Animate new TitleCards 0 -> 1 and fade in left content when active changes
+  // Tabs New
+  useEffect(() => {
+    const activeTab = tabRefs.current[active];
+    const container = containerRef.current;
+    if (activeTab && container) {
+      const tabRect = activeTab.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      setIndicator({
+        left:
+          tabRect.left -
+          containerRect.left +
+          container.scrollLeft,
+        width: tabRect.width,
+        visible: true,
+      });
+    }
+  }, [active, data]);
+
   useEffect(() => {
     const cards = cardsWrapRef.current?.querySelectorAll(".title-card-anim");
     const leftContent = leftContentRef.current;
@@ -138,24 +161,55 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data }) => {
       ref={tabsRef}
       className="mt-[72px] md:mt-2 lg:mt-[50px] overflow-hidden "
     >
+     {sectionFiveTitle && <H2 className="max-w-[970px] mx-[20px] lg:mx-[60px] mb-[26px]">
+        {sectionFiveTitle}
+      </H2>}
       {/* Tabs */}
       <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
-          <div className="flex overflow-x-auto whitespace-nowrap gap-x-6 lg:gap-x-[72px] w-fit min-w-full lg:min-w-0">
-            {data?.map(
-              (items, index) =>
-                items?.category && (
-                  <button
-                    key={items?.id}
-                    onClick={() => handleTabClick(index)}
-                    className={`text-grey-300 font-alte-hans leading-[136%] text-[24px] lg:text-[44px] cursor-pointer flex-shrink-0 transition-all duration-600 ease-out hover:text-orange-200/70 ${
-                      active === index ? "text-orange-200" : ""
-                    } ${isTransitioning ? "pointer-events-none" : ""}`}
-                  >
-                    {items?.category}
-                  </button>
-                )
-            )}
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] whitespace-nowrap w-fit">
+            <div
+              ref={containerRef}
+              className="relative flex gap-x-[5px] md:gap-x-[10px] z-10 px-1 w-max"
+            >
+              {/* Animated Indicator */}
+              <div
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  left: indicator.visible ? indicator.left : 0,
+                  top: 0,
+                  height: "100%",
+                  borderRadius: 9999,
+                  background: "#F97316",
+                  width: indicator.visible ? indicator.width : 0,
+                  transition:
+                    "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)",
+                  zIndex: 0,
+                }}
+              />
+              {/* Tabs */}
+              {data?.map(
+                (item, index) =>
+                  item?.category && (
+                    <div
+                      key={item?.id ?? index}
+                      ref={(el) => {(tabRefs.current[index] = el)}}
+                      onClick={() => handleTabClick(index)}
+                      className={`relative z-10 cursor-pointer font-alte-hans leading-[136%]
+                        py-[10px] px-[12px] md:px-[24px] text-[12px] md:text-[14px]
+                        rounded-[40px] transition-all duration-300
+                        ${
+                          active === index
+                            ? "text-white"
+                            : "text-grey-400 hover:bg-grey-200"
+                        }`}
+                    >
+                      {item?.category}
+                    </div>
+                  )
+              )}
+            </div>
           </div>
         )}
       </div>

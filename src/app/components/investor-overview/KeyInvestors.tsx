@@ -12,7 +12,7 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
 
   return (
     <div>
-      <div className="grid lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]  gap-y-[18px] gap-x-[24px] fluid-container">
+      <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]  gap-y-[18px] gap-x-[24px] fluid-container">
         <div>
           {leftSection?.title && (
             <SubH1 className="!text-[24px] lg:!text-[30px]">

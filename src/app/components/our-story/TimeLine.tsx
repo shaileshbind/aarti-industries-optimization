@@ -161,16 +161,16 @@ export default function TimeLine({ data }: TimelineData) {
       </FadeInRevealBlur>
 
       {/* Large Background Numbers */}
-      <div className="absolute lg:right-[-170px] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0">
+      <div className="absolute lg:right-[-170px] right-10 top-33 lg:-top-10 z-0 pointer-events-none flex gap-0">
         <h1
           ref={yearDigit1Ref}
-          className="font-inter text-gray-200 lg:text-[550px] text-[200px] font-bold"
+          className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
         >
           {currentYear.slice(2, 3)}
         </h1>
         <h1
           ref={yearDigit2Ref}
-          className="font-inter text-gray-200 lg:text-[550px] text-[200px] font-bold"
+          className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
         >
           {currentYear.slice(-1)}
         </h1>

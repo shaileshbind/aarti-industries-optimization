@@ -479,18 +479,18 @@ const Header = ({ data }: HeaderProps) => {
       <div
         className={clsx(
           `fixed left-0 right-0 z-50`,
-          pathname === "/" ? `top-9 lg:top-11` : `top-0`
+          pathname === "/" ? `top-9 lgx:top-11` : `top-0`
         )}
       >
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
-          <div className="ml-[0px] lg:ml-[60px] w-full h-auto relative z-10">
-            <div className="flex items-center justify-start lg:justify-between h-16 lg:h-18 pr-[24px] relative">
+          <div className="ml-[0px] lgx:ml-[60px] w-full h-auto relative z-10">
+            <div className="flex items-center justify-start lgx:justify-between h-16 lgx:h-18 pr-[24px] relative">
               {/* Logo desktop */}
               {Logo?.Logo?.url && (
                 <Link
                   href={Logo?.link || "/"}
-                  className="hidden lg:flex items-center space-x-2 z-50"
+                  className="hidden lgx:flex items-center space-x-2 z-50"
                 >
                   <Image
                     src={Logo?.Logo?.url}
@@ -503,7 +503,7 @@ const Header = ({ data }: HeaderProps) => {
               )}
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
-                className="hidden lg:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
+                className="hidden lgx:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
                 {menu?.map((item, index) => {
@@ -575,7 +575,7 @@ const Header = ({ data }: HeaderProps) => {
                                 desktopDropdownRefs.current.delete(index);
                               }
                             }}
-                            className="absolute top-full left-0 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
+                            className="absolute top-full -left-10 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                           >
                             {/* {openDropdown} */}
                             <div className="grid grid-cols-2   gap-2">
@@ -596,16 +596,16 @@ const Header = ({ data }: HeaderProps) => {
                                             onClick={() =>
                                               toggleSubMenu(subMenuId)
                                             }
-                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-orange-200 hover:text-orange-300 transition-colors cursor-pointer"
+                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-300 transition-colors cursor-pointer"
                                           >
-                                            <BodyText3 className="text-orange-200">
+                                            <BodyText3 className="text-[#DC4C03]">
                                               {subMenuItem.title}
                                             </BodyText3>
                                             {subMenuItem.item &&
                                               subMenuItem.item.length > 0 && (
                                                 <i
                                                   className={clsx(
-                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
+                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[1.5px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[1.5px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                                                     isExpanded
                                                       ? "before:rotate-90"
                                                       : "before:rotate-0"
@@ -669,7 +669,7 @@ const Header = ({ data }: HeaderProps) => {
                                                             href={href}
                                                             target="_self"
                                                             rel="noopener noreferrer"
-                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]"
                                                             onClick={() =>
                                                               setOpenDropdown(
                                                                 null
@@ -686,7 +686,7 @@ const Header = ({ data }: HeaderProps) => {
                                                           key={item.id}
                                                           href={href}
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#4C5861] transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
                                                               : "text-gray-700"
@@ -740,7 +740,7 @@ const Header = ({ data }: HeaderProps) => {
                                                       return (
                                                         <div
                                                           key={item.id}
-                                                          className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed"
+                                                          className="block px-4 py-2 text-sm text-gray-400 cursor-not-allowed rounded-[6px]"
                                                         >
                                                           {item.title}
                                                         </div>
@@ -764,7 +764,7 @@ const Header = ({ data }: HeaderProps) => {
                                                           target="_self"
                                                           rel="noopener noreferrer"
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
                                                               : "text-gray-700"
@@ -785,7 +785,7 @@ const Header = ({ data }: HeaderProps) => {
                                                         key={item.id}
                                                         href={href}
                                                         className={clsx(
-                                                          "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors",
+                                                          "block rounded-[6px]  px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[4C5861] transition-colors",
                                                           isActive(href)
                                                             ? "text-orange-500 bg-orange-50 font-medium"
                                                             : "text-gray-700"
@@ -876,7 +876,7 @@ const Header = ({ data }: HeaderProps) => {
               </nav>
               {/* Mobile/Tablet Menu Button - Visible on tablets and below */}
               <button
-                className="lg:hidden relative w-14 h-10 flex items-center justify-center focus:outline-none z-50"
+                className="lgx:hidden relative w-14 h-10 flex items-center justify-center focus:outline-none z-50"
                 onClick={mobileMenuToggle}
                 aria-label="Toggle menu"
               >
@@ -906,7 +906,7 @@ const Header = ({ data }: HeaderProps) => {
               {Logo?.Logo?.url && (
                 <Link
                   href={Logo?.link || "/"}
-                  className="block lg:hidden items-center space-x-2 z-50"
+                  className="block lgx:hidden items-center space-x-2 z-50"
                 >
                   <Image
                     src={Logo?.Logo?.url}
@@ -920,7 +920,7 @@ const Header = ({ data }: HeaderProps) => {
               {/* Mobile Search */}
               {pathname !== "/search-results" && (
                 <div
-                  className="h-[100%] lg:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
+                  className="h-[100%] lgx:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
                   onClick={handleSearchToggle}
                 >
                   <div className="w-[20px] mx-3 h-[20px] relative">
@@ -944,17 +944,17 @@ const Header = ({ data }: HeaderProps) => {
                 </div>
               )}
               {/* Extra div only for mobile */}
-              <div className="block lg:hidden w-[50px]" />
+              <div className="block lgx:hidden w-[50px]" />
             </div>
           </div>
 
           {/* Contact Button - Fixed on right */}
           <Link
             href="/contact"
-            className="absolute top-0 right-0 z-[11] w-[88px] lg:w-[212px] cursor-pointer text-[14px] lg:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lg:h-18"
+            className="absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium  bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
           >
-            <span className="hidden lg:block">Get in touch</span>
-            <span className="block lg:hidden">Contact</span>
+            <span className="hidden lgx:block">Get in touch</span>
+            <span className="block lgx:hidden">Contact</span>
           </Link>
 
           <div
@@ -987,7 +987,7 @@ const Header = ({ data }: HeaderProps) => {
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
         ref={mobileNavRef}
-        className={`lg:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
+        className={`lgx:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
         style={{ paddingTop: `${pathname === "/" ? `99px` : `63px`}` }}
       >
         {/* Mobile/Tablet Navigation Links */}
@@ -1282,7 +1282,7 @@ const Header = ({ data }: HeaderProps) => {
       />
 
       {/* Spacer to prevent content from hiding under fixed header */}
-      <div className="h-16 lg:h-18 block lg:hidden"></div>
+      <div className="h-16 lgx:h-18 block lgx:hidden"></div>
 
       {/* Add CSS for menu item animations and header height variable */}
       <style jsx>{`

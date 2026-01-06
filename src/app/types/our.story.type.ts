@@ -33,6 +33,8 @@ export type GlobalInnovationProps = {
       id: number;
       description: string;
     }[];
+    sectionTitle?:string;
+   // formTitle?:string;
   };
   useBulletes?: boolean;
 };

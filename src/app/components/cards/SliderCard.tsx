@@ -107,7 +107,7 @@ const SliderCard: FC<SliderCardProps> = ({
             ))}
           </div>
         )}
-        <div className="gap-[1%] mt-[10px] lg:mt-6  mb-[20px] lg:mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-[10px]">
+        <div className="gap-9 md:gap-[1%] mt-[10px] lg:mt-6  mb-[20px] lg:mb-[36px] flex-wrap text-[26px]  grid grid-cols-2 items-start gap-y-5 md:gap-y-[10px]">
           {values?.map((stat, idx) => (
             <div key={idx}>
               {stat?.value && <H2 className="text-orange-200">{stat.value}</H2>}
@@ -137,7 +137,7 @@ const SliderCard: FC<SliderCardProps> = ({
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
           <div className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
               {imgSrc && (
                 <Image
                   src={imgSrc}

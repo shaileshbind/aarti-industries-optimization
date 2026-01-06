@@ -10,7 +10,7 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
-import { isMobile } from "react-device-detect";
+import {useMediaQuery} from "@mui/material";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
@@ -18,6 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 const ANIMATION_END_PROGRESS = 0.55;
 
 const SustainableChem = ({ data }: RespGrowthProps) => {
+  const isTablet = useMediaQuery("(max-width:1023px)");
   const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
@@ -197,7 +198,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           scrollTriggerRef.current = mainTl.scrollTrigger;
         }
 
-      if (isMobile) {
+      if (isTablet) {
         mainTl
           .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 6 })
           .fromTo(
@@ -266,15 +267,15 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               height: "206px",
               left: "50%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width: "100%",
               height: "100vh",
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
@@ -378,8 +379,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               height: "206px",
               left: "52%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width:  () => `${slideWidth}px`,
@@ -387,7 +388,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
@@ -550,7 +551,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         ref={envSlider}
         className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0">
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-          {mainSection?.length > 0 && !isMobile && (
+          {mainSection?.length > 0 && !isTablet && (
             <div>
               <Swiper
                 slidesPerView={1.2}
@@ -593,7 +594,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           )}
           <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
             <div className="w-fit mx-auto">
-              {mainSection?.length > 0 && !isMobile && (
+              {mainSection?.length > 0 && !isTablet && (
                 <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                   <div
                     ref={containerRef}
@@ -646,7 +647,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       </div>
       <div ref={mobileSliderContainerRef} className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
           <div className="pt-[110px]" >
-            {mainSection?.length > 0 && isMobile && (
+            {mainSection?.length > 0 && isTablet && (
                 <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                   <div
                     ref={containerRef}
@@ -695,7 +696,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           </div>
           <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
             <div className="grid items-center">
-                {isMobile && (
+                {isTablet && (
                   <Swiper
                 slidesPerView={1}
                 loop={false}

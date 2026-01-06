@@ -23,7 +23,7 @@ const NumberCard = ({
   return (
     <div
       className={clsxN(
-        `bg-[#EFF3F5] md:py-[27px] py-5 px-5 md:px-[24px] rounded-[20px] overflow-hidden relative group h-auto lg:h-[174px]`,
+        `bg-[#EFF3F5] md:py-[27px] py-5 px-5 md:px-[24px] rounded-[20px] overflow-hidden relative group h-auto lg:h-[204px] lgx:h-[174px]`,
         className
       )}
     >

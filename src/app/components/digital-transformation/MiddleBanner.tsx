@@ -13,6 +13,7 @@ const MiddleBanner = ({ data }: MiddleBannerProps) => {
         mobImage={mobImage?.url}
         title={title}
         description={description}
+        overlayClassName="bg-black/70"
       />
     </div>
   );

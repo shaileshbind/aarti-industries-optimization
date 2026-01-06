@@ -339,7 +339,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                   <></>
                 ) : (
                 
-                  <div className="absolute top-1/2 -translate-y-1/2 w-full z-10">
+                  <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">
                     <FadeInReveal delay={0.5}> 
                     <div className="fluid-container">
                       {items?.card?.[0]?.title &&

@@ -8,8 +8,7 @@ export type SocialHealthAndSafetyBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
-    btnTitle: string;
-    btnLink: string;
+    ctaButton: ButtonProps;
   };
 };
 

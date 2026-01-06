@@ -256,7 +256,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
             {/* Archive dropdown - Desktop */}
             {yearAndReport?.length > 4 && (
-              <div className="w-[80px] hidden md:block">
+              <div className="w-[90px] hidden md:block">
                 <FormControl variant="standard" fullWidth>
                   <Select
                     sx={styles}

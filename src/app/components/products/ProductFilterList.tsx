@@ -223,7 +223,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
           className="hidden md:block"
           isOpen={showSubCategories}
         >
-          <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
+          <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto justify-center">
             {catagoriesData
               .find((item) => item.slug === activeTab)
               ?.product_sub_categories?.map((sub: SubCategory) => {
@@ -259,7 +259,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         </SmoothCollapseGSAP>
       )}
 
-      <div className="flex items-center justify-between mb-6 md:mt-10">
+      <div className="flex items-center justify-between mb-6 md:mt-10 relative z-[1]">
         <BodyText1>
           {searchQuery && searchQuery.trim() !== ""
             ? `Search Results for "${searchQuery}" (${
