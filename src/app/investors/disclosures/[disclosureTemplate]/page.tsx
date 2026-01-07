@@ -19,7 +19,7 @@ export default async function page({ params }: PageProps) {
   const templates = ["intimation-of-stock-exchange"];
 
   const orangeCardCategoryListingPages = [
-    "disclosure",
+    "overview",
     "corporate-restructuring",
     "regulation",
   ];
@@ -45,7 +45,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div>
+    <div data-lenis-prevent>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (

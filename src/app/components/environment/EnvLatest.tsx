@@ -9,6 +9,7 @@ import { Mousewheel, Pagination } from "swiper/modules";
 import { EnvLifeProps } from "@/app/types/environment.type";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { FadeInReveal } from "../ScrollReveal";
 
 const EnvLatest = ({ data }: EnvLifeProps) => {
   const { post_categories, sectionTitle } = data;
@@ -24,9 +25,9 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
           spaceBetween={24}
           slidesPerView={1.5}
           breakpoints={{
-          768: { slidesPerView: 2.5 },
-          1024: { slidesPerView: 3 },
-          1440: { slidesPerView: 4 }, 
+            768: { slidesPerView: 2.5 },
+            1024: { slidesPerView: 3 },
+            1440: { slidesPerView: 4 },
           }}
           modules={[Pagination, Mousewheel]}
           pagination={{
@@ -45,13 +46,15 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
         >
           {slides.map((item, index) => (
             <SwiperSlide key={index}>
-              <DateCard
-                imageSrc={item?.image?.url}
-                date={item?.title}
-                desc={item?.description}
-                link={"/blogs/" + item?.slug}
-                animate
-              />
+              <FadeInReveal delay={0.4 * index}>
+                <DateCard
+                  imageSrc={item?.image?.url}
+                  date={item?.title}
+                  desc={item?.description}
+                  link={"/blogs/" + item?.slug}
+                  animate
+                />
+              </FadeInReveal>
             </SwiperSlide>
           ))}
         </Swiper>

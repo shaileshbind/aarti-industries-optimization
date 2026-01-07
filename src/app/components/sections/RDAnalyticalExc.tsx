@@ -105,19 +105,24 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             sustainbleLogo.current,
             { height: "0px" },
             { height: "203px", duration: 0.5 },
-             "<"
+            "<"
           )
           .fromTo(
             sustainInner.current,
-            { width: '200px', height: '200px', opacity: 0,  },
-            { width: window.innerWidth - 40 + "px",opacity: 1,  
-              height: window.innerWidth - 40 + "px", ease:"power4.inOut", duration: 0.5},
+            { width: "200px", height: "200px", opacity: 0 },
+            {
+              width: window.innerWidth - 40 + "px",
+              opacity: 1,
+              height: window.innerWidth - 40 + "px",
+              ease: "power4.inOut",
+              duration: 0.5,
+            },
             "<"
           )
           .fromTo(
             headinLeft.current,
             { y: -150, opacity: 1 },
-            { y: -180, opacity: 0, duration: 0.5 },  
+            { y: -180, opacity: 0, duration: 0.5 }
           )
           .fromTo(
             headinRight.current,
@@ -179,9 +184,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             "<"
           )
           .fromTo(
-            sustainInner.current ,
+            sustainInner.current,
             { opacity: 0, scale: 0.5, transformOrigin: "center center" },
-            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 0.3, ease:"power4.inOut",  
+            {
+              opacity: 1,
+              scale: 1,
+              transformOrigin: "center center",
+              duration: 0.3,
+              ease: "power4.inOut",
             },
             "<0.4"
           )
@@ -196,15 +206,24 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               x: "-50%",
             },
             {
-              width: window.innerWidth > 1280 ? "600px" : window.innerWidth > 1024 && window.innerWidth < 1280 ? "400px" : "100%",
-              height: window.innerWidth > 1280 ? "600px" : window.innerWidth > 1024 && window.innerWidth < 1280 ? "400px" : "100vh",
+              width:
+                window.innerWidth > 1280
+                  ? "600px"
+                  : window.innerWidth > 1024 && window.innerWidth < 1280
+                  ? "400px"
+                  : "100%",
+              height:
+                window.innerWidth > 1280
+                  ? "600px"
+                  : window.innerWidth > 1024 && window.innerWidth < 1280
+                  ? "400px"
+                  : "100vh",
               left: "0%",
               top: "50%",
               y: "-50%",
               x: "0%",
               duration: 1,
-            },
-             
+            }
           )
           .fromTo(
             headinLeft.current,
@@ -221,7 +240,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           .to(titleSection.current, {
             opacity: 0,
             duration: 1,
-             
           })
           .fromTo(
             envSlider.current,
@@ -334,8 +352,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-47%] left-0 "
         >
-          <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
-            <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
+          <div
+            ref={sliderContainerRef}
+            className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]"
+          >
+            <div
+              ref={contentContainerRef}
+              className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center"
+            >
               <div className="relative w-full randdImageHeight pt-[100%] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
@@ -358,7 +382,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 )}
               </div>
               <div className="w-full overflow-hidden">
-                <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
+                <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] mt-4 lg:mt-0">
                   <BodyText2 className="text-orange-200">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
@@ -392,66 +416,42 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
-                  modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
-                  autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                  }}
-                  navigation={{
+                    modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    navigation={{
                       nextEl: ".swiper-button-next-analytical",
                       prevEl: ".swiper-button-prev-analytical",
                     }}
-                  // slidesOffsetAfter={offsetAfter}
-                  onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-                  breakpoints={{
-                    0: {
-                      slidesPerView: 1,
-                      spaceBetween: 0,
-                      allowTouchMove: true,
-                    },
-                    768: {
-                      
-                      spaceBetween: 80,
-                      allowTouchMove: false,
-                    },
-                  }}
-                  scrollbar={{ draggable: true }}
-                  direction="horizontal"
-                  mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                  }}
-                  className="framework-forged-swiper"
-                    // slidesPerView={
-                    //   typeof window !== "undefined" && window.innerWidth < 1024
-                    //     ? 1
-                    //     : 1.2
-                    // }
-                    // spaceBetween={80}
-                    // loop={false}
-                    // onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-                    // speed={800}
-                    // modules={[Navigation, Mousewheel, Autoplay]}
-                    // autoplay={{
-                    //   delay: 15000,
-                    //   disableOnInteraction: false,
-                    // }}
-                    // className="w-full relative"
-                    // navigation={{
-                    //   nextEl: ".swiper-button-next-analytical",
-                    //   prevEl: ".swiper-button-prev-analytical",
-                    // }}
-                    // mousewheel={{
-                    //   forceToAxis: true,
-                    //   sensitivity: 1,
-                    //   releaseOnEdges: true,
-                    // }}
+                    onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+                    breakpoints={{
+                      0: {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        allowTouchMove: true,
+                      },
+                      768: {
+                        spaceBetween: 80,
+                        allowTouchMove: true,
+                      },
+                      1024: {
+                        allowTouchMove: false,
+                      },
+                    }}
+                    scrollbar={{ draggable: true }}
+                    direction="horizontal"
+                    mousewheel={{
+                      forceToAxis: true,
+                      sensitivity: 1,
+                      releaseOnEdges: true,
+                    }}
                   >
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
                         <div
-                          className={`grid gap-12 pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                          className={`grid gap-12 lg:pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
                             active !== index
                               ? "lg:blur-sm lg:opacity-70"
                               : "lg:blur-0 lg:opacity-100"
@@ -498,7 +498,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   }}
                                   className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
                                 >
-                                  Read More
+                                  Enquire now
                                 </button>
                               </div>
                             )}

@@ -297,10 +297,7 @@ export default function YearQuarterListing({
           </div>
 
           {/* Report list - All quarters displayed in reverse order */}
-          <div
-            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
-            data-lenis-prevent
-          >
+          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
             {quarters?.length > 0 ? (
               quarters.map((quarterItem, qIdx) => (
                 <div

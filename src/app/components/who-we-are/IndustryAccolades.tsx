@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Mousewheel, Pagination, Navigation } from "swiper/modules";
+import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
@@ -36,20 +36,20 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       const containerRect = container.getBoundingClientRect();
       const tabRect = activeTab.getBoundingClientRect();
       // Calculate if tab is outside visible area
-      const isOutOfView = 
-        tabRect.left < containerRect.left || 
+      const isOutOfView =
+        tabRect.left < containerRect.left ||
         tabRect.right > containerRect.right;
-      
+
       if (isOutOfView) {
         // Calculate scroll position to center the tab
-        const scrollLeft = 
-          activeTab.offsetLeft - 
-          container.offsetLeft - 
-          (container.clientWidth / 2) + 
-          (activeTab.clientWidth / 2);
+        const scrollLeft =
+          activeTab.offsetLeft -
+          container.offsetLeft -
+          container.clientWidth / 2 +
+          activeTab.clientWidth / 2;
         container.scrollTo({
           left: scrollLeft,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     }
@@ -111,7 +111,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       { width: "0%" },
       {
         width: "100%",
-        duration: 5,
+        duration: 20,
         ease: "linear",
         onComplete: () => {
           const nextIndex = (active + 1) % awards.length;
@@ -152,10 +152,14 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
 
   return (
     <div className="py-[72px] lg:pt-[140px] lg:pb-[100px]">
-      {title && <FadeInReveal delay={0.6}><H2 className="text-left lg:text-center container">{title}</H2></FadeInReveal>}
+      {title && (
+        <FadeInReveal delay={0.6}>
+          <H2 className="text-left lg:text-center container">{title}</H2>
+        </FadeInReveal>
+      )}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
-        <div 
+        <div
           ref={tabsContainerRef}
           className="mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center"
         >
@@ -200,7 +204,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             spaceBetween={24}
             breakpoints={{
               768: { slidesPerView: 3 },
-              1024:{ slidesPerView: 3.2},
+              1024: { slidesPerView: 3.2 },
               1280: { slidesPerView: 4 },
             }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
@@ -212,7 +216,11 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               sensitivity: 1,
               releaseOnEdges: true,
             }}
-            modules={[Pagination, Mousewheel, Navigation]}
+            modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
             pagination={{
               el: ".awards-section-swiper",
               type: "progressbar",

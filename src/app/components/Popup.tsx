@@ -7,7 +7,7 @@ import { useGSAP } from "../contexts/GSAPContext";
 
 type PopupProps = {
   children: React.ReactNode;
-  onOverlayClick?: () => void;
+  onOverlayClick?: (e?: React.MouseEvent) => void;
   isOpen: boolean;
   className?: string;
 };
