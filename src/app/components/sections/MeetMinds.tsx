@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { BodyText2, H2, SubH3 } from "../Typography2";
+import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
