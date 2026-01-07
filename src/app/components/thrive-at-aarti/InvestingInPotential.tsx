@@ -103,7 +103,7 @@ export default function InvestingInPotential({
         className="h-[calc(100vh-70px)] relative overflow-hidden"
       >
         {/* Vertical Line */}
-        <div className="w-[1px] h-full bg-white absolute right-[6.3%] lg:right-[7.1%] top-0 z-[2]" />
+        <div className="w-[1px] h-full bg-white/50 absolute right-[6.3%] lg:right-[7.1%] top-0 z-[2]" />
 
         {/* Accordion Section */}
         <div className="relative z-[2] flex flex-col justify-between h-[90%]">
@@ -124,7 +124,7 @@ export default function InvestingInPotential({
                 >
                   <MainAccordion
                     borderBottom={
-                      cards.length - 1 !== index ? "1px solid white" : "none"
+                      cards.length - 1 !== index ? "1px solid rgba(255, 255, 255, 0.5)" : "none"
                     }
                     expanded={expanded === index}
                     showIcon={false}

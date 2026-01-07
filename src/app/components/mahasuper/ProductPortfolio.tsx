@@ -105,7 +105,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               {/* Accordion Content - Collapsible */}
               {cardSectionTwo?.length > 0 && (
                 <div
-                  className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
+                  className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)] overflow-hidden   relative`}
                 >
                   <Image
                     src="/images/home/flower-t.svg"
@@ -115,7 +115,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                     className="absolute bottom-[-35px] md:bottom-[-40px] -right-[30px] md:-right-[50px] w-[245px] h-[245px]"
                   />
                   {/* Capabilities List */}
-                  <div className="px-[42px] pb-9">
+                  <div className="px-[42px] pb-9 overflow-scroll max-h-[calc(100%-84px)] scrollbar-style">
                     <div className="space-y-4 ">
                       {cardSectionTwo?.map(
                         (capability, index) =>

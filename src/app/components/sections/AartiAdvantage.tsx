@@ -359,7 +359,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       fill
                       className="object-cover scale-110"
                     />
-                    <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+                    <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-white/30"></i>
                     <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
                       <Image
                         src={details[active]?.image?.url}

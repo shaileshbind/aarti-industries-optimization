@@ -12,8 +12,10 @@ import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
+import {useMediaQuery} from "@mui/material";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
+  const isTablet = useMediaQuery("(max-width:768px)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -296,22 +298,22 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] lg:min-h-screen relative overflow-hidden">
-                {items?.card?.[0]?.image?.url && (
+                {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
                     fill
                     priority
-                    className="hidden lg:block object-cover"
+                    className="hidden md:block object-cover"
                   />
                 )}
-                {items?.card?.[0]?.mobImage?.url && (
+                {items?.card?.[0]?.mobImage?.url && isTablet && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
                     alt={items?.card?.[0]?.mobImage?.alternativeText || "banner"}
                     fill
                     priority
-                    className="block lg:hidden object-cover"
+                    className="block md:hidden object-cover"
                   />
                 )}
                 {items?.card?.[0]?.bannerVideo?.url && !isMobile && (

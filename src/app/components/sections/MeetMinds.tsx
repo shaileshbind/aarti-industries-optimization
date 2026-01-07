@@ -16,8 +16,8 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 import clsx from "clsx";
-import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
+import SplitText from "../SplitText";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -105,37 +105,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                             : "opacity-40"
                         )}
                       >
-                        {item?.image?.url && (
-                          <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)] border-[1px] border-grey-200">
-                            <Image
-                              src={item?.image?.url}
-                              alt={item?.image?.alternativeText || "leader"}
-                              fill
-                              className="object-cover object-top"
-                            />
-                          </div>
-                        )}
-                        {item?.name && (
-                          <BodyText1 className="mt-[18px] text-blue-200">
-                            {item?.name}
-                          </BodyText1>
-                        )}
-                        {item?.designation && (
-                          <BodyText2 className="mt-[4px] text-[#9997A2]">
-                            {item?.designation}
-                          </BodyText2>
-                        )}
-
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setshowPopup(true);
-                            setpopupDetails(item);
-                          }}
-                          className="block lg:hidden mt-3"
+                        {/* <Button title="Read Bio" useTargetBlank={false} /> */}
+                        <button
+                          className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer
+              bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%]
+              font-alte-hans overflow-hidden transition-all duration-200`}
                         >
-                          <Button title="Read Bio" useTargetBlank={false} />
-                        </div>
+                          <span className="relative z-10 text-white">
+                            <SplitText text="Read Bio" />
+                          </span>
+                        </button>
                       </div>
                     </CustomCursorTrigger>
                   </SwiperSlide>
