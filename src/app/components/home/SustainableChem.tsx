@@ -41,6 +41,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const leafBigImg = useRef<HTMLSpanElement>(null);
   const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
   const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
   const [indicator, setIndicator] = useState({
@@ -384,9 +385,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
           .fromTo(
-            '.leafBigImg',
-            { scale: '2' },
-            { scale: '1', duration: 1 },
+            leafBigImg.current,
+            { x: '0px' },
+            { x: '-20px', duration: 1 },
             "<"
           )
          
@@ -546,7 +547,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className=" scale-110 object-cover"
                     />
                   </i>
                 )}
@@ -559,16 +560,16 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg object-cover blur"
+                        className=" object-cover blur scale-110"
                       />
                     </span>
-                    <span className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
+                    <span ref={leafBigImg} className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
                       <Image
                         src={mainSection?.[0]?.image?.url}
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg scale-200 object-cover "
+                        className="leafBigImg scale-110 object-cover "
                       />
                     </span>
                 </i>
@@ -580,7 +581,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
@@ -591,7 +592,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
