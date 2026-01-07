@@ -290,10 +290,10 @@ export default function MSDSForm({
 
         {formSubmitted && (
           <p className="pt-4 text-[#F36633] font-medium">
-            Form has been submitted successfully
+            Thank you for reaching out. Our team will get back to you shortly.
           </p>
         )}
-        
+
         <Button title={"Submit"} className="mt-6" />
       </form>
     </div>
