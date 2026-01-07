@@ -384,12 +384,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { width: "100px", height: "100px" },
             { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
-          .fromTo(
-            leafBigImg.current,
-            { x: '0px' },
-            { x: '-20px', duration: 1 },
-            "<"
-          )
          
           .fromTo(
             sustainbleLogo.current,
