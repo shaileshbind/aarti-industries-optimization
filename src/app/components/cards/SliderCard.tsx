@@ -60,8 +60,8 @@ const SliderCard: FC<SliderCardProps> = ({
             )}
             <div className="absolute inset-0 bg-black/40 z-[1]" />
 
-            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-            <span className="absolute bottom-0 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-black/10"></i>
+            <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] md:w-full h-full -ml-2 lg:-ml-6">
               {imgSrc && (
                 <Image
                   src={imgSrc}

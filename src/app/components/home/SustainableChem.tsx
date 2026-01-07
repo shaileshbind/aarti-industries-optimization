@@ -54,7 +54,18 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   // Calculate slideWidth after component mounts (client-side only)
   useLayoutEffect(() => {
     if (typeof window !== 'undefined') {
-      setSlideWidth((window.innerWidth / 1.28) * 40 / 100);
+      // Detect if running on Mac
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      console.log("isMac", isMac);
+      
+      if (isMac) {
+        // Mac calculation
+        setSlideWidth((window.innerWidth / 1.28) * 40 / 100);
+      } else {
+        // Windows calculation
+        setSlideWidth(((window.innerWidth - 22) / 1.28) * 40 / 100);
+        
+      }
     }
   }, []);
   
