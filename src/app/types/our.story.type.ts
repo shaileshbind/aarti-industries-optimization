@@ -44,6 +44,7 @@ export interface TimelineMilestone {
   year: string;
   title: string;
   description: string | null;
+  note: string | null;
 }
 
 interface Milestone {

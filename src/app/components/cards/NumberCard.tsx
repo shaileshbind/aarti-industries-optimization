@@ -10,6 +10,7 @@ type NumberCardProps = {
   desc?: string;
   className?: string;
   titleClassName?: string;
+  bottomText?: string;
 };
 
 const NumberCard = ({
@@ -19,6 +20,7 @@ const NumberCard = ({
   title,
   className,
   titleClassName,
+  bottomText,
 }: NumberCardProps) => {
   return (
     <div
@@ -36,16 +38,23 @@ const NumberCard = ({
         />
       ) : (
         <>
-          {title && (
-            <H2
-              className={clsx(
-                `text-orange-200 text-[40px] md:text-[44px]`,
-                titleClassName
-              )}
-            >
-              {title}
-            </H2>
-          )}
+          <div className="flex items-end">
+            {title && (
+              <H2
+                className={clsx(
+                  `text-orange-200 text-[40px] md:text-[44px]`,
+                  titleClassName
+                )}
+              >
+                {title}
+              </H2>
+            )}
+
+            {bottomText && (
+              <p className="text-orange-200 mb-2 text-[18px]">{bottomText}</p>
+            )}
+          </div>
+
           {desc && (
             <BodyText2 className=" text-[14px] md:text-[18px] lg:text-[16px]">
               {desc}

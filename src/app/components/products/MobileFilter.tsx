@@ -41,7 +41,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 top-[30%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${
+      className={`fixed inset-0 top-[0%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${
         showMobileFilter ? "translate-y-0" : "translate-y-full"
       }`}
     >
