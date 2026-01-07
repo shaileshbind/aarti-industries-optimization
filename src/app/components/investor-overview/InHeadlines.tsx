@@ -23,19 +23,27 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.slice(0, 4).map((release, index) => (
-            <Link href={release?.file?.url || "#"} target="_blank" key={index}>
-              <div
-                key={index}
-                className="pb-[14px] border-b border-grey-200 mb-[14px]"
-              >
-               {release?.heading && <BodyText2>{release?.heading}</BodyText2>}
-               {release?.date && <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                  {formatDate(release?.date)}
-                </BodyText2>}
-              </div>
-            </Link>
-          ))}
+          {pressRelease?.press_releases
+            ?.filter((release) => release?.file?.url || release?.slug)
+            .slice(0, 4)
+            .map((release, index) => {
+              const href = release?.file?.url || `press-releases/${release?.slug}`;
+              if (!href) return null;
+              return (
+                <Link href={href} target="_blank" key={index}>
+                  <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
+                    {release?.heading && (
+                      <BodyText2>{release.heading}</BodyText2>
+                    )}
+                    {release?.date && (
+                      <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
+                        {formatDate(release.date)}
+                      </BodyText2>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           {pressRelease?.ctaButton?.externalLink &&
             pressRelease?.ctaButton?.title && (
               <Button

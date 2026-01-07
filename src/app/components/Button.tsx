@@ -1,5 +1,7 @@
 import Link from "next/link";
-import SplitText from "./SplitText"
+import SplitText from "./SplitText";
+import { useTitleCase } from "../../../utils/toTitleCase";
+
 interface ButtonProps {
   title: string;
   href?: string;
@@ -15,6 +17,9 @@ const Button = ({
   className,
   useTargetBlank = true,
 }: ButtonProps) => {
+  // Call hook unconditionally at the top level
+  const titleCased = useTitleCase(title);
+
   return (
     <>
       {secondary ? (
@@ -28,7 +33,8 @@ const Button = ({
               font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
               [text-underline-position:under] ${className}`}
           >
-            {title}
+            {/* {title} */}
+            {titleCased}
           </button>
         </Link>
       ) : (
@@ -43,7 +49,8 @@ const Button = ({
               font-alte-hans overflow-hidden transition-all duration-200 ${className}`}
           >
             <span className="relative z-10 text-white">
-              <SplitText text={title} />
+              {/* <SplitText text={title} /> */}
+              <SplitText text={titleCased} />
             </span>
           </button>
         </Link>

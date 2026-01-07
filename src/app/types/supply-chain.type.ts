@@ -35,5 +35,11 @@ export type KeyRawMaterialsProps = {
         material: string;
       };
     }[];
+    raw_materials:{
+      productName: string;
+      casNo: string;
+      moducularName: string;
+      materialRequirement: string;
+    }[]
   };
 };

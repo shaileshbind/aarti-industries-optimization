@@ -1,6 +1,6 @@
 "use client";
 import { useLayoutEffect, useRef, useState } from "react";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
+import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
@@ -9,6 +9,7 @@ import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
 import SplitText from "../SplitText";
 import {useMediaQuery} from "@mui/material";
+import { useTitleCase } from "../../../../utils/toTitleCase";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -72,6 +73,9 @@ const HeroBanner = ({
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const isTablet = useMediaQuery("(max-width:768px)");
+  // Call hooks unconditionally at the top level
+  const titleCasedSecondaryBtnFormTitle = useTitleCase(secondaryBtnFormTitle || "");
+  const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -188,15 +192,15 @@ const HeroBanner = ({
                 )}
                 {title && (
                   <FadeInRevealBlur delay={0.1}>
-                    <H2
+                    <H1
                       className={clsx(
-                        `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
+                        `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
                         centerTitleClassName
                       )}
                     >
                       {title}
-                    </H2>
+                    </H1>
                   </FadeInRevealBlur>
                 )}
                 {desc && leftDesc && (
@@ -231,7 +235,8 @@ const HeroBanner = ({
                       font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
                       [text-underline-position:under] text-white white-btn-underline`}
                       >
-                      {secondaryBtnFormTitle}
+                      {/* {secondaryBtnFormTitle} */}
+                      {titleCasedSecondaryBtnFormTitle}
                       </button>
                     )}
                     {secondaryBtnLeftTitle && (
@@ -335,9 +340,9 @@ const HeroBanner = ({
             )}
             {title && (
               <FadeInRevealBlur delay={0.1}>
-                <H2 className="mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full">
+                <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full">
                   {title}
-                </H2>
+                </H1>
               </FadeInRevealBlur>
             )}
             {desc && (
@@ -369,7 +374,8 @@ const HeroBanner = ({
                   >
                     {popupButtonTitle && (
                       <span className="relative z-10 text-white">
-                        <SplitText text={popupButtonTitle} />
+                         {/* <SplitText text={popupButtonTitle} /> */}
+                        <SplitText text={titleCasedPopupButtonTitle} />
                       </span>
                     )}
                   </button>

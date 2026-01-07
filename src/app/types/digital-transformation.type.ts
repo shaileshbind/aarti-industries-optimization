@@ -6,6 +6,7 @@ export type DigitalBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
+    ctaButton?:ButtonProps;
   };
 };
 
