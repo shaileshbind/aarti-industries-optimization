@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
 }
 
 export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
-  const { title, description, products } = data;
+  const { title, description, raw_materials } = data;
 
   const [expanded, setexpanded] = useState(0);
 
@@ -41,7 +41,7 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
     return () => {
       mm.revert(); // Clean up all matchMedia instances
     };
-  }, [products]);
+  }, [raw_materials]);
 
   return (
     <div ref={containerRef} className="lg:flex justify-between fluid-container">
@@ -53,15 +53,15 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
         )}
       </div>
 
-      {products?.length > 0 && (
+      {raw_materials?.length > 0 && (
         <div className="lg:w-1/2 mt-6 lg:mt-0">
-          {products?.map((item, index) => (
+          {raw_materials?.map((item, index) => (
             <MainAccordion
               key={"accordion" + index}
               expanded={expanded === index}
               onChange={() => setexpanded(index)}
               borderBottom={
-                index === products?.length - 1 ? "none" : "1px solid #e8e8e8"
+                index === raw_materials?.length - 1 ? "none" : "1px solid #e8e8e8"
               }
               icon={
                 <Image
@@ -81,19 +81,19 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">Technical Name :</p>
                   <p className="text-[#4C5861]">
-                    {item?.productDetails?.commonName || "-"}
+                    {item?.productName || "-"}
                   </p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">CAS No. :</p>
                   <p className="text-[#4C5861]">
-                    {item?.productDetails?.casNo || "-"}
+                    {item?.casNo || "-"}
                   </p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
                   <p className="text-[#002F50] w-[60%]">Molecular Formula :</p>
                   <p className="text-[#4C5861]">
-                    {item?.productDetails?.chemicalFormula || "-"}
+                    {item?.moducularName || "-"}
                   </p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] ">
@@ -101,7 +101,7 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
                     Packaging Material Requirement :
                   </p>
                   <p className="text-[#4C5861]">
-                    {item?.productDetails?.material || "-"}
+                    {item?.materialRequirement || "-"}
                   </p>
                 </div>
               </div>

@@ -70,7 +70,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     }
   }, []);
   
-  console.log("slideWidth", slideWidth );  
+ // console.log("slideWidth", slideWidth );  
   const { setMarginBottom } = useMargin();
   const indicatorColor =
     "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";

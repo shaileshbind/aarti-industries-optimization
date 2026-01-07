@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { BodyText1, H2 } from "../Typography2";
+import { H2 } from "../Typography2";
 import { CDMOSafegreenProps } from "@/app/types/cdmo.type";
 import { FadeInReveal, WordReveal } from "../ScrollReveal";
 
@@ -17,7 +17,7 @@ const CDMOSafegreen: React.FC<CDMOSafegreenProps> = ({ data }) => {
 
         {description && (
           <FadeInReveal delay={0.2}>
-            <BodyText1 className="pt-3 pb-3">{description}</BodyText1>
+            <div className="font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] text-grey-400 font-roboto pt-3 pb-3" dangerouslySetInnerHTML={{__html:description}}/>
           </FadeInReveal>
         )}
       </div>

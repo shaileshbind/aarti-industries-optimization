@@ -1,21 +1,34 @@
 import React from "react";
 import clsxN from "../../../utils/clsxN";
+import { useTitleCase } from "../../../utils/toTitleCase";
 
 type TypographyProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-export const H1 = ({ className, children }: TypographyProps) => (
-  <h1
-    className={clsxN(
-      "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
-      className
-    )}
-  >
-    {children}
-  </h1>
-);
+// export const H1 = ({ className, children }: TypographyProps) => (
+//   <h1
+//     className={clsxN(
+//       "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
+//       className
+//     )}
+//   >
+//     {children}
+//   </h1>
+// );
+export const H1 = ({ className, children }: TypographyProps) => {
+  return (
+    <h1
+      className={clsxN(
+        "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
+        className
+      )}
+    >
+      {useTitleCase(children as string)}
+    </h1>
+  );
+};
 
 export const H2 = ({ className, children }: TypographyProps) => (
   <h2

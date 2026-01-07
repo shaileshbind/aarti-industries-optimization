@@ -78,6 +78,7 @@ export type InvestorHeadlines = {
         id?: number;
         heading?: string;
         date?: string;
+        slug?:string;
         // link?: string;
         file?: {
           id?: number;
