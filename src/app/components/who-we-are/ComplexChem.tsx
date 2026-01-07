@@ -11,7 +11,7 @@ import { useMediaQuery } from "@mui/material";
 import { FadeInReveal } from "../ScrollReveal";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
-  const { sectionTitle, content } = data;
+  const { sectionTitle, content, description } = data;
 
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
@@ -68,7 +68,16 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
 
   return (
     <div className="pb-[50px] md:pb-[140px] md:pt-0 fluid-container">
-      {sectionTitle && <FadeInReveal delay={0.6}><H2>{sectionTitle}</H2></FadeInReveal>}
+      {(sectionTitle || description) && (
+        <FadeInReveal delay={0.6}>
+          {sectionTitle && <H2>{sectionTitle}</H2>}
+          {description && (
+            <BodyText2 className="text-grey-400 mt-[8px] max-w-[700px]">
+              {description}
+            </BodyText2>
+          )}
+        </FadeInReveal>
+      )}
 
       {content?.length > 0 && (
         <FadeInReveal delay={0.6}>

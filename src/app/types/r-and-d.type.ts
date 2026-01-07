@@ -23,6 +23,7 @@ export type RDInfoProps = {
 export type RDInnovatingChemProps = {
   data: {
     heading: string;
+    description?:string;
     cards: {
       id: string;
       title: string;

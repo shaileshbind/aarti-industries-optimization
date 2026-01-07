@@ -10,7 +10,7 @@ import { RDInnovatingChemProps } from "@/app/types/r-and-d.type";
 
 gsap.registerPlugin(ScrollTrigger);
 const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
-  const { heading, cards } = data;
+  const { heading, cards,description } = data;
 
   const orangeLineRef = useRef<HTMLDivElement | null>(null);
   const starRef = useRef<HTMLDivElement | null>(null);
@@ -64,9 +64,16 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
 
   return (
     <div>
-      {heading && (
+      {(heading || description) && (
         <FadeInRevealBlur>
-          <H2 className="max-w-[600px] mx-[20px] lg:mx-[60px]">{heading}</H2>
+          {heading && (
+            <H2 className="max-w-[600px] mx-[20px] lg:mx-[60px]">{heading}</H2>
+          )}
+          {description && (
+            <BodyText2 className="text-grey-400 mt-[8px] mx-[20px] lg:mx-[60px] max-w-[700px]">
+              {description}
+            </BodyText2>
+          )}
         </FadeInRevealBlur>
       )}
 

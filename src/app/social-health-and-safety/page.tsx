@@ -10,6 +10,7 @@ import GridCardsSocial from "../components/social-health-and-safety/GridCardsSoc
 import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
 import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
 import SocialExplore from "../components/social-health-and-safety/SocialExplore";
+import StatsSection from "../components/social-health-and-safety/StatsSection";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -26,6 +27,7 @@ const page = async () => {
     section_six,
     section_seven,
     section_eight,
+    section_nine,
   } = data?.data;
   const seo = data?.seo;
   return (
@@ -64,6 +66,7 @@ const page = async () => {
           <EducationDevelopment data={section_seven} />
         </div>
       )}
+      {section_nine && <StatsSection data={section_nine} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
