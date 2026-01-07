@@ -53,36 +53,51 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
 
     setIsTransitioning(true);
 
-    // If no cards container yet, switch immediately
-    if (!cardsWrapRef.current && !leftContentRef.current) {
+    const cards = cardsWrapRef.current?.querySelectorAll(".title-card-anim");
+    const leftContent = leftContentRef.current;
+    // If no content yet, switch immediately
+    if (!cards?.length && !leftContent) {
       setActive(index);
       setIsTransitioning(false);
       return;
     }
 
-    const cards = cardsWrapRef.current?.querySelectorAll(".title-card-anim");
-    const leftContent = leftContentRef.current;
-
     const tl = gsap.timeline({
-      defaults: { ease: "power2.in" },
+      defaults: { ease: "power2.inOut" },
       onComplete: () => {
-        // After old content fades out, change data
-        setActive(index);
+        setIsTransitioning(false);
       },
     });
 
-    // Fade out left content
+    // Fade out left content and cards simultaneously
     if (leftContent) {
-      tl.to(leftContent, { opacity: 0, duration: 0.2 }, 0);
+      tl.to(leftContent, { opacity: 0, y: -20, duration: 0.2 }, 0);
     }
 
-    // Scale down cards
     if (cards && cards.length > 0) {
-      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "0%" });
-      tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 }, 0);
+      gsap.set(cards, { transformOrigin: "50% 50%" });
+      tl.to(
+        cards,
+        {
+          translateY: "100%",
+          opacity: 0,
+          duration: 0.2,
+          stagger: 0.03,
+        },
+        0
+      );
     }
 
-    switchAnimRef.current = tl;
+    // Change content at midpoint
+    tl.call(
+      () => {
+        setActive(index);
+      },
+      undefined,
+      0.15
+    );
+    // Fade in new content (this will be picked up by the useEffect)
+    tl.to({}, { duration: 0.05 }); // Small gap for data to update
   };
   useEffect(() => {
     let tabsAnim: gsap.core.Tween | undefined;
@@ -137,19 +152,28 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
 
     // Fade in left content
     if (leftContent) {
-      gsap.set(leftContent, { opacity: 0, y: 30 });
-      tl.to(leftContent, { opacity: 1, y: 0, duration: 0.3 }, 0);
+      gsap.set(leftContent, { opacity: 0, y: 20 });
+      tl.to(leftContent, { opacity: 1, y: 0, duration: 0.25 }, 0);
     }
 
-    // Scale up cards
+    // Fade in cards
     if (cards && cards.length > 0) {
-      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "100%" });
-      tl.to(cards, { translateY: '0%', duration: 0.3, stagger: 0.05 }, 0);
+      gsap.set(cards, {
+        transformOrigin: "50% 50%",
+        translateY: "100%",
+        opacity: 0,
+      });
+      tl.to(
+        cards,
+        {
+          translateY: "0%",
+          opacity: 1,
+          duration: 0.25,
+          stagger: 0.04,
+        },
+        0.05
+      );
     }
-
-    tl.eventCallback("onComplete", () => {
-      setIsTransitioning(false);
-    });
 
     return () => {
       tl.kill();

@@ -956,7 +956,7 @@ const Header = ({ data }: HeaderProps) => {
             className="group absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
           >
             <span className="hidden lgx:flex">
-              <SplitText text="Get in touch" />
+              <SplitText text="Get In Touch" />
             </span>
             <span className="block lgx:hidden">
               <SplitText text="Contact" />

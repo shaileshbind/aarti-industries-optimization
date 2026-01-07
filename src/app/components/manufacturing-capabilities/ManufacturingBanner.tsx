@@ -3,7 +3,7 @@ import HeroBanner from "../banners/HeroBanner";
 import { DigitalBannerProps } from "@/app/types/digital-transformation.type";
 
 const ManufacturingBanner: React.FC<DigitalBannerProps> = ({ data }) => {
-  const { title, description, image,mobImage } = data;
+  const { title, description, image,mobImage,ctaButton } = data;
 
   return (
     <HeroBanner
@@ -14,6 +14,9 @@ const ManufacturingBanner: React.FC<DigitalBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      btnLink={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`} 
+      btnTitle={ctaButton?.title}
+      useTargetBlank={ctaButton?.hasExternalLink === "true"}
     />
   );
 };

@@ -56,14 +56,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
             {leftSection?.ctaButton?.title && (
               <Button
                 title={leftSection?.ctaButton?.title}
-                href={
-                  leftSection?.ctaButton?.externalLink
-                    ? leftSection?.ctaButton?.externalLink
-                    : leftSection?.ctaButton?.link?.link
-                }
-                useTargetBlank={
-                  leftSection?.ctaButton?.externalLink ? true : false
-                }
+                href={leftSection?.ctaButton?.hasExternalLink == "true" ? leftSection?.ctaButton?.externalLink : leftSection?.ctaButton?.link?.link}
+                useTargetBlank={leftSection?.ctaButton?.hasExternalLink === "true"}
                 secondary
                 className="md:mx-[20px] lg:mx-[42px] mb-[40px]"
               />
