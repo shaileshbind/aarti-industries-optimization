@@ -38,6 +38,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
 
   return (
     <div className="pb-[72px] lg:pb-[140px] lg:pt-0">
+      {/* Title */}
       {!hideTitle && sectionTitle && (
         <FadeInReveal delay={0.6}>
           <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
