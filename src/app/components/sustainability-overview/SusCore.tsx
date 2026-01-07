@@ -128,6 +128,7 @@ const SusCore = ({ data }: SusCoreData) => {
                         key={items?.id}
                         title={items?.value}
                         desc={items?.description}
+                        bottomText={items?.bottomText}
                         imageSrc={items?.image?.url}
                         className="stat-box"
                       />
@@ -141,6 +142,7 @@ const SusCore = ({ data }: SusCoreData) => {
                         key={items?.id}
                         title={items?.value}
                         desc={items?.description}
+                        bottomText={items?.bottomText}
                         imageSrc={items?.image?.url}
                         className="stat-box"
                       />

@@ -61,7 +61,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                       imageSrc={item?.thumbnailImageDesktop?.url}
                       date={formatDate(item?.date || "")}
                       desc={item?.title}
-                      link={`/blogs/${item?.slug}`}
+                      link={`/case-studies/${item?.slug}`}
                       animate
                     />
                   </SwiperSlide>

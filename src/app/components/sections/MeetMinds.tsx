@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
+import { BodyText2, H2, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -16,8 +16,8 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 import clsx from "clsx";
-import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
+import SplitText from "../SplitText";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -40,109 +40,88 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
     <div className="pb-[72px] lg:pb-[140px] lg:pt-0">
       {!hideTitle && sectionTitle && (
         <FadeInReveal delay={0.6}>
-        <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
+          <H2 className="mx-5 lg:mx-[60px]">{sectionTitle}</H2>
         </FadeInReveal>
       )}
 
       <div className="mt-[44px]">
         {/* Swiper */}
         <FadeInReveal delay={0.6}>
-        {management_boards?.length > 0 && (
-          <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
-            <Swiper
-              onSwiper={(swiper) => (swiperRef.current = swiper)}
-              slidesPerView={1.2}
-              spaceBetween={24}
-              breakpoints={{
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 3 },
-                1280: {
-                  slidesPerView: 4,
-                },
-              }}
-              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-              observer={true}
-              observeParents={true}
-              direction="horizontal"
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
-              modules={[Pagination, Mousewheel, Navigation, Autoplay]}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              pagination={{
-                el: `.${progressClassName || "leader-section-swiper"}`,
-                type: "progressbar",
-              }}
-              navigation={{
-                nextEl: `.${
-                  navigationNextClass || "swiper-button-next-leaderSection"
-                }`,
-                prevEl: `.${
-                  navigationPrevClass || "swiper-button-prev-leaderSection"
-                }`,
-              }}
-              className="!pr-[20px] !lg:pr-[unset]"
-            >
-              {management_boards?.map((item, index) => (
-                <SwiperSlide key={item?.id}>
-                  <CustomCursorTrigger title="Read Bio">
-                    <div
-                      onClick={() => {
-                        setshowPopup(true);
-                        setpopupDetails(item);
-                      }}
-                      onMouseOver={() => sethoveredIndex(index)}
-                      onMouseLeave={() => sethoveredIndex(null)}
-                      className={clsx(
-                        "transition-all duration-300",
-                        hoveredIndex === index || hoveredIndex === null
-                          ? "opacity-100"
-                          : "opacity-40"
-                      )}
-                    >
-                      {item?.image?.url && (
-                        <div className="relative rounded-[20px] overflow-hidden w-full h-[328px] lg:h-[400px] bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f6f7f8_50%,_#e9ebec_100%)] border-[1px] border-grey-200">
-                          <Image
-                            src={item?.image?.url}
-                            alt={item?.image?.alternativeText || "leader"}
-                            fill
-                            className="object-cover object-top"
-                          />
-                        </div>
-                      )}
-                      {item?.name && (
-                        <BodyText1 className="mt-[18px] text-blue-200">
-                          {item?.name}
-                        </BodyText1>
-                      )}
-                      {item?.designation && (
-                        <BodyText2 className="mt-[4px] text-[#9997A2]">
-                          {item?.designation}
-                        </BodyText2>
-                      )}
-
+          {management_boards?.length > 0 && (
+            <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
+              <Swiper
+                onSwiper={(swiper) => (swiperRef.current = swiper)}
+                slidesPerView={1.2}
+                spaceBetween={24}
+                breakpoints={{
+                  768: { slidesPerView: 3 },
+                  1024: { slidesPerView: 3 },
+                  1280: {
+                    slidesPerView: 4,
+                  },
+                }}
+                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                observer={true}
+                observeParents={true}
+                direction="horizontal"
+                mousewheel={{
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                }}
+                modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                pagination={{
+                  el: `.${progressClassName || "leader-section-swiper"}`,
+                  type: "progressbar",
+                }}
+                navigation={{
+                  nextEl: `.${
+                    navigationNextClass || "swiper-button-next-leaderSection"
+                  }`,
+                  prevEl: `.${
+                    navigationPrevClass || "swiper-button-prev-leaderSection"
+                  }`,
+                }}
+                className="!pr-[20px] !lg:pr-[unset]"
+              >
+                {management_boards?.map((item, index) => (
+                  <SwiperSlide key={item?.id}>
+                    <CustomCursorTrigger title="Read Bio">
                       <div
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           setshowPopup(true);
                           setpopupDetails(item);
                         }}
-                        className="block lg:hidden mt-3"
+                        onMouseOver={() => sethoveredIndex(index)}
+                        onMouseLeave={() => sethoveredIndex(null)}
+                        className={clsx(
+                          "transition-all duration-300",
+                          hoveredIndex === index || hoveredIndex === null
+                            ? "opacity-100"
+                            : "opacity-40"
+                        )}
                       >
-                        <Button title="Read Bio" useTargetBlank={false} />
+                        {/* <Button title="Read Bio" useTargetBlank={false} /> */}
+                        <button
+                          className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer
+              bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%]
+              font-alte-hans overflow-hidden transition-all duration-200`}
+                        >
+                          <span className="relative z-10 text-white">
+                            <SplitText text="Read Bio" />
+                          </span>
+                        </button>
                       </div>
-                    </div>
-                  </CustomCursorTrigger>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        )}
+                    </CustomCursorTrigger>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          )}
         </FadeInReveal>
         {/* Navigation */}
         <div
@@ -213,7 +192,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
       <Popup
         className="!w-[90%] lg:!w-[60%] !p-4 md:!p-10"
         isOpen={showPopup}
-        onOverlayClick={() => setshowPopup(false)}
+        onOverlayClick={(e) => {
+          e?.stopPropagation();
+          setshowPopup(false);
+        }}
       >
         <div className="max-h-[80vh] overflow-y-auto lg:flex gap-10 pr-2 md:pr-0">
           <div className="md:w-[60%] lg:w-[45%] h-[350px] md:h-[500px] rounded-[20px] overflow-hidden">
@@ -234,7 +216,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
             </BodyText2>
 
             <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto scrollbar md:pr-2">
-              {`"${popupDetails?.bio}"`}
+              {`${popupDetails?.bio}`}
             </p>
           </div>
         </div>

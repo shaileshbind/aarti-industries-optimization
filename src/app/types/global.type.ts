@@ -9,7 +9,7 @@ export type ButtonProps = {
     link: string;
     target: string;
   };
-  externalLink?:string;
+  externalLink?: string;
   hasExternalLink?: "true" | "false";
 };
 
@@ -18,4 +18,5 @@ export type ValueProps = {
   id?: string;
   description?: string;
   image?: ImageProps;
+  bottomText?: string;
 };

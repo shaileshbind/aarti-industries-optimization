@@ -60,7 +60,7 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             WebkitBackfaceVisibility: 'hidden',
           }}
         >
-          <Image
+          {/* <Image
             src={prevImg}
             fill
             alt="previous"
@@ -68,7 +68,25 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             style={{
               transform: 'translate3d(0, 0, 0)',
             }}
-          />
+          /> */}
+          <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
+            <Image
+              src={prevImg}
+              alt="previous"
+              fill
+              className="object-cover scale-110"
+            />
+            <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+            <span className="absolute bottom-0 left-2 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-full h-full -ml-6">
+              <Image
+                src={prevImg}
+                alt="previous"
+                fill
+                className="object-cover scale-110"
+              />
+            </span>
+          </div>
         </div>
       )}
 
@@ -83,7 +101,7 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             WebkitBackfaceVisibility: 'hidden',
           }}
         >
-          <Image
+          {/* <Image
             src={activeImg}
             fill
             alt="current"
@@ -91,7 +109,25 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
             style={{
               transform: 'translate3d(0, 0, 0)',
             }}
-          />
+          /> */}
+          <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
+            <Image
+              src={activeImg}
+              alt="current"
+              fill
+              className="object-cover scale-110"
+            />
+            <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+            <span className="absolute bottom-0 left-2 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-full h-full -ml-6">
+              <Image
+                src={activeImg}
+                alt="current"
+                fill
+                className="object-cover scale-110"
+              />
+            </span>
+          </div>
         </div>
       )}
     </div>

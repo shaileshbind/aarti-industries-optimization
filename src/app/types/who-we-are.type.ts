@@ -52,6 +52,7 @@ export type MeetMindsProps = {
 export type ComplexChemProps = {
   data: {
     sectionTitle: string;
+    description?:string;
     content: {
       id: string;
       title: string;

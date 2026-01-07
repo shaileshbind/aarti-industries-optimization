@@ -58,7 +58,7 @@ const page = async () => {
         <div className="pt-[80px] lg:pt-[120px] pb-5">
           <ComprehensiveCare data={section_four} />
         </div>
-      )}
+      )}a
       {section_five && <ImageGallery imgArr={section_five} />}
       {section_six && <ThePeople data={section_six} />}
       {globallyCertifiedData && (

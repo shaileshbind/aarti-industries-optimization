@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle"; // Assuming path is correct
+import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -12,6 +12,7 @@ import {
   Autocomplete,
   Paper,
   Popper,
+  CircularProgress,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
@@ -51,12 +52,6 @@ type GeneralFormProps = {
   showTitle?: boolean;
 };
 
-type productsDataType = {
-  id?: number;
-  productName?: string;
-  slug?: string;
-};
-
 type formSubCategories = {
   id?: number;
   name?: string;
@@ -78,11 +73,12 @@ export default function GeneralForm({
   className,
   showTitle = true,
 }: GeneralFormProps) {
-  const [categorySubcategoryData, setCategorySubcategoryData] = useState<
-    CategorySubcategoryItem[]
-  >([]);
-  const [productsData, setProductsData] = useState<string[]>([]);
-  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
+  const [categorySubcategoryData, setCategorySubcategoryData] = useState<CategorySubcategoryItem[]>([]);
+  const [productLoading, setProductLoading] = useState(false);
+  const [initialProductOptions, setInitialProductOptions] = useState<string[]>([]);
+  const [productOptions, setProductOptions] = useState<string[]>([]);
+  const [searchInputValue, setSearchInputValue] = useState("");
+   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const {
     register,
@@ -109,26 +105,15 @@ export default function GeneralForm({
     },
   });
 
-  // 🔹 Call API and transform data & Handle Prefilling
+  // Fetch categories and initial products for dropdown
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
       try {
-        // 1. FETCH DATA
         const res = await fetch("/api/formCategoriesData");
         if (!res.ok) throw new Error("Failed to fetch categories");
         const data = await res.json();
 
-        const resProducts = await fetch("/api/formProductsData");
-        if (!resProducts.ok) throw new Error("Failed to fetch products");
-        const dataProducts = await resProducts.json();
-
-        // 2. TRANSFORM & SET STATE
-        const transformedProducts: string[] =
-          dataProducts?.data?.map(
-            (item: productsDataType) => item?.productName
-          ) || [];
-        setProductsData(transformedProducts);
-        const transformedData: CategorySubcategoryItem[] =
+        const transformedCategories: CategorySubcategoryItem[] =
           data?.data?.map((item: productsDataCatSubcatType) => ({
             category: item?.name,
             subCategories:
@@ -137,22 +122,36 @@ export default function GeneralForm({
               ) || [],
             subCatEmails:
               item?.form_sub_categories?.map(
-                (item: formSubCategories) => item?.reciverEmail
+                (sub: formSubCategories) => sub?.reciverEmail
               ) || [],
           })) || [];
-        setCategorySubcategoryData(transformedData);
 
-        // 3. APPLY PREFILL USING reset()
+        setCategorySubcategoryData(transformedCategories);
+
+        const resProducts = await fetch("/api/product-form-search?q=");
+        if (!resProducts.ok) throw new Error("Failed to fetch products");
+        const dataProducts = await resProducts.json();
+
+        const mappedProducts: string[] =
+          dataProducts?.data?.map(
+            (item: { productName: string }) => item.productName
+          ) || [];
+        const finalProducts = [...mappedProducts, "Others"];
+
+        setInitialProductOptions(finalProducts);
+        setProductOptions(finalProducts);
+
+        // Prefill logic
         const updatedDefaults: Partial<FormValues> = {};
         if (prefillCategory) {
-          const categoryExists = transformedData.some(
+          const categoryExists = transformedCategories.some(
             (item) => item.category === prefillCategory
           );
           if (categoryExists) {
             updatedDefaults.category = prefillCategory;
 
             if (prefillSubCategory) {
-              const subCategoryExists = transformedData
+              const subCategoryExists = transformedCategories
                 .find((item) => item.category === prefillCategory)
                 ?.subCategories.includes(prefillSubCategory);
               if (subCategoryExists) {
@@ -163,31 +162,71 @@ export default function GeneralForm({
         }
         if (
           prefillProduct &&
-          (transformedProducts.includes(prefillProduct) ||
+          (mappedProducts.includes(prefillProduct) ||
             prefillProduct === "Others")
         ) {
           updatedDefaults.productName = prefillProduct;
         }
         // Use reset to apply the prefilled values reliably
         if (Object.keys(updatedDefaults).length > 0) {
-          reset((prevDefaults) => ({
-            ...prevDefaults,
-            ...updatedDefaults,
-          }));
+          reset((prev) => ({ ...prev, ...updatedDefaults }));
         }
       } catch (err) {
-        console.error("Error fetching form categories:", err);
+        console.error("Error during initial load:", err);
       }
     };
 
-    fetchCategories();
-  }, [prefillCategory, prefillSubCategory, prefillProduct, reset]); // DEPENDENCY CHANGE: use 'reset' instead of 'setValue'
+    fetchInitialData();
+  }, [prefillCategory, prefillSubCategory, prefillProduct, reset]);
 
-  // 🔹 Watch the category field for dynamic subcategory loading
+  // Fetch products from Meilisearch based on search query
+  const fetchProductsFromMeili = async (query: string) => {
+    // If empty query, restore initial products
+    if (!query || query.trim().length === 0) {
+      setProductOptions(initialProductOptions);
+      return;
+    }
+
+    try {
+      setProductLoading(true);
+
+      const res = await fetch(
+        `/api/product-form-search?q=${encodeURIComponent(query)}`
+      );
+      if (!res.ok) {
+        console.error("Fetch failed");
+        return;
+      }
+
+      const data = await res.json();
+
+      const products =
+        data?.data?.map((item: { productName: string }) => item.productName) ||
+        [];
+
+      // Always include "Others" at the end
+      setProductOptions([...products, "Others"]);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setProductLoading(false);
+    }
+  };
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInputValue !== null) {
+        fetchProductsFromMeili(searchInputValue);
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchInputValue]);
+
   const selectedCategory = watch("category");
   const selectedSubcategory = watch("subCategory");
 
-  // 🔹 Get subcategories based on selected category
   const availableSubcategories = useMemo(
     () =>
       categorySubcategoryData?.find(
@@ -196,13 +235,7 @@ export default function GeneralForm({
     [categorySubcategoryData, selectedCategory]
   );
 
-  // 🔹 Add "Others" as static last option to products list
-  const productsWithOthers = useMemo(
-    () => [...(productsData || []), "Others"],
-    [productsData]
-  );
-
-  // 🔹 Update receiver email when subcategory changes
+  // Update receiver email when subcategory changes
   useEffect(() => {
     if (selectedCategory && selectedSubcategory) {
       const categoryData = categorySubcategoryData.find(
@@ -529,7 +562,6 @@ export default function GeneralForm({
               )}
             </FormControl>
 
-            {/* Subcategory */}
             {/* Subcategory - MANDATORY */}
             <FormControl
               fullWidth
@@ -574,7 +606,7 @@ export default function GeneralForm({
             </FormControl>
           </div>
 
-          {/* Products - CONDITIONAL MANDATORY */}
+          {/* Product Autocomplete - Active Search */}
           {selectedSubcategory === "Chemicals Products" && (
             <FormControl
               fullWidth
@@ -588,17 +620,29 @@ export default function GeneralForm({
                 render={({ field }) => (
                   <Autocomplete
                     {...field}
-                    options={productsWithOthers}
+                    openOnFocus
+                    options={productOptions}
+                    loading={productLoading}
                     getOptionLabel={(option) => option}
-                    onChange={(_, value) => field.onChange(value)}
+                    filterOptions={(x) => x} // Disable client-side filtering
+                    inputValue={searchInputValue}
+                    onInputChange={(_, value, reason) => {
+                      if (reason === "input") {
+                        setSearchInputValue(value);
+                      } else if (reason === "clear") {
+                        setSearchInputValue("");
+                        field.onChange(null);
+                      } else if (reason === "reset") {
+                        // When user selects, sync inputValue with selected value
+                        setSearchInputValue(value);
+                      }
+                    }}
+                    onChange={(_, value) => {
+                      field.onChange(value);
+                    }}
                     value={field.value || null}
                     PaperComponent={(props) => (
-                      <Paper
-                        {...props}
-                        sx={{
-                          bgcolor: "#fffdf8",
-                        }}
-                      />
+                      <Paper {...props} sx={{ bgcolor: "#fffdf8" }} />
                     )}
                     PopperComponent={(props) => (
                       <Popper {...props} data-lenis-prevent />
@@ -608,6 +652,17 @@ export default function GeneralForm({
                         {...params}
                         label="Product Name *"
                         error={!!errors.productName}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {productLoading ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
                       />
                     )}
                   />
@@ -716,7 +771,7 @@ export default function GeneralForm({
 
         {formSubmitted && (
           <p className="pt-4 text-[#F36633] font-medium">
-            Form has been submitted successfully
+            Thank you for reaching out. Our team will get back to you shortly.
           </p>
         )}
 

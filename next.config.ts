@@ -29,7 +29,7 @@ const nextConfig = async () => {
       return [
         {
           source: "/investors/disclosures",
-          destination: "/investors/disclosures/disclosure",
+          destination: "/investors/disclosures/overview",
           permanent: true,
         },
         {
