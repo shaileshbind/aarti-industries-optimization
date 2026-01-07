@@ -16,8 +16,8 @@ import {
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
 import Popup from "../Popup";
 import clsx from "clsx";
-import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
+import SplitText from "../SplitText";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -134,7 +134,16 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                         }}
                         className="block lg:hidden mt-3"
                       >
-                        <Button title="Read Bio" useTargetBlank={false} />
+                        {/* <Button title="Read Bio" useTargetBlank={false} /> */}
+                        <button
+            className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer
+              bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%]
+              font-alte-hans overflow-hidden transition-all duration-200`}
+          >
+            <span className="relative z-10 text-white">
+              <SplitText text="Read Bio" />
+            </span>
+          </button>
                       </div>
                     </div>
                   </CustomCursorTrigger>
