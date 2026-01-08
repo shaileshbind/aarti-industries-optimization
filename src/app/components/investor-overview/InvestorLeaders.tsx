@@ -16,6 +16,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current;
@@ -25,8 +26,44 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
     }
   }, [active]);
 
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="my-[72px] lg:mt-[90px] lg:mb-[140px]">
+    <div ref={sectionRef} className="my-[72px] lg:mt-[90px] lg:mb-[140px]">
       {title && (
         <FadeInReveal>
         <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
@@ -129,6 +166,10 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                   swiperRef.current = swiper;
                   setIsBeginning(swiper.isBeginning);
                   setIsEnd(swiper.isEnd);
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
                 }}
                 onSlideChange={(swiper) => {
                   setActive(swiper.activeIndex);

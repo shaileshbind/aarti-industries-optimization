@@ -13,6 +13,7 @@ import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
+import type { Swiper as SwiperType } from "swiper";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -46,6 +47,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 
   const isScrollingProgrammatically = useRef<boolean>(false);
   const { setMarginBottom } = useMargin();
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -301,10 +304,49 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     };
   }, [active, details?.length, setMarginBottom]);
 
+  // Intersection Observer for autoplay control
+  React.useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [active]); // Re-run when active tab changes
+
   return (
     <>
       <div
-        ref={triggerRef}
+        ref={(el) => {
+          triggerRef.current = el;
+          sectionRef.current = el;
+        }}
         className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]"
       >
         <div
@@ -415,7 +457,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 </div>
                 {/* Swiper section */}
                 {details?.length > 0 && (
-                  <Swiper
+                    <Swiper
                     modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
                     autoplay={{
                       delay: 15000,
@@ -424,6 +466,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     navigation={{
                       nextEl: ".swiper-button-next-analytical",
                       prevEl: ".swiper-button-prev-analytical",
+                    }}
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      // Don't start autoplay immediately - wait for viewport intersection
+                      if (swiper.autoplay) {
+                        swiper.autoplay.stop();
+                      }
                     }}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     breakpoints={{
