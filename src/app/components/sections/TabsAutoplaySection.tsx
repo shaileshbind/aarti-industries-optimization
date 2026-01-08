@@ -40,11 +40,13 @@ const TabsAutoplaySection = ({
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const pausedProgressRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const imageSize = 20;
 
   const startProgress = useCallback(() => {
@@ -58,7 +60,7 @@ const TabsAutoplaySection = ({
     const duration = 15000;
 
     const animate = (time: number) => {
-      if (isPaused) {
+      if (isPaused || !isInViewport) {
         pauseTimeRef.current = time;
         return;
       }
@@ -85,11 +87,51 @@ const TabsAutoplaySection = ({
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, [active, data.length, isPaused]);
+  }, [active, data.length, isPaused, isInViewport]);
+
+  // Intersection Observer to detect when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInViewport(true);
+          } else {
+            setIsInViewport(false);
+            // Reset progress when leaving viewport
+            if (rafRef.current) {
+              cancelAnimationFrame(rafRef.current);
+            }
+            setProgress(0);
+            pausedProgressRef.current = 0;
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    if (!isPaused) {
+    if (isInViewport && !isPaused) {
       startProgress();
+    } else {
+      // Pause animation when not in viewport
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
     }
 
     return () => {
@@ -97,7 +139,7 @@ const TabsAutoplaySection = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, startProgress, isPaused]);
+  }, [active, startProgress, isPaused, isInViewport]);
 
   const handleMouseEnter = () => {
     setIsPaused(true);
@@ -152,7 +194,7 @@ const TabsAutoplaySection = ({
     };
 
   return (
-    <>
+    <div ref={sectionRef}>
       {title && (
         <div className="max-w-full lg:max-w-[740px] mx-5 xl:mx-[60px] mb-[30px] lg:mb-[50px]">
           <FadeInReveal >
@@ -595,7 +637,7 @@ const TabsAutoplaySection = ({
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -9,6 +9,7 @@ import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
+import type { Swiper as SwiperType } from "swiper";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +26,44 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   const slidesPerView = 1.2;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     function computeOffset() {
@@ -106,7 +145,10 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   }, []);
 
   return (
-    <div ref={frameworkForgedRef}>
+    <div ref={(el) => {
+      frameworkForgedRef.current = el;
+      sectionRef.current = el;
+    }}>
       <div
         className={clsx(
           `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`
@@ -217,6 +259,13 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   prevEl: ".swiper-button-prev",
                 }}
                 slidesOffsetAfter={offsetAfter}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
+                }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 breakpoints={{
                   0: {

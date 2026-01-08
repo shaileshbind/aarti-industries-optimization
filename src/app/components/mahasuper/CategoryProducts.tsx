@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { SubH1 } from "../Typography2";
 import { CategoryProductsProps } from "@/app/types/mahasuper.type";
 import "swiper/css";
@@ -17,9 +17,46 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <section className="md:py-20 pb-[30px] pt-0 overflow-hidden ">
+    <section ref={sectionRef} className="md:py-20 pb-[30px] pt-0 overflow-hidden ">
       <div className="md:mt-[40px] mt-[0px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
           {/* Left Content */}
@@ -59,6 +96,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                     autoplay={{
                       delay: 5000,
                       disableOnInteraction: false,
+                      pauseOnMouseEnter: true,
                     }}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
@@ -72,6 +110,10 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       swiperRef.current = swiper;
                       setIsBeginning(swiper.isBeginning);
                       setIsEnd(swiper.isEnd);
+                      // Don't start autoplay immediately - wait for viewport intersection
+                      if (swiper.autoplay) {
+                        swiper.autoplay.stop();
+                      }
                     }}
                     onSlideChange={(swiper) => {
                       setIsBeginning(swiper.isBeginning);

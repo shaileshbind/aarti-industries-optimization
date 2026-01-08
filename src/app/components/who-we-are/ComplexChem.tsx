@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
+import { BodyText1, BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -25,7 +25,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       setProgress(0);
 
-      const duration = 15000;
+      const duration = 10000;
       const startTime = performance.now();
 
       const animate = (time: number) => {
@@ -106,9 +106,9 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                         {expanded === `panel${index}` && (
                           <div className="relative not-last:mt-[20px] hidden md:block ">
                             {item?.description && (
-                              <BodyText2 className="mt-[20px] max-w-[650px]">
+                              <BodyText1 className="mt-[20px] max-w-[650px]">
                                 {item?.description}
-                              </BodyText2>
+                              </BodyText1>
                             )}
                           </div>
                         )}

@@ -122,7 +122,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                 ))}
               <div
                 onClick={() => setSwapped(!swapped)}
-                className="bg-[#eff3f5] px-[18px] py-[8px] rounded-[40px] cursor-pointer"
+                className="bg-[#eff3f5] px-[18px] py-[8px] rounded-[40px] cursor-pointer border border-orange-200"
               >
                 <BodyText2>
                   View{" "}
@@ -156,7 +156,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
               {!swapped && (
                 <div
                   onClick={() => setSwapped(!swapped)}
-                  className="bg-white/10 px-[18px] py-[8px] rounded-[40px] cursor-pointer"
+                  className="bg-white/10 px-[18px] py-[8px] rounded-[40px] cursor-pointer border border-white"
                 >
                   <BodyText2 className="text-white">
                     View {existingChemistries?.content?.[0]?.cards?.length - 4}{" "}

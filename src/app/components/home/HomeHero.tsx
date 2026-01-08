@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useLayoutEffect } from "react";
+import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -212,6 +212,43 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     });
   };
 
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = wrapperRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+              startProgressBar();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div
       ref={wrapperRef}
@@ -234,8 +271,11 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         <Swiper
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
+            // Don't start autoplay immediately - wait for viewport intersection
+            if (swiper.autoplay) {
+              swiper.autoplay.stop();
+            }
             setTimeout(() => {
-              startProgressBar();
               controlVideos(activeIndexRef.current);
             }, 100);
           }}

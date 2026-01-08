@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 import { BodyText1, BodyText2, H2 } from "./Typography2";
 import Image from "next/image";
 import { ImageProps } from "../types/global.type";
+import type { Swiper as SwiperType } from "swiper";
 
 interface Testimonials {
   id: number;
@@ -26,9 +27,47 @@ interface ThePeopleProps {
 
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <div className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden">
+    <div ref={sectionRef} className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden">
       {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
         <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
@@ -42,6 +81,13 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             autoplay={{
               delay: 15000,
               disableOnInteraction: false
+            }}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              // Don't start autoplay immediately - wait for viewport intersection
+              if (swiper.autoplay) {
+                swiper.autoplay.stop();
+              }
             }}
             pagination={{
               el: ".home-by-use-section-swiper",

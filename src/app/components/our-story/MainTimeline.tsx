@@ -185,7 +185,7 @@ export default function MainTimeline({
             >
               <BodyText2
                 className={`mb-2 pb-5 ${
-                  activePhase === i ? "text-gray-800" : "text-gray-400"
+                  activePhase === i ? "text-orange-200" : "text-gray-400"
                 }`}
               >
                 {phase.title}
