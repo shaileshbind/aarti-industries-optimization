@@ -112,6 +112,7 @@ const GRInfo = ({ data }: GRInfoProps) => {
                       title={items?.values[0]?.value}
                       desc={items?.values[0]?.description}
                       imageSrc={items?.image?.url}
+                      bottomText={items?.values[0]?.bottomText}
                       className="stat-box"
                     />
                   );
@@ -125,6 +126,7 @@ const GRInfo = ({ data }: GRInfoProps) => {
                       title={items?.values[0]?.value}
                       desc={items?.values[0]?.description}
                       imageSrc={items?.image?.url}
+                      bottomText={items?.values[0]?.bottomText}
                       className="stat-box"
                     />
                   );

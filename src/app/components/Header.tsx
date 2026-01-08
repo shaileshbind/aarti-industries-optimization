@@ -530,7 +530,7 @@ const Header = ({ data }: HeaderProps) => {
                       <button
                         className={`flex items-center transition-colors hover:text-orange-500 ${
                           isMenuActive
-                            ? "text-orange-500 font-medium"
+                            ? "text-[#DC4C03] font-medium"
                             : "text-gray-700"
                         }`}
                       >
@@ -606,7 +606,7 @@ const Header = ({ data }: HeaderProps) => {
                                               subMenuItem.item.length > 0 && (
                                                 <i
                                                   className={clsx(
-                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[1.5px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[1.5px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
+                                                    " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[1.5px] after:bg-[#DC4C03] after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[1.5px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                                                     isExpanded
                                                       ? "before:rotate-90"
                                                       : "before:rotate-0"
@@ -687,9 +687,9 @@ const Header = ({ data }: HeaderProps) => {
                                                           key={item.id}
                                                           href={href}
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#4C5861] transition-colors rounded-[6px]",
+                                                            "block px-4 py-2 text-sm  hover:bg-orange-50 hover:text-[#4C5861] transition-colors rounded-[6px]",
                                                             isActive(href)
-                                                              ? "text-orange-500 bg-orange-50 font-medium"
+                                                              ? "text-[#DC4C03] bg-orange-50 font-medium"
                                                               : "text-gray-700"
                                                           )}
                                                           onClick={() => {

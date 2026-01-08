@@ -127,6 +127,7 @@ export type StatsSectionProps = {
       description?: string;
       image?: ImageProps;
       mobImage?: ImageProps;
+      bottomText?: string;
     }[];
   };
 };
