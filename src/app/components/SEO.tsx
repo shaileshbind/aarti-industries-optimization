@@ -19,7 +19,7 @@ interface SEOProps {
 }
 
 const SEO = ({
-  title,
+  // title,
   metaTitle,
   metaDescription,
   keywords,
