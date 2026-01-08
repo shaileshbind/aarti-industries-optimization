@@ -20,6 +20,7 @@ const ANIMATION_END_PROGRESS = 0.55;
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   // const isMobile = useMediaQuery("(max-width:600px)");
   const isTablet = useMediaQuery("(max-width:1023px)");
+  console.log('isTablets11s111', isTablet);  
   const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
@@ -52,23 +53,53 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const [slideWidth, setSlideWidth] = useState(0);
   
-  // Calculate slideWidth after component mounts (client-side only)
+  // Get slideWidth from the actual div width after component mounts
   useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Detect if running on Mac
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-      console.log("isMac", isMac);
-      
-      if (isMac) {
-        // Mac calculation
-        setSlideWidth((window.innerWidth / 1.28) * 40 / 100);
-      } else {
-        // Windows calculation
-        setSlideWidth(((window.innerWidth - 22) / 1.28) * 40 / 100);
-        
+    const measureSlideWidth = () => {
+      if (imageWrapperRef.current) {
+        const width = imageWrapperRef.current.offsetWidth;
+        console.log("width", width );
+        if (width > 0) {
+          setSlideWidth(width);
+        }
       }
+    };
+
+    // Small delay to ensure the ref is attached
+    const timeoutId = setTimeout(() => {
+      measureSlideWidth();
+    }, 0);
+
+    // Measure on resize
+    window.addEventListener('resize', measureSlideWidth);
+    
+    // Use ResizeObserver for more accurate measurements
+    const resizeObserver = new ResizeObserver(() => {
+      measureSlideWidth();
+    });
+
+    // Try to observe immediately, and also check periodically if ref becomes available
+    if (imageWrapperRef.current) {
+      resizeObserver.observe(imageWrapperRef.current);
+    } else {
+      // Check again after a short delay in case ref wasn't ready
+      const checkRef = setInterval(() => {
+        if (imageWrapperRef.current) {
+          resizeObserver.observe(imageWrapperRef.current);
+          clearInterval(checkRef);
+        }
+      }, 50);
+      
+      // Clear interval after 1 second to avoid infinite checking
+      setTimeout(() => clearInterval(checkRef), 1000);
     }
-  }, []);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureSlideWidth);
+      resizeObserver.disconnect();
+    };
+  }, [mainSection.length]);
   
  // console.log("slideWidth", slideWidth );  
   const { setMarginBottom } = useMargin();
@@ -125,9 +156,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   };
 
   useLayoutEffect(() => {
-    const isMobile = window.innerWidth < 1024;
     const ctx = gsap.context(() => {
-      if (isMobile) {
+      if (isTablet) {
         gsap.set(sustainbleLogo.current, {
           left: "50%",
           top: "50%",
@@ -144,12 +174,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           x: "-50%",
         });
       }
+      gsap.set(mobileSliderContainerRef.current, { opacity: 0 });
       gsap.set(envSlider.current, { opacity: 0 });
       gsap.set(".leafStag", { opacity: 0, scale: 0.5, transformOrigin: "center center" });
-
+      
       // Animation timeline - handles the initial animations and slide sync
       const animationEndProgress = ANIMATION_END_PROGRESS;
-      const animationScrollDistance = isMobile
+      const animationScrollDistance = isTablet
         ? window.innerHeight * 1.5
         : window.innerHeight * 4;
 
@@ -157,7 +188,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         scrollTrigger: {
           id: "mainTrigger",
           trigger: triggerRef.current,
-          start: isMobile ? "top top" : "top 50%",
+          start: isTablet ? "top top" : "top 50%",
           end: `+=${animationScrollDistance}`,
           scrub: 1,
           pin: true,
@@ -165,7 +196,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Sync slides after animation phase (55% progress) - similar to test slider logic
-            if(!isMobile) {
+            if(!isTablet) {
             if (
               self.progress >= animationEndProgress &&
               swiperRef.current &&
@@ -191,7 +222,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           }
           },
           onLeave: () => {
-            if (!isMobile && tabsRef.current) {
+            if (!isTablet && tabsRef.current) {
               gsap.to(tabsRef.current, {
                 opacity: 0,
                 duration: 0.6,
@@ -201,7 +232,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             }
           },
           onEnterBack: () => {
-            if (!isMobile && tabsRef.current) {
+            if (!isTablet && tabsRef.current) {
               gsap.to(tabsRef.current, {
                 opacity: 1,
                 duration: 0.6,
@@ -211,11 +242,12 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           },
         },
       });
-
+      
       // Store ScrollTrigger instance for tab click handling
       if (mainTl.scrollTrigger) {
         scrollTriggerRef.current = mainTl.scrollTrigger;
       }
+      
 
       if (isTablet) {
         mainTl
@@ -414,10 +446,16 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
              
           )
           .fromTo(
+            leafBigImg.current,
+            { width: '100%' },
+            { width:'calc(100% - 14px)',   },
+            "<"
+          )
+          .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<0.3"
+             
           )
           .fromTo(
             '.sliderStagger',
@@ -437,7 +475,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length, slideWidth]);
+  }, [mainSection.length, slideWidth, isTablet]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -563,9 +601,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg scale-110 object-cover "
+                        className="leafBigImg scale-110 object-cover"
                       />
                     </span>
+                    {/* <i className="absolute inset-0 bg-black/30 z-[1] rounded-lg"></i> */}
                 </i>
                 )}
                 {mainSection?.[0]?.image?.url && (
@@ -608,7 +647,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             <div>
               <Swiper
                 slidesPerView={1.2}
-                spaceBetween={32}
+                // spaceBetween={32}
                 loop={false}
                 allowTouchMove={false}
                 speed={600}
