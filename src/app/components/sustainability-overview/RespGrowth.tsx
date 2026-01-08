@@ -39,6 +39,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
   const scrollTriggerRef = useRef<ScrollTriggerType | null>(null);
   const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
+  const leafBigImg = useRef<HTMLSpanElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
   const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState({
@@ -47,16 +48,57 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     visible: false,
   });
   const [slideWidth, setSlideWidth] = useState(0);
+  const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   
-  // Calculate slideWidth after component mounts (client-side only)
+  // Get slideWidth from the actual div width after component mounts
   useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+    const measureSlideWidth = () => {
+      if (imageWrapperRef.current) {
+        const width = imageWrapperRef.current.offsetWidth;
+        console.log("width", width );
+        if (width > 0) {
+          setSlideWidth(width);
+        }
+      }
+    };
+
+    // Small delay to ensure the ref is attached
+    const timeoutId = setTimeout(() => {
+      measureSlideWidth();
+    }, 0);
+
+    // Measure on resize
+    window.addEventListener('resize', measureSlideWidth);
+    
+    // Use ResizeObserver for more accurate measurements
+    const resizeObserver = new ResizeObserver(() => {
+      measureSlideWidth();
+    });
+
+    // Try to observe immediately, and also check periodically if ref becomes available
+    if (imageWrapperRef.current) {
+      resizeObserver.observe(imageWrapperRef.current);
+    } else {
+      // Check again after a short delay in case ref wasn't ready
+      const checkRef = setInterval(() => {
+        if (imageWrapperRef.current) {
+          resizeObserver.observe(imageWrapperRef.current);
+          clearInterval(checkRef);
+        }
+      }, 50);
+      
+      // Clear interval after 1 second to avoid infinite checking
+      setTimeout(() => clearInterval(checkRef), 1000);
     }
-  }, []);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureSlideWidth);
+      resizeObserver.disconnect();
+    };
+  }, [mainSection.length]);
   
   const indicatorColor = "#F97316";
-  const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
@@ -108,9 +150,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   };
 
   useLayoutEffect(() => {
-    const isMobile = window.innerWidth < 1024;
     const ctx = gsap.context(() => {
-      if (isMobile) {
+      if (isTablet) {
         gsap.set(sustainbleLogo.current, {
           left: "50%",
           top: "50%",
@@ -127,10 +168,13 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           x: "-50%",
         });
       }
+      gsap.set(mobileSliderContainerRef.current, { opacity: 0 });
       gsap.set(envSlider.current, { opacity: 0 });
       gsap.set(".leafStag", { opacity: 0, scale: 0.5, transformOrigin: "center center" });
-      const animationEndProgress = 0.55;
-      const animationScrollDistance = isMobile
+      
+      // Animation timeline - handles the initial animations and slide sync
+      const animationEndProgress = ANIMATION_END_PROGRESS;
+      const animationScrollDistance = isTablet
         ? window.innerHeight * 1.5
         : window.innerHeight * 4;
 
@@ -138,7 +182,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           scrollTrigger: {
             id: "mainTrigger",
             trigger: triggerRef.current,
-            start: isMobile ? "top top" : "top 50%",
+            start: isTablet ? "top top" : "top 50%",
             end: `+=${animationScrollDistance}`,
             scrub: 1,
             pin: true,
@@ -146,7 +190,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             invalidateOnRefresh: true,
             onUpdate: (self) => {
               // Sync slides after animation phase (55% progress) - similar to test slider logic
-              if(!isMobile) {
+              if(!isTablet) {
               if (
                 self.progress >= animationEndProgress &&
                 swiperRef.current &&
@@ -172,7 +216,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             }
             },
             onLeave: () => {
-              if (!isMobile && tabsRef.current) {
+              if (!isTablet && tabsRef.current) {
                 gsap.to(tabsRef.current, {
                   opacity: 0,
                   duration: 0.6,
@@ -182,7 +226,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               }
             },
             onEnterBack: () => {
-              if (!isMobile && tabsRef.current) {
+              if (!isTablet && tabsRef.current) {
                 gsap.to(tabsRef.current, {
                   opacity: 1,
                   duration: 0.6,
@@ -307,7 +351,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           );
       } else {
         mainTl
-          .fromTo(
+           .fromTo(
             headinLeft.current,
             { x: 0, y: "unset" },
             { x: -150, duration: 0.5 }
@@ -365,12 +409,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             { width: "100px", height: "100px" },
             { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
-          .fromTo(
-            '.leafBigImg',
-            { scale: '2' },
-            { scale: '1', duration: 1 },
-            "<"
-          )
          
           .fromTo(
             sustainbleLogo.current,
@@ -379,7 +417,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               height: "206px",
               left: "52%",
               top: "50%",
-              // y: "-50%",
+              // y: "50%",
               // x: "-50%",
             },
             {
@@ -388,7 +426,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
               left: "0%",
               top: "50%",
-              // y: "-50%",
+              // y: "50%",
               x: "0%",
               duration: 1,
             },
@@ -401,10 +439,16 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
              
           )
           .fromTo(
+            leafBigImg.current,
+            { width: '100%' },
+            { width:'calc(100% - 14px)',   },
+            "<"
+          )
+          .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<0.3"
+             
           )
           .fromTo(
             '.sliderStagger',
@@ -423,11 +467,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
     return () => {
       ctx.revert();
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
     };
-  }, [mainSection.length, slideWidth]);
+  }, [mainSection.length, slideWidth, isTablet]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -489,7 +530,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
@@ -505,13 +546,13 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                         className="leafBigImg object-cover blur"
                       />
                     </span>
-                    <span className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
+                    <span ref={leafBigImg}  className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
                       <Image
                         src={mainSection?.[0]?.image?.url}
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg scale-200 object-cover "
+                        className="leafBigImg scale-110 object-cover "
                       />
                     </span>
                 </i>
@@ -523,7 +564,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
@@ -534,7 +575,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
-                      className="scale-200 object-cover"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
@@ -681,7 +722,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                             }}
                             onClick={() => handlMobileTabClick(index)}
                             className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                              activeTab === index
+                              activeTabMob === index
                                 ? "text-white"
                                 : "hover:bg-grey-200"
                             }`}
@@ -716,7 +757,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                   });
                 }}
                 onSlideChange={(swiper) => {
-                  setActiveTab(swiper.activeIndex);
+                  setActiveTabMob(swiper.activeIndex);
                 }}
               >
                 {mainSection.map((slide, index) => (

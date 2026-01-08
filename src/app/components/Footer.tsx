@@ -10,7 +10,7 @@ const Footer = ({ data }: FooterProps) => {
     <footer>
       <div className="bg-white container !py-[30px] lg:!py-[60px] grid lg:grid-cols-4 gap-x-[60px]">
         <div className="lg:col-span-1 grid content-between">
-          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset] w-[124px] md:w-[190px] h-12 md:h-[74px]">
+          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset] ">
             {Logo?.Logo?.url && (
               <Image
                 src={Logo?.Logo?.url}
@@ -18,7 +18,7 @@ const Footer = ({ data }: FooterProps) => {
                 width={190}
                 height={73}
                 priority
-                className="w-full h-full"
+                className="w-[124px] md:w-[190px] h-12 md:h-[74px]"
               />
             )}
             <div
@@ -27,7 +27,7 @@ const Footer = ({ data }: FooterProps) => {
                 __html: "Follow Us",
               }}
             />
-            <div className="hidden lg:grid mt-[15px] lg:grid-cols-4 2xl:grid-cols-5 w-fit gap-2">
+            <div className="hidden lg:grid mt-[15px] lg:grid-cols-4 2xl:grid-cols-5 w-fit gap-2 w-full">
               {FollowUs?.map((items) => (
                 <Link
                   key={items?.id}
