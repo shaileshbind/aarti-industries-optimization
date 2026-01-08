@@ -118,6 +118,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                         key={"value_" + index}
                         title={items?.value}
                         desc={items?.description}
+                        bottomText={items?.bottomText}
                         imageSrc={items?.image?.url}
                         imageAlt={items?.image?.alternativeText}
                         className="stat-box !h-auto"
@@ -134,6 +135,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                       key={"value_" + index}
                       title={items?.value}
                       desc={items?.description}
+                      bottomText={items?.bottomText}
                       imageSrc={items?.image?.url}
                       imageAlt={items?.image?.alternativeText}
                       className="stat-box !h-auto"
