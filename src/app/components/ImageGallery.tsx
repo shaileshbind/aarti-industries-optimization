@@ -68,15 +68,6 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   };
   const { isDesktop } = useIsDesktop();
 
-  // Update animation styles dynamically
-  useEffect(() => {
-    if (marqueeRef.current && isDesktop !== null) {
-      const duration = isDesktop ? 50 : 80;
-      marqueeRef.current.style.animationDuration = `${duration}s`;
-      marqueeRef.current.style.animationPlayState = isHovered ? "paused" : "running";
-    }
-  }, [isHovered, isDesktop]);
-
   type ImageArrayType =
     | {
         image?: ImageProps;
@@ -241,6 +232,44 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     }));
   }, [imgArr?.images]);
 
+  // Calculate animation duration based on constant speed
+  const calculateAnimationDuration = useCallback(() => {
+    if (marqueeRef.current && isDesktop !== null && slidesToRender.length > 0) {
+      // Constant speed in pixels per second (adjust these values to control speed)
+      const speedPxPerSecond = isDesktop ? 100 : 60; // Desktop: 100px/s, Mobile: 60px/s
+      
+      // Get the actual width of the marquee content
+      const marqueeWidth = marqueeRef.current.scrollWidth;
+      
+      // Calculate duration based on distance (50% of total width) and speed
+      // Since we're moving -50%, we need to cover half the width
+      const distance = marqueeWidth / 2;
+      const duration = distance / speedPxPerSecond;
+      
+      marqueeRef.current.style.animationDuration = `${duration}s`;
+      marqueeRef.current.style.animationPlayState = isHovered ? "paused" : "running";
+    }
+  }, [isHovered, isDesktop, slidesToRender]);
+
+  // Update animation styles dynamically with constant speed
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure DOM is fully laid out before measuring
+    requestAnimationFrame(() => {
+      calculateAnimationDuration();
+    });
+  }, [calculateAnimationDuration]);
+
+  // Recalculate on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      requestAnimationFrame(() => {
+        calculateAnimationDuration();
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [calculateAnimationDuration]);
+
   const handleImageClick = (imageData: SlideImageData) => {
     setSelectedImage(imageData);
     setCurrentImageIndex(imageData.index);
@@ -391,17 +420,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
             .image-gallery-marquee {
               display: flex;
               width: fit-content;
-              animation: imageGalleryMarquee 50s linear infinite;
-            }
-            @media (max-width: 1023px) {
-              .image-gallery-marquee {
-                animation-duration: 60s;
-              }
-            }
-            @media (max-width: 767px) {
-              .image-gallery-marquee {
-                animation-duration: 80s;
-              }
+              animation: imageGalleryMarquee linear infinite;
+              /* Duration is set dynamically via JavaScript to maintain constant speed */
             }
           `
         }} />

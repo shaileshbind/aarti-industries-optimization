@@ -71,7 +71,7 @@ export const useScrollReveal = (
         stagger = 0.2,
         ease = 'power3.out',
         trigger,
-        start = 'top 80%',
+        start = 'top 90%',
         end,
         toggleActions = 'play reverse play reverse', // Allow re-triggering on scroll
         scrub = false,

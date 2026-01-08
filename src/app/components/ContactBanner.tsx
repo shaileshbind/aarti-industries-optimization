@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Cta, SubH1 } from "./Typography2";
-import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
 import clsx from "clsx";
 import SplitText from "./SplitText";
@@ -17,7 +16,6 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
 
   return (
     <div className="container mb-14 lg:mb-0">
-      <FadeInReveal>
         <div className="relative  w-full min-h-[186px] md:min-h-[158px] max-w-[full] lg:max-w-[920px] mx-auto rounded-[14px] md:rounded-[20px] py-[30px] md:py-[37px] px-[28px] md:px-[40px] grid md:flex justify-between items-center gap-y-[24px] bg-gradient-orange-1 overflow-hidden">
           <Image
             src="/images/home/flower-t.svg"
@@ -28,12 +26,11 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
           />
 
           {title && (
-            <FadeInReveal
-              delay={0.2}
+            <div
               className={clsx(`md:w-[60%]`, titleClassName)}
             >
               <SubH1 className="text-white">{title}</SubH1>
-            </FadeInReveal>
+            </div>
           )}
           {(() => {
             const link =
@@ -43,7 +40,6 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
             return (
               ctaButton?.title &&
               link && (
-                <FadeInReveal delay={0.2}>
                   <Link href={link as string} target="_blank">
                     <div
                       className={clsx(
@@ -66,12 +62,10 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
                       )}
                     </div>
                   </Link>
-                </FadeInReveal>
               )
             );
           })()}
         </div>
-      </FadeInReveal>
     </div>
   );
 };
