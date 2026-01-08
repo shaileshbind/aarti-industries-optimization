@@ -226,12 +226,12 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             { width: "100px", height: "100px", right: 0, top: 0 },
             { width: window.innerWidth - 40, height: '250px', right: 20, top: '140px',  duration: 1 }
           )
-          .fromTo(
-            '.leafBigImg',
-            { scale: '2' },
-            { scale: '1', duration: 1 },
-            "<"
-          )
+          // .fromTo(
+          //   '.leafBigImg',
+          //   { scale: '2' },
+          //   { scale: '1', duration: 1 },
+          //   "<"
+          // )
           .fromTo(
             sustainbleLogo.current,
             {
@@ -239,15 +239,15 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
               height: "206px",
               left: "50%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width: "100%",
               height: "100vh",
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
@@ -307,12 +307,12 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             { width: "100px", height: "100px" },
             { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
-          .fromTo(
-            '.leafBigImg',
-            { scale: '2', objectPosition: 'top-left' },
-            { scale: '1', objectPosition: 'center', duration: 1 },
-            "<"
-          )
+          // .fromTo(
+          //   '.leafBigImg',
+          //   { scale: '2', objectPosition: 'top-left' },
+          //   { scale: '1', objectPosition: 'center', duration: 1 },
+          //   "<"
+          // )
           .fromTo(
             sustainbleLogo.current,
             {
@@ -471,7 +471,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
                       fill
                       priority
-                      className="object-cover object-top-left"
+                      className="object-cover object-center"
                     />
                   </i>
                 )}
@@ -490,7 +490,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg object-cover blur object-top-right"
+                        className="leafBigImg object-cover blur object-center"
                       />
                     </span>
                     <span className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
@@ -499,7 +499,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                         alt={"icon"}
                         fill
                         priority
-                        className="leafBigImg object-cover object-top-right"
+                        className="leafBigImg object-cover object-center"
                       />
                     </span>
                   </i>
@@ -512,7 +512,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
                       fill
                       priority
-                      className="object-cover object-bottom-right"
+                      className="object-cover object-center"
                     />
                   </i>
                 )}
@@ -523,7 +523,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
                       fill
                       priority
-                      className="object-cover object-bottom-left"
+                      className="object-cover object-center"
                     />
                   </i>
                 )}

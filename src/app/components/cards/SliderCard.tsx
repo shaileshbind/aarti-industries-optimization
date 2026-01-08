@@ -37,6 +37,7 @@ const SliderCard: FC<SliderCardProps> = ({
   values,
   ctaButton,
   bullets,
+  imageWrapperRef,
   index,
 }) => {
   return (
@@ -136,7 +137,7 @@ const SliderCard: FC<SliderCardProps> = ({
       {/* Desktop Version */}
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
-          <div className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
+          <div ref={index === 0 ? imageWrapperRef || null : null} className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
             <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
               {imgSrc && (
                 <Image
@@ -149,7 +150,7 @@ const SliderCard: FC<SliderCardProps> = ({
               <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
 
               <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-              <span className="absolute bottom-0 left-2 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full -ml-6">
+              <span className="absolute bottom-0 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden  h-full w-[calc(100%-16px)]">
                 {imgSrc && (
                   <Image
                     src={imgSrc}
