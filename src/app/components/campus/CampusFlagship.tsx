@@ -275,7 +275,10 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             </div>
           )}
 
-          {partnerWithUsCta?.title && (
+          {partnerWithUsCta?.title &&
+            (partnerWithUsCta?.hasExternalLink == "true"
+              ? partnerWithUsCta?.externalLink
+              : partnerWithUsCta?.link?.link) && (
             <div className="mt-[40px]">
               <Button
                 href={`${
@@ -284,6 +287,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                     : partnerWithUsCta?.link?.link
                 }`}
                 title={partnerWithUsCta?.title}
+                useTargetBlank={partnerWithUsCta?.hasExternalLink == "true"}
               />
             </div>
           )}

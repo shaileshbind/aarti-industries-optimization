@@ -170,7 +170,10 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       {description}
                     </BodyText2>
                   )}
-                  {ctaButton?.title && (
+                  {ctaButton?.title &&
+                    (ctaButton?.hasExternalLink == "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link) && (
                     <div className="mt-5">
                       <Button
                         title={ctaButton?.title}
@@ -180,6 +183,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                             : ctaButton?.link?.link
                         }
                         secondary
+                        useTargetBlank={ctaButton?.hasExternalLink == "true"}
                       />
                     </div>
                   )}
@@ -364,7 +368,10 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 {description}
               </BodyText2>
             )}
-            {ctaButton?.title && (
+            {ctaButton?.title &&
+              (ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link) && (
               <div className="mt-5">
                 <Button
                   title={ctaButton?.title}
@@ -374,6 +381,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       : ctaButton?.link?.link
                   }
                   secondary
+                  useTargetBlank={ctaButton?.hasExternalLink == "true"}
                 />
               </div>
             )}

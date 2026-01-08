@@ -387,15 +387,17 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
               {ctaButton?.title &&
-                ctaButton?.link?.link &&
-                ctaButton?.hasExternalLink && (
+                (ctaButton?.hasExternalLink === "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link) && (
                   <Button
                     title={ctaButton?.title}
                     href={
-                      ctaButton?.hasExternalLink == "true"
+                      ctaButton?.hasExternalLink === "true"
                         ? ctaButton?.externalLink
                         : ctaButton?.link?.link
                     }
+                    useTargetBlank={ctaButton?.hasExternalLink === "true"}
                   />
                 )}
             </div>

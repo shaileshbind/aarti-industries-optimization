@@ -131,7 +131,9 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
               </button>
             )}
             {ctaButton?.title &&
-              (ctaButton?.externalLink || ctaButton?.link?.link) && (
+              (ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link) && (
                 <Button
                   secondary
                   title={ctaButton?.title}
@@ -140,6 +142,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                       ? ctaButton?.externalLink
                       : ctaButton?.link?.link
                   }
+                  useTargetBlank={ctaButton?.hasExternalLink == "true"}
                 />
               )}
           </div>

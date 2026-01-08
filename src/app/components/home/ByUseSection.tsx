@@ -298,7 +298,10 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
               </BodyText2>
             )}
 
-            {data?.[active]?.ctaButton?.title && (
+            {data?.[active]?.ctaButton?.title &&
+              (data?.[active]?.ctaButton?.hasExternalLink == "true"
+                ? data?.[active]?.ctaButton?.externalLink
+                : data?.[active]?.ctaButton?.link?.link) && (
               <Button
                 secondary
                 href={
@@ -307,6 +310,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
                     : data?.[active]?.ctaButton?.link?.link
                 }
                 title={data?.[active]?.ctaButton?.title}
+                useTargetBlank={data?.[active]?.ctaButton?.hasExternalLink == "true"}
               />
             )}
           </div>

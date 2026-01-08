@@ -44,19 +44,22 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 </Link>
               );
             })}
-          {pressRelease?.ctaButton?.externalLink &&
-            pressRelease?.ctaButton?.title && (
-              <Button
-                secondary
-                href={
-                  pressRelease.ctaButton?.hasExternalLink == "true"
-                    ? pressRelease.ctaButton?.externalLink
-                    : pressRelease.ctaButton?.link?.link
-                }
-                title={pressRelease?.ctaButton?.title}
-                className="mt-[10px] lg:mt-[30px]"
-              />
-            )}
+          {pressRelease?.ctaButton?.title &&
+            (pressRelease?.ctaButton?.hasExternalLink == "true"
+              ? pressRelease?.ctaButton?.externalLink
+              : pressRelease?.ctaButton?.link?.link) && (
+            <Button
+              secondary
+              href={
+                pressRelease.ctaButton?.hasExternalLink == "true"
+                  ? pressRelease.ctaButton?.externalLink
+                  : pressRelease.ctaButton?.link?.link
+              }
+              title={pressRelease?.ctaButton?.title}
+              className="mt-[10px] lg:mt-[30px]"
+              useTargetBlank={pressRelease?.ctaButton?.hasExternalLink == "true"}
+            />
+          )}
         </div>
         <div className=" overflow-hidden">
           <div className="flex justify-between mx-[20px] lg:mx-[unset]">
@@ -66,19 +69,20 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               </H2>
             )}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              (mediaCoverage?.ctaButton?.[0]?.externalLink ||
-                (mediaCoverage?.ctaButton?.[0]?.link?.link &&
-                  mediaCoverage?.ctaButton?.[0]?.link?.link !== "#")) && (
-                <Button
-                  href={
-                    mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
-                      ? mediaCoverage?.ctaButton?.[0]?.externalLink
-                      : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"
-                  }
-                  title={mediaCoverage?.ctaButton?.[0]?.title}
-                  secondary
-                />
-              )}
+              (mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                ? mediaCoverage?.ctaButton?.[0]?.externalLink
+                : mediaCoverage?.ctaButton?.[0]?.link?.link) && (
+              <Button
+                href={
+                  mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                    ? mediaCoverage?.ctaButton?.[0]?.externalLink
+                    : mediaCoverage?.ctaButton?.[0]?.link?.link
+                }
+                title={mediaCoverage?.ctaButton?.[0]?.title}
+                secondary
+                useTargetBlank={mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"}
+              />
+            )}
           </div>
           <div className="mt-[28px]">
             <Swiper

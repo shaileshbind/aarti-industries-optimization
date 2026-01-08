@@ -399,10 +399,14 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                           {items?.card?.[0]?.description}
                         </BodyText2>
                       )}
-                      {items?.card?.[0]?.ctaButton?.title && (
+                      {items?.card?.[0]?.ctaButton?.title &&
+                        (items?.card?.[0]?.ctaButton?.hasExternalLink == "true"
+                          ? items?.card?.[0]?.ctaButton?.externalLink
+                          : items?.card?.[0]?.ctaButton?.link?.link) && (
                         <Button
                           href={items?.card?.[0]?.ctaButton?.hasExternalLink == "true" ? items?.card?.[0]?.ctaButton?.externalLink : items?.card?.[0]?.ctaButton?.link?.link}
                           title={items?.card?.[0]?.ctaButton?.title}
+                          useTargetBlank={items?.card?.[0]?.ctaButton?.hasExternalLink == "true"}
                         />
                       )}
                     </div>
