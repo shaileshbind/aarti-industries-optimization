@@ -39,6 +39,8 @@ const Header = ({ data }: HeaderProps) => {
   const desktopSubMenuRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const searchBackdropRef = useRef<HTMLDivElement>(null);
   const prevPathnameRef = useRef<string>(pathname);
+  const desktopNavRef = useRef<HTMLElement>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
@@ -142,7 +144,16 @@ const Header = ({ data }: HeaderProps) => {
   // };
 
   const closeAllDropdowns = () => {
-    setOpenDropdown(null);
+    // Only close on mouse leave if not a touch device
+    if (!isTouchDevice) {
+      setOpenDropdown(null);
+    }
+  };
+  const handleDropdownToggle = (index: number) => {
+    if (isTouchDevice) {
+      // Toggle dropdown on touch devices
+      setOpenDropdown(openDropdown === index ? null : index);
+    }
   };
 
   const handleSearchToggle = () => {
@@ -205,6 +216,43 @@ const Header = ({ data }: HeaderProps) => {
       return prev === subMenuId ? null : subMenuId;
     });
   };
+  // Detect touch device
+  useEffect(() => {
+    const checkTouchDevice = () => {
+      setIsTouchDevice(
+        "ontouchstart" in window ||
+          navigator.maxTouchPoints > 0 ||
+          // @ts-expect-error - msMaxTouchPoints is a legacy IE property
+          navigator.msMaxTouchPoints > 0
+      );
+    };
+    checkTouchDevice();
+    window.addEventListener("resize", checkTouchDevice);
+    return () => window.removeEventListener("resize", checkTouchDevice);
+  }, []);
+
+  // Close dropdown when clicking outside (for touch devices)
+  useEffect(() => {
+    if (!isTouchDevice || openDropdown === null) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        desktopNavRef.current &&
+        !desktopNavRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isTouchDevice, openDropdown]);
+
   // Close mobile menu when route changes
   useEffect(() => {
     // Check if pathname actually changed (skip initial render)
@@ -227,15 +275,41 @@ const Header = ({ data }: HeaderProps) => {
     prevPathnameRef.current = pathname;
   }, [pathname]);
 
-  // When a dropdown opens, expand the first submenu by default (only for first dropdown)
+  // When a dropdown opens, expand the active submenu if page matches, otherwise expand first (only for first dropdown)
   useEffect(() => {
     if (openDropdown !== null && menu) {
       // Only auto-expand for the first dropdown (index 0)
       if (openDropdown === 0) {
         const currentMenu = menu[openDropdown];
         if (currentMenu?.subMenu && currentMenu.subMenu.length > 0) {
-          const firstSubMenuId = currentMenu.subMenu[0].id ?? 0;
-          setExpandedSubMenuId(firstSubMenuId);
+          // Check if any submenu contains the active page
+          let activeSubMenuId: number | null = null;
+          
+          currentMenu.subMenu.forEach((subMenuItem) => {
+            if (subMenuItem.item && activeSubMenuId === null) {
+              const subMenuLinks = subMenuItem.item.map(
+                (i) => i.cta_link?.link || i.externalLink || ""
+              );
+              const isSubMenuActive = subMenuLinks.some(
+                (link) => link && isActive(link)
+              );
+
+              if (isSubMenuActive) {
+                activeSubMenuId = subMenuItem.id ?? null;
+              }
+            }
+          });
+
+          // Expand active submenu if found, otherwise expand first submenu
+          if (activeSubMenuId !== null) {
+            setExpandedSubMenuId(activeSubMenuId);
+          } else {
+            // Only set to first submenu if no submenu is already expanded
+            if (expandedSubMenuId === null) {
+              const firstSubMenuId = currentMenu.subMenu[0].id ?? 0;
+              setExpandedSubMenuId(firstSubMenuId);
+            }
+          }
         }
       } else {
         // For other dropdowns, don't use accordion
@@ -245,7 +319,8 @@ const Header = ({ data }: HeaderProps) => {
       // When dropdown closes, reset expanded submenu
       setExpandedSubMenuId(null);
     }
-  }, [openDropdown, menu]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openDropdown, menu, pathname]);
 
   // Initialize dropdown heights on mount
   useEffect(() => {
@@ -504,6 +579,7 @@ const Header = ({ data }: HeaderProps) => {
               )}
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
+                ref={desktopNavRef}
                 className="hidden lgx:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
@@ -524,10 +600,23 @@ const Header = ({ data }: HeaderProps) => {
                     <div
                       key={item.id}
                       className="relative group h-[100%] grid "
-                      onMouseEnter={() => hasDropdown && setOpenDropdown(index)}
-                      onMouseLeave={() => hasDropdown && setOpenDropdown(null)}
+                      onMouseEnter={() => {
+                        if (!isTouchDevice && hasDropdown) {
+                          setOpenDropdown(index);
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        if (!isTouchDevice && hasDropdown) {
+                          setOpenDropdown(null);
+                        }
+                      }}
                     >
                       <button
+                        onClick={() => {
+                          if (isTouchDevice && hasDropdown) {
+                            handleDropdownToggle(index);
+                          }
+                        }}
                         className={`flex items-center transition-colors hover:text-orange-500 ${
                           isMenuActive
                             ? "text-[#DC4C03] font-medium"
@@ -981,7 +1070,7 @@ const Header = ({ data }: HeaderProps) => {
                   value={searchedValue}
                   onChange={(e) => setsearchedValue(e.target.value)}
                   handleSearch={handleSearch}
-                  placeholder="Search..."
+                  placeholder="Find products, reports & more"
                   headerSearch={true}
                 />
               </div>
