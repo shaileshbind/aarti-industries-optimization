@@ -103,6 +103,7 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
                     key={items?.id}
                     title={items?.value}
                     desc={items?.description}
+                    bottomText={items?.bottomText}
                     imageSrc={items?.image?.url}
                     imageAlt={items?.image?.alternativeText}
                     className="stat-box"
@@ -120,6 +121,7 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
                     key={items?.id}
                     title={items?.value}
                     desc={items?.description}
+                    bottomText={items?.bottomText}
                     imageSrc={items?.image?.url}
                     imageAlt={items?.image?.alternativeText}
                     className="stat-box"

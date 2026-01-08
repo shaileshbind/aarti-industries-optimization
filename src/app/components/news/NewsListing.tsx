@@ -12,7 +12,7 @@ import { formatDate } from "../../../../utils/formatDate";
 const tabs = [
   { id: 0, category: "Interviews", slug: "Interviews" },
   { id: 1, category: "Print Publication", slug: "Print-Publication" },
-  { id: 2, category: "Digital Media Coverage", slug: "Digital-Media-Coverage" },
+  // { id: 2, category: "Digital Media Coverage", slug: "Digital-Media-Coverage" },
 ];
 
 export type Item1 = {
