@@ -8,6 +8,12 @@ import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../../../utils/formatDate";
+import gsap from "gsap";
+import ScrollToPlugin from "gsap/ScrollToPlugin";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollToPlugin);
+}
 
 const tabs = [
   { id: 0, category: "Interviews", slug: "Interviews" },
@@ -107,6 +113,9 @@ const NewsListing = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [, setHasMore] = useState(false);
   const ITEMS_PER_PAGE = 12;
+  const scrollInProgressRef = useRef(false);
+  const scrollAnimationRef = useRef<gsap.core.Tween | null>(null);
+  const lastPageChangeRef = useRef(0);
 
   // Fetch using fetchNews() on tab change or page change
   useEffect(() => {
@@ -184,8 +193,38 @@ const NewsListing = () => {
     _event: React.ChangeEvent<unknown>,
     page: number
   ) => {
+    const now = Date.now();
+    const timeSinceLastClick = now - lastPageChangeRef.current;
+    
+    // Debounce: ignore rapid clicks within 300ms
+    if (timeSinceLastClick < 300) {
+      return;
+    }
+    lastPageChangeRef.current = now;
+    
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    // Cancel any existing scroll animation
+    if (scrollAnimationRef.current) {
+      scrollAnimationRef.current.kill();
+      scrollAnimationRef.current = null;
+    }
+    
+    // Use GSAP ScrollToPlugin which works with Lenis
+    scrollInProgressRef.current = true;
+    scrollAnimationRef.current = gsap.to(window, {
+      scrollTo: { y: 0 },
+      duration: 0.8,
+      ease: "power2.out",
+      onComplete: () => {
+        scrollInProgressRef.current = false;
+        scrollAnimationRef.current = null;
+      },
+      onInterrupt: () => {
+        scrollInProgressRef.current = false;
+        scrollAnimationRef.current = null;
+      }
+    });
   };
 
   // --- Indicator logic unchanged ---
@@ -215,6 +254,15 @@ const NewsListing = () => {
     window.addEventListener("resize", measureIndicator);
     return () => window.removeEventListener("resize", measureIndicator);
   }, [measureIndicator]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollAnimationRef.current) {
+        scrollAnimationRef.current.kill();
+        scrollAnimationRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <div className="fluid-container py-[50px] pb-[72px] lg:pb-[100px]">

@@ -89,7 +89,7 @@ export const ScrollGroup = ({
 // Fade in with slide up
 export const FadeInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
   <ScrollReveal
-    from={{ autoAlpha: 0, y: 50 }}
+    from={{ autoAlpha: 0, y: 20 }}
     to={{ autoAlpha: 1, y: 0 }}
     duration={duration}
     delay={delay}
@@ -112,7 +112,7 @@ export const FadeInRevealBlur = ({
   ...props
 }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
   <ScrollReveal
-    from={{ autoAlpha: 0, y: 50, filter: 'blur(8px)' }} // start slightly blurred
+    from={{ autoAlpha: 0, y: 20, filter: 'blur(8px)' }} // start slightly blurred
     to={{ autoAlpha: 1, y: 0, filter: 'blur(0px)' }} // animate to normal
     duration={duration}
     delay={delay}
