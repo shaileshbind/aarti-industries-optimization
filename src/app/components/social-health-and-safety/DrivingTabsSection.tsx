@@ -251,12 +251,22 @@ const DrivingTabsSection = ({
                           )}
                       </div>
 
-                      {tabItem.cards[0]?.ctaButton?.link?.link && tabItem.cards[0]?.ctaButton?.hasExternalLink && (
+                      {tabItem.cards[0]?.ctaButton?.title &&
+                        (tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
+                          ? tabItem.cards[0]?.ctaButton?.externalLink
+                          : tabItem.cards[0]?.ctaButton?.link?.link) && (
                         <div className="mt-[18px] pointer-events-auto">
                           <Button
                             title={tabItem.cards[0].ctaButton.title}
-                            href={tabItem.cards[0]?.ctaButton?.hasExternalLink == "true" ? tabItem.cards[0]?.ctaButton?.externalLink : tabItem.cards[0]?.ctaButton?.link?.link}
+                            href={
+                              tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
+                                ? tabItem.cards[0]?.ctaButton?.externalLink
+                                : tabItem.cards[0]?.ctaButton?.link?.link
+                            }
                             secondary
+                            useTargetBlank={
+                              tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
+                            }
                           />
                         </div>
                       )}

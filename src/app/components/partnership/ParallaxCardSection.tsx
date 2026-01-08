@@ -318,7 +318,10 @@ export default function ParallaxCardSection({
                       </BodyText2>
                     )}
 
-                    {item?.ctaButton?.title && (
+                    {item?.ctaButton?.title &&
+                      (item?.ctaButton?.hasExternalLink == "true"
+                        ? item?.ctaButton?.externalLink
+                        : item?.ctaButton?.link?.link) && (
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
@@ -328,6 +331,7 @@ export default function ParallaxCardSection({
                             : item?.ctaButton?.link?.link
                         }`}
                         className=" mb-2"
+                        useTargetBlank={item?.ctaButton?.hasExternalLink == "true"}
                       />
                     )}
                   </div>

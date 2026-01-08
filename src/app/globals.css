@@ -193,7 +193,7 @@ body {
   left: 0;
   width: 100%;
   height: 0.0625em;
-  background-color: #f97316;
+  background-color: var(--orange-200);
   transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
   transform-origin: right;
   transform: scaleX(0);

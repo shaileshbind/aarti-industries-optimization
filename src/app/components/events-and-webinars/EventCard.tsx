@@ -100,7 +100,16 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
           : null
         )}
         {!pastEvent && (
-          <Button title={ctaButton?.title || ''} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
+          <Button
+            title={ctaButton?.title}
+            href={
+              ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link
+            }
+            secondary
+            useTargetBlank={ctaButton?.hasExternalLink == "true"}
+          />
         )}
       </div>
     </div>

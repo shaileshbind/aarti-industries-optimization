@@ -69,8 +69,11 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
         <FadeInRevealBlur>
           {title && <H2 className="max-w-[450px] mb-9">{title}</H2>}
 
-          {ctaButton?.title && (
-            <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} />
+          {ctaButton?.title &&
+            (ctaButton?.hasExternalLink == "true"
+              ? ctaButton?.externalLink
+              : ctaButton?.link?.link) && (
+            <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} useTargetBlank={ctaButton?.hasExternalLink == "true"} />
           )}
         </FadeInRevealBlur>
 

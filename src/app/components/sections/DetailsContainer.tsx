@@ -95,7 +95,10 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
               </BodyText1>
             )}
 
-            {ctaButton?.title && (
+            {ctaButton?.title &&
+              (ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link) && (
               <div className="my-[36px]">
                 <Button
                   title={ctaButton?.title}
@@ -105,6 +108,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
                       : ctaButton?.link?.link
                   }`}
                   className="!px-2 md:!px-[22px]"
+                  useTargetBlank={ctaButton?.hasExternalLink == "true"}
                 />
                 {/* </FadeInReveal> */}
               </div>

@@ -121,8 +121,9 @@ const SliderCard: FC<SliderCardProps> = ({
           ))}
         </div>
         {ctaButton?.title &&
-          ctaButton?.link?.link &&
-          ctaButton?.hasExternalLink && (
+          (ctaButton?.hasExternalLink == "true"
+            ? ctaButton?.externalLink
+            : ctaButton?.link?.link) && (
             <Button
               title={ctaButton?.title}
               href={
@@ -131,6 +132,7 @@ const SliderCard: FC<SliderCardProps> = ({
                   : ctaButton?.link?.link
               }
               secondary
+              useTargetBlank={ctaButton?.hasExternalLink == "true"}
             />
           )}
       </div>
@@ -210,8 +212,9 @@ const SliderCard: FC<SliderCardProps> = ({
             </div>
           ) : null}
           {ctaButton?.title &&
-            ctaButton?.link?.link &&
-            ctaButton?.hasExternalLink && (
+            (ctaButton?.hasExternalLink == "true"
+              ? ctaButton?.externalLink
+              : ctaButton?.link?.link) && (
               <Button
                 title={ctaButton?.title}
                 className="sliderStagger"
@@ -221,6 +224,7 @@ const SliderCard: FC<SliderCardProps> = ({
                     : ctaButton?.link?.link
                 }
                 secondary
+                useTargetBlank={ctaButton?.hasExternalLink == "true"}
               />
             )}
         </div>

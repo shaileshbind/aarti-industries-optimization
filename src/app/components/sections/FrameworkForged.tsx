@@ -387,7 +387,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                               )
                           )}
                       </div>
-                      {items?.ctaButton?.title && (
+                      {items?.ctaButton?.title &&
+                        (items?.ctaButton?.hasExternalLink == "true"
+                          ? items?.ctaButton?.externalLink
+                          : items?.ctaButton?.link?.link) && (
                         <div className="mt-[40px]">
                           <Button
                             href={
@@ -396,6 +399,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                 : items?.ctaButton?.link?.link
                             }
                             title={items?.ctaButton?.title}
+                            useTargetBlank={items?.ctaButton?.hasExternalLink == "true"}
                           />
                         </div>
                       )}

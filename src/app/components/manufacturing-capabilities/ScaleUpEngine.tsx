@@ -163,18 +163,19 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       )}
 
                       {item?.ctaButton?.title &&
-                        (item?.ctaButton?.externalLink ||
-                          item?.ctaButton?.link?.link) && (
+                        (item?.ctaButton?.hasExternalLink == "true"
+                          ? item?.ctaButton?.externalLink
+                          : item?.ctaButton?.link?.link) && (
                           <Button
                             secondary
                             title={item?.ctaButton?.title}
                             href={
-                              item?.ctaButton?.hasExternalLink === "true"
+                              item?.ctaButton?.hasExternalLink == "true"
                                 ? item?.ctaButton?.externalLink
                                 : item?.ctaButton?.link?.link
                             }
                             useTargetBlank={
-                              item?.ctaButton?.hasExternalLink === "true"
+                              item?.ctaButton?.hasExternalLink == "true"
                             }
                           />
                         )}
@@ -334,8 +335,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   )}
 
                   {item?.ctaButton?.title &&
-                    (item?.ctaButton?.externalLink ||
-                      item?.ctaButton?.link?.link) && (
+                    (item?.ctaButton?.hasExternalLink == "true"
+                      ? item?.ctaButton?.externalLink
+                      : item?.ctaButton?.link?.link) && (
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
@@ -343,6 +345,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                           item?.ctaButton?.hasExternalLink == "true"
                             ? item?.ctaButton?.externalLink
                             : item?.ctaButton?.link?.link
+                        }
+                        useTargetBlank={
+                          item?.ctaButton?.hasExternalLink == "true"
                         }
                       />
                     )}

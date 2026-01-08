@@ -24,7 +24,10 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
             </div>
           )}
         </div>
-        {ctaButton?.title && ctaButton?.link?.link && (
+        {ctaButton?.title &&
+          (ctaButton?.hasExternalLink == "true"
+            ? ctaButton?.externalLink
+            : ctaButton?.link?.link) && (
           <div className="hidden lg:block">
             <Button
               title={ctaButton?.title}
@@ -33,6 +36,7 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
                   ? ctaButton?.externalLink
                   : ctaButton?.link?.link
               }
+              useTargetBlank={ctaButton?.hasExternalLink == "true"}
             />
           </div>
         )}
@@ -56,7 +60,10 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
           )}
       </div>
 
-      {ctaButton?.title && ctaButton?.link?.link && (
+      {ctaButton?.title &&
+        (ctaButton?.hasExternalLink == "true"
+          ? ctaButton?.externalLink
+          : ctaButton?.link?.link) && (
         <div className="flex lg:justify-center mt-10 lg:hidden">
           <Button
             title={ctaButton?.title}
@@ -65,6 +72,7 @@ const OurCodeAndPolicies: React.FC<OurCodeAndPoliciesProps> = ({ data }) => {
                 ? ctaButton?.externalLink
                 : ctaButton?.link?.link
             }
+            useTargetBlank={ctaButton?.hasExternalLink == "true"}
           />
         </div>
       )}

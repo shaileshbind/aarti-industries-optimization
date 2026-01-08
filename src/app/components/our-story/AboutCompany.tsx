@@ -33,7 +33,10 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
           </AnimatedText>
         )}
 
-        {ctaButton && (
+        {ctaButton?.title &&
+          (ctaButton?.hasExternalLink == "true"
+            ? ctaButton?.externalLink
+            : ctaButton?.link?.link) && (
           <Button
             className="mt-12"
             title={ctaButton.title}
@@ -43,6 +46,7 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
                 : ctaButton?.link?.link
             }`}
             secondary
+            useTargetBlank={ctaButton?.hasExternalLink == "true"}
           />
         )}
       </div>
