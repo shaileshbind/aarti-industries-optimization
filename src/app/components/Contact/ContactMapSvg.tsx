@@ -368,18 +368,18 @@ const ContactMapSvg = () => {
           width={350}
           cardData={[
             {
-              tag: "registered office",
+              tag: "",
               title: "Vapi",
               subTitle: "Aarti Industries Limited",
               description:
                 "Plot No.-801/23, G.I.D.C Estate, Phase III, Vapi-396 195, Dist.-Valsad, Gujarat, India",
             },
             {
-              tag: "R&D centre",
-              title: "Navi Mumbai",
-              subTitle: "Aarti Research & Technology Centre",
+              tag: "",
+              title: "Mumbai",
+              subTitle: "Aarti Industries Limited",
               description:
-                "Plot No.A-94/1 & A-94/1/1, MIDC, TTC Industrial Area, Kopar Khairane, Navi Mumbai - 400 710.",
+                "Tower C, 4th Floor, 247 Embassy Park, LBS Marg, Vikhroli (W), Mumbai - 400083",
             },
           ]}
         />

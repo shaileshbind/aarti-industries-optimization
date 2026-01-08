@@ -380,11 +380,28 @@ const GRMaps = ({ data }: GRMapsProps) => {
           </div>
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
-            <StateMapSvg width="100%" height="300" />
+            <StateMapSvg
+              width="100%"
+              height="300"
+              active={activeMob}
+              hoverBachau={() => setActiveMob(0)}
+              hoverDahej={() => setActiveMob(1)}
+              hoverTarapur={() => setActiveMob(2)}
+              hoverNaviM={() => setActiveMob(3)}
+              hoverVapi={() => setActiveMob(4)}
+              hoverJhagadia={() => setActiveMob(5)}
+            />
             <div
               className={`${
                 [0, 1, 2,5].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
-              }  p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]`}
+              } p-2 absolute w-[123px] h-[137px] rounded-[6px] transition-all duration-300 ${
+                activeMob === 0 ? "top-[5%] left-[18%]" :
+                activeMob === 1 ? "top-[10%] left-[38%]" :
+                activeMob === 2 ? "top-[22%] left-[41%]" :
+                activeMob === 3 ? "top-[28%] left-[43%]" :
+                activeMob === 4 ? "top-[17%] left-[41%]" :
+                "top-[10%] left-[41%]"
+              }`}
             >
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">

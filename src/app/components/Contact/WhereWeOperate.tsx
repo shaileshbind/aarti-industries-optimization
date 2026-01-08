@@ -23,6 +23,7 @@ import {
   AddressCardItem,
   WhereWeOperateTab,
 } from "@/app/types/contact.type";
+import type { Swiper as SwiperType } from "swiper";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,7 +89,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const swiperRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {

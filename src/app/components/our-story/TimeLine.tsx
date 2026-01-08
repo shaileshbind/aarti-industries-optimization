@@ -155,7 +155,7 @@ export default function TimeLine({ data }: TimelineData) {
   }, [currentYear]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
+    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[80px] relative lg:pt-0 pt-4">
       <FadeInRevealBlur className="fluid-container">
         <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
           <H3>{sectionTitle}</H3>
