@@ -617,7 +617,7 @@ const Header = ({ data }: HeaderProps) => {
                             handleDropdownToggle(index);
                           }
                         }}
-                        className={`flex items-center transition-colors hover:text-orange-500 ${
+                        className={`flex items-center transition-colors hover:text-orange-200 ${
                           isMenuActive
                             ? "text-[#DC4C03] font-medium"
                             : "text-gray-700"
@@ -686,7 +686,7 @@ const Header = ({ data }: HeaderProps) => {
                                             onClick={() =>
                                               toggleSubMenu(subMenuId)
                                             }
-                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-300 transition-colors cursor-pointer"
+                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-200 transition-colors cursor-pointer"
                                           >
                                             <BodyText3 className="text-[#DC4C03]">
                                               {subMenuItem.title}
@@ -759,7 +759,7 @@ const Header = ({ data }: HeaderProps) => {
                                                             href={href}
                                                             target="_self"
                                                             rel="noopener noreferrer"
-                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-200 transition-colors rounded-[6px]"
                                                             onClick={() =>
                                                               setOpenDropdown(
                                                                 null
@@ -854,7 +854,7 @@ const Header = ({ data }: HeaderProps) => {
                                                           target="_self"
                                                           rel="noopener noreferrer"
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-200 transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
                                                               : "text-gray-700"
@@ -1115,7 +1115,7 @@ const Header = ({ data }: HeaderProps) => {
                       onClick={() => toggleMobileMenu(index)}
                       className={`flex-1 text-left transition-all duration-200 py-3 ${
                         isMenuActive
-                          ? "text-orange-500 font-medium"
+                          ? "text-orange-200 font-medium"
                           : "text-gray-700"
                       }`}
                     >
@@ -1130,7 +1130,7 @@ const Header = ({ data }: HeaderProps) => {
                       }
                       className={`flex-1 transition-all duration-200 py-3 ${
                         isMenuActive
-                          ? "text-orange-500 font-medium"
+                          ? "text-orange-200 font-medium"
                           : "text-gray-700"
                       }`}
                       onClick={() => setIsMenuOpen(false)}
@@ -1261,7 +1261,7 @@ const Header = ({ data }: HeaderProps) => {
                                       className={clsx(
                                         "block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                         isActive(href)
-                                          ? "text-orange-500 bg-orange-50 font-medium"
+                                          ? "text-orange-200 bg-orange-50 font-medium"
                                           : "text-gray-700"
                                       )}
                                       onClick={() => setIsMenuOpen(false)}
@@ -1326,7 +1326,7 @@ const Header = ({ data }: HeaderProps) => {
                                         className={clsx(
                                           "block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                           isActive(href)
-                                            ? "text-orange-500 bg-orange-50 font-medium"
+                                            ? "text-orange-200 bg-orange-50 font-medium"
                                             : "text-gray-700"
                                         )}
                                         onClick={() => setIsMenuOpen(false)}
@@ -1343,7 +1343,7 @@ const Header = ({ data }: HeaderProps) => {
                                       className={clsx(
                                         "block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                         isActive(href)
-                                          ? "text-orange-500 bg-orange-50 font-medium"
+                                          ? "text-orange-200 bg-orange-50 font-medium"
                                           : "text-gray-700"
                                       )}
                                       onClick={() => setIsMenuOpen(false)}

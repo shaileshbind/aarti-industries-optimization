@@ -22,7 +22,10 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const updateNavState = (swiper: SwiperType) => {
     setIsBeginning(swiper.isBeginning);
@@ -35,8 +38,53 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
     if (swiper) updateNavState(swiper);
   }, []);
 
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Control autoplay based on viewport and hover state
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (!swiper || !swiper.autoplay) return;
+
+    // Stop autoplay if section is out of viewport or hovered
+    if (!isInViewport || isHovered) {
+      if (swiper.autoplay.running) {
+        swiper.autoplay.stop();
+      }
+    } else {
+      // Start autoplay if section is in viewport and not hovered
+      if (!swiper.autoplay.running) {
+        swiper.autoplay.start();
+      }
+    }
+  }, [isInViewport, isHovered]);
+
   return (
-    <div className="pt-[50px] pb-[25px] lg:pt-[140px] lg:pb-[110px] overflow-hidden">
+    <div 
+      ref={sectionRef} 
+      className="pt-[50px] pb-[25px] lg:pt-[140px] lg:pb-[110px] overflow-hidden"
+    >
       {/* Content Section */}
       <div className={clsx(`mt-[0px] lg:mt-[62px]`, className)}>
         <div className="flex flex-col w-full">
@@ -89,6 +137,10 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
                   updateNavState(swiper);
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
                 }}
                 onSlideChange={(swiper) => updateNavState(swiper)}
                 observer={true}
@@ -102,7 +154,11 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               >
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
-                    <SwiperSlide key={index}>
+                    <SwiperSlide 
+                      key={index}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                    >
                       {useLink ? (
                         <Link href={item?.link || "#"}>
                           <Card
@@ -122,44 +178,49 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]">
-                {cards?.length > 4 && (
-                  <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
-                    <button
-                      className={`swiper-button-prev-simplified transition-opacity ${
-                        isBeginning
-                          ? "pointer-events-none opacity-30"
-                          : "cursor-pointer opacity-100"
-                      }`}
-                      aria-label="Previous slide"
-                    >
-                      <Image
-                        src="/images/home/chevron-right-orange.svg"
-                        alt="Previous"
-                        width={34}
-                        height={34}
-                        className="rotate-180"
-                      />
-                    </button>
-                    <button
-                      className={`swiper-button-next-simplified transition-opacity ${
-                        isEnd
-                          ? "pointer-events-none opacity-30"
-                          : "cursor-pointer opacity-100"
-                      }`}
-                      aria-label="Next slide"
-                    >
-                      <Image
-                        src="/images/home/chevron-right-orange.svg"
-                        alt="Next"
-                        width={34}
-                        height={34}
-                      />
-                    </button>
-                  </div>
-                )}
-                <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
-              </div>
+              {cards && cards.length > 1 && (
+                <div className={clsx(
+                  "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]",
+                  cards.length <= 4 && "lg:hidden"
+                )}>
+                  {cards?.length > 4 && (
+                    <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                      <button
+                        className={`swiper-button-prev-simplified transition-opacity ${
+                          isBeginning
+                            ? "pointer-events-none opacity-30"
+                            : "cursor-pointer opacity-100"
+                        }`}
+                        aria-label="Previous slide"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Previous"
+                          width={34}
+                          height={34}
+                          className="rotate-180"
+                        />
+                      </button>
+                      <button
+                        className={`swiper-button-next-simplified transition-opacity ${
+                          isEnd
+                            ? "pointer-events-none opacity-30"
+                            : "cursor-pointer opacity-100"
+                        }`}
+                        aria-label="Next slide"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Next"
+                          width={34}
+                          height={34}
+                        />
+                      </button>
+                    </div>
+                  )}
+                  <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
+                </div>
+              )}
             </FadeInGroup>
           </div>
         </div>

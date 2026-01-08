@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { CampusFlagshipProps } from "@/app/types/campus.type";
+import type { Swiper as SwiperType } from "swiper";
 
 gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
@@ -31,6 +32,44 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   const slidesPerView = 1.5;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     function computeOffset() {
       if (!containerRef.current) return;
@@ -111,7 +150,10 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   }, []);
 
   return (
-    <div ref={frameworkForgedRef}>
+    <div ref={(el) => {
+      frameworkForgedRef.current = el;
+      sectionRef.current = el;
+    }}>
       {sectionTitle && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {sectionTitle}
@@ -185,6 +227,13 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   prevEl: ".swiper-button-prev",
                 }}
                 slidesOffsetAfter={offsetAfter}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
+                }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 breakpoints={{
                   0: {
