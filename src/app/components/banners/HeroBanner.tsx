@@ -227,17 +227,19 @@ const HeroBanner = ({
                   >
                     {/* form cta */}
                     {secondaryBtnFormTitle && (
-                      <button
-                       onClick={() => {
-                      setshowGeneralPopup(true);
-                    }}
-                      className={`animated-underline w-fit cursor-pointer  text-[16px]
-                      font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
-                      [text-underline-position:under] text-white white-btn-underline`}
-                      >
-                      {/* {secondaryBtnFormTitle} */}
-                      {titleCasedSecondaryBtnFormTitle}
-                      </button>
+                      <div className="w-fit">
+                        <button
+                          onClick={() => {
+                            setshowGeneralPopup(true);
+                          }}
+                          className={`animated-underline inline-block w-fit cursor-pointer text-[16px]
+                            font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
+                            [text-underline-position:under] text-white white-btn-underline`}
+                        >
+                          {/* {secondaryBtnFormTitle} */}
+                          {titleCasedSecondaryBtnFormTitle}
+                        </button>
+                      </div>
                     )}
                     {secondaryBtnLeftTitle && (
                       <Button

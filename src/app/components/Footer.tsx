@@ -186,7 +186,7 @@ const Footer = ({ data }: FooterProps) => {
       <div className="container w-full mb-[24px] grid lg:flex lg:justify-between">
         {Legal?.leftText && (
           <p className="font-roboto text-center lg:text-left mt-[18px] lg:mt-[unset] text-[14px] leading-[100%] font-normal text-grey-400 order-1 lg:order-0">
-            {Legal?.leftText}
+            © {new Date().getFullYear()} {Legal?.leftText}
           </p>
         )}
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1 justify-between">

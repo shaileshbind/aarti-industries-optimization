@@ -60,11 +60,6 @@ export default async function page() {
       )}
       {section_four && <WhatSets data={section_four} />}
       {section_five && <GlobalInnovation data={section_five} />}
-      {/* {section_six && (
-        <div className="mb-[72px] lg:mb-[140px]">
-          <VideoScrollBarContainer data={section_six} />
-        </div>
-      )} */}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
