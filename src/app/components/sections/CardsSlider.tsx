@@ -178,44 +178,49 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]">
-                {cards?.length > 4 && (
-                  <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
-                    <button
-                      className={`swiper-button-prev-simplified transition-opacity ${
-                        isBeginning
-                          ? "pointer-events-none opacity-30"
-                          : "cursor-pointer opacity-100"
-                      }`}
-                      aria-label="Previous slide"
-                    >
-                      <Image
-                        src="/images/home/chevron-right-orange.svg"
-                        alt="Previous"
-                        width={34}
-                        height={34}
-                        className="rotate-180"
-                      />
-                    </button>
-                    <button
-                      className={`swiper-button-next-simplified transition-opacity ${
-                        isEnd
-                          ? "pointer-events-none opacity-30"
-                          : "cursor-pointer opacity-100"
-                      }`}
-                      aria-label="Next slide"
-                    >
-                      <Image
-                        src="/images/home/chevron-right-orange.svg"
-                        alt="Next"
-                        width={34}
-                        height={34}
-                      />
-                    </button>
-                  </div>
-                )}
-                <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
-              </div>
+              {cards && cards.length > 1 && (
+                <div className={clsx(
+                  "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]",
+                  cards.length <= 4 && "lg:hidden"
+                )}>
+                  {cards?.length > 4 && (
+                    <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                      <button
+                        className={`swiper-button-prev-simplified transition-opacity ${
+                          isBeginning
+                            ? "pointer-events-none opacity-30"
+                            : "cursor-pointer opacity-100"
+                        }`}
+                        aria-label="Previous slide"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Previous"
+                          width={34}
+                          height={34}
+                          className="rotate-180"
+                        />
+                      </button>
+                      <button
+                        className={`swiper-button-next-simplified transition-opacity ${
+                          isEnd
+                            ? "pointer-events-none opacity-30"
+                            : "cursor-pointer opacity-100"
+                        }`}
+                        aria-label="Next slide"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Next"
+                          width={34}
+                          height={34}
+                        />
+                      </button>
+                    </div>
+                  )}
+                  <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
+                </div>
+              )}
             </FadeInGroup>
           </div>
         </div>

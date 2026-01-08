@@ -292,6 +292,8 @@ export default function GeneralForm({
     // Clear productName if hasSalesforceLead is false
     const cleanedData = {
       ...data,
+      fullName: data.fullName?.trim() || "",
+      jobRole: data.jobRole?.trim() || "",
       productName: hasSalesforceLead ? data.productName : "",
       sendEmail: true,
     };
@@ -378,7 +380,16 @@ export default function GeneralForm({
             variant="outlined"
             className="w-full"
             sx={MaterialInputStyle(!!errors.fullName)}
-            {...register("fullName", { required: "Full Name is required" })}
+            {...register("fullName", {
+              required: "Full Name is required",
+              validate: (value) => {
+                const trimmed = value?.trim();
+                if (!trimmed || trimmed.length === 0) {
+                  return "Full Name cannot be empty";
+                }
+                return true;
+              },
+            })}
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
             onKeyDown={(e) => {
@@ -424,9 +435,21 @@ export default function GeneralForm({
             control={control}
             rules={{
               required: "Phone number is required",
-              minLength: {
-                value: 10,
-                message: "Enter a valid phone number",
+              validate: (value) => {
+                // Most countries: 7-15 digits total (E.164 standard allows up to 15 digits)
+                // Setting reasonable min of 8 to account for short country codes + phone digits
+                if (!value || value.length < 8) {
+                  return "Please enter a valid phone number";
+                }
+                // Maximum length per E.164 standard
+                if (value.length > 15) {
+                  return "Phone number is too long";
+                }
+                // Must contain only digits (country code + phone number)
+                if (!/^\d+$/.test(value)) {
+                  return "Phone number must contain only digits";
+                }
+                return true;
               },
             }}
             render={({ field }) => (
@@ -466,12 +489,19 @@ export default function GeneralForm({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Job Role */}
             <TextField
-              label="Job Role"
+              label="Job Role *"
               variant="outlined"
               className="w-full"
               sx={MaterialInputStyle(!!errors.jobRole)}
               {...register("jobRole", {
                 required: "Job Role is required",
+                validate: (value) => {
+                  const trimmed = value?.trim();
+                  if (!trimmed || trimmed.length === 0) {
+                    return "Job Role cannot be empty";
+                  }
+                  return true;
+                },
               })}
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
