@@ -284,9 +284,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       </div>
                     ))}
 
-                  {item?.description && (
+                  {item?.bottomDescription && (
                     <p className="text-sm md:text-base py-5 text-[#4C5861]">
-                      {item?.description}
+                      {item?.bottomDescription}
                     </p>
                   )}
 

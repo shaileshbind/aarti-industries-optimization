@@ -222,7 +222,7 @@ export default function SearchResults() {
           value={searchValue}
           onChange={handleChange}
           handleSearch={handleSearch}
-          placeholder="Search..."
+          placeholder="Find products, reports & more"
           headerSearch={true}
           className="border-[2px] border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
         />

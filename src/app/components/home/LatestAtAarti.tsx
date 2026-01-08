@@ -155,7 +155,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ? currentCard?.ctaButton?.externalLink
                 : currentCard?.ctaButton?.link?.link
             }
-            useTargetBlank={false}
+            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
           />
         </div>
       </div>
@@ -263,7 +263,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ? currentCard?.ctaButton?.externalLink
                 : currentCard?.ctaButton?.link?.link
             }
-            useTargetBlank={false}
+            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
           />
         </div>
       </div>
