@@ -6,7 +6,13 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "swiper/css/grid";
-import { Mousewheel, Pagination, Grid, Navigation, Autoplay } from "swiper/modules";
+import {
+  Mousewheel,
+  Pagination,
+  Grid,
+  Navigation,
+  Autoplay,
+} from "swiper/modules";
 import Tabs from "../Tabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -81,6 +87,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const swiperRef = useRef<any>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
@@ -89,6 +97,42 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [activeIndex]); // Re-run when active tab changes
 
   useEffect(() => {
     let tabsAnim: gsap.core.Tween | undefined;
@@ -169,7 +213,13 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   // Determine if progress bar should be shown
   const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
   return (
-    <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
+    <div
+      ref={(el) => {
+        sectionRef.current = el;
+        latestAtAartiRef.current = el;
+      }}
+      className="w-full my-[50px] lg:my-[100px]"
+    >
       <H2 className="text-blue-200 text-center">Where We Operate</H2>
       <div className="mt-[18px] md:mt-[30px] w-full ">
         <div className="max-w-[100%]  fluid-container ">
@@ -191,6 +241,13 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
               <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
                 <Swiper
                   key={active}
+                  onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    // Don't start autoplay immediately - wait for viewport intersection
+                    if (swiper.autoplay) {
+                      swiper.autoplay.stop();
+                    }
+                  }}
                   spaceBetween={24}
                   slidesPerView={2}
                   grid={{
@@ -225,9 +282,9 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                     nextEl: ".swiper-button-next-where-we-operate",
                   }}
                   modules={[Pagination, Mousewheel, Grid, Navigation, Autoplay]}
-                    autoplay={{
-                  delay: 15000,
-                  disableOnInteraction: false,
+                  autoplay={{
+                    delay: 15000,
+                    disableOnInteraction: false,
                   }}
                   direction="horizontal"
                   pagination={

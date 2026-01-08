@@ -11,7 +11,9 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
   const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   const startAutoplay = () => {
     if (intervalRef.current) {
@@ -32,25 +34,38 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
     }
   };
 
-  // Handle hover state
+  // Intersection Observer for viewport detection
   useEffect(() => {
-    if (isHovered) {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Control autoplay based on viewport and hover
+  useEffect(() => {
+    if (!isInViewport || isHovered) {
       stopAutoplay();
     } else {
       startAutoplay();
     }
-  }, [isHovered, data && data.length]);
-
-  // Initial autoplay setup
-  useEffect(() => {
-    startAutoplay();
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [data && data.length]);
+  }, [isInViewport, isHovered, data && data.length]);
 
   const handleTabClick = (index: number) => {
     setActive(index);
@@ -61,7 +76,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
   };
 
   return (
-    <section className="max-w-5xl mx-auto md:py-[100px] pt-[0px] pb-[50px] ">
+    <section ref={sectionRef} className="max-w-5xl mx-auto md:py-[100px] pt-[0px] pb-[50px] ">
       {title && (
         <FadeInReveal>
         <H2 className="max-w-xl mx-[20px] lg:mx-auto text-center py-[unset] md:py-9">

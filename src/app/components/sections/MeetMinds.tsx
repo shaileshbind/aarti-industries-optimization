@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -30,14 +30,58 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
 
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const [showPopup, setshowPopup] = useState<boolean>(false);
   const [popupDetails, setpopupDetails] = useState<ManagementBoardProps | null>(
     null
   );
   const [hoveredIndex, sethoveredIndex] = useState<number | null>(null);
+  const [isInViewport, setIsInViewport] = useState(false);
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Control autoplay based on viewport and hover state
+  useEffect(() => {
+    const swiper = swiperRef.current;
+    if (!swiper || !swiper.autoplay) return;
+
+    // Stop autoplay if section is out of viewport or a card is hovered
+    if (!isInViewport || hoveredIndex !== null) {
+      if (swiper.autoplay.running) {
+        swiper.autoplay.stop();
+      }
+    } else {
+      // Start autoplay if section is in viewport and no card is hovered
+      if (!swiper.autoplay.running) {
+        swiper.autoplay.start();
+      }
+    }
+  }, [isInViewport, hoveredIndex]);
 
   return (
-    <div className="pb-[72px] lg:pb-[140px] lg:pt-0">
+    <div ref={sectionRef} className="pb-[72px] lg:pb-[140px] lg:pt-0">
       {/* Title */}
       {!hideTitle && sectionTitle && (
         <FadeInReveal delay={0.6}>
@@ -51,7 +95,13 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
           {management_boards?.length > 0 && (
             <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
               <Swiper
-                onSwiper={(swiper) => (swiperRef.current = swiper)}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
+                }}
                 slidesPerView={1.2}
                 spaceBetween={24}
                 breakpoints={{
