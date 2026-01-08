@@ -3,10 +3,11 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
+import { useGSAP } from "../contexts/GSAPContext";
 
 type PopupProps = {
   children: React.ReactNode;
-  onOverlayClick?: () => void;
+  onOverlayClick?: (e?: React.MouseEvent) => void;
   isOpen: boolean;
   className?: string;
 };
@@ -21,16 +22,19 @@ export default function Popup({
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(isOpen);
   const isAnimatingRef = useRef(false);
+  const { stopLenis, startLenis } = useGSAP();
 
   // Handle body overflow when popup is open
   useEffect(() => {
     if (isOpen) {
       // Store the original overflow value
       const originalOverflow = document.body.style.overflow;
+      stopLenis();
       document.body.style.overflow = "hidden";
 
       // Cleanup: restore original overflow
       return () => {
+        startLenis();
         document.body.style.overflow = originalOverflow;
       };
     }
@@ -116,7 +120,10 @@ export default function Popup({
   if (!isVisible) return null;
 
   return (
-    <div data-lenis-prevent className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center">
+    <div
+      data-lenis-prevent
+      className="fixed w-full h-full top-0 left-0 z-50 flex justify-center items-center"
+    >
       <div
         ref={overlayRef}
         className="bg-[rgba(0,0,0,0.8)] fixed w-full h-full top-0 left-0"

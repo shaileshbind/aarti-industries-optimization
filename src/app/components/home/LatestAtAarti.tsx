@@ -9,6 +9,9 @@ import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { formatDate } from "../../../../utils/formatDate";
+import Button from "../Button";
+import { FadeInReveal } from "../ScrollReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +21,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [, setIsMobile] = useState<boolean>(false);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
@@ -26,6 +29,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   });
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const measureIndicator = useCallback(() => {
     const activeButton = tabRefs.current[activeTab];
     if (!activeButton || !containerRef.current) {
@@ -39,6 +43,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const width = activeButton.offsetWidth;
     setIndicator({ left, width, visible: true });
   }, [activeTab]);
+
   useEffect(() => {
     measureIndicator();
     window.addEventListener("resize", measureIndicator);
@@ -103,7 +108,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         setActiveTab(index);
       },
     });
-    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
+    tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 });
     switchAnimRef.current = tl;
   };
 
@@ -113,8 +118,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     if (!cards || cards.length === 0) return;
 
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
-    tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 });
+    gsap.set(cards, { transformOrigin: "50% 50%", translateY: "100%" });
+    tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 });
 
     return () => {
       tl.kill();
@@ -122,27 +127,48 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   }, [activeTab]);
 
   const currentCard = card[activeTab];
+  // console.log("sdwdf", card);
   const postsContent = Array.isArray(currentCard?.postContent)
     ? currentCard.postContent
     : currentCard?.postContent
     ? [currentCard.postContent]
     : [];
   const postsCount = postsContent.length;
-  const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
+
+  // const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
+
   return (
-    <div className="w-full my-[50px] lg:my-[100px]" ref={latestAtAartiRef}>
-      {sectionTitle && (
-        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
-          <H2 className="text-blue-200">{sectionTitle}</H2>
+    <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
+      <FadeInReveal delay={0.6}>
+      <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
+        {sectionTitle && (
+          <div className="max-w-[100%] md:max-w-fit">
+            <H2 className="text-blue-200">{sectionTitle}</H2>
+          </div>
+        )}
+
+        <div className="hidden lg:block">
+          <Button
+            title={currentCard?.ctaButton?.title || ""}
+            href={
+              currentCard?.ctaButton?.hasExternalLink == "true"
+                ? currentCard?.ctaButton?.externalLink
+                : currentCard?.ctaButton?.link?.link
+            }
+            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
+          />
         </div>
-      )}
+      </div>
+      </FadeInReveal>
+
       <div className="mt-[18px] md:mt-[30px] w-full ">
-        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px]">
-          <div className="overflow-x-auto w-full ">
+        <FadeInReveal delay={0.6}>
+        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px] overflow-x-auto">
+          <div className=" w-full ">
             <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
               <div
                 ref={containerRef}
-                className="relative flex gap-x-[14px] z-10 px-1 w-max"
+                className="relative flex gap-x-[5px] md:gap-x-[10px] z-10 px-1 w-max"
               >
                 <div
                   aria-hidden="true"
@@ -168,7 +194,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                       }
                     }}
                     onClick={() => handleTabClick(index)}
-                    className={`text-grey-400 cursor-pointer font-alte-hans py-[10px] px-[24px] rounded-[40px] relative z-10 transition-all ${
+                    className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
                       activeTab === index ? "text-white" : "hover:bg-grey-200"
                     }`}
                   >
@@ -179,9 +205,9 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
             </div>
           </div>
         </div>
-
+        </FadeInReveal>
         {postsCount > 0 && (
-          <>
+          <FadeInReveal delay={0.6}>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
                 key={activeTab}
@@ -199,12 +225,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   releaseOnEdges: true,
                 }}
                 pagination={
-                  showProgressBar
-                    ? {
-                        el: ".home-latest-at-swiper",
+                   
+                        {el: ".home-latest-at-swiper",
                         type: "progressbar",
                       }
-                    : undefined
                 }
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
@@ -213,7 +237,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                     <div className="date-card-anim">
                       <DateCard
                         imageSrc={item?.image?.url}
-                        date={item?.date}
+                        date={formatDate(item?.date)}
                         desc={item?.description}
                         link={item?.link}
                         animate
@@ -223,13 +247,25 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ))}
               </Swiper>
             </div>
-            {showProgressBar && (
+            {/* {showProgressBar && ( */}
               <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
                 <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
               </div>
-            )}
-          </>
+            {/* )} */}
+          </FadeInReveal>
         )}
+
+        <div className="flex lg:hidden justify-center mt-10">
+          <Button
+            title={currentCard?.ctaButton?.title || ""}
+            href={
+              currentCard?.ctaButton?.hasExternalLink == "true"
+                ? currentCard?.ctaButton?.externalLink
+                : currentCard?.ctaButton?.link?.link
+            }
+            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
+          />
+        </div>
       </div>
     </div>
   );

@@ -4,17 +4,19 @@ import Image from "next/image";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
-import { WordReveal } from "../ScrollReveal";
+import { FadeInGroup, FadeInRevealBlur } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
 import clsx from "clsx";
+import Link from "next/link";
 
 const CardsSlider: React.FC<CDMOSplchemProps> = ({
   data,
   className,
   headingClassName,
+  useLink = false,
 }) => {
   const { sectionTitle, cards } = data;
   const [, setActiveIndex] = useState(0);
@@ -34,16 +36,13 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   }, []);
 
   return (
-    <div className="pt-[50px] pb-[25px] lg:py-[75px] overflow-hidden">
+    <div className="pt-[50px] pb-[25px] lg:pt-[140px] lg:pb-[110px] overflow-hidden">
       {/* Content Section */}
       <div className={clsx(`mt-[0px] lg:mt-[62px]`, className)}>
         <div className="flex flex-col w-full">
           {/* Left Content */}
           {sectionTitle && (
-            <WordReveal
-              stagger={0.1}
-              fromY={10}
-              duration={3}
+            <FadeInRevealBlur
               className={clsx(
                 `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`
               )}
@@ -51,12 +50,12 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               <H2 className={clsx(`text-blue-200`, headingClassName)}>
                 {sectionTitle}
               </H2>
-            </WordReveal>
+            </FadeInRevealBlur>
           )}
 
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[22px] lg:mt-[40px]">
-            <div className="relative">
+            <FadeInGroup delay={0.2} className="relative">
               <Swiper
                 spaceBetween={14}
                 slidesPerView={1.2}
@@ -73,7 +72,11 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     slidesOffsetBefore: 40,
                   },
                 }}
-                modules={[Pagination, Navigation, Mousewheel]}
+                modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
                 navigation={{
                   prevEl: ".swiper-button-prev-simplified",
                   nextEl: ".swiper-button-next-simplified",
@@ -100,28 +103,26 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
                     <SwiperSlide key={index}>
-                      <div className="relative rounded-[20px] w-full h-[280px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0">
-                        <SubH2 className="text-blue-200 py-[24px] px-[26px]">
-                          {item?.title}
-                        </SubH2>
-
-                        {item?.image?.url && (
-                          <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] md:h-[220px] xl:h-[272px] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
-                            <Image
-                              src={item?.image?.url}
-                              alt={item?.image?.alternativeText || item?.title}
-                              fill
-                              className="rounded-b-[20px] object-cover object-top"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          </div>
-                        )}
-                      </div>
+                      {useLink ? (
+                        <Link href={item?.link || "#"}>
+                          <Card
+                            title={item?.title}
+                            src={item?.image?.url}
+                            alt={item?.image?.alternativeText}
+                          />
+                        </Link>
+                      ) : (
+                        <Card
+                          title={item?.title}
+                          src={item?.image?.url}
+                          alt={item?.image?.alternativeText}
+                        />
+                      )}
                     </SwiperSlide>
                   ))}
               </Swiper>
 
-              <div className="relative py-[30px] mx-[20px] lg:mx-[unset]">
+              <div className="relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]">
                 {cards?.length > 4 && (
                   <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                     <button
@@ -159,7 +160,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 )}
                 <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
               </div>
-            </div>
+            </FadeInGroup>
           </div>
         </div>
       </div>
@@ -168,3 +169,36 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
 };
 
 export default CardsSlider;
+
+const Card = ({
+  title,
+  src,
+  alt,
+}: {
+  title: string;
+  src: string;
+  alt: string;
+}) => {
+  return (
+    <div
+      className="relative rounded-[20px] w-full h-[300px] sm:h-[320px] lg:h-[390px] bg-[#EFF3F5] mr-5 lg:mr-0"
+      data-scroll
+    >
+      {title && (
+        <SubH2 className="text-blue-200 py-[24px] px-[26px]">{title}</SubH2>
+      )}
+
+      {src && (
+        <div className="absolute bottom-0 w-full h-[200px] sm:h-[240px] md:h-[220px] xl:h-[272px] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
+          <Image
+            src={src}
+            alt={alt || title}
+            fill
+            className="rounded-b-[20px] object-cover object-top"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      )}
+    </div>
+  );
+};

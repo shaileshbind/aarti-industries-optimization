@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { H3, SubH3 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import "swiper/css";
 import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";
+import { Autoplay } from "swiper/modules";
 
 export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const { title, description, card } = data;
@@ -18,12 +19,14 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const [expanded, setExpanded] = useState<number>(0);
 
   return (
-    <div className="fluid-container">
+    <div className="fluid-container lg:!mr-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-[60px]">
         {title && <H3 className="max-w-[424px]">{title}</H3>}
 
         {description && (
-          <p className="text-sm md:text-base xl:max-w-[536px] text-[#4C5861]">{description}</p>
+          <p className="text-sm md:text-base xl:max-w-[536px] text-[#4C5861]">
+            {description}
+          </p>
         )}
       </div>
 
@@ -66,6 +69,11 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
           <div className="grid grid-cols-2 gap-[60px]">
             <Swiper
               effect="fade"
+              modules={[Autoplay]}
+              autoplay={{
+                delay: 15000,
+                disableOnInteraction: false,
+              }}
               speed={800}
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
@@ -122,7 +130,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                                 ? item?.ctaButton?.externalLink
                                 : item?.ctaButton?.link?.link
                             }
-                            useTargetBlank={item?.ctaButton?.hasExternalLink === "true"}
+                            useTargetBlank={
+                              item?.ctaButton?.hasExternalLink === "true"
+                            }
                           />
                         )}
                     </div>
@@ -220,12 +230,12 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       height={50}
                       className="absolute -top-[24px] z-10 right-[60px] w-[42px] lg:w-[50px]"
                     />
-
+<i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
                     <Image
                       src={item?.image?.url}
                       alt={item?.image?.alternativeText || "banner"}
                       fill
-                      className="absolute object-cover opacity-40 blur-sm transition-opacity duration-700"
+                      className="absolute object-cover  blur-sm transition-opacity duration-700"
                     />
                     <Image
                       src={item?.image?.url}
@@ -254,17 +264,17 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   </p>
                 )}
 
-                <div className="flex flex-col gap-2 mt-3">
+                <div className="flex flex-col gap-3 lg:gap-2 mt-3">
                   {item?.BulletPoints?.length > 0 &&
                     item?.BulletPoints?.map((items, index2) => (
                       <div
-                        className="flex gap-2 items-baseline"
+                        className="flex gap-2"
                         key={"pointers_" + index2}
                       >
                         <Image
                           src={"/images/star-orange.svg"}
                           alt={"star"}
-                          className="object-cover object-top w-[14px] h-[14px]"
+                          className="object-cover object-top w-[14px] h-[14px] mt-[3px]"
                           width={14}
                           height={14}
                         />
@@ -274,25 +284,25 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       </div>
                     ))}
 
-                  {item?.description && (
+                  {item?.bottomDescription && (
                     <p className="text-sm md:text-base py-5 text-[#4C5861]">
-                      {item?.description}
+                      {item?.bottomDescription}
                     </p>
                   )}
 
                   {item?.ctaButton?.title &&
-                        (item?.ctaButton?.externalLink ||
-                          item?.ctaButton?.link?.link) && (
-                    <Button
-                      secondary
-                      title={item?.ctaButton?.title}
-                      href={
-                        item?.ctaButton?.hasExternalLink == "true"
-                          ? item?.ctaButton?.externalLink
-                          : item?.ctaButton?.link?.link
-                      }
-                    />
-                  )}
+                    (item?.ctaButton?.externalLink ||
+                      item?.ctaButton?.link?.link) && (
+                      <Button
+                        secondary
+                        title={item?.ctaButton?.title}
+                        href={
+                          item?.ctaButton?.hasExternalLink == "true"
+                            ? item?.ctaButton?.externalLink
+                            : item?.ctaButton?.link?.link
+                        }
+                      />
+                    )}
                 </div>
               </div>
             </MainAccordion>

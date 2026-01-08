@@ -30,9 +30,11 @@ export default function ParallaxCardSection({
   const containerRef = useRef<HTMLDivElement>(null);
   const leftImageRef = useRef<HTMLDivElement>(null);
   const rightImageRef = useRef<HTMLDivElement>(null);
+  const stickyImageRefWrapper = useRef<HTMLDivElement>(null);
   const bottomLeftImageRef = useRef<HTMLDivElement>(null);
   const bottomImageRef = useRef<HTMLDivElement>(null);
   const stickyImageRef = useRef<HTMLDivElement>(null!);
+  const stickyContainerRef = useRef<HTMLDivElement>(null);
   const topLineRef = useRef(null);
   const mobileBottomImageRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +67,7 @@ export default function ParallaxCardSection({
           { ref: leftImageRef, y: -400 },
           { ref: rightImageRef, y: -400 },
           { ref: bottomLeftImageRef, y: -250 },
+          { ref: bottomImageRef, y: -250 },
         ];
 
         images.forEach(({ ref, y }) => {
@@ -80,89 +83,105 @@ export default function ParallaxCardSection({
           });
         });
 
-        // --- DISTANCE CALCULATOR ---
-        const calculateDistance = () => {
-          if (bottomImageRef.current && stickyImageRef.current) {
-            const bottomRect = bottomImageRef.current.getBoundingClientRect();
-            const stickyRect = stickyImageRef.current.getBoundingClientRect();
-            return stickyRect.top - bottomRect.top + 116;
-          }
-          return 600; // fallback
-        };
+        // --- STICKY IMAGE PIN ---
+        if (stickyImageRefWrapper.current && stickyContainerRef.current) {
+          ScrollTrigger.create({
+            trigger: stickyContainerRef.current,
+            start: "top top+=100",
+            end: () => {
+              if (!stickyContainerRef.current || !stickyImageRefWrapper.current) return "+=0";
+              const containerHeight = stickyContainerRef.current.offsetHeight;
+              const stickyHeight = stickyImageRefWrapper.current.offsetHeight;
+              return `+=${Math.max(0, containerHeight - stickyHeight - 100)}`;
+            },
+            pin: stickyImageRefWrapper.current,
+            pinSpacing: false,
+          });
+        }
 
-        // --- RESPONSIVE MATCH MEDIA ---
-        const mm = gsap.matchMedia();
+        // // --- DISTANCE CALCULATOR ---
+        // const calculateDistance = () => {
+        //   if (bottomImageRef.current && stickyImageRef.current) {
+        //     const bottomRect = bottomImageRef.current.getBoundingClientRect();
+        //     const stickyRect = stickyImageRef.current.getBoundingClientRect();
+        //     return stickyRect.top - bottomRect.top + 116;
+        //   }
+        //   return 600; // fallback
+        // };
 
-        mm.add(
-          {
-            isDesktop: "(min-width: 1281px)",
-            isMidScreen: "(min-width: 1025px) and (max-width: 1280px)",
-            is1024: "(max-width: 1024px)",
-          },
-          (context) => {
-            const { isDesktop, isMidScreen, is1024 } = context.conditions as {
-              isDesktop: boolean;
-              isMidScreen: boolean;
-              is1024: boolean;
-            };
+        // // --- RESPONSIVE MATCH MEDIA ---
+        // const mm = gsap.matchMedia();
 
-            // Set responsive scale & x-offset
-            const scaleValue = isDesktop
-              ? 1.9 // large desktops
-              : isMidScreen
-              ? 1.55 // mid screens (like 1280px)
-              : is1024
-              ? 1.3 // small tablets / 1024px
-              : 1.9;
+        // mm.add(
+        //   {
+        //     isDesktop: "(min-width: 1281px)",
+        //     isMidScreen: "(min-width: 1025px) and (max-width: 1280px)",
+        //     is1024: "(max-width: 1024px)",
+        //   },
+        //   (context) => {
+        //     const { isDesktop, isMidScreen, is1024 } = context.conditions as {
+        //       isDesktop: boolean;
+        //       isMidScreen: boolean;
+        //       is1024: boolean;
+        //     };
 
-            const xOffset = isDesktop
-              ? 50
-              : isMidScreen
-              ? 50
-              : is1024
-              ? 45
-              : 50;
+        //     // Set responsive scale & x-offset
+        //     const scaleValue = isDesktop
+        //       ? 1.9 // large desktops
+        //       : isMidScreen
+        //       ? 1.55 // mid screens (like 1280px)
+        //       : is1024
+        //       ? 1.3 // small tablets / 1024px
+        //       : 1.9;
 
-            // --- SCROLL TRIGGER ANIMATION ---
-            const tl = gsap.timeline({
-              scrollTrigger: {
-                trigger: stickyImageRef.current,
-                start: "top 80%",
-                end: "top 24%",
-                scrub: 1,
-                // markers: true, // uncomment for debugging
-              },
-            });
+        //     const xOffset = isDesktop
+        //       ? 50
+        //       : isMidScreen
+        //       ? 50
+        //       : is1024
+        //       ? 45
+        //       : 50;
 
-            // Move + scale + fade cross animation
-            tl.to(
-              bottomImageRef.current,
-              {
-                y: calculateDistance,
-                ease: "none",
-                scale: scaleValue,
-                x: xOffset,
-              },
-              0
-            )
-              .to(
-                bottomImageRef.current,
-                {
-                  opacity: 0,
-                  ease: "none",
-                },
-                0.6
-              )
-              .to(
-                stickyImageRef.current,
-                {
-                  opacity: 1,
-                  ease: "none",
-                },
-                0.6
-              );
-          }
-        );
+        //     // --- SCROLL TRIGGER ANIMATION ---
+        //     const tl = gsap.timeline({
+        //       scrollTrigger: {
+        //         trigger: stickyImageRef.current,
+        //         start: "top 80%",
+        //         end: "top 24%",
+        //         scrub: 1,
+        //         // markers: true, // uncomment for debugging
+        //       },
+        //     });
+
+        //     // Move + scale + fade cross animation
+        //     tl.to(
+        //       bottomImageRef.current,
+        //       {
+        //         y: calculateDistance,
+        //         ease: "none",
+        //         scale: scaleValue,
+        //         x: xOffset,
+        //       },
+        //       0
+        //     )
+        //       .to(
+        //         bottomImageRef.current,
+        //         {
+        //           opacity: 0,
+        //           ease: "none",
+        //         },
+        //         0.6
+        //       )
+        //       .to(
+        //         stickyImageRef.current,
+        //         {
+        //           opacity: 1,
+        //           ease: "none",
+        //         },
+        //         0.6
+        //       );
+        //   }
+        // );
       } else {
         gsap.fromTo(
           mobileBottomImageRef.current,
@@ -217,7 +236,9 @@ export default function ParallaxCardSection({
 
           {description && (
             <AnimatedText className="w-[90%] lg:w-[70%] text-center mx-auto">
-              <SubH2 className="text-blue-200">{description}</SubH2>
+              <SubH2 className="text-blue-200 text-[20px] md:text-[22px] xl:text-[24px]">
+                {description}
+              </SubH2>
             </AnimatedText>
           )}
 
@@ -241,7 +262,7 @@ export default function ParallaxCardSection({
           )}
         </div>
 
-        <div className="justify-around mt-[66px] hidden lg:flex">
+        <div className="justify-around mt-[46px] md:mt-[146px] lgx:mt-[66px] hidden lg:flex">
           {images?.[2]?.image?.url && (
             <div
               ref={bottomLeftImageRef}
@@ -303,7 +324,7 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[64px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px]">
+      <div ref={stickyContainerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px] items-start">
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}
@@ -319,13 +340,28 @@ export default function ParallaxCardSection({
           </FadeInReveal>
 
           {accordion?.length > 0 && (
-            <FadeInReveal className="pt-6 xl:pt-18">
+            <FadeInReveal className="pt-6 xl:pt-18 accordionWidth">
               {accordion?.map((item, index) => (
                 <MainAccordion
                   key={`accordion-${index}`}
-                  borderBottom={accordion?.length - 1 === index ? "border-b-0" : "1px solid #D9D9D9"}
+                  borderBottom={
+                    accordion?.length - 1 === index
+                      ? "border-b-0"
+                      : "1px solid #D9D9D9"
+                  }
                   expanded={expanded === index}
                   onChange={() => setExpanded(index)}
+                  icon={
+                    isMobile && (
+                      <Image
+                        src="/images/accordian-down.svg"
+                        alt="arrow"
+                        width={34}
+                        height={34}
+                        className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
+                      />
+                    )
+                  }
                   title={
                     <h2 className="text-base md:text-xl text-[#002F50]">
                       {item?.title}
@@ -342,14 +378,19 @@ export default function ParallaxCardSection({
                     {item?.bulletPoints?.length > 0 && (
                       <div className="flex flex-col gap-2">
                         {item?.bulletPoints?.map((item, index) => (
-                          <div key={"list_" + index} className="flex gap-2">
+                          <div
+                            key={"list_" + index}
+                            className="flex items-start gap-2"
+                          >
                             <Image
                               src={"/images/star-orange.svg"}
                               alt="banner"
                               width={20}
                               height={20}
                             />
-                            <BodyText2 className="w-[96%]">{item?.title}</BodyText2>
+                            <BodyText2 className="w-[96%]">
+                              {item?.title}
+                            </BodyText2>
                           </div>
                         ))}
                       </div>
@@ -365,7 +406,11 @@ export default function ParallaxCardSection({
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
-                        href={`${item?.ctaButton?.hasExternalLink == "true" ? item?.ctaButton?.externalLink : item?.ctaButton?.link?.link}`}
+                        href={`${
+                          item?.ctaButton?.hasExternalLink == "true"
+                            ? item?.ctaButton?.externalLink
+                            : item?.ctaButton?.link?.link
+                        }`}
                         className=" mb-2"
                       />
                     )}
@@ -378,11 +423,13 @@ export default function ParallaxCardSection({
 
         {/* Sticky Image Desktop */}
         {image?.url && (
-          <StickyImage
-            stickyImageRef={stickyImageRef}
-            className="hidden lg:block"
-            src={image?.url}
-          />
+          <div ref={stickyImageRefWrapper}>
+            <StickyImage
+              stickyImageRef={stickyImageRef}
+              className="hidden lg:block"
+              src={image?.url}
+            />
+          </div>
         )}
       </div>
     </div>
@@ -396,16 +443,16 @@ const StickyImage: React.FC<StickyImageProps> = ({
 }) => {
   return (
     <div className={`lg:pr-0 mt-6 lg:mt-0 ${className}`}>
-      <div className="order-1 lg:order-2 h-[317px] lg:h-[640px] w-full overflow-hidden relative lg:sticky lg:top-[100px]">
+      <div className="order-1 lg:order-2 w-full overflow-hidden relative lg:sticky lg:top-[100px]">
         <div
           ref={stickyImageRef}
-          className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-0`}
+          className={`relative min-h-[317px] lg:min-h-[400px] xl:min-h-[568px] w-[100%] lg:w-full rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] opacity-100 lg:opacity-100`}
         >
           <Image
             src={src}
             alt={"banner"}
             fill
-            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]"
+            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] blur-[4px]"
           />
 
           <Image

@@ -70,6 +70,7 @@ const EnvCards = ({ data }: EnvInfoProps) => {
                     key={items?.id}
                     title={items?.value}
                     desc={items?.description}
+                    bottomText={items?.bottomText}
                     imageSrc={items?.image?.url}
                     className="stat-box"
                   />
@@ -83,6 +84,7 @@ const EnvCards = ({ data }: EnvInfoProps) => {
                     key={items?.id}
                     title={items?.value}
                     desc={items?.description}
+                    bottomText={items?.bottomText}
                     imageSrc={items?.image?.url}
                     className="stat-box"
                   />

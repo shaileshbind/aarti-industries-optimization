@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import SimpleTabs from "../SimpleTabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -130,7 +130,7 @@ export default function MediaContainer({ data }: MediaContainerProps) {
   };
 
   return (
-    <div className="pt-[60px] pb-[50px] lg:pb-[100px]" ref={containerRef}>
+    <div className="pt-[30px] lg:pt-[60px] pb-[50px] lg:pb-[100px]" ref={containerRef}>
       <div className="fluid-container">
         <SimpleTabs
           tabs={tabs}
@@ -145,7 +145,7 @@ export default function MediaContainer({ data }: MediaContainerProps) {
 
         {/* Cards container */}
         <FadeInReveal>
-          <div className="mt-[30px] lg:mt-[12px]" ref={cardsWrapRef}>
+          <div className="mt-[0px] lg:mt-[12px]" ref={cardsWrapRef}>
             {renderContent()}
           </div>
         </FadeInReveal>

@@ -5,6 +5,7 @@ import { Cta, SubH1 } from "./Typography2";
 import { FadeInReveal } from "./ScrollReveal";
 import { ContactBannerProps } from "@/app/types/home.type";
 import clsx from "clsx";
+import SplitText from "./SplitText";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({
   data,
@@ -15,7 +16,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
   const { title, ctaButton } = data;
 
   return (
-    <div className="container">
+    <div className="container mb-14 lg:mb-0">
       <FadeInReveal>
         <div className="relative  w-full min-h-[186px] md:min-h-[158px] max-w-[full] lg:max-w-[920px] mx-auto rounded-[14px] md:rounded-[20px] py-[30px] md:py-[37px] px-[28px] md:px-[40px] grid md:flex justify-between items-center gap-y-[24px] bg-gradient-orange-1 overflow-hidden">
           <Image
@@ -46,12 +47,12 @@ const ContactBanner: React.FC<ContactBannerProps> = ({
                   <Link href={link as string} target="_blank">
                     <div
                       className={clsx(
-                        `bg-white button-subtle-scale rounded-[6px] py-[14px] px-[22px] h-[47px] cursor-pointer relative z-10 w-fit md:w-full text-center flex`,
+                        `bg-white group rounded-[6px] py-[14px] px-[22px] h-[47px] cursor-pointer relative z-10 w-fit md:w-full text-center flex`,
                         className
                       )}
                     >
                       <Cta className="text-orange-200 whitespace-nowrap">
-                        {ctaButton?.title}
+                     <SplitText text={ctaButton?.title}/> 
                       </Cta>
 
                       {src && (

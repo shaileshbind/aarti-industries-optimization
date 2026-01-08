@@ -41,7 +41,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 top-[30%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${
+      className={`fixed inset-0 top-[0%] z-50 bg-white flex flex-col h-0-full md:hidden transition-transform duration-300 ${
         showMobileFilter ? "translate-y-0" : "translate-y-full"
       }`}
     >
@@ -61,7 +61,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
           return (
             <label
               key={sub.id}
-              className="flex items-center justify-between gap-3 cursor-pointer select-none"
+              className="flex items-center justify-between gap-5 cursor-pointer select-none"
             >
               <BodyText2 className="text-gray-800">{sub.subCategory}</BodyText2>
               <input

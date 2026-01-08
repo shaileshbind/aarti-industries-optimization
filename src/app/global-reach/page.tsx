@@ -1,4 +1,3 @@
-import React from "react";
 import GRBanner from "../components/global-reach/GRBanner";
 import GRInfo from "../components/global-reach/GRInfo";
 import GloballyCertified from "../components/GloballyCertified";
@@ -16,15 +15,17 @@ const page = async () => {
     "/globally-certified-datas?populate=*"
   );
   const { Section_one, section_two, section_three, section_four } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
   return (
     <>
-     <SEO
+      <SEO
         title={seo?.title ?? "Global Reach"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/global-reach"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/global-reach"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -40,10 +41,7 @@ const page = async () => {
       {section_two && <GRInfo data={section_two} />}
       {section_three && <GRMaps data={section_three} />}
       {globallyCertifiedData && (
-        <GloballyCertified
-          title="Globally Certified"
-          itemsData={globallyCertifiedData}
-        />
+        <GloballyCertified itemsData={globallyCertifiedData} />
       )}
       {section_four && <GRExplore data={section_four} />}
     </>

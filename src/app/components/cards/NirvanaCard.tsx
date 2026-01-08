@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { BodyText2 } from "../Typography2";
+import { FadeInReveal } from "../ScrollReveal";
 
 interface NirvanaCardProps {
   id?: string | number;
@@ -25,7 +26,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
   const canFlip = !image && !mobImage && !!flipImg;
 
   return (
-    <div
+    <FadeInReveal 
       key={id}
       className={`relative lg:min-h-[246px] lg:min-w-[246px] rounded-[14px] overflow-hidden ${
         canFlip ? "group flip-container" : ""
@@ -63,7 +64,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
               fill
               src={image}
               alt="img"
-              className="hidden lg:block object-cover"
+              className="hidden lg:block object-cover hover:scale-105 transition-all duration-500"
             />
           )}
 
@@ -125,7 +126,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </FadeInReveal>
   );
 };
 

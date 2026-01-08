@@ -1,4 +1,3 @@
-import React from "react";
 import EthicsAndCode from "../components/ethics/EthicsAndCode";
 import WhoBanner from "../components/who-we-are/WhoBanner";
 import GloballyCertified from "../components/GloballyCertified";

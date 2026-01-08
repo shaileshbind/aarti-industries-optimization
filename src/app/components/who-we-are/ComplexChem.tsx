@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { isMobile } from "react-device-detect";
 import { BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
@@ -8,22 +7,25 @@ import "swiper/css/effect-fade";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
+import { useMediaQuery } from "@mui/material";
+import { FadeInReveal } from "../ScrollReveal";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
-  const { sectionTitle, content } = data;
+  const { sectionTitle, content, description } = data;
 
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   const startProgress = useCallback(
     (index: number) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       setProgress(0);
 
-      const duration = 8000;
+      const duration = 15000;
       const startTime = performance.now();
 
       const animate = (time: number) => {
@@ -66,9 +68,19 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
 
   return (
     <div className="pb-[50px] md:pb-[140px] md:pt-0 fluid-container">
-      {sectionTitle && <H2>{sectionTitle}</H2>}
+      {(sectionTitle || description) && (
+        <FadeInReveal delay={0.6}>
+          {sectionTitle && <H2>{sectionTitle}</H2>}
+          {description && (
+            <BodyText2 className="text-grey-400 mt-[8px] max-w-[700px]">
+              {description}
+            </BodyText2>
+          )}
+        </FadeInReveal>
+      )}
 
       {content?.length > 0 && (
+        <FadeInReveal delay={0.6}>
         <div className="mt-[30px] md:mt-[60px]">
           {content?.map((item, index) => (
             <div key={index} className="relative complex-chemistry">
@@ -147,6 +159,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
             </div>
           ))}
         </div>
+        </FadeInReveal>
       )}
     </div>
   );

@@ -1,3 +1,5 @@
+import MapBlip from "../MapBlip";
+
 interface NewMapProps {
   hoverNorthAmerica?: () => void;
   hoverRestWorld?: () => void;
@@ -11,6 +13,12 @@ interface NewMapProps {
   fillRestOfAsia?: string;
   fillEurope?: string;
   fillNorthAmerica?: string;
+  isActive0?: boolean;
+  isActive1?: boolean;
+  isActive2?: boolean;
+  isActive3?: boolean;
+  isActive4?: boolean;
+  isActive5?: boolean;
 }
 
 const DesktopMapSvg = ({
@@ -26,12 +34,22 @@ const DesktopMapSvg = ({
   fillRestOfAsia,
   fillEurope,
   fillNorthAmerica,
+  isActive0,
+  isActive1,
+  isActive2,
+  isActive3,
+  isActive4,
+  isActive5,
 }: NewMapProps) => {
   return (
     <svg
-      width="1262"
-      height="623"
+      // width="1262"
+      // height="623"
+      // viewBox="0 0 1262 623"
+      width="100%"
+      height="auto"
       viewBox="0 0 1262 623"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -372,6 +390,54 @@ const DesktopMapSvg = ({
         cy="202"
         r="6"
         fill="#F36633"
+      />
+      <MapBlip
+        x="71"
+        y="428"
+        title="3%"
+        subtitle="Rest of the world"
+        isActive={isActive0}
+        onMouseEnter={hoverRestWorld}
+      />
+      <MapBlip
+        x="158"
+        y="120"
+        title="18%"
+        subtitle="North America"
+        isActive={isActive1}
+        onMouseEnter={hoverNorthAmerica}
+      />
+      <MapBlip
+        x="542"
+        y="112"
+        title="4%"
+        subtitle="Europe"
+        isActive={isActive2}
+        onMouseEnter={hoverEurope}
+      />
+      <MapBlip
+        x="670"
+        y="180"
+        title="23%"
+        subtitle="Middle East"
+        isActive={isActive3}
+        onMouseEnter={hoverMiddleE}
+      />
+      <MapBlip
+        x="815"
+        y="199"
+        title="46%"
+        subtitle="India"
+        isActive={isActive4}
+        onMouseEnter={hoverIndia}
+      />
+      <MapBlip
+        x="963"
+        y="104"
+        title="6%"
+        subtitle="Rest of Asia"
+        isActive={isActive5}
+        onMouseEnter={hoverAsia}
       />
     </svg>
   );

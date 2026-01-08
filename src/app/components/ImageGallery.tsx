@@ -1,13 +1,11 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
-import "swiper/css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, FreeMode } from "swiper/modules";
 import { FadeInRevealBlur } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
 import Button from "./Button";
 import { ButtonProps, ImageProps } from "../types/global.type";
+import ImagePopup from "./ImagePopup";
 
 type FosteringSafeProps = {
   data?: {
@@ -46,6 +44,11 @@ interface Slide {
 
 const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   const { title, description, ctaButton } = data ?? {};
+  const [isHovered, setIsHovered] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<SlideImageData | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const marqueeRef = useRef<HTMLDivElement>(null);
 
   // A custom hook to detect screen size for responsive rendering
   const useIsDesktop = (): { isDesktop: boolean | null; mounted: boolean } => {
@@ -65,14 +68,25 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   };
   const { isDesktop } = useIsDesktop();
 
-  type ImageArrayType = {
-    image?: ImageProps;
-  }[] | undefined;
+  // Update animation styles dynamically
+  useEffect(() => {
+    if (marqueeRef.current && isDesktop !== null) {
+      const duration = isDesktop ? 50 : 80;
+      marqueeRef.current.style.animationDuration = `${duration}s`;
+      marqueeRef.current.style.animationPlayState = isHovered ? "paused" : "running";
+    }
+  }, [isHovered, isDesktop]);
+
+  type ImageArrayType =
+    | {
+        image?: ImageProps;
+      }[]
+    | undefined;
 
   // if not enough images on mobile add one -
   const generateMobileSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
     if (!imageArray || imageArray.length === 0) return [];
-    
+
     const pattern = [2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -93,8 +107,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
       },
       {
         images: [
-          { marginTop: "mt-0", height: "h-[136px]" },
-          { marginTop: "mt-[4px]", height: "h-[139px]" },
+          { marginTop: "mt-0", height: "h-[154px]" },
+          { marginTop: "mt-[4px]", height: "h-[135px]" },
         ],
       },
     ];
@@ -141,7 +155,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
 
   const generateSwiperSlides = (imageArray?: ImageArrayType): Slide[] => {
     if (!imageArray || imageArray.length === 0) return [];
-    
+
     const pattern = [1, 2, 2, 2];
     const slides: Slide[] = [];
     let imageIndex = 0;
@@ -217,30 +231,112 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     }));
   }, [baseSlides]);
 
-  const renderSwiperSlide = (slide: Slide): React.ReactElement => {
+  // Get all unique images for navigation
+  const allImages = useMemo(() => {
+    if (!imgArr?.images || imgArr.images.length === 0) return [];
+    return imgArr.images.map((item, index) => ({
+      src: item?.image?.url || "",
+      alt: item?.image?.alternativeText || "",
+      index: index,
+    }));
+  }, [imgArr?.images]);
+
+  const handleImageClick = (imageData: SlideImageData) => {
+    setSelectedImage(imageData);
+    setCurrentImageIndex(imageData.index);
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = useCallback(() => {
+    setIsPopupOpen(false);
+    setSelectedImage(null);
+  }, []);
+
+  const handleNextImage = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (allImages.length === 0) return;
+    setCurrentImageIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % allImages.length;
+      setSelectedImage({
+        src: allImages[nextIndex].src,
+        alt: allImages[nextIndex].alt,
+        config: { marginTop: "", height: "" },
+        index: nextIndex,
+      });
+      return nextIndex;
+    });
+  }, [allImages]);
+
+  const handlePrevImage = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (allImages.length === 0) return;
+    setCurrentImageIndex((prevIndex) => {
+      const newPrevIndex = (prevIndex - 1 + allImages.length) % allImages.length;
+      setSelectedImage({
+        src: allImages[newPrevIndex].src,
+        alt: allImages[newPrevIndex].alt,
+        config: { marginTop: "", height: "" },
+        index: newPrevIndex,
+      });
+      return newPrevIndex;
+    });
+  }, [allImages]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (!isPopupOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNextImage();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrevImage();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        handleClosePopup();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isPopupOpen, handleNextImage, handlePrevImage, handleClosePopup]);
+
+  const renderSlide = (slide: Slide): React.ReactElement => {
     return (
-      <SwiperSlide key={slide.id}>
+      <div key={slide.id} className="px-[2px] w-[236px] lg:w-[350px] ">
         {slide?.images?.length > 0 &&
           slide?.images?.map((imageData, index) => (
             <div
               key={index}
-              className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height}`}
+              className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height} ${isDesktop ? 'cursor-pointer' : ''}`}
+              // style={{
+              //   width: isDesktop 
+              //     ? slide.images.length === 1 
+              //       ? "337px" 
+              //       : "262px"
+              //     : "calc((100% - 6px) / 2)",
+              // }}
+              onClick={isDesktop ? () => handleImageClick(imageData) : undefined}
             >
-            {imageData?.src &&  <Image
-                src={imageData?.src}
-                alt={imageData?.alt || ""}
-                className="swiper-lazy w-full h-full object-cover"
-                width={800}
-                height={600}
-              />}
+              {imageData?.src && (
+                <Image
+                  src={imageData?.src}
+                  alt={imageData?.alt || ""}
+                  className="swiper-lazy w-full h-full object-cover"
+                  width={800}
+                  height={600}
+                />
+              )}
             </div>
           ))}
-      </SwiperSlide>
+      </div>
     );
   };
 
   return (
-    <div className="w-full my-[72px] lg:my-[100px]">
+    <div className="w-full my-[72px] lg:my-[140px]">
       <div className="w-full container mx-auto">
         {title && (
           <FadeInRevealBlur>
@@ -261,54 +357,123 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         {ctaButton?.title && (
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
-              <Button href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} title={ctaButton?.title} />
+              {ctaButton?.title &&
+                ctaButton?.link?.link &&
+                ctaButton?.hasExternalLink && (
+                  <Button
+                    title={ctaButton?.title}
+                    href={
+                      ctaButton?.hasExternalLink == "true"
+                        ? ctaButton?.externalLink
+                        : ctaButton?.link?.link
+                    }
+                  />
+                )}
             </div>
           </FadeInRevealBlur>
         )}
       </div>
-      <div className="mt-[100px] relative !pointer-events-none">
-        <Swiper
-          slidesPerView={1.8}
-          speed={3000}
-          allowTouchMove={false}
-          freeMode={{ enabled: true, momentum: false }}
-          spaceBetween={6}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: false,
-            stopOnLastSlide: false,
-          }}
-          loop={true}
-          loopAdditionalSlides={10}
-          loopPreventsSliding={false}
-          modules={[Autoplay, FreeMode]}
-          centeredSlides={!isDesktop}
-          breakpoints={{
-            600: {
-              slidesPerView: 2.2,
-            },
-            1024: {
-              slidesPerView: 5,
-            },
-          }}
-          onSwiper={(s) => {
-            const wrapper = s.el.querySelector(
-              ".swiper-wrapper"
-            ) as HTMLElement | null;
-            if (wrapper) {
-              wrapper.style.transitionTimingFunction = "linear";
-              wrapper.style.willChange = "transform";
+      <div 
+        className="mt-[100px] relative overflow-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes imageGalleryMarquee {
+              from {
+                transform: translateX(0);
+              }
+              to {
+                transform: translateX(-50%);
+              }
             }
-            // Force smooth autoplay
-            if (s.autoplay) {
-              s.autoplay.start();
+            .image-gallery-marquee {
+              display: flex;
+              width: fit-content;
+              animation: imageGalleryMarquee 50s linear infinite;
             }
+            @media (max-width: 1023px) {
+              .image-gallery-marquee {
+                animation-duration: 60s;
+              }
+            }
+            @media (max-width: 767px) {
+              .image-gallery-marquee {
+                animation-duration: 80s;
+              }
+            }
+          `
+        }} />
+        <div 
+          ref={marqueeRef}
+          className="image-gallery-marquee"
+          style={{
+            animationPlayState: isHovered ? "paused" : "running",
           }}
         >
-          {slidesToRender?.map((slide) => renderSwiperSlide(slide))}
-        </Swiper>
+          {/* First set of slides */}
+          {slidesToRender?.map((slide) => 
+            renderSlide(slide)
+          )}
+          {/* Duplicate for seamless loop */}
+          {slidesToRender?.map((slide) => 
+            renderSlide(slide)
+          )}
+        </div>
       </div>
+
+      {/* Image Popup */}
+      <ImagePopup
+        isOpen={isPopupOpen}
+        onOverlayClick={handleClosePopup}
+        className="!w-[90%] lg:!w-[70%] !p-4 md:!p-8"
+      >
+        {selectedImage && allImages.length > 0 && (
+          <div className="w-full h-full flex items-center justify-center relative">
+            {/* Previous Button */}
+            {allImages.length > 1 && (
+              <button
+                onClick={handlePrevImage}
+                className="absolute left-2 md:left-0 z-20  rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+                aria-label="Previous image"
+              >
+                <Image src="/images/home/chevron-right-white.svg" alt="next" width={45} height={45} className="rotate-180" />
+              </button>
+            )}
+
+            {/* Image Container */}
+            <div className="relative w-full h-[70vh] rounded-[20px] overflow-hidden">
+              <Image
+                src={selectedImage.src}
+                alt={selectedImage.alt || ""}
+                fill
+                className="object-contain"
+                sizes="90vw"
+              />
+            </div>
+
+            {/* Next Button */}
+            {allImages.length > 1 && (
+              <button
+                onClick={handleNextImage}
+                className="absolute right-2 md:right-0 z-20   rounded-full  shadow-lg transition-all duration-200 hover:scale-110"
+                aria-label="Next image"
+              >
+                {/* <ChevronRightIcon className="text-gray-800 text-2xl md:text-3xl" /> */}
+                <Image src="/images/home/chevron-right-white.svg" alt="next" width={45} height={45} />
+              </button>
+            )}
+
+            {/* Image Counter */}
+            {allImages.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 bg-black/60 text-white px-4 py-2 rounded-full text-sm md:text-base">
+                {currentImageIndex + 1} / {allImages.length}
+              </div>
+            )}
+          </div>
+        )}
+      </ImagePopup>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TabsYearsContainerProps } from "@/app/types/shareholder.type";
 import SimpleListing from "../templates/SimpleListing";
 import YearAndListing from "../templates/YearAndListing";

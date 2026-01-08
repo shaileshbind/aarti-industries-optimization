@@ -1,5 +1,5 @@
 "use client";
-import React, {
+import {
   useEffect,
   useRef,
   useState,
@@ -176,7 +176,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
 
   return (
     <>
-      <div ref={wrapperRef} className="w-full h-screen relative">
+      <div ref={wrapperRef} className="w-full h-screen md:h-[60vh] lg:h-screen relative">
         {/* Background Images with clip-path animation */}
         {leftSection && leftSection?.length > 0 && (
           <div className="absolute inset-0 z-[0]">
@@ -201,7 +201,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+                   <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
                   </div>
                 )
             )}
@@ -221,7 +221,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             >
               <div
                 ref={lineRef}
-                className="w-[1px] bg-white absolute left-[50px]"
+                className="w-[1px] bg-white/60 absolute left-[50px]"
                 style={{ height: "0px" }}
               />
               <div
@@ -246,12 +246,12 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       index + 1
                     }`}</BodyText2>
                     <div>
-                      <SubH2 className="text-white mt-[-3px]">
+                      <SubH2 className="text-white mt-[-3px] font-alte-hans">
                         {items.title}
                       </SubH2>
                       <BodyText2
-                        className={`mt-[2px] text-white transition-opacity duration-300 max-w-[unset] md:max-w-[300px] xl:max-w-[350px] ${
-                          index === active ? "opacity-100" : "opacity-0"
+                        className={`mt-[2px] text-white transition-opacity duration-300 max-w-[unset] md:max-w-[300px] xl:max-w-[350px] font-roboto pt-1 font-normal ${
+                          index === active ? "opacity-90" : "opacity-0"
                         }`}
                       >
                         {items.description}
@@ -263,10 +263,15 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             </div>
             {/* Desktop grey box */}
             {rightSectionData && (
-              <div className="hidden lg:block overflow-hidden absolute rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
-                <Image src="/images/sustainability/grey-bg.png" alt="img" fill className="object-cover z-[-2]" />
+              <div className="hidden lg:block overflow-hidden absolute opacity-90 rounded-[14px] w-[300px] lg:w-[500px] h-auto bottom-[60px] right-[60px] p-[24px]">
+                <Image
+                  src="/images/sustainability/grey-bg.png"
+                  alt="img"
+                  fill
+                  className="object-cover z-[-2]"
+                />
                 {rightSectionData.heading && (
-                  <SubH3 className="text-white">
+                  <SubH3 className="text-white md:!text-[16px] lg:!text-[20px]">
                     {rightSectionData.heading}
                   </SubH3>
                 )}
@@ -276,13 +281,23 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       key={items?.id}
                       className="flex gap-4 mb-2 items-start"
                     >
-                      <Image
-                        src="/images/home/star-white.svg"
-                        alt="star"
-                        width={12}
-                        height={12}
-                        className="mt-[6px]"
-                      />
+                      {items?.bulletImg ? (
+                        <Image
+                          src={items?.bulletImg}
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      ) : (
+                        <Image
+                          src="/images/home/star-white.svg"
+                          alt="star"
+                          width={12}
+                          height={12}
+                          className="mt-[6px]"
+                        />
+                      )}
                       <BodyText2 className="text-white">
                         {items?.title}
                       </BodyText2>
@@ -294,7 +309,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             {/* Mobile grey box - Inside pinned section */}
             <div className="block lg:hidden absolute w-[100%] h-auto bottom-0">
               {rightSectionData && (
-                <div className=" bg-[#102533] absolute  left-0 w-full p-[24px] z-10">
+                <div className=" bg-[#102533] absolute left-0 w-full px-[24px] py-[40px] z-10">
                   {rightSectionData.heading && (
                     <SubH3 className="text-white">
                       {rightSectionData.heading}
@@ -304,15 +319,25 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                     {rightSectionData.bulletPoints?.map((items) => (
                       <div
                         key={items?.id}
-                        className="flex gap-4 mb-2 items-center"
+                        className="flex gap-4 mb-2 items-start"
                       >
-                        <Image
-                          src="/images/home/star-white.svg"
-                          alt="star"
-                          width={12}
-                          height={12}
-                          className="mt-[6px]"
-                        />
+                        {items?.bulletImg ? (
+                          <Image
+                            src={items?.bulletImg}
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        ) : (
+                          <Image
+                            src="/images/home/star-white.svg"
+                            alt="star"
+                            width={12}
+                            height={12}
+                            className="mt-[6px]"
+                          />
+                        )}
                         <BodyText2 className="text-white">
                           {items?.title}
                         </BodyText2>

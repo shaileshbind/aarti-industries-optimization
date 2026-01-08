@@ -13,23 +13,41 @@ import {
 import { ProductData } from "@/app/types/product.inner.type";
 import MobileFilter from "./MobileFilter";
 import Button from "../Button";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
   searchQuery = "",
-  activeTab,
+  activeTab: activeTabProp,
   setActiveTab,
   clearSearch,
 }) => {
   const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
 
-  const [showSubCategories, setShowSubCategories] = useState(false);
+  // Initialize activeTab from URL on mount, otherwise use prop
+  const [activeTab, setActiveTabState] = useState(() => {
+    const categoryFromUrl = searchParams.get("category");
+    return categoryFromUrl || activeTabProp;
+  });
+
+  const [showSubCategories, setShowSubCategories] = useState(() => {
+    const categoryFromUrl = searchParams.get("category");
+    return categoryFromUrl ? categoryFromUrl !== "all" : false;
+  });
+
   const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(
-    []
+    () => {
+      const subcategoryFromUrl = searchParams.get("subcategory");
+      return subcategoryFromUrl
+        ? subcategoryFromUrl.split(",").filter(Boolean)
+        : [];
+    }
   );
+
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -37,21 +55,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
 
-  // Initialize from URL params on mount
+  // Sync local activeTab state with parent when it changes programmatically
   useEffect(() => {
     const categoryFromUrl = searchParams.get("category");
-    const subcategoryFromUrl = searchParams.get("subcategory");
-
-    if (categoryFromUrl && categoryFromUrl !== activeTab) {
-      setActiveTab(categoryFromUrl);
-      setShowSubCategories(categoryFromUrl !== "all");
+    if (!categoryFromUrl && activeTabProp !== activeTab) {
+      setActiveTabState(activeTabProp);
     }
-
-    if (subcategoryFromUrl) {
-      const subCats = subcategoryFromUrl.split(",").filter(Boolean);
-      setSelectedSubCategories(subCats);
-    }
-  }, [searchParams, activeTab, setActiveTab]); // Run only on mount
+  }, [activeTabProp]);
 
   // Update URL when filters change
   const updateURL = useCallback(
@@ -71,8 +81,14 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       } else {
         params.delete("subcategory");
       }
+
+      // Navigate with new params
+      const newUrl = params.toString()
+        ? `${pathname}?${params.toString()}`
+        : pathname;
+      router.push(newUrl, { scroll: false });
     },
-    [searchParams]
+    [searchParams, pathname, router]
   );
 
   // Reset visible count when filters change
@@ -126,10 +142,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   // Main effect: Fetch products or search results
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== "") {
-      // If there's a search query, perform search
       fetchSearchResults(searchQuery);
     } else {
-      // Otherwise, fetch products by category/subcategory
       fetchProducts();
     }
   }, [
@@ -140,6 +154,18 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
     fetchSearchResults,
   ]);
 
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim() !== "") {
+      if (activeTab !== "all") {
+        setActiveTabState("all");
+        setActiveTab("all");
+      }
+
+      setShowSubCategories(false);
+      setSelectedSubCategories([]);
+    }
+  }, [searchQuery]);
+
   // Toggle subcategory selection
   const toggleSubCategory = (slug: string) => {
     setSelectedSubCategories((prev) => {
@@ -147,9 +173,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         ? prev.filter((x) => x !== slug)
         : [slug];
 
-      // Update URL with new subcategory selection
       updateURL(activeTab, newSelection);
-
       return newSelection;
     });
   };
@@ -164,14 +188,12 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   // Handle tab change - CLEAR SEARCH COMPLETELY
   const handleTabChange = (id: string) => {
-    setActiveTab(id);
+    setActiveTabState(id);
+    setActiveTab(id); // Also update parent state
     setShowSubCategories(id !== "all");
     setSelectedSubCategories([]);
 
-    // Update URL with new category
     updateURL(id, []);
-
-    // Clear both search query states (input + actual search)
     clearSearch();
   };
 
@@ -189,20 +211,19 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
 
   return (
     <div className="w-full max-w-[85rem] mx-auto my-[60px] px-4">
-      {/* Category Tabs */}
+      {/* Rest of the JSX remains the same */}
       <ProductTabs
         tabs={catagoriesData}
         activeTab={activeTab}
         onChange={handleTabChange}
       />
 
-      {/* Subcategory Filter */}
       {activeTab !== "all" && (
         <SmoothCollapseGSAP
           className="hidden md:block"
           isOpen={showSubCategories}
         >
-          <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto">
+          <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto justify-center">
             {catagoriesData
               .find((item) => item.slug === activeTab)
               ?.product_sub_categories?.map((sub: SubCategory) => {
@@ -213,13 +234,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                     type="button"
                     onClick={() => toggleSubCategory(sub.slug)}
                     className={clsx(
-                      "px-4 py-2 border rounded-[10px] transition inline-flex items-center",
+                      "px-4 py-2 border rounded-[10px] transition inline-flex gap-2 items-center text-center cursor-pointer",
                       selected
                         ? "border-[#DC4C03] text-[#DC4C03]"
                         : "border-[#4C5861] hover:bg-gray-100"
                     )}
                   >
-                    <span className="mr-2">{sub.subCategory}</span>
+                    <span className="">{sub.subCategory}</span>
                     {selected && (
                       <div
                         onClick={(e) => {
@@ -238,8 +259,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         </SmoothCollapseGSAP>
       )}
 
-      {/* Result Header */}
-      <div className="flex items-center justify-between mb-6 md:mt-10">
+      <div className="flex items-center justify-between mb-6 md:mt-10 relative z-[1]">
         <BodyText1>
           {searchQuery && searchQuery.trim() !== ""
             ? `Search Results for "${searchQuery}" (${
@@ -262,7 +282,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         )}
       </div>
 
-      {/* Mobile Filter */}
       {!desktop && showMobileFilter && (
         <MobileFilter
           subCategories={
@@ -280,7 +299,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         />
       )}
 
-      {/* Product List */}
       {loading ? (
         <div className="text-center py-8">Loading products...</div>
       ) : filteredProducts.length > 0 ? (
@@ -293,15 +311,15 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                   link={`/${product.slug}${
                     queryString ? `?${queryString}` : ""
                   }`}
-                   pdfLink={product?.tdsDocument?.file?.url}
-                    pdfTitle="View TDS"           
+                  pdfLink={product?.tdsDocument?.file?.url}
+                  pdfTitle="View TDS"
                 />
               </div>
             ))}
           </div>
           {filteredProducts.length > visibleCount && (
-            <div className="flex justify-center mt-8">
-              <div onClick={handleLoadMore} className="mt-8">
+            <div className="flex justify-center mt-10 lg:mt-[60px]">
+              <div onClick={handleLoadMore} className="">
                 <Button secondary title="View More" href="#" />
               </div>
             </div>

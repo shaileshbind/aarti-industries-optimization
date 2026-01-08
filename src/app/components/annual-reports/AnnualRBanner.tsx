@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
 import HeroBanner from "../banners/HeroBanner";
 import { AnnualRBannerProps } from "@/app/types/annual-reports.type";
+import { useMediaQuery } from "@mui/material";
 
 const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
+  const isMobile = useMediaQuery("(max-width:820px)");
   const { title, description, image, mobImage } = data;
 
   return (
@@ -10,14 +12,12 @@ const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
       title={title}
       desc={description}
       fullBg
-      centerText={true}
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
-      showStar3={false}
-      lineClassName="hidden md:block"
-      bottomMiddleStarClassName="hidden md:block"
       centerTitleClassName="lg:max-w-[900px]"
     />
   );

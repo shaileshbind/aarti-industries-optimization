@@ -1,4 +1,3 @@
-import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import ProductWrapper from "../components/products/ProductWrapper";
 import { getData } from "@/_lib/getData.fetch";
@@ -42,7 +41,9 @@ export default async function Product() {
       />
 
       {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
+        <div className="pt-[12px] lg:pt-[40px]">
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        </div>
       )}
     </>
   );

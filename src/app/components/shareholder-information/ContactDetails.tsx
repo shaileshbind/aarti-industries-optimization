@@ -1,7 +1,7 @@
 "use client";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import clsx from "clsx";
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { BodyText2, SubH3 } from "../Typography2";
 import Link from "next/link";

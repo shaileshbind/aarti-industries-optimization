@@ -12,8 +12,10 @@ import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
+import {useMediaQuery} from "@mui/material";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
+  const isTablet = useMediaQuery("(max-width:768px)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -45,17 +47,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const star = starRef.current;
     const star2 = starRef2.current;
     const star3 = starRef3.current;
-    const stars = [star2, star3];
+    const stars = [star, star2, star3];
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
     const orangeBar = orangeScroll.current;
     const navTitle = navTitles.current;
 
     // Set initial state - all stars are completely hidden
-    gsap.set(star, {
-      opacity: 1,
-      scale: 200,
-    });
+    // gsap.set(star, {
+    //   opacity: 1,
+    //   scale: 200,
+    // });
     gsap.set(stars, {
       opacity: 0,
       scale: 0,
@@ -90,13 +92,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       duration: 0.5,
       ease: "power3.out",
     })
-      .to(star, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: "sine.out",
-        stagger: 0.2,
-      })
+      // .to(star, {
+      //   opacity: 1,
+      //   scale: 1,
+      //   duration: 0.6,
+      //   ease: "sine.out",
+      //   stagger: 0.2,
+      // })
       // Step 2: Lines draw in
       .to(
         vLine,
@@ -296,22 +298,22 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] lg:min-h-screen relative overflow-hidden">
-                {items?.card?.[0]?.image?.url && (
+                {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
                     fill
                     priority
-                    className="hidden lg:block object-cover"
+                    className="hidden md:block object-cover"
                   />
                 )}
-                {items?.card?.[0]?.mobImage?.url && (
+                {items?.card?.[0]?.mobImage?.url && isTablet && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
                     alt={items?.card?.[0]?.mobImage?.alternativeText || "banner"}
                     fill
                     priority
-                    className="block lg:hidden object-cover"
+                    className="block md:hidden object-cover"
                   />
                 )}
                 {items?.card?.[0]?.bannerVideo?.url && !isMobile && (
@@ -332,14 +334,15 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
                   <></>
                 ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0)_70%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.60)_0%,rgba(0,0,0,0)_80%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
                 )}
                 {/* Content box */}
                 { items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
                   <></>
                 ) : (
-                <FadeInReveal delay={0.2}>
-                  <div className="absolute mt-[20vh] w-full z-10">
+                
+                  <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">
+                    <FadeInReveal delay={0.5}> 
                     <div className="fluid-container">
                       {items?.card?.[0]?.title &&
                         (index === 0 ? (
@@ -363,8 +366,9 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                         />
                       )}
                     </div>
+                    </FadeInReveal>
                   </div>
-                </FadeInReveal>
+                
                 )}
               </div>
             </SwiperSlide>
@@ -375,11 +379,11 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       {/* stars + lines */}
       <div
         ref={lineVertical}
-        className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5"
+        className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[88px] lg:right-[212.5px] z-5"
       />
       <div
         ref={lineHorizontal}
-        className="absolute w-full bg-white bottom-[105px] lg:bottom-[119px] h-[1px] z-5"
+        className="absolute w-full bg-white/40 bottom-[105px] lg:bottom-[119px] h-[1px] z-5"
       />
       <div
         ref={starRef}
@@ -459,9 +463,9 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         {/* mobile */}
         <div className="block md:hidden fluid-container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
-            {activeIndexRef.current + 1}/
+            0{activeIndexRef.current + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">
-              {data?.banner?.length}
+              0{data?.banner?.length}
             </span>
           </p>
 

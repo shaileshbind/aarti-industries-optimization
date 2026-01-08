@@ -1,4 +1,3 @@
-import React from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import AnnualRBanner from "../annual-reports/AnnualRBanner";
 import OrangeCardListing from "../templates/OrangeCardListing";

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BodyText1 } from "../Typography2";
 import Image from "next/image";
 import clsxN from "../../../../utils/clsxN";
@@ -19,7 +19,7 @@ const ProductList = ({
   link,
   pdfLink,
   secondary,
-  scale=true,
+  scale=false,
 }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -110,7 +110,7 @@ const ProductList = ({
           <Link
             href={"/products" + link}
             className={clsxN(
-              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full",
+              "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:pointer-events-none",
               isHovered
                 ? "border-white text-white hover:text-orange-600"
                 : "border-orange-800 text-orange-800 hover:bg-orange-800"

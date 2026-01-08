@@ -1,4 +1,3 @@
-import React from "react";
 import { SubH2, BodyText2, BodyText3 } from "../Typography2";
 import Button from "../Button";
 import { ImageProps, ButtonProps } from "@/app/types/global.type";

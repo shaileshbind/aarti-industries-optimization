@@ -1,24 +1,23 @@
 import Image from "next/image";
-import React from "react";
 import { H2 } from "../Typography2";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { WhatSetsProps } from "@/app/types/manufacturing-capabilities.type";
+import ParallaxImage from "../ParallaxImage";
 
 export default function WhatSets({ data }: WhatSetsProps) {
   const { title, image, mobImage, ctaButton, cards } = data;
 
   return (
     <div className="relative lg:h-[calc(100vh-70px)] ">
+      <div className="absolute inset-0 bg-black/60 z-[1] hidden lg:block" />
       {/* Desktop */}
       {image?.url && (
         <div className="lg:absolute w-full h-full hidden lg:block">
-          <Image
+          <ParallaxImage
             src={image?.url}
             alt={"banner"}
-            width={1440}
-            height={720}
-            className="object-cover w-full h-full"
+            className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
           />
         </div>
       )}
@@ -31,13 +30,18 @@ export default function WhatSets({ data }: WhatSetsProps) {
             </H2>
           )}
 
-          {ctaButton?.title && ctaButton?.link?.link && ctaButton?.hasExternalLink && (
-            <Button
-              title={ctaButton?.title}
-              href={`${ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}`}
-              className="mt-6"
-            />
-          )}
+          {ctaButton?.title &&
+            ctaButton?.link?.link && (
+              <Button
+                title={ctaButton?.title}
+                href={`${
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }`}
+                className="mt-6"
+              />
+            )}
 
           {/* Mobile */}
           {mobImage?.url && (

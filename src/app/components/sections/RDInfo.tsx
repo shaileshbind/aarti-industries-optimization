@@ -79,7 +79,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
     <div className="w-full">
       <div
         ref={wrapperRef}
-        className="container mx-auto mb-[72px] lg:mb-[140px] mt-[unset] lg:mt-[50px]"
+        className="container mx-auto mb-[72px] lg:mb-[140px] mt-[-24px] lg:mt-[55px]"
       >
         {/* Top Line */}
         {showLine && (
@@ -97,7 +97,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
         )}
         {/* Text content */}
         {description && (
-          <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-4">
+          <div className="max-w-full lg:max-w-[1048px] mx-[unset] lg:mx-auto text-center mt-[36px]">
             <AnimatedText>
               <H3>{description}</H3>
             </AnimatedText>
@@ -118,9 +118,10 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                         key={"value_" + index}
                         title={items?.value}
                         desc={items?.description}
+                        bottomText={items?.bottomText}
                         imageSrc={items?.image?.url}
                         imageAlt={items?.image?.alternativeText}
-                        className="stat-box"
+                        className="stat-box !h-auto"
                       />
                     );
                   })}
@@ -134,21 +135,22 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                       key={"value_" + index}
                       title={items?.value}
                       desc={items?.description}
+                      bottomText={items?.bottomText}
                       imageSrc={items?.image?.url}
                       imageAlt={items?.image?.alternativeText}
-                      className="stat-box"
+                      className="stat-box !h-auto"
                     />
                   );
                 })}
               </div>
             </div>
             {rightSectionImage?.url && (
-              <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden">
+              <div className="hidden lg:block relative rounded-[14px] lg:rounded-[20px] min-h-[136px] lg:min-h-[350px] overflow-hidden transition-all duration-700">
                 <Image
                   src={rightSectionImage?.url}
                   alt={rightSectionImage?.alternativeText || "img"}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-all duration-300 hover:scale-105"
                 />
               </div>
             )}

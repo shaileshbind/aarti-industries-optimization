@@ -1,21 +1,34 @@
 import React from "react";
 import clsxN from "../../../utils/clsxN";
+import { useTitleCase } from "../../../utils/toTitleCase";
 
 type TypographyProps = {
   className?: string;
   children: React.ReactNode;
 };
 
-export const H1 = ({ className, children }: TypographyProps) => (
-  <h1
-    className={clsxN(
-      "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
-      className
-    )}
-  >
-    {children}
-  </h1>
-);
+// export const H1 = ({ className, children }: TypographyProps) => (
+//   <h1
+//     className={clsxN(
+//       "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
+//       className
+//     )}
+//   >
+//     {children}
+//   </h1>
+// );
+export const H1 = ({ className, children }: TypographyProps) => {
+  return (
+    <h1
+      className={clsxN(
+        "font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] text-blue-200 font-alte-hans",
+        className
+      )}
+    >
+      {useTitleCase(children as string)}
+    </h1>
+  );
+};
 
 export const H2 = ({ className, children }: TypographyProps) => (
   <h2
@@ -54,7 +67,7 @@ export const H3 = ({ className, children }: TypographyProps) => (
 export const SubH1 = ({ className, children }: TypographyProps) => (
   <h5
     className={clsxN(
-      "font-normal text-[20px] md:text-[24px]  xl:text-[30px] leading-[140%] text-blue-200 font-alte-hans",
+      "font-normal text-[20px] md:text-[24px] xl:text-[30px] leading-[140%] text-blue-200 font-alte-hans",
       className
     )}
   >
@@ -74,7 +87,12 @@ export const SubH2 = ({ className, children }: TypographyProps) => (
 );
 
 export const SubH3 = ({ className, children }: TypographyProps) => (
-  <p className={clsxN("font-normal text-[16px] xl:text-[18px] lg:text-[20px] leading-[140%] text-blue-200 font-alte-hans", className)}>
+  <p
+    className={clsxN(
+      "font-normal text-[16px] xl:text-[18px] lg:text-[20px] leading-[140%] text-blue-200 font-alte-hans",
+      className
+    )}
+  >
     {children}
   </p>
 );

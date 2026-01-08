@@ -18,6 +18,7 @@ export type EnvInfoProps = {
       id?: number;
       value?: string;
       description?: string;
+      bottomText?: string;
       image?: ImageProps;
       mobImage?: ImageProps;
     }[];
@@ -43,23 +44,16 @@ export type EnvRespChemProps = {
       content?: {
         id?: number;
         description?: string;
-        image?: {
-          id?: number;
-          url: string;
-          alternativeText: string;
-        };
+        image?: ImageProps;
         mobImage?: ImageProps;
         ctaButton?: ButtonProps;
         content?: {
           id?: number;
+          image?: ImageProps;
           sdgPlay?: {
             sdgPlayTitle?: string;
-            images?: {
-              id?: number;
-              url?: string;
-              alternativeText?: string;
-            }[]
-          }
+            images?: ImageProps[];
+          };
           materialTopics?: {
             id?: number;
             label?: string;
@@ -83,8 +77,8 @@ export type EnvRespChemProps = {
               title?: string;
             }[];
           };
-        }[]
-      }
+        }[];
+      };
     }[];
   };
 };
@@ -108,10 +102,10 @@ export type EnvLifeProps = {
 export type EnvExpProps = {
   data: {
     title?: string;
-    link?:string;
-    buttonTitle?:string;
-    reportFile?:{
-      url?:string;
-    }
+    link?: string;
+    buttonTitle?: string;
+    reportFile?: {
+      url?: string;
+    };
   };
 };

@@ -7,6 +7,7 @@ import FaqAccordion from "../FaqAccordian";
 import Image from "next/image";
 import { RDDiverseChemProps } from "@/app/types/r-and-d.type";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { FadeInReveal } from "../ScrollReveal";
 const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
   const { title, description } = data;
   const { newChemistries, existingChemistries } = data2;
@@ -65,13 +66,15 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]"
     style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
     >
-      <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[50px] ">
+      <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[100px] ">
         {title && (
           <div>
+            <FadeInReveal delay={0.2}>
             <H2>{title}</H2>
+            </FadeInReveal>
           </div>
         )}
-        <div>{description && <BodyText1>{description}</BodyText1>}</div>
+        <div> <FadeInReveal delay={0.2}>{description && <BodyText1>{description}</BodyText1>}</FadeInReveal></div>
       </div>
       <div className="hidden xl:block">
         <div
@@ -91,7 +94,7 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                   className={`mt-[30px] ${swapped ? "hidden" : "block"}`}
                   key={"tab_" + index}
                 >
-                  {item?.heading && <BodyText1 className="!text-blue-100">{item?.heading}</BodyText1>}
+                  {item?.heading && <BodyText1 className="!text-[#10456A]">{item?.heading}</BodyText1>}
 
                   <div className="mt-[14px] flex flex-wrap gap-[12px]">
                     {item?.cards?.length > 0 &&

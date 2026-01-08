@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Image from "next/image";
 import Tags from "./Tags";
 import Link from "next/link";
@@ -11,7 +10,7 @@ const Footer = ({ data }: FooterProps) => {
     <footer>
       <div className="bg-white container !py-[30px] lg:!py-[60px] grid lg:grid-cols-4 gap-x-[60px]">
         <div className="lg:col-span-1 grid content-between">
-          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset]">
+          <div className="mb-[unset] md:mb-[30px] lg:mb-[unset] w-[124px] md:w-[190px] h-12 md:h-[74px]">
             {Logo?.Logo?.url && (
               <Image
                 src={Logo?.Logo?.url}
@@ -19,6 +18,7 @@ const Footer = ({ data }: FooterProps) => {
                 width={190}
                 height={73}
                 priority
+                className="w-full h-full"
               />
             )}
             <div
@@ -27,11 +27,11 @@ const Footer = ({ data }: FooterProps) => {
                 __html: "Follow Us",
               }}
             />
-            <div className=" hidden lg:grid mt-[15px] lg:grid-cols-4 xl:grid-cols-5 w-fit gap-[8px] ">
+            <div className="hidden lg:grid mt-[15px] lg:grid-cols-4 2xl:grid-cols-5 w-fit gap-2">
               {FollowUs?.map((items) => (
-                <a
+                <Link
                   key={items?.id}
-                  href={items?.link}
+                  href={items?.link ? items?.link : ""}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -50,7 +50,7 @@ const Footer = ({ data }: FooterProps) => {
                       />
                     )}
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -61,7 +61,7 @@ const Footer = ({ data }: FooterProps) => {
               {menu?.[0]?.category && (
                 <Tags
                   title={menu[0]?.category}
-                  className="mb-[20px] uppercase"
+                  className="mb-[14px] uppercase !text-orange-200"
                 />
               )}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1">
@@ -106,25 +106,25 @@ const Footer = ({ data }: FooterProps) => {
               </div>
             </div>
           </div>
-          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px] ">
+          <div className="grid lg:col-span-9 grid-cols-2 md:grid-cols-3 gap-y-[10px]">
             {menu?.slice(1).map((section) => (
               <div key={section?.id}>
                 {section?.category && (
                   <Tags
                     title={section?.category}
-                    className="mb-[20px] uppercase"
+                    className="mb-[7px] lg:mb-[14px] uppercase !text-orange-200"
                   />
                 )}
                 <div>
-                  <div className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]">
+                  <div className="text-[14px] lg:pb-[5px] font-roboto font-normal text-[#999999]">
                     {section?.subMenu?.map((item) => {
                       return (
                         <div
                           key={item?.id}
-                          className="text-[14px] py-[5px] font-roboto font-normal text-[#999999]"
+                          className="text-[14px] lg:pb-[5px] font-roboto font-normal text-[#999999]"
                         >
                           {item?.title}
-                          <div className="grid">
+                          <div className="grid mb-4 lg:mb-0">
                             {item?.item?.map((items) => {
                               const link =
                                 items?.cta_link?.link ?? items?.externalLink;
@@ -155,7 +155,7 @@ const Footer = ({ data }: FooterProps) => {
             __html: "Follow Us",
           }}
         />
-        <div className=" mt-[15px] grid grid-cols-5 md:hidden w-fit gap-[8px]">
+        <div className="mt-[15px] grid grid-cols-4 md:grid-cols-5 lg:hidden w-fit gap-2">
           {FollowUs?.map((item) => (
             <Link
               key={item?.id}
@@ -186,7 +186,7 @@ const Footer = ({ data }: FooterProps) => {
       <div className="container w-full mb-[24px] grid lg:flex lg:justify-between">
         {Legal?.leftText && (
           <p className="font-roboto text-center lg:text-left mt-[18px] lg:mt-[unset] text-[14px] leading-[100%] font-normal text-grey-400 order-1 lg:order-0">
-            {Legal?.leftText}
+            © {new Date().getFullYear()} {Legal?.leftText}
           </p>
         )}
         <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1 justify-between">

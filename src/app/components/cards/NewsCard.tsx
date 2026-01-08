@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,16 +27,18 @@ const NewsCard = ({
   const CardContent = () => (
     <>
       {animate ? (
-        <div className="group relative inverted-radius transition-all duration-300">
-          <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2] border-[1px] border-gray-300">
-            {imageSrc && (
-              <Image
-                src={imageSrc}
-                alt={imageAlt ? imageAlt : "img"}
-                fill
-                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
-              />
-            )}
+        <>
+          <div className="group relative inverted-radius transition-all duration-500">
+            <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2] border-[1px] border-gray-300 ">
+              {imageSrc && (
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt ? imageAlt : "img"}
+                  fill
+                  className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                />
+              )}
+            </div>
           </div>
           <div className="flex mt-[16px] gap-x-[14px] items-center">
             {tag && (
@@ -70,7 +71,7 @@ const NewsCard = ({
           <div className="mt-[8px] mb-1 font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
             {desc}
           </div>
-        </div>
+        </>
       ) : (
         <div className="group relative transition-all duration-300">
           <div className="relative  transition-all duration-300 rounded-[10px] w-full h-[230px] overflow-hidden z-[2]">
@@ -98,10 +99,10 @@ const NewsCard = ({
     <Link
       href={link}
       target={useTargetBlank ? "_blank" : "_self"}
-      className="block cursor-pointer"
+      className="block cursor-pointer group"
     >
       {animate && (
-        <div className="absolute right-3 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500 pointer-events-none">
+        <div className="absolute  opacity-0 group-hover:opacity-100 right-3 scale-0 group-hover:scale-100 top-2 z-[2] w-12 h-12 grid place-items-center transition-all duration-500 pointer-events-none">
           <Image
             src="/images/arrow-up-right-o.svg"
             alt={"arrow"}

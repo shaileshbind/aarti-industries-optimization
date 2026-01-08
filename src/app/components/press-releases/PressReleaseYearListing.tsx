@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import clsx from "clsx";
-import React, {
+import {
   useLayoutEffect,
   useRef,
   useState,
@@ -21,6 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BodyText2, BodyText3, SubH1 } from "../Typography2";
 import Button from "../Button";
 import Link from "next/link";
+import { formatDate } from "../../../../utils/formatDate";
 
 export type PressItem = {
   id?: number;
@@ -65,7 +66,7 @@ export default function PressReleaseYearListing({
     const urlYear = searchParams.get("year");
     const firstYear = yearsList[0];
     const targetYear =
-    urlYear && yearsList.includes(urlYear) ? urlYear : firstYear;
+      urlYear && yearsList.includes(urlYear) ? urlYear : firstYear;
 
     setActiveYear(targetYear);
     setDropdownClicked(false);
@@ -74,13 +75,20 @@ export default function PressReleaseYearListing({
   // Safely derive array of press releases for activeYear
   const currentPressReleases: PressItem[] = useMemo(() => {
     if (!activeYear || !yearAndPressReleases) return [];
-    const val = yearAndPressReleases[activeYear as keyof typeof yearAndPressReleases] as YearValue;
+    const val = yearAndPressReleases[
+      activeYear as keyof typeof yearAndPressReleases
+    ] as YearValue;
     // If it's already an array, return a shallow copy
     if (Array.isArray(val)) {
       return val.slice();
     }
     // If it's an object with report array
-    if (val && typeof val === "object" && "report" in val && Array.isArray(val.report)) {
+    if (
+      val &&
+      typeof val === "object" &&
+      "report" in val &&
+      Array.isArray(val.report)
+    ) {
       return val.report.slice();
     }
     // Unexpected shape -> empty
@@ -151,15 +159,21 @@ export default function PressReleaseYearListing({
               {latestReleases.slice(0, 2).map((item, index) => (
                 <div key={`latest_${index}`} className="flex flex-col gap-5">
                   <div className="flex flex-col gap-3">
-                    <BodyText3 className="text-[#9997A2]">
-                      {item?.date}
-                    </BodyText3>
+                    {item?.date && (
+                      <BodyText3 className="text-[#9997A2]">
+                        {formatDate(item?.date)}
+                      </BodyText3>
+                    )}
                     <BodyText2 className="text-[#10456A] text-base leading-[1.54]">
                       {item?.shortDescription}
                     </BodyText2>
                   </div>
                   {item?.file?.url && (
-                    <Button title="Download PDF" secondary href={item.file.url} />
+                    <Button
+                      title="Download PDF"
+                      secondary
+                      href={item.file.url}
+                    />
                   )}
                   {index < latestReleases.slice(0, 2).length - 1 && (
                     <div className="bg-[#D9D9D9] h-px w-full mt-2" />
@@ -195,7 +209,7 @@ export default function PressReleaseYearListing({
                       className={clsx(
                         "text-base",
                         year === activeYear
-                          ? "text-[#002F50] font-semibold"
+                          ? "text-[#002F50]"
                           : "text-[#4C5861]"
                       )}
                     >
@@ -206,7 +220,7 @@ export default function PressReleaseYearListing({
                 {/* Animated underline */}
                 {!dropdownClicked && (
                   <div
-                    className="absolute bottom-0 h-[2px] bg-[#DC4C03] md:bg-[#002F50] transition-all duration-300 ease-out rounded-[20px]"
+                    className="absolute bottom-[-2] h-[2px] bg-[#DC4C03] md:bg-[#002F50] transition-all duration-300 ease-out rounded-[20px]"
                     style={{
                       width: `${underline.width}px`,
                       transform: `translateX(${underline.left}px)`,
@@ -243,7 +257,10 @@ export default function PressReleaseYearListing({
           </div>
 
           {/* Press Release list */}
-          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+          <div
+            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+            data-lenis-prevent
+          >
             {/* Desktop - show all */}
             <div className="hidden lg:block">
               {currentPressReleases.map((item) => (
@@ -252,15 +269,19 @@ export default function PressReleaseYearListing({
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1">
-                    {/* commented on purpose */}
-                    {/* <Link href={`/press-releases/${item?.slug}`} target="_blank"> */}
+                    <Link
+                      href={`/press-releases/${item?.slug}`}
+                      target="_blank"
+                    >
                       <p className="text-[#0F3557] text-lg leading-[1.6]">
                         {item?.heading}
                       </p>
-                    {/* </Link> */}
-                    <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item?.date}
-                    </p>
+                    </Link>
+                    {item?.date && (
+                      <p className="text-[#9997A2] text-sm leading-[1.4]">
+                        {formatDate(item?.date)}
+                      </p>
+                    )}
                   </div>
                   {item?.file?.url && (
                     <a
@@ -296,14 +317,19 @@ export default function PressReleaseYearListing({
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1 pr-4">
-                    <Link href={`/press-releases/${item?.slug}`} target="_blank">
+                    <Link
+                      href={`/press-releases/${item?.slug}`}
+                      target="_blank"
+                    >
                       <p className="text-[#0F3557] text-lg leading-[1.6]">
                         {item?.heading}
                       </p>
                     </Link>
-                    <p className="text-[#9997A2] text-sm leading-[1.4]">
-                      {item?.date}
-                    </p>
+                    {item?.date && (
+                      <p className="text-[#9997A2] text-sm leading-[1.4]">
+                        {formatDate(item?.date)}
+                      </p>
+                    )}
                   </div>
                   {item?.file?.url && (
                     <a

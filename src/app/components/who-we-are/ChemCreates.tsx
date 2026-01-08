@@ -10,6 +10,7 @@ import { Mousewheel, Pagination } from "swiper/modules";
 import { ChemCreatesProps } from "@/app/types/who-we-are.type";
 import Image from "next/image";
 import { formatDate } from "../../../../utils/formatDate";
+import { FadeInReveal } from "../ScrollReveal";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const { sectionTitle, blog_case_studies } = data;
@@ -25,12 +26,10 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
 
   return (
     <div className="mt-[0] mb-[72px] lg:mb-[100px] lg:mt-0">
-      {sectionTitle && (
-        <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
-      )}
+      {sectionTitle && <FadeInReveal delay={0.6}><H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2></FadeInReveal>}
 
       {blog_case_studies && blog_case_studies.length > 0 && (
-        <>
+        <FadeInReveal delay={0.6}>
           <div className="mt-[36px] lg:mt-[40px]">
             <Swiper
               slidesPerView={1.2}
@@ -62,7 +61,8 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                       imageSrc={item?.thumbnailImageDesktop?.url}
                       date={formatDate(item?.date || "")}
                       desc={item?.title}
-                      link={`/blogs/${item?.slug}`}
+                      link={`/case-studies/${item?.slug}`}
+                      animate
                     />
                   </SwiperSlide>
                 );
@@ -116,7 +116,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
               </div>
             )}
           </div>
-        </>
+        </FadeInReveal>
       )}
     </div>
   );

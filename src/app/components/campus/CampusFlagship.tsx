@@ -17,8 +17,11 @@ interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
 
-const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, layout }) => {
-  const {  card, partnerWithUsCta, sectionTitle } = data;
+const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
+  data,
+  layout,
+}) => {
+  const { card, partnerWithUsCta, sectionTitle } = data;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -62,60 +65,73 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
     const timer = setTimeout(() => {
       setIsImageAnimating(true);
     }, 50);
-    return () => clearTimeout(timer); 
+    return () => clearTimeout(timer);
   }, [activeIndex]);
-  const baseImageClasses = "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
-  const secondaryImageClasses = "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
-  const imageTransitionClasses = "transition-all duration-700 ease-out"; 
-  const imageInitialClasses = "transform scale-[0.99] opacity-0"; 
+  const baseImageClasses =
+    "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
+  const secondaryImageClasses =
+    "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]";
+  const imageTransitionClasses = "transition-all duration-700 ease-out";
+  const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
-  const backgroundFinalOpacityClass = "opacity-40"; 
+  const backgroundFinalOpacityClass = "opacity-40";
   const mainFinalOpacityClass = "opacity-100";
-  const backgroundAnimationClasses = isImageAnimating 
-    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}` 
+  const backgroundAnimationClasses = isImageAnimating
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}`
     : `${imageTransitionClasses} ${imageInitialClasses}`;
-  const mainAnimationClasses = isImageAnimating 
-    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}` 
+  const mainAnimationClasses = isImageAnimating
+    ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}`
     : `${imageTransitionClasses} ${imageInitialClasses}`;
 
-    useEffect(() => {
-      let tabsAnim: gsap.core.Tween | undefined;
-      if (frameworkForgedRef.current) {
-        tabsAnim = gsap.fromTo(
-          frameworkForgedRef.current,
-          { opacity: 0, y: 30, filter: "blur(10px)" },
-          {
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",
-            duration: 0.8,
-            ease: "power2.out",
-            delay: 0.1,
-            scrollTrigger: {
-              trigger: frameworkForgedRef.current,
-              start: "top 87%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-      return () => {
-        if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
-        if (tabsAnim) tabsAnim.kill();
-      };
-    }, []);
+  useEffect(() => {
+    let tabsAnim: gsap.core.Tween | undefined;
+    if (frameworkForgedRef.current) {
+      tabsAnim = gsap.fromTo(
+        frameworkForgedRef.current,
+        { opacity: 0, y: 30, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.1,
+          scrollTrigger: {
+            trigger: frameworkForgedRef.current,
+            start: "top 87%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+    return () => {
+      if (tabsAnim && tabsAnim.scrollTrigger) tabsAnim.scrollTrigger.kill();
+      if (tabsAnim) tabsAnim.kill();
+    };
+  }, []);
 
   return (
-      <div ref={frameworkForgedRef}>
-             {sectionTitle && (
+    <div ref={frameworkForgedRef}>
+      {sectionTitle && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {sectionTitle}
         </H2>
       )}
 
-
-      <div className={clsx(`relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `)}>
-        <div className={clsx( `w-full md:w-[55%] lg:w-[65%]  ${layout === "imgLeftContentRight" ? " order-2 lg:order-2 md:pl-10 lg:pl-20" : "lg:ml-[60px] order-2 lg:order-1"}`)}>
+      <div
+        className={clsx(
+          `relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `
+        )}
+      >
+        <div
+          className={clsx(
+            `w-full md:w-[55%] lg:w-[65%]  ${
+              layout === "imgLeftContentRight"
+                ? " order-2 lg:order-2 md:pl-10 lg:pl-20"
+                : "lg:ml-[60px] order-2 lg:order-1"
+            }`
+          )}
+        >
           {sectionTitle && (
             <H2 className="hidden lg:block text-blue-200 max-w-[460px] font-normal">
               {sectionTitle}
@@ -134,10 +150,11 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${activeIndex > 0
+                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                    activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                    }`}
+                  }`}
                 />
 
                 <Image
@@ -145,10 +162,11 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${activeIndex < card?.length - 1
+                  className={`swiper-button-next transition-opacity ${
+                    activeIndex < card?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
-                    }`}
+                  }`}
                 />
               </div>
             </div>
@@ -158,13 +176,10 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
             <div ref={containerRef} className="w-full">
               <Swiper
                 modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
-                autoplay={
-                    {
-                          delay: 5000,
-                          disableOnInteraction: false,
-                         
-                  }
-                }
+                autoplay={{
+                  delay: 15000,
+                  disableOnInteraction: false,
+                }}
                 navigation={{
                   nextEl: ".swiper-button-next",
                   prevEl: ".swiper-button-prev",
@@ -181,8 +196,6 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
                     slidesPerView: slidesPerView,
                     spaceBetween: 80,
                     allowTouchMove: false,
-                    autoplay: false
-
                   },
                 }}
                 scrollbar={{ draggable: true }}
@@ -198,8 +211,9 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
                   return (
                     <SwiperSlide
                       key={items?.id}
-                      className={`transition-all duration-500  ${index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
-                        }`}
+                      className={`transition-all duration-500  ${
+                        index === activeIndex ? "" : "lg:blur-xs lg:opacity-50"
+                      }`}
                     >
                       <SubH1 className={`text-blue-200`}>{items?.title}</SubH1>
                       <BodyText2 className="mt-[12px] text-[#585858]">
@@ -215,86 +229,114 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({ data, lay
           {partnerWithUsCta?.title && (
             <div className="mt-[40px]">
               <Button
-                href={`${partnerWithUsCta?.hasExternalLink == "true" ? partnerWithUsCta?.externalLink : partnerWithUsCta?.link?.link}`}
+                href={`${
+                  partnerWithUsCta?.hasExternalLink == "true"
+                    ? partnerWithUsCta?.externalLink
+                    : partnerWithUsCta?.link?.link
+                }`}
                 title={partnerWithUsCta?.title}
               />
             </div>
           )}
         </div>
-        <div className={clsx(` relative md:w-[45%] lg:w-[35%] w-full overflow-hidden ${layout === "imgLeftContentRight" ? " order-1 lg:order-1" : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "}`)}>
+        <div
+          className={clsx(
+            ` relative md:w-[45%] lg:w-[35%] w-full overflow-hidden ${
+              layout === "imgLeftContentRight"
+                ? " order-1 lg:order-1"
+                : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "
+            }`
+          )}
+        >
           {layout === "imgLeftContentRight" ? (
-             <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+            <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
               <div className="absolute inset-0 overflow-hidden">
                 <Image
                   key={`bg-${currentImageIndex}`}
                   src={card?.[currentImageIndex]?.image?.url}
-                  alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
                   fill
-                  className={`object-cover scale-110 transition-opacity duration-700 ease-out ${isImageAnimating ? "opacity-40" : "opacity-0"}`}
+                  className={`object-cover scale-110 transition-opacity duration-700 ease-out ${
+                    isImageAnimating ? "opacity-40" : "opacity-0"
+                  }`}
                 />
                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
+                <span className="absolute bottom-0 -left-4 rounded-br-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-full h-full">
                   <Image
                     key={`main-${currentImageIndex}`}
                     src={card?.[currentImageIndex]?.image?.url}
-                    alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
+                    alt={
+                      card?.[currentImageIndex]?.image?.alternativeText ||
+                      "banner"
+                    }
                     fill
-                    className={`object-cover scale-110 transition-opacity duration-700 ease-out ${isImageAnimating ? "opacity-100" : "opacity-0"}`}
+                    className={`object-cover scale-110 transition-opacity duration-700 ease-out ${
+                      isImageAnimating ? "opacity-100" : "opacity-0"
+                    }`}
                   />
                 </span>
               </div>
             </div>
           ) : (
             <div
-            className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
-          >
-            {card?.[currentImageIndex]?.image?.url && (
-              <Image
-                key={`outer-${currentImageIndex}`} 
-                src={card?.[currentImageIndex]?.image?.url}
-                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
-                fill
-                sizes="(max-width: 768px) 768px, 
+              className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+            >
+              {card?.[currentImageIndex]?.image?.url && (
+                <Image
+                  key={`outer-${currentImageIndex}`}
+                  src={card?.[currentImageIndex]?.image?.url}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
+                  fill
+                  sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
-              />
-            )}
-            {card?.[currentImageIndex]?.image?.url && (
-              <Image
-                key={`main-${currentImageIndex}`} 
-                src={card?.[currentImageIndex]?.image?.url}
-                alt={card?.[currentImageIndex]?.image?.alternativeText || "banner"}
-                width={500}
-                height={548}
-                sizes="(max-width: 768px) 768px, 
+                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
+                />
+              )}
+              {card?.[currentImageIndex]?.image?.url && (
+                <Image
+                  key={`main-${currentImageIndex}`}
+                  src={card?.[currentImageIndex]?.image?.url}
+                  alt={
+                    card?.[currentImageIndex]?.image?.alternativeText ||
+                    "banner"
+                  }
+                  width={500}
+                  height={548}
+                  sizes="(max-width: 768px) 768px, 
                 (max-width: 1200px) 1200px, 
                 1000px"
-                className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
-              />
-            )}
+                  className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
+                />
+              )}
 
-            <Image
-              src="/images/home/star-white.svg"
-              alt="img"
-              width={72}
-              height={72}
-              className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-            />
-            <Image
-              src="/images/home/star-white.svg"
-              alt="img"
-              width={72}
-              height={72}
-              className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
-            />
-            <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
-            <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
-          </div>
+              <Image
+                src="/images/home/star-white.svg"
+                alt="img"
+                width={72}
+                height={72}
+                className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+              />
+              <Image
+                src="/images/home/star-white.svg"
+                alt="img"
+                width={72}
+                height={72}
+                className="absolute bottom-[50px] lg:bottom-[56px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
+              />
+              <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
+              <div className="absolute w-full bg-white bottom-[70px] lg:bottom-[90.5px] h-[1px]" />
+            </div>
           )}
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
+import { FadeInGroup, FadeInReveal } from "../ScrollReveal";
+import Button from "../Button";
 
 const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
   const { image, leftSection, righSection } = data;
@@ -36,30 +38,40 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
       </div>
 
       <div className="  lg:px-14 mb-0 lg:mt-60 z-10 w-full flex lg:flex-row flex-col justify-between container">
-        <div className="w-full lg:w-[63%] bg-white rounded-3xl relative ">
+        <FadeInReveal delay={0.2} className="w-full lg:w-[63%] bg-white rounded-3xl relative ">
           {/* Main Content Section - Always Visible */}
-          <div className="lg:pt-[40px] lg:pb-[70px] pt-7  flex flex-col">
+          <div className="lg:pt-[40px] lg:pb-[85px] pt-7  flex flex-col">
             {leftSection?.title && (
-              <H2 className="lg:w-[85%] w-full pb-6 px-[20px] lg:px-[42px]">
+              <H2 className="lg:w-[85%] w-full pb-4 md:px-[20px] lg:px-[42px]">
                 {leftSection?.title}
               </H2>
             )}
 
             {leftSection?.description && (
-              <BodyText1 className="pb-7 px-[20px] lg:px-[42px]">
+              <BodyText1 className="pb-7 md:px-[20px] lg:px-[42px]">
                 {leftSection?.description}
               </BodyText1>
             )}
 
+            {leftSection?.ctaButton?.title && (
+              <Button
+                title={leftSection?.ctaButton?.title}
+                href={leftSection?.ctaButton?.hasExternalLink == "true" ? leftSection?.ctaButton?.externalLink : leftSection?.ctaButton?.link?.link}
+                useTargetBlank={leftSection?.ctaButton?.hasExternalLink === "true"}
+                secondary
+                className="md:mx-[20px] lg:mx-[42px] mb-[40px]"
+              />
+            )}
+
             <div
-              className={`hidden lg:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 overflow-hidden ${isOpen ? "rounded-2xl h-full" : "rounded-b-3xl h-[84px]"
+              className={`hidden lg:block absolute bottom-0  w-full transition-all duration-700 bg-gradient-orange-3 overflow-hidden ${isOpen ? "rounded-2xl h-full" : "rounded-b-3xl h-[76px]"
                 }`}
             >
               {/* Accordion Header - Always Visible */}
               {leftSection?.accordion?.title && (
                 <button
                   onClick={toggleAccordion}
-                  className="w-full py-6 px-[42px] flex justify-between items-center cursor-pointer"
+                  className="w-full py-5 px-[42px] flex justify-between items-center cursor-pointer relative z-10"
                 >
                   <SubH2 className="text-white">
                     {leftSection?.accordion?.title}
@@ -72,13 +84,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                   </span>
                 </button>
               )}
-
-              {/* Accordion Content - Collapsible */}
-              {leftSection?.accordion?.items?.length > 0 && (
-                <div 
-                  data-lenis-prevent
-                  className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
-                >
+              {isOpen && (
                   <Image
                     src="/images/home/flower-t.svg"
                     alt="img"
@@ -86,6 +92,20 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                     height={245}
                     className="absolute bottom-[-35px] md:bottom-[-40px] -right-[30px] md:-right-[50px] w-[245px] h-[245px]"
                   />
+              )}
+              {/* Accordion Content - Collapsible */}
+              {leftSection?.accordion?.items?.length > 0 && (
+                <div 
+                  data-lenis-prevent
+                  className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
+                >
+                  {/* <Image
+                    src="/images/home/flower-t.svg"
+                    alt="img"
+                    width={245}
+                    height={245}
+                    className="absolute bottom-[-35px] md:bottom-[-40px] -right-[30px] md:-right-[50px] w-[245px] h-[245px]"
+                  /> */}
                   {/* Capabilities List */}
                   <div className="px-[42px] pb-9">
                     <div className="space-y-4 ">
@@ -96,9 +116,9 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                               <Image
                                 src="/images/star.png"
                                 alt="check-icon"
-                                width={20}
-                                height={20}
-                                className=""
+                                width={16}
+                                height={16}
+                                className="mt-[4px]"
                               />
                               <BodyText2 className="text-white">
                                 {capability?.title}
@@ -112,10 +132,10 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               )}
             </div>
           </div>
-        </div>
+        </FadeInReveal>
 
         <div
-          className={`block lg:hidden mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mb-9`}
+          className={`block lg:hidden md:mx-3 w-auto transition-all duration-700 bg-gradient-orange-3 rounded-2xl mb-9`}
         >
           {/* Accordion Header - Always Visible */}
           {leftSection?.accordion?.title && (
@@ -154,9 +174,9 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                           <Image
                             src="/images/star.png"
                             alt="check-icon"
-                            width={20}
-                            height={20}
-                            className=""
+                            width={14}
+                            height={14}
+                            className="mt-[3px]"
                           />
                           <BodyText2 className="text-white">
                             {capability?.title}
@@ -171,14 +191,15 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
         </div>
 
         {/* <div className="w-full lg:w-[45%] flex justify-center items-center flex-wrap gap-[2%] lg:gap-6 z-[1]"> */}
-        <div className="grid grid-cols-2 grid-rows-2 gap-4 z-[1] relative lg:w-[35%] w-full">
+        {/* <FadeInGroup delay={0.2}> */}
+        <FadeInGroup delay={0.2} className="grid grid-cols-2 grid-rows-2 gap-4 z-[1] relative lg:w-[35%] w-full">
           {righSection?.values?.map((item, index) => (
             <div
-              className="bg-grey-100 py-[27px] px-[24px] rounded-[20px] stat-box  "
-              key={"item_" + index}
+              className="bg-grey-100 py-[28px] lg:px-[24px] px-[20px] rounded-[20px] stat-box  "
+              key={"item_" + index} data-scroll
             >
               {item?.value && (
-                <H2 className="text-orange-200">{item?.value}</H2>
+                <H2 className="text-orange-200 !text-[40px] lg:!text-[60px]">{item?.value}</H2>
               )}
               {item?.description && (
                 <BodyText2 className="lg:w-[80%] w-full">
@@ -187,7 +208,8 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               )}
             </div>
           ))}
-        </div>
+        </FadeInGroup>
+        {/* </FadeInGroup> */}
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { BodyText2, BodyText3, H2, SubH1 } from "../Typography2";
+import { useState } from "react";
+import { BodyText2, H2 } from "../Typography2";
 import DesktopMapSvg from "../global-reach/DesktopMapSvg";
 import Image from "next/image";
 import { useMargin } from "@/app/contexts/MarginContext";
@@ -25,8 +25,8 @@ const HomeMap = () => {
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
           Growing Across Markets and Beyond Borders
         </H2>
-        <div className="relative w-full h-[180px] lg:h-[550px] mb-[100px]">
-          <div className="w-fit h-full mx-auto hidden lg:block relative ">
+        <div className="relative w-full h-[180px] lg:h-[550px] mb-[50px] lg:mb-[100px] ">
+          <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
             <DesktopMapSvg
               hoverRestWorld={() => setActiveBlip(0)}
               hoverNorthAmerica={() => setActiveBlip(1)}
@@ -40,216 +40,13 @@ const HomeMap = () => {
               fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
               fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
               fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
+              isActive0={activeBlip === 0 ? true : false}
+              isActive1={activeBlip === 1 ? true : false}
+              isActive2={activeBlip === 2 ? true : false}
+              isActive3={activeBlip === 3 ? true : false}
+              isActive4={activeBlip === 4 ? true : false}
+              isActive5={activeBlip === 5 ? true : false}
             />
-            <div
-              onMouseEnter={() => setActiveBlip(0)}
-              className="absolute top-[78%] left-[5.5%]  cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 0
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                }    transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 0 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  3%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 0 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  Rest of the world
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 0
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
-            {/* North America */}
-            <div
-              onMouseEnter={() => setActiveBlip(1)}
-              className="absolute top-[21.5%] left-[12.5%] cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 1
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 1 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  18%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 1 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  North America
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 1
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
-            {/* Europe */}
-            <div
-              onMouseEnter={() => setActiveBlip(2)}
-              className="absolute top-[20.5%] left-[43%] cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 2
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 2 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  4%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 2 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  Europe
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 2
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
-            {/* Middle East */}
-            <div
-              onMouseEnter={() => setActiveBlip(3)}
-              className="absolute top-[33%] left-[53%] cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 3
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 3 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  23%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 3 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  Middle East
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 3
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
-            {/* India */}
-            <div
-              onMouseEnter={() => setActiveBlip(4)}
-              className="absolute top-[36%] left-[64.5%] cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 4
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 4 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  46%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 4 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  India
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 4
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
-            {/* Rest of Asia */}
-            <div
-              onMouseEnter={() => setActiveBlip(5)}
-              className="absolute top-[19%] left-[76.3%] cursor-pointer"
-            >
-              <div
-                className={`${
-                  activeBlip === 5
-                    ? "bg-gradient-orange-1 border-transparent"
-                    : "bg-white border-gray-200"
-                } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-              >
-                <SubH1
-                  className={`${
-                    activeBlip === 5 ? "text-white" : "text-orange-100"
-                  } !text-[28px]`}
-                >
-                  6%
-                </SubH1>
-                <BodyText3
-                  className={`${
-                    activeBlip === 5 ? "text-white" : "text-grey-400"
-                  } !text-[12px]`}
-                >
-                  Rest of Asia
-                </BodyText3>
-                <div
-                  className={`${
-                    activeBlip === 5
-                      ? "bg-[#e3590c] border-none"
-                      : "bg-white blip-border"
-                  } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                ></div>
-              </div>
-            </div>
           </div>
           <Image
             src="/images/global-reach/gr-map-m.svg"
@@ -257,6 +54,7 @@ const HomeMap = () => {
             fill
             className="object-contain block lg:hidden"
           />
+          <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:block hidden">*% indicate revenue breakup by market share.</p>
         </div>
         <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
           {mobileStatsData?.map((items) => {
@@ -273,6 +71,8 @@ const HomeMap = () => {
             );
           })}
         </div>
+
+        <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:hidden block">*% indicate revenue breakup by market share.</p>
       </div>
     </div>
   );

@@ -135,11 +135,14 @@ export default function SearchResults() {
   };
 
   const getUrl = (hit: HitProps) => {
+    console.log(hit);
     if (hit?._index === "products") return `/products/${hit.slug}`;
     if (hit?._index === "disclosures_reports")
       return `/investors/disclosures/${hit.slug}`;
     if (hit?.type === "case-study") return `/case-studies/${hit.slug}`;
     if (hit?.type === "blog") return `/blogs/${hit.slug}`;
+    if (hit?.type === "blog") return `/blogs/${hit.slug}`;
+    if (hit?.slug === "sustainability-report") return `/sustainability-report`;
 
     return `/${hit?.searchUrl}`;
   };
@@ -219,7 +222,7 @@ export default function SearchResults() {
           value={searchValue}
           onChange={handleChange}
           handleSearch={handleSearch}
-          placeholder="Search..."
+          placeholder="Find products, reports & more"
           headerSearch={true}
           className="border-[2px] border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
         />
@@ -248,6 +251,7 @@ export default function SearchResults() {
               title={hit?.title || hit?.productName || hit?.category || ""}
               link={getUrl(hit)}
               useTargetBlank={false}
+              titleClassName="capitalize"
             />
           ))}
 

@@ -11,10 +11,10 @@ export type IndustryBannerProps = {
 
 export type IndustryInfoProps = {
   data: {
-    title: string;
-    description: string;
-    image: ImageProps;
-    mobImage: ImageProps;
+    description?: string;
+    image?: ImageProps;
+    mobImage?: ImageProps;
+    subDescription?:string;
   };
 };
 
@@ -42,8 +42,9 @@ export type OurPortfolioProps = {
 export type IndustryExpProps = {
   data: {
     exploreMore: {
-      title: string;
-      ctaButton: ButtonProps[];
+      title?: string;
+      ctaButton?: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

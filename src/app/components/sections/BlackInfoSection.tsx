@@ -1,8 +1,9 @@
 import Image from "next/image";
-import React from "react";
-import { BodyText1, H2 } from "../Typography2";
+import { BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
+import ParallaxImage from "../ParallaxImage";
+import clsx from "clsx";
 
 type BlackInfoSectionProps = {
   image?: string;
@@ -13,6 +14,7 @@ type BlackInfoSectionProps = {
   description?: string;
   ctaTitle?: string;
   ctaLink?: string;
+  overlayClassName?: string;
 };
 
 const BlackInfoSection = ({
@@ -24,6 +26,7 @@ const BlackInfoSection = ({
   description,
   ctaTitle,
   ctaLink,
+  overlayClassName
 }: BlackInfoSectionProps) => {
   return (
     <>
@@ -35,19 +38,23 @@ const BlackInfoSection = ({
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-black/20 " />
+          {/* <div className="absolute inset-0 bg-black/20 " /> */}
         </div>
       )}
       <div className="w-full relative lg:h-[calc(100vh-70px)]">
         {image && (
           <div className="relative w-full h-full">
-            <Image
+            <ParallaxImage
               src={image}
               alt={alt ? alt : "banner"}
-              fill
-              className="hidden lg:block object-top object-cover"
+              className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
             />
-            <div className="absolute inset-0 bg-black/30" />
+            <div
+              className={clsx(
+                `absolute inset-0 bg-black/20 hidden lg:block `,
+                overlayClassName
+              )}
+            />
           </div>
         )}
         <div className="lg:absolute w-full lg:py-[80px] px-[20px] lg:px-[60px] top-0 flex flex-col justify-between h-full">
@@ -58,12 +65,12 @@ const BlackInfoSection = ({
               </H2>
             </FadeInReveal>
           )}
-          <div className="grid mt-[12px] lg:mt-[90px] xl:justify-end">
+          <div className="grid mt-[12px] lg:mt-[90px] xl:justify-end max-w-[540px] ml-auto">
             <FadeInReveal>
               {description && (
-                <BodyText1 className="xl:max-w-[620px] text-grey-400 lg:text-white">
+                <BodyText2 className="max-w-[540px] text-grey-400 lg:text-[#F7F9FA]">
                   {description}
-                </BodyText1>
+                </BodyText2>
               )}
               {ctaLink && ctaTitle && (
                 <div className="mt-[28px] lg:mt-[38px]">

@@ -1,4 +1,3 @@
-
 import { ButtonProps, ImageProps } from "./global.type";
 
 export type SocialHealthAndSafetyBannerProps = {
@@ -8,8 +7,7 @@ export type SocialHealthAndSafetyBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
-    btnTitle: string;
-    btnLink: string;
+    ctaButton: ButtonProps;
   };
 };
 
@@ -57,11 +55,13 @@ export type EducationDevelopmentProps = {
       image: ImageProps;
       mobImage: ImageProps;
       bulletPointsTitle: string;
-      bulletPoints: {
-        title: string;
+      bulletPoints?: {
+        title?: string;
+      }[];
+      BulletPoints?: {
+        title?: string;
       }[];
     }[];
-     
   };
 };
 export type ImpactStoriesSliderProps = {
@@ -77,7 +77,6 @@ export type ImpactStoriesSliderProps = {
         title: string;
         description: string;
       }[];
-      
     }[];
   };
 };
@@ -114,6 +113,21 @@ export type SocialExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
+      formTitle?: string;
+    }[];
+  };
+};
+
+export type StatsSectionProps = {
+  data: {
+    leftText?: string;
+    rightSection?: {
+      id?: number;
+      value?: string;
+      description?: string;
+      image?: ImageProps;
+      mobImage?: ImageProps;
+      bottomText?: string;
     }[];
   };
 };

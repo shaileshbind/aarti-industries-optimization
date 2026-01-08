@@ -11,15 +11,18 @@ import SliderCard from "../cards/SliderCard";
 import { H2 } from "../Typography2";
 import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
+// import { isMobile } from "react-device-detect";
+import {useMediaQuery} from "@mui/material";
+import { FadeInReveal } from "../ScrollReveal";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
 
 const PeopleVision = ({ data }: LAAVisionProps) => {
-  const { title, content, images } = data;
-
+  const { title, content } = data;
+  const isMobile = useMediaQuery("(max-width:600px)");
   const triggerRef = useRef<HTMLDivElement>(null);
-
+  const tabBarContainerRef = useRef<HTMLDivElement>(null);
   const sustainbleLogo = useRef<HTMLDivElement>(null);
   const susLogotl = useRef<HTMLElement>(null);
   const susLogotr = useRef<HTMLElement>(null);
@@ -39,7 +42,16 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
   const contentContainerRef = useRef<HTMLDivElement>(null);
-
+  const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
+  const [slideWidth, setSlideWidth] = useState(0);
+  
+  // Calculate slideWidth after component mounts (client-side only)
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setSlideWidth((window.innerWidth / 1.27) * 40 / 100);
+    }
+  }, []);
+  
   const { setMarginBottom } = useMargin();
 
   const [indicator, setIndicator] = useState({
@@ -113,7 +125,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       }
 
       gsap.set(envSlider.current, { opacity: 0 });
-
+      gsap.set(".leafStag", { opacity: 0, scale: 0.5, transformOrigin: "center center" });
       const animationEndProgress = 0.55;
       const animationScrollDistance = isMobile
         ? window.innerHeight * 1.5
@@ -132,6 +144,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           invalidateOnRefresh: true,
           refreshPriority: 0,
           onUpdate: (self) => {
+            if(!isMobile) {
             if (
               self.progress >= animationEndProgress &&
               swiperRef.current &&
@@ -154,6 +167,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                 setActiveTab(index);
               }
             }
+          }
           },
           onLeave: () => {
             if (!isMobile && tabsRef.current) {
@@ -179,10 +193,16 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
       if (isMobile) {
         mainTl
+          // .fromTo(
+          //   sustainbleLogo.current,
+          //   { height: "0px" },
+          //   { height: "203px", duration: 6 }
+          // )
           .fromTo(
-            sustainbleLogo.current,
-            { height: "0px" },
-            { height: "203px", duration: 6 }
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 1, stagger: 0.1, ease:"power4.inOut",  
+            }
           )
           .fromTo(
             susLogotl.current,
@@ -203,9 +223,15 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px", right: 0, top: 0 },
-            { width: window.innerWidth - 40, right: 20, duration: 1 }
+            { width: "100px", height: "100px", right: 0, top: 0 },
+            { width: window.innerWidth - 40, height: '250px', right: 20, top: '140px',  duration: 1 }
           )
+          // .fromTo(
+          //   '.leafBigImg',
+          //   { scale: '2' },
+          //   { scale: '1', duration: 1 },
+          //   "<"
+          // )
           .fromTo(
             sustainbleLogo.current,
             {
@@ -213,21 +239,26 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
               height: "206px",
               left: "50%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width: "100%",
-              height: "500px",
+              height: "100vh",
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
             "<"
           )
-          .to(titleSection.current, { opacity: 0, duration: 0.5 })
+          // .to(titleSection.current, { opacity: 0, duration: 0.5 })
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+          )
           .fromTo(
             envSlider.current,
             { opacity: 0 },
@@ -242,10 +273,17 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           );
       } else {
         mainTl
+          // .fromTo(
+          //   sustainbleLogo.current,
+          //   { width: "0px" },
+          //   { width: "206px", duration: 1 }
+          // )
           .fromTo(
-            sustainbleLogo.current,
-            { width: "0px" },
-            { width: "206px", duration: 1 }
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 0.3, stagger: 0.1, ease:"power4.inOut",  
+            },
+             "<0.2"
           )
           .fromTo(
             susLogotl.current,
@@ -266,9 +304,15 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px" },
-            { width: "500px", duration: 1 }
+            { width: "100px", height: "100px" },
+            { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
+          // .fromTo(
+          //   '.leafBigImg',
+          //   { scale: '2', objectPosition: 'top-left' },
+          //   { scale: '1', objectPosition: 'center', duration: 1 },
+          //   "<"
+          // )
           .fromTo(
             sustainbleLogo.current,
             {
@@ -276,29 +320,37 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
               height: "206px",
               left: "52%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
-              width: "500px",
-              height: "500px",
+              width:  () => `${slideWidth}px`,
+              height:  () => `${slideWidth}px`,
+
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
             "<"
           )
-          .to(titleSection.current, {
-            opacity: 0,
-            duration: 1,
-            filter: "blur(50px)",
-          })
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+             
+          )
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<0.3"
+          )
+          .fromTo(
+            '.sliderStagger',
+            { opacity: 0, x : 100 },
+            { opacity: 1, x : 0, duration: 0.7, stagger: 0.1, ease:"power4.inOut",   },
             "<"
           )
           .fromTo(
@@ -314,7 +366,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       ctx.revert();
       requestAnimationFrame(() => ScrollTrigger.refresh());
     };
-  }, [content]);
+  }, [content, slideWidth]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -376,13 +428,22 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     };
   }, [activeTab, content?.length, setMarginBottom]);
 
-  
+  const handlMobileTabClick = (index: number) => {
+    if(index === activeTabMob) return;
+    const swiper = swiperRef.current;
+    if(swiper && !swiper.destroyed) {
+        swiper.slideTo(index);
+        setActiveTabMob(index);
+    }
+};
   return (
     <>
       {title && (
+        <FadeInReveal delay={0.6}>
         <H2 className="text-center max-w-[780px] mx-[20px] lg:mx-auto ">
           {title}
         </H2>
+        </FadeInReveal>
       )}
       <div
         ref={triggerRef}
@@ -397,65 +458,83 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             {/* LEAF LOGOs */}
             <div
               ref={sustainbleLogo}
-              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+              className="flex w-[206px]  h-[206px] overflow-hidden absolute"
             >
               <span
                 ref={sustainInner}
                 className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
               >
-                {images?.leftTop?.url && (
-                  <i ref={susLogotl} className="absolute top-0 left-0">
+                {content?.[0]?.card?.[0]?.image?.url && (
+                  <i ref={susLogotl} className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden">
                     <Image
-                      src={images.leftTop.url}
-                      alt={images.leftTop.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={content?.[0]?.card?.[0]?.image?.url || ""}
+                      alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
+                      fill
                       priority
+                      className="object-cover object-center"
                     />
                   </i>
                 )}
-                {images?.rightTop?.url && (
-                  <i ref={susLogotr} className="absolute top-0 right-0">
-                    <Image
-                      src={images.rightTop.url}
-                      alt={images.rightTop.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                {content?.[0]?.card?.[0]?.image?.url && (
+                  <i ref={susLogotr} className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]">
+                    {/* <Image
+                      src={content?.[0]?.card?.[0]?.image?.url || ""}
+                      alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
+                      fill
                       priority
-                      className="w-full h-full"
+                      className="object-cover"
+                    /> */}
+                    <span ref={susLogoinnerblurtr}  className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0">
+                      <Image
+                        src={content?.[0]?.card?.[0]?.image?.url || ""}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className="leafBigImg object-cover blur object-center"
+                      />
+                    </span>
+                    <span className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
+                      <Image
+                        src={content?.[0]?.card?.[0]?.image?.url || ""}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className="leafBigImg object-cover object-center"
+                      />
+                    </span>
+                  </i>
+                )}
+                
+                {content?.[0]?.card?.[0]?.image?.url && (
+                  <i ref={susLogobr} className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
+                    <Image
+                      src={content?.[0]?.card?.[0]?.image?.url || ""}
+                      alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
+                      fill
+                      priority
+                      className="object-cover object-center"
                     />
                   </i>
                 )}
-                {images?.leftBottom?.url && (
-                  <i ref={susLogobl} className="absolute bottom-0 left-0">
+                {content?.[0]?.card?.[0]?.image?.url && (
+                  <i ref={susLogobl} className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
-                      src={images.leftBottom.url}
-                      alt={images.leftBottom.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={content?.[0]?.card?.[0]?.image?.url || ""}
+                      alt={content?.[0]?.card?.[0]?.image?.alternativeText || "icon"}
+                      fill
                       priority
-                    />
-                  </i>
-                )}
-                {images?.rightBottom?.url && (
-                  <i ref={susLogobr} className="absolute bottom-0 right-0">
-                    <Image
-                      src={images.rightBottom.url}
-                      alt={images.rightBottom.alternativeText || "icon"}
-                      width={99}
-                      height={101}
-                      priority
+                      className="object-cover object-center"
                     />
                   </i>
                 )}
               </span>
             </div>
           </div>
-        </div>
+        
         {/* Slider Section */}
         <div
           ref={envSlider}
-          className="w-full  bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
+          className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0 z-20 xxx"
         >
           {/* Desktop Slider */}
           <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
@@ -483,7 +562,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                 }}
               >
                 {content?.map((section: any) =>
-                  section?.card?.map((slide: any) => (
+                  section?.card?.map((slide: any, index: number) => (
                     <SwiperSlide key={slide?.id}>
                       <SliderCard
                         imgSrc={slide?.image?.url}
@@ -494,6 +573,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                         ctaButton={slide?.ctaButton}
                         heading={slide?.title}
                         bullets={slide?.BulletPoints}
+                        index={index}
                       />
                     </SwiperSlide>
                   ))
@@ -554,7 +634,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh] ">
             <div className="relative" ref={contentContainerRef}>
               <div className="w-full absolute mt-[70px]">
-                <div className="overflow-x-auto mb-6">
+                {/* <div className="overflow-x-auto mb-6">
                   <div className="bg-grey-100 rounded-[40px] p-[4px] flex gap-2 w-full justify-between md:w-[50%] mx-[unset] md:mx-auto">
                     {content?.map((item: any, index: number) =>
                       item?.category ? (
@@ -572,9 +652,57 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       ) : null
                     )}
                   </div>
+                </div> */}
+                <div className="pt-[10px]" ref={tabBarContainerRef}>
+            {content && content.length > 0 && isMobile && (
+                <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+                  <div
+                    ref={containerRef}
+                    className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                  >
+                    {/* Animated Indicator */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: indicator.visible ? indicator.left : 0,
+                        top: 0,
+                        height: "100%",
+                        borderRadius: 9999,
+                        background: indicatorColor,
+                        width: indicator.visible ? indicator.width : 0,
+                        transition: indicatorTransition,
+                        zIndex: 0,
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    {/* Tab Buttons */}
+                    {content?.map(
+                      (items: any, index: number) =>
+                        items?.category && (
+                          <div
+                            key={index}
+                            ref={(element) => {
+                              tabRefs.current[index] = element;
+                            }}
+                            onClick={() => handlMobileTabClick(index)}
+                            className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                              activeTab === index
+                                ? "text-white"
+                                : "hover:bg-grey-200"
+                            }`}
+                          >
+                            {items?.category}
+                          </div>
+                        )
+                    )}
+                  </div>
                 </div>
-                <div className="grid items-center gap-6">
-                  {content
+              )}
+          </div>
+                <div className="grid items-center gap-6 mt-4">
+                  {/* {content
                     ?.filter((_: any, index: number) => index === activeTabMob)
                     ?.map((section: any) =>
                       section?.card?.map((slide: any) => (
@@ -591,12 +719,55 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                           />
                         </SwiperSlide>
                       ))
-                    )}
+                    )} */}
+                    {isMobile && (
+                  <Swiper
+                slidesPerView={1}
+                loop={false}
+                allowTouchMove={true}
+                speed={600}
+                watchSlidesProgress={true}
+                updateOnWindowResize={true}
+                className="w-full h-auto"
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  swiper.on("resize", () => {
+                    swiper.updateSize();
+                    swiper.updateSlides();
+                    swiper.updateProgress();
+                    swiper.updateSlidesClasses();
+                     
+                  });
+                }}
+                onSlideChange={(swiper) => {
+                  setActiveTab(swiper.activeIndex);
+                }}
+              >
+                 {content?.map((section: any) =>
+                  section?.card?.map((slide: any, index: number) => (
+                    <SwiperSlide key={slide?.id}>
+                      <SliderCard
+                        imgSrc={slide?.image?.url}
+                        imgAlt={slide?.image?.alternativeText || "banner"}
+                        title={section?.category} // parent category
+                        description={slide?.description}
+                        values={slide?.values}
+                        ctaButton={slide?.ctaButton}
+                        heading={slide?.title}
+                        bullets={slide?.BulletPoints}
+                        index={index}
+                      />
+                    </SwiperSlide>
+                  ))
+                )}
+              </Swiper>
+                )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

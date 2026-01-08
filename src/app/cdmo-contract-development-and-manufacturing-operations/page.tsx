@@ -1,4 +1,3 @@
-import React from "react";
 import CDMOBanner from "../components/cdmo/CDMOBanner";
 import CDMODriving from "../components/cdmo/CDMODriving";
 import CDMOE2E from "../components/cdmo/CDMOE2E";
@@ -28,15 +27,18 @@ const Page = async () => {
     section_seven,
     section_eight,
   } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "CDMO"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/cdmo-contract-development-and-manufacturing-operations"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/cdmo-contract-development-and-manufacturing-operations"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -49,10 +51,15 @@ const Page = async () => {
         schemaData={seo?.schemaData}
       />
       {section_one && <CDMOBanner data={section_one} />}
-      {section_two && <GridCardsContainer data={section_two} />}
+      {section_two && (
+        <GridCardsContainer
+          data={section_two}
+          className="lg:py-[100px] py-[50px] pt-0"
+        />
+      )}
       {section_three && <CDMODriving data={section_three} />}
       {section_four && <CDMOE2E data={section_four} />}
-      {section_five && <CardsSlider data={section_five} />}
+      {section_five && <CardsSlider data={section_five} useLink />}
       {section_six && <CDMOSafegreen data={section_six} />}
       {section_seven && (
         <GloballyCertified

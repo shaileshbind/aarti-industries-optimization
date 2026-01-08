@@ -2,7 +2,6 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import SEO from "@/app/components/SEO";
 import { BodyText2, H1 } from "@/app/components/Typography2";
 import { notFound } from "next/navigation";
-import React from "react";
 
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;

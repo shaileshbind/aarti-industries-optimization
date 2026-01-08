@@ -21,7 +21,7 @@ const OurPhilosophy: React.FC<OurPhilosophyProps> = ({ data }) => {
                     fill
                     className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
                   />
-                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm"></i>
+                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm bg-white/30"></i>
                   <span className="absolute bottom-0 right-0 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-[95%] h-[100%]">
                     <Image
                       src={image?.url}

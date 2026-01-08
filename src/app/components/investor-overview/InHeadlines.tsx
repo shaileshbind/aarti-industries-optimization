@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { BodyText2, H2, SubH2 } from "../Typography2";
 import Button from "../Button";
 import DateCard from "../cards/DateCard";
@@ -9,11 +8,13 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel } from "swiper/modules";
 import { InvestorHeadlines } from "@/app/types/investor-overview.type";
 import Link from "next/link";
+import { formatDate } from "../../../../utils/formatDate";
+import { FadeInReveal } from "../ScrollReveal";
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
   return (
-    <div className="my-[72px] lg:my-[120px]">
+    <FadeInReveal className="my-[72px] lg:my-[120px]">
       {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
       <div className="mt-[30px] grid lg:grid-cols-[300px_1fr] gap-y-[50px] gap-x-[60px] mx-[unset] lg:mx-[60px]">
         <div className="mx-[20px] lg:mx-[unset]">
@@ -22,26 +23,36 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases?.slice(0, 4).map((release, index) =>
-            // release?.report?.map((item) => (
-                <Link href={release?.file?.url || '#'} target="_blank" key={index}>
-                <div
-                key={index}
-                className="pb-[14px] border-b border-grey-200 mb-[14px]"
-              >
-                <BodyText2>{release?.heading}</BodyText2>
-                <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                  {release?.date}
-                </BodyText2>
-              </div>
-            </Link>
-          )}
+          {pressRelease?.press_releases
+            ?.filter((release) => release?.file?.url || release?.slug)
+            .slice(0, 4)
+            .map((release, index) => {
+              const href = release?.file?.url || `press-releases/${release?.slug}`;
+              if (!href) return null;
+              return (
+                <Link href={href} target="_blank" key={index}>
+                  <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
+                    {release?.heading && (
+                      <BodyText2>{release.heading}</BodyText2>
+                    )}
+                    {release?.date && (
+                      <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
+                        {formatDate(release.date)}
+                      </BodyText2>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           {pressRelease?.ctaButton?.externalLink &&
             pressRelease?.ctaButton?.title && (
               <Button
                 secondary
-                // href={pressRelease?.ctaButton?.externalLink}  
-                href={pressRelease.ctaButton?.hasExternalLink == "true" ? pressRelease.ctaButton?.externalLink : pressRelease.ctaButton?.link?.link}
+                href={
+                  pressRelease.ctaButton?.hasExternalLink == "true"
+                    ? pressRelease.ctaButton?.externalLink
+                    : pressRelease.ctaButton?.link?.link
+                }
                 title={pressRelease?.ctaButton?.title}
                 className="mt-[10px] lg:mt-[30px]"
               />
@@ -55,9 +66,15 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               </H2>
             )}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              (mediaCoverage?.ctaButton?.[0]?.externalLink || mediaCoverage?.ctaButton?.[0]?.link?.link && mediaCoverage?.ctaButton?.[0]?.link?.link !== "#") && (
+              (mediaCoverage?.ctaButton?.[0]?.externalLink ||
+                (mediaCoverage?.ctaButton?.[0]?.link?.link &&
+                  mediaCoverage?.ctaButton?.[0]?.link?.link !== "#")) && (
                 <Button
-                  href={mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true" ? mediaCoverage?.ctaButton?.[0]?.externalLink : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"}
+                  href={
+                    mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                      ? mediaCoverage?.ctaButton?.[0]?.externalLink
+                      : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"
+                  }
                   title={mediaCoverage?.ctaButton?.[0]?.title}
                   secondary
                 />
@@ -101,7 +118,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                     <DateCard
                       key={news?.id}
                       imageSrc={news?.image?.url}
-                      date={news?.date}
+                      date={formatDate(news?.date ?? "")}
                       desc={news?.newsDescription}
                       link={news?.ctaButton?.externalLink}
                     />
@@ -110,12 +127,14 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               })}
             </Swiper>
           </div>
-          <div className="w-full pt-[24px] px-5 lg:px-0">
-            <div className="in-headlines-section-progressbar h-[2px] z-[1] w-full lg:hidden" />
+          <div className="w-full pt-[24px] lg:hidden">
+            <div className="mx-[20px] relative h-[2px]">
+               <div className="in-headlines-section-progressbar !static !w-full h-full" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </FadeInReveal>
   );
 };
 

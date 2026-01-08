@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import clsx from "clsx";
@@ -133,7 +133,10 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
         )}
       >
         {/* Report list */}
-        <div className="lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+        <div
+          className="lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+          data-lenis-prevent
+        >
           {/* Desktop - show all */}
           <div className="hidden lg:block">
             {allReports?.map((item) => (

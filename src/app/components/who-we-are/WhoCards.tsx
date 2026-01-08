@@ -60,8 +60,8 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
       <div className="mt-[40px] lg:mt-[140px] max-w-[unset] lg:max-w-[1048px] mx-auto ">
         <div ref={wrapperRefBox} className="w-full h-auto mx-auto">
           {cards?.length > 0 && (
-            <div className="grid grid-cols-[1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-[6px]">
+            <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
+              <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px] relative z-[1]">
                 {cards?.slice(0, 4)?.map((items) => {
                   return (
                     <NumberCard
@@ -69,12 +69,14 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
                       title={items?.value}
                       desc={items?.description}
                       imageSrc={items?.image?.url}
+                      bottomText={items?.bottomText}
                       className="stat-box"
+                      titleClassName={"text-[28px] lg:text-[44px]"}
                     />
                   );
                 })}
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-[6px]">
+              <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px] relative z-[1]">
                 {cards?.slice(4, 8)?.map((items) => {
                   return (
                     <NumberCard
@@ -82,7 +84,9 @@ const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
                       title={items?.value}
                       desc={items?.description}
                       imageSrc={items?.image?.url}
+                      bottomText={items?.bottomText}
                       className="stat-box"
+                      titleClassName={"text-[28px] lg:text-[44px]"}
                     />
                   );
                 })}

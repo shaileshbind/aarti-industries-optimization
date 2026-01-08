@@ -1,4 +1,3 @@
-import React from "react";
 import SusBanner from "../components/sustainability-overview/SusBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
@@ -40,7 +39,7 @@ const page = async () => {
         <SusBanner data={section_one} />
         <SusCore data={section_two} />
         <AILRoadmap data={section_three} />
-        <div className="pt-[160px] pb-[80px] mb-[50px] md:mb-[unset]">
+        <div className="pt-[160px] pb-[80px] mb-[50px]">
           <RespGrowth data={section_four} />
         </div>
         {globallyCertifiedData && (

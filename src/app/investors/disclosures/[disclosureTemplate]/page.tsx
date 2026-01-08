@@ -3,7 +3,6 @@ import GloballyCertified from "@/app/components/GloballyCertified";
 import IntimationOfStockExchange from "@/app/components/investor-templates/disclosure/IntimationOfStockExchange";
 import OrangeCardCategoryListingPage from "@/app/components/investor-templates/disclosure/OrangeCardCategoryListingPage";
 import { notFound } from "next/navigation";
-import React from "react";
 
 type PageProps = {
   params: Promise<{
@@ -20,7 +19,7 @@ export default async function page({ params }: PageProps) {
   const templates = ["intimation-of-stock-exchange"];
 
   const orangeCardCategoryListingPages = [
-    "disclosure",
+    "overview",
     "corporate-restructuring",
     "regulation",
   ];
@@ -46,7 +45,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div>
+    <div data-lenis-prevent>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (

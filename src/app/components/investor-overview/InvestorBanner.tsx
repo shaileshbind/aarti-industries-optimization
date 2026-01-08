@@ -1,4 +1,3 @@
-import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { InvestorBannerProps } from "@/app/types/investor-overview.type";
 
@@ -17,9 +16,9 @@ const InvestorBanner = ({ data }: InvestorBannerProps) => {
         alt={image?.alternativeText}
         mobAlt={mobImage?.alternativeText}
         fullBg
+        useTargetBlank={ctaButton?.hasExternalLink === "true"}
         showStar2={false}
         showStar3={false}
-        useTargetBlank={ctaButton?.hasExternalLink === "true"}
       />
     </div>
   );

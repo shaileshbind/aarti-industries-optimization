@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ImageProps } from "@/app/types/global.type";
+import { useMediaQuery } from "@mui/material";
 
 export type FinancialBannerProps = {
   data: {
@@ -13,20 +15,19 @@ export type FinancialBannerProps = {
 
 const FinancialBanner: React.FC<FinancialBannerProps> = ({ data }) => {
   const { title, description, image, mobImage } = data;
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   return (
     <HeroBanner
       title={title}
       desc={description}
       fullBg
-      centerText={true}
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
-      showStar3={false}
-      lineClassName="hidden md:block"
-      bottomMiddleStarClassName="hidden md:block"
     />
   );
 };

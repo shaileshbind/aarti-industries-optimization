@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { H2 } from "../Typography2";
 import DateCard from "../cards/DateCard";
 import "swiper/css";
@@ -9,6 +9,7 @@ import { Mousewheel, Pagination } from "swiper/modules";
 import { EnvLifeProps } from "@/app/types/environment.type";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { FadeInReveal } from "../ScrollReveal";
 
 const EnvLatest = ({ data }: EnvLifeProps) => {
   const { post_categories, sectionTitle } = data;
@@ -17,16 +18,16 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
   const slides = post_categories[0]?.posts || [];
 
   return (
-    <div className="my-[50px] lg:my-[100px]">
+    <div className="my-[50px] lg:my-[100px] mb-[80px] lg:mb-[100px]">
       <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
-      <div className="mt-[52px]">
+      <div className="lg:mt-[52px] mt-[30px]">
         <Swiper
           spaceBetween={24}
           slidesPerView={1.5}
           breakpoints={{
-          768: { slidesPerView: 2.5 },
-          1024: { slidesPerView: 3 },
-          1440: { slidesPerView: 4 }, 
+            768: { slidesPerView: 2.5 },
+            1024: { slidesPerView: 3 },
+            1440: { slidesPerView: 4 },
           }}
           modules={[Pagination, Mousewheel]}
           pagination={{
@@ -45,18 +46,20 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
         >
           {slides.map((item, index) => (
             <SwiperSlide key={index}>
-              <DateCard
-                imageSrc={item?.image?.url}
-                date={item?.title}
-                desc={item?.description}
-                link={item?.slug}
-                animate
-              />
+              <FadeInReveal delay={0.4 * index}>
+                <DateCard
+                  imageSrc={item?.image?.url}
+                  date={item?.title}
+                  desc={item?.description}
+                  link={"/blogs/" + item?.slug}
+                  animate
+                />
+              </FadeInReveal>
             </SwiperSlide>
           ))}
         </Swiper>
         {/* Progress + Navigation Flex Below Swiper */}
-        <div className="mt-[16px] flex items-center gap-x-[12px] mx-[20px] lg:mx-[60px]">
+        <div className="mt-[30px] lg:mt-[16px] flex items-center gap-x-[12px] mx-[20px] lg:mx-[60px]">
           {/* Progress Bar */}
           <div className="flex-1 relative h-[1px]">
             <div className="env-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />

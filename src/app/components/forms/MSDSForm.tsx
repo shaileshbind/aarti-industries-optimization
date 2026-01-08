@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   TextField,
@@ -50,6 +50,7 @@ export default function MSDSForm({
       message: "",
     },
   });
+  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const businessCategories = [
     "Chemical",
@@ -82,7 +83,13 @@ export default function MSDSForm({
       });
 
       if (response.ok) {
-        setshowMSDSPopup?.(false);
+        setformSubmitted(true);
+
+        setTimeout(() => {
+          setshowMSDSPopup?.(false);
+          setformSubmitted(false);
+        }, 5000);
+
         reset();
         if (document) {
           const link = window.document.createElement("a");
@@ -133,6 +140,18 @@ export default function MSDSForm({
               error={!!errors.fullName}
               helperText={errors.fullName?.message}
               onKeyDown={(e) => {
+                if (
+                  e.key === "Backspace" ||
+                  e.key === "Delete" ||
+                  e.key === "ArrowLeft" ||
+                  e.key === "ArrowRight" ||
+                  e.key === "Tab" ||
+                  e.ctrlKey ||
+                  e.metaKey
+                ) {
+                  return;
+                }
+
                 // Prevent numbers and special characters, allow only letters and space
                 if (!/^[a-zA-Z\s]$/.test(e.key)) {
                   e.preventDefault();
@@ -213,6 +232,15 @@ export default function MSDSForm({
                     value={field.value || ""}
                     labelId="country"
                     IconComponent={KeyboardArrowDownIcon}
+                    MenuProps={{
+                      disableScrollLock: true,
+                      PaperProps: {
+                        "data-lenis-prevent": true,
+                        sx: {
+                          maxHeight: 300,
+                        },
+                      },
+                    }}
                   >
                     {Countries.map((country) => (
                       <MenuItem key={country.code} value={country.name}>
@@ -259,6 +287,13 @@ export default function MSDSForm({
             className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
           ></textarea>
         </div>
+
+        {formSubmitted && (
+          <p className="pt-4 text-[#F36633] font-medium">
+            Thank you for reaching out. Our team will get back to you shortly.
+          </p>
+        )}
+
         <Button title={"Submit"} className="mt-6" />
       </form>
     </div>

@@ -33,7 +33,10 @@ export type GlobalInnovationProps = {
       id: number;
       description: string;
     }[];
+    sectionTitle?:string;
+    formTitle?:string;
   };
+  useBulletes?: boolean;
 };
 
 export interface TimelineMilestone {
@@ -41,6 +44,7 @@ export interface TimelineMilestone {
   year: string;
   title: string;
   description: string | null;
+  note: string | null;
 }
 
 interface Milestone {
@@ -58,3 +62,12 @@ export interface TimelineData {
     milestone: Milestone[];
   };
 }
+
+
+export type OurExpProps = {
+  data: {
+    title: string;
+    ctaButton: ButtonProps[];
+    formTitle?:string;
+  }[];
+};

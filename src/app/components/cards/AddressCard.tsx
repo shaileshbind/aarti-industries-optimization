@@ -11,6 +11,7 @@ type AddressCardProps = {
   url?: string;
   registeredOffice?: boolean;
   corporateOffice?: boolean;
+  researchCentre?: boolean;
 };
 
 const AddressCard = ({
@@ -21,6 +22,7 @@ const AddressCard = ({
   url,
   registeredOffice,
   corporateOffice,
+  researchCentre,
 }: AddressCardProps) => {
   return (
     <div className="group bg-grey-100 p-[30px] rounded-[10px] mt-[20px] relative h-full flex flex-col">
@@ -32,6 +34,11 @@ const AddressCard = ({
       {corporateOffice && (
         <span className="absolute bg-white uppercase top-[-12px] border border-orange-200 text-orange-200 text-[12px] font-normal leading-[100%] font-alte-hans px-[10px] grid items-center rounded-[50px] left-[30px] h-[28px]">
           corporate office
+        </span>
+      )}
+      {researchCentre && (
+        <span className="absolute bg-white uppercase top-[-12px] border border-orange-200 text-orange-200 text-[12px] font-normal leading-[100%] font-alte-hans px-[10px] grid items-center rounded-[50px] left-[30px] h-[28px]">
+          R & D Centre
         </span>
       )}
       <SubH2 className="text-blue-200 mb-[10px]">{location}</SubH2>

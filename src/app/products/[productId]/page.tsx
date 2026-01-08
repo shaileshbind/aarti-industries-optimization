@@ -1,4 +1,3 @@
-import React from "react";
 import MainComponent from "@/app/components/product-inner/MainComponent";
 import GloballyCertified from "@/app/components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";

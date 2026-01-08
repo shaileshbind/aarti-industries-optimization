@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
 import { BodyText1, H2, SubH2 } from "../Typography2";
 import Image from "next/image";
 import NirvanaCard from "../cards/NirvanaCard";
@@ -7,6 +6,7 @@ import {
   LAANirvanaProps,
 } from "@/app/types/life-at-aarti.type";
 import ImageGallery from "../ImageGallery";
+import { FadeInReveal } from "../ScrollReveal";
 
 type Props = {
   data: LAANirvanaProps;
@@ -21,14 +21,18 @@ const AartiNirvana = ({ data,
   return (
     <div>
       {title && (
+        <FadeInReveal>
         <H2 className="max-w-[600px] mx-[20px] lg:mx-auto text-left lg:text-center">
           {title}
         </H2>
+        </FadeInReveal>
       )}
       {description && (
+        <FadeInReveal>
         <BodyText1 className="mt-[10px] lg:mt-[6px] max-w-[730px] mx-[20px] lg:mx-auto text-left lg:text-center">
           {description}
         </BodyText1>
+        </FadeInReveal>
       )}
       {/* desktop only */}
       <div className="hidden md:grid mt-[30px] lg:mt-[48px] grid-cols-2 lg:grid-cols-4 gap-[6px] max-w-[1024px] mx-auto">

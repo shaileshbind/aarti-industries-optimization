@@ -1,7 +1,7 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import ScrollTriggerModule from "gsap/ScrollTrigger";
+import ScrollTriggerModule, { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,12 +10,18 @@ import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
+import {useMediaQuery} from "@mui/material";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
 
+const ANIMATION_END_PROGRESS = 0.55;
+
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
-  const { leftText, rightText, images, mainSection } = data;
+  // const isMobile = useMediaQuery("(max-width:600px)");
+  const isTablet = useMediaQuery("(max-width:1023px)");
+  console.log('isTablets11s111', isTablet);  
+  const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);
@@ -31,15 +37,71 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const titleSection = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
+  const scrollTriggerRef = useRef<ScrollTriggerType | null>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const leafBigImg = useRef<HTMLSpanElement>(null);
+  const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
+  const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
     visible: false,
   });
+  const imageWrapperRef = useRef<HTMLDivElement | null>(null);
+  const [slideWidth, setSlideWidth] = useState(0);
+  
+  // Get slideWidth from the actual div width after component mounts
+  useLayoutEffect(() => {
+    const measureSlideWidth = () => {
+      if (imageWrapperRef.current) {
+        const width = imageWrapperRef.current.offsetWidth;
+        console.log("width", width );
+        if (width > 0) {
+          setSlideWidth(width);
+        }
+      }
+    };
+
+    // Small delay to ensure the ref is attached
+    const timeoutId = setTimeout(() => {
+      measureSlideWidth();
+    }, 0);
+
+    // Measure on resize
+    window.addEventListener('resize', measureSlideWidth);
+    
+    // Use ResizeObserver for more accurate measurements
+    const resizeObserver = new ResizeObserver(() => {
+      measureSlideWidth();
+    });
+
+    // Try to observe immediately, and also check periodically if ref becomes available
+    if (imageWrapperRef.current) {
+      resizeObserver.observe(imageWrapperRef.current);
+    } else {
+      // Check again after a short delay in case ref wasn't ready
+      const checkRef = setInterval(() => {
+        if (imageWrapperRef.current) {
+          resizeObserver.observe(imageWrapperRef.current);
+          clearInterval(checkRef);
+        }
+      }, 50);
+      
+      // Clear interval after 1 second to avoid infinite checking
+      setTimeout(() => clearInterval(checkRef), 1000);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', measureSlideWidth);
+      resizeObserver.disconnect();
+    };
+  }, [mainSection.length]);
+  
+ // console.log("slideWidth", slideWidth );  
   const { setMarginBottom } = useMargin();
   const indicatorColor =
     "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
@@ -68,25 +130,34 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     });
   }, [activeTab]);
 
-  const handleTabClick = useCallback(
-    (index: number, e?: React.MouseEvent) => {
-      e?.preventDefault();
-      e?.stopPropagation();
-      if (index === activeTab) return;
+  const handleTabClick = (index: number) => {
+    const st = scrollTriggerRef.current;
+    if (!st || !mainSection.length) return;
 
-      const swiper = swiperRef.current;
-      if (swiper && !swiper.destroyed) {
-        swiper.slideTo(index);
-        setActiveTab(index);
-      }
-    },
-    [activeTab]
-  );
+    const total = mainSection.length;
+    const clampedIndex = Math.max(0, Math.min(index, total - 1));
+
+    // Map tab index (0 → last) into ScrollTrigger progress space
+    const slideProgress = total > 1 ? clampedIndex / (total - 1) : 0;
+    const progress =
+      ANIMATION_END_PROGRESS +
+      slideProgress * (1 - ANIMATION_END_PROGRESS);
+
+    const start =
+      typeof st.start === "number" ? st.start : (st.start as number) || 0;
+    const end = typeof st.end === "number" ? st.end : (st.end as number) || 0;
+    const distance = end - start;
+    const targetY = start + distance * progress;
+
+    window.scrollTo({
+      top: targetY,
+      behavior: "smooth",
+    });
+  };
 
   useLayoutEffect(() => {
-    const isMobile = window.innerWidth < 1024;
     const ctx = gsap.context(() => {
-      if (isMobile) {
+      if (isTablet) {
         gsap.set(sustainbleLogo.current, {
           left: "50%",
           top: "50%",
@@ -103,11 +174,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           x: "-50%",
         });
       }
+      gsap.set(mobileSliderContainerRef.current, { opacity: 0 });
       gsap.set(envSlider.current, { opacity: 0 });
-
+      gsap.set(".leafStag", { opacity: 0, scale: 0.5, transformOrigin: "center center" });
+      
       // Animation timeline - handles the initial animations and slide sync
-      const animationEndProgress = 0.55;
-      const animationScrollDistance = isMobile
+      const animationEndProgress = ANIMATION_END_PROGRESS;
+      const animationScrollDistance = isTablet
         ? window.innerHeight * 1.5
         : window.innerHeight * 4;
 
@@ -115,7 +188,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         scrollTrigger: {
           id: "mainTrigger",
           trigger: triggerRef.current,
-          start: "top 50%",
+          start: isTablet ? "top top" : "top 50%",
           end: `+=${animationScrollDistance}`,
           scrub: 1,
           pin: true,
@@ -123,6 +196,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Sync slides after animation phase (55% progress) - similar to test slider logic
+            if(!isTablet) {
             if (
               self.progress >= animationEndProgress &&
               swiperRef.current &&
@@ -145,9 +219,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 setActiveTab(index);
               }
             }
+          }
           },
           onLeave: () => {
-            if (!isMobile && tabsRef.current) {
+            if (!isTablet && tabsRef.current) {
               gsap.to(tabsRef.current, {
                 opacity: 0,
                 duration: 0.6,
@@ -157,7 +232,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             }
           },
           onEnterBack: () => {
-            if (!isMobile && tabsRef.current) {
+            if (!isTablet && tabsRef.current) {
               gsap.to(tabsRef.current, {
                 opacity: 1,
                 duration: 0.6,
@@ -167,8 +242,14 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           },
         },
       });
+      
+      // Store ScrollTrigger instance for tab click handling
+      if (mainTl.scrollTrigger) {
+        scrollTriggerRef.current = mainTl.scrollTrigger;
+      }
+      
 
-      if (isMobile) {
+      if (isTablet) {
         mainTl
           .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 6 })
           .fromTo(
@@ -182,6 +263,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             { height: "0px" },
             { height: "203px", duration: 6 },
             "<"
+          )
+          .fromTo(
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 1, stagger: 0.1, ease:"power4.inOut",  
+            },
+             "<4"
           )
           .fromTo(
             susLogotl.current,
@@ -214,8 +302,14 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px", right: 0, top: 0 },
-            { width: window.innerWidth - 40, right: 20, duration: 1 }
+            { width: "100px", height: "100px", right: 0, top: 0 },
+            { width: window.innerWidth - 40, height: '250px', right: 20, top: '170px',  duration: 1 }
+          )
+          .fromTo(
+            '.leafBigImg',
+            { scale: '2' },
+            { scale: '1', duration: 1 },
+            "<"
           )
           .fromTo(
             sustainbleLogo.current,
@@ -224,25 +318,36 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               height: "206px",
               left: "50%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "-50%",
+              // x: "-50%",
             },
             {
               width: "100%",
-              height: "500px",
+              height: "100vh",
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "-50%",
               x: "0%",
               duration: 1,
             },
             "<"
           )
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+          )
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
-            envSlider.current,
+            mobileSliderContainerRef.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
+            "<"
+          )
+          .fromTo(
+            '.sliderStagger',
+            { opacity: 0, x : 100 },
+            { opacity: 1, x : 0, duration: 0.7, stagger: 0.1, ease:"power4.inOut",   },
             "<"
           )
           .fromTo(
@@ -256,19 +361,26 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           .fromTo(
             headinLeft.current,
             { x: 0, y: "unset" },
-            { x: -150, duration: 1 }
+            { x: -150, duration: 0.5 }
           )
           .fromTo(
             headinRight.current,
             { x: 0, y: "unset" },
-            { x: 150, duration: 1 },
+            { x: 150, duration: 0.5 },
             "<"
           )
           .fromTo(
             sustainbleLogo.current,
             { width: "0px" },
-            { width: "206px", duration: 1 },
+            { width: "206px", duration: 0.5 },
             "<"
+          )
+          .fromTo(
+            ".leafStag" ,
+            { opacity: 0, scale: 0.5, transformOrigin: "center center" },
+            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 0.3, stagger: 0.1, ease:"power4.inOut",  
+            },
+             "<0.2"
           )
           .fromTo(
             susLogotl.current,
@@ -301,9 +413,10 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )
           .fromTo(
             susLogotr.current,
-            { width: "100px" },
-            { width: "500px", duration: 1 }
+            { width: "100px", height: "100px" },
+            { width:  () => `${slideWidth}px`, height:  () => `${slideWidth}px`, duration: 1 }
           )
+         
           .fromTo(
             sustainbleLogo.current,
             {
@@ -311,29 +424,43 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               height: "206px",
               left: "52%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              // y: "50%",
+              // x: "-50%",
             },
             {
-              width: "500px",
-              height: "500px",
+              width:  () => `${slideWidth}px`,
+              height:  () => `${slideWidth}px`,
+
               left: "0%",
               top: "50%",
-              y: "-50%",
+              // y: "50%",
               x: "0%",
               duration: 1,
             },
             "<"
           )
-          .to(titleSection.current, {
-            opacity: 0,
-            duration: 1,
-            filter: "blur(50px)",
-          })
+          .fromTo(
+            susLogoinnerblurtr.current,
+            { borderRadius: '50% 50% 50% 50%', opacity: 1 },
+            { borderRadius: '0% 0% 0% 0%', opacity: 1, duration: 0.5 }
+             
+          )
+          .fromTo(
+            leafBigImg.current,
+            { width: '100%' },
+            { width:'calc(100% - 14px)',   },
+            "<"
+          )
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
+             
+          )
+          .fromTo(
+            '.sliderStagger',
+            { opacity: 0, x : 100 },
+            { opacity: 1, x : 0, duration: 0.7, stagger: 0.1, ease:"power4.inOut",   },
             "<"
           )
           .fromTo(
@@ -348,7 +475,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length]);
+  }, [mainSection.length, slideWidth, isTablet]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -386,7 +513,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
       if (totalHeight > screenHeight) {
         const margin = totalHeight - screenHeight;
-        setMarginBottom(margin);
+        setMarginBottom(margin + 50);
       } else {
         setMarginBottom(0);
       }
@@ -411,16 +538,23 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     };
   }, [activeTabMob, mainSection.length, setMarginBottom]);
 
-
+    const handlMobileTabClick = (index: number) => {
+        if(index === activeTabMob) return;
+        const swiper = swiperRef.current;
+        if(swiper && !swiper.destroyed) {
+            swiper.slideTo(index);
+            setActiveTabMob(index);
+        }
+    };
 
   return (
     <div
       ref={triggerRef}
-      className="w-full relative  min-h-[40vh] mt-[200px] lg:mt-[unset]"
+      className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
     >
       <div
         ref={titleSection}
-        className="absolute top-0 w-full flex justify-center items-center z-20 bg-white"
+        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
           {leftText && (
@@ -429,7 +563,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             </span>
           )}
 
-          {images?.length > 0 && (
+          {mainSection?.[0]?.image?.url && (
             <div
               ref={sustainbleLogo}
               className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
@@ -438,78 +572,82 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                 ref={sustainInner}
                 className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
               >
-                {images?.[2]?.url && (
-                  <i ref={susLogotl} className="absolute top-0 left-1">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogotl} className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden">
                     <Image
-                      src={images?.[2]?.url}
-                      alt={images?.[2]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
+                      className=" scale-110 object-cover"
                     />
                   </i>
                 )}
 
-                {images?.[1]?.url && (
-                  <i ref={susLogotr} className="absolute top-0 right-[2px]">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogotr} className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]">
+                    <span ref={susLogoinnerblurtr}  className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0">
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className=" object-cover blur scale-110"
+                      />
+                    </span>
+                    <span ref={leafBigImg} className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden">
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        className="leafBigImg scale-110 object-cover"
+                      />
+                    </span>
+                    {/* <i className="absolute inset-0 bg-black/30 z-[1] rounded-lg"></i> */}
+                </i>
+                )}
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogobr} className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
-                      src={images?.[1]?.url}
-                      alt={images?.[1]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
-                      className="w-full h-full"
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
-
-                {images?.[0]?.url && (
-                  <i ref={susLogobl} className="absolute bottom-[3px] left-1">
+                {mainSection?.[0]?.image?.url && (
+                  <i ref={susLogobl} className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden">
                     <Image
-                      src={images?.[0]?.url}
-                      alt={images?.[0]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
+                      src={mainSection?.[0]?.image?.url}
+                      alt={"icon"}
+                      fill
                       priority
-                    />
-                  </i>
-                )}
-
-                {images?.[3]?.url && (
-                  <i
-                    ref={susLogobr}
-                    className="absolute bottom-[3px] right-[2px]"
-                  >
-                    <Image
-                      src={images?.[3]?.url}
-                      alt={images?.[3]?.alternativeText || "icon"}
-                      width={99}
-                      height={101}
-                      priority
+                      className="scale-110 object-cover"
                     />
                   </i>
                 )}
               </span>
             </div>
           )}
-
           {rightText && (
             <span ref={headinRight}>
               <H2>{rightText}</H2>
             </span>
           )}
         </div>
-      </div>
-      <div
+        <div
         ref={envSlider}
-        className="w-full max-h-[100vh] bg-white opacity-0 absolute top-50% translate-y-[-50%] left-0"
-      >
+        className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0">
         <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-          {mainSection?.length > 0 && (
+          {/* {mainSection?.length > 0 && !isMobile && ( */}
+          {mainSection?.length > 0 && !isTablet && (
             <div>
               <Swiper
                 slidesPerView={1.2}
-                spaceBetween={32}
+                // spaceBetween={32}
                 loop={false}
                 allowTouchMove={false}
                 speed={600}
@@ -529,7 +667,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                   setActiveTab(swiper.activeIndex);
                 }}
               >
-                {mainSection.map((slide) => (
+                {mainSection.map((slide, index) => (
                   <SwiperSlide key={slide.id}>
                     <SliderCard
                       imgSrc={slide?.image?.url}
@@ -538,6 +676,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
+                      imageWrapperRef={imageWrapperRef as React.RefObject<HTMLDivElement>}  
+                      index={index}
                     />
                   </SwiperSlide>
                 ))}
@@ -546,7 +686,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )}
           <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
             <div className="w-fit mx-auto">
-              {mainSection?.length > 0 && (
+              {mainSection?.length > 0 && !isTablet && (
                 <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                   <div
                     ref={containerRef}
@@ -578,8 +718,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                             ref={(element) => {
                               tabRefs.current[index] = element;
                             }}
-                            onClick={(e) => handleTabClick(index, e)}
-                            className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
+                            onClick={() => handleTabClick(index)}
+                            className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${
                               activeTab === index
                                 ? "text-white"
                                 : "hover:bg-grey-200"
@@ -595,35 +735,84 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
-          <div className=" pt-[110px]" ref={tabBarContainerRef}>
-            {mainSection?.length > 0 && (
-              <div className="bg-grey-100 rounded-[40px] p-[4px] flex justify-between w-full">
-                {mainSection?.map(
-                  (item, index) =>
-                    item?.category && (
-                      <div
-                        key={index}
-                        onClick={() => setActiveTabMob(index)}
-                        className={`text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                          activeTabMob === index
-                            ? "text-white bg-gradient-orange-3"
-                            : "hover:bg-grey-200"
-                        }`}
-                      >
-                        {item?.category}
-                      </div>
-                    )
-                )}
-              </div>
-            )}
+      </div>
+      </div>
+      <div ref={mobileSliderContainerRef} className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]">
+          <div className="pt-[110px]" ref={tabBarContainerRef}>
+            {mainSection?.length > 0 && isTablet && (
+                <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+                  <div
+                    ref={containerRef}
+                    className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                  >
+                    {/* Animated Indicator */}
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: indicator.visible ? indicator.left : 0,
+                        top: 0,
+                        height: "100%",
+                        borderRadius: 9999,
+                        background: indicatorColor,
+                        width: indicator.visible ? indicator.width : 0,
+                        transition: indicatorTransition,
+                        zIndex: 0,
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    {/* Tab Buttons */}
+                    {mainSection?.map(
+                      (items, index) =>
+                        items?.category && (
+                          <div
+                            key={index}
+                            ref={(element) => {
+                              tabRefs.current[index] = element;
+                            }}
+                            onClick={() => handlMobileTabClick(index)}
+                            className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                              activeTab === index
+                                ? "text-white"
+                                : "hover:bg-grey-200"
+                            }`}
+                          >
+                            {items?.category}
+                          </div>
+                        )
+                    )}
+                  </div>
+                </div>
+              )}
           </div>
-          <div className="mt-[16px] lg:mt-[32px] " ref={sliderContainerRef}>
+          <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
             <div className="grid items-center">
-              {mainSection
-                .filter((_, index) => index === activeTabMob)
-                .map((slide, index) => (
-                  <div key={index}>
+                {isTablet && (
+                  <Swiper
+                slidesPerView={1}
+                loop={false}
+                allowTouchMove={true}
+                speed={600}
+                watchSlidesProgress={true}
+                updateOnWindowResize={true}
+                className="w-full h-auto"
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  swiper.on("resize", () => {
+                    swiper.updateSize();
+                    swiper.updateSlides();
+                    swiper.updateProgress();
+                    swiper.updateSlidesClasses();
+                     
+                  });
+                }}
+                onSlideChange={(swiper) => {
+                  setActiveTab(swiper.activeIndex);
+                }}
+              >
+                {mainSection.map((slide, index) => (
+                  <SwiperSlide key={slide.id}>
                     <SliderCard
                       imgSrc={slide?.image?.url}
                       imgAlt={slide?.image?.alternativeText || "banner"}
@@ -631,13 +820,16 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       description={slide?.description}
                       values={slide?.values}
                       ctaButton={slide?.ctaButton}
+                      imageWrapperRef={imageWrapperRef as React.RefObject<HTMLDivElement>}  
+                      index={index}
                     />
-                  </div>
+                  </SwiperSlide>
                 ))}
+              </Swiper>
+                )}
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };

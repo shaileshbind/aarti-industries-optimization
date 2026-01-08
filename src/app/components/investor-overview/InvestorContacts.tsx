@@ -1,12 +1,13 @@
-import React from "react";
 import { BodyText2, BodyText3, Cta, H3, SubH3 } from "../Typography2";
 import Image from "next/image";
 import { InvestorContactProps } from "@/app/types/investor-overview.type";
+import clsx from "clsx";
+import { FadeInReveal } from "../ScrollReveal";
 
 const InvestorContacts = ({ data }: InvestorContactProps) => {
   const { sectionTitle, image, investor_contacts } = data;
   return (
-    <div>
+    <FadeInReveal>
       <div className="grid lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-x-[50px]  gap-y-[36px]  fluid-container mb-[72px] lg:mb-[120px]">
         {sectionTitle && (
           <H3 className="!text-[24px] block lg:hidden">{sectionTitle}</H3>
@@ -26,7 +27,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
             )}
           </div>
         </div>
-        <div className="grid lg:grid-cols-2 gap-[50px]">
+        <div className="grid xl:grid-cols-2 gap-[50px]">
           {investor_contacts?.map((items) => {
             return (
               <div key={items?.id}>
@@ -46,7 +47,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                     {items?.address}
                   </BodyText3>
                 )}
-                <div className="grid lg:grid-cols-2 gap-x-[5px] items-start">
+                <div className={clsx("grid gap-x-[5px] items-start", items?.fax ? "lg:grid-cols-2" : "lg:grid-cols-1" )}>
                   {items?.mobile && (
                     <a
                       href={`tel:${items?.mobile}`}
@@ -124,7 +125,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
           })}
         </div>
       </div>
-    </div>
+      </FadeInReveal>
   );
 };
 

@@ -4,7 +4,6 @@ import FinancialInformation from "@/app/components/investor-templates/FinancialI
 import OrangeCardListingPage from "@/app/components/investor-templates/OranegCardListingPage";
 import ShareholderInformation from "@/app/components/investor-templates/ShareholderInformation";
 import { notFound } from "next/navigation";
-import React from "react";
 
 type PageProps = {
   params: {
@@ -51,7 +50,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div>
+    <div data-lenis-prevent>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (

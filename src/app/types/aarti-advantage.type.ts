@@ -22,8 +22,9 @@ export type AilEdgeProps = {
 export type AdvExploreProps = {
   data: {
     exploreMore: {
-      title: string;
-      ctaButton: ButtonProps[];
+      title?: string;
+      ctaButton?: ButtonProps[];
+      formTitle?:string;
     };
   }[];
 };

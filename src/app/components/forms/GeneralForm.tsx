@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle"; // Assuming path is correct
+import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -11,6 +11,8 @@ import {
   MenuItem,
   Autocomplete,
   Paper,
+  Popper,
+  CircularProgress,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "react-phone-input-2/lib/style.css";
@@ -31,7 +33,7 @@ type FormValues = {
   category: string;
   subCategory: string;
   productName: string;
-  recievedEmail?:string;
+  recievedEmail?: string;
 };
 
 type CategorySubcategoryItem = {
@@ -50,16 +52,10 @@ type GeneralFormProps = {
   showTitle?: boolean;
 };
 
-type productsDataType = {
-  id?: number;
-  productName?: string;
-  slug?: string;
-};
-
 type formSubCategories = {
   id?: number;
   name?: string;
-  reciverEmail?:string;
+  reciverEmail?: string;
 };
 type productsDataCatSubcatType = {
   id?: number;
@@ -77,10 +73,12 @@ export default function GeneralForm({
   className,
   showTitle = true,
 }: GeneralFormProps) {
-  const [categorySubcategoryData, setCategorySubcategoryData] = useState<
-    CategorySubcategoryItem[]
-  >([]);
-  const [productsData, setProductsData] = useState<string[]>([]);
+  const [categorySubcategoryData, setCategorySubcategoryData] = useState<CategorySubcategoryItem[]>([]);
+  const [productLoading, setProductLoading] = useState(false);
+  const [initialProductOptions, setInitialProductOptions] = useState<string[]>([]);
+  const [productOptions, setProductOptions] = useState<string[]>([]);
+  const [searchInputValue, setSearchInputValue] = useState("");
+   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const {
     register,
@@ -103,30 +101,19 @@ export default function GeneralForm({
       category: "",
       subCategory: "",
       productName: "",
-      recievedEmail:"",
+      recievedEmail: "",
     },
   });
 
-  // 🔹 Call API and transform data & Handle Prefilling
+  // Fetch categories and initial products for dropdown
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchInitialData = async () => {
       try {
-        // 1. FETCH DATA
         const res = await fetch("/api/formCategoriesData");
         if (!res.ok) throw new Error("Failed to fetch categories");
         const data = await res.json();
 
-        const resProducts = await fetch("/api/formProductsData");
-        if (!resProducts.ok) throw new Error("Failed to fetch products");
-        const dataProducts = await resProducts.json();
-
-        // 2. TRANSFORM & SET STATE
-        const transformedProducts: string[] =
-          dataProducts?.data?.map(
-            (item: productsDataType) => item?.productName
-          ) || [];
-        setProductsData(transformedProducts);
-        const transformedData: CategorySubcategoryItem[] =
+        const transformedCategories: CategorySubcategoryItem[] =
           data?.data?.map((item: productsDataCatSubcatType) => ({
             category: item?.name,
             subCategories:
@@ -135,22 +122,36 @@ export default function GeneralForm({
               ) || [],
             subCatEmails:
               item?.form_sub_categories?.map(
-                (item: formSubCategories) => item?.reciverEmail
-              ) || [],       
+                (sub: formSubCategories) => sub?.reciverEmail
+              ) || [],
           })) || [];
-        setCategorySubcategoryData(transformedData);
 
-        // 3. APPLY PREFILL USING reset()
+        setCategorySubcategoryData(transformedCategories);
+
+        const resProducts = await fetch("/api/product-form-search?q=");
+        if (!resProducts.ok) throw new Error("Failed to fetch products");
+        const dataProducts = await resProducts.json();
+
+        const mappedProducts: string[] =
+          dataProducts?.data?.map(
+            (item: { productName: string }) => item.productName
+          ) || [];
+        const finalProducts = [...mappedProducts, "Others"];
+
+        setInitialProductOptions(finalProducts);
+        setProductOptions(finalProducts);
+
+        // Prefill logic
         const updatedDefaults: Partial<FormValues> = {};
         if (prefillCategory) {
-          const categoryExists = transformedData.some(
+          const categoryExists = transformedCategories.some(
             (item) => item.category === prefillCategory
           );
           if (categoryExists) {
             updatedDefaults.category = prefillCategory;
 
             if (prefillSubCategory) {
-              const subCategoryExists = transformedData
+              const subCategoryExists = transformedCategories
                 .find((item) => item.category === prefillCategory)
                 ?.subCategories.includes(prefillSubCategory);
               if (subCategoryExists) {
@@ -159,29 +160,73 @@ export default function GeneralForm({
             }
           }
         }
-        if (prefillProduct && (transformedProducts.includes(prefillProduct) || prefillProduct === "Others")) {
+        if (
+          prefillProduct &&
+          (mappedProducts.includes(prefillProduct) ||
+            prefillProduct === "Others")
+        ) {
           updatedDefaults.productName = prefillProduct;
         }
         // Use reset to apply the prefilled values reliably
         if (Object.keys(updatedDefaults).length > 0) {
-          reset((prevDefaults) => ({
-            ...prevDefaults,
-            ...updatedDefaults,
-          }));
+          reset((prev) => ({ ...prev, ...updatedDefaults }));
         }
       } catch (err) {
-        console.error("Error fetching form categories:", err);
+        console.error("Error during initial load:", err);
       }
     };
 
-    fetchCategories();
-  }, [prefillCategory, prefillSubCategory, prefillProduct, reset]); // DEPENDENCY CHANGE: use 'reset' instead of 'setValue'
+    fetchInitialData();
+  }, [prefillCategory, prefillSubCategory, prefillProduct, reset]);
 
-  // 🔹 Watch the category field for dynamic subcategory loading
+  // Fetch products from Meilisearch based on search query
+  const fetchProductsFromMeili = async (query: string) => {
+    // If empty query, restore initial products
+    if (!query || query.trim().length === 0) {
+      setProductOptions(initialProductOptions);
+      return;
+    }
+
+    try {
+      setProductLoading(true);
+
+      const res = await fetch(
+        `/api/product-form-search?q=${encodeURIComponent(query)}`
+      );
+      if (!res.ok) {
+        console.error("Fetch failed");
+        return;
+      }
+
+      const data = await res.json();
+
+      const products =
+        data?.data?.map((item: { productName: string }) => item.productName) ||
+        [];
+
+      // Always include "Others" at the end
+      setProductOptions([...products, "Others"]);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setProductLoading(false);
+    }
+  };
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInputValue !== null) {
+        fetchProductsFromMeili(searchInputValue);
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchInputValue]);
+
   const selectedCategory = watch("category");
   const selectedSubcategory = watch("subCategory");
 
-  // 🔹 Get subcategories based on selected category
   const availableSubcategories = useMemo(
     () =>
       categorySubcategoryData?.find(
@@ -190,13 +235,7 @@ export default function GeneralForm({
     [categorySubcategoryData, selectedCategory]
   );
 
-  // 🔹 Add "Others" as static last option to products list
-  const productsWithOthers = useMemo(
-    () => [...(productsData || []), "Others"],
-    [productsData]
-  );
-
-  // 🔹 Update receiver email when subcategory changes
+  // Update receiver email when subcategory changes
   useEffect(() => {
     if (selectedCategory && selectedSubcategory) {
       const categoryData = categorySubcategoryData.find(
@@ -211,7 +250,12 @@ export default function GeneralForm({
         }
       }
     }
-  }, [selectedCategory, selectedSubcategory, categorySubcategoryData, setValue]);
+  }, [
+    selectedCategory,
+    selectedSubcategory,
+    categorySubcategoryData,
+    setValue,
+  ]);
 
   // 🔹 Auto-select subcategory if only one exists, reset if multiple or none
   useEffect(() => {
@@ -239,7 +283,7 @@ export default function GeneralForm({
 
   const onSubmit = async (data: FormValues) => {
     // Determine if Salesforce lead applies
-    const sendEmail = true
+    const sendEmail = true;
     const hasSalesforceLead =
       data.subCategory === "Chemicals Products" &&
       data.productName !== "" &&
@@ -280,7 +324,13 @@ export default function GeneralForm({
       });
 
       if (response.ok) {
-        setshowGeneralPopup?.(false);
+        setformSubmitted(true);
+
+        setTimeout(() => {
+          setshowGeneralPopup?.(false);
+          setformSubmitted(false);
+        }, 5000);
+
         reset(); // Reset form fields to default after successful submission
         if (document) {
           const link = window.document.createElement("a");
@@ -304,14 +354,18 @@ export default function GeneralForm({
 
   // --- Form JSX ---
   return (
-    <div className="w-full">
+    <div data-lenis-prevent className="w-full">
       {showTitle && (
         <div>
           <p className="text-xl text-[#002F50]">Recipient Information</p>
           <div className="w-full h-[1px] bg-[#F3663399] mt-2" />
         </div>
       )}
-      <form className="w-full popup" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        data-lenis-prevent
+        className="w-full popup"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
@@ -328,6 +382,18 @@ export default function GeneralForm({
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
             onKeyDown={(e) => {
+              if (
+                e.key === "Backspace" ||
+                e.key === "Delete" ||
+                e.key === "ArrowLeft" ||
+                e.key === "ArrowRight" ||
+                e.key === "Tab" ||
+                e.ctrlKey ||
+                e.metaKey
+              ) {
+                return;
+              }
+
               // Prevent numbers and special characters, allow only letters and space
               if (!/^[a-zA-Z\s]$/.test(e.key)) {
                 e.preventDefault();
@@ -410,6 +476,18 @@ export default function GeneralForm({
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
               onKeyDown={(e) => {
+                if (
+                  e.key === "Backspace" ||
+                  e.key === "Delete" ||
+                  e.key === "ArrowLeft" ||
+                  e.key === "ArrowRight" ||
+                  e.key === "Tab" ||
+                  e.ctrlKey ||
+                  e.metaKey
+                ) {
+                  return;
+                }
+
                 // Prevent numbers and special characters, allow only letters and space
                 if (!/^[a-zA-Z\s]$/.test(e.key)) {
                   e.preventDefault();
@@ -429,6 +507,15 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="country"
                     IconComponent={KeyboardArrowDownIcon}
+                    MenuProps={{
+                      disableScrollLock: true,
+                      PaperProps: {
+                        "data-lenis-prevent": true,
+                        sx: {
+                          maxHeight: 300,
+                        },
+                      },
+                    }}
                   >
                     {Countries.map((country) => (
                       <MenuItem key={country.code} value={country.name}>
@@ -440,6 +527,154 @@ export default function GeneralForm({
               />
             </FormControl>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Category */}
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.category)}
+              error={!!errors.category}
+            >
+              <InputLabel id="category">Category *</InputLabel>
+              <Controller
+                name="category"
+                control={control}
+                rules={{ required: "Category is required" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="category"
+                    IconComponent={KeyboardArrowDownIcon}
+                  >
+                    {categorySubcategoryData?.map((item, index) => (
+                      <MenuItem key={index} value={item?.category}>
+                        {item?.category}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              {errors.category && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.category.message}
+                </p>
+              )}
+            </FormControl>
+
+            {/* Subcategory - MANDATORY */}
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.subCategory)}
+              error={!!errors.subCategory}
+              className={clsx(
+                availableSubcategories?.length > 0
+                  ? "opacity-100 pointer-events-auto"
+                  : "opacity-60 pointer-events-none"
+              )}
+            >
+              <InputLabel id="subCategory">Sub category *</InputLabel>
+              <Controller
+                name="subCategory"
+                control={control}
+                rules={{ required: "Sub category is required" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="subCategory"
+                    IconComponent={KeyboardArrowDownIcon}
+                    disabled={
+                      availableSubcategories.length !== 1 &&
+                      availableSubcategories.length === 0
+                    }
+                  >
+                    {availableSubcategories?.length > 0 &&
+                      availableSubcategories?.map((subCat, index) => (
+                        <MenuItem key={index} value={subCat}>
+                          {subCat}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                )}
+              />
+              {errors.subCategory && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.subCategory.message}
+                </p>
+              )}
+            </FormControl>
+          </div>
+
+          {/* Product Autocomplete - Active Search */}
+          {selectedSubcategory === "Chemicals Products" && (
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.productName)}
+              error={!!errors.productName}
+            >
+              <Controller
+                name="productName"
+                control={control}
+                rules={{ required: "Product Name is required" }}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    openOnFocus
+                    options={productOptions}
+                    loading={productLoading}
+                    getOptionLabel={(option) => option}
+                    filterOptions={(x) => x} // Disable client-side filtering
+                    inputValue={searchInputValue}
+                    onInputChange={(_, value, reason) => {
+                      if (reason === "input") {
+                        setSearchInputValue(value);
+                      } else if (reason === "clear") {
+                        setSearchInputValue("");
+                        field.onChange(null);
+                      } else if (reason === "reset") {
+                        // When user selects, sync inputValue with selected value
+                        setSearchInputValue(value);
+                      }
+                    }}
+                    onChange={(_, value) => {
+                      field.onChange(value);
+                    }}
+                    value={field.value || null}
+                    PaperComponent={(props) => (
+                      <Paper {...props} sx={{ bgcolor: "#fffdf8" }} />
+                    )}
+                    PopperComponent={(props) => (
+                      <Popper {...props} data-lenis-prevent />
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Product Name *"
+                        error={!!errors.productName}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {productLoading ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
+                      />
+                    )}
+                  />
+                )}
+              />
+              {errors.productName && (
+                <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                  {errors.productName.message}
+                </p>
+              )}
+            </FormControl>
+          )}
 
           {/* Message */}
           <div className="flex flex-col">
@@ -509,129 +744,6 @@ export default function GeneralForm({
             )}
           </FormControl>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Category */}
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.category)}
-              error={!!errors.category}
-            >
-              <InputLabel id="category">Category *</InputLabel>
-              <Controller
-                name="category"
-                control={control}
-                rules={{ required: "Category is required" }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ""}
-                    labelId="category"
-                    IconComponent={KeyboardArrowDownIcon}
-                  >
-                    {categorySubcategoryData?.map((item, index) => (
-                      <MenuItem key={index} value={item?.category}>
-                        {item?.category}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-              {errors.category && (
-                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                  {errors.category.message}
-                </p>
-              )}
-            </FormControl>
-
-            {/* Subcategory */}
-            {/* Subcategory - MANDATORY */}
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.subCategory)}
-              error={!!errors.subCategory}
-              className={clsx(
-                availableSubcategories?.length > 0
-                  ? "opacity-100 pointer-events-auto"
-                  : "opacity-60 pointer-events-none"
-              )}
-            >
-              <InputLabel id="subCategory">Sub category *</InputLabel>
-              <Controller
-                name="subCategory"
-                control={control}
-                rules={{ required: "Sub category is required" }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ""}
-                    labelId="subCategory"
-                    IconComponent={KeyboardArrowDownIcon}
-                    disabled={
-                      availableSubcategories.length !== 1 &&
-                      availableSubcategories.length === 0
-                    }
-                  >
-                    {availableSubcategories?.length > 0 &&
-                      availableSubcategories?.map((subCat, index) => (
-                        <MenuItem key={index} value={subCat}>
-                          {subCat}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                )}
-              />
-              {errors.subCategory && (
-                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                  {errors.subCategory.message}
-                </p>
-              )}
-            </FormControl>
-          </div>
-
-          {/* Products - CONDITIONAL MANDATORY */}
-          {selectedSubcategory === "Chemicals Products" && (
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.productName)}
-              error={!!errors.productName}
-            >
-              <Controller
-                name="productName"
-                control={control}
-                rules={{ required: "Product Name is required" }}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    options={productsWithOthers}
-                    getOptionLabel={(option) => option}
-                    onChange={(_, value) => field.onChange(value)}
-                    value={field.value || null}
-                    PaperComponent={(props) => (
-                      <Paper
-                        {...props}
-                        sx={{
-                          bgcolor: "#fffdf8",
-                        }}
-                      />
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Product Name *"
-                        error={!!errors.productName}
-                      />
-                    )}
-                  />
-                )}
-              />
-              {errors.productName && (
-                <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
-                  {errors.productName.message}
-                </p>
-              )}
-            </FormControl>
-          )}
-
           {/* Other - Msg Box */}
           {selectedSubcategory === "Other" && (
             <div className="flex flex-col">
@@ -656,6 +768,12 @@ export default function GeneralForm({
             </div>
           )}
         </div>
+
+        {formSubmitted && (
+          <p className="pt-4 text-[#F36633] font-medium">
+            Thank you for reaching out. Our team will get back to you shortly.
+          </p>
+        )}
 
         <Button title={"Submit"} className="mt-6" />
       </form>

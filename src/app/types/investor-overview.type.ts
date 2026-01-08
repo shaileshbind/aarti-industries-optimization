@@ -78,6 +78,7 @@ export type InvestorHeadlines = {
         id?: number;
         heading?: string;
         date?: string;
+        slug?:string;
         // link?: string;
         file?: {
           id?: number;
@@ -133,6 +134,7 @@ export type InvestorExpProps = {
       id?: number;
       title?: string;
       ctaButton?: ButtonProps[];
+      formTitle?:string;
     }[];
   };
 };

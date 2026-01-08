@@ -5,13 +5,14 @@ import gsap from "gsap";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H2 } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
+import { useMediaQuery } from "@mui/material";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
-
+  const isTablet = useMediaQuery("(max-width:768px)");
   // Extract data safely
   const tag = data?.sectionTitle || "";
   const title = data?.title || "";
@@ -79,21 +80,21 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         ref={wrapperRef}
         className="relative fluid-container rounded-[14px] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-[520px]"
       >
-        {image && (
+        {image && !isTablet && (
           <Image
             src={image}
             alt={alt}
             fill
-            className="object-cover hidden lg:block"
+            className="object-cover hidden md:block"
             priority
           />
         )}
-        {mobImage && (
+        {mobImage && isTablet && (
           <Image
             src={mobImage}
             alt={alt}
             fill
-            className="object-cover block lg:hidden"
+            className="object-cover block md:hidden"
             priority
           />
         )}
@@ -101,11 +102,11 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         {/* Animated lines & star */}
         <div
           ref={lineVertical}
-          className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[152px] z-10"
+          className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[88px] lg:right-[152px] z-10 opacity-40"
         />
         <div
           ref={lineHorizontal}
-          className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-10"
+          className="absolute w-full bg-white bottom-[52px] lg:bottom-[119px] h-[1px] z-10 opacity-40"
         />
         <div
           ref={starRef}

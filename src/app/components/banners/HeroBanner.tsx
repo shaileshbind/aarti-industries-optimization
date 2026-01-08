@@ -1,12 +1,15 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
+import { useLayoutEffect, useRef, useState } from "react";
+import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import gsap from "gsap";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
+import SplitText from "../SplitText";
+import {useMediaQuery} from "@mui/material";
+import { useTitleCase } from "../../../../utils/toTitleCase";
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -25,6 +28,7 @@ type HeroBannerProps = {
   secondaryBtnLeftLink?: string;
   secondaryBtnRightTitle?: string;
   secondaryBtnRightLink?: string;
+  secondaryBtnFormTitle?: string;
   showStar2?: boolean;
   showStar3?: boolean;
   lineClassName?: string;
@@ -32,7 +36,7 @@ type HeroBannerProps = {
   bottomMiddleStarClassName?: string;
   popupButton?: boolean;
   popupButtonTitle?: string;
-  useTargetBlank?:boolean;
+  useTargetBlank?: boolean;
 };
 const HeroBanner = ({
   centerText,
@@ -59,6 +63,7 @@ const HeroBanner = ({
   popupButton = false,
   popupButtonTitle,
   useTargetBlank = true,
+  secondaryBtnFormTitle,
 }: HeroBannerProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const starRef = useRef<HTMLDivElement>(null);
@@ -67,6 +72,10 @@ const HeroBanner = ({
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
+  const isTablet = useMediaQuery("(max-width:768px)");
+  // Call hooks unconditionally at the top level
+  const titleCasedSecondaryBtnFormTitle = useTitleCase(secondaryBtnFormTitle || "");
+  const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -149,48 +158,49 @@ const HeroBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
-              {image && (
+              {image && !isTablet && (
                 <Image
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
-                  className="object-cover hidden lg:block"
+                  className="object-cover hidden md:block"
                 />
               )}
-              {mobImage && (
+
+              {mobImage && isTablet && (
                 <Image
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
-                  className="object-cover block lg:hidden"
+                  className="object-cover block md:hidden"
                 />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
               <div
-                className={`w-full h-full absolute pt-[64px] z-[3] ${
+                className={`w-full h-full absolute z-[3] ${
                   centerText
                     ? "flex flex-col items-center justify-center !pt-0 lg:!pt-[50px] text-center"
-                    : "lg:pt-[150px]"
+                    : "pt-[54px] md:pt-0 flex flex-col md:justify-center items-start"
                 }`}
               >
                 {tag && (
                   <FadeInRevealBlur delay={0.1}>
-                    <BodyText2 className="text-white font-alte-hans fluid-container">
+                    <BodyText2 className="text-white font-alte-hans fluid-container w-[82%] lg:w-full">
                       {tag}
                     </BodyText2>
                   </FadeInRevealBlur>
                 )}
                 {title && (
                   <FadeInRevealBlur delay={0.1}>
-                    <H2
+                    <H1
                       className={clsx(
-                        `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
+                        `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
                         centerTitleClassName
                       )}
                     >
                       {title}
-                    </H2>
+                    </H1>
                   </FadeInRevealBlur>
                 )}
                 {desc && leftDesc && (
@@ -208,11 +218,29 @@ const HeroBanner = ({
                   </FadeInRevealBlur>
                 )}
                 {/* buttons */}
-                {(secondaryBtnLeftTitle || secondaryBtnRightTitle) && (
+                {(secondaryBtnLeftTitle ||
+                  secondaryBtnRightTitle ||
+                  secondaryBtnFormTitle) && (
                   <FadeInRevealBlur
                     delay={0.1}
                     className="flex flex-col lg:flex-row gap-4 lg:gap-9 fluid-container mt-6 lg:mt-7"
                   >
+                    {/* form cta */}
+                    {secondaryBtnFormTitle && (
+                      <div className="w-fit">
+                        <button
+                          onClick={() => {
+                            setshowGeneralPopup(true);
+                          }}
+                          className={`animated-underline inline-block w-fit cursor-pointer text-[16px]
+                            font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
+                            [text-underline-position:under] text-white white-btn-underline`}
+                        >
+                          {/* {secondaryBtnFormTitle} */}
+                          {titleCasedSecondaryBtnFormTitle}
+                        </button>
+                      </div>
+                    )}
                     {secondaryBtnLeftTitle && (
                       <Button
                         className="text-white white-btn-underline"
@@ -221,7 +249,6 @@ const HeroBanner = ({
                         secondary
                       />
                     )}
-
                     {secondaryBtnRightTitle && (
                       <Button
                         className="text-white white-btn-underline"
@@ -235,7 +262,11 @@ const HeroBanner = ({
                 {btnTitle && btnLink && (
                   <FadeInRevealBlur delay={0.1}>
                     <div className="mt-[10px] lg:mt-[35px] fluid-container">
-                      <Button title={btnTitle} href={btnLink}  useTargetBlank={useTargetBlank}/>
+                      <Button
+                        title={btnTitle}
+                        href={btnLink}
+                        useTargetBlank={useTargetBlank}
+                      />
                     </div>
                   </FadeInRevealBlur>
                 )}
@@ -244,22 +275,22 @@ const HeroBanner = ({
               <div
                 ref={lineVertical}
                 className={clsx(
-                  `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
+                  `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
                   lineClassName
                 )}
               />
-              {!centerText && (
+              {/* {!centerText && ( */}
                 <div
                   ref={lineHorizontal}
                   className={clsx(
-                    `absolute w-full bg-white bottom-[52px] lg:bottom-[110px] h-[1px] z-5`
+                    `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`
                   )}
                 />
-              )}
+              {/* )} */}
               <div
                 ref={starRef}
                 className={clsx(
-                  `absolute bottom-[34px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
+                  `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
                   bottomMiddleStarClassName
                 )}
               >
@@ -273,7 +304,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -286,7 +317,7 @@ const HeroBanner = ({
               {showStar3 && (
                 <div
                   ref={starRef3}
-                  className="absolute bottom-[-20px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-19.5px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -304,16 +335,16 @@ const HeroBanner = ({
           <div className="px-[20px] lg:pl-[60px] lg:pr-[unset] pt-[30px] lg:pt-[unset] self-center">
             {tag && (
               <FadeInRevealBlur delay={0.1}>
-                <BodyText2 className="text-orange-100 font-alte-hans">
+                <BodyText2 className="text-orange-100 font-alte-hans max-w-full lg:max-w-[480px] 2xl:max-w-full">
                   {tag}
                 </BodyText2>
               </FadeInRevealBlur>
             )}
             {title && (
               <FadeInRevealBlur delay={0.1}>
-                <H2 className="mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full">
+                <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full">
                   {title}
-                </H2>
+                </H1>
               </FadeInRevealBlur>
             )}
             {desc && (
@@ -326,18 +357,30 @@ const HeroBanner = ({
             {btnTitle && btnLink && (
               <FadeInRevealBlur delay={0.1}>
                 <div className="mt-[35px]">
-                  <Button title={btnTitle} href={btnLink} useTargetBlank={useTargetBlank} />
+                  <Button
+                    title={btnTitle}
+                    href={btnLink}
+                    useTargetBlank={useTargetBlank}
+                  />
                 </div>
               </FadeInRevealBlur>
             )}
             {popupButton && (
               <FadeInRevealBlur delay={0.1}>
                 <div className="mt-[10px] lg:mt-[35px]">
-                  <button className="group relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300 " onClick={() => {
-                    setshowGeneralPopup(true);
-                  }}>
-                    <span className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></span>
-                    <span className="relative z-10 text-white">{popupButtonTitle}</span></button>
+                  <button
+                    className="group relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%] font-alte-hans overflow-hidden transition-all duration-300 "
+                    onClick={() => {
+                      setshowGeneralPopup(true);
+                    }}
+                  >
+                    {popupButtonTitle && (
+                      <span className="relative z-10 text-white">
+                         {/* <SplitText text={popupButtonTitle} /> */}
+                        <SplitText text={titleCasedPopupButtonTitle} />
+                      </span>
+                    )}
+                  </button>
                 </div>
               </FadeInRevealBlur>
             )}
@@ -346,35 +389,35 @@ const HeroBanner = ({
             ref={wrapperRef}
             className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
           >
-            {image && (
+            {image && !isTablet && (
               <Image
                 src={image}
                 alt={alt ? alt : "img"}
                 fill
-                className="object-cover hidden lg:block"
+                className="object-cover hidden md:block"
               />
             )}
-            {mobImage && (
+            {mobImage && isTablet && (
               <Image
                 src={mobImage}
                 alt={mobAlt ? mobAlt : "img"}
                 fill
-                className="object-cover block lg:hidden"
+                className="object-cover block md:hidden"
               />
             )}
             {/* starts & lines */}
             <div
               ref={lineVertical}
-              className="absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
+              className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white bottom-[52px] lg:bottom-[120px] h-[1px] z-5"
+              className="absolute w-full bg-white/40 bottom-[82px] lg:bottom-[120px] h-[1px] z-5"
             />
             <div
               ref={starRef}
               className="absolute 
-              bottom-[34px] lg:bottom-[84px] 
+              bottom-[64px] lg:bottom-[84px] 
               right-[57px] lg:right-[177px] 
               w-[38px] lg:w-[72px] 
               z-5 "

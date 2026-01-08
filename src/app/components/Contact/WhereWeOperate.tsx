@@ -6,7 +6,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import "swiper/css/grid";
-import { Mousewheel, Pagination, Grid, Navigation } from "swiper/modules";
+import { Mousewheel, Pagination, Grid, Navigation, Autoplay } from "swiper/modules";
 import Tabs from "../Tabs";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -147,7 +147,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
         setShowAll(false);
       },
     });
-    tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 });
+    tl.to(cards, { translateY: "200%", duration: 0.2, stagger: 0.05 });
     switchAnimRef.current = tl;
   };
 
@@ -157,8 +157,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     if (!cards || cards.length === 0) return;
 
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-    gsap.set(cards, { transformOrigin: "50% 50%", scale: 0 });
-    tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 });
+    gsap.set(cards, { transformOrigin: "50% 50%", translateY: "200%" });
+    tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 });
 
     return () => {
       tl.kill();
@@ -224,7 +224,11 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                     prevEl: ".swiper-button-prev-where-we-operate",
                     nextEl: ".swiper-button-next-where-we-operate",
                   }}
-                  modules={[Pagination, Mousewheel, Grid, Navigation]}
+                  modules={[Pagination, Mousewheel, Grid, Navigation, Autoplay]}
+                    autoplay={{
+                  delay: 15000,
+                  disableOnInteraction: false,
+                  }}
                   direction="horizontal"
                   pagination={
                     showProgressBar
@@ -235,10 +239,10 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       : undefined
                   }
                   mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  }}
                   className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
                 >
                   {card[activeIndex]?.post_category?.address?.map(
@@ -249,6 +253,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                             location={item?.location}
                             name={item?.company}
                             fullAddress={item?.address}
+                            researchCentre={item?.type === "R&D OFFICE"}
                             phone={item?.phone}
                             type={item?.type}
                             url={item?.url}

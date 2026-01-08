@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import "swiper/css";
@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { LAAWorldProps } from "@/app/types/life-at-aarti.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const { title, leadersCard } = data;
@@ -27,11 +28,13 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   return (
     <div className="mt-[unset] mb-[72px] lg:my-[120px]">
       {title && (
+        <FadeInReveal>
         <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
           {title}
         </H2>
+        </FadeInReveal>
       )}
-      <div className="mt-[28px] lg:mt-[48px] container mx-auto">
+      <FadeInReveal className="mt-[28px] lg:mt-[48px] container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] xl:grid-cols-[500px_1fr] container gap-y-[16px] md:gap-x-[20px] xl:gap-x-[80px]">
           {/* image section */}
           <div className="w-[100%] h-[300px] lg:h-[450px] overflow-hidden rounded-[14px] lg:rounded-[20px] relative">
@@ -149,45 +152,48 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                 })}
               </Swiper>
 
-              <div className="mt-[8px] flex gap-x-4 justify-end ">
-                <button
-                  className={`swiper-button-prev-aartiWorld transition-opacity ${
-                    isBeginning
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Previous slide"
-                  aria-disabled={isBeginning}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Previous"
-                    width={34}
-                    height={34}
-                    className="rotate-180"
-                  />
-                </button>
-                <button
-                  className={`swiper-button-next-aartiWorld transition-opacity ${
-                    isEnd
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Next slide"
-                  aria-disabled={isEnd}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Next"
-                    width={34}
-                    height={34}
-                  />
-                </button>
-              </div>
+              {/* Arrows */}
+              {leadersCard && leadersCard?.length > 1 && (
+                <div className="mt-[8px] flex gap-x-4 justify-end ">
+                  <button
+                    className={`swiper-button-prev-aartiWorld transition-opacity ${
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Previous slide"
+                    aria-disabled={isBeginning}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Previous"
+                      width={34}
+                      height={34}
+                      className="rotate-180"
+                    />
+                  </button>
+                  <button
+                    className={`swiper-button-next-aartiWorld transition-opacity ${
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Next slide"
+                    aria-disabled={isEnd}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Next"
+                      width={34}
+                      height={34}
+                    />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </FadeInReveal>
       <style>{`
   .progress-border {
     position: absolute;

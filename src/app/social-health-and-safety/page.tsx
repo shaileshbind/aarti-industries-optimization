@@ -1,4 +1,3 @@
-import React from "react";
 import SocialHealthAndSafetyBanner from "../components/social-health-and-safety/SocialHealthAndSafetyBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
@@ -11,6 +10,7 @@ import GridCardsSocial from "../components/social-health-and-safety/GridCardsSoc
 import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
 import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
 import SocialExplore from "../components/social-health-and-safety/SocialExplore";
+import StatsSection from "../components/social-health-and-safety/StatsSection";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -27,6 +27,7 @@ const page = async () => {
     section_six,
     section_seven,
     section_eight,
+    section_nine,
   } = data?.data;
   const seo = data?.seo;
   return (
@@ -36,7 +37,10 @@ const page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/social-health-and-safety"}  
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/social-health-and-safety"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -49,21 +53,20 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       {section_one && <SocialHealthAndSafetyBanner data={section_one} />}
-      {section_two && <OurResponsibility data={section_two} />} 
+      {section_two && <OurResponsibility data={section_two} />}
       {section_three && <WhoCards data={section_three} />}
-      {section_four && (
-        <DrivingEmpowerment data={section_four} />
-      )}
+      {section_four && <DrivingEmpowerment data={section_four} />}
 
-      {section_five && <ImpactStoriesSlider
-        data={section_five}
-        />}
-       {section_six && <GridCardsSocial data={section_six} />}
+      {section_five && <ImpactStoriesSlider data={section_five} />}
+      {section_six && (
+        <GridCardsSocial data={section_six} headingClassName="!text-[36px]" />
+      )}
       {section_seven && (
         <div className="mb-[72px] lg:mb-[140px] mt-[20px]">
           <EducationDevelopment data={section_seven} />
         </div>
-      )} 
+      )}
+      {section_nine && <StatsSection data={section_nine} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

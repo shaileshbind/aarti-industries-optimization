@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
+import { createContext, useContext, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 // Register GSAP plugins
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -15,6 +15,8 @@ interface GSAPContextType {
   ScrollTrigger: typeof ScrollTrigger;
   timeline: gsap.core.Timeline | null;
   createTimeline: () => gsap.core.Timeline;
+  stopLenis: () => void;
+  startLenis: () => void;
 }
 
 const GSAPContext = createContext<GSAPContextType | null>(null);
@@ -22,7 +24,7 @@ const GSAPContext = createContext<GSAPContextType | null>(null);
 export const useGSAP = () => {
   const context = useContext(GSAPContext);
   if (!context) {
-    throw new Error('useGSAP must be used within a GSAPProvider');
+    throw new Error("useGSAP must be used within a GSAPProvider");
   }
   return context;
 };
@@ -42,52 +44,76 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
   };
 
   useEffect(() => {
-    // Initialize Lenis Smooth Scroll with optimal settings
+    // Initialize Lenis Smooth Scroll with optimal settings for smooth scrolling
     const lenis = new Lenis({
-      duration: 1,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 0.8,
+      touchMultiplier: 1.5,
+      infinite: false,
     });
     lenisRef.current = lenis;
 
-    // Connect Lenis to ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
+    // Connect Lenis to ScrollTrigger - update on scroll
+    lenis.on("scroll", ScrollTrigger.update);
 
-    // Add Lenis to GSAP ticker
+    // Use requestAnimationFrame for smooth Lenis updates
+    // This is the recommended approach by Lenis
+    let rafId: number;
     const raf = (time: number) => {
-      lenis.raf(time * 1000);
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
     };
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
+    rafId = requestAnimationFrame(raf);
 
-    // Refresh ScrollTrigger on mount and when window resizes
-    const handleResize = () => {
+    // Configure GSAP ticker for better performance
+    gsap.ticker.lagSmoothing(200);
+
+    // Refresh ScrollTrigger after DOM is ready
+    const refreshTimeout = setTimeout(() => {
       ScrollTrigger.refresh();
+    }, 100);
+
+    // Refresh ScrollTrigger on window resize with debounce
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
     };
 
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener("resize", handleResize, { passive: true });
+
     return () => {
       // Clean up
-      gsap.ticker.remove(raf);
+      clearTimeout(refreshTimeout);
+      clearTimeout(resizeTimeout);
+      cancelAnimationFrame(rafId);
       lenis.destroy();
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       // Clean up ScrollTrigger instances
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
+  const stopLenis = () => {
+    lenisRef.current?.stop();
+  };
+
+  const startLenis = () => {
+    lenisRef.current?.start();
+  };
 
   const value: GSAPContextType = {
     gsap,
     ScrollTrigger,
     timeline: timelineRef.current,
     createTimeline,
+    stopLenis,
+    startLenis,
   };
 
-  return (
-    <GSAPContext.Provider value={value}>
-      {children}
-    </GSAPContext.Provider>
-  );
+  return <GSAPContext.Provider value={value}>{children}</GSAPContext.Provider>;
 };

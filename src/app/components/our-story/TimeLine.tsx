@@ -1,39 +1,39 @@
-'use client'
-import React, { useEffect, useRef, useState } from 'react'
-import { BodyText1, BodyText2, H3, SubH2 } from '../Typography2'
-import { FadeInGroup, FadeInRevealBlur, WordReveal } from '../ScrollReveal'
-import Image from 'next/image'
-import MainTimeline from './MainTimeline'
-import MobilePhaseDropdown from './MobilePhaseDropdown'
-import { gsap } from 'gsap'
-import { TimelineData } from '../../types/our.story.type' // adjust import path if needed
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { BodyText1, BodyText2, H3, SubH2 } from "../Typography2";
+import { FadeInRevealBlur } from "../ScrollReveal";
+import Image from "next/image";
+import MainTimeline from "./MainTimeline";
+import MobilePhaseDropdown from "./MobilePhaseDropdown";
+import { gsap } from "gsap";
+import { TimelineData } from "../../types/our.story.type"; // adjust import path if needed
 
-export default function TimeLine({
- data
-}: TimelineData) {
+export default function TimeLine({ data }: TimelineData) {
   const sectionTitle = data?.sectionTitle || "Our Journey";
 
-  const phases = data?.milestone?.map((milestone) => ({
-    title: `${milestone.name} (${milestone.date_range})`,
-    years: milestone.timeline_milestones.map((item) =>
-      parseInt(item.year.slice(0, 4))
-    ),
-    images: milestone.images?.map((image) => image?.url) || [],
-  })) || [];
+  const phases =
+    data?.milestone?.map((milestone) => ({
+      title: `${milestone.name} (${milestone.date_range})`,
+      years: milestone.timeline_milestones.map((item) => item.year),
+      images: milestone.images?.map((image) => image?.url) || [],
+    })) || [];
+
   const yearContent = data?.milestone?.reduce((acc, milestone) => {
     milestone.timeline_milestones.forEach((item) => {
-      const numericYear = parseInt(item.year.slice(0, 4));
-      acc[numericYear] = {
+      // const yearStr = item.year.slice(0, 4);
+      const yearStr = item.year;
+      acc[yearStr] = {
         title: item.title,
         description: item.description || "",
+        note: item.note || "",
       };
     });
     return acc;
-  }, {} as Record<number, { title: string; description: string }>);
+  }, {} as Record<string, { title: string; description: string; note: string }>);
 
   const [currentPhase, setCurrentPhase] = useState(0);
-  const [currentYear, setCurrentYear] = useState(
-    phases?.[0]?.years?.[0] || 0
+  const [currentYear, setCurrentYear] = useState<string>(
+    phases?.[0]?.years?.[0] || ""
   );
 
   const imagesContainerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,22 @@ export default function TimeLine({
   const image2Ref = useRef<HTMLDivElement>(null);
   const image3Ref = useRef<HTMLDivElement>(null);
 
-  const content = yearContent?.[currentYear] || { title: "", description: "" };
+  // Refs for content animation
+  const yearRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const isInitialRender = useRef(true);
+
+  // Refs for large background year numbers
+  const yearDigit1Ref = useRef<HTMLHeadingElement>(null);
+  const yearDigit2Ref = useRef<HTMLHeadingElement>(null);
+  const isInitialYearRender = useRef(true);
+
+  const content = yearContent?.[currentYear] || {
+    title: "",
+    description: "",
+    note: "",
+  };
   const images = phases?.[currentPhase]?.images || [];
 
   // Handlers
@@ -49,10 +64,10 @@ export default function TimeLine({
     setCurrentPhase(index);
     setCurrentYear(phases[index].years[0]);
   };
-  const handleYearClick = (year: number) => setCurrentYear(year);
+  const handleYearClick = (year: string) => setCurrentYear(year);
   const handleMobilePhaseSelect = (i: number) => handlePhaseClick(i);
 
-  // Animation
+  // Animation for images
   useEffect(() => {
     if (imagesContainerRef.current) {
       const tl = gsap.timeline();
@@ -74,42 +89,125 @@ export default function TimeLine({
     }
   }, [currentPhase]);
 
+  // Animation for content changes (year, title, description)
+  useEffect(() => {
+    if (yearRef.current && titleRef.current && descriptionRef.current) {
+      // Set initial state on first render (no animation)
+      if (isInitialRender.current) {
+        gsap.set([yearRef.current, titleRef.current, descriptionRef.current], {
+          autoAlpha: 1,
+          y: 0,
+          filter: "blur(0px)",
+        });
+        isInitialRender.current = false;
+        return;
+      }
+
+      const tl = gsap.timeline();
+
+      // Fade out current content
+      tl.to([yearRef.current, titleRef.current, descriptionRef.current], {
+        autoAlpha: 0,
+        y: 20,
+        filter: "blur(8px)",
+        duration: 0.3,
+        ease: "power2.in",
+      })
+        // Fade in new content
+        .to([yearRef.current, titleRef.current, descriptionRef.current], {
+          autoAlpha: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power3.out",
+        });
+    }
+  }, [currentYear, content.title, content.description]);
+
+  // Animation for large background year numbers
+  useEffect(() => {
+    if (yearDigit1Ref.current && yearDigit2Ref.current) {
+      // Set initial state on first render (no animation)
+      if (isInitialYearRender.current) {
+        gsap.set([yearDigit1Ref.current, yearDigit2Ref.current], {
+          autoAlpha: 1,
+        });
+        isInitialYearRender.current = false;
+        return;
+      }
+
+      const tl = gsap.timeline();
+
+      // Fade out and scale down current year digits
+      tl.to([yearDigit1Ref.current, yearDigit2Ref.current], {
+        autoAlpha: 0,
+        duration: 0.3,
+        ease: "power2.in",
+      })
+        // Fade in and scale up new year digits
+        .to([yearDigit1Ref.current, yearDigit2Ref.current], {
+          autoAlpha: 1,
+          duration: 0.3,
+          ease: "power3.out",
+        });
+    }
+  }, [currentYear]);
+
   return (
     <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
-      <WordReveal className="fluid-container" stagger={0.1} fromY={10} duration={3}>
-        <H3 className="lg:w-[35%] static lg:absolute lg:top-40 mb-5 lg:mb-[unset]">
-          {sectionTitle}
-        </H3>
-      </WordReveal>
+      <FadeInRevealBlur className="fluid-container">
+        <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
+          <H3>{sectionTitle}</H3>
+        </div>
+      </FadeInRevealBlur>
 
-      <FadeInGroup
-        stagger={0.2}
-        className="absolute lg:right-[-170] right-10 top-36 lg:-top-10 z-0 pointer-events-none flex gap-0"
-      >
-        <h1 className="font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]">
-          {String(currentYear).slice(2, 3)}
+      {/* Large Background Numbers */}
+      <div className="absolute lg:right-[-170px] right-10 top-33 lg:-top-48 z-0 pointer-events-none flex gap-0">
+        <h1
+          ref={yearDigit1Ref}
+          className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
+        >
+          {currentYear.slice(2, 3)}
         </h1>
-        <h1 className="font-alte-hans text-gray-200 font-extralight lg:text-[550px] text-[200px]">
-          {String(currentYear).slice(-1)}
+        <h1
+          ref={yearDigit2Ref}
+          className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
+        >
+          {currentYear.slice(-1)}
         </h1>
-      </FadeInGroup>
+      </div>
 
-      <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-center lg:items-end fluid-container">
-        <div className="lg:w-[320px] h-fit lg:mb-9">
-          <FadeInRevealBlur delay={0.1}>
+      <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-start md:items-center lg:items-end fluid-container">
+        <div className="lg:w-[420px] h-fit lg:mb-6">
+          <div ref={yearRef}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {currentYear}
             </BodyText2>
+          </div>
+          <div ref={titleRef}>
             <SubH2 className="capitalize">{content.title}</SubH2>
+          </div>
+          <div ref={descriptionRef}>
             <BodyText1>{content.description}</BodyText1>
-          </FadeInRevealBlur>
+          </div>
+
+          {content?.note && (
+            <div
+              dangerouslySetInnerHTML={{ __html: content?.note }}
+              className="ourStoryNote text-xs pt-2 text-grey-400 font-medium"
+            />
+          )}
         </div>
 
         <div
           className="xl:w-[50%] w-full lg:gap-6 gap-2 align-baseline justify-center lg:justify-end flex lg:flex-wrap items-center xl:mr-20"
           ref={imagesContainerRef}
         >
-          <div className="md:w-[295px] md:h-[340px] w-[170px] h-[196px]" ref={image1Ref}>
+          <div
+            className="md:w-[295px] md:h-[340px] w-[170px] h-[196px]"
+            ref={image1Ref}
+          >
             <Image
               src={images[0]}
               alt={phases[currentPhase]?.title}
@@ -118,7 +216,10 @@ export default function TimeLine({
               className="h-full w-full object-cover lg:rounded-3xl rounded-xl"
             />
           </div>
-          <div className="flex flex-col lg:gap-6 gap-2 justify-end" ref={image2Ref}>
+          <div
+            className="flex flex-col lg:gap-6 gap-2 justify-end"
+            ref={image2Ref}
+          >
             <div className="md:w-[239px] md:h-[200px] w-[144px] h-[130px] relative">
               <Image
                 src={images[2]}
@@ -127,7 +228,10 @@ export default function TimeLine({
                 className="h-full w-full object-cover lg:rounded-3xl rounded-xl"
               />
             </div>
-            <div className="md:w-[217px] md:h-[220px] w-[135px] h-[121px]" ref={image3Ref}>
+            <div
+              className="md:w-[217px] md:h-[220px] w-[135px] h-[121px]"
+              ref={image3Ref}
+            >
               <Image
                 src={images[1]}
                 alt={phases[currentPhase]?.title}
@@ -160,5 +264,5 @@ export default function TimeLine({
         />
       </div>
     </section>
-  )
+  );
 }

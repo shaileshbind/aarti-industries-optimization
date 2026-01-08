@@ -4,7 +4,7 @@ import { getSecret } from "./utils/awsSecret";
 const secretName = process.env.AWS_SECRET_NAME;
 const environment = process.env.NEXT_PUBLIC_IS_PRODUCTION;
 
-const nextConfig: NextConfig = async () => {
+const nextConfig = async () => {
   const awsSecrets = (secretName && environment === "true") ? await getSecret(secretName) : null;
   console.log("AWS_SECRET_NAME:", secretName);
   console.log("ENVIRONMENT:", environment);
@@ -20,13 +20,16 @@ const nextConfig: NextConfig = async () => {
     images: {
       unoptimized: true,
     },
+    compiler: {
+    removeConsole: environment === 'true'
+  },
     // env: { ...secrets },
 
     async redirects() {
       return [
         {
           source: "/investors/disclosures",
-          destination: "/investors/disclosures/disclosure",
+          destination: "/investors/disclosures/overview",
           permanent: true,
         },
         {

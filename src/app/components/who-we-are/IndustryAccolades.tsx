@@ -8,10 +8,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Mousewheel, Pagination, Navigation } from "swiper/modules";
+import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
-
+import { FadeInReveal } from "../ScrollReveal";
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
 
@@ -36,20 +36,20 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       const containerRect = container.getBoundingClientRect();
       const tabRect = activeTab.getBoundingClientRect();
       // Calculate if tab is outside visible area
-      const isOutOfView = 
-        tabRect.left < containerRect.left || 
+      const isOutOfView =
+        tabRect.left < containerRect.left ||
         tabRect.right > containerRect.right;
-      
+
       if (isOutOfView) {
         // Calculate scroll position to center the tab
-        const scrollLeft = 
-          activeTab.offsetLeft - 
-          container.offsetLeft - 
-          (container.clientWidth / 2) + 
-          (activeTab.clientWidth / 2);
+        const scrollLeft =
+          activeTab.offsetLeft -
+          container.offsetLeft -
+          container.clientWidth / 2 +
+          activeTab.clientWidth / 2;
         container.scrollTo({
           left: scrollLeft,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     }
@@ -80,8 +80,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
           // Animation complete, allow next transition
         },
       });
-      gsap.set(cards, { transformOrigin: "50% 50%" });
-      tl.to(cards, { scale: 0, duration: 0.2, stagger: 0.05 }, 0);
+      gsap.set(cards, { transformOrigin: "50% 50%", translateY: "0%" });
+      tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 }, 0);
 
       switchAnimRef.current = tl;
       return index;
@@ -111,7 +111,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       { width: "0%" },
       {
         width: "100%",
-        duration: 5,
+        duration: 20,
         ease: "linear",
         onComplete: () => {
           const nextIndex = (active + 1) % awards.length;
@@ -139,8 +139,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
     const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
     if (cards && cards.length > 0) {
-      gsap.set(cards, { scale: 0, transformOrigin: "50% 50%" });
-      tl.to(cards, { scale: 1, duration: 0.3, stagger: 0.05 }, 0);
+      gsap.set(cards, { translateY: "100%", transformOrigin: "50% 50%" });
+      tl.to(cards, { translateY: "0%", duration: 0.3, stagger: 0.05 }, 0);
     }
     tl.eventCallback("onComplete", () => {
       setIsTransitioning(false);
@@ -151,11 +151,15 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   }, [active]);
 
   return (
-    <div className="py-[72px] lg:py-[100px]">
-      {title && <H2 className="text-left lg:text-center container">{title}</H2>}
+    <div className="py-[72px] lg:pt-[140px] lg:pb-[100px]">
+      {title && (
+        <FadeInReveal delay={0.6}>
+          <H2 className="text-left lg:text-center container">{title}</H2>
+        </FadeInReveal>
+      )}
       {/* Tabs */}
       {awards?.[0]?.card?.length > 0 && (
-        <div 
+        <div
           ref={tabsContainerRef}
           className="mt-[27px] lg:mt-[36px] w-full lg:w-fit flex gap-x-[20px] lg:gap-x-[46px] overflow-x-auto lg:overflow-hidden px-[20px] lg:px-auto mx-[unset] lg:mx-auto md:justify-center"
         >
@@ -171,8 +175,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               } ${isTransitioning ? "pointer-events-none" : ""}`}
             >
               <BodyText2
-                className={`transition-all duration-300 whitespace-nowrap ${
-                  active === index ? "text-orange-200" : "text-grey-200"
+                className={`transition-all duration-300 whitespace-nowrap  ${
+                  active === index ? "text-orange-200" : "text-[#9997A2]"
                 }`}
               >
                 {items?.year}
@@ -200,7 +204,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             spaceBetween={24}
             breakpoints={{
               768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
+              1024: { slidesPerView: 3.2 },
+              1280: { slidesPerView: 4 },
             }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             observer={true}
@@ -211,7 +216,11 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               sensitivity: 1,
               releaseOnEdges: true,
             }}
-            modules={[Pagination, Mousewheel, Navigation]}
+            modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
             pagination={{
               el: ".awards-section-swiper",
               type: "progressbar",
@@ -226,7 +235,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
               <SwiperSlide key={`${active}-${idx}`}>
                 <div className="award-card-anim">
                   {item?.image?.url && (
-                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-[60px] grid place-items-center h-[230px] md:h-auto">
+                    <div className="bg-[#EFF3F5] rounded-[20px] p-6 xl:p-10 grid place-items-center h-[230px] overflow-hidden lg:h-[320px] 2xl:h-[360px] ">
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}

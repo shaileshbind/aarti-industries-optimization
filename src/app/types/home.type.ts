@@ -66,8 +66,10 @@ export type ByUseSectionProps = {
     card: {
       title: string;
       image: ImageProps;
+      link: string;
     }[];
   }[];
+  sectionFiveTitle?:string;
 };
 
 export type FosteringSafeProps = {
@@ -106,6 +108,7 @@ export type LatestAtAartiProps = {
     card: {
       id?: number;
       category?: string;
+      ctaButton?: ButtonProps;
       postContent?: {
         id?: string;
         description?: string;

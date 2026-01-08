@@ -1,5 +1,4 @@
 import { getData } from "@/_lib/getData.fetch";
-import React from "react";
 import BlogBanner from "../components/blogs/BlogBanner";
 import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";
@@ -46,14 +45,14 @@ export default async function page() {
 
       {section_one && <BlogBanner data={section_one} />}
 
-      {latestBlog && (
+      {latestBlog?.data?.length > 0 && (
         <div className="py-[72px] lg:py-[100px]">
           <LatestBlog data={latestBlog} section_two={section_two} />
         </div>
       )}
 
       {section_three && (
-        <div className="pb-[72px] lg:pb-[100px]">
+        <div className="pb-[72px] lg:pb-[100px] md:pt-10">
           <BlogAndCaseStudies
             data={section_three}
             lastestBlogId={latestBlog?.data?.[0]?.documentId}

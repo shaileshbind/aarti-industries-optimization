@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
@@ -45,51 +44,90 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full pt-[100%] overflow-hidden rounded-[1rem] hidden lg:block"
+      className="relative h-full w-full overflow-hidden rounded-3xl"
+      style={{
+        isolation: 'isolate', // Creates stacking context
+      }}
     >
       {/* Previous Image */}
       {prevImg && (
-        <div ref={previousRef} className="absolute inset-0">
-          <Image
+        <div
+          ref={previousRef}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
+            backfaceVisibility: 'hidden', // Firefox fix
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
+          {/* <Image
             src={prevImg}
-            alt="previous"
             fill
-            className="object-cover scale-110"
-            priority
-          />
-          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-          <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
+            alt="previous"
+            className="object-cover"
+            style={{
+              transform: 'translate3d(0, 0, 0)',
+            }}
+          /> */}
+          <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
             <Image
               src={prevImg}
               alt="previous"
               fill
               className="object-cover scale-110"
-              priority
             />
-          </span>
+            <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+            <span className="absolute bottom-0 left-2 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-full h-full -ml-6">
+              <Image
+                src={prevImg}
+                alt="previous"
+                fill
+                className="object-cover scale-110"
+              />
+            </span>
+          </div>
         </div>
       )}
 
       {/* Current Image */}
       {activeImg && (
-        <div ref={currentRef} className="absolute inset-0">
-          <Image
+        <div
+          ref={currentRef}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
+            backfaceVisibility: 'hidden', // Firefox fix
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
+          {/* <Image
             src={activeImg}
-            alt="active"
             fill
-            className="object-cover scale-110"
-            priority
-          />
-          <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-             <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-[100%] h-[100%]">
+            alt="current"
+            className="object-cover"
+            style={{
+              transform: 'translate3d(0, 0, 0)',
+            }}
+          /> */}
+          <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
             <Image
               src={activeImg}
-              alt="previous"
+              alt="current"
               fill
               className="object-cover scale-110"
-              priority
             />
-          </span>
+            <div className="absolute inset-0 bg-black/30 z-[1] rounded-lg" />
+            <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
+            <span className="absolute bottom-0 left-2 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-full h-full -ml-6">
+              <Image
+                src={activeImg}
+                alt="current"
+                fill
+                className="object-cover scale-110"
+              />
+            </span>
+          </div>
         </div>
       )}
     </div>

@@ -9,7 +9,7 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
   data,
   headingClassName,
 }) => {
-  const { cards, title } = data;
+  const { cards, title, description } = data;
 
   return (
     <section className="fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative">
@@ -24,6 +24,11 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
               >
                 {title}
               </H3>
+                {description && (
+                <BodyText2 className="text-grey-400 mt-[10px] md:mt-[20px]">
+                  {description}
+                </BodyText2>
+              )}
             </AnimatedText>
           </div>
         )}
@@ -44,13 +49,13 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
           cards?.map(({ title }, i) => (
             <div
               key={i}
-              className=" sm:h-auto lg:min-h-[140px] w-full bg-[#EFF3F5] rounded-3xl p-8 flex flex-col justify-between"
+              className="sm:h-auto lg:min-h-[140px] w-full bg-[#EFF3F5] rounded-3xl p-[24px] lg:p-8 flex flex-col justify-between"
               data-scroll
             >
-              <BodyText3 className="text-orange-200">{'0' + (i + 1)}</BodyText3>
+              <BodyText3 className="text-orange-200 !text-[16px]">{'0' + (i + 1)}</BodyText3>
 
-              <div className="mt-3 md:mt-3 space-y-3">
-                {title && <BodyText2>{title}</BodyText2>}
+              <div className="mt-3 md:mt-[10px] space-y-3">
+                {title && <BodyText2 className="!text-[20px] !font-alte-hans">{title}</BodyText2>}
               </div>
             </div>
           ))}

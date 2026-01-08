@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { BodyText2, BodyText3, H2, H3, SubH1, SubH3 } from "../Typography2";
+import { useState, useEffect, useRef } from "react";
+import { BodyText2, H2, H3, SubH3 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import DesktopMapSvg from "./DesktopMapSvg";
@@ -8,6 +8,7 @@ import StateMapSvg from "./StateMapSvg";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRMapsProps } from "@/app/types/global-reach.type";
+import { FadeInRevealBlur } from "../ScrollReveal";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -18,18 +19,17 @@ const GRMaps = ({ data }: GRMapsProps) => {
   const sectionOne = useRef<HTMLDivElement | null>(null);
   const sectionTwo = useRef<HTMLDivElement | null>(null);
   const revealCircle = useRef<HTMLDivElement | null>(null);
-  const [active, setActive] = useState(4);
+  const [active, setActive] = useState<number | null>(null);
   const [activeMob, setActiveMob] = useState(0);
-  const [activeBlip, setActiveBlip] = useState(4);
-  const totalCities = 5;
+  const [activeBlip, setActiveBlip] = useState<number | null>();
+  const totalCities = 6;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveMob((prev) => (prev + 1) % totalCities);
-    }, 1500);
-
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setActiveMob((prev) => (prev + 1) % totalCities);
+  }, 4000);
+  return () => clearInterval(interval);
+}, [activeMob]); 
 
   useEffect(() => {
     if (
@@ -93,12 +93,15 @@ const GRMaps = ({ data }: GRMapsProps) => {
       >
         <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
           {sectionTitle && (
+            <FadeInRevealBlur className="w-full">
             <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
               {sectionTitle}
             </H2>
+            </FadeInRevealBlur>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px] overflow-scroll ">
-            <div className="w-fit h-full mx-auto hidden lg:block relative ">
+          <div className="relative w-full h-[180px] lg:h-[550px]">  
+            <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
+            <FadeInRevealBlur className="w-full">
               <DesktopMapSvg
                 hoverRestWorld={() => setActiveBlip(0)}
                 hoverNorthAmerica={() => setActiveBlip(1)}
@@ -112,223 +115,23 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
                 fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
                 fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
+                isActive0={activeBlip === 0}
+                isActive1={activeBlip === 1}
+                isActive2={activeBlip === 2}
+                isActive3={activeBlip === 3}
+                isActive4={activeBlip === 4}
+                isActive5={activeBlip === 5}
               />
-              <div
-                onMouseEnter={() => setActiveBlip(0)}
-                className="absolute top-[78%] left-[5.5%]  cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 0
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  }    transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 0 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    3%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 0 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Rest of the world
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 0
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* North America */}
-              <div
-                onMouseEnter={() => setActiveBlip(1)}
-                className="absolute top-[21.5%] left-[12.5%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 1
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 1 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    18%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 1 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    North America
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 1
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Europe */}
-              <div
-                onMouseEnter={() => setActiveBlip(2)}
-                className="absolute top-[20.5%] left-[43%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 2
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 2 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    4%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 2 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Europe
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 2
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Middle East */}
-              <div
-                onMouseEnter={() => setActiveBlip(3)}
-                className="absolute top-[33%] left-[53%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 3
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 3 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    23%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 3 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Middle East
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 3
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* India */}
-              <div
-                onMouseEnter={() => setActiveBlip(4)}
-                className="absolute top-[36%] left-[64.5%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 4
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 4 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    46%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 4 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    India
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 4
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
-              {/* Rest of Asia */}
-              <div
-                onMouseEnter={() => setActiveBlip(5)}
-                className="absolute top-[19%] left-[76.3%] cursor-pointer"
-              >
-                <div
-                  className={`${
-                    activeBlip === 5
-                      ? "bg-gradient-orange-1 border-transparent"
-                      : "bg-white border-gray-200"
-                  } transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]  w-[123px] h-[73px] rounded-[10px] border  grid content-center text-center relative`}
-                >
-                  <SubH1
-                    className={`${
-                      activeBlip === 5 ? "text-white" : "text-orange-100"
-                    } !text-[28px]`}
-                  >
-                    6%
-                  </SubH1>
-                  <BodyText3
-                    className={`${
-                      activeBlip === 5 ? "text-white" : "text-grey-400"
-                    } !text-[12px]`}
-                  >
-                    Rest of Asia
-                  </BodyText3>
-                  <div
-                    className={`${
-                      activeBlip === 5
-                        ? "bg-[#e3590c] border-none"
-                        : "bg-white blip-border"
-                    } absolute left-1/2 -translate-x-1/2 -bottom-2 w-4 h-4 rotate-45 z-[0]`}
-                  ></div>
-                </div>
-              </div>
+              </FadeInRevealBlur>
             </div>
+            {/* <FadeInRevealBlur className="w-full"> */}
             <Image
               src="/images/global-reach/gr-map-m.svg"
               alt="img"
               fill
               className="object-contain block lg:hidden"
             />
+            {/* </FadeInRevealBlur> */}
           </div>
           <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
             {mobileStatsData?.map((items, index) => {
@@ -371,7 +174,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     <div className="mt-5">
                       <Button
                         title={ctaButton?.title}
-                        href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
+                        href={
+                          ctaButton?.hasExternalLink == "true"
+                            ? ctaButton?.externalLink
+                            : ctaButton?.link?.link
+                        }
                         secondary
                       />
                     </div>
@@ -391,29 +198,51 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         Manufacturing Facilities
                       </SubH3>
                     </div>
-                    <div className="mt-[20px] grid grid-cols-2">
-                      <BodyText2
-                        className={`${
-                          active === 2 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                    <div className="mt-[20px] grid grid-cols-2 gap-2">
+                      <div
+                        onMouseEnter={() => setActive(2)}
+                        className="cursor-pointer w-fit"
                       >
-                        Tarapur
-                      </BodyText2>
-                      <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 0 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 2 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Tarapur
+                        </BodyText2>
+                      </div>
+                      <div   onMouseEnter={() => setActive(5)}
+                        className="cursor-pointer w-fit">
+                        <BodyText2 className={`${
+                            active === 5 ? "text-grey-400" : "text-grey-300"
+                          }`}>
+                          Jhagadia
+                        </BodyText2>
+                      </div>
+                      <div
+                        onMouseEnter={() => setActive(0)}
+                        className="cursor-pointer w-fit"
                       >
-                        Bhachau
-                      </BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 1 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 0 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Bhachau
+                        </BodyText2>
+                      </div>
+                      <div
+                        onMouseEnter={() => setActive(1)}
+                        className="cursor-pointer w-fit"
                       >
-                        Dahej
-                      </BodyText2>
+                        <BodyText2
+                          className={`${
+                            active === 1 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Dahej
+                        </BodyText2>
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -425,23 +254,33 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         height={18}
                         className="object-cover h-[18px] w-[18px]"
                       />
-                      <SubH3 className="!text-[16px]">R&D Centers</SubH3>
+                      <SubH3 className="!text-[16px]">R&D Centres</SubH3>
                     </div>
                     <div className="mt-[20px] grid grid-cols-2">
-                      <BodyText2
-                        className={`${
-                          active === 4 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                      <div
+                        onMouseEnter={() => setActive(4)}
+                        className="cursor-pointer w-fit"
                       >
-                        Vapi
-                      </BodyText2>
-                      <BodyText2
-                        className={`${
-                          active === 3 ? "text-grey-400" : "text-grey-300"
-                        }`}
+                        <BodyText2
+                          className={`${
+                            active === 4 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Vapi
+                        </BodyText2>
+                      </div>
+                      <div
+                        onMouseEnter={() => setActive(3)}
+                        className="cursor-pointer w-fit"
                       >
-                        Navi Mumbai
-                      </BodyText2>
+                        <BodyText2
+                          className={`${
+                            active === 3 ? "text-grey-400" : "text-grey-300"
+                          }`}
+                        >
+                          Navi Mumbai
+                        </BodyText2>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -451,26 +290,37 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 <StateMapSvg
                   width="737"
                   height="569"
+                  active={active}
                   hoverBachau={() => setActive(0)}
                   hoverDahej={() => setActive(1)}
                   hoverTarapur={() => setActive(2)}
                   hoverNaviM={() => setActive(3)}
                   hoverVapi={() => setActive(4)}
+                  hoverJhagadia={()=> setActive(5)}
                 />
-                <div className="bg-blue-100 p-2 absolute top-[5%] right-[22%] w-[270px] h-[300px] rounded-[12px]">
+               {active !== null && 
+               (<div
+                  className={`${
+                    [0, 1, 2,5].includes(active) ? "bg-[#e55e2d]" : "bg-blue-100"
+                    } p-2 absolute w-[270px] h-[300px] rounded-[12px] transition-all duration-300  ${
+                      active === 0 ? "top-[5%] left-[16%]" :
+                      active === 1 ? "top-[10%] left-[38%]" :
+                      active === 2 ? "top-[22%] left-[41%]" :
+                      active === 3 ? "top-[25%] left-[42%]" :
+                      active === 4 ? "top-[17%] left-[40%]" :
+                      "top-[10%] left-[41%]"
+                    }`}
+                >
                   <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                     <div className="absolute inset-0 overflow-hidden">
                       <Image
                         src={
-                          active === 0
-                            ? "/images/global-reach/gr-banner.png"
-                            : active === 1
-                            ? "/images/rd/rd-banner.png"
-                            : active === 2
-                            ? "/images/cdmo/cdmo-driving-banner.png"
-                            : active === 3
-                            ? "/images/home/blog1.png"
-                            : "/images/home/framework-forged-1.png"
+                          active === 0 ? "/images/global-reach/Bachau.webp" :
+                            active === 1 ? "/images/global-reach/Dahej.webp" :
+                            active === 2 ? "/images/global-reach/Tarapur.webp" :
+                            active === 3 ? "/images/global-reach/NaviM.webp" :
+                            active === 4 ? "/images/global-reach/Vapi.webp" :
+                            "/images/global-reach/Jhagadia.webp"
                         }
                         alt="img"
                         fill
@@ -480,35 +330,27 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                         <Image
                           src={
-                            active === 0
-                              ? "/images/global-reach/gr-banner.png"
-                              : active === 1
-                              ? "/images/rd/rd-banner.png"
-                              : active === 2
-                              ? "/images/cdmo/cdmo-driving-banner.png"
-                              : active === 3
-                              ? "/images/home/blog1.png"
-                              : "/images/home/framework-forged-1.png"
-                          }
-                          alt="img"
-                          fill
-                          className="object-cover scale-110"
+                          active === 0 ? "/images/global-reach/Bachau.webp" :
+                              active === 1 ? "/images/global-reach/Dahej.webp" :
+                              active === 2 ? "/images/global-reach/Tarapur.webp" :
+                              active === 3 ? "/images/global-reach/NaviM.webp" :
+                              active === 4 ? "/images/global-reach/Vapi.webp" :
+                              "/images/global-reach/Jhagadia.webp"
+                        }
+                          alt="img" fill className="object-cover scale-110"
                         />
                       </span>
                     </div>
                   </div>
                   <BodyText2 className="text-white mt-[14px] text-center">
-                    {active === 0
-                      ? "Bhachau"
-                      : active === 1
-                      ? "Dahej "
-                      : active === 2
-                      ? "Tarapur"
-                      : active === 3
-                      ? "Navi Mumbai"
-                      : "Vapi"}
+                    {active === 0 ? "Bhachau" :
+                       active === 1 ? "Dahej " :
+                       active === 2 ? "Tarapur" :
+                       active === 3 ? "Navi Mumbai" :
+                       active === 4 ? "Vapi" :
+                       "Jhagadia"}
                   </BodyText2>
-                </div>
+                </div>)}
               </div>
             </div>
           </div>
@@ -526,7 +368,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
               <div className="mt-5">
                 <Button
                   title={ctaButton?.title}
-                  href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link}
+                  href={
+                    ctaButton?.hasExternalLink == "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link
+                  }
                   secondary
                 />
               </div>
@@ -535,22 +381,28 @@ const GRMaps = ({ data }: GRMapsProps) => {
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
             <StateMapSvg width="100%" height="300" />
-            <div className="bg-blue-100 p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]">
+            <div
+              className={`${
+                [0, 1, 2,5].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
+              }  p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]`}
+            >
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
                     key={activeMob}
-                    src={
-                      activeMob === 0
-                        ? "/images/global-reach/gr-banner.png"
-                        : activeMob === 1
-                        ? "/images/rd/rd-banner.png"
-                        : activeMob === 2
-                        ? "/images/cdmo/cdmo-driving-banner.png"
-                        : activeMob === 3
-                        ? "/images/home/blog1.png"
-                        : "/images/home/framework-forged-1.png"
-                    }
+                     src={
+                          activeMob === 0
+                            ? "/images/global-reach/Bachau.webp"
+                            : activeMob === 1
+                            ? "/images/global-reach/Dahej.webp"
+                            : activeMob === 2
+                            ? "/images/global-reach/Tarapur.webp"
+                            : activeMob === 3
+                            ? "/images/global-reach/NaviM.webp"
+                            : activeMob === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
+                        }
                     alt="img"
                     fill
                     className="object-cover scale-110"
@@ -559,17 +411,19 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                     <Image
                       key={`inner-${activeMob}`}
-                      src={
-                        activeMob === 0
-                          ? "/images/global-reach/gr-banner.png"
-                          : activeMob === 1
-                          ? "/images/rd/rd-banner.png"
-                          : activeMob === 2
-                          ? "/images/cdmo/cdmo-driving-banner.png"
-                          : activeMob === 3
-                          ? "/images/home/blog1.png"
-                          : "/images/home/framework-forged-1.png"
-                      }
+                       src={
+                          activeMob === 0
+                            ? "/images/global-reach/Bachau.webp"
+                            : activeMob === 1
+                            ? "/images/global-reach/Dahej.webp"
+                            : activeMob === 2
+                            ? "/images/global-reach/Tarapur.webp"
+                            : activeMob === 3
+                            ? "/images/global-reach/NaviM.webp"
+                            : activeMob === 4
+                            ? "/images/global-reach/Vapi.webp"
+                            : "/images/global-reach/Jhagadia.webp"
+                        }
                       alt="img"
                       fill
                       className="object-cover scale-110"
@@ -586,12 +440,14 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   ? "Tarapur"
                   : activeMob === 3
                   ? "Navi Mumbai"
-                  : "Vapi"}
+                  : activeMob === 4
+                  ? "Vapi"
+                  : "Jhagadia"}
               </BodyText2>
             </div>
           </div>
-          <div className="my-[62px] px-[20px] w-full grid lg:grid-cols-2 gap-y-[16px] gap-x-[5px] items-start lg:justify-between">
-            <div className="border-b  border-grey-200 pb-[16px] lg:pb-[unset]">
+          <div className="my-[62px] px-[20px] w-full grid lg:grid-cols-2 gap-y-[14px] gap-x-[5px] items-start lg:justify-between">
+            <div className="border-b  border-grey-200 pb-[14px] lg:pb-[unset]">
               <div className="flex gap-x-[12px] items-center w-full">
                 <Image
                   src="/images/global-reach/blip-orange.svg"
@@ -602,29 +458,49 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 />
                 <SubH3 className="!text-[18px]">Manufacturing Facilities</SubH3>
               </div>
-              <div className="mt-[20px] grid grid-cols-2">
-                <BodyText2
-                  className={`${
-                    active === 2 ? "text-grey-400" : "text-grey-300"
-                  }`}
+              <div className="mt-[12px] grid grid-cols-2 gap-2">
+                <div
+                  onClick={() => setActiveMob(2)}
+                  className="cursor-pointer w-fit"
                 >
-                  Tarapur
-                </BodyText2>
-                <BodyText2 className="text-grey-300">Jhagadia</BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 0 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 2 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Tarapur
+                  </BodyText2>
+                </div>
+                <div    onClick={() => setActiveMob(5)}
+                  className="cursor-pointer w-fit">
+                  <BodyText2   className={`${
+                      activeMob === 5 ? "text-grey-400" : "text-grey-300"
+                    }`}>Jhagadia</BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(0)}
+                  className="cursor-pointer w-fit"
                 >
-                  Bhachau
-                </BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 1 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 0 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Bhachau
+                  </BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(1)}
+                  className="cursor-pointer w-fit"
                 >
-                  Dahej
-                </BodyText2>
+                  <BodyText2
+                    className={`${
+                      activeMob === 1 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Dahej
+                  </BodyText2>
+                </div>
               </div>
             </div>
             <div>
@@ -636,23 +512,33 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   height={18}
                   className="object-cover h-[18px] w-[18px]"
                 />
-                <SubH3 className="!text-[18px]">R&D Centers</SubH3>
+                <SubH3 className="!text-[18px]">R&D Centres</SubH3>
               </div>
-              <div className="mt-[20px] grid grid-cols-2">
-                <BodyText2
-                  className={`${
-                    active === 4 ? "text-grey-400" : "text-grey-300"
-                  }`}
+              <div className="mt-[12px] grid grid-cols-2">
+                <div
+                  onClick={() => setActiveMob(4)}
+                  className="cursor-pointer w-fit"
                 >
-                  Vapi
-                </BodyText2>
-                <BodyText2
-                  className={`${
-                    active === 3 ? "text-grey-400" : "text-grey-300"
-                  }`}
+                  <BodyText2
+                    className={`${
+                      activeMob === 4 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Vapi
+                  </BodyText2>
+                </div>
+                <div
+                  onClick={() => setActiveMob(3)}
+                  className="cursor-pointer w-fit"
                 >
-                  Navi Mumbai
-                </BodyText2>
+                  <BodyText2
+                    className={`${
+                      activeMob === 3 ? "text-grey-400" : "text-grey-300"
+                    }`}
+                  >
+                    Navi Mumbai
+                  </BodyText2>
+                </div>
               </div>
             </div>
           </div>

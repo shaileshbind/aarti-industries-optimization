@@ -24,6 +24,7 @@ export type CDMOPartnerProps = {
     }[];
   };
   headingClassName?: string;
+  className?: string;
 };
 
 export type CDMODrivingProps = {
@@ -69,10 +70,12 @@ export type CDMOSplchemProps = {
     cards: {
       title: string;
       image: ImageProps;
+      link: string;
     }[];
   };
   headingClassName?: string;
   className?: string;
+  useLink?: boolean;
 };
 
 export type CDMOSafegreenProps = {
@@ -85,7 +88,8 @@ export type CDMOSafegreenProps = {
 
 export type CDMOExpProps = {
   data: {
-    title: string;
-    ctaButton: ButtonProps[];
+    title?: string;
+    ctaButton?: ButtonProps[];
+    formTitle?: string;
   }[];
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import BlackInfoSection from "../sections/BlackInfoSection";
 import { MiddleBannerProps } from "@/app/types/digital-transformation.type";
 
@@ -14,6 +13,7 @@ const MiddleBanner = ({ data }: MiddleBannerProps) => {
         mobImage={mobImage?.url}
         title={title}
         description={description}
+        overlayClassName="bg-black/70"
       />
     </div>
   );

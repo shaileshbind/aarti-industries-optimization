@@ -1,4 +1,3 @@
-import React from "react";
 import GloballyCertified from "../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
@@ -59,7 +58,7 @@ const page = async () => {
         <div className="pt-[80px] lg:pt-[120px] pb-5">
           <ComprehensiveCare data={section_four} />
         </div>
-      )}
+      )}a
       {section_five && <ImageGallery imgArr={section_five} />}
       {section_six && <ThePeople data={section_six} />}
       {globallyCertifiedData && (

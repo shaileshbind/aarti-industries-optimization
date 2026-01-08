@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useCustomCursor } from "./GlobalCursor";
 
 interface CustomCursorTriggerProps {
@@ -27,11 +27,19 @@ const CustomCursorTrigger: React.FC<CustomCursorTriggerProps> = ({
     if (customCursor) cursor.hide();
   };
 
+  useEffect(() => {
+    return () => handleMouseLeave()
+  }, [])
+  
+
   return (
     <div
       className={className}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onScroll={handleMouseLeave}
+      onWheel={handleMouseLeave}
+      onMouseDown={handleMouseLeave}
     >
       {children}
     </div>

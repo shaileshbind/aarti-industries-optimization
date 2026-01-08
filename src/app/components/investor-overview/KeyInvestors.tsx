@@ -1,25 +1,29 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BodyText2, SubH1 } from "../Typography2";
 import Link from "next/link";
 import Image from "next/image";
 import InvestorBarChart from "../InvestorBarChart";
 import { InvestorKeyProps } from "@/app/types/investor-overview.type";
+import { FadeInReveal } from "../ScrollReveal";
 
 const KeyInvestors = ({ data }: InvestorKeyProps) => {
   const { leftSection, rightSection } = data;
   const [active, setActive] = useState(0);
 
   return (
-    <div>
-      <div className="grid lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]  gap-y-[18px] gap-x-[24px] fluid-container">
+    <FadeInReveal>
+      <div className="grid grid-cols-1 lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]  gap-y-[18px] gap-x-[24px] fluid-container">
         <div>
           {leftSection?.title && (
             <SubH1 className="!text-[24px] lg:!text-[30px]">
               {leftSection?.title}
             </SubH1>
           )}
-          <div className="mt-[24px] lg:mt-[28px] max-h-[unset] lg:max-h-[550px] lg:overflow-y-scroll grid gap-y-[18px] bg-gradient-orange-1 rounded-[12px] px-[20px] py-[30px] lg:p-[36px]">
+          <div
+            className="mt-[24px] lg:mt-[28px] max-h-[unset] lg:max-h-[550px] lg:overflow-y-auto scrollbar grid gap-y-[18px] bg-gradient-orange-1 rounded-[12px] px-[20px] py-[30px] lg:p-[36px]"
+            data-lenis-prevent
+          >
             {leftSection?.content?.map((items) => {
               const url = items?.file?.url ?? items?.link;
               return (
@@ -92,7 +96,7 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </FadeInReveal>
   );
 };
 

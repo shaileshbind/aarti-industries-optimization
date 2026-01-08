@@ -65,9 +65,10 @@ export default function ListingContainer({
         value={searchValue}
         onChange={handleChange}
         handleSearch={handleSearch}
+        lineClassName="hidden"
+        bottomMiddleStarClassName="hidden"
         showStar3={false}
-        lineClassName="hidden md:block"
-        bottomMiddleStarClassName="hidden md:block"
+        showStar2={false}
       />
 
       <DisclosureTabs categories={categories} />
