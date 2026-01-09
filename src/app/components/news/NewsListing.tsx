@@ -124,7 +124,7 @@ const NewsListing = () => {
         setIsLoading(true);
         setError(null);
         const url = `/api/news?type=${encodeURIComponent(
-          activeCat
+          activeCat,
         )}&_page=${currentPage}`;
         const data = await fetchNews(url);
         const results = data?.results || [];
@@ -191,25 +191,25 @@ const NewsListing = () => {
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
-    page: number
+    page: number,
   ) => {
     const now = Date.now();
     const timeSinceLastClick = now - lastPageChangeRef.current;
-    
+
     // Debounce: ignore rapid clicks within 300ms
     if (timeSinceLastClick < 300) {
       return;
     }
     lastPageChangeRef.current = now;
-    
+
     setCurrentPage(page);
-    
+
     // Cancel any existing scroll animation
     if (scrollAnimationRef.current) {
       scrollAnimationRef.current.kill();
       scrollAnimationRef.current = null;
     }
-    
+
     // Use GSAP ScrollToPlugin which works with Lenis
     scrollInProgressRef.current = true;
     scrollAnimationRef.current = gsap.to(window, {
@@ -223,7 +223,7 @@ const NewsListing = () => {
       onInterrupt: () => {
         scrollInProgressRef.current = false;
         scrollAnimationRef.current = null;
-      }
+      },
     });
   };
 
@@ -239,7 +239,7 @@ const NewsListing = () => {
     const activeButton = tabRefs.current[activeTab];
     if (!activeButton || !containerRef.current) {
       setIndicator((prev) =>
-        prev.visible ? { ...prev, visible: false } : prev
+        prev.visible ? { ...prev, visible: false } : prev,
       );
       return;
     }

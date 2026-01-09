@@ -12,14 +12,9 @@ export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/ethics");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
-  const {
-    section_one,
-    section_two,
-    section_three,
-    section_four,
-  } = data?.data;
+  const { section_one, section_two, section_three, section_four } = data?.data;
   const seo = data?.seo;
 
   return (
@@ -41,13 +36,12 @@ const page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-      {section_one && <WhoBanner data={section_one} />} 
+      {section_one && <WhoBanner data={section_one} />}
       {section_two && <EthicsAndCode data={section_two} />}
       {section_three && <GlobalInnovation data={section_three} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {/* {section_four && <WhoExp data={section_four} />}  */}
       {section_four && <SocialExplore data={section_four} />}
     </div>
   );

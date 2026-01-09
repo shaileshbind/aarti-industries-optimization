@@ -52,7 +52,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -81,8 +81,8 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   }, [isInViewport, isHovered]);
 
   return (
-    <div 
-      ref={sectionRef} 
+    <div
+      ref={sectionRef}
       className="pt-[50px] pb-[25px] lg:pt-[140px] lg:pb-[110px] overflow-hidden"
     >
       {/* Content Section */}
@@ -92,7 +92,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
           {sectionTitle && (
             <FadeInRevealBlur
               className={clsx(
-                `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`
+                `px-5 lg:pl-[60px] lg:pr-8 lg:w-[60%] w-full flex-shrink-0 mb-0 lg:mb-4`,
               )}
             >
               <H2 className={clsx(`text-blue-200`, headingClassName)}>
@@ -154,7 +154,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               >
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
-                    <SwiperSlide 
+                    <SwiperSlide
                       key={index}
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
@@ -179,10 +179,12 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               </Swiper>
 
               {cards && cards.length > 1 && (
-                <div className={clsx(
-                  "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]",
-                  cards.length <= 4 && "lg:hidden"
-                )}>
+                <div
+                  className={clsx(
+                    "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]",
+                    cards.length <= 4 && "lg:hidden",
+                  )}
+                >
                   {cards?.length > 4 && (
                     <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
                       <button

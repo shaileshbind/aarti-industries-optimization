@@ -73,12 +73,16 @@ export default function GeneralForm({
   className,
   showTitle = true,
 }: GeneralFormProps) {
-  const [categorySubcategoryData, setCategorySubcategoryData] = useState<CategorySubcategoryItem[]>([]);
+  const [categorySubcategoryData, setCategorySubcategoryData] = useState<
+    CategorySubcategoryItem[]
+  >([]);
   const [productLoading, setProductLoading] = useState(false);
-  const [initialProductOptions, setInitialProductOptions] = useState<string[]>([]);
+  const [initialProductOptions, setInitialProductOptions] = useState<string[]>(
+    [],
+  );
   const [productOptions, setProductOptions] = useState<string[]>([]);
   const [searchInputValue, setSearchInputValue] = useState("");
-   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
+  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const {
     register,
@@ -118,11 +122,11 @@ export default function GeneralForm({
             category: item?.name,
             subCategories:
               item?.form_sub_categories?.map(
-                (sub: formSubCategories) => sub?.name
+                (sub: formSubCategories) => sub?.name,
               ) || [],
             subCatEmails:
               item?.form_sub_categories?.map(
-                (sub: formSubCategories) => sub?.reciverEmail
+                (sub: formSubCategories) => sub?.reciverEmail,
               ) || [],
           })) || [];
 
@@ -134,7 +138,7 @@ export default function GeneralForm({
 
         const mappedProducts: string[] =
           dataProducts?.data?.map(
-            (item: { productName: string }) => item.productName
+            (item: { productName: string }) => item.productName,
           ) || [];
         const finalProducts = [...mappedProducts, "Others"];
 
@@ -145,7 +149,7 @@ export default function GeneralForm({
         const updatedDefaults: Partial<FormValues> = {};
         if (prefillCategory) {
           const categoryExists = transformedCategories.some(
-            (item) => item.category === prefillCategory
+            (item) => item.category === prefillCategory,
           );
           if (categoryExists) {
             updatedDefaults.category = prefillCategory;
@@ -191,7 +195,7 @@ export default function GeneralForm({
       setProductLoading(true);
 
       const res = await fetch(
-        `/api/product-form-search?q=${encodeURIComponent(query)}`
+        `/api/product-form-search?q=${encodeURIComponent(query)}`,
       );
       if (!res.ok) {
         console.error("Fetch failed");
@@ -230,16 +234,16 @@ export default function GeneralForm({
   const availableSubcategories = useMemo(
     () =>
       categorySubcategoryData?.find(
-        (item) => item.category === selectedCategory
+        (item) => item.category === selectedCategory,
       )?.subCategories || [],
-    [categorySubcategoryData, selectedCategory]
+    [categorySubcategoryData, selectedCategory],
   );
 
   // Update receiver email when subcategory changes
   useEffect(() => {
     if (selectedCategory && selectedSubcategory) {
       const categoryData = categorySubcategoryData.find(
-        (item) => item.category === selectedCategory
+        (item) => item.category === selectedCategory,
       );
       if (categoryData) {
         const subCategoryIndex =
@@ -371,7 +375,7 @@ export default function GeneralForm({
         <div
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
-            className
+            className,
           )}
         >
           {/* Full Name */}
@@ -600,7 +604,7 @@ export default function GeneralForm({
               className={clsx(
                 availableSubcategories?.length > 0
                   ? "opacity-100 pointer-events-auto"
-                  : "opacity-60 pointer-events-none"
+                  : "opacity-60 pointer-events-none",
               )}
             >
               <InputLabel id="subCategory">Sub category *</InputLabel>
@@ -718,7 +722,7 @@ export default function GeneralForm({
               placeholder="Write your message here *"
               className={clsx(
                 "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]",
               )}
             ></textarea>
             {errors.message && (
@@ -787,7 +791,7 @@ export default function GeneralForm({
                 placeholder="Other Enquiries *"
                 className={clsx(
                   "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]",
                 )}
               ></textarea>
               {errors.otherEnquiry && (

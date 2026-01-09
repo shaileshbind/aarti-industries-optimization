@@ -47,7 +47,7 @@ const SliderCard: FC<SliderCardProps> = ({
         <div
           className={clsx(
             "relative w-full pt-[60%] h-[250px] lg:h-[300px] mb-[10px] lg:mb-[unset]",
-            "overflow-hidden rounded-[1rem] flex items-center justify-center"
+            "overflow-hidden rounded-[1rem] flex items-center justify-center",
           )}
         >
           <div className="absolute inset-0 overflow-hidden">
@@ -139,7 +139,10 @@ const SliderCard: FC<SliderCardProps> = ({
       {/* Desktop Version */}
       <div className="hidden lg:flex  gap-12 items-center flex-shrink-0 rounded-lg pr-10">
         <div className="relative w-[40%]   overflow-hidden rounded-[1rem] flex items-center justify-center">
-          <div ref={index === 0 ? imageWrapperRef || null : null} className={`w-full pt-[100%] relative ${index != 0 ? 'sliderStagger' : ''}`}>
+          <div
+            ref={index === 0 ? imageWrapperRef || null : null}
+            className={`w-full pt-[100%] relative ${index != 0 ? "sliderStagger" : ""}`}
+          >
             <div className="absolute w-full h-full top-0 left-0 overflow-hidden! rounded-[20px]!">
               {imgSrc && (
                 <Image
@@ -172,8 +175,12 @@ const SliderCard: FC<SliderCardProps> = ({
           </div>
         </div>
         <div className="w-[60%]">
-          {heading && <SubH1 className="mb-[14px] sliderStagger">{heading}</SubH1>}
-          {description && <BodyText1 className="sliderStagger">{description}</BodyText1>}
+          {heading && (
+            <SubH1 className="mb-[14px] sliderStagger">{heading}</SubH1>
+          )}
+          {description && (
+            <BodyText1 className="sliderStagger">{description}</BodyText1>
+          )}
           {bullets && (
             <div className="mt-[18px]">
               {bullets?.map((bp: bulletProp) => (

@@ -42,7 +42,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
     // Find the matching subcategory
     const matchingSubCategory = reportLayout.find(
-      (item) => item.subCategory === targetSubCategory
+      (item) => item.subCategory === targetSubCategory,
     );
 
     if (matchingSubCategory) {
@@ -92,13 +92,13 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
   // Get current subcategory data
   const currentSubCategory = reportLayout?.find(
-    (item) => item.subCategory === activeSubCategory
+    (item) => item.subCategory === activeSubCategory,
   );
   const yearAndReport = currentSubCategory?.yearAndReport || [];
 
   // Get current reports based on active year
   const currentReports = yearAndReport?.find(
-    (item) => item.year === activeYear
+    (item) => item.year === activeYear,
   )?.report;
 
   // Handler for Archive year dropdown
@@ -121,7 +121,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
   const handleSubCategoryClick = (subCat: string) => {
     setActiveSubCategory(subCat);
     const newSubCategory = reportLayout?.find(
-      (item) => item.subCategory === subCat
+      (item) => item.subCategory === subCat,
     );
     setActiveYear(newSubCategory?.yearAndReport?.[0]?.year || "");
     setDropdownClicked(false);
@@ -148,7 +148,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
       setUnderline({ left: Math.round(left), width });
     },
-    [activeYear]
+    [activeYear],
   );
 
   // measure after layout and when activeYear changes
@@ -172,7 +172,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                 `py-5 px-2 border-b-2 border-b-[#E1E1E1] cursor-pointer text-base transition-all duration-300`,
                 activeSubCategory === subCat.subCategory
                   ? "text-[#002F50]"
-                  : "text-[#9997A2] hover:text-[#002F50]"
+                  : "text-[#9997A2] hover:text-[#002F50]",
               )}
               onClick={() => handleSubCategoryClick(subCat.subCategory)}
             >
@@ -232,7 +232,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                         "text-base",
                         item?.year === activeYear
                           ? "text-[#002F50]"
-                          : "text-[#4C5861]"
+                          : "text-[#4C5861]",
                       )}
                     >
                       {item?.year}
@@ -295,8 +295,8 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                       item?.link
                         ? item?.link
                         : item?.file?.url
-                        ? item?.file?.url
-                        : ""
+                          ? item?.file?.url
+                          : ""
                     }
                     scale={false}
                   />
@@ -319,8 +319,8 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                       item?.link
                         ? item?.link
                         : item?.file?.url
-                        ? item?.file?.url
-                        : ""
+                          ? item?.file?.url
+                          : ""
                     }
                     scale={false}
                   />

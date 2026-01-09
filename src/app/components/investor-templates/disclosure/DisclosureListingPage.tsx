@@ -26,8 +26,8 @@ export default function DisclosureListingPage({
                   item?.link
                     ? item?.link
                     : item?.file?.url
-                    ? item?.file?.url
-                    : ""
+                      ? item?.file?.url
+                      : ""
                 }
               />
             ))}

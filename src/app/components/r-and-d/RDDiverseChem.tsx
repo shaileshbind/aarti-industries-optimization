@@ -63,18 +63,24 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
     };
 
   return (
-    <div className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]"
-    style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    <div
+      className="pt-[72px] md:pt-[0px] lg:pt-[100px] pb-[72px] lg:pb-[unset] mx-[20px] lg:mx-[60px] mt-[100px] md:mt-[0px] lg:mt-[unset] lg:mb-[100px]"
+      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
     >
       <div className="w-full grid xl:grid-cols-[450px_1fr] gap-y-[10px] gap-x-[100px] ">
         {title && (
           <div>
             <FadeInReveal delay={0.2}>
-            <H2>{title}</H2>
+              <H2>{title}</H2>
             </FadeInReveal>
           </div>
         )}
-        <div> <FadeInReveal delay={0.2}>{description && <BodyText1>{description}</BodyText1>}</FadeInReveal></div>
+        <div>
+          {" "}
+          <FadeInReveal delay={0.2}>
+            {description && <BodyText1>{description}</BodyText1>}
+          </FadeInReveal>
+        </div>
       </div>
       <div className="hidden xl:block">
         <div
@@ -94,7 +100,11 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                   className={`mt-[30px] ${swapped ? "hidden" : "block"}`}
                   key={"tab_" + index}
                 >
-                  {item?.heading && <BodyText1 className="!text-[#10456A]">{item?.heading}</BodyText1>}
+                  {item?.heading && (
+                    <BodyText1 className="!text-[#10456A]">
+                      {item?.heading}
+                    </BodyText1>
+                  )}
 
                   <div className="mt-[14px] flex flex-wrap gap-[12px]">
                     {item?.cards?.length > 0 &&
@@ -197,7 +207,11 @@ const RDDiverseChem: React.FC<RDDiverseChemProps> = ({ data, data2 }) => {
                   <div className="px-[20px]">
                     {items?.content?.map((p) => (
                       <div key={p?.id} className="mb-[30px]">
-                        {p.heading && <BodyText1 className="!text-blue-100">{p.heading}</BodyText1>}
+                        {p.heading && (
+                          <BodyText1 className="!text-blue-100">
+                            {p.heading}
+                          </BodyText1>
+                        )}
 
                         {p?.cards?.length > 0 && (
                           <div className="mt-[20px] flex flex-wrap gap-[10px]">

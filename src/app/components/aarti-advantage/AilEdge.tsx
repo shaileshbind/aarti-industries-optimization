@@ -7,8 +7,9 @@ export default function AilEdge({ data }: AilEdgeProps) {
   const { heading, cards } = data;
   const { marginBottom } = useMargin();
   return (
-    <div className="relative fluid-container xl:flex items-start"
-    style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+    <div
+      className="relative fluid-container xl:flex items-start"
+      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
     >
       {heading && (
         <H2 className="xl:absolute xl:top-0 xl:max-w-[412px] pb-6 xl:pb-0">
@@ -37,7 +38,7 @@ export default function AilEdge({ data }: AilEdgeProps) {
 
                 <SubH2>{item?.title}</SubH2>
               </FadeInReveal>
-            )
+            ),
         )}
         <div className="hidden lg:block" />
       </div>

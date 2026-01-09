@@ -8,16 +8,19 @@ type TitleCardProps = {
   description?: string;
 };
 
-const TitleCard = ({ imageAlt, imageSrc, title, description }: TitleCardProps) => {
+const TitleCard = ({
+  imageAlt,
+  imageSrc,
+  title,
+  description,
+}: TitleCardProps) => {
   return (
     <div className="relative rounded-[20px] w-full   bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden">
-      <div className="flex flex-col gap-2 py-[24px] px-[26px] min-h-[175px]"> 
-      {title && (
-        <SubH2 className="text-blue-200 ">{title}</SubH2>
-      )}
-      {description && (
-        <BodyText2 className="text-grey-400">{description}</BodyText2>
-      )}
+      <div className="flex flex-col gap-2 py-[24px] px-[26px] min-h-[175px]">
+        {title && <SubH2 className="text-blue-200 ">{title}</SubH2>}
+        {description && (
+          <BodyText2 className="text-grey-400">{description}</BodyText2>
+        )}
       </div>
       <div className="relative bottom-0 w-full aspect-[312/180] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
         {imageSrc && (

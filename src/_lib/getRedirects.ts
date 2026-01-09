@@ -32,7 +32,7 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
     }
 
     const data = await response.json();
-    
+
     // Handle different possible response formats
     if (Array.isArray(data)) {
       return data;

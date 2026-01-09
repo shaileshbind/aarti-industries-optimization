@@ -46,7 +46,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
 
       rafRef.current = requestAnimationFrame(animate);
     },
-    [content]
+    [content],
   );
 
   useEffect(() => {
@@ -81,84 +81,84 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
 
       {content?.length > 0 && (
         <FadeInReveal delay={0.6}>
-        <div className="mt-[30px] md:mt-[60px]">
-          {content?.map((item, index) => (
-            <div key={index} className="relative complex-chemistry">
-              <FaqAccordion
-                faqTitle={
-                  <div
-                    className={`w-full flex gap-x-[48px] justify-between ${
-                      expanded === `panel${index}`
-                        ? "my-[unset]"
-                        : "my-[18px] md:my-[30px]"
-                    }`}
-                  >
-                    <div className="flex items-start gap-x-[12px] md:gap-x-[48px]">
-                      <BodyText3 className="text-orange-200 mt-[5px]">
-                        0{index + 1}
-                      </BodyText3>
-                      <div>
-                        {item?.title && (
-                          <SubH2 className="max-w-[70%] lg:max-w-[unset]">
-                            {item?.title}
-                          </SubH2>
-                        )}
-                        {expanded === `panel${index}` && (
-                          <div className="relative not-last:mt-[20px] hidden md:block ">
-                            {item?.description && (
-                              <BodyText1 className="mt-[20px] max-w-[650px]">
-                                {item?.description}
-                              </BodyText1>
-                            )}
-                          </div>
-                        )}
+          <div className="mt-[30px] md:mt-[60px]">
+            {content?.map((item, index) => (
+              <div key={index} className="relative complex-chemistry">
+                <FaqAccordion
+                  faqTitle={
+                    <div
+                      className={`w-full flex gap-x-[48px] justify-between ${
+                        expanded === `panel${index}`
+                          ? "my-[unset]"
+                          : "my-[18px] md:my-[30px]"
+                      }`}
+                    >
+                      <div className="flex items-start gap-x-[12px] md:gap-x-[48px]">
+                        <BodyText3 className="text-orange-200 mt-[5px]">
+                          0{index + 1}
+                        </BodyText3>
+                        <div>
+                          {item?.title && (
+                            <SubH2 className="max-w-[70%] lg:max-w-[unset]">
+                              {item?.title}
+                            </SubH2>
+                          )}
+                          {expanded === `panel${index}` && (
+                            <div className="relative not-last:mt-[20px] hidden md:block ">
+                              {item?.description && (
+                                <BodyText1 className="mt-[20px] max-w-[650px]">
+                                  {item?.description}
+                                </BodyText1>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      {expanded === `panel${index}` && (
+                        <div className="relative md:w-1/2 lg:w-[290px] h-[200px] rounded-[20px] overflow-hidden hidden md:block md:mr-6 lg:mr-[88px]">
+                          {item?.image?.url && (
+                            <Image
+                              src={item?.image?.url}
+                              alt="img"
+                              fill
+                              className="object-cover object-top"
+                            />
+                          )}
+                        </div>
+                      )}
                     </div>
-                    {expanded === `panel${index}` && (
-                      <div className="relative md:w-1/2 lg:w-[290px] h-[200px] rounded-[20px] overflow-hidden hidden md:block md:mr-6 lg:mr-[88px]">
-                        {item?.image?.url && (
+                  }
+                  faqContent={
+                    <div className="block md:hidden ml-[26px] mb-[30px]">
+                      <BodyText2>{item?.description}</BodyText2>
+                      <div className="mt-[24px] relative  h-[170px] md:h-[240px] rounded-[10px] overflow-hidden">
+                        {item?.mobImage?.url && (
                           <Image
-                            src={item?.image?.url}
+                            src={item?.mobImage?.url}
                             alt="img"
                             fill
                             className="object-cover object-top"
                           />
                         )}
                       </div>
-                    )}
-                  </div>
-                }
-                faqContent={
-                  <div className="block md:hidden ml-[26px] mb-[30px]">
-                    <BodyText2>{item?.description}</BodyText2>
-                    <div className="mt-[24px] relative  h-[170px] md:h-[240px] rounded-[10px] overflow-hidden">
-                      {item?.mobImage?.url && (
-                        <Image
-                          src={item?.mobImage?.url}
-                          alt="img"
-                          fill
-                          className="object-cover object-top"
-                        />
-                      )}
                     </div>
-                  </div>
-                }
-                showIcon={isMobile}
-                expanded={expanded === `panel${index}`}
-                handleChange={handleChange(`panel${index}`)}
-              />
-              {/* Grey base line */}
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
-              {/* Orange progress bar (fixed) */}
-              {index === active && (
-                <div
-                  className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
-                  style={{ width: `${progress}%` }}
+                  }
+                  showIcon={isMobile}
+                  expanded={expanded === `panel${index}`}
+                  handleChange={handleChange(`panel${index}`)}
                 />
-              )}
-            </div>
-          ))}
-        </div>
+                {/* Grey base line */}
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
+                {/* Orange progress bar (fixed) */}
+                {index === active && (
+                  <div
+                    className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                    style={{ width: `${progress}%` }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </FadeInReveal>
       )}
     </div>

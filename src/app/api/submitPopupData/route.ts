@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       const error = await response.json();
       return NextResponse.json(
         { error: "API submission failed", details: error },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { error: "Server error", details: error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

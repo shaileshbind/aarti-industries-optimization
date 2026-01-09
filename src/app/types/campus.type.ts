@@ -29,6 +29,6 @@ export type CampusExpProps = {
   data: {
     title?: string;
     ctaButton?: ButtonProps[];
-    formTitle?:string;
+    formTitle?: string;
   }[];
 };

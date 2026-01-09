@@ -3,7 +3,7 @@ import HeroBanner from "../banners/HeroBanner";
 import { WhoBannerProps } from "@/app/types/who-we-are.type";
 
 const WhoBanner: React.FC<WhoBannerProps> = ({ data }) => {
-  const { title, description, image,mobImage } = data;
+  const { title, description, image, mobImage } = data;
 
   return (
     <HeroBanner

@@ -5,8 +5,8 @@ import { getData } from "@/_lib/getData.fetch";
 import SEO from "@/app/components/SEO";
 import DetailsContainer from "@/app/components/mahasuper/DetailsContainer";
 import ProductPortfolio from "@/app/components/mahasuper/ProductPortfolio";
-import CategoryProducts from "@/app/components/mahasuper/CategoryProducts";    
-import EmpoweringFarmers from "@/app/components/mahasuper/EmpoweringFarmers";  
+import CategoryProducts from "@/app/components/mahasuper/CategoryProducts";
+import EmpoweringFarmers from "@/app/components/mahasuper/EmpoweringFarmers";
 import ContactBanner from "@/app/components/ContactBanner";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/maha-super");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const {
     section_one,
@@ -33,7 +33,9 @@ const page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/mahasuper"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/mahasuper"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

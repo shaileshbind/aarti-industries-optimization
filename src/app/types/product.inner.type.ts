@@ -56,7 +56,7 @@ export interface ProductData {
   productMobImage?: string | null;
   productDetails?: ProductDetails;
   product_sub_categories?: ProductSubcategory[];
-   tdsDocument?: {
+  tdsDocument?: {
     file?: {
       url?: string;
     };

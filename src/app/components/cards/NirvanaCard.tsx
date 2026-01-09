@@ -26,7 +26,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
   const canFlip = !image && !mobImage && !!flipImg;
 
   return (
-    <FadeInReveal 
+    <FadeInReveal
       key={id}
       className={`relative lg:min-h-[246px] lg:min-w-[246px] rounded-[14px] overflow-hidden ${
         canFlip ? "group flip-container" : ""
@@ -117,12 +117,14 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
           </div>
           {/* BACK SIDE  */}
           <div className="flip-side flip-back">
-           {flipImg! && <Image
-              src={flipImg!}
-              alt="flip-img"
-              fill
-              className="object-cover"
-            />}
+            {flipImg! && (
+              <Image
+                src={flipImg!}
+                alt="flip-img"
+                fill
+                className="object-cover"
+              />
+            )}
           </div>
         </div>
       )}

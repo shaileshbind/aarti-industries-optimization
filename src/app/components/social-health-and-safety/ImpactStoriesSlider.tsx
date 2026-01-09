@@ -34,7 +34,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);

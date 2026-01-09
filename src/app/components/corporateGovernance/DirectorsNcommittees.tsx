@@ -201,7 +201,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -291,7 +291,8 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
                       <div>
                         {member?.role1 && (
                           <BodyText3 className="py-1 text-[#9997A2]">
-                            {member?.role1} {member?.role2 && <span>,</span>}{" "}
+                            {member?.role1}{" "}
+                            {member?.role2 && <span>,</span>}{" "}
                           </BodyText3>
                         )}
 

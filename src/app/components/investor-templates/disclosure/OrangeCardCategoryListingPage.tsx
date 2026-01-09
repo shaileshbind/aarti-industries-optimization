@@ -9,16 +9,19 @@ export default async function OrangeCardCategoryListingPage({
 }: OrangeCardCategoryListingPageProps) {
   const categories = await getData("/disclosures-reports");
   const data = await getDisclosureData(`/get-disclosure-report/${template}`);
-  const seo = data?.seo
+  const seo = data?.seo;
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? data?.category}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? `https://www.aarti-industries.com/disclosures/${data?.slug}`}
+        canonical={
+          seo?.canonical ??
+          `https://www.aarti-industries.com/disclosures/${data?.slug}`
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

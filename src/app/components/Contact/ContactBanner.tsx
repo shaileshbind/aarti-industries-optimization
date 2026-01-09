@@ -4,7 +4,6 @@ import Image from "next/image";
 import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import Link from "next/link";
 import { ContactBannerProps } from "@/app/types/contact.type";
-// import MSDSForm from "../forms/MSDSForm";
 import GeneralForm from "../forms/GeneralForm";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
@@ -83,7 +82,10 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                         }
                         return (
                           <React.Fragment key={index}>
-                            <a href={`tel:${fullNumber.replace(/\s+/g, "")}`} className="hover:text-orange-200 transition-all duration-300 cursor-pointer">
+                            <a
+                              href={`tel:${fullNumber.replace(/\s+/g, "")}`}
+                              className="hover:text-orange-200 transition-all duration-300 cursor-pointer"
+                            >
                               {trimmedPhone}
                             </a>
                             {index < array.length - 1 && <span> / </span>}
@@ -120,7 +122,11 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                     </svg>
                   </div>
                   {data?.office?.googleMapLink && (
-                    <Link href={data.office.googleMapLink} target="_blank" className="group">
+                    <Link
+                      href={data.office.googleMapLink}
+                      target="_blank"
+                      className="group"
+                    >
                       <BodyText1 className="text-grey-400 group-hover:text-orange-200 transition-all duration-300 cursor-pointer">
                         View on map
                       </BodyText1>
@@ -131,8 +137,10 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
             </div>
           </div>
           <div className="w-full lg:col-span-7 lg:pl-[30px]">
-            {/* <MSDSForm onPageForm={true} /> */}
-            <GeneralForm showTitle={false} className="max-h-full overflow-y-visible pt-[0px]"/>
+            <GeneralForm
+              showTitle={false}
+              className="max-h-full overflow-y-visible pt-[0px]"
+            />
           </div>
         </div>
       </div>

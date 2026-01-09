@@ -36,12 +36,17 @@ export default function SustainabilityTransparancy({
           (ctaButton?.hasExternalLink == "true"
             ? ctaButton?.externalLink
             : ctaButton?.link?.link) && (
-          <Button title={ctaButton?.title} href={
-            ctaButton?.hasExternalLink == "true"
-              ? ctaButton?.externalLink
-              : ctaButton?.link?.link
-          } secondary useTargetBlank={ctaButton?.hasExternalLink == "true"} />
-        )}
+            <Button
+              title={ctaButton?.title}
+              href={
+                ctaButton?.hasExternalLink == "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link
+              }
+              secondary
+              useTargetBlank={ctaButton?.hasExternalLink == "true"}
+            />
+          )}
       </div>
     </div>
   );

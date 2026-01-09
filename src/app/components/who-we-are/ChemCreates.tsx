@@ -26,7 +26,11 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
 
   return (
     <div className="mt-[0] mb-[72px] lg:mb-[100px] lg:mt-0">
-      {sectionTitle && <FadeInReveal delay={0.6}><H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2></FadeInReveal>}
+      {sectionTitle && (
+        <FadeInReveal delay={0.6}>
+          <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
+        </FadeInReveal>
+      )}
 
       {blog_case_studies && blog_case_studies.length > 0 && (
         <FadeInReveal delay={0.6}>

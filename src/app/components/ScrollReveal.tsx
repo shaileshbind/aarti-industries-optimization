@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { ReactNode, useRef, useEffect } from 'react';
-import { useScrollReveal, ScrollRevealConfig } from '../hooks/useScrollReveal';
-import { gsap } from 'gsap';
-import SplitType from 'split-type';
+import React, { ReactNode, useRef, useEffect } from "react";
+import { useScrollReveal, ScrollRevealConfig } from "../hooks/useScrollReveal";
+import { gsap } from "gsap";
+import SplitType from "split-type";
 
 interface ScrollRevealProps extends ScrollRevealConfig {
   children: ReactNode;
@@ -15,7 +15,7 @@ interface ScrollRevealProps extends ScrollRevealConfig {
 /**
  * ScrollReveal Component
  * A wrapper component that automatically applies scroll-triggered reveal animations
- * 
+ *
  * Usage:
  * <ScrollReveal animation="fadeIn" delay={0.2}>
  *   <div>Your content here</div>
@@ -23,14 +23,12 @@ interface ScrollRevealProps extends ScrollRevealConfig {
  */
 export const ScrollReveal = ({
   children,
-  className = '',
-  as: Component = 'div',
+  className = "",
+  as: Component = "div",
   disabled = false,
   ...config
 }: ScrollRevealProps) => {
-  const ref = useScrollReveal(
-    disabled ? {} : config
-  );
+  const ref = useScrollReveal(disabled ? {} : config);
 
   return (
     <Component ref={ref} className={className}>
@@ -42,7 +40,7 @@ export const ScrollReveal = ({
 /**
  * ScrollGroup Component
  * Groups multiple elements for staggered animations
- * 
+ *
  * Usage:
  * <ScrollGroup animation="fadeIn" stagger={0.2}>
  *   <div data-scroll>Item 1</div>
@@ -61,18 +59,20 @@ interface ScrollGroupProps extends ScrollRevealConfig {
 
 export const ScrollGroup = ({
   children,
-  className = '',
-  as: Component = 'div',
+  className = "",
+  as: Component = "div",
   disabled = false,
-  groupSelector = '[data-scroll]',
+  groupSelector = "[data-scroll]",
   ...config
 }: ScrollGroupProps) => {
   const ref = useScrollReveal(
-    disabled ? {} : {
-      ...config,
-      isGroup: true,
-      groupSelector,
-    }
+    disabled
+      ? {}
+      : {
+          ...config,
+          isGroup: true,
+          groupSelector,
+        },
   );
 
   return (
@@ -87,7 +87,14 @@ export const ScrollGroup = ({
  */
 
 // Fade in with slide up
-export const FadeInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const FadeInReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, y: 20 }}
     to={{ autoAlpha: 1, y: 0 }}
@@ -105,15 +112,15 @@ export const FadeInReveal = ({ children, className = '', delay = 0, duration = 1
 // Fade in with slide up + blur effect
 export const FadeInRevealBlur = ({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 1,
   stagger = 0.2,
   ...props
-}: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
-    from={{ autoAlpha: 0, y: 20, filter: 'blur(8px)' }} // start slightly blurred
-    to={{ autoAlpha: 1, y: 0, filter: 'blur(0px)' }} // animate to normal
+    from={{ autoAlpha: 0, y: 20, filter: "blur(8px)" }} // start slightly blurred
+    to={{ autoAlpha: 1, y: 0, filter: "blur(0px)" }} // animate to normal
     duration={duration}
     delay={delay}
     stagger={stagger}
@@ -125,9 +132,15 @@ export const FadeInRevealBlur = ({
   </ScrollReveal>
 );
 
-
 // Scale in animation
-export const ScaleInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const ScaleInReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, scale: 0.8 }}
     to={{ autoAlpha: 1, scale: 1 }}
@@ -143,7 +156,14 @@ export const ScaleInReveal = ({ children, className = '', delay = 0, duration = 
 );
 
 // Slide in from left
-export const SlideInLeftReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const SlideInLeftReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, x: -100 }}
     to={{ autoAlpha: 1, x: 0 }}
@@ -159,7 +179,14 @@ export const SlideInLeftReveal = ({ children, className = '', delay = 0, duratio
 );
 
 // Slide in from right
-export const SlideInRightReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const SlideInRightReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, x: 100 }}
     to={{ autoAlpha: 1, x: 0 }}
@@ -175,7 +202,14 @@ export const SlideInRightReveal = ({ children, className = '', delay = 0, durati
 );
 
 // Rotate in animation
-export const RotateInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const RotateInReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, rotation: -180 }}
     to={{ autoAlpha: 1, rotation: 0 }}
@@ -191,7 +225,14 @@ export const RotateInReveal = ({ children, className = '', delay = 0, duration =
 );
 
 // Bounce in animation
-export const BounceInReveal = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollRevealProps, 'from' | 'to'>) => (
+export const BounceInReveal = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
     from={{ autoAlpha: 0, scale: 0.3 }}
     to={{ autoAlpha: 1, scale: 1 }}
@@ -207,7 +248,15 @@ export const BounceInReveal = ({ children, className = '', delay = 0, duration =
 );
 
 // Group animations
-export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, y = 50,...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const FadeInGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  y = 50,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, y: y }}
     to={{ autoAlpha: 1, y: 0 }}
@@ -222,7 +271,14 @@ export const FadeInGroup = ({ children, className = '', delay = 0, duration = 1,
   </ScrollGroup>
 );
 
-export const ScaleInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const ScaleInGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, scale: 0.8 }}
     to={{ autoAlpha: 1, scale: 1 }}
@@ -237,7 +293,14 @@ export const ScaleInGroup = ({ children, className = '', delay = 0, duration = 1
   </ScrollGroup>
 );
 
-export const SlideInLeftGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const SlideInLeftGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, x: -100 }}
     to={{ autoAlpha: 1, x: 0 }}
@@ -252,7 +315,14 @@ export const SlideInLeftGroup = ({ children, className = '', delay = 0, duration
   </ScrollGroup>
 );
 
-export const SlideInRightGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const SlideInRightGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, x: 100 }}
     to={{ autoAlpha: 1, x: 0 }}
@@ -267,7 +337,14 @@ export const SlideInRightGroup = ({ children, className = '', delay = 0, duratio
   </ScrollGroup>
 );
 
-export const RotateInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const RotateInGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, rotation: -180 }}
     to={{ autoAlpha: 1, rotation: 0 }}
@@ -282,7 +359,14 @@ export const RotateInGroup = ({ children, className = '', delay = 0, duration = 
   </ScrollGroup>
 );
 
-export const BounceInGroup = ({ children, className = '', delay = 0, duration = 1, stagger = 0.2, ...props }: Omit<ScrollGroupProps, 'from' | 'to'>) => (
+export const BounceInGroup = ({
+  children,
+  className = "",
+  delay = 0,
+  duration = 1,
+  stagger = 0.2,
+  ...props
+}: Omit<ScrollGroupProps, "from" | "to">) => (
   <ScrollGroup
     from={{ autoAlpha: 0, scale: 0.3 }}
     to={{ autoAlpha: 1, scale: 1 }}
@@ -315,14 +399,14 @@ interface TypewriterRevealProps {
 
 export const TypewriterReveal = ({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 0.05,
   stagger = 0.05,
   trigger = true,
-  start = 'top 80%',
-  end = 'bottom 20%',
-  toggleActions = 'play reverse play reverse',
+  start = "top 80%",
+  end = "bottom 20%",
+  toggleActions = "play reverse play reverse",
 }: TypewriterRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const isInitializedRef = useRef(false);
@@ -332,16 +416,19 @@ export const TypewriterReveal = ({
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    // Split text into characters for typewriter effect
-    const textContent = text.textContent || '';
-    text.innerHTML = textContent
-      .split('')
-      .map(char => `<span class="inline-block">${char === ' ' ? '&nbsp;' : char}</span>`)
-      .join('');
 
-    const spans = text.querySelectorAll('span');
-    
+    // Split text into characters for typewriter effect
+    const textContent = text.textContent || "";
+    text.innerHTML = textContent
+      .split("")
+      .map(
+        (char) =>
+          `<span class="inline-block">${char === " " ? "&nbsp;" : char}</span>`,
+      )
+      .join("");
+
+    const spans = text.querySelectorAll("span");
+
     // Set initial state - all characters invisible
     gsap.set(spans, { opacity: 0 });
 
@@ -361,7 +448,7 @@ export const TypewriterReveal = ({
       duration,
       delay,
       stagger,
-      ease: 'power2.out',
+      ease: "power2.out",
     });
 
     timelineRef.current = tl;
@@ -392,7 +479,7 @@ export const TypewriterReveal = ({
 interface SplitTextRevealProps {
   children: ReactNode;
   className?: string;
-  splitType?: 'lines' | 'words' | 'chars';
+  splitType?: "lines" | "words" | "chars";
   delay?: number;
   duration?: number;
   stagger?: number;
@@ -410,16 +497,16 @@ interface SplitTextRevealProps {
  */
 export const LineReveal = ({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 0.8,
   stagger = 0.1,
   fromY = 40,
-  ease = 'power4.out',
+  ease = "power4.out",
   trigger = true,
-  start = 'top 80%',
-  end = 'bottom 20%',
-  toggleActions = 'play reverse play reverse',
+  start = "top 80%",
+  end = "bottom 20%",
+  toggleActions = "play reverse play reverse",
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
@@ -430,10 +517,10 @@ export const LineReveal = ({
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    const split = new SplitType(text, { types: 'lines' });
+
+    const split = new SplitType(text, { types: "lines" });
     splitRef.current = split;
-    
+
     // Set initial state
     gsap.set(split.lines, { y: fromY, opacity: 0 });
 
@@ -486,16 +573,16 @@ export const LineReveal = ({
  */
 export const WordReveal = ({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 0.6,
   stagger = 0.05,
   fromY = 30,
-  ease = 'power3.out',
+  ease = "power3.out",
   trigger = true,
-  start = 'top 80%',
-  end = 'bottom 20%',
-  toggleActions = 'play reverse play reverse',
+  start = "top 80%",
+  end = "bottom 20%",
+  toggleActions = "play reverse play reverse",
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
@@ -506,10 +593,10 @@ export const WordReveal = ({
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    const split = new SplitType(text, { types: 'words' });
+
+    const split = new SplitType(text, { types: "words" });
     splitRef.current = split;
-    
+
     // Set initial state
     gsap.set(split.words, { y: fromY, opacity: 0 });
 
@@ -562,16 +649,16 @@ export const WordReveal = ({
  */
 export const LetterReveal = ({
   children,
-  className = '',
+  className = "",
   delay = 0,
   duration = 0.4,
   stagger = 0.02,
   fromY = 20,
-  ease = 'power2.out',
+  ease = "power2.out",
   trigger = true,
-  start = 'top 80%',
-  end = 'bottom 20%',
-  toggleActions = 'play reverse play reverse',
+  start = "top 80%",
+  end = "bottom 20%",
+  toggleActions = "play reverse play reverse",
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
@@ -582,10 +669,10 @@ export const LetterReveal = ({
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
-    const split = new SplitType(text, { types: 'chars' });
+
+    const split = new SplitType(text, { types: "chars" });
     splitRef.current = split;
-    
+
     // Set initial state
     gsap.set(split.chars, { y: fromY, opacity: 0 });
 
@@ -638,17 +725,17 @@ export const LetterReveal = ({
  */
 export const SplitTextReveal = ({
   children,
-  className = '',
-  splitType = 'lines',
+  className = "",
+  splitType = "lines",
   delay = 0,
   duration = 0.8,
   stagger = 0.05,
   fromY = 40,
-  ease = 'power4.out',
+  ease = "power4.out",
   trigger = true,
-  start = 'top 80%',
-  end = 'bottom 20%',
-  toggleActions = 'play reverse play reverse',
+  start = "top 80%",
+  end = "bottom 20%",
+  toggleActions = "play reverse play reverse",
 }: SplitTextRevealProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<InstanceType<typeof SplitType> | null>(null);
@@ -659,10 +746,10 @@ export const SplitTextReveal = ({
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;
-    
+
     const split = new SplitType(text, { types: splitType });
     splitRef.current = split;
-    
+
     // Set initial state
     gsap.set(split[splitType], { y: fromY, opacity: 0 });
 

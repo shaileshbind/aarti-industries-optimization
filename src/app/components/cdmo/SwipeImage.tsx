@@ -46,7 +46,7 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
       ref={containerRef}
       className="relative h-full w-full overflow-hidden rounded-3xl"
       style={{
-        isolation: 'isolate', // Creates stacking context
+        isolation: "isolate", // Creates stacking context
       }}
     >
       {/* Previous Image */}
@@ -55,9 +55,9 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
           ref={previousRef}
           className="absolute inset-0 h-full w-full"
           style={{
-            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
-            backfaceVisibility: 'hidden', // Firefox fix
-            WebkitBackfaceVisibility: 'hidden',
+            transform: "translate3d(0, 0, 0)", // Force GPU acceleration
+            backfaceVisibility: "hidden", // Firefox fix
+            WebkitBackfaceVisibility: "hidden",
           }}
         >
           {/* <Image
@@ -96,9 +96,9 @@ const SwipeImage: React.FC<SwipeImageProps> = ({ activeImg }) => {
           ref={currentRef}
           className="absolute inset-0 h-full w-full"
           style={{
-            transform: 'translate3d(0, 0, 0)', // Force GPU acceleration
-            backfaceVisibility: 'hidden', // Firefox fix
-            WebkitBackfaceVisibility: 'hidden',
+            transform: "translate3d(0, 0, 0)", // Force GPU acceleration
+            backfaceVisibility: "hidden", // Firefox fix
+            WebkitBackfaceVisibility: "hidden",
           }}
         >
           {/* <Image

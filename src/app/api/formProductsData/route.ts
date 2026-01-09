@@ -16,17 +16,17 @@ export async function GET() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${process.env.API_TOKEN}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch products: ${response.status} ${response.statusText}`
+          `Failed to fetch products: ${response.status} ${response.statusText}`,
         );
       }
 
       const data = await response.json();
-    
+
       if (total === null) {
         total = data?.meta?.pagination?.total || 0;
       }
@@ -43,15 +43,15 @@ export async function GET() {
           pagination: {
             total: total,
             fetched: allProducts.length,
-          }
-        }
+          },
+        },
       },
-      { 
+      {
         status: 200,
         headers: {
-          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
-        }
-      }
+          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+        },
+      },
     );
   } catch (error) {
     console.error("API Error:", error);
@@ -62,7 +62,7 @@ export async function GET() {
         data: [],
         error: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

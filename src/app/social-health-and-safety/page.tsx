@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/social-health-safety");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const {
     section_one,

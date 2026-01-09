@@ -25,7 +25,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
   const toggleSubCategory = (id: string) => {
     const idString = id.toString();
     setLocalSelected((prev) =>
-      prev.includes(idString) ? prev.filter((s) => s !== idString) : [idString]
+      prev.includes(idString) ? prev.filter((s) => s !== idString) : [idString],
     );
   };
 

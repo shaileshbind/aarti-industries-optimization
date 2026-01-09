@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 const Page = async () => {
   const data = await getPageData("/pages/by-slug/campus-opportunities");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const {
     section_one,
@@ -29,7 +29,10 @@ const Page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/campus-opportunities"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/campus-opportunities"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

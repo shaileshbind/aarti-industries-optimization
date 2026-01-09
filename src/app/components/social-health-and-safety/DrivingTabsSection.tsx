@@ -20,7 +20,6 @@ type DrivingTabsSectionProps = {
   title?: string;
 };
 
-
 const DrivingTabsSection = ({
   data,
   tabClass,
@@ -132,7 +131,7 @@ const DrivingTabsSection = ({
                     `${
                       index === active ? "text-orange-200" : "text-grey-300"
                     } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200 !text-[18px] md:!text-[16px] `,
-                    tabClass
+                    tabClass,
                   )}
                 >
                   {item?.heading}
@@ -180,7 +179,8 @@ const DrivingTabsSection = ({
                               <Image
                                 src={tabItem.cards[0].image.url}
                                 alt={
-                                  tabItem.cards[0].image.alternativeText || "img"
+                                  tabItem.cards[0].image.alternativeText ||
+                                  "img"
                                 }
                                 fill
                                 className="absolute object-cover opacity-40"
@@ -188,7 +188,8 @@ const DrivingTabsSection = ({
                               <Image
                                 src={tabItem.cards[0].image.url}
                                 alt={
-                                  tabItem.cards[0].image.alternativeText || "img"
+                                  tabItem.cards[0].image.alternativeText ||
+                                  "img"
                                 }
                                 width={500}
                                 height={548}
@@ -247,7 +248,7 @@ const DrivingTabsSection = ({
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>
-                            )
+                            ),
                           )}
                       </div>
 
@@ -255,21 +256,23 @@ const DrivingTabsSection = ({
                         (tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
                           ? tabItem.cards[0]?.ctaButton?.externalLink
                           : tabItem.cards[0]?.ctaButton?.link?.link) && (
-                        <div className="mt-[18px] pointer-events-auto">
-                          <Button
-                            title={tabItem.cards[0].ctaButton.title}
-                            href={
-                              tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
-                                ? tabItem.cards[0]?.ctaButton?.externalLink
-                                : tabItem.cards[0]?.ctaButton?.link?.link
-                            }
-                            secondary
-                            useTargetBlank={
-                              tabItem.cards[0]?.ctaButton?.hasExternalLink == "true"
-                            }
-                          />
-                        </div>
-                      )}
+                          <div className="mt-[18px] pointer-events-auto">
+                            <Button
+                              title={tabItem.cards[0].ctaButton.title}
+                              href={
+                                tabItem.cards[0]?.ctaButton?.hasExternalLink ==
+                                "true"
+                                  ? tabItem.cards[0]?.ctaButton?.externalLink
+                                  : tabItem.cards[0]?.ctaButton?.link?.link
+                              }
+                              secondary
+                              useTargetBlank={
+                                tabItem.cards[0]?.ctaButton?.hasExternalLink ==
+                                "true"
+                              }
+                            />
+                          </div>
+                        )}
                     </div>
                   </>
                 )}
@@ -372,9 +375,11 @@ const DrivingTabsSection = ({
                                     width={14}
                                     height={14}
                                   />
-                                  <p className="text-[#4C5861] text-sm">{items?.title}</p>
+                                  <p className="text-[#4C5861] text-sm">
+                                    {items?.title}
+                                  </p>
                                 </div>
-                              )
+                              ),
                             )}
                         </div>
                       </>

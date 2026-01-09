@@ -5,7 +5,8 @@ const secretName = process.env.AWS_SECRET_NAME;
 const environment = process.env.NEXT_PUBLIC_IS_PRODUCTION;
 
 const nextConfig = async () => {
-  const awsSecrets = (secretName && environment === "true") ? await getSecret(secretName) : null;
+  const awsSecrets =
+    secretName && environment === "true" ? await getSecret(secretName) : null;
   console.log("AWS_SECRET_NAME:", secretName);
   console.log("ENVIRONMENT:", environment);
 
@@ -13,17 +14,13 @@ const nextConfig = async () => {
     console.log("Fetched AWS Secrets for production true:", awsSecrets);
   }
 
-  // const secrets = await getSecret(secretName as string);
-  // console.log("Fetched Secrets:", secrets);
-
   const nextConfigObject: Partial<NextConfig> = {
     images: {
       unoptimized: true,
     },
     compiler: {
-    removeConsole: environment === 'true'
-  },
-    // env: { ...secrets },
+      removeConsole: environment === "true",
+    },
 
     async redirects() {
       return [
@@ -39,9 +36,9 @@ const nextConfig = async () => {
         },
       ];
     },
-  }
+  };
 
-  if (environment === "true" && awsSecrets) { 
+  if (environment === "true" && awsSecrets) {
     nextConfigObject.env = { ...(awsSecrets as Record<string, string>) };
   }
 

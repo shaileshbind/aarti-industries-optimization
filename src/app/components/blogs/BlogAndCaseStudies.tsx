@@ -85,12 +85,6 @@ export default function BlogAndCaseStudies({
   data,
   lastestBlogId,
 }: BlogAndCaseStudiesProps) {
-  // const tabs =
-  //   data?.toggleTabs?.map((item) => ({
-  //     title: item?.title,
-  //     slug: item?.title.toLowerCase().replace(/\s+/g, "-"),
-  //     id: item?.id,
-  //   })) || [];
   const tabs =
     data?.toggleTabs
       ?.filter((item) => item?.title?.toLowerCase() !== "blogs")
@@ -139,14 +133,14 @@ export default function BlogAndCaseStudies({
       } catch (error) {
         console.error("Error fetching blog data:", error);
         setError(
-          error instanceof Error ? error.message : "Failed to load content"
+          error instanceof Error ? error.message : "Failed to load content",
         );
         setBlogData([]);
       } finally {
         setLoading(false);
       }
     },
-    [lastestBlogId]
+    [lastestBlogId],
   );
 
   useEffect(() => {
@@ -179,7 +173,7 @@ export default function BlogAndCaseStudies({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {

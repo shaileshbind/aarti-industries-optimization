@@ -33,8 +33,8 @@ export type GlobalInnovationProps = {
       id: number;
       description: string;
     }[];
-    sectionTitle?:string;
-    formTitle?:string;
+    sectionTitle?: string;
+    formTitle?: string;
   };
   useBulletes?: boolean;
 };
@@ -63,11 +63,10 @@ export interface TimelineData {
   };
 }
 
-
 export type OurExpProps = {
   data: {
     title: string;
     ctaButton: ButtonProps[];
-    formTitle?:string;
+    formTitle?: string;
   }[];
 };

@@ -69,7 +69,7 @@ export type ByUseSectionProps = {
       link: string;
     }[];
   }[];
-  sectionFiveTitle?:string;
+  sectionFiveTitle?: string;
 };
 
 export type FosteringSafeProps = {
@@ -98,7 +98,6 @@ export type FrameworkForgedProps = {
       }[];
       ctaButton: ButtonProps;
     }[];
-    // partnerWithUsCta: ButtonProps;
   };
 };
 

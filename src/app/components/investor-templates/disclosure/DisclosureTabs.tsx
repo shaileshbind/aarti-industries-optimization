@@ -14,7 +14,7 @@ export default function DisclosureTabs({ categories }: DisclosureTabsProps) {
           key={`top_category_${index}`}
           className={clsx(
             `border-r-[#10456A] cursor-pointer transition-all duration-300`,
-            index === categories.length - 1 ? "border-r-0" : "border-r-2 pr-6 "
+            index === categories.length - 1 ? "border-r-0" : "border-r-2 pr-6 ",
           )}
           onClick={() => router.push(item?.slug)}
         >
@@ -23,7 +23,7 @@ export default function DisclosureTabs({ categories }: DisclosureTabsProps) {
               "text-base whitespace-nowrap",
               pathname?.split("/").pop() === item?.slug
                 ? "text-[#FFF]"
-                : "text-[#9997A2]"
+                : "text-[#9997A2]",
             )}
           >
             {item?.category}

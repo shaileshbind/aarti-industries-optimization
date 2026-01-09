@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/thrive-at-aarti");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const {
@@ -26,16 +26,18 @@ const page = async () => {
     section_six,
     section_seven,
   } = data?.data;
-  const seo = data?.seo
+  const seo = data?.seo;
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Thrive At Aarti"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/thrive-at-aarti"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/thrive-at-aarti"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -58,8 +60,8 @@ const page = async () => {
         <div className="pt-[80px] lg:pt-[120px] pb-5">
           <ComprehensiveCare data={section_four} />
         </div>
-      )}a
-      {section_five && <ImageGallery imgArr={section_five} />}
+      )}
+      a{section_five && <ImageGallery imgArr={section_five} />}
       {section_six && <ThePeople data={section_six} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />

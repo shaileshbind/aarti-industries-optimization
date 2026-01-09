@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     if (!query || query === "") {
       return NextResponse.json(
         { error: "Missing required parameter: q" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     if (!baseUrl) {
       return NextResponse.json(
         { error: "Missing environment variable: NEXT_PUBLIC_BASE_URL" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -37,18 +37,18 @@ export async function GET(req: Request) {
       console.error("Backend error:", text);
       return NextResponse.json(
         { error: "Failed to fetch search results from backend" },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
     const data = await res.json();
-    
+
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error in search API:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

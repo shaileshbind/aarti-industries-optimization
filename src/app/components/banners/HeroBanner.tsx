@@ -8,7 +8,7 @@ import gsap from "gsap";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
 import SplitText from "../SplitText";
-import {useMediaQuery} from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { useTitleCase } from "../../../../utils/toTitleCase";
 
 type HeroBannerProps = {
@@ -74,7 +74,9 @@ const HeroBanner = ({
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const isTablet = useMediaQuery("(max-width:768px)");
   // Call hooks unconditionally at the top level
-  const titleCasedSecondaryBtnFormTitle = useTitleCase(secondaryBtnFormTitle || "");
+  const titleCasedSecondaryBtnFormTitle = useTitleCase(
+    secondaryBtnFormTitle || "",
+  );
   const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
@@ -123,7 +125,7 @@ const HeroBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.1"
+        "-=0.1",
       )
       .to(
         hLine,
@@ -132,7 +134,7 @@ const HeroBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .to(
         stars,
@@ -143,7 +145,7 @@ const HeroBanner = ({
           ease: "sine.out",
           stagger: 0.2,
         },
-        "<"
+        "<",
       );
   }, [showStar2, showStar3]);
 
@@ -196,7 +198,7 @@ const HeroBanner = ({
                       className={clsx(
                         `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
-                        centerTitleClassName
+                        centerTitleClassName,
                       )}
                     >
                       {title}
@@ -236,7 +238,6 @@ const HeroBanner = ({
                             font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
                             [text-underline-position:under] text-white white-btn-underline`}
                         >
-                          {/* {secondaryBtnFormTitle} */}
                           {titleCasedSecondaryBtnFormTitle}
                         </button>
                       </div>
@@ -276,22 +277,20 @@ const HeroBanner = ({
                 ref={lineVertical}
                 className={clsx(
                   `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
-                  lineClassName
+                  lineClassName,
                 )}
               />
-              {/* {!centerText && ( */}
-                <div
-                  ref={lineHorizontal}
-                  className={clsx(
-                    `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`
-                  )}
-                />
-              {/* )} */}
+              <div
+                ref={lineHorizontal}
+                className={clsx(
+                  `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`,
+                )}
+              />
               <div
                 ref={starRef}
                 className={clsx(
                   `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
-                  bottomMiddleStarClassName
+                  bottomMiddleStarClassName,
                 )}
               >
                 <Image
@@ -376,7 +375,6 @@ const HeroBanner = ({
                   >
                     {popupButtonTitle && (
                       <span className="relative z-10 text-white">
-                         {/* <SplitText text={popupButtonTitle} /> */}
                         <SplitText text={titleCasedPopupButtonTitle} />
                       </span>
                     )}

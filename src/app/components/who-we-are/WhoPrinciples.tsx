@@ -28,7 +28,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             {/* Left Tabs + Progress Bar */}
             <div className="relative bg-white text-white lg:w-[40%] flex flex-col justify-center">
               <div className="relative flex gap-4">
-                <div className="bg-[#f5f8fa] h-[100%] w-[30px] absolute right-0"/>
+                <div className="bg-[#f5f8fa] h-[100%] w-[30px] absolute right-0" />
                 {/* Progress Bar */}
                 {content?.length > 0 && (
                   <div className="relative flex flex-col items-center justify-center">
@@ -61,7 +61,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                                 "block text-left transition-all duration-300 cursor-pointer  ",
                                 active === index
                                   ? "text-white "
-                                  : "text-white/40 !text-[36px] hover:text-white/80"
+                                  : "text-white/40 !text-[36px] hover:text-white/80",
                               )}
                             >
                               {tab?.value}
@@ -76,7 +76,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                               />
                             )}
                           </button>
-                        )
+                        ),
                     )}
 
                     <Image
@@ -115,7 +115,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                   key={tab.id}
                   className={clsx(
                     `border-b border-gray-200 overflow-hidden transition-all duration-1000 ease-in-out mb-0`,
-                    content?.length - 1 === index && "border-b-0"
+                    content?.length - 1 === index && "border-b-0",
                   )}
                 >
                   {/* Header Button */}
@@ -125,14 +125,14 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                         "w-full text-left p-5 rounded-2xl flex justify-between items-center transition-all duration-1000 relative ",
                         isOpen
                           ? "bg-gradient-orange-1 text-white pt-5"
-                          : "text-gray-700 hover:bg-gray-50"
+                          : "text-gray-700 hover:bg-gray-50",
                       )}
                       onClick={() => setOpenIndex(isOpen ? null : index)}
                     >
                       <p
                         className={clsx(
                           "transition-colors duration-300 text-[24px]",
-                          isOpen ? "text-white" : "text-gray-700"
+                          isOpen ? "text-white" : "text-gray-700",
                         )}
                       >
                         {tab?.value}
@@ -158,7 +158,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                         "transition-all duration-1000 ease-in-out overflow-hidden",
                         isOpen
                           ? "max-h-[500px] opacity-100"
-                          : "max-h-0 opacity-0"
+                          : "max-h-0 opacity-0",
                       )}
                     >
                       <div

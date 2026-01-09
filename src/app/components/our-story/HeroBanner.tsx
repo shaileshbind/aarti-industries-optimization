@@ -51,7 +51,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
       .to(
         star,
         { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
-        "<"
+        "<",
       );
   }, []);
 

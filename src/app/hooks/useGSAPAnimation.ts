@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { useGSAP } from '../contexts/GSAPContext';
+import { useEffect, useRef } from "react";
+import { useGSAP } from "../contexts/GSAPContext";
 
 interface AnimationConfig {
   from?: Record<string, string | number>;
@@ -17,7 +17,7 @@ interface AnimationConfig {
 
 export const useGSAPAnimation = (
   config: AnimationConfig,
-  dependencies: React.DependencyList = []
+  dependencies: React.DependencyList = [],
 ) => {
   const elementRef = useRef<HTMLElement>(null);
   const { gsap: gsapInstance, ScrollTrigger: ST } = useGSAP();
@@ -31,7 +31,7 @@ export const useGSAPAnimation = (
       to,
       duration = 1,
       delay = 0,
-      ease = 'power2.out',
+      ease = "power2.out",
       scrollTrigger,
       timeline,
       onComplete,
@@ -69,7 +69,7 @@ export const useGSAPAnimation = (
 
     return () => {
       animation.kill();
-      ST.getAll().forEach(trigger => {
+      ST.getAll().forEach((trigger) => {
         if (trigger.animation === animation) {
           trigger.kill();
         }
@@ -84,7 +84,7 @@ export const useGSAPAnimation = (
 export const useFadeIn = (
   duration: number = 1,
   delay: number = 0,
-  scrollTrigger?: Record<string, unknown>
+  scrollTrigger?: Record<string, unknown>,
 ) => {
   return useGSAPAnimation({
     from: { opacity: 0, y: 20 },
@@ -99,7 +99,7 @@ export const useFadeIn = (
 export const useSlideInLeft = (
   duration: number = 1,
   delay: number = 0,
-  scrollTrigger?: Record<string, unknown>
+  scrollTrigger?: Record<string, unknown>,
 ) => {
   return useGSAPAnimation({
     from: { x: -100, opacity: 0 },
@@ -114,7 +114,7 @@ export const useSlideInLeft = (
 export const useSlideInRight = (
   duration: number = 1,
   delay: number = 0,
-  scrollTrigger?: Record<string, unknown>
+  scrollTrigger?: Record<string, unknown>,
 ) => {
   return useGSAPAnimation({
     from: { x: 100, opacity: 0 },
@@ -129,7 +129,7 @@ export const useSlideInRight = (
 export const useScaleIn = (
   duration: number = 1,
   delay: number = 0,
-  scrollTrigger?: Record<string, unknown>
+  scrollTrigger?: Record<string, unknown>,
 ) => {
   return useGSAPAnimation({
     from: { scale: 0, opacity: 0 },
@@ -144,7 +144,7 @@ export const useScaleIn = (
 export const useRotateIn = (
   duration: number = 1,
   delay: number = 0,
-  scrollTrigger?: Record<string, unknown>
+  scrollTrigger?: Record<string, unknown>,
 ) => {
   return useGSAPAnimation({
     from: { rotation: -180, opacity: 0 },

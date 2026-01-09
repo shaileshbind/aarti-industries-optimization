@@ -24,7 +24,7 @@ export type AdvExploreProps = {
     exploreMore: {
       title?: string;
       ctaButton?: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     };
   }[];
 };

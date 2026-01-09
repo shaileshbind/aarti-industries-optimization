@@ -10,17 +10,16 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
 
   return (
     <div className=" max-w-[1030px] mx-auto pb-[20px] md:pb-[40px] px-[15px]">
-        <div className="flex w-full py-[70px]">
+      <div className="flex w-full py-[70px]">
         {description && (
           <AnimatedText>
             <H3 className="max-w-[unset] lg:max-w-[1000px] text-left mx-[unset] lg:mx-auto">
-            {heading}
+              {heading}
             </H3>
           </AnimatedText>
         )}
-        </div>
+      </div>
       <div className=" flex flex-col md:flex-row justify-between items-center">
-       
         <div className=" w-full md:w-[60%] md:pr-10 order-2 md:order-1">
           {description && (
             <FadeInReveal>
@@ -29,57 +28,52 @@ const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
               </BodyText1>
             </FadeInReveal>
           )}
-          </div>
-          <div className="w-full md:w-[40%] mb-10 md:mt-0 order-1 md:order-2">
-
+        </div>
+        <div className="w-full md:w-[40%] mb-10 md:mt-0 order-1 md:order-2">
           {image && (
             <FadeInReveal>
               <div className="hidden lg:block relative w-full pt-[100%] rounded-[30px] overflow-hidden">
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                   
-                  src={image?.url}
-                  alt={image?.alternativeText || "banner"}
-                  fill
-                  className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
-                />
-                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm"></i>
-                <span className="absolute bottom-0 right-0 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-[95%] h-[100%]">
+                <div className="absolute inset-0 overflow-hidden">
                   <Image
-                     
                     src={image?.url}
                     alt={image?.alternativeText || "banner"}
                     fill
                     className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
                   />
-                </span>
+                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm"></i>
+                  <span className="absolute bottom-0 right-0 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-[95%] h-[100%]">
+                    <Image
+                      src={image?.url}
+                      alt={image?.alternativeText || "banner"}
+                      fill
+                      className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
+                    />
+                  </span>
+                </div>
               </div>
-            </div>
             </FadeInReveal>
           )}
           {mobImage && (
             <FadeInReveal>
               <div className="block lg:hidden relative w-full pt-[100%] rounded-[20px] overflow-hidden">
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                   
-                  src={mobImage?.url}
-                  alt={mobImage?.alternativeText || "banner"}
-                  fill
-                  className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
-                />
-                <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm"></i>
-                <span className="absolute bottom-0 right-0 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-[95%] h-[100%]">
+                <div className="absolute inset-0 overflow-hidden">
                   <Image
-                     
                     src={mobImage?.url}
                     alt={mobImage?.alternativeText || "banner"}
                     fill
                     className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
                   />
-                </span>
+                  <i className="absolute top-0 left-0 w-full h-full backdrop-blur-sm"></i>
+                  <span className="absolute bottom-0 right-0 rounded-bl-[400px] rounded-tl-[400px] rounded-tr-[400px] rounded-br-[20px] overflow-hidden w-[95%] h-[100%]">
+                    <Image
+                      src={mobImage?.url}
+                      alt={mobImage?.alternativeText || "banner"}
+                      fill
+                      className={`object-cover scale-110 transition-opacity duration-700 ease-out `}
+                    />
+                  </span>
+                </div>
               </div>
-            </div>
             </FadeInReveal>
           )}
         </div>

@@ -14,7 +14,7 @@ export default function ListingContainer({
 
   const [searchValue, setSearchValue] = useState("");
   const [filteredReports, setFilteredReports] = useState<ReportItemProps[]>(
-    data?.reportLayout?.[0]?.reports || []
+    data?.reportLayout?.[0]?.reports || [],
   );
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -34,7 +34,7 @@ export default function ListingContainer({
           .includes(searchLower);
 
         return matchesHeading;
-      }
+      },
     );
 
     setFilteredReports(filtered);

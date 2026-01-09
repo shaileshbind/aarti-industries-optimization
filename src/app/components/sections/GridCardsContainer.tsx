@@ -17,7 +17,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
     <section
       className={clsx(
         `fluid-container lg:py-[100px] py-[50px] flex lg:flex-row flex-col justify-end relative`,
-        className
+        className,
       )}
     >
       <div className="lg:w-[46%] static lg:absolute top-42 left-0 mb-8">
@@ -26,7 +26,7 @@ const GridCardsContainer: React.FC<CDMOPartnerProps> = ({
             <AnimatedText>
               <H3
                 className={clsx(
-                  headingClassName ? headingClassName : "lg:!text-[28px]"
+                  headingClassName ? headingClassName : "lg:!text-[28px]",
                 )}
               >
                 {title}
