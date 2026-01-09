@@ -1,5 +1,5 @@
 import React from "react";
-import { BodyText1, H2 } from "../Typography2";
+import { H2 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";
 import { OurPhilosophyProps } from "@/app/types/corporate-governance.type";
@@ -67,9 +67,9 @@ const OurPhilosophy: React.FC<OurPhilosophyProps> = ({ data }) => {
                 </FadeInReveal>
               )}
 
-              <BodyText1>
+              <div className="font-normal text-[14px] md:text-[16px] xl:text-[18px] leading-[154%] lg:leading-[160%] text-grey-400 font-roboto">
                 <div dangerouslySetInnerHTML={{ __html: description }} />
-              </BodyText1>
+              </div>
             </FadeInReveal>
           )}
         </div>

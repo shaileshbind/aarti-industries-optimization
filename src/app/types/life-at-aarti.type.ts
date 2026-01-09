@@ -44,6 +44,11 @@ export type LAAVisionProps = {
           id?: number;
           title?: string;
         }[];
+        values?: {
+          value?: string;
+          description?: string;
+        }[];
+        ctaButton?: ButtonProps;
       }[];
     }[];
   };

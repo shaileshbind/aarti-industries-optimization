@@ -113,13 +113,14 @@ const TabsAutoplaySection = ({
       },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);
@@ -252,7 +253,7 @@ const TabsAutoplaySection = ({
             allowTouchMove={false}
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             onSlideChange={handleSlideChange}
-            className="w-full h-full"
+            className="w-full h-full fadeInSlider"
           >
             {data?.map((tabItem) => (
               <SwiperSlide key={tabItem.id}>

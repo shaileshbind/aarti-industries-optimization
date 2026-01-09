@@ -58,8 +58,9 @@ export type RDAnalyticalExcProps = {
 
 export type RDDiverseChemProps = {
   data: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
+    ctaButton?:ButtonProps
   };
   data2: {
     newChemistries: {
