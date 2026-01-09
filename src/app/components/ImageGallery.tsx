@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import Image from "next/image";
-import { FadeInRevealBlur } from "./ScrollReveal";
+import { FadeInReveal } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
 import Button from "./Button";
 import { ButtonProps, ImageProps } from "../types/global.type";
@@ -380,23 +380,23 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     <div className="w-full my-[72px] lg:my-[140px]">
       <div className="w-full container mx-auto">
         {title && (
-          <FadeInRevealBlur>
+          <FadeInReveal>
             <H2 className="text-blue-200 max-w-[unset] lg:max-w-[560px] mx-auto text-center">
               {title}
             </H2>
-          </FadeInRevealBlur>
+          </FadeInReveal>
         )}
 
         {description && (
-          <FadeInRevealBlur delay={0.3}>
+          <FadeInReveal delay={0.3}>
             <BodyText1 className="mt-[20px] text-grey-400  max-w-[unset] lg:max-w-[640px] mx-auto text-center font-roboto">
               {description}
             </BodyText1>
-          </FadeInRevealBlur>
+          </FadeInReveal>
         )}
 
         {ctaButton?.title && (
-          <FadeInRevealBlur delay={0.3}>
+          <FadeInReveal delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
               {ctaButton?.title &&
                 (ctaButton?.hasExternalLink === "true"
@@ -413,7 +413,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                   />
                 )}
             </div>
-          </FadeInRevealBlur>
+          </FadeInReveal>
         )}
       </div>
       <div
