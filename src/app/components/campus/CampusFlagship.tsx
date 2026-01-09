@@ -194,7 +194,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                  className={`-rotate-180 swiper-button-prev-campus-flagship transition-opacity ${
                     activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -206,7 +206,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${
+                  className={`swiper-button-next-campus-flagship transition-opacity ${
                     activeIndex < card?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -225,8 +225,8 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   disableOnInteraction: false,
                 }}
                 navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
+                  nextEl: ".swiper-button-next-campus-flagship",
+                  prevEl: ".swiper-button-prev-campus-flagship",
                 }}
                 slidesOffsetAfter={offsetAfter}
                 onSwiper={(swiper) => {

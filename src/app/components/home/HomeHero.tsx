@@ -332,7 +332,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
-              <div className="w-full min-h-screen md:min-h-[80vh] lg:min-h-screen relative overflow-hidden">
+              <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
                 {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -435,7 +435,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       />
       <div
         ref={starRef}
-        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60 scale-[200] "
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60  "
       >
         <Image
           src="/images/home/star-white.svg"
