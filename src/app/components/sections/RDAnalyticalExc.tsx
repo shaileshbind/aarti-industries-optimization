@@ -547,7 +547,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   }}
                                   className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
                                 >
-                                  Enquire now
+                                  Enquire Now
                                 </button>
                               </div>
                             )}
