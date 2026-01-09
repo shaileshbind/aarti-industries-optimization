@@ -177,7 +177,7 @@ export default function ProductInnerPage({
                     setdocument("");
                   }}
                 >
-                  Enquire now
+                  Enquire Now
                   <div className="w-[90px] h-[1px] mt-[0.4px] bg-[#DC4C03] transition-all duration-300 origin-left group-hover:w-0" />
                 </button>
               </div>
