@@ -12,7 +12,7 @@ const page = async () => {
   const { section_one, section_two } = data?.data;
   const seo = data?.seo;
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   return (
     <div>

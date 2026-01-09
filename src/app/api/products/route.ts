@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     if (!category) {
       return NextResponse.json(
         { error: "Missing required parameter: category" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     if (!baseUrl) {
       return NextResponse.json(
         { error: "Missing environment variable: NEXT_PUBLIC_BASE_URL" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -41,7 +41,7 @@ export async function GET(req: Request) {
       console.error("Backend error:", text);
       return NextResponse.json(
         { error: "Failed to fetch products from backend" },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
@@ -51,7 +51,7 @@ export async function GET(req: Request) {
     console.error("Error fetching product data:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

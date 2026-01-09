@@ -1,6 +1,4 @@
-
 import clsxN from "../../../utils/clsxN";
-
 
 type TagProps = {
   title: string;
@@ -12,7 +10,7 @@ const Tags = ({ title, className }: TagProps) => {
     <p
       className={clsxN(
         "text-[#FF7932] font-medium text-[14px] font-roboto",
-        className
+        className,
       )}
     >
       {title}

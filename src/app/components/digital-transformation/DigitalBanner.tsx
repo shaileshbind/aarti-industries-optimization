@@ -3,7 +3,7 @@ import HeroBanner from "../banners/HeroBanner";
 import { DigitalBannerProps } from "@/app/types/digital-transformation.type";
 
 const DigitalBanner: React.FC<DigitalBannerProps> = ({ data }) => {
-  const { title, description, image,mobImage } = data;
+  const { title, description, image, mobImage } = data;
 
   return (
     <HeroBanner

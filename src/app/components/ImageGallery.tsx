@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import { FadeInRevealBlur } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
@@ -45,7 +51,9 @@ interface Slide {
 const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
   const { title, description, ctaButton } = data ?? {};
   const [isHovered, setIsHovered] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<SlideImageData | null>(null);
+  const [selectedImage, setSelectedImage] = useState<SlideImageData | null>(
+    null,
+  );
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -237,17 +245,19 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     if (marqueeRef.current && isDesktop !== null && slidesToRender.length > 0) {
       // Constant speed in pixels per second (adjust these values to control speed)
       const speedPxPerSecond = isDesktop ? 100 : 60; // Desktop: 100px/s, Mobile: 60px/s
-      
+
       // Get the actual width of the marquee content
       const marqueeWidth = marqueeRef.current.scrollWidth;
-      
+
       // Calculate duration based on distance (50% of total width) and speed
       // Since we're moving -50%, we need to cover half the width
       const distance = marqueeWidth / 2;
       const duration = distance / speedPxPerSecond;
-      
+
       marqueeRef.current.style.animationDuration = `${duration}s`;
-      marqueeRef.current.style.animationPlayState = isHovered ? "paused" : "running";
+      marqueeRef.current.style.animationPlayState = isHovered
+        ? "paused"
+        : "running";
     }
   }, [isHovered, isDesktop, slidesToRender]);
 
@@ -281,35 +291,42 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     setSelectedImage(null);
   }, []);
 
-  const handleNextImage = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    if (allImages.length === 0) return;
-    setCurrentImageIndex((prevIndex) => {
-      const nextIndex = (prevIndex + 1) % allImages.length;
-      setSelectedImage({
-        src: allImages[nextIndex].src,
-        alt: allImages[nextIndex].alt,
-        config: { marginTop: "", height: "" },
-        index: nextIndex,
+  const handleNextImage = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      if (allImages.length === 0) return;
+      setCurrentImageIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % allImages.length;
+        setSelectedImage({
+          src: allImages[nextIndex].src,
+          alt: allImages[nextIndex].alt,
+          config: { marginTop: "", height: "" },
+          index: nextIndex,
+        });
+        return nextIndex;
       });
-      return nextIndex;
-    });
-  }, [allImages]);
+    },
+    [allImages],
+  );
 
-  const handlePrevImage = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    if (allImages.length === 0) return;
-    setCurrentImageIndex((prevIndex) => {
-      const newPrevIndex = (prevIndex - 1 + allImages.length) % allImages.length;
-      setSelectedImage({
-        src: allImages[newPrevIndex].src,
-        alt: allImages[newPrevIndex].alt,
-        config: { marginTop: "", height: "" },
-        index: newPrevIndex,
+  const handlePrevImage = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      if (allImages.length === 0) return;
+      setCurrentImageIndex((prevIndex) => {
+        const newPrevIndex =
+          (prevIndex - 1 + allImages.length) % allImages.length;
+        setSelectedImage({
+          src: allImages[newPrevIndex].src,
+          alt: allImages[newPrevIndex].alt,
+          config: { marginTop: "", height: "" },
+          index: newPrevIndex,
+        });
+        return newPrevIndex;
       });
-      return newPrevIndex;
-    });
-  }, [allImages]);
+    },
+    [allImages],
+  );
 
   // Keyboard navigation
   useEffect(() => {
@@ -339,15 +356,10 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
           slide?.images?.map((imageData, index) => (
             <div
               key={index}
-              className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height} ${isDesktop ? 'cursor-pointer' : ''}`}
-              // style={{
-              //   width: isDesktop 
-              //     ? slide.images.length === 1 
-              //       ? "337px" 
-              //       : "262px"
-              //     : "calc((100% - 6px) / 2)",
-              // }}
-              onClick={isDesktop ? () => handleImageClick(imageData) : undefined}
+              className={`w-full rounded-[14px] overflow-hidden ${imageData.config.marginTop} ${imageData.config.height} ${isDesktop ? "cursor-pointer" : ""}`}
+              onClick={
+                isDesktop ? () => handleImageClick(imageData) : undefined
+              }
             >
               {imageData?.src && (
                 <Image
@@ -387,28 +399,31 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
           <FadeInRevealBlur delay={0.3}>
             <div className="mt-[36px] w-fit mx-auto">
               {ctaButton?.title &&
-                ctaButton?.link?.link &&
-                ctaButton?.hasExternalLink && (
+                (ctaButton?.hasExternalLink === "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link) && (
                   <Button
                     title={ctaButton?.title}
                     href={
-                      ctaButton?.hasExternalLink == "true"
+                      ctaButton?.hasExternalLink === "true"
                         ? ctaButton?.externalLink
                         : ctaButton?.link?.link
                     }
+                    useTargetBlank={ctaButton?.hasExternalLink === "true"}
                   />
                 )}
             </div>
           </FadeInRevealBlur>
         )}
       </div>
-      <div 
+      <div
         className="mt-[100px] relative overflow-hidden"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <style dangerouslySetInnerHTML={{
-          __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
             @keyframes imageGalleryMarquee {
               from {
                 transform: translateX(0);
@@ -423,9 +438,10 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
               animation: imageGalleryMarquee linear infinite;
               /* Duration is set dynamically via JavaScript to maintain constant speed */
             }
-          `
-        }} />
-        <div 
+          `,
+          }}
+        />
+        <div
           ref={marqueeRef}
           className="image-gallery-marquee"
           style={{
@@ -433,13 +449,9 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
           }}
         >
           {/* First set of slides */}
-          {slidesToRender?.map((slide) => 
-            renderSlide(slide)
-          )}
+          {slidesToRender?.map((slide) => renderSlide(slide))}
           {/* Duplicate for seamless loop */}
-          {slidesToRender?.map((slide) => 
-            renderSlide(slide)
-          )}
+          {slidesToRender?.map((slide) => renderSlide(slide))}
         </div>
       </div>
 
@@ -458,7 +470,13 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                 className="absolute left-2 md:left-0 z-20  rounded-full shadow-lg transition-all duration-200 hover:scale-110"
                 aria-label="Previous image"
               >
-                <Image src="/images/home/chevron-right-white.svg" alt="next" width={45} height={45} className="rotate-180" />
+                <Image
+                  src="/images/home/chevron-right-white.svg"
+                  alt="next"
+                  width={45}
+                  height={45}
+                  className="rotate-180"
+                />
               </button>
             )}
 
@@ -480,8 +498,12 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                 className="absolute right-2 md:right-0 z-20   rounded-full  shadow-lg transition-all duration-200 hover:scale-110"
                 aria-label="Next image"
               >
-                {/* <ChevronRightIcon className="text-gray-800 text-2xl md:text-3xl" /> */}
-                <Image src="/images/home/chevron-right-white.svg" alt="next" width={45} height={45} />
+                <Image
+                  src="/images/home/chevron-right-white.svg"
+                  alt="next"
+                  width={45}
+                  height={45}
+                />
               </button>
             )}
 

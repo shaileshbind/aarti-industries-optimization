@@ -36,7 +36,7 @@ export default function StockExchangeContainer({
 
               // Check if any report heading matches
               const matchesReport = quarterData.report?.some((report) =>
-                report.heading?.toLowerCase().includes(searchLower)
+                report.heading?.toLowerCase().includes(searchLower),
               );
 
               return matchesQuarter || matchesReport;
@@ -58,10 +58,10 @@ export default function StockExchangeContainer({
                 return {
                   ...quarterData,
                   report: quarterData.report?.filter((report) =>
-                    report.heading?.toLowerCase().includes(searchLower)
+                    report.heading?.toLowerCase().includes(searchLower),
                   ),
                 };
-              }
+              },
             );
 
             // Only return year data if it has matching quarters

@@ -27,7 +27,8 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
             ?.filter((release) => release?.file?.url || release?.slug)
             .slice(0, 4)
             .map((release, index) => {
-              const href = release?.file?.url || `press-releases/${release?.slug}`;
+              const href =
+                release?.file?.url || `press-releases/${release?.slug}`;
               if (!href) return null;
               return (
                 <Link href={href} target="_blank" key={index}>
@@ -44,8 +45,10 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 </Link>
               );
             })}
-          {pressRelease?.ctaButton?.externalLink &&
-            pressRelease?.ctaButton?.title && (
+          {pressRelease?.ctaButton?.title &&
+            (pressRelease?.ctaButton?.hasExternalLink == "true"
+              ? pressRelease?.ctaButton?.externalLink
+              : pressRelease?.ctaButton?.link?.link) && (
               <Button
                 secondary
                 href={
@@ -55,6 +58,9 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 }
                 title={pressRelease?.ctaButton?.title}
                 className="mt-[10px] lg:mt-[30px]"
+                useTargetBlank={
+                  pressRelease?.ctaButton?.hasExternalLink == "true"
+                }
               />
             )}
         </div>
@@ -66,17 +72,20 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               </H2>
             )}
             {mediaCoverage?.ctaButton?.[0]?.title &&
-              (mediaCoverage?.ctaButton?.[0]?.externalLink ||
-                (mediaCoverage?.ctaButton?.[0]?.link?.link &&
-                  mediaCoverage?.ctaButton?.[0]?.link?.link !== "#")) && (
+              (mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                ? mediaCoverage?.ctaButton?.[0]?.externalLink
+                : mediaCoverage?.ctaButton?.[0]?.link?.link) && (
                 <Button
                   href={
                     mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
                       ? mediaCoverage?.ctaButton?.[0]?.externalLink
-                      : mediaCoverage?.ctaButton?.[0]?.link?.link || "#"
+                      : mediaCoverage?.ctaButton?.[0]?.link?.link
                   }
                   title={mediaCoverage?.ctaButton?.[0]?.title}
                   secondary
+                  useTargetBlank={
+                    mediaCoverage?.ctaButton?.[0]?.hasExternalLink == "true"
+                  }
                 />
               )}
           </div>
@@ -129,7 +138,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
           </div>
           <div className="w-full pt-[24px] lg:hidden">
             <div className="mx-[20px] relative h-[2px]">
-               <div className="in-headlines-section-progressbar !static !w-full h-full" />
+              <div className="in-headlines-section-progressbar !static !w-full h-full" />
             </div>
           </div>
         </div>

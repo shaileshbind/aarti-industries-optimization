@@ -20,7 +20,7 @@ export default function DownloadCard({
         ? `&filename=${encodeURIComponent(filename)}`
         : "";
       const proxyUrl = `/api/download?url=${encodeURIComponent(
-        downloadUrl
+        downloadUrl,
       )}${filenameParam}`;
       const response = await fetch(proxyUrl);
 
@@ -62,7 +62,7 @@ export default function DownloadCard({
           onClick={handleDownload}
           className={clsx(
             `relative h-[328px] md:h-[398px] rounded-[20px] overflow-hidden cursor-pointer border-[1px] border-[#d2d2d2]`,
-            className
+            className,
           )}
         >
           <Image

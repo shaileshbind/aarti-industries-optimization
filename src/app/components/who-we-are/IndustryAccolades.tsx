@@ -105,10 +105,10 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   // Animate only the active tab's progress bar (only when in viewport)
   useEffect(() => {
     if (!awards || awards.length === 0) return;
-    
+
     const activeProgress = progressRefs.current[active];
     if (!activeProgress) return;
-    
+
     // Kill all existing progress animations
     progressRefs.current.forEach((el) => {
       if (el) gsap.killTweensOf(el);
@@ -122,20 +122,20 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       progressAnimationRef.current.kill();
       progressAnimationRef.current = null;
     }
-    
+
     // Reset other bars
     progressRefs.current.forEach((el, idx) => {
       if (el && idx !== active) gsap.set(el, { width: "0%" });
     });
-    
+
     // Get saved progress or start from 0%
     const savedProgress = savedProgressRef.current[active] || 0;
     const startWidth = `${savedProgress * 100}%`;
     const remainingDuration = 20 * (1 - savedProgress);
-    
+
     // Set initial width
     gsap.set(activeProgress, { width: startWidth });
-    
+
     // Only start animation if section is in viewport
     if (isInViewport && remainingDuration > 0) {
       // Animate the active tab's progress from saved position
@@ -226,7 +226,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -382,7 +382,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
                       typeof swiperRef.current?.params.slidesPerView ===
                         "number"
                         ? swiperRef.current.params.slidesPerView
-                        : 1
+                        : 1,
                     )
                     ? "pointer-events-none opacity-30"
                     : "cursor-pointer opacity-100"

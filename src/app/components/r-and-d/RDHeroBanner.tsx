@@ -5,10 +5,10 @@ import { RDHeroBannerProps } from "@/app/types/r-and-d.type";
 import { isMobile } from "react-device-detect";
 
 const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
-   const [isClientMobile, setIsClientMobile] = useState(false);
-    useEffect(() => {
-      setIsClientMobile(isMobile);
-    }, []);
+  const [isClientMobile, setIsClientMobile] = useState(false);
+  useEffect(() => {
+    setIsClientMobile(isMobile);
+  }, []);
   const { title, pageHeading, ctaButton, description, image, mobImage } = data;
 
   return (
@@ -23,7 +23,7 @@ const RDHeroBanner: React.FC<RDHeroBannerProps> = ({ data }) => {
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
       useTargetBlank={ctaButton?.hasExternalLink === "true"}
-       showStar3={!isClientMobile}
+      showStar3={!isClientMobile}
     />
   );
 };

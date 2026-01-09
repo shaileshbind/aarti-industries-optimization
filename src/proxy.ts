@@ -8,9 +8,9 @@ let cacheTimestamp: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 async function getCachedRedirects(): Promise<RedirectMapping[]> {
-  const now = Date.now()
+  const now = Date.now();
   // Return cached redirects if still valid
-  if (redirectCache && (now - cacheTimestamp) < CACHE_DURATION) {
+  if (redirectCache && now - cacheTimestamp < CACHE_DURATION) {
     return redirectCache;
   }
   // Fetch fresh redirects

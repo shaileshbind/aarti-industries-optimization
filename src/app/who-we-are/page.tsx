@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 const page = async () => {
   const data = await getPageData("/pages/by-slug/who-we-are");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const {
@@ -35,12 +35,14 @@ const page = async () => {
   const seo = data?.seo;
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Who We Are"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/who-we-are"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/who-we-are"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

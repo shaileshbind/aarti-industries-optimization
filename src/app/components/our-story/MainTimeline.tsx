@@ -32,7 +32,7 @@ export default function MainTimeline({
   // Updated: internal state handles strings
   const [internalActivePhase, setInternalActivePhase] = useState(0);
   const [internalActiveYear, setInternalActiveYear] = useState<string>(
-    phases[0].years[0]
+    phases[0].years[0],
   );
 
   const activePhase = externalActivePhase ?? internalActivePhase;

@@ -16,7 +16,7 @@ const CopyLink = () => {
       },
       (err) => {
         console.error("Could not copy text: ", err);
-      }
+      },
     );
   };
 

@@ -16,7 +16,11 @@ The scroll reveal system provides multiple ways to create scroll-triggered anima
 ### 1. Using Components (Recommended for most cases)
 
 ```tsx
-import { FadeInReveal, ScaleInReveal, FadeInGroup } from '@/components/ScrollReveal';
+import {
+  FadeInReveal,
+  ScaleInReveal,
+  FadeInGroup,
+} from "@/components/ScrollReveal";
 
 function MyComponent() {
   return (
@@ -25,7 +29,7 @@ function MyComponent() {
       <FadeInReveal delay={0.2}>
         <h1>Animated Title</h1>
       </FadeInReveal>
-      
+
       {/* Group animation */}
       <FadeInGroup stagger={0.2}>
         <div data-scroll>Item 1</div>
@@ -40,14 +44,14 @@ function MyComponent() {
 ### 2. Using Hooks (For custom animations)
 
 ```tsx
-import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 function MyComponent() {
   const ref = useScrollReveal({
     from: { autoAlpha: 0, y: 50 },
     to: { autoAlpha: 1, y: 0 },
     duration: 1,
-    delay: 0.2
+    delay: 0.2,
   });
 
   return <div ref={ref}>Animated content</div>;
@@ -57,10 +61,10 @@ function MyComponent() {
 ### 3. Using Utility Functions (For programmatic control)
 
 ```tsx
-import { fadeInUpReveal } from '@/utils/gsapUtils';
+import { fadeInUpReveal } from "@/utils/gsapUtils";
 
 useEffect(() => {
-  const element = document.querySelector('.my-element');
+  const element = document.querySelector(".my-element");
   if (element) {
     fadeInUpReveal(element, 0.2);
   }
@@ -71,32 +75,32 @@ useEffect(() => {
 
 ### Individual Animation Components
 
-| Component | Description | Default Animation |
-|-----------|-------------|-------------------|
-| `FadeInReveal` | Fade in with slide up | `autoAlpha: 0, y: 50` → `autoAlpha: 1, y: 0` |
-| `ScaleInReveal` | Scale in with bounce | `autoAlpha: 0, scale: 0.8` → `autoAlpha: 1, scale: 1` |
-| `SlideInLeftReveal` | Slide in from left | `autoAlpha: 0, x: -100` → `autoAlpha: 1, x: 0` |
-| `SlideInRightReveal` | Slide in from right | `autoAlpha: 0, x: 100` → `autoAlpha: 1, x: 0` |
-| `RotateInReveal` | Rotate in | `autoAlpha: 0, rotation: -180` → `autoAlpha: 1, rotation: 0` |
-| `BounceInReveal` | Bounce in | `autoAlpha: 0, scale: 0.3` → `autoAlpha: 1, scale: 1` |
+| Component            | Description           | Default Animation                                            |
+| -------------------- | --------------------- | ------------------------------------------------------------ |
+| `FadeInReveal`       | Fade in with slide up | `autoAlpha: 0, y: 50` → `autoAlpha: 1, y: 0`                 |
+| `ScaleInReveal`      | Scale in with bounce  | `autoAlpha: 0, scale: 0.8` → `autoAlpha: 1, scale: 1`        |
+| `SlideInLeftReveal`  | Slide in from left    | `autoAlpha: 0, x: -100` → `autoAlpha: 1, x: 0`               |
+| `SlideInRightReveal` | Slide in from right   | `autoAlpha: 0, x: 100` → `autoAlpha: 1, x: 0`                |
+| `RotateInReveal`     | Rotate in             | `autoAlpha: 0, rotation: -180` → `autoAlpha: 1, rotation: 0` |
+| `BounceInReveal`     | Bounce in             | `autoAlpha: 0, scale: 0.3` → `autoAlpha: 1, scale: 1`        |
 
 ### Group Animation Components
 
-| Component | Description | Stagger Default |
-|-----------|-------------|-----------------|
-| `FadeInGroup` | Group fade in | 0.2s |
-| `ScaleInGroup` | Group scale in | 0.2s |
-| `SlideInLeftGroup` | Group slide from left | 0.2s |
-| `SlideInRightGroup` | Group slide from right | 0.2s |
-| `RotateInGroup` | Group rotate in | 0.2s |
-| `BounceInGroup` | Group bounce in | 0.2s |
+| Component           | Description            | Stagger Default |
+| ------------------- | ---------------------- | --------------- |
+| `FadeInGroup`       | Group fade in          | 0.2s            |
+| `ScaleInGroup`      | Group scale in         | 0.2s            |
+| `SlideInLeftGroup`  | Group slide from left  | 0.2s            |
+| `SlideInRightGroup` | Group slide from right | 0.2s            |
+| `RotateInGroup`     | Group rotate in        | 0.2s            |
+| `BounceInGroup`     | Group bounce in        | 0.2s            |
 
 ### Generic Components
 
-| Component | Description |
-|-----------|-------------|
-| `ScrollReveal` | Generic scroll reveal with custom animation |
-| `ScrollGroup` | Generic group animation with custom settings |
+| Component      | Description                                  |
+| -------------- | -------------------------------------------- |
+| `ScrollReveal` | Generic scroll reveal with custom animation  |
+| `ScrollGroup`  | Generic group animation with custom settings |
 
 ## Component Props
 
@@ -106,10 +110,10 @@ useEffect(() => {
 interface ScrollRevealProps {
   children: ReactNode;
   className?: string;
-  delay?: number;        // Animation delay in seconds
-  duration?: number;     // Animation duration in seconds
-  stagger?: number;      // Stagger delay for group animations
-  disabled?: boolean;   // Disable animation
+  delay?: number; // Animation delay in seconds
+  duration?: number; // Animation duration in seconds
+  stagger?: number; // Stagger delay for group animations
+  disabled?: boolean; // Disable animation
   as?: keyof JSX.IntrinsicElements; // HTML element type
 }
 ```
@@ -130,24 +134,24 @@ interface ScrollRevealProps {
   className?: string;
   as?: keyof JSX.IntrinsicElements;
   disabled?: boolean;
-  
+
   // Animation properties
-  from?: gsap.TweenVars;     // Initial state
-  to?: gsap.TweenVars;       // Final state
-  duration?: number;          // Animation duration
-  delay?: number;             // Animation delay
-  stagger?: number;           // Stagger delay
-  ease?: string;             // Easing function
-  
+  from?: gsap.TweenVars; // Initial state
+  to?: gsap.TweenVars; // Final state
+  duration?: number; // Animation duration
+  delay?: number; // Animation delay
+  stagger?: number; // Stagger delay
+  ease?: string; // Easing function
+
   // ScrollTrigger properties
   trigger?: string | Element; // Trigger element
-  start?: string;             // Start position (default: 'top 80%')
-  end?: string;               // End position
-  toggleActions?: string;     // Toggle actions (default: 'play none none reverse')
-  scrub?: boolean | number;   // Scrub animation
-  pin?: boolean;              // Pin element
-  pinSpacing?: boolean;       // Pin spacing
-  
+  start?: string; // Start position (default: 'top 80%')
+  end?: string; // End position
+  toggleActions?: string; // Toggle actions (default: 'play none none reverse')
+  scrub?: boolean | number; // Scrub animation
+  pin?: boolean; // Pin element
+  pinSpacing?: boolean; // Pin spacing
+
   // Callbacks
   onComplete?: () => void;
   onStart?: () => void;
@@ -160,18 +164,23 @@ interface ScrollRevealProps {
 ### useScrollReveal Hook
 
 ```tsx
-import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 function MyComponent() {
-  const ref = useScrollReveal({
-    from: { autoAlpha: 0, y: 50 },
-    to: { autoAlpha: 1, y: 0 },
-    duration: 1,
-    delay: 0.2,
-    ease: 'power3.out',
-    start: 'top 80%',
-    onComplete: () => console.log('Animation complete')
-  }, [/* dependencies */]);
+  const ref = useScrollReveal(
+    {
+      from: { autoAlpha: 0, y: 50 },
+      to: { autoAlpha: 1, y: 0 },
+      duration: 1,
+      delay: 0.2,
+      ease: "power3.out",
+      start: "top 80%",
+      onComplete: () => console.log("Animation complete"),
+    },
+    [
+      /* dependencies */
+    ],
+  );
 
   return <div ref={ref}>Animated content</div>;
 }
@@ -180,15 +189,15 @@ function MyComponent() {
 ### Predefined Hook Functions
 
 ```tsx
-import { 
-  useFadeInReveal, 
-  useScaleInReveal, 
+import {
+  useFadeInReveal,
+  useScaleInReveal,
   useSlideInLeftReveal,
   useSlideInRightReveal,
   useRotateInReveal,
   useBounceInReveal,
-  useGroupReveal
-} from '@/hooks/useScrollReveal';
+  useGroupReveal,
+} from "@/hooks/useScrollReveal";
 
 // Individual animations
 const fadeRef = useFadeInReveal(1, 0.2); // duration, delay
@@ -196,7 +205,7 @@ const scaleRef = useScaleInReveal(1, 0.4);
 const slideLeftRef = useSlideInLeftReveal(1, 0.6);
 
 // Group animation
-const groupRef = useGroupReveal('fadeIn', 1, 0.2, 0.2); // type, duration, delay, stagger
+const groupRef = useGroupReveal("fadeIn", 1, 0.2, 0.2); // type, duration, delay, stagger
 ```
 
 ## Utility Functions
@@ -204,16 +213,16 @@ const groupRef = useGroupReveal('fadeIn', 1, 0.2, 0.2); // type, duration, delay
 ### Direct GSAP Functions
 
 ```tsx
-import { 
-  fadeInUpReveal, 
-  scaleInReveal, 
+import {
+  fadeInUpReveal,
+  scaleInReveal,
   fadeInUpGroup,
-  createScrollReveal 
-} from '@/utils/gsapUtils';
+  createScrollReveal,
+} from "@/utils/gsapUtils";
 
 // Quick animations
 useEffect(() => {
-  const element = document.querySelector('.my-element');
+  const element = document.querySelector(".my-element");
   if (element) {
     fadeInUpReveal(element, 0.2); // element, delay
   }
@@ -221,13 +230,13 @@ useEffect(() => {
 
 // Custom animation
 useEffect(() => {
-  const element = document.querySelector('.my-element');
+  const element = document.querySelector(".my-element");
   if (element) {
     createScrollReveal(element, {
       from: { autoAlpha: 0, y: 100, rotation: 45 },
       to: { autoAlpha: 1, y: 0, rotation: 0 },
       duration: 1.5,
-      ease: 'elastic.out(1, 0.3)'
+      ease: "elastic.out(1, 0.3)",
     });
   }
 }, []);
@@ -246,13 +255,13 @@ function HomePage() {
           <h1>Welcome to Our Site</h1>
         </section>
       </FadeInReveal>
-      
+
       <ScaleInReveal delay={0.4}>
         <section className="features">
           <h2>Our Features</h2>
         </section>
       </ScaleInReveal>
-      
+
       <FadeInGroup stagger={0.2}>
         <section className="testimonials" data-scroll>
           <div className="testimonial">Testimonial 1</div>
@@ -313,9 +322,7 @@ function CustomAnimation() {
       delay={0.2}
       ease="elastic.out(1, 0.3)"
     >
-      <div className="custom-element">
-        Custom animated content
-      </div>
+      <div className="custom-element">Custom animated content</div>
     </ScrollReveal>
   );
 }
@@ -329,12 +336,12 @@ function CustomAnimation() {
 <ScrollReveal
   from={{ autoAlpha: 0, y: 50 }}
   to={{ autoAlpha: 1, y: 0 }}
-  trigger=".my-trigger"           // Custom trigger element
-  start="top 90%"                 // Start when element is 90% from top
-  end="bottom 10%"                // End when element is 10% from bottom
+  trigger=".my-trigger" // Custom trigger element
+  start="top 90%" // Start when element is 90% from top
+  end="bottom 10%" // End when element is 10% from bottom
   toggleActions="play pause resume reverse" // Custom toggle actions
-  scrub={1}                       // Scrub animation with scroll
-  pin={true}                      // Pin element during animation
+  scrub={1} // Scrub animation with scroll
+  pin={true} // Pin element during animation
 >
   <div>Advanced animation</div>
 </ScrollReveal>
@@ -376,9 +383,9 @@ function CustomAnimation() {
 
 ```tsx
 // Enable ScrollTrigger markers for debugging
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   ScrollTrigger.config({
-    markers: true
+    markers: true,
   });
 }
 ```

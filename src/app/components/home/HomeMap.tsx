@@ -17,7 +17,7 @@ const HomeMap = () => {
     { id: 5, percent: "3%", title: "Rest of the world" },
   ];
   return (
-    <div 
+    <div
       className="w-full relative z-10 bg-white pt-20"
       style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
     >
@@ -54,7 +54,9 @@ const HomeMap = () => {
             fill
             className="object-contain block lg:hidden"
           />
-          <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:block hidden">*% indicate revenue breakup by market share.</p>
+          <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:block hidden">
+            *% indicate revenue breakup by market share.
+          </p>
         </div>
         <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
           {mobileStatsData?.map((items) => {
@@ -72,7 +74,9 @@ const HomeMap = () => {
           })}
         </div>
 
-        <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:hidden block">*% indicate revenue breakup by market share.</p>
+        <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:hidden block">
+          *% indicate revenue breakup by market share.
+        </p>
       </div>
     </div>
   );

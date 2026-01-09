@@ -6,7 +6,7 @@ export type PartnershipBannerProps = {
     ctaButtons: ButtonProps[];
     image: ImageProps;
     mobImage: ImageProps;
-    sectionTitle?:string;
+    sectionTitle?: string;
   };
 };
 
@@ -68,7 +68,7 @@ export type PartneshipExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     };
   }[];
 };

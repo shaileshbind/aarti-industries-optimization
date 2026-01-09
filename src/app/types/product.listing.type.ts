@@ -63,7 +63,7 @@ export interface ProductSubCategory {
 interface CatagoriesData {
   productCategory: string;
   slug: string;
-   tdsDocument?: {
+  tdsDocument?: {
     file?: {
       url?: string;
     };

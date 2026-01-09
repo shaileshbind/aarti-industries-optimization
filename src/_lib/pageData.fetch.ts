@@ -17,7 +17,6 @@ export async function getPageData(slug: string) {
     if (response.status === 404) {
       return null;
     }
-    
 
     // Handle non-OK response
     if (!response.ok) {
@@ -25,11 +24,11 @@ export async function getPageData(slug: string) {
     }
 
     const data = await response.json();
-    console.log("data", data?.layout?.[0])
+    console.log("data", data?.layout?.[0]);
     return {
       data: data?.layout?.[0],
       seo: data?.seo,
-      pressData:data,
+      pressData: data,
     };
   } catch (error: unknown) {
     // Handle fetch error

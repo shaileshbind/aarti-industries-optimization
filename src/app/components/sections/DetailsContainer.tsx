@@ -36,7 +36,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
             end: "bottom 65%",
             scrub: true,
           },
-        }
+        },
       );
       const starLineTl = gsap.timeline({
         scrollTrigger: {
@@ -49,12 +49,12 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
       starLineTl.fromTo(
         starRef.current,
         { opacity: 0, scale: 0.5 },
-        { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 }
+        { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 },
       );
       starLineTl.fromTo(
         bottomLineRef.current,
         { scaleY: 0, transformOrigin: "top center" },
-        { scaleY: 1, ease: "power2.out", duration: 0.8 }
+        { scaleY: 1, ease: "power2.out", duration: 0.8 },
       );
     }, wrapperRef);
 
@@ -95,20 +95,23 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
               </BodyText1>
             )}
 
-            {ctaButton?.title && (
-              <div className="my-[36px]">
-                <Button
-                  title={ctaButton?.title}
-                  href={`${
-                    ctaButton?.hasExternalLink == "true"
-                      ? ctaButton?.externalLink
-                      : ctaButton?.link?.link
-                  }`}
-                  className="!px-2 md:!px-[22px]"
-                />
-                {/* </FadeInReveal> */}
-              </div>
-            )}
+            {ctaButton?.title &&
+              (ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link) && (
+                <div className="my-[36px]">
+                  <Button
+                    title={ctaButton?.title}
+                    href={`${
+                      ctaButton?.hasExternalLink == "true"
+                        ? ctaButton?.externalLink
+                        : ctaButton?.link?.link
+                    }`}
+                    className="!px-2 md:!px-[22px]"
+                    useTargetBlank={ctaButton?.hasExternalLink == "true"}
+                  />
+                </div>
+              )}
           </FadeInRevealBlur>
         </div>
         {/* Bottom Line */}

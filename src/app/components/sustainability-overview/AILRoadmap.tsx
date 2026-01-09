@@ -1,11 +1,5 @@
 "use client";
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -58,12 +52,12 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
           clipPath: "inset(0% 0% 0% 0%)",
           duration: 0.6,
           ease: "power2.out",
-        }
+        },
       );
 
       prevIndexRef.current = newIndex;
     },
-    []
+    [],
   );
 
   // GSAP scroll animation
@@ -171,12 +165,15 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
     (index: number) => (el: HTMLDivElement | null) => {
       itemRefs.current[index] = el;
     },
-    []
+    [],
   );
 
   return (
     <>
-      <div ref={wrapperRef} className="w-full h-screen md:h-[60vh] lg:h-screen relative">
+      <div
+        ref={wrapperRef}
+        className="w-full h-screen md:h-[60vh] lg:h-screen relative"
+      >
         {/* Background Images with clip-path animation */}
         {leftSection && leftSection?.length > 0 && (
           <div className="absolute inset-0 z-[0]">
@@ -201,9 +198,9 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                       className="object-cover"
                       priority={index === 0}
                     />
-                   <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+                    <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
                   </div>
-                )
+                ),
             )}
           </div>
         )}

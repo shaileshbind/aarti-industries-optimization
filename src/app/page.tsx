@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const data = await getPageData("/pages/by-slug/home-page");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const {
     sectionOne,
@@ -56,7 +56,9 @@ export default async function Home() {
       {sectionTwo && <DetailsContainer data={sectionTwo} />}
       {sectionThree && <GlobalPartner data={sectionThree} />}
       <HomeSections sustainableChemData={sectionFour} />
-      {sectionFive && <ByUseSection data={sectionFive} sectionFiveTitle={sectionFiveTitle}/>}
+      {sectionFive && (
+        <ByUseSection data={sectionFive} sectionFiveTitle={sectionFiveTitle} />
+      )}
       {sectionSix && <ImageGallery data={sectionSix} imgArr={sectionSeven} />}
       {sectionEight && <FrameworkForged data={sectionEight} />}
       {sectionNine && <LatestAtAarti data={sectionNine} />}

@@ -6,7 +6,7 @@ export type DigitalBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
-    ctaButton?:ButtonProps;
+    ctaButton?: ButtonProps;
   };
 };
 
@@ -76,6 +76,6 @@ export type ExploreCardsProps = {
   data: {
     title?: string;
     ctaButton?: ButtonProps[];
-    formTitle?:string;
+    formTitle?: string;
   }[];
 };

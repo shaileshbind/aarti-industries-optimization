@@ -7,16 +7,16 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/industries-we-serve");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
- const { section_one, section_two, section_three, section_four } = data?.data;
- const seo = data?.seo;
- 
+  const { section_one, section_two, section_three, section_four } = data?.data;
+  const seo = data?.seo;
+
   return (
     <div>
       <SEO
@@ -24,7 +24,10 @@ const page = async () => {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/industries-we-serve"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/industries-we-serve"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

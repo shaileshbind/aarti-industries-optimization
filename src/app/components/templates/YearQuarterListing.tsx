@@ -34,7 +34,7 @@ export default function YearQuarterListing({
   const [activeSubCategory, setActiveSubCategory] =
     useState<string>(defaultSubCategory);
   const [activeYear, setActiveYear] = useState<string | number>(
-    reportLayout?.[0]?.yearAndQuarter?.[0]?.year || ""
+    reportLayout?.[0]?.yearAndQuarter?.[0]?.year || "",
   );
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
   const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
@@ -53,7 +53,7 @@ export default function YearQuarterListing({
 
     // Find the matching subcategory
     const matchingSubCategory = reportLayout.find(
-      (item) => item.subCategory === targetSubCategory
+      (item) => item.subCategory === targetSubCategory,
     );
 
     if (matchingSubCategory) {
@@ -103,13 +103,13 @@ export default function YearQuarterListing({
 
   // Get current subcategory data
   const currentSubCategory = reportLayout?.find(
-    (item) => item.subCategory === activeSubCategory
+    (item) => item.subCategory === activeSubCategory,
   );
   const yearAndQuarter = currentSubCategory?.yearAndQuarter || [];
 
   // Get quarters for active year - reversed order (last quarter first)
   const currentYearData = yearAndQuarter?.find(
-    (item) => item.year === activeYear
+    (item) => item.year === activeYear,
   );
   const quarters = currentYearData?.quarter
     ? [...currentYearData.quarter].reverse()
@@ -135,7 +135,7 @@ export default function YearQuarterListing({
   const handleSubCategoryClick = (subCat: string) => {
     setActiveSubCategory(subCat);
     const newSubCategory = reportLayout?.find(
-      (item) => item.subCategory === subCat
+      (item) => item.subCategory === subCat,
     );
     const firstYear = newSubCategory?.yearAndQuarter?.[0];
     setActiveYear(firstYear?.year || "");
@@ -163,7 +163,7 @@ export default function YearQuarterListing({
 
       setUnderline({ left: Math.round(left), width });
     },
-    [activeYear]
+    [activeYear],
   );
 
   // measure after layout and when activeYear changes
@@ -187,7 +187,7 @@ export default function YearQuarterListing({
                 `py-5 px-2 border-b-2 border-b-[#E1E1E1] cursor-pointer text-base transition-all duration-300`,
                 activeSubCategory === subCat.subCategory
                   ? "text-[#002F50]"
-                  : "text-[#9997A2] hover:text-[#002F50]"
+                  : "text-[#9997A2] hover:text-[#002F50]",
               )}
               onClick={() => handleSubCategoryClick(subCat.subCategory)}
             >
@@ -248,7 +248,7 @@ export default function YearQuarterListing({
                         "text-base",
                         item?.year === activeYear
                           ? "text-[#002F50]"
-                          : "text-[#4C5861]"
+                          : "text-[#4C5861]",
                       )}
                     >
                       {item?.year}
@@ -310,7 +310,7 @@ export default function YearQuarterListing({
                       `xl:mb-4 xl:pb-2`,
                       !showFinancialYear
                         ? `w-full xl:w-[10%]`
-                        : ` w-full xl:w-[15%]`
+                        : ` w-full xl:w-[15%]`,
                     )}
                   >
                     <h3 className="text-sm xl:text-base text-[#4C5861]">
@@ -327,7 +327,7 @@ export default function YearQuarterListing({
                       `hidden lg:block`,
                       !showFinancialYear
                         ? ` w-full xl:w-[90%]`
-                        : ` w-full xl:w-[85%]`
+                        : ` w-full xl:w-[85%]`,
                     )}
                   >
                     {quarterItem.report?.map((item) => (
@@ -338,8 +338,8 @@ export default function YearQuarterListing({
                             item?.link
                               ? item?.link
                               : item?.file?.url
-                              ? item?.file?.url
-                              : ""
+                                ? item?.file?.url
+                                : ""
                           }
                           scale={false}
                         />
@@ -365,8 +365,8 @@ export default function YearQuarterListing({
                               item?.link
                                 ? item?.link
                                 : item?.file?.url
-                                ? item?.file?.url
-                                : ""
+                                  ? item?.file?.url
+                                  : ""
                             }
                             scale={false}
                           />

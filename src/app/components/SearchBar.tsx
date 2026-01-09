@@ -27,7 +27,7 @@ export default function SearchBar({
         headerSearch
           ? "mr-0 max-w-[90%] lg:max-w-[760px] mt-4"
           : "mx-auto md:max-w-[560px] mt-5 md:mt-9",
-        className
+        className,
       )}
     >
       <input
@@ -36,7 +36,7 @@ export default function SearchBar({
         value={value}
         onChange={onChange}
         className={clsx(
-          `flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none`
+          `flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none`,
         )}
       />
       <button

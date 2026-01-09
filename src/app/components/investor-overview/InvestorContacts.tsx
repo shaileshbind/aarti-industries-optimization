@@ -47,7 +47,12 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                     {items?.address}
                   </BodyText3>
                 )}
-                <div className={clsx("grid gap-x-[5px] items-start", items?.fax ? "lg:grid-cols-2" : "lg:grid-cols-1" )}>
+                <div
+                  className={clsx(
+                    "grid gap-x-[5px] items-start",
+                    items?.fax ? "lg:grid-cols-2" : "lg:grid-cols-1",
+                  )}
+                >
                   {items?.mobile && (
                     <a
                       href={`tel:${items?.mobile}`}
@@ -125,7 +130,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
           })}
         </div>
       </div>
-      </FadeInReveal>
+    </FadeInReveal>
   );
 };
 

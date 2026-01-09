@@ -33,7 +33,7 @@ const AddressCard = ({
       )}
       {corporateOffice && (
         <span className="absolute bg-white uppercase top-[-12px] border border-orange-200 text-orange-200 text-[12px] font-normal leading-[100%] font-alte-hans px-[10px] grid items-center rounded-[50px] left-[30px] h-[28px]">
-          corporate office
+          mumbai office
         </span>
       )}
       {researchCentre && (

@@ -19,12 +19,12 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
             <AnimatedText>
               <H3
                 className={clsx(
-                  headingClassName ? headingClassName : "lg:!text-[28px]"
+                  headingClassName ? headingClassName : "lg:!text-[28px]",
                 )}
               >
                 {title}
               </H3>
-                {description && (
+              {description && (
                 <BodyText2 className="text-grey-400 mt-[10px] md:mt-[20px]">
                   {description}
                 </BodyText2>
@@ -32,8 +32,6 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
             </AnimatedText>
           </div>
         )}
-
-        
       </div>
 
       <ScaleInGroup
@@ -52,10 +50,16 @@ const GridCardsContainer: React.FC<GridCardsSocialProps> = ({
               className="sm:h-auto lg:min-h-[140px] w-full bg-[#EFF3F5] rounded-3xl p-[24px] lg:p-8 flex flex-col justify-between"
               data-scroll
             >
-              <BodyText3 className="text-orange-200 !text-[16px]">{'0' + (i + 1)}</BodyText3>
+              <BodyText3 className="text-orange-200 !text-[16px]">
+                {"0" + (i + 1)}
+              </BodyText3>
 
               <div className="mt-3 md:mt-[10px] space-y-3">
-                {title && <BodyText2 className="!text-[20px] !font-alte-hans">{title}</BodyText2>}
+                {title && (
+                  <BodyText2 className="!text-[20px] !font-alte-hans">
+                    {title}
+                  </BodyText2>
+                )}
               </div>
             </div>
           ))}

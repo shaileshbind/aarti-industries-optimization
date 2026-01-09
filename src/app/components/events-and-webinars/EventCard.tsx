@@ -18,18 +18,18 @@ type EventCardProps = {
       url: string;
       alternativeText: string;
     };
-    ctaButton: ButtonProps; 
-    // ctaButton?: {
-    //   title: string;
-    //   link: string;
-    //   externalLink?: string;
-    // };
+    ctaButton: ButtonProps;
   };
   onButtonClick?: () => void;
 };
 
-const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) => {
-  const { title, date, location, description, image, mobImage, ctaButton } = event;
+const EventCard = ({
+  event,
+  onButtonClick,
+  pastEvent = false,
+}: EventCardProps) => {
+  const { title, date, location, description, image, mobImage, ctaButton } =
+    event;
 
   return (
     <div className="group relative transition-all duration-300">
@@ -57,17 +57,11 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
       <div className="mt-[16px]">
         {/* Date */}
         {date && (
-          <BodyText3 className="text-grey-300 mb-[8px]">
-            {date}
-          </BodyText3>
+          <BodyText3 className="text-grey-300 mb-[8px]">{date}</BodyText3>
         )}
 
         {/* Event Title */}
-        {title && (
-          <SubH3 className="text-blue-200 mb-[8px]">
-            {title}
-          </SubH3>
-        )}
+        {title && <SubH3 className="text-blue-200 mb-[8px]">{title}</SubH3>}
 
         {/* Location */}
         {location && (
@@ -84,8 +78,8 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
         )}
 
         {/* CTA Link */}
-        {pastEvent && (
-          onButtonClick ? (
+        {pastEvent &&
+          (onButtonClick ? (
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -96,11 +90,18 @@ const EventCard = ({ event, onButtonClick, pastEvent = false }: EventCardProps) 
             >
               View Gallery
             </button>
-          )  
-          : null
-        )}
+          ) : null)}
         {!pastEvent && (
-          <Button title={ctaButton?.title || ''} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
+          <Button
+            title={ctaButton?.title}
+            href={
+              ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link
+            }
+            secondary
+            useTargetBlank={ctaButton?.hasExternalLink == "true"}
+          />
         )}
       </div>
     </div>

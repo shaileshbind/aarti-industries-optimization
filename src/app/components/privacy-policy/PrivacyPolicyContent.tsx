@@ -42,16 +42,25 @@ const StarIcon: React.FC = () => (
 );
 
 // Typography components
-const BodyText2: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
-  <p className={`text-base font-normal ${className || ''}`}>{children}</p>
+const BodyText2: React.FC<{
+  className?: string;
+  children: React.ReactNode;
+}> = ({ className, children }) => (
+  <p className={`text-base font-normal ${className || ""}`}>{children}</p>
 );
 
-const BodyText3: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
-  <p className={`text-sm font-normal ${className || ''}`}>{children}</p>
+const BodyText3: React.FC<{
+  className?: string;
+  children: React.ReactNode;
+}> = ({ className, children }) => (
+  <p className={`text-sm font-normal ${className || ""}`}>{children}</p>
 );
 
-const SubH2: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
-  <h2 className={`text-2xl font-semibold ${className || ''}`}>{children}</h2>
+const SubH2: React.FC<{ className?: string; children: React.ReactNode }> = ({
+  className,
+  children,
+}) => (
+  <h2 className={`text-2xl font-semibold ${className || ""}`}>{children}</h2>
 );
 
 const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
@@ -116,7 +125,12 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
 
   // Pin the sidebar using GSAP ScrollTrigger
   useEffect(() => {
-    if (typeof window === "undefined" || !sidebarRef.current || !containerRef.current) return;
+    if (
+      typeof window === "undefined" ||
+      !sidebarRef.current ||
+      !containerRef.current
+    )
+      return;
     const sidebar = sidebarRef.current;
     const container = containerRef.current;
     // Kill existing pin trigger
@@ -234,7 +248,7 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
 
   const renderNavLabel = (
     label: string,
-    state: "passed" | "active" | "future"
+    state: "passed" | "active" | "future",
   ) => {
     const colorClass = getTextColorClass(state);
 
@@ -260,7 +274,7 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
 
   return (
     <section className="w-full bg-white pt-20 pb-20 max-md:pt-6 max-md:pb-[60px]">
-      <div 
+      <div
         ref={containerRef}
         className="max-w-[1200px] mx-auto px-6 flex gap-[60px] max-[900px]:flex-col max-[900px]:gap-8 max-sm:px-4 relative"
       >
@@ -328,9 +342,7 @@ const PrivacyPolicyContent: React.FC<PrivacyPolicyProps> = ({ data }) => {
               className="mb-12 pt-2 opacity-100 transition-opacity duration-300"
             >
               {section.title && (
-                <SubH2 className="text-blue-200 mb-4">
-                  {section.title}
-                </SubH2>
+                <SubH2 className="text-blue-200 mb-4">{section.title}</SubH2>
               )}
 
               {section.description && (

@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { PodcastListingProps, Podcast, PodcastApiItem } from "@/app/types/events-and-webinars.type";
+import {
+  PodcastListingProps,
+  Podcast,
+  PodcastApiItem,
+} from "@/app/types/events-and-webinars.type";
 import { ImageProps } from "@/app/types/global.type";
 import PodcastCard from "./PodcastCard";
 import FeaturedPodcastCard from "./FeaturedPodcastCard";
@@ -82,19 +86,26 @@ const transformImage = (img: ImageProps | null) => {
   if (!img) return { url: "", alternativeText: "" };
   return {
     url: img.url || "",
-    alternativeText: img.alternativeText || ""
+    alternativeText: img.alternativeText || "",
   };
 };
 
 // Helper function to transform API podcast data to component format
-const transformPodcastData = (apiPodcast: PodcastApiItem | Podcast): Podcast | null => {
+const transformPodcastData = (
+  apiPodcast: PodcastApiItem | Podcast,
+): Podcast | null => {
   if (!apiPodcast) return null;
-  
+
   // If it's already a Podcast type (from old format), return as is
-  if ('image' in apiPodcast && apiPodcast.image && 'url' in apiPodcast.image && typeof apiPodcast.image.url === 'string') {
+  if (
+    "image" in apiPodcast &&
+    apiPodcast.image &&
+    "url" in apiPodcast.image &&
+    typeof apiPodcast.image.url === "string"
+  ) {
     return apiPodcast as Podcast;
   }
-  
+
   // Otherwise, it's PodcastApiItem, transform it
   const item = apiPodcast as PodcastApiItem;
   return {
@@ -106,12 +117,17 @@ const transformPodcastData = (apiPodcast: PodcastApiItem | Podcast): Podcast | n
     speakerInfo: item.speakerInfo,
     image: transformImage(item.image),
     mobImage: transformImage(item.mobImage || item.image),
-    ctaButton: item.ctaButton ? {
-      title: item.ctaButton.title,
-      link: item.ctaButton.link,
-      externalLink: item.ctaButton.hasExternalLink == "true" ? item.ctaButton.externalLink : item.ctaButton.link?.link,
-      hasExternalLink: item.ctaButton.hasExternalLink
-    } : undefined
+    ctaButton: item.ctaButton
+      ? {
+          title: item.ctaButton.title,
+          link: item.ctaButton.link,
+          externalLink:
+            item.ctaButton.hasExternalLink == "true"
+              ? item.ctaButton.externalLink
+              : item.ctaButton.link?.link,
+          hasExternalLink: item.ctaButton.hasExternalLink,
+        }
+      : undefined,
   };
 };
 
@@ -120,28 +136,29 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
-  
+
   // Check if podcastsData is in the new API format (pressData) or old format (data.podcasts)
   // getData returns the array directly, so check if it's already an array first
   const podcastsArray: (PodcastApiItem | Podcast)[] = useMemo(() => {
     if (Array.isArray(podcastsData)) {
       // getData returns array directly
       return podcastsData;
-    } else if (podcastsData && 'pressData' in podcastsData) {
+    } else if (podcastsData && "pressData" in podcastsData) {
       // Wrapped in pressData (from getPageData)
       return podcastsData.pressData?.data || [];
-    } else if (podcastsData && 'data' in podcastsData && podcastsData.data) {
+    } else if (podcastsData && "data" in podcastsData && podcastsData.data) {
       // Old format with data.podcasts
       return podcastsData.data.podcasts || [];
     }
     return [];
   }, [podcastsData]);
-  
+
   // Calculate total pages based on podcasts count (excluding featured podcast)
   useEffect(() => {
     if (podcastsArray && podcastsArray.length > 0) {
       // Exclude the first podcast (featured) from pagination
-      const podcastsForPagination = podcastsArray.length > 1 ? podcastsArray.slice(1) : [];
+      const podcastsForPagination =
+        podcastsArray.length > 1 ? podcastsArray.slice(1) : [];
       const total = Math.ceil(podcastsForPagination.length / itemsPerPage);
       setTotalPages(total || 1);
     } else {
@@ -172,65 +189,73 @@ const PodcastListing = ({ data, podcastsData }: PodcastListingProps) => {
   const paginatedPodcasts = React.useMemo((): Podcast[] => {
     if (!podcastsArray || podcastsArray.length === 0) return [];
     // Exclude the first podcast (featured) from the list
-    const podcastsForPagination = podcastsArray.length > 1 ? podcastsArray.slice(1) : [];
+    const podcastsForPagination =
+      podcastsArray.length > 1 ? podcastsArray.slice(1) : [];
     if (podcastsForPagination.length === 0) return [];
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, podcastsForPagination.length);
+    const endIndex = Math.min(
+      startIndex + itemsPerPage,
+      podcastsForPagination.length,
+    );
     const sliced = podcastsForPagination.slice(startIndex, endIndex);
     // Transform API data to component format and filter out nulls
-    return sliced.map(transformPodcastData).filter((podcast: Podcast | null): podcast is Podcast => podcast !== null);
+    return sliced
+      .map(transformPodcastData)
+      .filter(
+        (podcast: Podcast | null): podcast is Podcast => podcast !== null,
+      );
   }, [podcastsArray, currentPage, itemsPerPage]);
 
   // Get featured podcast (first podcast from the list)
-  const featuredPodcast = podcastsArray && podcastsArray.length > 0 
-    ? transformPodcastData(podcastsArray[0]) 
-    : null;
+  const featuredPodcast =
+    podcastsArray && podcastsArray.length > 0
+      ? transformPodcastData(podcastsArray[0])
+      : null;
 
   return (
     <section className="py-[40px] lg:py-[60px]">
-        <div className="container">
-            <H2 className=" mb-[30px]">{data?.title}</H2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="col-span-1">
-                {featuredPodcast && (
-                  <FeaturedPodcastCard podcast={featuredPodcast} />
-                )}
-              </div>
-              <div className="col-span-1">
-                <div 
-                  className="flex flex-col gap-4"
-                  ref={cardsWrapRef}
-                >
-                  {paginatedPodcasts.map((podcast: Podcast, index: number) => (
-                    <PodcastCard 
-                      key={`podcast-${currentPage}-${index}-${podcast?.title || index}`} 
-                      podcast={podcast} 
-                    />
-                  ))}
-                </div>
-                {paginatedPodcasts.length > 0 && podcastsArray && podcastsArray.length > 1 && totalPages > 1 && (
-              <div className="flex justify-end mt-[20px]">
-                <StyledPagination
-                  count={totalPages}
-                  page={currentPage}
-                  onChange={handlePageChange}
-                  shape="rounded"
-                  renderItem={(item) => (
-                    <PaginationItem
-                      slots={{
-                        previous: PreviousIcon,
-                        next: NextIcon,
-                      }}
-                      {...item}
-                    />
-                  )}
-                />
-              </div>
+      <div className="container">
+        <H2 className=" mb-[30px]">{data?.title}</H2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="col-span-1">
+            {featuredPodcast && (
+              <FeaturedPodcastCard podcast={featuredPodcast} />
             )}
-              </div>
+          </div>
+          <div className="col-span-1">
+            <div className="flex flex-col gap-4" ref={cardsWrapRef}>
+              {paginatedPodcasts.map((podcast: Podcast, index: number) => (
+                <PodcastCard
+                  key={`podcast-${currentPage}-${index}-${podcast?.title || index}`}
+                  podcast={podcast}
+                />
+              ))}
             </div>
-           
+            {paginatedPodcasts.length > 0 &&
+              podcastsArray &&
+              podcastsArray.length > 1 &&
+              totalPages > 1 && (
+                <div className="flex justify-end mt-[20px]">
+                  <StyledPagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    shape="rounded"
+                    renderItem={(item) => (
+                      <PaginationItem
+                        slots={{
+                          previous: PreviousIcon,
+                          next: NextIcon,
+                        }}
+                        {...item}
+                      />
+                    )}
+                  />
+                </div>
+              )}
+          </div>
         </div>
+      </div>
     </section>
   );
 };

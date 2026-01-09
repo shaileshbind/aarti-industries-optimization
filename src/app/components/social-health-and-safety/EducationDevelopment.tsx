@@ -55,7 +55,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -135,7 +135,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -145,19 +145,21 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   }, []);
 
   return (
-    <div ref={(el) => {
-      frameworkForgedRef.current = el;
-      sectionRef.current = el;
-    }}>
+    <div
+      ref={(el) => {
+        frameworkForgedRef.current = el;
+        sectionRef.current = el;
+      }}
+    >
       <div
         className={clsx(
-          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`
+          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`,
         )}
       >
         <div
           className={clsx(
             ` relative w-full overflow-hidden pt-[80%]
-            `
+            `,
           )}
         >
           <div
@@ -323,7 +325,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
 
                                 <BodyText2>{bulletPoint?.title}</BodyText2>
                               </li>
-                            )
+                            ),
                           )}
                       </ul>
                     </SwiperSlide>

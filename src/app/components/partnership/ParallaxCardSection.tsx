@@ -54,7 +54,7 @@ export default function ParallaxCardSection({
           end: "bottom 65%",
           scrub: true,
         },
-      }
+      },
     );
 
     const ctx = gsap.context(() => {
@@ -89,7 +89,8 @@ export default function ParallaxCardSection({
             trigger: stickyContainerRef.current,
             start: "top top+=100",
             end: () => {
-              if (!stickyContainerRef.current || !stickyImageRefWrapper.current) return "+=0";
+              if (!stickyContainerRef.current || !stickyImageRefWrapper.current)
+                return "+=0";
               const containerHeight = stickyContainerRef.current.offsetHeight;
               const stickyHeight = stickyImageRefWrapper.current.offsetHeight;
               return `+=${Math.max(0, containerHeight - stickyHeight - 100)}`;
@@ -111,7 +112,7 @@ export default function ParallaxCardSection({
               end: "top 50%",
               scrub: 2,
             },
-          }
+          },
         );
       }
     }, containerRef);
@@ -240,7 +241,10 @@ export default function ParallaxCardSection({
       </div>
 
       {/* Section Two - Accordion */}
-      <div ref={stickyContainerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px] items-start">
+      <div
+        ref={stickyContainerRef}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-[40px] xl:gap-[86px] pt-[72px] lg:pt-[0px] pl-5 pr-5 lg:pr-0 lg:pl-[60px] items-start"
+      >
         <div className="">
           <FadeInReveal>
             {heading && <H3>{heading}</H3>}
@@ -318,18 +322,24 @@ export default function ParallaxCardSection({
                       </BodyText2>
                     )}
 
-                    {item?.ctaButton?.title && (
-                      <Button
-                        secondary
-                        title={item?.ctaButton?.title}
-                        href={`${
-                          item?.ctaButton?.hasExternalLink == "true"
-                            ? item?.ctaButton?.externalLink
-                            : item?.ctaButton?.link?.link
-                        }`}
-                        className=" mb-2"
-                      />
-                    )}
+                    {item?.ctaButton?.title &&
+                      (item?.ctaButton?.hasExternalLink == "true"
+                        ? item?.ctaButton?.externalLink
+                        : item?.ctaButton?.link?.link) && (
+                        <Button
+                          secondary
+                          title={item?.ctaButton?.title}
+                          href={`${
+                            item?.ctaButton?.hasExternalLink == "true"
+                              ? item?.ctaButton?.externalLink
+                              : item?.ctaButton?.link?.link
+                          }`}
+                          className=" mb-2"
+                          useTargetBlank={
+                            item?.ctaButton?.hasExternalLink == "true"
+                          }
+                        />
+                      )}
                   </div>
                 </MainAccordion>
               ))}

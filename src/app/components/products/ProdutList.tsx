@@ -19,7 +19,7 @@ const ProductList = ({
   link,
   pdfLink,
   secondary,
-  scale=false,
+  scale = false,
 }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -30,7 +30,7 @@ const ProductList = ({
         scale && "button-subtle-scale ",
         isHovered
           ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg  `
-          : `${secondary ? " border-gray-200" : "bg-white border-gray-200"} `
+          : `${secondary ? " border-gray-200" : "bg-white border-gray-200"} `,
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -41,7 +41,7 @@ const ProductList = ({
           <BodyText1
             className={clsxN(
               "text-sm lg:text-lg font-medium  ",
-              isHovered ? "text-white" : "text-blue-200"
+              isHovered ? "text-white" : "text-blue-200",
             )}
           >
             {title}
@@ -54,7 +54,7 @@ const ProductList = ({
             download
             className={clsxN(
               "flex items-center space-x-1 text-xs md:hidden mt-1 ",
-              isHovered ? "text-white" : "text-gray-800"
+              isHovered ? "text-white" : "text-gray-800",
             )}
             onClick={(e) => e.stopPropagation()}
             target="_blank"
@@ -83,7 +83,7 @@ const ProductList = ({
             download
             className={clsxN(
               "hidden md:flex items-center space-x-1 text-sm  cursor-pointer z-[1]",
-              isHovered ? "text-white" : "text-gray-800"
+              isHovered ? "text-white" : "text-gray-800",
             )}
             target="_blank"
           >
@@ -113,7 +113,7 @@ const ProductList = ({
               "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:pointer-events-none",
               isHovered
                 ? "border-white text-white hover:text-orange-600"
-                : "border-orange-800 text-orange-800 hover:bg-orange-800"
+                : "border-orange-800 text-orange-800 hover:bg-orange-800",
             )}
           >
             <div className="w-[20px] h-[20px] relative">

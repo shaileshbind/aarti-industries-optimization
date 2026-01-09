@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import gsap from "gsap";
 import clsx from "clsx";
 import GeneralPopup from "../Popups/GeneralPopup";
 import SplitText from "../SplitText";
-import {useMediaQuery} from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { useTitleCase } from "../../../../utils/toTitleCase";
 
 type HeroBannerProps = {
@@ -72,10 +72,21 @@ const HeroBanner = ({
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
+  const [isMobImageLoading, setIsMobImageLoading] = useState<boolean>(!!mobImage);
   const isTablet = useMediaQuery("(max-width:768px)");
   // Call hooks unconditionally at the top level
-  const titleCasedSecondaryBtnFormTitle = useTitleCase(secondaryBtnFormTitle || "");
+  const titleCasedSecondaryBtnFormTitle = useTitleCase(
+    secondaryBtnFormTitle || "",
+  );
   const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
+  
+  // Reset loading states when image sources change
+  useEffect(() => {
+    setIsImageLoading(true);
+    setIsMobImageLoading(true);
+  }, [image, mobImage]);
+
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -123,7 +134,7 @@ const HeroBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.1"
+        "-=0.1",
       )
       .to(
         hLine,
@@ -132,7 +143,7 @@ const HeroBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .to(
         stars,
@@ -143,7 +154,7 @@ const HeroBanner = ({
           ease: "sine.out",
           stagger: 0.2,
         },
-        "<"
+        "<",
       );
   }, [showStar2, showStar3]);
 
@@ -158,12 +169,20 @@ const HeroBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
+              {/* Skeleton loader with blur effect */}
+              {((image && !isTablet && isImageLoading) ||
+                (mobImage && isTablet && isMobImageLoading)) && (
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
+              )}
               {image && !isTablet && (
                 <Image
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
-                  className="object-cover hidden md:block"
+                  className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                    isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  }`}
+                  onLoad={() => setIsImageLoading(false)}
                 />
               )}
 
@@ -172,10 +191,13 @@ const HeroBanner = ({
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
-                  className="object-cover block md:hidden"
+                  className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                    isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  }`}
+                  onLoad={() => setIsMobImageLoading(false)}
                 />
               )}
-              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)] z-[2]" />
               <div
                 className={`w-full h-full absolute z-[3] ${
                   centerText
@@ -196,7 +218,7 @@ const HeroBanner = ({
                       className={clsx(
                         `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
-                        centerTitleClassName
+                        centerTitleClassName,
                       )}
                     >
                       {title}
@@ -236,7 +258,6 @@ const HeroBanner = ({
                             font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
                             [text-underline-position:under] text-white white-btn-underline`}
                         >
-                          {/* {secondaryBtnFormTitle} */}
                           {titleCasedSecondaryBtnFormTitle}
                         </button>
                       </div>
@@ -276,22 +297,20 @@ const HeroBanner = ({
                 ref={lineVertical}
                 className={clsx(
                   `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
-                  lineClassName
+                  lineClassName,
                 )}
               />
-              {/* {!centerText && ( */}
-                <div
-                  ref={lineHorizontal}
-                  className={clsx(
-                    `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`
-                  )}
-                />
-              {/* )} */}
+              <div
+                ref={lineHorizontal}
+                className={clsx(
+                  `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`,
+                )}
+              />
               <div
                 ref={starRef}
                 className={clsx(
                   `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
-                  bottomMiddleStarClassName
+                  bottomMiddleStarClassName,
                 )}
               >
                 <Image
@@ -376,7 +395,6 @@ const HeroBanner = ({
                   >
                     {popupButtonTitle && (
                       <span className="relative z-10 text-white">
-                         {/* <SplitText text={popupButtonTitle} /> */}
                         <SplitText text={titleCasedPopupButtonTitle} />
                       </span>
                     )}
@@ -389,12 +407,20 @@ const HeroBanner = ({
             ref={wrapperRef}
             className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
           >
+            {/* Skeleton loader with blur effect */}
+            {((image && !isTablet && isImageLoading) ||
+              (mobImage && isTablet && isMobImageLoading)) && (
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
+            )}
             {image && !isTablet && (
               <Image
                 src={image}
                 alt={alt ? alt : "img"}
                 fill
-                className="object-cover hidden md:block"
+                className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                  isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                }`}
+                onLoad={() => setIsImageLoading(false)}
               />
             )}
             {mobImage && isTablet && (
@@ -402,7 +428,10 @@ const HeroBanner = ({
                 src={mobImage}
                 alt={mobAlt ? mobAlt : "img"}
                 fill
-                className="object-cover block md:hidden"
+                className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                  isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                }`}
+                onLoad={() => setIsMobImageLoading(false)}
               />
             )}
             {/* starts & lines */}

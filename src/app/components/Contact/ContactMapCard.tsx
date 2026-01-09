@@ -4,7 +4,7 @@ interface CardItem {
   tag?: string;
   title?: string;
   description?: string;
-  subTitle?:string;
+  subTitle?: string;
 }
 
 interface ContactMapCardProps {

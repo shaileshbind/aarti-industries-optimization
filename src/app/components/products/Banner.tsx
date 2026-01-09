@@ -22,7 +22,9 @@ const Banner: React.FC<
       {/* Text Content */}
       <div className="h-auto max-w-[65%] md:max-w-[30%] lg:mt-20 z-10">
         <H2 className="text-h2-l text-blue-100">{title}</H2>
-        <BodyText1 className="text-body-m mt-1 mb-5 lg:mb-9 text-[#646464]">{description}</BodyText1>
+        <BodyText1 className="text-body-m mt-1 mb-5 lg:mb-9 text-[#646464]">
+          {description}
+        </BodyText1>
       </div>
 
       {/* Search */}

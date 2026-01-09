@@ -7,14 +7,13 @@ import GlobalInnovation from "../components/sections/GlobalInnovation";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import Explore from "../components/manufacturing-capabilities/Explore";
-//import VideoScrollBarContainer from "../components/manufacturing-capabilities/VideoScrollBarContainer";
 import SEO from "../components/SEO";
 export const dynamic = "force-dynamic";
 
 export default async function page() {
   const data = await getPageData("/pages/by-slug/manufacturing-capabilities");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const {
@@ -23,7 +22,6 @@ export default async function page() {
     section_three,
     section_four,
     section_five,
-    //section_six,
     section_seven,
   } = data?.data;
   const seo = data?.seo;

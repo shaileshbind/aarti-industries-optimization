@@ -64,7 +64,7 @@ const Tabs: React.FC<TabsProps> = ({
     if (!container) return;
 
     const activeIndex = tabs.findIndex(
-      (tab) => tab?.post_category?.slug === activeId
+      (tab) => tab?.post_category?.slug === activeId,
     );
     const activeButton = tabRefs.current[activeIndex] ?? null;
 
@@ -97,7 +97,13 @@ const Tabs: React.FC<TabsProps> = ({
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeId, tabs.length, indicatorColor, indicatorTransition, measureIndicator]);
+  }, [
+    activeId,
+    tabs.length,
+    indicatorColor,
+    indicatorTransition,
+    measureIndicator,
+  ]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${

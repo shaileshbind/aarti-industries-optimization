@@ -74,7 +74,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                               {item?.title}
                             </BodyText2>
                           </div>
-                        )
+                        ),
                     )}
                 </div>
               </>
@@ -132,7 +132,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                                 {capability?.title}
                               </BodyText2>
                             </div>
-                          )
+                          ),
                       )}
                     </div>
                   </div>
@@ -151,7 +151,9 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
               onClick={toggleAccordion}
               className="w-full py-3 px-[22px] flex justify-between items-center cursor-pointer"
             >
-              <SubH2 className="text-white text-left md:text-center">{cardSectionTwoTitle}</SubH2>
+              <SubH2 className="text-white text-left md:text-center">
+                {cardSectionTwoTitle}
+              </SubH2>
               <span
                 className={`text-white text-3xl font-light transition-transform duration-300 ${
                   isOpen ? "rotate-45" : ""
@@ -189,7 +191,7 @@ const ProductPortfolio: React.FC<ProductPortfolioProps> = ({ data }) => {
                             {capability?.title}
                           </BodyText2>
                         </div>
-                      )
+                      ),
                   )}
                 </div>
               </div>

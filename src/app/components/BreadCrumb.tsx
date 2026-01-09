@@ -22,7 +22,7 @@ const BreadCrumb = ({ breadcrumbArr }: BreadCrumbProps) => {
           <div
             className={clsxN(
               "text-sm leading-[130%] font-normal capitalize w-max flex items-center text-[#4C5861]",
-              { "text-[#F36633]": arr.length === index + 1 }
+              { "text-[#F36633]": arr.length === index + 1 },
             )}
           >
             <Link

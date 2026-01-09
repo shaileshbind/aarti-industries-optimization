@@ -50,7 +50,7 @@ export default function MediaContainer({ data }: MediaContainerProps) {
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -130,7 +130,10 @@ export default function MediaContainer({ data }: MediaContainerProps) {
   };
 
   return (
-    <div className="pt-[30px] lg:pt-[60px] pb-[50px] lg:pb-[100px]" ref={containerRef}>
+    <div
+      className="pt-[30px] lg:pt-[60px] pb-[50px] lg:pb-[100px]"
+      ref={containerRef}
+    >
       <div className="fluid-container">
         <SimpleTabs
           tabs={tabs}

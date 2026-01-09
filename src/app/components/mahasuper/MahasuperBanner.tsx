@@ -11,7 +11,7 @@ const MahasuperBanner = ({ data }: MahasuperBannerProps) => {
       btnLink={ctaLink}
       fullBg
       image={image?.url}
-      mobImage={mobImage?.url} 
+      mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
     />

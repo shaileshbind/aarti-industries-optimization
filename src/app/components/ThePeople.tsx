@@ -56,7 +56,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -67,7 +67,10 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden">
+    <div
+      ref={sectionRef}
+      className="w-full mt-[0px] md:mt-10 mb-[72px] md:mb-[90px] pb-[50px] overflow-hidden"
+    >
       {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
         <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
@@ -80,7 +83,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             modules={[Navigation, Pagination, Mousewheel, Autoplay]}
             autoplay={{
               delay: 15000,
-              disableOnInteraction: false
+              disableOnInteraction: false,
             }}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
@@ -147,9 +150,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               </SwiperSlide>
             ))}
           </Swiper>
-          {/* <div className="absolute top-[100%] mt-2.5 left-0 w-full h-5 z-10"> */}
           <div className="lg:hidden home-by-use-section-swiper mt-10 h-[2px] w-[90%] mx-auto z-[1]" />
-          {/* </div> */}
           <div className="hidden lg:block swiper-button-prev-people absolute top-1/2 -translate-y-1/2 right-full mr-[0px] xl:mr-[20px] min-w-[65px] min-h-[70px] p-3  cursor-pointer ">
             <Image
               src="/images/home/chevron-right-orange.svg"

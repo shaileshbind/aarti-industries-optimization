@@ -115,7 +115,7 @@ export default function PressReleaseYearListing({
 
       setUnderline({ left: Math.round(left), width });
     },
-    [activeYear]
+    [activeYear],
   );
 
   useLayoutEffect(() => {
@@ -210,7 +210,7 @@ export default function PressReleaseYearListing({
                         "text-base",
                         year === activeYear
                           ? "text-[#002F50]"
-                          : "text-[#4C5861]"
+                          : "text-[#4C5861]",
                       )}
                     >
                       {year}

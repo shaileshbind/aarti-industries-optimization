@@ -45,7 +45,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -56,7 +56,10 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="md:py-20 pb-[30px] pt-0 overflow-hidden ">
+    <section
+      ref={sectionRef}
+      className="md:py-20 pb-[30px] pt-0 overflow-hidden "
+    >
       <div className="md:mt-[40px] mt-[0px] lg:mt-[62px]">
         <div className="flex flex-col lg:flex-row w-full">
           {/* Left Content */}

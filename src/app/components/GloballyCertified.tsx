@@ -56,7 +56,7 @@ const GloballyCertified = ({
         {
           x: -singleSetWidth,
           duration: duration,
-        }
+        },
       );
       animationRef.current.play();
     };

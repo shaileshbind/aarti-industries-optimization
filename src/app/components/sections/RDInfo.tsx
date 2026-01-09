@@ -42,7 +42,7 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
               end: "bottom 65%",
               scrub: true,
             },
-          }
+          },
         );
 
         gsap.set(statBoxes, { y: 80, opacity: 0 });

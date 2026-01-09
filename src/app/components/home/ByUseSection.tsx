@@ -15,7 +15,10 @@ import { ByUseSectionProps } from "@/app/types/home.type";
 import Link from "next/link";
 gsap.registerPlugin(ScrollTrigger);
 
-const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) => {
+const ByUseSection: React.FC<ByUseSectionProps> = ({
+  data,
+  sectionFiveTitle,
+}) => {
   const [active, setActive] = useState(0);
   const [, setIsTransitioning] = useState(false);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -85,7 +88,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
           duration: 0.2,
           stagger: 0.03,
         },
-        0
+        0,
       );
     }
 
@@ -95,7 +98,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
         setActive(index);
       },
       undefined,
-      0.15
+      0.15,
     );
     // Fade in new content (this will be picked up by the useEffect)
     tl.to({}, { duration: 0.05 }); // Small gap for data to update
@@ -118,7 +121,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -135,10 +138,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
       const tabRect = activeTab.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       setIndicator({
-        left:
-          tabRect.left -
-          containerRect.left +
-          container.scrollLeft,
+        left: tabRect.left - containerRect.left + container.scrollLeft,
         width: tabRect.width,
         visible: true,
       });
@@ -172,7 +172,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
           duration: 0.25,
           stagger: 0.04,
         },
-        0.05
+        0.05,
       );
     }
 
@@ -210,7 +210,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -228,9 +228,11 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
       }}
       className="mt-[72px] md:mt-2 lg:mt-[50px] overflow-hidden "
     >
-     {sectionFiveTitle && <H2 className="max-w-[970px] mx-[20px] lg:mx-[60px] mb-[26px]">
-        {sectionFiveTitle}
-      </H2>}
+      {sectionFiveTitle && (
+        <H2 className="max-w-[970px] mx-[20px] lg:mx-[60px] mb-[26px]">
+          {sectionFiveTitle}
+        </H2>
+      )}
       {/* Tabs */}
       <div className="ml-[unset] lg:ml-[60px] w-full overflow-x-auto px-5 lg:px-0">
         {data?.length > 0 && (
@@ -261,7 +263,9 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
                   item?.category && (
                     <div
                       key={item?.id ?? index}
-                      ref={(el) => {(tabRefs.current[index] = el)}}
+                      ref={(el) => {
+                        tabRefs.current[index] = el;
+                      }}
                       onClick={() => handleTabClick(index)}
                       className={`relative z-10 cursor-pointer font-alte-hans leading-[136%]
                         py-[10px] px-[12px] md:px-[24px] text-[12px] md:text-[14px]
@@ -274,7 +278,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
                     >
                       {item?.category}
                     </div>
-                  )
+                  ),
               )}
             </div>
           </div>
@@ -298,17 +302,23 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
               </BodyText2>
             )}
 
-            {data?.[active]?.ctaButton?.title && (
-              <Button
-                secondary
-                href={
-                  data?.[active]?.ctaButton?.hasExternalLink == "true"
-                    ? data?.[active]?.ctaButton?.externalLink
-                    : data?.[active]?.ctaButton?.link?.link
-                }
-                title={data?.[active]?.ctaButton?.title}
-              />
-            )}
+            {data?.[active]?.ctaButton?.title &&
+              (data?.[active]?.ctaButton?.hasExternalLink == "true"
+                ? data?.[active]?.ctaButton?.externalLink
+                : data?.[active]?.ctaButton?.link?.link) && (
+                <Button
+                  secondary
+                  href={
+                    data?.[active]?.ctaButton?.hasExternalLink == "true"
+                      ? data?.[active]?.ctaButton?.externalLink
+                      : data?.[active]?.ctaButton?.link?.link
+                  }
+                  title={data?.[active]?.ctaButton?.title}
+                  useTargetBlank={
+                    data?.[active]?.ctaButton?.hasExternalLink == "true"
+                  }
+                />
+              )}
           </div>
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">
@@ -362,8 +372,8 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
                       // Check if section is already in viewport and start autoplay if so
                       if (sectionRef.current && swiper.autoplay) {
                         const rect = sectionRef.current.getBoundingClientRect();
-                        const isInViewport = 
-                          rect.top < window.innerHeight * 0.8 && 
+                        const isInViewport =
+                          rect.top < window.innerHeight * 0.8 &&
                           rect.bottom > window.innerHeight * 0.2;
                         if (isInViewport && !swiper.autoplay.running) {
                           swiper.autoplay.start();
@@ -410,7 +420,6 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({ data, sectionFiveTitle }) =
 
               {/* Navigation Buttons */}
               <div className="relative py-[30px] mx-[20px] lg:mx-[unset] mt-[12px] flex justify-between items-center lg:pr-[50px]">
-                
                 <div className="home-by-use-section-swiper  h-[2px] w-[100%] lg:w-[calc(100%-150px)] !relative" />
                 <div className="hidden lg:flex w-fit gap-3 px-5 lg:px-0 ml-5">
                   <button

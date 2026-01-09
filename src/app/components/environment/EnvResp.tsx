@@ -46,7 +46,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       const elapsed = time - startTimeRef.current;
       const progressPercent = Math.min(
         resumeFrom + (elapsed / duration) * 100,
-        100
+        100,
       );
       setProgress(progressPercent);
 
@@ -103,10 +103,15 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
 
   // Setup ScrollTrigger pin for sticky tabs (desktop only)
   useEffect(() => {
-    if (!stickyRef.current || !containerRef.current || !cardWithCategory?.length) return;
+    if (
+      !stickyRef.current ||
+      !containerRef.current ||
+      !cardWithCategory?.length
+    )
+      return;
 
     const mm = gsap.matchMedia();
-    
+
     mm.add("(min-width: 1280px)", () => {
       // Only create ScrollTrigger on xl screens (desktop)
       const scrollTrigger = ScrollTrigger.create({
@@ -186,10 +191,13 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     <FadeInReveal className="my-[50px] lg:my-[100px] container mx-[auto]">
       <H2 className="max-w-[760px] ">{title}</H2>
       {/* Desktop */}
-      <div ref={containerRef} className="my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px] relative items-start">
+      <div
+        ref={containerRef}
+        className="my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px] relative items-start"
+      >
         {/* Tabs */}
         {cardWithCategory?.length > 0 && (
-          <div ref={stickyRef} className="mt-[14px]" >
+          <div ref={stickyRef} className="mt-[14px]">
             {cardWithCategory?.map((item, index: number) => (
               <div
                 key={item.id}
@@ -200,7 +208,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                   className={clsxN(
                     `${
                       index === active ? "text-orange-200" : "text-grey-300"
-                    } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200`
+                    } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
                   )}
                 >
                   {item?.category}
@@ -281,7 +289,9 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                 }}
                 className="mt-2 cursor-pointer inline-flex"
               >
-                <BodyText2 className="text-[#002F50] underline mb-3">{"Read More"}</BodyText2>
+                <BodyText2 className="text-[#002F50] underline mb-3">
+                  {"Read More"}
+                </BodyText2>
               </div>
             )}
 
@@ -308,7 +318,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                           height={64}
                           className="object-cover"
                         />
-                      )
+                      ),
                     )}
                   </div>
                   {cardWithCategory[active]?.content?.content?.map((item) => (
@@ -471,7 +481,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                           height={50}
                                           className="objcect-cover"
                                         />
-                                      )
+                                      ),
                                     )}
                                   </div>
                                 </>
@@ -534,7 +544,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                         />
                                         <BodyText2>{bp?.title}</BodyText2>
                                       </div>
-                                    )
+                                    ),
                                   )}
                                 </>
                               )}

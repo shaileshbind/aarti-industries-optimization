@@ -60,7 +60,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -140,7 +140,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -150,10 +150,12 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   }, []);
 
   return (
-    <div ref={(el) => {
-      frameworkForgedRef.current = el;
-      sectionRef.current = el;
-    }}>
+    <div
+      ref={(el) => {
+        frameworkForgedRef.current = el;
+        sectionRef.current = el;
+      }}
+    >
       {sectionTitle && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {sectionTitle}
@@ -162,7 +164,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
 
       <div
         className={clsx(
-          `relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `
+          `relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `,
         )}
       >
         <div
@@ -171,7 +173,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               layout === "imgLeftContentRight"
                 ? " order-2 lg:order-2 md:pl-10 lg:pl-20"
                 : "lg:ml-[60px] order-2 lg:order-1"
-            }`
+            }`,
           )}
         >
           {sectionTitle && (
@@ -275,18 +277,22 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             </div>
           )}
 
-          {partnerWithUsCta?.title && (
-            <div className="mt-[40px]">
-              <Button
-                href={`${
-                  partnerWithUsCta?.hasExternalLink == "true"
-                    ? partnerWithUsCta?.externalLink
-                    : partnerWithUsCta?.link?.link
-                }`}
-                title={partnerWithUsCta?.title}
-              />
-            </div>
-          )}
+          {partnerWithUsCta?.title &&
+            (partnerWithUsCta?.hasExternalLink == "true"
+              ? partnerWithUsCta?.externalLink
+              : partnerWithUsCta?.link?.link) && (
+              <div className="mt-[40px]">
+                <Button
+                  href={`${
+                    partnerWithUsCta?.hasExternalLink == "true"
+                      ? partnerWithUsCta?.externalLink
+                      : partnerWithUsCta?.link?.link
+                  }`}
+                  title={partnerWithUsCta?.title}
+                  useTargetBlank={partnerWithUsCta?.hasExternalLink == "true"}
+                />
+              </div>
+            )}
         </div>
         <div
           className={clsx(
@@ -294,7 +300,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               layout === "imgLeftContentRight"
                 ? " order-1 lg:order-1"
                 : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "
-            }`
+            }`,
           )}
         >
           {layout === "imgLeftContentRight" ? (
