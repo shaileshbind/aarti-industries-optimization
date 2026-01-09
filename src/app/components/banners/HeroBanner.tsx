@@ -1,5 +1,5 @@
 "use client";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
@@ -72,12 +72,21 @@ const HeroBanner = ({
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
+  const [isMobImageLoading, setIsMobImageLoading] = useState<boolean>(!!mobImage);
   const isTablet = useMediaQuery("(max-width:768px)");
   // Call hooks unconditionally at the top level
   const titleCasedSecondaryBtnFormTitle = useTitleCase(
     secondaryBtnFormTitle || "",
   );
   const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
+  
+  // Reset loading states when image sources change
+  useEffect(() => {
+    setIsImageLoading(true);
+    setIsMobImageLoading(true);
+  }, [image, mobImage]);
+
   useLayoutEffect(() => {
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
@@ -160,12 +169,20 @@ const HeroBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
+              {/* Skeleton loader with blur effect */}
+              {((image && !isTablet && isImageLoading) ||
+                (mobImage && isTablet && isMobImageLoading)) && (
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
+              )}
               {image && !isTablet && (
                 <Image
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
-                  className="object-cover hidden md:block"
+                  className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                    isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  }`}
+                  onLoad={() => setIsImageLoading(false)}
                 />
               )}
 
@@ -174,10 +191,13 @@ const HeroBanner = ({
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
-                  className="object-cover block md:hidden"
+                  className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                    isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  }`}
+                  onLoad={() => setIsMobImageLoading(false)}
                 />
               )}
-              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
+              <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)] z-[2]" />
               <div
                 className={`w-full h-full absolute z-[3] ${
                   centerText
@@ -387,12 +407,20 @@ const HeroBanner = ({
             ref={wrapperRef}
             className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
           >
+            {/* Skeleton loader with blur effect */}
+            {((image && !isTablet && isImageLoading) ||
+              (mobImage && isTablet && isMobImageLoading)) && (
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
+            )}
             {image && !isTablet && (
               <Image
                 src={image}
                 alt={alt ? alt : "img"}
                 fill
-                className="object-cover hidden md:block"
+                className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                  isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                }`}
+                onLoad={() => setIsImageLoading(false)}
               />
             )}
             {mobImage && isTablet && (
@@ -400,7 +428,10 @@ const HeroBanner = ({
                 src={mobImage}
                 alt={mobAlt ? mobAlt : "img"}
                 fill
-                className="object-cover block md:hidden"
+                className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                  isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                }`}
+                onLoad={() => setIsMobImageLoading(false)}
               />
             )}
             {/* starts & lines */}
