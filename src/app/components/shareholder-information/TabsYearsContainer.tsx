@@ -148,7 +148,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
       </div>
 
       {/* Render appropriate template based on category */}
-      {activeTab === 4 ? <ContactDetails /> : getTemplateComponent()}
+      {activeTab === 3 ? <ContactDetails /> : getTemplateComponent()}
     </div>
   );
 }

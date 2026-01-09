@@ -109,11 +109,11 @@ export default function StockTicker() {
 
     return (
       <div className="flex gap-4">
-        <p className="text-[#FFFFFF] text-base font-roboto">
+        <p className="text-[#FFFFFF] text-sm font-roboto">
           {exchange}: {stock?.symbol}
         </p>
 
-        <p style={{ color: changeColor }}>
+        <p style={{ color: changeColor }} className="text-sm font-roboto">
           {stock?.ltp?.toFixed(2)}
           <PlayArrowIcon className={arrowRotation} />
           {changeSign}
