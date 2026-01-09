@@ -69,15 +69,15 @@ export type ContactBannerOffice = {
 
 export type ContactBannerProps = {
   data: {
-      sectionTitle?: string | null;
-      office?: ContactBannerOffice | null;
+    sectionTitle?: string | null;
+    office?: ContactBannerOffice | null;
   } | null;
 };
 
 export type ContactExpProps = {
-   data: {
-      title: string;
-      ctaButton: ButtonProps;
+  data: {
+    title: string;
+    ctaButton: ButtonProps;
   };
 };
 
@@ -87,5 +87,5 @@ export type ContactMapProps = {
     image?: ImageProps;
     mobImage?: ImageProps;
   };
-  data2 :WhereWeOperateDataItem[] | null;
+  data2: WhereWeOperateDataItem[] | null;
 };

@@ -6,7 +6,7 @@ import Image from "next/image";
 import MainTimeline from "./MainTimeline";
 import MobilePhaseDropdown from "./MobilePhaseDropdown";
 import { gsap } from "gsap";
-import { TimelineData } from "../../types/our.story.type"; // adjust import path if needed
+import { TimelineData } from "../../types/our.story.type";
 
 export default function TimeLine({ data }: TimelineData) {
   const sectionTitle = data?.sectionTitle || "Our Journey";
@@ -18,22 +18,24 @@ export default function TimeLine({ data }: TimelineData) {
       images: milestone.images?.map((image) => image?.url) || [],
     })) || [];
 
-  const yearContent = data?.milestone?.reduce((acc, milestone) => {
-    milestone.timeline_milestones.forEach((item) => {
-      // const yearStr = item.year.slice(0, 4);
-      const yearStr = item.year;
-      acc[yearStr] = {
-        title: item.title,
-        description: item.description || "",
-        note: item.note || "",
-      };
-    });
-    return acc;
-  }, {} as Record<string, { title: string; description: string; note: string }>);
+  const yearContent = data?.milestone?.reduce(
+    (acc, milestone) => {
+      milestone.timeline_milestones.forEach((item) => {
+        const yearStr = item.year;
+        acc[yearStr] = {
+          title: item.title,
+          description: item.description || "",
+          note: item.note || "",
+        };
+      });
+      return acc;
+    },
+    {} as Record<string, { title: string; description: string; note: string }>,
+  );
 
   const [currentPhase, setCurrentPhase] = useState(0);
   const [currentYear, setCurrentYear] = useState<string>(
-    phases?.[0]?.years?.[0] || ""
+    phases?.[0]?.years?.[0] || "",
   );
 
   const imagesContainerRef = useRef<HTMLDivElement>(null);
@@ -155,7 +157,7 @@ export default function TimeLine({ data }: TimelineData) {
   }, [currentYear]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[50px] relative lg:pt-0 pt-4">
+    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[80px] relative lg:pt-0 pt-4">
       <FadeInRevealBlur className="fluid-container">
         <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
           <H3>{sectionTitle}</H3>

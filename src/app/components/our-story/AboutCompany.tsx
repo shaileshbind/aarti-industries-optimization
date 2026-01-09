@@ -33,18 +33,22 @@ const AboutCompany: React.FC<AboutCompanyProps> = ({ data }) => {
           </AnimatedText>
         )}
 
-        {ctaButton && (
-          <Button
-            className="mt-12"
-            title={ctaButton.title}
-            href={`${
-              ctaButton?.hasExternalLink == "true"
-                ? ctaButton?.externalLink
-                : ctaButton?.link?.link
-            }`}
-            secondary
-          />
-        )}
+        {ctaButton?.title &&
+          (ctaButton?.hasExternalLink == "true"
+            ? ctaButton?.externalLink
+            : ctaButton?.link?.link) && (
+            <Button
+              className="mt-12"
+              title={ctaButton.title}
+              href={`${
+                ctaButton?.hasExternalLink == "true"
+                  ? ctaButton?.externalLink
+                  : ctaButton?.link?.link
+              }`}
+              secondary
+              useTargetBlank={ctaButton?.hasExternalLink == "true"}
+            />
+          )}
       </div>
     </section>
   );

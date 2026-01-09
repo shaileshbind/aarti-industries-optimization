@@ -14,7 +14,7 @@ export default async function page() {
   const data = await getPageData("/pages/by-slug/aarti-advantage");
 
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const {
@@ -36,7 +36,9 @@ export default async function page() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/aarti-advantage"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/aarti-advantage"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

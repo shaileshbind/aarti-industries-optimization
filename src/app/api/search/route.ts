@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/global-search?q=${encodeURIComponent(
-        query
+        query,
       )}&page=${page}&limit=${limit}`,
       {
         cache: "no-store",
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
             ? error.message
             : "Failed to fetch search results",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

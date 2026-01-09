@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL;
+  const base = "https://admin.aarti-industries.com/api/nse-stock/find";
   const token = process.env.API_TOKEN;
 
-  if (!base || !token) {
+  if (!token) {
     return NextResponse.json(
       { error: "Missing server environment variables" },
       { status: 500 },
@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${base}/press-releases`, {
+    const res = await fetch(`${base}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export async function GET() {
       const errorText = await res.text();
 
       return NextResponse.json(
-        { error: "Failed to fetch press releases", details: errorText },
+        { error: "Failed to fetch NSE stock data", details: errorText },
         { status: res.status },
       );
     }
@@ -32,10 +32,10 @@ export async function GET() {
     const data = await res.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Press releases fetch error:", error);
+    console.error("NSE stock fetch error:", error);
 
     return NextResponse.json(
-      { error: "Server error while fetching press releases" },
+      { error: "Server error while fetching NSE stock data" },
       { status: 500 },
     );
   }

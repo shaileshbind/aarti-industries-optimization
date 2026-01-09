@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 const Page = async () => {
   const data = await getPageData("/pages/by-slug/cdmo");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const {
     section_one,

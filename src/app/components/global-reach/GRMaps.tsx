@@ -25,11 +25,11 @@ const GRMaps = ({ data }: GRMapsProps) => {
   const totalCities = 6;
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setActiveMob((prev) => (prev + 1) % totalCities);
-  }, 4000);
-  return () => clearInterval(interval);
-}, [activeMob]); 
+    const interval = setInterval(() => {
+      setActiveMob((prev) => (prev + 1) % totalCities);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [activeMob]);
 
   useEffect(() => {
     if (
@@ -67,7 +67,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
       sectionTwo.current,
       { opacity: 0, zIndex: 0 },
       { opacity: 1, zIndex: 30, duration: 0.5, ease: "power2.out" },
-      "-=0.3"
+      "-=0.3",
     );
 
     return () => {
@@ -94,44 +94,42 @@ const GRMaps = ({ data }: GRMapsProps) => {
         <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
           {sectionTitle && (
             <FadeInRevealBlur className="w-full">
-            <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
-              {sectionTitle}
-            </H2>
+              <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
+                {sectionTitle}
+              </H2>
             </FadeInRevealBlur>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px]">  
+          <div className="relative w-full h-[180px] lg:h-[550px]">
             <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
-            <FadeInRevealBlur className="w-full">
-              <DesktopMapSvg
-                hoverRestWorld={() => setActiveBlip(0)}
-                hoverNorthAmerica={() => setActiveBlip(1)}
-                hoverEurope={() => setActiveBlip(2)}
-                hoverMiddleE={() => setActiveBlip(3)}
-                hoverIndia={() => setActiveBlip(4)}
-                hoverAsia={() => setActiveBlip(5)}
-                fillRestOfWorld={activeBlip === 0 ? "#898698" : "#E7EBED"}
-                fillNorthAmerica={activeBlip === 1 ? "#898698" : "#E7EBED"}
-                fillEurope={activeBlip === 2 ? "#898698" : "#E7EBED"}
-                fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
-                fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
-                fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
-                isActive0={activeBlip === 0}
-                isActive1={activeBlip === 1}
-                isActive2={activeBlip === 2}
-                isActive3={activeBlip === 3}
-                isActive4={activeBlip === 4}
-                isActive5={activeBlip === 5}
-              />
+              <FadeInRevealBlur className="w-full">
+                <DesktopMapSvg
+                  hoverRestWorld={() => setActiveBlip(0)}
+                  hoverNorthAmerica={() => setActiveBlip(1)}
+                  hoverEurope={() => setActiveBlip(2)}
+                  hoverMiddleE={() => setActiveBlip(3)}
+                  hoverIndia={() => setActiveBlip(4)}
+                  hoverAsia={() => setActiveBlip(5)}
+                  fillRestOfWorld={activeBlip === 0 ? "#898698" : "#E7EBED"}
+                  fillNorthAmerica={activeBlip === 1 ? "#898698" : "#E7EBED"}
+                  fillEurope={activeBlip === 2 ? "#898698" : "#E7EBED"}
+                  fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
+                  fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
+                  fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
+                  isActive0={activeBlip === 0}
+                  isActive1={activeBlip === 1}
+                  isActive2={activeBlip === 2}
+                  isActive3={activeBlip === 3}
+                  isActive4={activeBlip === 4}
+                  isActive5={activeBlip === 5}
+                />
               </FadeInRevealBlur>
             </div>
-            {/* <FadeInRevealBlur className="w-full"> */}
             <Image
               src="/images/global-reach/gr-map-m.svg"
               alt="img"
               fill
               className="object-contain block lg:hidden"
             />
-            {/* </FadeInRevealBlur> */}
           </div>
           <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
             {mobileStatsData?.map((items, index) => {
@@ -170,19 +168,23 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       {description}
                     </BodyText2>
                   )}
-                  {ctaButton?.title && (
-                    <div className="mt-5">
-                      <Button
-                        title={ctaButton?.title}
-                        href={
-                          ctaButton?.hasExternalLink == "true"
-                            ? ctaButton?.externalLink
-                            : ctaButton?.link?.link
-                        }
-                        secondary
-                      />
-                    </div>
-                  )}
+                  {ctaButton?.title &&
+                    (ctaButton?.hasExternalLink == "true"
+                      ? ctaButton?.externalLink
+                      : ctaButton?.link?.link) && (
+                      <div className="mt-5">
+                        <Button
+                          title={ctaButton?.title}
+                          href={
+                            ctaButton?.hasExternalLink == "true"
+                              ? ctaButton?.externalLink
+                              : ctaButton?.link?.link
+                          }
+                          secondary
+                          useTargetBlank={ctaButton?.hasExternalLink == "true"}
+                        />
+                      </div>
+                    )}
                 </div>
                 <div className="mt-[62px] w-full grid lg:grid-cols-2 gap-y-[16px] gap-x-[5px] items-start lg:justify-between">
                   <div className="border-b lg:border-none border-grey-200 pb-[16px] lg:pb-[unset]">
@@ -211,11 +213,15 @@ const GRMaps = ({ data }: GRMapsProps) => {
                           Tarapur
                         </BodyText2>
                       </div>
-                      <div   onMouseEnter={() => setActive(5)}
-                        className="cursor-pointer w-fit">
-                        <BodyText2 className={`${
+                      <div
+                        onMouseEnter={() => setActive(5)}
+                        className="cursor-pointer w-fit"
+                      >
+                        <BodyText2
+                          className={`${
                             active === 5 ? "text-grey-400" : "text-grey-300"
-                          }`}>
+                          }`}
+                        >
                           Jhagadia
                         </BodyText2>
                       </div>
@@ -296,61 +302,86 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   hoverTarapur={() => setActive(2)}
                   hoverNaviM={() => setActive(3)}
                   hoverVapi={() => setActive(4)}
-                  hoverJhagadia={()=> setActive(5)}
+                  hoverJhagadia={() => setActive(5)}
                 />
-               {active !== null && 
-               (<div
-                  className={`${
-                    [0, 1, 2,5].includes(active) ? "bg-[#e55e2d]" : "bg-blue-100"
+                {active !== null && (
+                  <div
+                    className={`${
+                      [0, 1, 2, 5].includes(active)
+                        ? "bg-[#e55e2d]"
+                        : "bg-blue-100"
                     } p-2 absolute w-[270px] h-[300px] rounded-[12px] transition-all duration-300  ${
-                      active === 0 ? "top-[5%] left-[16%]" :
-                      active === 1 ? "top-[10%] left-[38%]" :
-                      active === 2 ? "top-[22%] left-[41%]" :
-                      active === 3 ? "top-[25%] left-[42%]" :
-                      active === 4 ? "top-[17%] left-[40%]" :
-                      "top-[10%] left-[41%]"
+                      active === 0
+                        ? "top-[5%] left-[16%]"
+                        : active === 1
+                          ? "top-[10%] left-[38%]"
+                          : active === 2
+                            ? "top-[22%] left-[41%]"
+                            : active === 3
+                              ? "top-[25%] left-[42%]"
+                              : active === 4
+                                ? "top-[17%] left-[40%]"
+                                : "top-[10%] left-[41%]"
                     }`}
-                >
-                  <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
-                    <div className="absolute inset-0 overflow-hidden">
-                      <Image
-                        src={
-                          active === 0 ? "/images/global-reach/Bachau.webp" :
-                            active === 1 ? "/images/global-reach/Dahej.webp" :
-                            active === 2 ? "/images/global-reach/Tarapur.webp" :
-                            active === 3 ? "/images/global-reach/NaviM.webp" :
-                            active === 4 ? "/images/global-reach/Vapi.webp" :
-                            "/images/global-reach/Jhagadia.webp"
-                        }
-                        alt="img"
-                        fill
-                        className="object-cover scale-110"
-                      />
-                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
-                      <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
+                  >
+                    <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
+                      <div className="absolute inset-0 overflow-hidden">
                         <Image
                           src={
-                          active === 0 ? "/images/global-reach/Bachau.webp" :
-                              active === 1 ? "/images/global-reach/Dahej.webp" :
-                              active === 2 ? "/images/global-reach/Tarapur.webp" :
-                              active === 3 ? "/images/global-reach/NaviM.webp" :
-                              active === 4 ? "/images/global-reach/Vapi.webp" :
-                              "/images/global-reach/Jhagadia.webp"
-                        }
-                          alt="img" fill className="object-cover scale-110"
+                            active === 0
+                              ? "/images/global-reach/Bachau.webp"
+                              : active === 1
+                                ? "/images/global-reach/Dahej.webp"
+                                : active === 2
+                                  ? "/images/global-reach/Tarapur.webp"
+                                  : active === 3
+                                    ? "/images/global-reach/NaviM.webp"
+                                    : active === 4
+                                      ? "/images/global-reach/Vapi.webp"
+                                      : "/images/global-reach/Jhagadia.webp"
+                          }
+                          alt="img"
+                          fill
+                          className="object-cover scale-110"
                         />
-                      </span>
+                        <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
+                        <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
+                          <Image
+                            src={
+                              active === 0
+                                ? "/images/global-reach/Bachau.webp"
+                                : active === 1
+                                  ? "/images/global-reach/Dahej.webp"
+                                  : active === 2
+                                    ? "/images/global-reach/Tarapur.webp"
+                                    : active === 3
+                                      ? "/images/global-reach/NaviM.webp"
+                                      : active === 4
+                                        ? "/images/global-reach/Vapi.webp"
+                                        : "/images/global-reach/Jhagadia.webp"
+                            }
+                            alt="img"
+                            fill
+                            className="object-cover scale-110"
+                          />
+                        </span>
+                      </div>
                     </div>
+                    <BodyText2 className="text-white mt-[14px] text-center">
+                      {active === 0
+                        ? "Bhachau"
+                        : active === 1
+                          ? "Dahej "
+                          : active === 2
+                            ? "Tarapur"
+                            : active === 3
+                              ? "Navi Mumbai"
+                              : active === 4
+                                ? "Vapi"
+                                : "Jhagadia"}
+                    </BodyText2>
                   </div>
-                  <BodyText2 className="text-white mt-[14px] text-center">
-                    {active === 0 ? "Bhachau" :
-                       active === 1 ? "Dahej " :
-                       active === 2 ? "Tarapur" :
-                       active === 3 ? "Navi Mumbai" :
-                       active === 4 ? "Vapi" :
-                       "Jhagadia"}
-                  </BodyText2>
-                </div>)}
+                )}
               </div>
             </div>
           </div>
@@ -364,45 +395,73 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 {description}
               </BodyText2>
             )}
-            {ctaButton?.title && (
-              <div className="mt-5">
-                <Button
-                  title={ctaButton?.title}
-                  href={
-                    ctaButton?.hasExternalLink == "true"
-                      ? ctaButton?.externalLink
-                      : ctaButton?.link?.link
-                  }
-                  secondary
-                />
-              </div>
-            )}
+            {ctaButton?.title &&
+              (ctaButton?.hasExternalLink == "true"
+                ? ctaButton?.externalLink
+                : ctaButton?.link?.link) && (
+                <div className="mt-5">
+                  <Button
+                    title={ctaButton?.title}
+                    href={
+                      ctaButton?.hasExternalLink == "true"
+                        ? ctaButton?.externalLink
+                        : ctaButton?.link?.link
+                    }
+                    secondary
+                    useTargetBlank={ctaButton?.hasExternalLink == "true"}
+                  />
+                </div>
+              )}
           </div>
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
-            <StateMapSvg width="100%" height="300" />
+            <StateMapSvg
+              width="100%"
+              height="300"
+              active={activeMob}
+              hoverBachau={() => setActiveMob(0)}
+              hoverDahej={() => setActiveMob(1)}
+              hoverTarapur={() => setActiveMob(2)}
+              hoverNaviM={() => setActiveMob(3)}
+              hoverVapi={() => setActiveMob(4)}
+              hoverJhagadia={() => setActiveMob(5)}
+            />
             <div
               className={`${
-                [0, 1, 2,5].includes(activeMob) ? "bg-[#e55e2d]" : "bg-blue-100"
-              }  p-2 absolute top-[18%] right-[27%] w-[123px] h-[137px] rounded-[6px]`}
+                [0, 1, 2, 5].includes(activeMob)
+                  ? "bg-[#e55e2d]"
+                  : "bg-blue-100"
+              } p-2 absolute w-[123px] h-[137px] rounded-[6px] transition-all duration-300 ${
+                activeMob === 0
+                  ? "top-[5%] left-[18%]"
+                  : activeMob === 1
+                    ? "top-[10%] left-[38%]"
+                    : activeMob === 2
+                      ? "top-[22%] left-[41%]"
+                      : activeMob === 3
+                        ? "top-[28%] left-[43%]"
+                        : activeMob === 4
+                          ? "top-[17%] left-[41%]"
+                          : "top-[10%] left-[41%]"
+              }`}
             >
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
                     key={activeMob}
-                     src={
-                          activeMob === 0
-                            ? "/images/global-reach/Bachau.webp"
-                            : activeMob === 1
-                            ? "/images/global-reach/Dahej.webp"
-                            : activeMob === 2
+                    src={
+                      activeMob === 0
+                        ? "/images/global-reach/Bachau.webp"
+                        : activeMob === 1
+                          ? "/images/global-reach/Dahej.webp"
+                          : activeMob === 2
                             ? "/images/global-reach/Tarapur.webp"
                             : activeMob === 3
-                            ? "/images/global-reach/NaviM.webp"
-                            : activeMob === 4
-                            ? "/images/global-reach/Vapi.webp"
-                            : "/images/global-reach/Jhagadia.webp"
-                        }
+                              ? "/images/global-reach/NaviM.webp"
+                              : activeMob === 4
+                                ? "/images/global-reach/Vapi.webp"
+                                : "/images/global-reach/Jhagadia.webp"
+                    }
                     alt="img"
                     fill
                     className="object-cover scale-110"
@@ -411,19 +470,19 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                     <Image
                       key={`inner-${activeMob}`}
-                       src={
-                          activeMob === 0
-                            ? "/images/global-reach/Bachau.webp"
-                            : activeMob === 1
+                      src={
+                        activeMob === 0
+                          ? "/images/global-reach/Bachau.webp"
+                          : activeMob === 1
                             ? "/images/global-reach/Dahej.webp"
                             : activeMob === 2
-                            ? "/images/global-reach/Tarapur.webp"
-                            : activeMob === 3
-                            ? "/images/global-reach/NaviM.webp"
-                            : activeMob === 4
-                            ? "/images/global-reach/Vapi.webp"
-                            : "/images/global-reach/Jhagadia.webp"
-                        }
+                              ? "/images/global-reach/Tarapur.webp"
+                              : activeMob === 3
+                                ? "/images/global-reach/NaviM.webp"
+                                : activeMob === 4
+                                  ? "/images/global-reach/Vapi.webp"
+                                  : "/images/global-reach/Jhagadia.webp"
+                      }
                       alt="img"
                       fill
                       className="object-cover scale-110"
@@ -435,14 +494,14 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 {activeMob === 0
                   ? "Bhachau"
                   : activeMob === 1
-                  ? "Dahej "
-                  : activeMob === 2
-                  ? "Tarapur"
-                  : activeMob === 3
-                  ? "Navi Mumbai"
-                  : activeMob === 4
-                  ? "Vapi"
-                  : "Jhagadia"}
+                    ? "Dahej "
+                    : activeMob === 2
+                      ? "Tarapur"
+                      : activeMob === 3
+                        ? "Navi Mumbai"
+                        : activeMob === 4
+                          ? "Vapi"
+                          : "Jhagadia"}
               </BodyText2>
             </div>
           </div>
@@ -471,11 +530,17 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     Tarapur
                   </BodyText2>
                 </div>
-                <div    onClick={() => setActiveMob(5)}
-                  className="cursor-pointer w-fit">
-                  <BodyText2   className={`${
+                <div
+                  onClick={() => setActiveMob(5)}
+                  className="cursor-pointer w-fit"
+                >
+                  <BodyText2
+                    className={`${
                       activeMob === 5 ? "text-grey-400" : "text-grey-300"
-                    }`}>Jhagadia</BodyText2>
+                    }`}
+                  >
+                    Jhagadia
+                  </BodyText2>
                 </div>
                 <div
                   onClick={() => setActiveMob(0)}

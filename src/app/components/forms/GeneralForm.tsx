@@ -73,12 +73,16 @@ export default function GeneralForm({
   className,
   showTitle = true,
 }: GeneralFormProps) {
-  const [categorySubcategoryData, setCategorySubcategoryData] = useState<CategorySubcategoryItem[]>([]);
+  const [categorySubcategoryData, setCategorySubcategoryData] = useState<
+    CategorySubcategoryItem[]
+  >([]);
   const [productLoading, setProductLoading] = useState(false);
-  const [initialProductOptions, setInitialProductOptions] = useState<string[]>([]);
+  const [initialProductOptions, setInitialProductOptions] = useState<string[]>(
+    [],
+  );
   const [productOptions, setProductOptions] = useState<string[]>([]);
   const [searchInputValue, setSearchInputValue] = useState("");
-   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
+  const [formSubmitted, setformSubmitted] = useState<boolean>(false);
 
   const {
     register,
@@ -118,11 +122,11 @@ export default function GeneralForm({
             category: item?.name,
             subCategories:
               item?.form_sub_categories?.map(
-                (sub: formSubCategories) => sub?.name
+                (sub: formSubCategories) => sub?.name,
               ) || [],
             subCatEmails:
               item?.form_sub_categories?.map(
-                (sub: formSubCategories) => sub?.reciverEmail
+                (sub: formSubCategories) => sub?.reciverEmail,
               ) || [],
           })) || [];
 
@@ -134,7 +138,7 @@ export default function GeneralForm({
 
         const mappedProducts: string[] =
           dataProducts?.data?.map(
-            (item: { productName: string }) => item.productName
+            (item: { productName: string }) => item.productName,
           ) || [];
         const finalProducts = [...mappedProducts, "Others"];
 
@@ -145,7 +149,7 @@ export default function GeneralForm({
         const updatedDefaults: Partial<FormValues> = {};
         if (prefillCategory) {
           const categoryExists = transformedCategories.some(
-            (item) => item.category === prefillCategory
+            (item) => item.category === prefillCategory,
           );
           if (categoryExists) {
             updatedDefaults.category = prefillCategory;
@@ -191,7 +195,7 @@ export default function GeneralForm({
       setProductLoading(true);
 
       const res = await fetch(
-        `/api/product-form-search?q=${encodeURIComponent(query)}`
+        `/api/product-form-search?q=${encodeURIComponent(query)}`,
       );
       if (!res.ok) {
         console.error("Fetch failed");
@@ -230,16 +234,16 @@ export default function GeneralForm({
   const availableSubcategories = useMemo(
     () =>
       categorySubcategoryData?.find(
-        (item) => item.category === selectedCategory
+        (item) => item.category === selectedCategory,
       )?.subCategories || [],
-    [categorySubcategoryData, selectedCategory]
+    [categorySubcategoryData, selectedCategory],
   );
 
   // Update receiver email when subcategory changes
   useEffect(() => {
     if (selectedCategory && selectedSubcategory) {
       const categoryData = categorySubcategoryData.find(
-        (item) => item.category === selectedCategory
+        (item) => item.category === selectedCategory,
       );
       if (categoryData) {
         const subCategoryIndex =
@@ -292,6 +296,8 @@ export default function GeneralForm({
     // Clear productName if hasSalesforceLead is false
     const cleanedData = {
       ...data,
+      fullName: data.fullName?.trim() || "",
+      jobRole: data.jobRole?.trim() || "",
       productName: hasSalesforceLead ? data.productName : "",
       sendEmail: true,
     };
@@ -369,7 +375,7 @@ export default function GeneralForm({
         <div
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
-            className
+            className,
           )}
         >
           {/* Full Name */}
@@ -378,7 +384,16 @@ export default function GeneralForm({
             variant="outlined"
             className="w-full"
             sx={MaterialInputStyle(!!errors.fullName)}
-            {...register("fullName", { required: "Full Name is required" })}
+            {...register("fullName", {
+              required: "Full Name is required",
+              validate: (value) => {
+                const trimmed = value?.trim();
+                if (!trimmed || trimmed.length === 0) {
+                  return "Full Name cannot be empty";
+                }
+                return true;
+              },
+            })}
             error={!!errors.fullName}
             helperText={errors.fullName?.message}
             onKeyDown={(e) => {
@@ -424,9 +439,21 @@ export default function GeneralForm({
             control={control}
             rules={{
               required: "Phone number is required",
-              minLength: {
-                value: 10,
-                message: "Enter a valid phone number",
+              validate: (value) => {
+                // Most countries: 7-15 digits total (E.164 standard allows up to 15 digits)
+                // Setting reasonable min of 8 to account for short country codes + phone digits
+                if (!value || value.length < 8) {
+                  return "Please enter a valid phone number";
+                }
+                // Maximum length per E.164 standard
+                if (value.length > 15) {
+                  return "Phone number is too long";
+                }
+                // Must contain only digits (country code + phone number)
+                if (!/^\d+$/.test(value)) {
+                  return "Phone number must contain only digits";
+                }
+                return true;
               },
             }}
             render={({ field }) => (
@@ -466,12 +493,19 @@ export default function GeneralForm({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Job Role */}
             <TextField
-              label="Job Role"
+              label="Job Role *"
               variant="outlined"
               className="w-full"
               sx={MaterialInputStyle(!!errors.jobRole)}
               {...register("jobRole", {
                 required: "Job Role is required",
+                validate: (value) => {
+                  const trimmed = value?.trim();
+                  if (!trimmed || trimmed.length === 0) {
+                    return "Job Role cannot be empty";
+                  }
+                  return true;
+                },
               })}
               error={!!errors.jobRole}
               helperText={errors.jobRole?.message}
@@ -570,7 +604,7 @@ export default function GeneralForm({
               className={clsx(
                 availableSubcategories?.length > 0
                   ? "opacity-100 pointer-events-auto"
-                  : "opacity-60 pointer-events-none"
+                  : "opacity-60 pointer-events-none",
               )}
             >
               <InputLabel id="subCategory">Sub category *</InputLabel>
@@ -688,7 +722,7 @@ export default function GeneralForm({
               placeholder="Write your message here *"
               className={clsx(
                 "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]",
               )}
             ></textarea>
             {errors.message && (
@@ -757,7 +791,7 @@ export default function GeneralForm({
                 placeholder="Other Enquiries *"
                 className={clsx(
                   "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]"
+                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]",
                 )}
               ></textarea>
               {errors.otherEnquiry && (

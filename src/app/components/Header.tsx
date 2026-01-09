@@ -15,15 +15,14 @@ import SplitText from "./SplitText";
 
 const Header = ({ data }: HeaderProps) => {
   const { Logo, menu } = data || {};
-  // ctaButton
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [expandedSubMenuId, setExpandedSubMenuId] = useState<number | null>(
-    null
+    null,
   );
   const [mobileExpandedMenu, setMobileExpandedMenu] = useState<number | null>(
-    null
+    null,
   );
   const [mobileExpandedSubMenu, setMobileExpandedSubMenu] = useState<
     number | null
@@ -58,7 +57,7 @@ const Header = ({ data }: HeaderProps) => {
           top: "-100%",
           duration: 0.6,
           ease: "power3.inOut",
-        }
+        },
       );
     } else {
       setIsMenuOpen(true);
@@ -74,11 +73,11 @@ const Header = ({ data }: HeaderProps) => {
             const allInnerLinks = item.subMenu.flatMap(
               (sub) =>
                 sub.item?.map(
-                  (i) => i.cta_link?.link || i.externalLink || ""
-                ) || []
+                  (i) => i.cta_link?.link || i.externalLink || "",
+                ) || [],
             );
             const isMenuActive = allInnerLinks.some(
-              (link) => link && isActive(link)
+              (link) => link && isActive(link),
             );
 
             if (isMenuActive && activeMenuIndex === null) {
@@ -88,10 +87,10 @@ const Header = ({ data }: HeaderProps) => {
               item.subMenu.forEach((subMenuItem) => {
                 if (subMenuItem.item) {
                   const subMenuLinks = subMenuItem.item.map(
-                    (i) => i.cta_link?.link || i.externalLink || ""
+                    (i) => i.cta_link?.link || i.externalLink || "",
                   );
                   const isSubMenuActive = subMenuLinks.some(
-                    (link) => link && isActive(link)
+                    (link) => link && isActive(link),
                   );
 
                   if (isSubMenuActive && activeSubMenuId === null) {
@@ -120,7 +119,7 @@ const Header = ({ data }: HeaderProps) => {
           top: "0%",
           duration: 1.2,
           ease: "power3.inOut",
-        }
+        },
       );
     }
   };
@@ -138,10 +137,6 @@ const Header = ({ data }: HeaderProps) => {
     // Only exact match - no sub-route matching
     return pathname.trim() === href.trim();
   };
-
-  // const handleDropdownToggle = (index: number) => {
-  //   setOpenDropdown(openDropdown === index ? null : index);
-  // };
 
   const closeAllDropdowns = () => {
     // Only close on mouse leave if not a touch device
@@ -170,7 +165,7 @@ const Header = ({ data }: HeaderProps) => {
           top: "-100%",
           duration: 0.6,
           ease: "power3.inOut",
-        }
+        },
       );
     }
   };
@@ -223,7 +218,7 @@ const Header = ({ data }: HeaderProps) => {
         "ontouchstart" in window ||
           navigator.maxTouchPoints > 0 ||
           // @ts-expect-error - msMaxTouchPoints is a legacy IE property
-          navigator.msMaxTouchPoints > 0
+          navigator.msMaxTouchPoints > 0,
       );
     };
     checkTouchDevice();
@@ -284,14 +279,14 @@ const Header = ({ data }: HeaderProps) => {
         if (currentMenu?.subMenu && currentMenu.subMenu.length > 0) {
           // Check if any submenu contains the active page
           let activeSubMenuId: number | null = null;
-          
+
           currentMenu.subMenu.forEach((subMenuItem) => {
             if (subMenuItem.item && activeSubMenuId === null) {
               const subMenuLinks = subMenuItem.item.map(
-                (i) => i.cta_link?.link || i.externalLink || ""
+                (i) => i.cta_link?.link || i.externalLink || "",
               );
               const isSubMenuActive = subMenuLinks.some(
-                (link) => link && isActive(link)
+                (link) => link && isActive(link),
               );
 
               if (isSubMenuActive) {
@@ -355,13 +350,6 @@ const Header = ({ data }: HeaderProps) => {
           const isExpanded = mobileExpandedMenu === menuIndex;
 
           if (isExpanded) {
-            // Animate to auto height
-            // gsap.to(element, {
-            //   height: "auto",
-            //   opacity: 1,
-            //   duration: 0.5,
-            //   ease: "power3.out",
-            // });
             gsap.fromTo(
               element,
               {
@@ -376,7 +364,7 @@ const Header = ({ data }: HeaderProps) => {
                 duration: 0.4,
 
                 ease: "sine.inOut",
-              }
+              },
             );
           } else {
             // Animate to closed
@@ -401,13 +389,6 @@ const Header = ({ data }: HeaderProps) => {
           const isExpanded = mobileExpandedSubMenu === subMenuId;
 
           if (isExpanded) {
-            // Animate to auto height
-            // gsap.to(element, {
-            //   height: "auto",
-            //   opacity: 1,
-            //   duration: 0.4,
-            //   ease: "power3.out",
-            // });
             gsap.fromTo(
               element,
               {
@@ -422,7 +403,7 @@ const Header = ({ data }: HeaderProps) => {
                 duration: 0.4,
 
                 ease: "sine.inOut",
-              }
+              },
             );
           } else {
             // Animate to closed
@@ -459,7 +440,7 @@ const Header = ({ data }: HeaderProps) => {
                 visibility: "visible",
                 duration: 0.4,
                 ease: "sine.inOut",
-              }
+              },
             );
           } else {
             gsap.to(element, {
@@ -494,7 +475,7 @@ const Header = ({ data }: HeaderProps) => {
                 height: "auto",
                 duration: 0.4,
                 ease: "sine.inOut",
-              }
+              },
             );
           } else {
             gsap.to(element, {
@@ -522,7 +503,7 @@ const Header = ({ data }: HeaderProps) => {
             opacity: 1,
             duration: 0.3,
             ease: "sine.inOut",
-          }
+          },
         );
       } else {
         gsap.to(searchBackdropRef.current, {
@@ -540,7 +521,7 @@ const Header = ({ data }: HeaderProps) => {
 
     if (searchedValue.trim()) {
       router.push(
-        `/search-results?search=${encodeURIComponent(searchedValue.trim())}`
+        `/search-results?search=${encodeURIComponent(searchedValue.trim())}`,
       );
       setsearchedValue("");
       setIsSearchOpen(false);
@@ -555,7 +536,7 @@ const Header = ({ data }: HeaderProps) => {
       <div
         className={clsx(
           `fixed left-0 right-0 z-50`,
-          pathname === "/" ? `top-9 lgx:top-11` : `top-0`
+          pathname === "/" ? `top-9 lgx:top-11` : `top-0`,
         )}
       >
         {/* Main Header */}
@@ -589,8 +570,8 @@ const Header = ({ data }: HeaderProps) => {
                   const allInnerLinks =
                     item.subMenu?.flatMap((sub) =>
                       sub.item?.map(
-                        (i) => i.cta_link?.link || i.externalLink || ""
-                      )
+                        (i) => i.cta_link?.link || i.externalLink || "",
+                      ),
                     ) || [];
                   // Check if ANY link is active
                   const isMenuActive =
@@ -617,7 +598,7 @@ const Header = ({ data }: HeaderProps) => {
                             handleDropdownToggle(index);
                           }
                         }}
-                        className={`flex items-center transition-colors hover:text-orange-500 ${
+                        className={`flex items-center transition-colors hover:text-orange-200 ${
                           isMenuActive
                             ? "text-[#DC4C03] font-medium"
                             : "text-gray-700"
@@ -628,11 +609,10 @@ const Header = ({ data }: HeaderProps) => {
                           activeHover={isActive(
                             item.subMenu?.[0]?.item?.[0]?.cta_link?.link ||
                               item.subMenu?.[0]?.item?.[0]?.externalLink ||
-                              ""
+                              "",
                           )}
                           className="text-sm font-medium"
                         >
-                          {/* {item.subMenu?.[0]?.item?.map((item) => item.cta_link?.link || item.externalLink || "").join(", ")} */}
                           {item.menuTitle}
                         </AnimateTextOnHover>
                         {item.subMenu && item.subMenu.length > 0 && (
@@ -667,7 +647,6 @@ const Header = ({ data }: HeaderProps) => {
                             }}
                             className="absolute top-full -left-10 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                           >
-                            {/* {openDropdown} */}
                             <div className="grid grid-cols-2   gap-2">
                               <div className="max-h-[500px] overflow-y-auto col-span-1">
                                 {item.subMenu.map(
@@ -686,7 +665,7 @@ const Header = ({ data }: HeaderProps) => {
                                             onClick={() =>
                                               toggleSubMenu(subMenuId)
                                             }
-                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-300 transition-colors cursor-pointer"
+                                            className="w-full flex items-center justify-between text-sm font-medium py-2 text-[#DC4C03] hover:text-orange-200 transition-colors cursor-pointer"
                                           >
                                             <BodyText3 className="text-[#DC4C03]">
                                               {subMenuItem.title}
@@ -698,7 +677,7 @@ const Header = ({ data }: HeaderProps) => {
                                                     " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[1.5px] after:bg-[#DC4C03] after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[1.5px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                                                     isExpanded
                                                       ? "before:rotate-90"
-                                                      : "before:rotate-0"
+                                                      : "before:rotate-0",
                                                   )}
                                                 ></i>
                                               )}
@@ -710,11 +689,11 @@ const Header = ({ data }: HeaderProps) => {
                                                   if (el) {
                                                     desktopSubMenuRefs.current.set(
                                                       subMenuId,
-                                                      el
+                                                      el,
                                                     );
                                                   } else {
                                                     desktopSubMenuRefs.current.delete(
-                                                      subMenuId
+                                                      subMenuId,
                                                     );
                                                   }
                                                 }}
@@ -745,10 +724,10 @@ const Header = ({ data }: HeaderProps) => {
 
                                                       const isExternal =
                                                         href.startsWith(
-                                                          "http://"
+                                                          "http://",
                                                         ) ||
                                                         href.startsWith(
-                                                          "https://"
+                                                          "https://",
                                                         );
 
                                                       // For external links, use regular <a> tag, for internal use Next.js Link
@@ -759,10 +738,10 @@ const Header = ({ data }: HeaderProps) => {
                                                             href={href}
                                                             target="_self"
                                                             rel="noopener noreferrer"
-                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-200 transition-colors rounded-[6px]"
                                                             onClick={() =>
                                                               setOpenDropdown(
-                                                                null
+                                                                null,
                                                               )
                                                             }
                                                           >
@@ -779,24 +758,24 @@ const Header = ({ data }: HeaderProps) => {
                                                             "block px-4 py-2 text-sm  hover:bg-orange-50 hover:text-[#4C5861] transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-[#DC4C03] bg-orange-50 font-medium"
-                                                              : "text-gray-700"
+                                                              : "text-gray-700",
                                                           )}
                                                           onClick={() => {
                                                             setsearchedValue(
-                                                              ""
+                                                              "",
                                                             );
                                                             setIsSearchOpen(
-                                                              false
+                                                              false,
                                                             );
                                                             setOpenDropdown(
-                                                              null
+                                                              null,
                                                             );
                                                           }}
                                                         >
                                                           {item.title}
                                                         </Link>
                                                       );
-                                                    }
+                                                    },
                                                   )}
                                                 </div>
                                               </div>
@@ -839,10 +818,10 @@ const Header = ({ data }: HeaderProps) => {
 
                                                     const isExternal =
                                                       href.startsWith(
-                                                        "http://"
+                                                        "http://",
                                                       ) ||
                                                       href.startsWith(
-                                                        "https://"
+                                                        "https://",
                                                       );
 
                                                     // For external links, use regular <a> tag, for internal use Next.js Link
@@ -854,14 +833,14 @@ const Header = ({ data }: HeaderProps) => {
                                                           target="_self"
                                                           rel="noopener noreferrer"
                                                           className={clsx(
-                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors rounded-[6px]",
+                                                            "block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-200 transition-colors rounded-[6px]",
                                                             isActive(href)
                                                               ? "text-orange-500 bg-orange-50 font-medium"
-                                                              : "text-gray-700"
+                                                              : "text-gray-700",
                                                           )}
                                                           onClick={() =>
                                                             setOpenDropdown(
-                                                              null
+                                                              null,
                                                             )
                                                           }
                                                         >
@@ -878,12 +857,12 @@ const Header = ({ data }: HeaderProps) => {
                                                           "block rounded-[6px]  px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[4C5861] transition-colors",
                                                           isActive(href)
                                                             ? "text-orange-500 bg-orange-50 font-medium"
-                                                            : "text-gray-700"
+                                                            : "text-gray-700",
                                                         )}
                                                         onClick={() => {
                                                           setsearchedValue("");
                                                           setIsSearchOpen(
-                                                            false
+                                                            false,
                                                           );
                                                           setOpenDropdown(null);
                                                         }}
@@ -891,14 +870,14 @@ const Header = ({ data }: HeaderProps) => {
                                                         {item.title}
                                                       </Link>
                                                     );
-                                                  }
+                                                  },
                                                 )}
                                               </div>
                                             )}
                                         </div>
                                       );
                                     }
-                                  }
+                                  },
                                 )}
                               </div>
                               {item.image && item.image.url && (
@@ -957,7 +936,7 @@ const Header = ({ data }: HeaderProps) => {
                         height={20}
                         className={clsx(
                           "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300",
-                          isSearchOpen ? "opacity-100" : ""
+                          isSearchOpen ? "opacity-100" : "",
                         )}
                       />
                     </div>
@@ -1027,7 +1006,7 @@ const Header = ({ data }: HeaderProps) => {
                       height={20}
                       className={clsx(
                         "absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-[20px] h-[20px] opacity-0 transition-all duration-300",
-                        isSearchOpen ? "opacity-100" : ""
+                        isSearchOpen ? "opacity-100" : "",
                       )}
                     />
                   </div>
@@ -1055,14 +1034,14 @@ const Header = ({ data }: HeaderProps) => {
           <div
             className={clsx(
               "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
-              isSearchOpen ? "!max-h-[320]" : ""
+              isSearchOpen ? "!max-h-[320]" : "",
             )}
           >
             <div className="container relative">
               <div
                 className={clsx(
                   "absolute top-0 md:left-10 w-full pt-26 pb-16 flex flex-col justify-start transition-opactiy duration-600 delay-600",
-                  isSearchOpen ? "opacity-100" : "opacity-0 "
+                  isSearchOpen ? "opacity-100" : "opacity-0 ",
                 )}
               >
                 <SubH1 className="text-blue-200 font-medium">Search</SubH1>
@@ -1097,7 +1076,7 @@ const Header = ({ data }: HeaderProps) => {
             const hasDropdown = item.subMenu && item.subMenu.length > 0;
             const allInnerLinks =
               item.subMenu?.flatMap((sub) =>
-                sub.item?.map((i) => i.cta_link?.link || i.externalLink || "")
+                sub.item?.map((i) => i.cta_link?.link || i.externalLink || ""),
               ) || [];
             // Check if ANY link is active
             const isMenuActive =
@@ -1115,7 +1094,7 @@ const Header = ({ data }: HeaderProps) => {
                       onClick={() => toggleMobileMenu(index)}
                       className={`flex-1 text-left transition-all duration-200 py-3 ${
                         isMenuActive
-                          ? "text-orange-500 font-medium"
+                          ? "text-orange-200 font-medium"
                           : "text-gray-700"
                       }`}
                     >
@@ -1130,7 +1109,7 @@ const Header = ({ data }: HeaderProps) => {
                       }
                       className={`flex-1 transition-all duration-200 py-3 ${
                         isMenuActive
-                          ? "text-orange-500 font-medium"
+                          ? "text-orange-200 font-medium"
                           : "text-gray-700"
                       }`}
                       onClick={() => setIsMenuOpen(false)}
@@ -1148,7 +1127,7 @@ const Header = ({ data }: HeaderProps) => {
                           " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                           isMenuExpanded
                             ? "before:rotate-90"
-                            : "before:rotate-0"
+                            : "before:rotate-0",
                         )}
                       ></i>
                     </button>
@@ -1199,7 +1178,7 @@ const Header = ({ data }: HeaderProps) => {
                                     " h-[14px] w-[14px] relative after:content-[''] after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:w-full after:h-[2px] after:bg-orange-200 after:rounded-[2px] after:transition-all after:duration-200  before:content-[''] before:absolute before:top-[50%] before:left-[50%] before:translate-x-[-50%] before:translate-y-[-50%] before:h-full before:w-[2px] before:bg-orange-200 before:rounded-[2px] before:transition-all before:duration-600 ",
                                     isSubMenuExpanded
                                       ? "before:rotate-90"
-                                      : "before:rotate-0"
+                                      : "before:rotate-0",
                                   )}
                                 ></i>
                               )}
@@ -1261,8 +1240,8 @@ const Header = ({ data }: HeaderProps) => {
                                       className={clsx(
                                         "block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                         isActive(href)
-                                          ? "text-orange-500 bg-orange-50 font-medium"
-                                          : "text-gray-700"
+                                          ? "text-orange-200 bg-orange-50 font-medium"
+                                          : "text-gray-700",
                                       )}
                                       onClick={() => setIsMenuOpen(false)}
                                     >
@@ -1281,16 +1260,6 @@ const Header = ({ data }: HeaderProps) => {
                             key={subMenuId}
                             className="border-b border-gray-200 last:border-b-0"
                           >
-                            {/* SubMenu Section Header - Non-clickable */}
-                            {/* <div className="w-full flex items-center justify-between pl-2 py-3">
-                              <Typography
-                                variant="body-l"
-                                className="text-orange-200 font-medium"
-                              >
-                                {subMenuItem.title}
-                              </Typography>
-                            </div> */}
-
                             {/* SubMenu Items - Always visible */}
                             {hasItems && (
                               <div className="pl-3">
@@ -1326,8 +1295,8 @@ const Header = ({ data }: HeaderProps) => {
                                         className={clsx(
                                           "block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                           isActive(href)
-                                            ? "text-orange-500 bg-orange-50 font-medium"
-                                            : "text-gray-700"
+                                            ? "text-orange-200 bg-orange-50 font-medium"
+                                            : "text-gray-700",
                                         )}
                                         onClick={() => setIsMenuOpen(false)}
                                       >
@@ -1343,8 +1312,8 @@ const Header = ({ data }: HeaderProps) => {
                                       className={clsx(
                                         "block   py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors",
                                         isActive(href)
-                                          ? "text-orange-500 bg-orange-50 font-medium"
-                                          : "text-gray-700"
+                                          ? "text-orange-200 bg-orange-50 font-medium"
+                                          : "text-gray-700",
                                       )}
                                       onClick={() => setIsMenuOpen(false)}
                                     >

@@ -15,36 +15,38 @@ export type OurResponsibilityProps = {
   data: {
     title: string;
     leftSection: {
-        id: string | number;
-        title: string;
-        description: string;
+      id: string | number;
+      title: string;
+      description: string;
     }[];
     rightSection: {
-        id: string | number;
-        title: string;
-        description: string;
+      id: string | number;
+      title: string;
+      description: string;
     }[];
   };
 };
 export type DrivingEmpowermentProps = {
   data: {
     heading?: string;
-    cards: DrivingTabsSectionProps[] | {
-      id: string | number;
-      title: string;
-      description: string;
-      bottomDescription?: string | null;
-      BulletPoints: {
-        id: string | number;
-        title: string;
-      }[];
-      image: ImageProps;
-      mobImage: ImageProps | null;
-      ctaButton: ButtonProps | null;
-    }[];
+    cards:
+      | DrivingTabsSectionProps[]
+      | {
+          id: string | number;
+          title: string;
+          description: string;
+          bottomDescription?: string | null;
+          BulletPoints: {
+            id: string | number;
+            title: string;
+          }[];
+          image: ImageProps;
+          mobImage: ImageProps | null;
+          ctaButton: ButtonProps | null;
+        }[];
   };
 };
- 
+
 export type EducationDevelopmentProps = {
   data: {
     title: string;
@@ -61,6 +63,7 @@ export type EducationDevelopmentProps = {
       BulletPoints?: {
         title?: string;
       }[];
+      repeatableCta?:ButtonProps[];
     }[];
   };
 };

@@ -49,11 +49,11 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         // Filter only simple-list layouts
         const simpleListLayouts = currentCategory.reportLayout.filter(
           (
-            layout
+            layout,
           ): layout is Extract<
             typeof layout,
             { __component: "reports.sub-category-with-report" }
-          > => layout.__component === "reports.sub-category-with-report"
+          > => layout.__component === "reports.sub-category-with-report",
         );
         return <SimpleListing reportLayout={simpleListLayouts} />;
 
@@ -62,11 +62,11 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         // Filter only sub-year-and-report layouts
         const yearReportLayouts = currentCategory.reportLayout.filter(
           (
-            layout
+            layout,
           ): layout is Extract<
             typeof layout,
             { __component: "reports.sub-year-and-report" }
-          > => layout.__component === "reports.sub-year-and-report"
+          > => layout.__component === "reports.sub-year-and-report",
         );
         return <YearAndListing reportLayout={yearReportLayouts} />;
 
@@ -75,11 +75,11 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         // Filter only sub-year-and-quarter layouts
         const yearQuarterLayouts = currentCategory.reportLayout.filter(
           (
-            layout
+            layout,
           ): layout is Extract<
             typeof layout,
             { __component: "reports.sub-year-and-quarter" }
-          > => layout.__component === "reports.sub-year-and-quarter"
+          > => layout.__component === "reports.sub-year-and-quarter",
         );
         return <YearQuarterListing reportLayout={yearQuarterLayouts} />;
 
@@ -87,11 +87,11 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         // Filter simple-list layouts
         const simpleListReports = currentCategory.reportLayout.filter(
           (
-            layout
+            layout,
           ): layout is Extract<
             typeof layout,
             { __component: "reports.simple-list" }
-          > => layout.__component === "reports.simple-list"
+          > => layout.__component === "reports.simple-list",
         );
 
         // Construct data in the format OrangeCardListing expects
@@ -128,7 +128,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             key={`top_category_${index}`}
             className={clsx(
               `border-r-[#10456A] cursor-pointer transition-all duration-300`,
-              index === data.length - 1 ? "border-r-0" : "border-r-2 pr-6 "
+              index === data.length - 1 ? "border-r-0" : "border-r-2 pr-6 ",
             )}
             onClick={() => {
               setActiveTab(index);
@@ -138,7 +138,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             <p
               className={clsx(
                 "text-base whitespace-nowrap",
-                activeTab === index ? "text-[#FFF]" : "text-[#9997A2]"
+                activeTab === index ? "text-[#FFF]" : "text-[#9997A2]",
               )}
             >
               {item?.category}

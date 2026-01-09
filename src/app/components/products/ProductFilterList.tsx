@@ -45,7 +45,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       return subcategoryFromUrl
         ? subcategoryFromUrl.split(",").filter(Boolean)
         : [];
-    }
+    },
   );
 
   const [filteredProducts, setFilteredProducts] = useState<ProductData[]>([]);
@@ -88,7 +88,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
         : pathname;
       router.push(newUrl, { scroll: false });
     },
-    [searchParams, pathname, router]
+    [searchParams, pathname, router],
   );
 
   // Reset visible count when filters change
@@ -237,7 +237,7 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                       "px-4 py-2 border rounded-[10px] transition inline-flex gap-2 items-center text-center cursor-pointer",
                       selected
                         ? "border-[#DC4C03] text-[#DC4C03]"
-                        : "border-[#4C5861] hover:bg-gray-100"
+                        : "border-[#4C5861] hover:bg-gray-100",
                     )}
                   >
                     <span className="">{sub.subCategory}</span>
@@ -266,8 +266,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                 loading ? "..." : totalProducts
               })`
             : activeTab !== "all"
-            ? `Filtered Results (${loading ? "..." : totalProducts})`
-            : `All Results (${loading ? "..." : totalProducts})`}
+              ? `Filtered Results (${loading ? "..." : totalProducts})`
+              : `All Results (${loading ? "..." : totalProducts})`}
         </BodyText1>
         {!desktop && showSubCategories && (
           <button

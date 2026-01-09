@@ -43,9 +43,6 @@ const DesktopMapSvg = ({
 }: NewMapProps) => {
   return (
     <svg
-      // width="1262"
-      // height="623"
-      // viewBox="0 0 1262 623"
       width="100%"
       height="auto"
       viewBox="0 0 1262 623"
@@ -345,7 +342,7 @@ const DesktopMapSvg = ({
         className="hover:cursor-pointer"
         onMouseEnter={hoverMiddleE}
         cx="730"
-        cy="279"
+        cy="259"
         r="10"
         fill="#F9C095"
       />
@@ -353,7 +350,7 @@ const DesktopMapSvg = ({
         className="hover:cursor-pointer"
         onMouseEnter={hoverMiddleE}
         cx="730"
-        cy="279"
+        cy="259"
         r="6"
         fill="#F36633"
       />
@@ -361,16 +358,16 @@ const DesktopMapSvg = ({
       <circle
         className="hover:cursor-pointer"
         onMouseEnter={hoverIndia}
-        cx="876"
-        cy="299"
+        cx="855"
+        cy="330"
         r="10"
         fill="#F9C095"
       />
       <circle
         className="hover:cursor-pointer"
         onMouseEnter={hoverIndia}
-        cx="876"
-        cy="299"
+        cx="855"
+        cy="330"
         r="6"
         fill="#F36633"
       />
@@ -417,15 +414,15 @@ const DesktopMapSvg = ({
       />
       <MapBlip
         x="670"
-        y="180"
+        y="162"
         title="23%"
         subtitle="Middle East"
         isActive={isActive3}
         onMouseEnter={hoverMiddleE}
       />
       <MapBlip
-        x="815"
-        y="199"
+        x="795"
+        y="235"
         title="46%"
         subtitle="India"
         isActive={isActive4}

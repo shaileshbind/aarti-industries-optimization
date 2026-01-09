@@ -12,12 +12,12 @@ export default async function ProductInner({ params }: ProductPageProps) {
 
   const mainData = await getData(`/products-details/${productId}`);
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   if (mainData) {
     relatedData = await getData(
-      `/related-products/${mainData.product_sub_categories[0].slug || ""}`
+      `/related-products/${mainData.product_sub_categories[0].slug || ""}`,
     );
   }
   const seo = mainData?.seo;

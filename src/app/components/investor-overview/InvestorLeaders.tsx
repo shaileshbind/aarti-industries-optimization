@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
-import { InvestorPeopleProps} from "@/app/types/investor-overview.type";
+import { InvestorPeopleProps } from "@/app/types/investor-overview.type";
 import { FadeInReveal } from "../ScrollReveal";
 
 const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
@@ -16,6 +16,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const swiper = swiperRef.current;
@@ -25,13 +26,49 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
     }
   }, [active]);
 
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="my-[72px] lg:mt-[90px] lg:mb-[140px]">
+    <div ref={sectionRef} className="my-[72px] lg:mt-[90px] lg:mb-[140px]">
       {title && (
         <FadeInReveal>
-        <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
-          {title}
-        </H2>
+          <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
+            {title}
+          </H2>
         </FadeInReveal>
       )}
       <FadeInReveal className="mt-[28px] lg:mt-[48px] container mx-auto">
@@ -129,6 +166,10 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                   swiperRef.current = swiper;
                   setIsBeginning(swiper.isBeginning);
                   setIsEnd(swiper.isEnd);
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
                 }}
                 onSlideChange={(swiper) => {
                   setActive(swiper.activeIndex);
@@ -140,7 +181,9 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                 {testimonials?.map((items) => {
                   return (
                     <SwiperSlide key={items?.id}>
-                      <SubH2 className="text-grey-400">{items?.testimonialText}</SubH2>
+                      <SubH2 className="text-grey-400">
+                        {items?.testimonialText}
+                      </SubH2>
                       <SubH3 className="mt-[18px] lg:mt-[30px] !text-[16px] md:!text-[20px]">
                         {items?.name}
                       </SubH3>
@@ -152,39 +195,39 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
                 })}
               </Swiper>
               {testimonials && testimonials.length > 1 && (
-              <div className="mt-[8px] flex gap-x-4 justify-end ">
-                <button
-                  className={`swiper-button-prev-aartiWorld transition-opacity ${
-                    isBeginning
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Previous slide"
-                  aria-disabled={isBeginning}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Previous"
-                    width={34}
-                    height={34}
-                    className="rotate-180"
-                  />
-                </button>
-                <button
-                  className={`swiper-button-next-aartiWorld transition-opacity ${
-                    isEnd
-                      ? "pointer-events-none opacity-30"
-                      : "cursor-pointer opacity-100"
-                  }`}
-                  aria-label="Next slide"
-                  aria-disabled={isEnd}
-                >
-                  <Image
-                    src="/images/home/chevron-right-orange.svg"
-                    alt="Next"
-                    width={34}
-                    height={34}
-                  />
+                <div className="mt-[8px] flex gap-x-4 justify-end ">
+                  <button
+                    className={`swiper-button-prev-aartiWorld transition-opacity ${
+                      isBeginning
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Previous slide"
+                    aria-disabled={isBeginning}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Previous"
+                      width={34}
+                      height={34}
+                      className="rotate-180"
+                    />
+                  </button>
+                  <button
+                    className={`swiper-button-next-aartiWorld transition-opacity ${
+                      isEnd
+                        ? "pointer-events-none opacity-30"
+                        : "cursor-pointer opacity-100"
+                    }`}
+                    aria-label="Next slide"
+                    aria-disabled={isEnd}
+                  >
+                    <Image
+                      src="/images/home/chevron-right-orange.svg"
+                      alt="Next"
+                      width={34}
+                      height={34}
+                    />
                   </button>
                 </div>
               )}

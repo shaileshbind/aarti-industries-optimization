@@ -10,7 +10,7 @@ import { RDInnovatingChemProps } from "@/app/types/r-and-d.type";
 
 gsap.registerPlugin(ScrollTrigger);
 const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
-  const { heading, cards,description } = data;
+  const { heading, cards, description } = data;
 
   const orangeLineRef = useRef<HTMLDivElement | null>(null);
   const starRef = useRef<HTMLDivElement | null>(null);
@@ -40,7 +40,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
             }px)`;
           },
         },
-      }
+      },
     );
 
     gridRefs.current.forEach((grid) => {
@@ -57,7 +57,7 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
             end: "top 50%",
             scrub: true,
           },
-        }
+        },
       );
     });
   }, []);
@@ -100,7 +100,10 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                 )}
                 <div>
                   <div className="flex items-start gap-x-[24px] pr-[unset] lg:pr-[110px]">
-                    <Tags title={`0${index + 1}`} className="mt-1 xl:mt-[6px] !text-[14px] lg:!text-[20px]" />
+                    <Tags
+                      title={`0${index + 1}`}
+                      className="mt-1 xl:mt-[6px] !text-[14px] lg:!text-[20px]"
+                    />
                     <div className="">
                       {items?.title && (
                         <SubH1 className="text-blue-200">{items?.title}</SubH1>

@@ -47,7 +47,7 @@ export default function InvestingInPotential({
         clipPath: "inset(0% 0% 0% 0%)",
         duration: 0.6,
         ease: "power2.out",
-      }
+      },
     );
 
     prevIndexRef.current = newIndex;
@@ -124,7 +124,9 @@ export default function InvestingInPotential({
                 >
                   <MainAccordion
                     borderBottom={
-                      cards.length - 1 !== index ? "1px solid rgba(255, 255, 255, 0.5)" : "none"
+                      cards.length - 1 !== index
+                        ? "1px solid rgba(255, 255, 255, 0.5)"
+                        : "none"
                     }
                     expanded={expanded === index}
                     showIcon={false}
@@ -186,7 +188,7 @@ export default function InvestingInPotential({
                     />
                     <div className="absolute inset-0 bg-black/60 z-[1]" />
                   </div>
-                )
+                ),
             )}
           </div>
         )}

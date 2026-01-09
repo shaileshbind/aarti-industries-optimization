@@ -94,7 +94,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
                       typeof swiperRef.current?.params.slidesPerView ===
                         "number"
                         ? swiperRef.current.params.slidesPerView
-                        : 1
+                        : 1,
                     )
                     ? "pointer-events-none opacity-30"
                     : "cursor-pointer opacity-100"
@@ -107,7 +107,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
                       typeof swiperRef.current?.params.slidesPerView ===
                         "number"
                         ? swiperRef.current.params.slidesPerView
-                        : 1
+                        : 1,
                     )
                 }
                 onClick={() => swiperRef.current?.slideNext()}

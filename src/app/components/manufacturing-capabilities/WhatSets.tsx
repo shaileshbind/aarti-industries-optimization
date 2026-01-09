@@ -31,7 +31,9 @@ export default function WhatSets({ data }: WhatSetsProps) {
           )}
 
           {ctaButton?.title &&
-            ctaButton?.link?.link && (
+            (ctaButton?.hasExternalLink == "true"
+              ? ctaButton?.externalLink
+              : ctaButton?.link?.link) && (
               <Button
                 title={ctaButton?.title}
                 href={`${
@@ -40,6 +42,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
                     : ctaButton?.link?.link
                 }`}
                 className="mt-6"
+                useTargetBlank={ctaButton?.hasExternalLink == "true"}
               />
             )}
 

@@ -44,7 +44,6 @@ const EnvExp = ({ data }: EnvExpProps) => {
               </FadeInReveal>
             );
           })()}
-
         </div>
       </FadeInReveal>
     </div>

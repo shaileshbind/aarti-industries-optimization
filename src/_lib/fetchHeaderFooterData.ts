@@ -14,7 +14,7 @@ export async function fetchHeaderFooterData(): Promise<HeaderFooterData> {
           Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
         next: { revalidate: 1 },
-      }
+      },
     );
 
     if (!res.ok) {

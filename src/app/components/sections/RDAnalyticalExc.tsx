@@ -13,6 +13,7 @@ import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
+import type { Swiper as SwiperType } from "swiper";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -46,6 +47,8 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 
   const isScrollingProgrammatically = useRef<boolean>(false);
   const { setMarginBottom } = useMargin();
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -81,12 +84,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           invalidateOnRefresh: true,
           onEnter: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
+              "mainTrigger",
             ) as ScrollTriggerInstance | null;
           },
           onRefresh: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              "mainTrigger"
+              "mainTrigger",
             ) as ScrollTriggerInstance | null;
           },
         },
@@ -99,13 +102,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             headinRight.current,
             { x: 0, y: 0 },
             { y: 150, duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
             { height: "0px" },
             { height: "203px", duration: 0.5 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainInner.current,
@@ -117,18 +120,18 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               ease: "power4.inOut",
               duration: 0.5,
             },
-            "<"
+            "<",
           )
           .fromTo(
             headinLeft.current,
             { y: -150, opacity: 1 },
-            { y: -180, opacity: 0, duration: 0.5 }
+            { y: -180, opacity: 0, duration: 0.5 },
           )
           .fromTo(
             headinRight.current,
             { y: 150, opacity: 1 },
             { y: 180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
@@ -149,39 +152,39 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               x: "-50%",
               duration: 1,
             },
-            "<"
+            "<",
           )
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<"
+            "<",
           )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
             { opacity: 1, duration: 5 },
-            "<"
+            "<",
           );
       } else {
         mainTl
           .fromTo(
             headinLeft.current,
             { x: 0, y: "unset" },
-            { x: -150, duration: 1 }
+            { x: -150, duration: 1 },
           )
           .fromTo(
             headinRight.current,
             { x: 0, y: "unset" },
             { x: 150, duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
             { width: "0px" },
             { width: "200px", duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainInner.current,
@@ -193,7 +196,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               duration: 0.3,
               ease: "power4.inOut",
             },
-            "<0.4"
+            "<0.4",
           )
           .fromTo(
             sustainbleLogo.current,
@@ -210,32 +213,32 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 window.innerWidth > 1280
                   ? "600px"
                   : window.innerWidth > 1024 && window.innerWidth < 1280
-                  ? "400px"
-                  : "100%",
+                    ? "400px"
+                    : "100%",
               height:
                 window.innerWidth > 1280
                   ? "600px"
                   : window.innerWidth > 1024 && window.innerWidth < 1280
-                  ? "400px"
-                  : "100vh",
+                    ? "400px"
+                    : "100vh",
               left: "0%",
               top: "50%",
               y: "-50%",
               x: "0%",
               duration: 1,
-            }
+            },
           )
           .fromTo(
             headinLeft.current,
             { x: -150, opacity: 1 },
             { x: -180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .fromTo(
             headinRight.current,
             { x: 150, opacity: 1 },
             { x: 180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .to(titleSection.current, {
             opacity: 0,
@@ -245,13 +248,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<"
+            "<",
           )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
             { opacity: 1, duration: 5 },
-            "<"
+            "<",
           );
       }
     });
@@ -301,10 +304,49 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
     };
   }, [active, details?.length, setMarginBottom]);
 
+  // Intersection Observer for autoplay control
+  React.useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [active]); // Re-run when active tab changes
+
   return (
     <>
       <div
-        ref={triggerRef}
+        ref={(el) => {
+          triggerRef.current = el;
+          sectionRef.current = el;
+        }}
         className="w-full relative  min-h-[40vh] mt-[100px] lg:mt-[unset]"
       >
         <div
@@ -425,6 +467,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       nextEl: ".swiper-button-next-analytical",
                       prevEl: ".swiper-button-prev-analytical",
                     }}
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      // Don't start autoplay immediately - wait for viewport intersection
+                      if (swiper.autoplay) {
+                        swiper.autoplay.stop();
+                      }
+                    }}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     breakpoints={{
                       0: {
@@ -498,7 +547,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                   }}
                                   className={`animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100% font-alte-hans underline underline-offset-[4px] [text-underline-position:under]`}
                                 >
-                                  Enquire now
+                                  Enquire Now
                                 </button>
                               </div>
                             )}
@@ -525,7 +574,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-        // document={document}
         prefillCategory="Business Products / Services"
         prefillSubCategory="LAB Testing (Analytical/ Safety)"
       />

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ShareholderInformation() {
   const data = await getPageData("/pages/by-slug/shareholder-report");
-  const seo = data?.seo
+  const seo = data?.seo;
 
   return (
     <div>
@@ -16,7 +16,10 @@ export default async function ShareholderInformation() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/investors/shareholder-information"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/investors/shareholder-information"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

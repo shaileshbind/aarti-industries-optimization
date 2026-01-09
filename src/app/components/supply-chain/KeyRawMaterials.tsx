@@ -61,7 +61,9 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
               expanded={expanded === index}
               onChange={() => setexpanded(index)}
               borderBottom={
-                index === raw_materials?.length - 1 ? "none" : "1px solid #e8e8e8"
+                index === raw_materials?.length - 1
+                  ? "none"
+                  : "1px solid #e8e8e8"
               }
               icon={
                 <Image
@@ -79,26 +81,20 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
             >
               <div className="border-[1px] rounded-[20px] overflow-hidden border-[#e8e8e8] ">
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
-                  <p className="text-[#002F50] w-[60%]">Technical Name :</p>
-                  <p className="text-[#4C5861]">
-                    {item?.productName || "-"}
-                  </p>
+                  <p className="text-[#002F50] w-[60%]">Technical Name:</p>
+                  <p className="text-[#4C5861]">{item?.productName || "-"}</p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
-                  <p className="text-[#002F50] w-[60%]">CAS No. :</p>
-                  <p className="text-[#4C5861]">
-                    {item?.casNo || "-"}
-                  </p>
+                  <p className="text-[#002F50] w-[60%]">CAS No.:</p>
+                  <p className="text-[#4C5861]">{item?.casNo || "-"}</p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] border-b border-[#e8e8e8]">
-                  <p className="text-[#002F50] w-[60%]">Molecular Formula :</p>
-                  <p className="text-[#4C5861]">
-                    {item?.moducularName || "-"}
-                  </p>
+                  <p className="text-[#002F50] w-[60%]">Molecular Formula:</p>
+                  <p className="text-[#4C5861]">{item?.moducularName || "-"}</p>
                 </div>
                 <div className="flex py-[18px] px-5 even:bg-[#F7F9FA] ">
                   <p className="text-[#002F50] w-[60%]">
-                    Packaging Material Requirement :
+                    Packaging Material Requirement:
                   </p>
                   <p className="text-[#4C5861]">
                     {item?.materialRequirement || "-"}

@@ -1,14 +1,14 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ThriveBannerProps } from "@/app/types/thrive-at-aarti.type";
 import { isMobile } from "react-device-detect";
 
 const ThriveBanner: React.FC<ThriveBannerProps> = ({ data }) => {
-   const [isClientMobile, setIsClientMobile] = useState(false);
-      useEffect(() => {
-        setIsClientMobile(isMobile);
-      }, []);
+  const [isClientMobile, setIsClientMobile] = useState(false);
+  useEffect(() => {
+    setIsClientMobile(isMobile);
+  }, []);
   const { title, pageHeading, ctaButton, description, image, mobImage } = data;
 
   return (

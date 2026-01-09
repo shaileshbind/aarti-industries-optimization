@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1 } from "../Typography2";
+import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
@@ -9,6 +10,7 @@ import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
+import type { Swiper as SwiperType } from "swiper";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +27,44 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   const slidesPerView = 1.2;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     function computeOffset() {
@@ -96,7 +136,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -106,16 +146,21 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   }, []);
 
   return (
-    <div ref={frameworkForgedRef}>
+    <div
+      ref={(el) => {
+        frameworkForgedRef.current = el;
+        sectionRef.current = el;
+      }}
+    >
       <div
         className={clsx(
-          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`
+          `lg:!pl-[60px] relative w-full grid grid-cols-1  px-[20px] lg:px-[unset]  ${"lg:grid-cols-[45%_55%]"}`,
         )}
       >
         <div
           className={clsx(
             ` relative w-full overflow-hidden pt-[80%]
-            `
+            `,
           )}
         >
           <div
@@ -182,7 +227,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                  className={`-rotate-180 swiper-button-prev-education-development transition-opacity ${
                     activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -194,7 +239,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${
+                  className={`swiper-button-next-education-development transition-opacity ${
                     activeIndex < cards?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -213,10 +258,17 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   disableOnInteraction: false,
                 }}
                 navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
+                  nextEl: ".swiper-button-next-education-development",
+                  prevEl: ".swiper-button-prev-education-development",
                 }}
                 slidesOffsetAfter={offsetAfter}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
+                }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 breakpoints={{
                   0: {
@@ -274,9 +326,36 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
 
                                 <BodyText2>{bulletPoint?.title}</BodyText2>
                               </li>
-                            )
+                            ),
                           )}
                       </ul>
+                      {item?.repeatableCta && item.repeatableCta.length > 0 && (
+                        <div className="mt-[10px]">
+                          {item.repeatableCta.map((cta, ctaIndex) => {
+                            const hasValidLink =
+                              (cta?.link?.link && cta.link.link.trim() !== "") ||
+                              (cta?.externalLink && cta.externalLink.trim() !== "");
+                            
+                            if (!cta?.title || !hasValidLink) {
+                              return null;
+                            }
+                            const href =
+                              cta?.hasExternalLink === "true"
+                                ? cta?.externalLink || ""
+                                : cta?.link?.link || "";                      
+                            const useTargetBlank = cta?.hasExternalLink === "true";
+                            return (
+                              <Button
+                                key={ctaIndex}
+                                title={cta?.title}
+                                href={href}
+                                secondary
+                                useTargetBlank={useTargetBlank}
+                              />
+                            );
+                          })}
+                        </div>
+                      )}
                     </SwiperSlide>
                   );
                 })}

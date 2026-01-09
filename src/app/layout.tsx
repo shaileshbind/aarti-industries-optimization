@@ -6,6 +6,7 @@ import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { GlobalCursor } from "./GlobalCursor";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 import SEO from "./components/SEO";
+import ScrollToTop from "./components/ScrollToTop";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,6 +58,7 @@ export default async function RootLayout({
           />
         </Link>
         <GSAPProvider>
+          <ScrollToTop />
           <GlobalCursor />
           <Header data={data?.Header} />
           <main>{children}</main>

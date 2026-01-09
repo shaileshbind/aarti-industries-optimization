@@ -32,7 +32,7 @@ export default function MainTimeline({
   // Updated: internal state handles strings
   const [internalActivePhase, setInternalActivePhase] = useState(0);
   const [internalActiveYear, setInternalActiveYear] = useState<string>(
-    phases[0].years[0]
+    phases[0].years[0],
   );
 
   const activePhase = externalActivePhase ?? internalActivePhase;
@@ -185,7 +185,7 @@ export default function MainTimeline({
             >
               <BodyText2
                 className={`mb-2 pb-5 ${
-                  activePhase === i ? "text-gray-800" : "text-gray-400"
+                  activePhase === i ? "text-orange-200" : "text-gray-400"
                 }`}
               >
                 {phase.title}
@@ -257,7 +257,7 @@ export default function MainTimeline({
         </div>
 
         {/* Desktop Navigation Arrows */}
-        <div className="flex items-center gap-4 lg:-mb-[10px] relative z-[1]">
+        <div className="flex items-center gap-4 lg:-mb-[10px] relative z-[1] min-w-[80px]">
           <button
             onClick={handlePrev}
             disabled={activePhase === 0 && activeYear === phases[0].years[0]}
@@ -268,7 +268,7 @@ export default function MainTimeline({
               alt="prev"
               width={34}
               height={34}
-              className={`-rotate-180 swiper-button-prev transition-opacity`}
+              className={`-rotate-180 transition-opacity`}
             />
           </button>
 

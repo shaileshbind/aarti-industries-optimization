@@ -1,6 +1,6 @@
 {
   "name": "AartiIndustries-fe",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -39,6 +39,7 @@
     "@types/react-dom": "19.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "prettier": "^3.7.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

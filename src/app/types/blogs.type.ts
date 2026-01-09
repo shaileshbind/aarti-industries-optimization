@@ -53,7 +53,7 @@ export type RelatedBogsProps = {
   date: string;
   excerpt: string;
   slug: string;
-  title?:string;
+  title?: string;
 };
 
 export type BlogDataProps = {
@@ -62,7 +62,7 @@ export type BlogDataProps = {
   excerpt: string;
   slug: string;
   id: string | number;
-  title?:string;
+  title?: string;
 };
 
 export type BlogAndCaseStudiesProps = {

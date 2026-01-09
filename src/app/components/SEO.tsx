@@ -19,7 +19,7 @@ interface SEOProps {
 }
 
 const SEO = ({
-  title,
+  // title,
   metaTitle,
   metaDescription,
   keywords,
@@ -38,7 +38,7 @@ const SEO = ({
   return (
     <>
       {/* Basic Meta Tags */}
-      {title && <title>{title}</title>}
+      {metaTitle && <title>{metaTitle}</title>}
       {metaTitle && <meta name="title" content={metaTitle} />}
       {metaDescription && <meta name="description" content={metaDescription} />}
       {canonical && <link rel="canonical" href={canonical} />}

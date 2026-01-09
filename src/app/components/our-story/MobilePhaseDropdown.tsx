@@ -26,7 +26,10 @@ export default function MobilePhaseDropdown({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -50,12 +53,12 @@ export default function MobilePhaseDropdown({
           {phases[activePhase]?.title}
         </BodyText1>
         <div className="border-1 border-white rounded-full p-1">
-             <ChevronDown
-          size={20}
-          className={`text-white transition-transform ${
-            isDropdownOpen ? "rotate-180" : ""
-          }`}
-        />
+          <ChevronDown
+            size={20}
+            className={`text-white transition-transform ${
+              isDropdownOpen ? "rotate-180" : ""
+            }`}
+          />
         </div>
       </button>
 
@@ -71,7 +74,9 @@ export default function MobilePhaseDropdown({
                   ? "bg-gradient-orange-3 text-white"
                   : "text-gray-700"
               } ${i === 0 ? "rounded-t-lg" : ""} ${
-                i === phases.length - 1 ? "rounded-b-lg" : "border-b border-gray-100"
+                i === phases.length - 1
+                  ? "rounded-b-lg"
+                  : "border-b border-gray-100"
               }`}
             >
               {phase.title}

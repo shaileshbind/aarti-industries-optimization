@@ -1,5 +1,6 @@
 "use client";
 import { SearchBarProps } from "@/app/types/product.listing.type";
+import { useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
@@ -9,6 +10,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   clearTrigger, // Add this prop
 }) => {
   const [query, setQuery] = useState("");
+  const isMobile = useMediaQuery("(max-width:820px)");
 
   // Clear query when clearTrigger changes
   useEffect(() => {
@@ -35,7 +37,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
     >
       <input
         type="text"
-        placeholder="Search within products"
+        placeholder={
+          isMobile
+            ? "Search within categories"
+            : "Search by End Use, Chemistry or Value Chain"
+        }
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"

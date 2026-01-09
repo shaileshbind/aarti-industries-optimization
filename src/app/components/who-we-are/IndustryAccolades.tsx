@@ -24,6 +24,10 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const progressRefs = useRef<HTMLDivElement[]>([]);
   const tabsContainerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const progressAnimationRef = useRef<gsap.core.Tween | null>(null);
+  const savedProgressRef = useRef<{ [key: number]: number }>({});
 
   // Scroll active tab into view
   const scrollActiveTabIntoView = useCallback((index: number) => {
@@ -64,6 +68,12 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       progressRefs.current.forEach((el) => {
         if (el) gsap.killTweensOf(el);
       });
+      // Clear saved progress for the new tab (start fresh)
+      delete savedProgressRef.current[index];
+      if (progressAnimationRef.current) {
+        progressAnimationRef.current.kill();
+        progressAnimationRef.current = null;
+      }
 
       const cards = cardsWrapRef.current?.querySelectorAll(".award-card-anim");
       if (switchAnimRef.current) {
@@ -92,39 +102,69 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
     scrollActiveTabIntoView(active);
   }, [active, scrollActiveTabIntoView]);
 
-  // Animate only the active tab's progress bar
+  // Animate only the active tab's progress bar (only when in viewport)
   useEffect(() => {
     if (!awards || awards.length === 0) return;
+
+    const activeProgress = progressRefs.current[active];
+    if (!activeProgress) return;
+
     // Kill all existing progress animations
     progressRefs.current.forEach((el) => {
       if (el) gsap.killTweensOf(el);
     });
-    const activeProgress = progressRefs.current[active];
-    if (!activeProgress) return;
+    if (progressAnimationRef.current) {
+      // Save current progress before killing
+      const currentProgress = progressAnimationRef.current.progress();
+      if (currentProgress > 0 && currentProgress < 1) {
+        savedProgressRef.current[active] = currentProgress;
+      }
+      progressAnimationRef.current.kill();
+      progressAnimationRef.current = null;
+    }
+
     // Reset other bars
     progressRefs.current.forEach((el, idx) => {
       if (el && idx !== active) gsap.set(el, { width: "0%" });
     });
-    // Animate the active tab's progress
-    gsap.fromTo(
-      activeProgress,
-      { width: "0%" },
-      {
+
+    // Get saved progress or start from 0%
+    const savedProgress = savedProgressRef.current[active] || 0;
+    const startWidth = `${savedProgress * 100}%`;
+    const remainingDuration = 20 * (1 - savedProgress);
+
+    // Set initial width
+    gsap.set(activeProgress, { width: startWidth });
+
+    // Only start animation if section is in viewport
+    if (isInViewport && remainingDuration > 0) {
+      // Animate the active tab's progress from saved position
+      progressAnimationRef.current = gsap.to(activeProgress, {
         width: "100%",
-        duration: 20,
+        duration: remainingDuration,
         ease: "linear",
         onComplete: () => {
+          // Clear saved progress when complete
+          delete savedProgressRef.current[active];
           const nextIndex = (active + 1) % awards.length;
           handleTabClick(nextIndex);
         },
-      }
-    );
+      });
+    } else if (!isInViewport) {
+      // Clear saved progress when tab changes while out of viewport
+      delete savedProgressRef.current[active];
+      gsap.set(activeProgress, { width: "0%" });
+    }
 
     // Cleanup on unmount or when active changes
     return () => {
       if (activeProgress) gsap.killTweensOf(activeProgress);
+      if (progressAnimationRef.current) {
+        progressAnimationRef.current.kill();
+        progressAnimationRef.current = null;
+      }
     };
-  }, [active, awards, handleTabClick]);
+  }, [active, awards, handleTabClick, isInViewport]);
 
   // Animate cards on tab change
   useEffect(() => {
@@ -150,8 +190,54 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
     };
   }, [active]);
 
+  // Intersection Observer for autoplay and progress bar control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInViewport(true);
+            // Start autoplay when section enters viewport
+            if (swiper?.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Save progress before pausing
+            if (progressAnimationRef.current) {
+              const currentProgress = progressAnimationRef.current.progress();
+              if (currentProgress > 0 && currentProgress < 1) {
+                savedProgressRef.current[active] = currentProgress;
+              }
+              progressAnimationRef.current.pause();
+            }
+            setIsInViewport(false);
+            // Stop autoplay when section leaves viewport
+            if (swiper?.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [active]); // Re-run when active tab changes to observe new swiper instance
+
   return (
-    <div className="py-[72px] lg:pt-[140px] lg:pb-[100px]">
+    <div ref={sectionRef} className="py-[72px] lg:pt-[140px] lg:pb-[100px]">
       {title && (
         <FadeInReveal delay={0.6}>
           <H2 className="text-left lg:text-center container">{title}</H2>
@@ -199,7 +285,13 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       {awards?.[active]?.card?.length > 0 && (
         <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]">
           <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              // Don't start autoplay immediately - wait for viewport intersection
+              if (swiper.autoplay) {
+                swiper.autoplay.stop();
+              }
+            }}
             slidesPerView={1.5}
             spaceBetween={24}
             breakpoints={{
@@ -290,7 +382,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
                       typeof swiperRef.current?.params.slidesPerView ===
                         "number"
                         ? swiperRef.current.params.slidesPerView
-                        : 1
+                        : 1,
                     )
                     ? "pointer-events-none opacity-30"
                     : "cursor-pointer opacity-100"

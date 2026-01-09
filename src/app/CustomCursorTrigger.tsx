@@ -28,9 +28,8 @@ const CustomCursorTrigger: React.FC<CustomCursorTriggerProps> = ({
   };
 
   useEffect(() => {
-    return () => handleMouseLeave()
-  }, [])
-  
+    return () => handleMouseLeave();
+  }, []);
 
   return (
     <div

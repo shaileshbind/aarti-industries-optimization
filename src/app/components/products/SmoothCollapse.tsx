@@ -1,6 +1,5 @@
-
-import React, { useState, useRef, useEffect } from 'react';
-import type { ReactNode } from 'react';
+import React, { useState, useRef, useEffect } from "react";
+import type { ReactNode } from "react";
 
 interface SmoothCollapseProps {
   isOpen: boolean;
@@ -10,11 +9,11 @@ interface SmoothCollapseProps {
 }
 
 // SmoothCollapse component that handles dynamic height transitions
-const SmoothCollapse: React.FC<SmoothCollapseProps> = ({ 
-  isOpen, 
-  children, 
-  className = '', 
-  duration = 500 
+const SmoothCollapse: React.FC<SmoothCollapseProps> = ({
+  isOpen,
+  children,
+  className = "",
+  duration = 500,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -29,7 +28,7 @@ const SmoothCollapse: React.FC<SmoothCollapseProps> = ({
       if (isOpen) {
         // Measure the actual content height
         const contentHeight = contentRef.current!.scrollHeight;
-        
+
         // If we're transitioning from closed to open
         if (height === 0) {
           setIsAnimating(true);
@@ -97,13 +96,16 @@ const SmoothCollapse: React.FC<SmoothCollapseProps> = ({
       ref={containerRef}
       className={`overflow-hidden ${className}`}
       style={{
-        height: isOpen || isAnimating ? `${height}px` : '0px',
+        height: isOpen || isAnimating ? `${height}px` : "0px",
         transition: `height ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
       }}
     >
-         <div ref={contentRef} className='pb-[42px] font-normal text-[12px] md:text-[14px] leading-[140%] text-grey-400 font-roboto'>
-           {children}
-        </div>
+      <div
+        ref={contentRef}
+        className="pb-[42px] font-normal text-[12px] md:text-[14px] leading-[140%] text-grey-400 font-roboto"
+      >
+        {children}
+      </div>
     </div>
   );
 };

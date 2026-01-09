@@ -14,7 +14,7 @@ type PageProps = {
 export default async function page({ params }: PageProps) {
   const { investorTemplate } = await params;
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const templates = ["shareholder-information", "financial-information"];

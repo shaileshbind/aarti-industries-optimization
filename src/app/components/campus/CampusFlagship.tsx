@@ -11,6 +11,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { CampusFlagshipProps } from "@/app/types/campus.type";
+import type { Swiper as SwiperType } from "swiper";
 
 gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
@@ -31,6 +32,44 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   const slidesPerView = 1.5;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     function computeOffset() {
       if (!containerRef.current) return;
@@ -101,7 +140,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -111,7 +150,12 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   }, []);
 
   return (
-    <div ref={frameworkForgedRef}>
+    <div
+      ref={(el) => {
+        frameworkForgedRef.current = el;
+        sectionRef.current = el;
+      }}
+    >
       {sectionTitle && (
         <H2 className="container block lg:hidden mb-[24px] text-blue-200">
           {sectionTitle}
@@ -120,7 +164,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
 
       <div
         className={clsx(
-          `relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `
+          `relative w-full flex flex-col md:flex-row  px-[20px] lg:px-[unset] `,
         )}
       >
         <div
@@ -129,7 +173,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               layout === "imgLeftContentRight"
                 ? " order-2 lg:order-2 md:pl-10 lg:pl-20"
                 : "lg:ml-[60px] order-2 lg:order-1"
-            }`
+            }`,
           )}
         >
           {sectionTitle && (
@@ -150,7 +194,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                  className={`-rotate-180 swiper-button-prev-campus-flagship transition-opacity ${
                     activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -162,7 +206,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${
+                  className={`swiper-button-next-campus-flagship transition-opacity ${
                     activeIndex < card?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -181,10 +225,17 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   disableOnInteraction: false,
                 }}
                 navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
+                  nextEl: ".swiper-button-next-campus-flagship",
+                  prevEl: ".swiper-button-prev-campus-flagship",
                 }}
                 slidesOffsetAfter={offsetAfter}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  // Don't start autoplay immediately - wait for viewport intersection
+                  if (swiper.autoplay) {
+                    swiper.autoplay.stop();
+                  }
+                }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                 breakpoints={{
                   0: {
@@ -226,18 +277,22 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             </div>
           )}
 
-          {partnerWithUsCta?.title && (
-            <div className="mt-[40px]">
-              <Button
-                href={`${
-                  partnerWithUsCta?.hasExternalLink == "true"
-                    ? partnerWithUsCta?.externalLink
-                    : partnerWithUsCta?.link?.link
-                }`}
-                title={partnerWithUsCta?.title}
-              />
-            </div>
-          )}
+          {partnerWithUsCta?.title &&
+            (partnerWithUsCta?.hasExternalLink == "true"
+              ? partnerWithUsCta?.externalLink
+              : partnerWithUsCta?.link?.link) && (
+              <div className="mt-[40px]">
+                <Button
+                  href={`${
+                    partnerWithUsCta?.hasExternalLink == "true"
+                      ? partnerWithUsCta?.externalLink
+                      : partnerWithUsCta?.link?.link
+                  }`}
+                  title={partnerWithUsCta?.title}
+                  useTargetBlank={partnerWithUsCta?.hasExternalLink == "true"}
+                />
+              </div>
+            )}
         </div>
         <div
           className={clsx(
@@ -245,7 +300,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               layout === "imgLeftContentRight"
                 ? " order-1 lg:order-1"
                 : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px] "
-            }`
+            }`,
           )}
         >
           {layout === "imgLeftContentRight" ? (

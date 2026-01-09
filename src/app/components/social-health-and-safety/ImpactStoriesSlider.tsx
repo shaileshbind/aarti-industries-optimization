@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H3, SubH1, SubH2 } from "../Typography2";
 import { ImpactStoriesSliderProps } from "@/app/types/social-health-and-safety.type";
@@ -12,36 +12,89 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [active, setActive] = useState(0);
   const [accordionProgress, setAccordionProgress] = useState(0);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const accordionProgressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const AUTOPLAY_DURATION = 15000;
   const ACCORDION_AUTOPLAY_DURATION = 15000;
 
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Desktop slider progress
   useEffect(() => {
-    if (!stories || stories.length === 0) return;
+    if (!stories || stories.length === 0 || !isInViewport) {
+      // Clear intervals when out of viewport
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      if (autoplayTimeoutRef.current) {
+        clearTimeout(autoplayTimeoutRef.current);
+        autoplayTimeoutRef.current = null;
+      }
+      return;
+    }
 
     setProgress(0);
-    const progressInterval = setInterval(() => {
+    progressIntervalRef.current = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) return 100;
         return prev + 100 / (AUTOPLAY_DURATION / 50);
       });
     }, 50);
 
-    const autoplayTimeout = setTimeout(() => {
+    autoplayTimeoutRef.current = setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % stories.length);
     }, AUTOPLAY_DURATION);
 
     return () => {
-      clearInterval(progressInterval);
-      clearTimeout(autoplayTimeout);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      if (autoplayTimeoutRef.current) {
+        clearTimeout(autoplayTimeoutRef.current);
+        autoplayTimeoutRef.current = null;
+      }
     };
-  }, [activeIndex, stories]);
+  }, [activeIndex, stories, isInViewport]);
 
   useEffect(() => {
-    if (!stories || stories.length === 0) return;
+    if (!stories || stories.length === 0 || !isInViewport) {
+      // Clear interval when out of viewport
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
+      return;
+    }
 
     setAccordionProgress(0);
-    const progressInterval = setInterval(() => {
+    accordionProgressIntervalRef.current = setInterval(() => {
       setAccordionProgress((prev) => {
         if (prev >= 100) {
           // Move to next accordion when progress completes
@@ -55,9 +108,12 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     }, 50);
 
     return () => {
-      clearInterval(progressInterval);
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
     };
-  }, [active, stories]);
+  }, [active, stories, isInViewport]);
 
   // Early return if no stories (after hooks)
   if (!stories || stories.length === 0) {
@@ -80,7 +136,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
       }
     };
   return (
-    <>
+    <div ref={sectionRef}>
       <div className="hidden xl:block relative w-full h-[calc(100dvh-64px)] overflow-hidden bg-black mt-20 lg:mt-40">
         {/* Background Images with Fade Effect */}
         <div className="absolute inset-0">
@@ -278,7 +334,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -10,12 +10,12 @@ export async function GET() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch form categories: ${response.status} ${response.statusText}`
+        `Failed to fetch form categories: ${response.status} ${response.statusText}`,
       );
     }
 
@@ -26,7 +26,7 @@ export async function GET() {
         success: true,
         data: data?.data || [],
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("API Error:", error);
@@ -36,7 +36,7 @@ export async function GET() {
         success: false,
         data: [],
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -26,7 +26,7 @@ const BlackInfoSection = ({
   description,
   ctaTitle,
   ctaLink,
-  overlayClassName
+  overlayClassName,
 }: BlackInfoSectionProps) => {
   return (
     <>
@@ -52,7 +52,7 @@ const BlackInfoSection = ({
             <div
               className={clsx(
                 `absolute inset-0 bg-black/20 hidden lg:block `,
-                overlayClassName
+                overlayClassName,
               )}
             />
           </div>

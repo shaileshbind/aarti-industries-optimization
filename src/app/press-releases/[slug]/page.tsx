@@ -15,13 +15,14 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
   return (
     <section>
-       <SEO
+      <SEO
         title={seo?.title ?? "Press Releases"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
         canonical={
-          seo?.canonical ?? `https://www.aarti-industries.com/press-releases/${slug}`
+          seo?.canonical ??
+          `https://www.aarti-industries.com/press-releases/${slug}`
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

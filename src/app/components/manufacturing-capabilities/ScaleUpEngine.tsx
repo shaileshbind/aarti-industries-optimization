@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { H3, SubH3 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";
@@ -16,10 +16,47 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState<number>(0);
 
+  // Intersection Observer for autoplay control
+  useEffect(() => {
+    const section = sectionRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Start autoplay when section enters viewport
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+            }
+          } else {
+            // Stop autoplay when section leaves viewport
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="fluid-container lg:!mr-0">
+    <div ref={sectionRef} className="fluid-container lg:!mr-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-[60px]">
         {title && <H3 className="max-w-[424px]">{title}</H3>}
 
@@ -75,7 +112,13 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                 disableOnInteraction: false,
               }}
               speed={800}
-              onSwiper={(swiper) => (swiperRef.current = swiper)}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+                // Don't start autoplay immediately - wait for viewport intersection
+                if (swiper.autoplay) {
+                  swiper.autoplay.stop();
+                }
+              }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               className="w-full h-full cursor-grab"
             >
@@ -110,7 +153,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>
-                            )
+                            ),
                         )}
 
                       {item?.bottomDescription && (
@@ -120,18 +163,19 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       )}
 
                       {item?.ctaButton?.title &&
-                        (item?.ctaButton?.externalLink ||
-                          item?.ctaButton?.link?.link) && (
+                        (item?.ctaButton?.hasExternalLink == "true"
+                          ? item?.ctaButton?.externalLink
+                          : item?.ctaButton?.link?.link) && (
                           <Button
                             secondary
                             title={item?.ctaButton?.title}
                             href={
-                              item?.ctaButton?.hasExternalLink === "true"
+                              item?.ctaButton?.hasExternalLink == "true"
                                 ? item?.ctaButton?.externalLink
                                 : item?.ctaButton?.link?.link
                             }
                             useTargetBlank={
-                              item?.ctaButton?.hasExternalLink === "true"
+                              item?.ctaButton?.hasExternalLink == "true"
                             }
                           />
                         )}
@@ -230,7 +274,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       height={50}
                       className="absolute -top-[24px] z-10 right-[60px] w-[42px] lg:w-[50px]"
                     />
-<i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
+                    <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
                     <Image
                       src={item?.image?.url}
                       alt={item?.image?.alternativeText || "banner"}
@@ -267,10 +311,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                 <div className="flex flex-col gap-3 lg:gap-2 mt-3">
                   {item?.BulletPoints?.length > 0 &&
                     item?.BulletPoints?.map((items, index2) => (
-                      <div
-                        className="flex gap-2"
-                        key={"pointers_" + index2}
-                      >
+                      <div className="flex gap-2" key={"pointers_" + index2}>
                         <Image
                           src={"/images/star-orange.svg"}
                           alt={"star"}
@@ -291,8 +332,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   )}
 
                   {item?.ctaButton?.title &&
-                    (item?.ctaButton?.externalLink ||
-                      item?.ctaButton?.link?.link) && (
+                    (item?.ctaButton?.hasExternalLink == "true"
+                      ? item?.ctaButton?.externalLink
+                      : item?.ctaButton?.link?.link) && (
                       <Button
                         secondary
                         title={item?.ctaButton?.title}
@@ -300,6 +342,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                           item?.ctaButton?.hasExternalLink == "true"
                             ? item?.ctaButton?.externalLink
                             : item?.ctaButton?.link?.link
+                        }
+                        useTargetBlank={
+                          item?.ctaButton?.hasExternalLink == "true"
                         }
                       />
                     )}

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function Product() {
   const data = await getPageData("/pages/by-slug/product-listing");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
   const { section_one, product_categories } = data?.data;
   const seo = data?.seo;

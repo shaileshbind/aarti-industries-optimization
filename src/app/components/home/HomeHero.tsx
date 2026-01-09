@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useLayoutEffect } from "react";
+import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -12,7 +12,7 @@ import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
-import {useMediaQuery} from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");
@@ -53,16 +53,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const orangeBar = orangeScroll.current;
     const navTitle = navTitles.current;
 
-    // Set initial state - all stars are completely hidden
-    // gsap.set(star, {
-    //   opacity: 1,
-    //   scale: 200,
-    // });
     gsap.set(stars, {
       opacity: 0,
       scale: 0,
     });
-    // Set initial state for lines - hidden by scaling
     gsap.set(vLine, {
       scaleY: 0,
       transformOrigin: "top center",
@@ -71,7 +65,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       scaleX: 0,
       transformOrigin: "left center",
     });
-    // Set initial state for orange progress bar - hidden
     gsap.set(orangeBar, {
       opacity: 0,
     });
@@ -79,27 +72,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       opacity: 0,
       y: 20,
     });
-    // Set initial state for background
     gsap.set(wrapperRef.current, {
       opacity: 0,
       scale: 0.95,
     });
     const tl = gsap.timeline();
-    // Step 1: Background fades in
     tl.to(wrapperRef.current, {
       opacity: 1,
       scale: 1,
       duration: 0.5,
       ease: "power3.out",
     })
-      // .to(star, {
-      //   opacity: 1,
-      //   scale: 1,
-      //   duration: 0.6,
-      //   ease: "sine.out",
-      //   stagger: 0.2,
-      // })
-      // Step 2: Lines draw in
       .to(
         vLine,
         {
@@ -107,7 +90,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.1"
+        "-=0.1",
       )
       .to(
         hLine,
@@ -116,7 +99,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           duration: 0.8,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .to(
         orangeBar,
@@ -125,7 +108,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           duration: 0.1,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .to(
         stars,
@@ -136,7 +119,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           ease: "sine.out",
           stagger: 0.2,
         },
-        "<"
+        "<",
       )
       .to(
         navTitle,
@@ -146,24 +129,29 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           duration: 0.4,
           ease: "power2.out",
         },
-        "<"
+        "<",
       );
   }, []);
 
-  // Handle manual tab click
   const handleTabClick = (index: number) => {
     if (swiperRef.current) {
       swiperRef.current.autoplay.stop();
 
-      // Update both ref and state immediately
       activeIndexRef.current = index;
       setActive(index);
       resetProgressBar();
       controlVideos(index);
 
-      // Update autoplay delay based on target slide
-      const delay = index === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
-      if (swiperRef.current.params.autoplay && typeof swiperRef.current.params.autoplay === 'object') {
+      const delay =
+        index === 0 &&
+        data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
+        !isMobile
+          ? 30000
+          : 5000;
+      if (
+        swiperRef.current.params.autoplay &&
+        typeof swiperRef.current.params.autoplay === "object"
+      ) {
         swiperRef.current.params.autoplay.delay = delay;
       }
 
@@ -177,7 +165,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       }, 100);
     }
   };
-  // Reset progress bar
+
   const resetProgressBar = () => {
     const bar = progressBarRef.current;
     if (!bar) return;
@@ -186,47 +174,82 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     bar.style.transform = "scaleX(0)";
     void bar.offsetWidth;
   };
-  // Start progress bar
+
   const startProgressBar = () => {
     const bar = progressBarRef.current;
     if (!bar) return;
 
-    const delay = activeIndexRef.current === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
+    const delay =
+      activeIndexRef.current === 0 &&
+      data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
+      !isMobile
+        ? 30000
+        : 5000;
     bar.style.transition = `transform ${delay}ms linear`;
     bar.style.transform = "scaleX(1)";
   };
 
-  // Control video playback based on active slide
   const controlVideos = (activeIndex: number) => {
     videoRefs.current.forEach((video, index) => {
       if (video) {
         if (index === activeIndex) {
-          video.play().catch(() => {
-            // Handle play promise rejection silently
-          });
+          video.play().catch(() => {});
         } else {
           video.pause();
-          video.currentTime = 0; // Reset to start
+          video.currentTime = 0;
         }
       }
     });
   };
+
+  useEffect(() => {
+    const section = wrapperRef.current;
+    const swiper = swiperRef.current;
+
+    if (!section || !swiper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (swiper.autoplay && !swiper.autoplay.running) {
+              swiper.autoplay.start();
+              startProgressBar();
+            }
+          } else {
+            if (swiper.autoplay && swiper.autoplay.running) {
+              swiper.autoplay.stop();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div
       ref={wrapperRef}
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
     >
-      
       {/* Conditional overlay - lighter for video slides on desktop */}
       {(() => {
         const currentSlide = data?.banner?.[active];
         const hasVideo = currentSlide?.card?.[0]?.bannerVideo?.url && !isMobile;
         return (
-          <div 
+          <div
             className={`absolute inset-0 z-[1] transition-opacity duration-500 ${
-              hasVideo ? 'bg-black/5' : 'bg-black/20'
-            }`} 
+              hasVideo ? "bg-black/5" : "bg-black/20"
+            }`}
           />
         );
       })()}
@@ -234,8 +257,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         <Swiper
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
+            if (swiper.autoplay) {
+              swiper.autoplay.stop();
+            }
             setTimeout(() => {
-              startProgressBar();
               controlVideos(activeIndexRef.current);
             }, 100);
           }}
@@ -248,12 +273,19 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             setActive(realIndex);
             resetProgressBar();
             controlVideos(realIndex);
-            
-            // Update autoplay delay based on current slide
-            const delay = realIndex === 0 && data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000;
+
+            const delay =
+              realIndex === 0 &&
+              data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
+              !isMobile
+                ? 30000
+                : 5000;
             if (swiperRef.current && swiperRef.current.autoplay) {
               swiperRef.current.autoplay.stop();
-              if (swiperRef.current.params.autoplay && typeof swiperRef.current.params.autoplay === 'object') {
+              if (
+                swiperRef.current.params.autoplay &&
+                typeof swiperRef.current.params.autoplay === "object"
+              ) {
                 swiperRef.current.params.autoplay.delay = delay;
               }
             }
@@ -283,7 +315,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           loop={true}
           speed={800}
           autoplay={{
-            delay: data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile ? 30000 : 5000,
+            delay:
+              data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile
+                ? 30000
+                : 5000,
             disableOnInteraction: false,
             pauseOnMouseEnter: false,
             waitForTransition: true,
@@ -297,7 +332,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
-              <div className="w-full min-h-screen md:min-h-[80vh] lg:min-h-screen relative overflow-hidden">
+              <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
                 {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -310,7 +345,9 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 {items?.card?.[0]?.mobImage?.url && isTablet && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
-                    alt={items?.card?.[0]?.mobImage?.alternativeText || "banner"}
+                    alt={
+                      items?.card?.[0]?.mobImage?.alternativeText || "banner"
+                    }
                     fill
                     priority
                     className="block md:hidden object-cover"
@@ -337,38 +374,49 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.60)_0%,rgba(0,0,0,0)_80%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
                 )}
                 {/* Content box */}
-                { items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
                   <></>
                 ) : (
-                
                   <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">
-                    <FadeInReveal delay={0.5}> 
-                    <div className="fluid-container">
-                      {items?.card?.[0]?.title &&
-                        (index === 0 ? (
-                          <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                            {items.card[0].title}
-                          </H1>
-                        ) : (
-                          <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                            {items.card[0].title}
-                          </h2>
-                        ))}
-                      {items?.card?.[0]?.description && (
-                        <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
-                          {items?.card?.[0]?.description}
-                        </BodyText2>
-                      )}
-                      {items?.card?.[0]?.ctaButton?.title && (
-                        <Button
-                          href={items?.card?.[0]?.ctaButton?.hasExternalLink == "true" ? items?.card?.[0]?.ctaButton?.externalLink : items?.card?.[0]?.ctaButton?.link?.link}
-                          title={items?.card?.[0]?.ctaButton?.title}
-                        />
-                      )}
-                    </div>
+                    <FadeInReveal delay={0.5}>
+                      <div className="fluid-container">
+                        {items?.card?.[0]?.title &&
+                          (index === 0 ? (
+                            <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                              {items.card[0].title}
+                            </H1>
+                          ) : (
+                            <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                              {items.card[0].title}
+                            </h2>
+                          ))}
+                        {items?.card?.[0]?.description && (
+                          <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
+                            {items?.card?.[0]?.description}
+                          </BodyText2>
+                        )}
+                        {items?.card?.[0]?.ctaButton?.title &&
+                          (items?.card?.[0]?.ctaButton?.hasExternalLink ==
+                          "true"
+                            ? items?.card?.[0]?.ctaButton?.externalLink
+                            : items?.card?.[0]?.ctaButton?.link?.link) && (
+                            <Button
+                              href={
+                                items?.card?.[0]?.ctaButton?.hasExternalLink ==
+                                "true"
+                                  ? items?.card?.[0]?.ctaButton?.externalLink
+                                  : items?.card?.[0]?.ctaButton?.link?.link
+                              }
+                              title={items?.card?.[0]?.ctaButton?.title}
+                              useTargetBlank={
+                                items?.card?.[0]?.ctaButton?.hasExternalLink ==
+                                "true"
+                              }
+                            />
+                          )}
+                      </div>
                     </FadeInReveal>
                   </div>
-                
                 )}
               </div>
             </SwiperSlide>
@@ -387,7 +435,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       />
       <div
         ref={starRef}
-        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60 scale-[200] "
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60  "
       >
         <Image
           src="/images/home/star-white.svg"
@@ -431,7 +479,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             style={{
               width: "100%",
               transform: "scaleX(0)",
-              // transition: "transform 5s linear",
             }}
           />
         </div>

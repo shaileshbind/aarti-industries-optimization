@@ -12,7 +12,7 @@ export default async function page() {
   const data = await getPageData("/pages/by-slug/media-kit");
 
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const { section_one, section_two, section_three } = data?.data;
@@ -25,7 +25,9 @@ export default async function page() {
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/media-kit"}
+        canonical={
+          seo?.canonical ?? "https://www.aarti-industries.com/media-kit"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}

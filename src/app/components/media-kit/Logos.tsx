@@ -8,7 +8,7 @@ export default function Logos({ data }: LogosProps) {
   const handleDownload = async (
     e: React.MouseEvent,
     downloadUrl: string,
-    filename: string
+    filename: string,
   ) => {
     e.preventDefault();
 
@@ -20,7 +20,7 @@ export default function Logos({ data }: LogosProps) {
         ? `&filename=${encodeURIComponent(filename)}`
         : "";
       const proxyUrl = `/api/download?url=${encodeURIComponent(
-        downloadUrl
+        downloadUrl,
       )}${filenameParam}`;
       const response = await fetch(proxyUrl);
 
@@ -81,7 +81,7 @@ export default function Logos({ data }: LogosProps) {
             handleDownload(
               e,
               sectionImages?.[0]?.imageCards?.[0]?.file?.url,
-              "Logo Kit"
+              "Logo Kit",
             )
           }
         >

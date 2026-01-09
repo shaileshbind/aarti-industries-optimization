@@ -39,15 +39,20 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                 {items?.name && (
                   <SubH3 className="mt-[10px]">{items?.name}</SubH3>
                 )}
-                <BodyText3 className="mt-[8px] !text-[14px]">
-                  Company Secretary & Compliance Officer
-                </BodyText3>
+              {items?.designation && <BodyText3 className="mt-[8px] !text-[14px]">
+                  {items?.designation}
+                </BodyText3>}
                 {items?.address && (
                   <BodyText3 className="mt-[6px] !text-[14px]">
                     {items?.address}
                   </BodyText3>
                 )}
-                <div className={clsx("grid gap-x-[5px] items-start", items?.fax ? "lg:grid-cols-2" : "lg:grid-cols-1" )}>
+                <div
+                  className={clsx(
+                    "grid gap-x-[5px] items-start",
+                    items?.fax ? "lg:grid-cols-2" : "lg:grid-cols-1",
+                  )}
+                >
                   {items?.mobile && (
                     <a
                       href={`tel:${items?.mobile}`}
@@ -105,7 +110,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                   {items?.email && (
                     <a
                       href={`mailto:${items?.email}`}
-                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline"
+                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline w-full"
                     >
                       <Image
                         src="/images/mail.svg"
@@ -114,7 +119,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                         height={16}
                         className="h-4 w-4 object-contain shrink-0 mt-[5px]"
                       />
-                      <BodyText2 className="!text-[14px] lg:!text-[16px]">
+                      <BodyText2 className="!text-[14px] lg:!text-[16px] break-all w-full">
                         {items?.email}
                       </BodyText2>
                     </a>
@@ -125,7 +130,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
           })}
         </div>
       </div>
-      </FadeInReveal>
+    </FadeInReveal>
   );
 };
 

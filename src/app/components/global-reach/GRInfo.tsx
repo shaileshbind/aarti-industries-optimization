@@ -42,7 +42,7 @@ const GRInfo = ({ data }: GRInfoProps) => {
               end: "bottom 65%",
               scrub: true,
             },
-          }
+          },
         );
 
         gsap.set(statBoxes, { y: 80, opacity: 0 });
@@ -77,7 +77,10 @@ const GRInfo = ({ data }: GRInfoProps) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto mb-[110px] md:mb-[70px] mt-[50px] lg:mt-[80px]">
+      <div
+        ref={wrapperRef}
+        className="container mx-auto mb-[110px] md:mb-[70px] mt-[50px] lg:mt-[80px]"
+      >
         {/* Top Line */}
         <div
           ref={topLineRef}

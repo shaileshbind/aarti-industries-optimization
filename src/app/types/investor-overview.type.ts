@@ -65,6 +65,7 @@ export type InvestorContactProps = {
       email?: string;
       fax?: string;
       website?: string;
+      designation?:string;
     }[];
   };
 };
@@ -78,8 +79,7 @@ export type InvestorHeadlines = {
         id?: number;
         heading?: string;
         date?: string;
-        slug?:string;
-        // link?: string;
+        slug?: string;
         file?: {
           id?: number;
           url?: string;
@@ -134,7 +134,7 @@ export type InvestorExpProps = {
       id?: number;
       title?: string;
       ctaButton?: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     }[];
   };
 };

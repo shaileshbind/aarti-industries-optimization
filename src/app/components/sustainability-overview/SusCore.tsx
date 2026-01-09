@@ -42,7 +42,7 @@ const SusCore = ({ data }: SusCoreData) => {
               end: "bottom 65%",
               scrub: true,
             },
-          }
+          },
         );
 
         gsap.set(statBoxes, { y: 80, opacity: 0 });
@@ -77,7 +77,10 @@ const SusCore = ({ data }: SusCoreData) => {
 
   return (
     <div className="w-full">
-      <div ref={wrapperRef} className="container mx-auto mb-[72px] lg:mb-[120px] mt-[50px]">
+      <div
+        ref={wrapperRef}
+        className="container mx-auto mb-[72px] lg:mb-[120px] mt-[50px]"
+      >
         {/* Top Line */}
         <div
           ref={topLineRef}

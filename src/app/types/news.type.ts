@@ -1,4 +1,4 @@
-import { ImageProps} from "./global.type";
+import { ImageProps } from "./global.type";
 
 export type NewsBannerProps = {
   data: {

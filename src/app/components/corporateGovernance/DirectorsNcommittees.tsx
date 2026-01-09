@@ -21,22 +21,32 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Audit Committee",
       members: [
         {
-          name: "Shri Lalitkumar S. Naik",
+          name: "Ashok Kumar Barat",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Shri Shekhar S. Khanolkar",
+          name: "Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Lalitkumar Shantaram Naik",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Shri Nikhil J. Bhatia",
+          name: "Shekhar Shreedhar Khanolkar",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Shri Ashok Kumar Barat",
+          name: "Nikhil Jaysinh Bhatia",
           role1: "Independent Director",
           role2: null,
         },
@@ -46,17 +56,22 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Nomination & Remuneration Committee",
       members: [
         {
-          name: "Prof. Aniruddha B. Pandit",
+          name: "Aniruddha Bhalchandra Pandit",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Shri Belur K. Sethuram",
+          name: "Rajendra Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Belur Krishna Murthy Sethuram",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Smt. Rupa Devi Singh",
+          name: "Rupa Devi Singh",
           role1: "Independent Director",
           role2: null,
         },
@@ -66,13 +81,18 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "CSR Committee",
       members: [
         {
-          name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          name: "Hetal Gogri Gala",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
         {
-          name: "Smt. Rupa Devi Singh",
+          name: "Rupa Devi Singh",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
           role2: null,
         },
       ],
@@ -81,13 +101,28 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Stakeholders’ Relationship Committee",
       members: [
         {
-          name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          name: "Hetal Gogri Gala",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
         {
-          name: "Prof. Aniruddha B. Pandit",
+          name: "Aniruddha Bhalchandra Pandit",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Manoj Mulji Chheda",
+          role1: "Executive Directors",
           role2: null,
         },
       ],
@@ -96,13 +131,43 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Risk Management Committee",
       members: [
         {
-          name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          name: "Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
         },
         {
-          name: "Shri Belur K. Sethuram",
+          name: "Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Hetal Gogri Gala",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
+        },
+        {
+          name: "Renil Rajendra Gogri",
+          role1: "Vice Chairman and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Suyog Kalyanji Kotecha",
+          role1: "CEO and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Belur Krishna Murthy Sethuram",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
+          role2: null,
+        },
+        {
+          name: "Manoj Mulji Chheda",
+          role1: "Executive Directors",
           role2: null,
         },
       ],
@@ -111,9 +176,39 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Finance & Investment Committee",
       members: [
         {
-          name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          name: "Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Renil Rajendra Gogri",
+          role1: "Vice Chairman and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Manoj Mulji Chheda",
+          role1: "Executive Directors",
+          role2: null,
+        },
+        {
+          name: "Suyog Kalyanji Kotecha",
+          role1: "CEO and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
+          role2: null,
+        },
+        {
+          name: "Hetal Gogri Gala",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
       ],
     },
@@ -201,7 +296,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -291,7 +386,8 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
                       <div>
                         {member?.role1 && (
                           <BodyText3 className="py-1 text-[#9997A2]">
-                            {member?.role1} {member?.role2 && <span>,</span>}{" "}
+                            {member?.role1}{" "}
+                            {member?.role2 && <span>,</span>}{" "}
                           </BodyText3>
                         )}
 

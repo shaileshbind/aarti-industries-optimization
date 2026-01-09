@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {  Cta,  } from "../Typography2";
+import { Cta } from "../Typography2";
 import Image from "next/image";
 import { InvestorsBlueProps } from "@/app/types/investor-overview.type";
 import { FadeInReveal } from "../ScrollReveal";
@@ -9,8 +9,8 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   return (
     <div className="bg-blue-200">
       <div className="container">
-      <FadeInReveal className="py-[24px] lg:py-[40px] grid xl:grid-cols-4 gap-y-[40px] gap-x-[100px]">
-        {/* <div className="grid gap-x-[10px] lg:gap-x-[50px] gap-y-[16px] lg:gap-y-[10px] xl:justify-between "> */}
+        <FadeInReveal className="py-[24px] lg:py-[40px] grid xl:grid-cols-4 gap-y-[40px] gap-x-[100px]">
+          {/* <div className="grid gap-x-[10px] lg:gap-x-[50px] gap-y-[16px] lg:gap-y-[10px] xl:justify-between "> */}
           {reports?.map((items) => {
             const url = items?.file?.url ?? items?.link;
             return (
@@ -46,8 +46,8 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
               </div>
             );
           })}
-        {/* </div> */}
-        {/* <div className="flex gap-x-[40px] lg:gap-x-[50px] justify-between ">
+          {/* </div> */}
+          {/* <div className="flex gap-x-[40px] lg:gap-x-[50px] justify-between ">
           <div>
             <BodyText2 className="text-white">BSE</BodyText2>
             <div className="flex gap-x-[10px] items-end">
@@ -70,7 +70,7 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
             <BodyText2 className="text-white ">-11.50 (-0.34%)</BodyText2>
           </div>
         </div> */}
-      </FadeInReveal>
+        </FadeInReveal>
       </div>
     </div>
   );
