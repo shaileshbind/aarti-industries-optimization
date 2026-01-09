@@ -9,14 +9,7 @@ import FaqAccordion from "../FaqAccordian";
 import clsxN from "../../../../utils/clsxN";
 import Button from "../Button";
 import { EnvRespChemProps } from "@/app/types/environment.type";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInReveal } from "../ScrollReveal";
-
-// Register ScrollTrigger
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 const EnvResp = ({ data }: EnvRespChemProps) => {
   const { cardWithCategory, title } = data;
@@ -29,9 +22,6 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const pausedAtRef = useRef<number>(0);
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
   const startProgress = (resumeFrom: number = 0) => {
     // Cancel any existing animation
@@ -101,60 +91,6 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     };
   }, [active, cardWithCategory?.length]);
 
-  // Setup ScrollTrigger pin for sticky tabs (desktop only)
-  useEffect(() => {
-    if (
-      !stickyRef.current ||
-      !containerRef.current ||
-      !cardWithCategory?.length
-    )
-      return;
-
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 1280px)", () => {
-      // Only create ScrollTrigger on xl screens (desktop)
-      const scrollTrigger = ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top+=100",
-        end: () => {
-          if (!containerRef.current || !stickyRef.current) return "+=0";
-          const containerHeight = containerRef.current.offsetHeight;
-          const stickyHeight = stickyRef.current.offsetHeight;
-          return `+=${Math.max(0, containerHeight - stickyHeight - 100)}`;
-        },
-        pin: stickyRef.current,
-        pinSpacing: false,
-      });
-
-      scrollTriggerRef.current = scrollTrigger;
-
-      // Refresh ScrollTrigger after a short delay to ensure layout is complete
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 100);
-
-      return () => {
-        scrollTrigger.kill();
-        scrollTriggerRef.current = null;
-      };
-    });
-
-    return () => {
-      mm.revert();
-    };
-  }, [cardWithCategory]);
-
-  // Refresh ScrollTrigger when showMore state changes (content expands/collapses)
-  useEffect(() => {
-    if (scrollTriggerRef.current) {
-      // Use setTimeout to ensure DOM has updated before refreshing
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 50);
-    }
-  }, [showMore]);
-
   // Handle tab click
   const handleTabClick = (index: number) => {
     if (index === active) return;
@@ -192,12 +128,11 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       <H2 className="max-w-[760px] ">{title}</H2>
       {/* Desktop */}
       <div
-        ref={containerRef}
         className="my-[70px] xl:my-[120px] hidden xl:grid grid-cols-[25%_1fr] gap-x-[60px] relative items-start"
       >
         {/* Tabs */}
         {cardWithCategory?.length > 0 && (
-          <div ref={stickyRef} className="mt-[14px]">
+          <div className="mt-[14px]">
             {cardWithCategory?.map((item, index: number) => (
               <div
                 key={item.id}
@@ -282,10 +217,6 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
               <div
                 onClick={() => {
                   setshowMore(true);
-                  // Refresh ScrollTrigger after content expands
-                  setTimeout(() => {
-                    ScrollTrigger.refresh();
-                  }, 100);
                 }}
                 className="mt-2 cursor-pointer inline-flex"
               >

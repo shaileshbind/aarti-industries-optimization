@@ -213,8 +213,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               height: "205px",
               left: "52%",
               top: "50%",
-              y: "-50%",
-              x: "-50%",
+              
             },
             {
               width:
@@ -231,7 +230,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     : "100vh",
               left: "0%",
               top: "50%",
-              y: "-50%",
+               
               x: "0%",
               duration: 1,
             },
