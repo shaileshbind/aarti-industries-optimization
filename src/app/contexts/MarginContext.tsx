@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface MarginContextType {
   marginBottom: number;
@@ -30,4 +30,3 @@ export const MarginProvider = ({ children }: MarginProviderProps) => {
     </MarginContext.Provider>
   );
 };
-

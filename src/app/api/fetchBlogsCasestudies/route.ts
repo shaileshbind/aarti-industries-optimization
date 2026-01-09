@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     // Build the API URL
     const apiUrl = new URL(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/blog-case-studies`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/blog-case-studies`,
     );
 
     // Add query parameters
@@ -30,35 +30,35 @@ export async function GET(request: NextRequest) {
     // Populate thumbnail images
     apiUrl.searchParams.append(
       "populate[thumbnailImageDesktop][fields][0]",
-      "url"
+      "url",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageDesktop][fields][1]",
-      "alternativeText"
+      "alternativeText",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageDesktop][fields][2]",
-      "mime"
+      "mime",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageDesktop][fields][3]",
-      "ext"
+      "ext",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageMobile][fields][0]",
-      "url"
+      "url",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageMobile][fields][1]",
-      "alternativeText"
+      "alternativeText",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageMobile][fields][2]",
-      "mime"
+      "mime",
     );
     apiUrl.searchParams.append(
       "populate[thumbnailImageMobile][fields][3]",
-      "ext"
+      "ext",
     );
 
     // Add fields
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
         error: "Failed to fetch blog data",
         message: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

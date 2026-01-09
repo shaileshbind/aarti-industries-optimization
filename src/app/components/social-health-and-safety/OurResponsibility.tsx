@@ -11,23 +11,30 @@ const OurResponsibility: React.FC<OurResponsibilityProps> = ({ data }) => {
       <div className="max-w-[unset] lg:max-w-[1320px] px-[20px] lg:mx-auto">
         {title && (
           <FadeInReveal>
-            <H2 className="lg:max-w-[650px] text-left mx-[unset]">
-              {title}
-            </H2>
+            <H2 className="lg:max-w-[650px] text-left mx-[unset]">{title}</H2>
           </FadeInReveal>
         )}
         <div className="mt-[28px] pl-[20px] lg:pl-[unset] lg:mt-[60px] grid lg:flex gap-y-[16px] gap-x-[100px] ml-[unset] lg:ml-[130px] max-w-[unset] lg:max-w-[1000px]">
           {leftSection && (
             <FadeInReveal>
-              <SubH2 className="relative before:content-[''] before:absolute before:top-2 before:mr-2 before:right-full before:w-[14px] before:h-[14px] before:bg-[url('/images/star-orange.svg')] before:bg-no-repeat before:bg-center before:bg-contain"> {leftSection[0].title}</SubH2>
-              <BodyText1 className="mt-4">{leftSection[0].description}</BodyText1>
+              <SubH2 className="relative before:content-[''] before:absolute before:top-2 before:mr-2 before:right-full before:w-[14px] before:h-[14px] before:bg-[url('/images/star-orange.svg')] before:bg-no-repeat before:bg-center before:bg-contain">
+                {" "}
+                {leftSection[0].title}
+              </SubH2>
+              <BodyText1 className="mt-4">
+                {leftSection[0].description}
+              </BodyText1>
             </FadeInReveal>
           )}
 
           {rightSection && (
             <FadeInReveal>
-              <SubH2  className="relative before:content-[''] before:absolute before:top-2 before:mr-2 before:right-full before:w-[14px] before:h-[14px] before:bg-[url('/images/star-orange.svg')] before:bg-no-repeat before:bg-center before:bg-contain">{rightSection[0].title}</SubH2>
-              <BodyText1 className="mt-4">{rightSection[0].description}</BodyText1>
+              <SubH2 className="relative before:content-[''] before:absolute before:top-2 before:mr-2 before:right-full before:w-[14px] before:h-[14px] before:bg-[url('/images/star-orange.svg')] before:bg-no-repeat before:bg-center before:bg-contain">
+                {rightSection[0].title}
+              </SubH2>
+              <BodyText1 className="mt-4">
+                {rightSection[0].description}
+              </BodyText1>
             </FadeInReveal>
           )}
         </div>

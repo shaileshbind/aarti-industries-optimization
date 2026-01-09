@@ -33,7 +33,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [showPopup, setshowPopup] = useState<boolean>(false);
   const [popupDetails, setpopupDetails] = useState<ManagementBoardProps | null>(
-    null
+    null,
   );
   const [hoveredIndex, sethoveredIndex] = useState<number | null>(null);
   const [isInViewport, setIsInViewport] = useState(false);
@@ -52,7 +52,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -153,7 +153,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                           "transition-all duration-300",
                           hoveredIndex === index || hoveredIndex === null
                             ? "opacity-100"
-                            : "opacity-40"
+                            : "opacity-40",
                         )}
                       >
                         {item?.image?.url && (
@@ -177,7 +177,6 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                           </BodyText2>
                         )}
 
-                        {/* <Button title="Read Bio" useTargetBlank={false} /> */}
                         <button
                           className={`relative w-fit py-[14px] px-[22px] rounded-[6px] cursor-pointer
               bg-gradient-orange-1 text-white text-[16px] font-normal leading-[100%]
@@ -199,7 +198,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
         <div
           className={clsx(
             `w-full`,
-            management_boards?.length > 4 ? "mt-[40px]" : "mt-[40px] lg:mt-0"
+            management_boards?.length > 4 ? "mt-[40px]" : "mt-[40px] lg:mt-0",
           )}
         >
           <div className="mx-[20px] lg:mx-[60px] flex items-center lg:gap-x-[32px]">
@@ -240,7 +239,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                         typeof swiperRef.current?.params.slidesPerView ===
                           "number"
                           ? swiperRef.current.params.slidesPerView
-                          : 1
+                          : 1,
                       )
                       ? "pointer-events-none opacity-30"
                       : "cursor-pointer opacity-100"

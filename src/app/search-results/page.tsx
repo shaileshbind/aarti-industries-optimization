@@ -1,5 +1,4 @@
 import { getPageData } from "@/_lib/pageData.fetch";
-// import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
 import SearchResults from "../components/search-results/SearchResults";
 

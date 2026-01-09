@@ -54,7 +54,14 @@ export type UpcomingEventsResponse = {
 
 export type EventsListingProps = {
   pastEvent?: boolean;
-  upcomingEventsData: UpcomingEventData[] | UpcomingEventsResponse | { pressData?: UpcomingEventsResponse['pressData']; data?: UpcomingEventData[] } | null;
+  upcomingEventsData:
+    | UpcomingEventData[]
+    | UpcomingEventsResponse
+    | {
+        pressData?: UpcomingEventsResponse["pressData"];
+        data?: UpcomingEventData[];
+      }
+    | null;
   data: {
     title: string;
     events: {
@@ -67,7 +74,7 @@ export type EventsListingProps = {
       ctaButton?: ButtonProps;
     }[];
   };
-};  
+};
 
 export type PodcastsResponse = {
   data: {
@@ -103,7 +110,7 @@ export type PodcastApiItem = {
   // ctaTitle?: string;
   // ctaLink?: string | null;
   ctaButton?: ButtonProps;
-    externalLink?: string | null;
+  externalLink?: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

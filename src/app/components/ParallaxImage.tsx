@@ -38,11 +38,11 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
           ease: "none",
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top bottom",   // when image enters viewport
-            end: "bottom top",     // when image leaves viewport
+            start: "top bottom", // when image enters viewport
+            end: "bottom top", // when image leaves viewport
             scrub: true,
           },
-        }
+        },
       );
     }, containerRef);
 
@@ -56,13 +56,7 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
       style={{ willChange: "transform" }}
     >
       <div ref={imgRef} className="w-full h-full relative">
-        <Image
-          src={src}
-          alt={alt}
-          className="object-cover"
-          priority
-          fill
-        />
+        <Image src={src} alt={alt} className="object-cover" priority fill />
       </div>
     </div>
   );

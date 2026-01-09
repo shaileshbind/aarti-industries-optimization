@@ -34,7 +34,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const activeButton = tabRefs.current[activeTab];
     if (!activeButton || !containerRef.current) {
       setIndicator((prev) =>
-        prev.visible ? { ...prev, visible: false } : prev
+        prev.visible ? { ...prev, visible: false } : prev,
       );
       return;
     }
@@ -75,7 +75,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -127,84 +127,83 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   }, [activeTab]);
 
   const currentCard = card[activeTab];
-  // console.log("sdwdf", card);
   const postsContent = Array.isArray(currentCard?.postContent)
     ? currentCard.postContent
     : currentCard?.postContent
-    ? [currentCard.postContent]
-    : [];
+      ? [currentCard.postContent]
+      : [];
   const postsCount = postsContent.length;
-
-  // const showProgressBar = isMobile ? postsCount > 1 : postsCount > 4;
 
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
       <FadeInReveal delay={0.6}>
-      <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
-        {sectionTitle && (
-          <div className="max-w-[100%] md:max-w-fit">
-            <H2 className="text-blue-200">{sectionTitle}</H2>
-          </div>
-        )}
+        <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
+          {sectionTitle && (
+            <div className="max-w-[100%] md:max-w-fit">
+              <H2 className="text-blue-200">{sectionTitle}</H2>
+            </div>
+          )}
 
-        <div className="hidden lg:block">
-          <Button
-            title={currentCard?.ctaButton?.title || ""}
-            href={
-              currentCard?.ctaButton?.hasExternalLink == "true"
-                ? currentCard?.ctaButton?.externalLink
-                : currentCard?.ctaButton?.link?.link
-            }
-            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
-          />
+          <div className="hidden lg:block">
+            <Button
+              title={currentCard?.ctaButton?.title || ""}
+              href={
+                currentCard?.ctaButton?.hasExternalLink == "true"
+                  ? currentCard?.ctaButton?.externalLink
+                  : currentCard?.ctaButton?.link?.link
+              }
+              useTargetBlank={
+                currentCard?.ctaButton?.hasExternalLink === "true"
+              }
+            />
+          </div>
         </div>
-      </div>
       </FadeInReveal>
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
         <FadeInReveal delay={0.6}>
-        <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px] overflow-x-auto">
-          <div className=" w-full ">
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
-              <div
-                ref={containerRef}
-                className="relative flex gap-x-[5px] md:gap-x-[10px] z-10 px-1 w-max"
-              >
+          <div className="max-w-[100%] md:max-w-fit px-[20px] lg:px-[60px] overflow-x-auto">
+            <div className=" w-full ">
+              <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
                 <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: indicator.visible ? indicator.left : 0,
-                    top: 0,
-                    height: "100%",
-                    borderRadius: 9999,
-                    background: "#F97316",
-                    width: indicator.visible ? indicator.width : 0,
-                    transition:
-                      "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)",
-                    zIndex: 0,
-                  }}
-                />
-                {card.map((item, index) => (
+                  ref={containerRef}
+                  className="relative flex gap-x-[5px] md:gap-x-[10px] z-10 px-1 w-max"
+                >
                   <div
-                    key={item.id || index}
-                    ref={(el) => {
-                      if (el) {
-                        tabRefs.current[index] = el;
-                      }
+                    aria-hidden="true"
+                    style={{
+                      position: "absolute",
+                      left: indicator.visible ? indicator.left : 0,
+                      top: 0,
+                      height: "100%",
+                      borderRadius: 9999,
+                      background: "#F97316",
+                      width: indicator.visible ? indicator.width : 0,
+                      transition:
+                        "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)",
+                      zIndex: 0,
                     }}
-                    onClick={() => handleTabClick(index)}
-                    className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
-                      activeTab === index ? "text-white" : "hover:bg-grey-200"
-                    }`}
-                  >
-                    {item.category}
-                  </div>
-                ))}
+                  />
+                  {card.map((item, index) => (
+                    <div
+                      key={item.id || index}
+                      ref={(el) => {
+                        if (el) {
+                          tabRefs.current[index] = el;
+                        }
+                      }}
+                      onClick={() => handleTabClick(index)}
+                      className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
+                        activeTab === index ? "text-white" : "hover:bg-grey-200"
+                      }`}
+                    >
+                      {item.category}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </FadeInReveal>
         {postsCount > 0 && (
           <FadeInReveal delay={0.6}>
@@ -224,12 +223,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   sensitivity: 1,
                   releaseOnEdges: true,
                 }}
-                pagination={
-                   
-                        {el: ".home-latest-at-swiper",
-                        type: "progressbar",
-                      }
-                }
+                pagination={{
+                  el: ".home-latest-at-swiper",
+                  type: "progressbar",
+                }}
                 className=" w-full !px-[20px] lg:!px-[60px]"
               >
                 {postsContent.map((item, index) => (
@@ -247,11 +244,9 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ))}
               </Swiper>
             </div>
-            {/* {showProgressBar && ( */}
-              <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
-                <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
-              </div>
-            {/* )} */}
+            <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
+              <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+            </div>
           </FadeInReveal>
         )}
 
@@ -263,7 +258,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ? currentCard?.ctaButton?.externalLink
                 : currentCard?.ctaButton?.link?.link
             }
-            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true" }
+            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true"}
           />
         </div>
       </div>

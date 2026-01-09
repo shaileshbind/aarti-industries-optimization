@@ -17,7 +17,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
   const [expanded, setExpanded] = useState<number>(0);
   const [activeImage, setactiveImage] = useState<string>(
-    content[0]?.image?.url
+    content[0]?.image?.url,
   );
   const [progressWidth, setProgressWidth] = useState<number>(0);
   const [imageFade, setImageFade] = useState<boolean>(true);
@@ -239,7 +239,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
                                 />
                                 <BodyText2>{listItem?.title}</BodyText2>
                               </div>
-                            )
+                            ),
                         )}
                       </div>
                     )}

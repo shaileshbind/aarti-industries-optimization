@@ -14,16 +14,21 @@ export default function WorksWithPartners({
   const { sectionTitle, card, ctaTitle, ctaLink } = data;
 
   const [activeCard, setActiveCard] = useState<number>(0);
-  const [mobileProgress, setMobileProgress] = useState<number[]>(() => 
-    card ? new Array(card.length).fill(0) : []
+  const [mobileProgress, setMobileProgress] = useState<number[]>(() =>
+    card ? new Array(card.length).fill(0) : [],
   );
-  
+
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const ticking = useRef(false);
 
   // Desktop auto-rotation only
   useEffect(() => {
-    if (typeof window === "undefined" || window.innerWidth < 1024 || !card?.length) return;
+    if (
+      typeof window === "undefined" ||
+      window.innerWidth < 1024 ||
+      !card?.length
+    )
+      return;
 
     const interval = setInterval(() => {
       setActiveCard((prev) => (prev + 1) % card.length);
@@ -34,14 +39,19 @@ export default function WorksWithPartners({
 
   // Mobile scroll-based progress - Optimized
   useEffect(() => {
-    if (typeof window === "undefined" || window.innerWidth >= 1024 || !card?.length) return;
+    if (
+      typeof window === "undefined" ||
+      window.innerWidth >= 1024 ||
+      !card?.length
+    )
+      return;
 
     const handleScroll = () => {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
           const windowHeight = window.innerHeight;
           const newProgress = new Array(card.length).fill(0);
-          
+
           // Trigger thresholds
           const startTrigger = windowHeight * 0.7;
           const endTrigger = windowHeight * 0.3;
@@ -112,7 +122,9 @@ export default function WorksWithPartners({
 
       {/* Desktop Content */}
       {card?.length > 0 && (
-        <FadeInReveal className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}>
+        <FadeInReveal
+          className={clsx(`mt-[50px] hidden grid-cols-4 lg:grid`, className)}
+        >
           {card.map((item, index) => (
             <div key={"desktop_card_" + index} className="relative pr-[50px]">
               {index !== card.length - 1 && (
@@ -138,10 +150,16 @@ export default function WorksWithPartners({
                 className="relative z-[1]"
               />
 
-              <div className={`transition-all duration-500 ${activeCard >= index ? "opacity-100" : "opacity-40"}`}>
-                {item?.title && <SubH2 className="pb-2 pt-7">{item.title}</SubH2>}
+              <div
+                className={`transition-all duration-500 ${activeCard >= index ? "opacity-100" : "opacity-40"}`}
+              >
+                {item?.title && (
+                  <SubH2 className="pb-2 pt-7">{item.title}</SubH2>
+                )}
                 {item?.description && (
-                  <p className="text-base text-[#4C5861] !font-roboto">{item.description}</p>
+                  <p className="text-base text-[#4C5861] !font-roboto">
+                    {item.description}
+                  </p>
                 )}
               </div>
             </div>
@@ -155,7 +173,9 @@ export default function WorksWithPartners({
           {card.map((item, index) => (
             <div
               key={"mobile_card_" + index}
-              ref={(el) => { cardRefs.current[index] = el; }}
+              ref={(el) => {
+                cardRefs.current[index] = el;
+              }}
               className={`relative flex items-start gap-7 ${index === card.length - 1 ? "pb-0" : "pb-10"}`}
             >
               {index !== card.length - 1 && (
@@ -180,9 +200,14 @@ export default function WorksWithPartners({
 
               <div
                 className="w-[90%] transition-opacity duration-300"
-                style={{ opacity: index === 0 || (mobileProgress[index - 1] >= 100) ? 1 : 0.4 }}
+                style={{
+                  opacity:
+                    index === 0 || mobileProgress[index - 1] >= 100 ? 1 : 0.4,
+                }}
               >
-                {item?.title && <SubH2 className="pb-[6px]">{item?.title}</SubH2>}
+                {item?.title && (
+                  <SubH2 className="pb-[6px]">{item?.title}</SubH2>
+                )}
 
                 {item?.description && (
                   <p className="text-sm text-[#4C5861]">{item?.description}</p>

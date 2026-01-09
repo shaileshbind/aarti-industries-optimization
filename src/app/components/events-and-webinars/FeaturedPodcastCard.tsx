@@ -34,7 +34,7 @@ const FeaturedPodcastCard = ({ podcast }: FeaturedPodcastCardProps) => {
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
-        
+
         {/* Text Section - Bottom 1/3 with dark blue background */}
         <div className="bg-[#1A3258] p-5 lg:p-6 flex flex-col flex-1">
           {/* Top Row - Episode/Duration & Date */}
@@ -63,20 +63,16 @@ const FeaturedPodcastCard = ({ podcast }: FeaturedPodcastCardProps) => {
                 </BodyText2>
               )}
             </div>
-            
+
             {/* Right: Date */}
             {podcast.date && (
-              <BodyText3 className="text-white">
-                {podcast.date}
-              </BodyText3>
+              <BodyText3 className="text-white">{podcast.date}</BodyText3>
             )}
           </div>
-          
+
           {/* Title - Bottom */}
           {podcast.title && (
-            <SubH2 className="text-white mt-auto">
-              {podcast.title}
-            </SubH2>
+            <SubH2 className="text-white mt-auto">{podcast.title}</SubH2>
           )}
         </div>
       </div>

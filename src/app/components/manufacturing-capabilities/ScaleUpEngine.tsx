@@ -45,7 +45,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -153,7 +153,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                                 />
                                 <p className="text-[#4C5861]">{items?.title}</p>
                               </div>
-                            )
+                            ),
                         )}
 
                       {item?.bottomDescription && (
@@ -274,7 +274,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                       height={50}
                       className="absolute -top-[24px] z-10 right-[60px] w-[42px] lg:w-[50px]"
                     />
-<i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
+                    <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg! "></i>
                     <Image
                       src={item?.image?.url}
                       alt={item?.image?.alternativeText || "banner"}
@@ -311,10 +311,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                 <div className="flex flex-col gap-3 lg:gap-2 mt-3">
                   {item?.BulletPoints?.length > 0 &&
                     item?.BulletPoints?.map((items, index2) => (
-                      <div
-                        className="flex gap-2"
-                        key={"pointers_" + index2}
-                      >
+                      <div className="flex gap-2" key={"pointers_" + index2}>
                         <Image
                           src={"/images/star-orange.svg"}
                           alt={"star"}

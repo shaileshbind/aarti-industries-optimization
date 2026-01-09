@@ -85,7 +85,13 @@ const SimpleTabs: React.FC<SimpleTabsProps> = ({
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeId, tabs.length, indicatorColor, indicatorTransition, measureIndicator]);
+  }, [
+    activeId,
+    tabs.length,
+    indicatorColor,
+    indicatorTransition,
+    measureIndicator,
+  ]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${

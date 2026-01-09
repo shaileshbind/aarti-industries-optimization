@@ -23,11 +23,11 @@ export const dynamic = "force-dynamic";
 export default async function page({ params }: BlogInnerProps) {
   const { blogInner } = await params;
   const data = await getBlogsCasestudies(
-    `/blog-case-study/by-slug/${blogInner}`
+    `/blog-case-study/by-slug/${blogInner}`,
   );
 
   const relatedBlogs = await getBlogsCasestudies(
-    `/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=blog&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&fields[4]=slug&filters[documentId][$ne]=${data?.data?.[0]?.documentId}&pagination[pageSize]=4&pagination[page]=1&status=published`
+    `/blog-case-studies?sort[0]=date:desc&filters[type][$eq]=blog&populate[thumbnailImageDesktop][fields][0]=url&populate[thumbnailImageDesktop][fields][1]=alternativeText&populate[thumbnailImageDesktop][fields][2]=mime&populate[thumbnailImageDesktop][fields][3]=ext&populate[thumbnailImageMobile][fields][0]=url&populate[thumbnailImageMobile][fields][1]=alternativeText&populate[thumbnailImageMobile][fields][2]=mime&populate[thumbnailImageMobile][fields][3]=ext&fields[0]=title&fields[1]=date&fields[2]=type&fields[3]=excerpt&fields[4]=slug&filters[documentId][$ne]=${data?.data?.[0]?.documentId}&pagination[pageSize]=4&pagination[page]=1&status=published`,
   );
 
   const {
@@ -46,7 +46,7 @@ export default async function page({ params }: BlogInnerProps) {
   const seo = data?.data?.[0]?.seo;
 
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   return (
@@ -180,7 +180,7 @@ export default async function page({ params }: BlogInnerProps) {
           <div
             className={clsx(
               (relatedBlogs?.data?.length === 0 || !relatedBlogs) &&
-                "mt-[72px] lg:mt-[140px]"
+                "mt-[72px] lg:mt-[140px]",
             )}
           >
             <GloballyCertified itemsData={globallyCertifiedData} />

@@ -8,7 +8,16 @@ import GeneralPopup from "../Popups/GeneralPopup";
 import { FadeInReveal } from "../ScrollReveal";
 
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
-  const { title, description, states, subtitle, stats, ctaTitle, image, bottomText } = data;
+  const {
+    title,
+    description,
+    states,
+    subtitle,
+    stats,
+    ctaTitle,
+    image,
+    bottomText,
+  } = data;
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   return (
     <section className="pb-[72px] overflow-hidden  ">
@@ -29,7 +38,6 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
                       key={index}
                       className={clsx(
                         "flex items-center gap-2 font-light mb-1",
-                        // index == 0 ? "text-orange-200" : ""
                       )}
                     >
                       <i className="w-[18px] h-[18px] rounded-full bg-orange-100 border-[4px] border-[#F9C095]"></i>
@@ -77,11 +85,14 @@ const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
               )}
             </div>
           </FadeInReveal>
-          <FadeInReveal delay={0.4} className=" xl:col-span-6 col-span-12 mt-20 xl:mt-0">
+          <FadeInReveal
+            delay={0.4}
+            className=" xl:col-span-6 col-span-12 mt-20 xl:mt-0"
+          >
             {image && (
               <Image
                 src={image.url}
-                alt={image.alternativeText ?? 'img'}
+                alt={image.alternativeText ?? "img"}
                 width={685}
                 height={779}
               />

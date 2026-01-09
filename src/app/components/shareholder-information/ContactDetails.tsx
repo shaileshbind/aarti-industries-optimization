@@ -57,7 +57,7 @@ export default function ContactDetails() {
     const targetSubCategory = urlSubCat || data[0]?.subCategory || "";
 
     const matchingSubCategory = data.find(
-      (item) => item.subCategory === targetSubCategory
+      (item) => item.subCategory === targetSubCategory,
     );
 
     if (matchingSubCategory) {
@@ -114,7 +114,7 @@ export default function ContactDetails() {
               `py-5 px-2 border-b-2 border-b-[#E1E1E1] cursor-pointer text-base transition-all duration-300`,
               activeSubCategory === subCat.subCategory
                 ? "text-[#002F50]"
-                : "text-[#9997A2] hover:text-[#002F50]"
+                : "text-[#9997A2] hover:text-[#002F50]",
             )}
             onClick={() => handleSubCategoryClick(subCat.subCategory)}
           >

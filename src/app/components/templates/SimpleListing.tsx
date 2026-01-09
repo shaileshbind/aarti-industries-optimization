@@ -23,7 +23,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
     const targetSubCategory = urlSubCat || reportLayout[0]?.subCategory || "";
 
     const matchingSubCategory = reportLayout.find(
-      (item) => item.subCategory === targetSubCategory
+      (item) => item.subCategory === targetSubCategory,
     );
 
     if (matchingSubCategory) {
@@ -70,13 +70,13 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
 
   // Get current subcategory data
   const currentSubCategory = reportLayout?.find(
-    (item) => item.subCategory === activeSubCategory
+    (item) => item.subCategory === activeSubCategory,
   );
 
   // Flatten all reports from the current subcategory
   const allReports =
     currentSubCategory?.reports?.flatMap(
-      (reportGroup) => reportGroup.reports
+      (reportGroup) => reportGroup.reports,
     ) || [];
 
   return (
@@ -91,7 +91,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
                 `py-5 px-2 border-b-2 border-b-[#E1E1E1] cursor-pointer text-base transition-all duration-300`,
                 activeSubCategory === subCat.subCategory
                   ? "text-[#002F50]"
-                  : "text-[#9997A2] hover:text-[#002F50]"
+                  : "text-[#9997A2] hover:text-[#002F50]",
               )}
               onClick={() => handleSubCategoryClick(subCat.subCategory)}
             >
@@ -129,7 +129,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
       <div
         className={clsx(
           "lg:p-10 lg:bg-[#F7F9FA] w-full rounded-[12px]",
-          reportLayout?.length > 0 ? "lg:w-[75%]" : "lg:w-full"
+          reportLayout?.length > 0 ? "lg:w-[75%]" : "lg:w-full",
         )}
       >
         {/* Report list */}
@@ -147,8 +147,8 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
                     item?.link
                       ? item?.link
                       : item?.file?.url
-                      ? item?.file?.url
-                      : ""
+                        ? item?.file?.url
+                        : ""
                   }
                   scale={false}
                 />
@@ -169,8 +169,8 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
                     item?.link
                       ? item?.link
                       : item?.file?.url
-                      ? item?.file?.url
-                      : ""
+                        ? item?.file?.url
+                        : ""
                   }
                   scale={false}
                 />

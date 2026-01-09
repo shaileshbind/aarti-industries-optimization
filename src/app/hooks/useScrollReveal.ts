@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, RefObject } from 'react';
-import { useGSAP } from '../contexts/GSAPContext';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef, RefObject } from "react";
+import { useGSAP } from "../contexts/GSAPContext";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type GsapTweenVars = Record<string, unknown>;
 
@@ -14,7 +14,7 @@ export interface ScrollRevealConfig {
   delay?: number;
   stagger?: number;
   ease?: string;
-  
+
   // ScrollTrigger properties
   trigger?: string | Element;
   start?: string;
@@ -23,11 +23,11 @@ export interface ScrollRevealConfig {
   scrub?: boolean | number;
   pin?: boolean;
   pinSpacing?: boolean;
-  
+
   // Group animation properties
   isGroup?: boolean;
   groupSelector?: string;
-  
+
   // Callbacks
   onComplete?: () => void;
   onStart?: () => void;
@@ -39,7 +39,7 @@ export interface ScrollRevealConfig {
  * Perfect for animating elements as they come into view
  */
 export const useScrollReveal = (
-  config: ScrollRevealConfig = {}
+  config: ScrollRevealConfig = {},
 ): RefObject<HTMLElement | null> => {
   const elementRef = useRef<HTMLElement>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
@@ -69,16 +69,16 @@ export const useScrollReveal = (
         duration = 1,
         delay = 0,
         stagger = 0.2,
-        ease = 'power3.out',
+        ease = "power3.out",
         trigger,
-        start = 'top 90%',
+        start = "top 90%",
         end,
-        toggleActions = 'play reverse play reverse', // Allow re-triggering on scroll
+        toggleActions = "play reverse play reverse", // Allow re-triggering on scroll
         scrub = false,
         pin = false,
         pinSpacing = true,
         isGroup = false,
-        groupSelector = '[data-scroll]',
+        groupSelector = "[data-scroll]",
         onComplete,
         onStart,
         onUpdate,
@@ -86,7 +86,7 @@ export const useScrollReveal = (
 
       // Set initial state explicitly to ensure element is hidden before animation
       let elements: Element | NodeListOf<Element> = element;
-      
+
       // If it's a group, get all child elements
       if (isGroup) {
         const nodeList = element.querySelectorAll(groupSelector);
@@ -168,7 +168,7 @@ export const useScrollReveal = (
 export const useFadeInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, y: 50 },
@@ -176,7 +176,7 @@ export const useFadeInReveal = (
     duration,
     delay,
     stagger,
-    ease: 'power3.out',
+    ease: "power3.out",
   });
 };
 
@@ -184,7 +184,7 @@ export const useFadeInReveal = (
 export const useScaleInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, scale: 0.8 },
@@ -192,7 +192,7 @@ export const useScaleInReveal = (
     duration,
     delay,
     stagger,
-    ease: 'back.out(1.7)',
+    ease: "back.out(1.7)",
   });
 };
 
@@ -200,7 +200,7 @@ export const useScaleInReveal = (
 export const useSlideInLeftReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, x: -100 },
@@ -208,7 +208,7 @@ export const useSlideInLeftReveal = (
     duration,
     delay,
     stagger,
-    ease: 'power3.out',
+    ease: "power3.out",
   });
 };
 
@@ -216,7 +216,7 @@ export const useSlideInLeftReveal = (
 export const useSlideInRightReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, x: 100 },
@@ -224,7 +224,7 @@ export const useSlideInRightReveal = (
     duration,
     delay,
     stagger,
-    ease: 'power3.out',
+    ease: "power3.out",
   });
 };
 
@@ -232,7 +232,7 @@ export const useSlideInRightReveal = (
 export const useRotateInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, rotation: -180 },
@@ -240,7 +240,7 @@ export const useRotateInReveal = (
     duration,
     delay,
     stagger,
-    ease: 'power3.out',
+    ease: "power3.out",
   });
 };
 
@@ -248,7 +248,7 @@ export const useRotateInReveal = (
 export const useBounceInReveal = (
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   return useScrollReveal({
     from: { autoAlpha: 0, scale: 0.3 },
@@ -256,24 +256,45 @@ export const useBounceInReveal = (
     duration,
     delay,
     stagger,
-    ease: 'bounce.out',
+    ease: "bounce.out",
   });
 };
 
 // Group animation for multiple elements
 export const useGroupReveal = (
-  animationType: 'fadeIn' | 'scaleIn' | 'slideInLeft' | 'slideInRight' | 'rotateIn' | 'bounceIn' = 'fadeIn',
+  animationType:
+    | "fadeIn"
+    | "scaleIn"
+    | "slideInLeft"
+    | "slideInRight"
+    | "rotateIn"
+    | "bounceIn" = "fadeIn",
   duration: number = 1,
   delay: number = 0,
-  stagger: number = 0.2
+  stagger: number = 0.2,
 ) => {
   const animations = {
     fadeIn: { from: { autoAlpha: 0, y: 50 }, to: { autoAlpha: 1, y: 0 } },
-    scaleIn: { from: { autoAlpha: 0, scale: 0.8 }, to: { autoAlpha: 1, scale: 1 } },
-    slideInLeft: { from: { autoAlpha: 0, x: -100 }, to: { autoAlpha: 1, x: 0 } },
-    slideInRight: { from: { autoAlpha: 0, x: 100 }, to: { autoAlpha: 1, x: 0 } },
-    rotateIn: { from: { autoAlpha: 0, rotation: -180 }, to: { autoAlpha: 1, rotation: 0 } },
-    bounceIn: { from: { autoAlpha: 0, scale: 0.3 }, to: { autoAlpha: 1, scale: 1 } },
+    scaleIn: {
+      from: { autoAlpha: 0, scale: 0.8 },
+      to: { autoAlpha: 1, scale: 1 },
+    },
+    slideInLeft: {
+      from: { autoAlpha: 0, x: -100 },
+      to: { autoAlpha: 1, x: 0 },
+    },
+    slideInRight: {
+      from: { autoAlpha: 0, x: 100 },
+      to: { autoAlpha: 1, x: 0 },
+    },
+    rotateIn: {
+      from: { autoAlpha: 0, rotation: -180 },
+      to: { autoAlpha: 1, rotation: 0 },
+    },
+    bounceIn: {
+      from: { autoAlpha: 0, scale: 0.3 },
+      to: { autoAlpha: 1, scale: 1 },
+    },
   };
 
   return useScrollReveal({
@@ -282,7 +303,7 @@ export const useGroupReveal = (
     delay,
     stagger,
     isGroup: true,
-    groupSelector: '[data-scroll]',
-    ease: animationType === 'bounceIn' ? 'bounce.out' : 'power3.out',
+    groupSelector: "[data-scroll]",
+    ease: animationType === "bounceIn" ? "bounce.out" : "power3.out",
   });
 };

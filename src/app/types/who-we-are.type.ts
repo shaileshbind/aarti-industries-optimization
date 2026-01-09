@@ -52,7 +52,7 @@ export type MeetMindsProps = {
 export type ComplexChemProps = {
   data: {
     sectionTitle: string;
-    description?:string;
+    description?: string;
     content: {
       id: string;
       title: string;
@@ -98,8 +98,8 @@ export type ChemCreatesProps = {
       title?: string;
       slug?: string;
       date?: string;
-      thumbnailImageDesktop?:ImageProps;
-      thumbnailImageMobile?:ImageProps
+      thumbnailImageDesktop?: ImageProps;
+      thumbnailImageMobile?: ImageProps;
     }[];
   };
 };
@@ -109,7 +109,7 @@ export type WhoExpProps = {
     ExlporeCard: {
       title: string;
       ctaButton: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     }[];
   };
 };

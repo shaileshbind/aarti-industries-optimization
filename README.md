@@ -1,7 +1,5 @@
 # Aarti Industries Frontend
 
-
-
 ## 🚀 Features
 
 - **Modern Tech Stack**: Next.js 15 with React 19, TypeScript, and Tailwind CSS
@@ -48,15 +46,18 @@ src/
 ## 🎨 Design System
 
 ### Typography
+
 - **Work Sans**: Primary font for UI elements
 - **PT Serif**: Accent font for headings and special content
 
 ### Color Palette
+
 - **Primary**: Violet shades (#351646 to #743795)
 - **Neutral**: Grey scale for text and backgrounds
 - **Accent**: Various colors for interactive elements
 
 ### Components
+
 - **Header**: Fixed navigation with mobile menu
 - **Footer**: Comprehensive site footer with links and contact info
 - **Typography**: Consistent text styling system
@@ -68,6 +69,7 @@ src/
 The project includes a comprehensive GSAP animation system with:
 
 ### Available Components
+
 - `FadeInReveal` - Fade in with slide up
 - `ScaleInReveal` - Scale in with bounce effect
 - `SlideInLeftReveal` - Slide in from left
@@ -77,14 +79,16 @@ The project includes a comprehensive GSAP animation system with:
 - `TypewriterReveal` - Typewriter text effect
 
 ### Group Animations
+
 - `FadeInGroup` - Staggered fade in for multiple elements
 - `ScaleInGroup` - Staggered scale in
 - `SlideInLeftGroup` - Staggered slide from left
 - And more...
 
 ### Usage Example
+
 ```tsx
-import { FadeInReveal, TypewriterReveal } from '@/app/components/ScrollReveal';
+import { FadeInReveal, TypewriterReveal } from "@/app/components/ScrollReveal";
 
 function MyComponent() {
   return (
@@ -92,7 +96,7 @@ function MyComponent() {
       <FadeInReveal delay={0.2}>
         <h1>Animated Title</h1>
       </FadeInReveal>
-      
+
       <TypewriterReveal delay={0.4} stagger={0.1}>
         <p>This text will type out character by character</p>
       </TypewriterReveal>
@@ -104,18 +108,21 @@ function MyComponent() {
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm, yarn, pnpm, or bun
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd aartiindustries
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -125,6 +132,7 @@ function MyComponent() {
    ```
 
 3. **Start development server**
+
    ```bash
    npm run dev
    # or
@@ -146,11 +154,13 @@ function MyComponent() {
 ## 📱 Responsive Design
 
 The application is fully responsive with breakpoints:
+
 - **Mobile**: < 768px
-- **Tablet**: 768px - 1024px  
+- **Tablet**: 768px - 1024px
 - **Desktop**: > 1024px
 
 ### Mobile Features
+
 - Collapsible navigation menu
 - Touch-friendly interactions
 - Optimized animations for mobile performance
@@ -159,6 +169,7 @@ The application is fully responsive with breakpoints:
 ## 🎯 Key Pages & Features
 
 ### Animation Demo (`/scroll-reveal-demo`)
+
 - Interactive showcase of all animation types
 - Live code examples
 - Performance testing tools
@@ -167,13 +178,16 @@ The application is fully responsive with breakpoints:
 ## 🔧 Configuration
 
 ### GSAP Setup
+
 The project includes a complete GSAP setup with:
+
 - ScrollTrigger plugin for scroll-based animations
 - React context for GSAP instance management
 - Custom hooks for common animation patterns
 - TypeScript support for better development experience
 
 ### Tailwind Configuration
+
 - Custom color palette matching brand guidelines
 - Typography scale with consistent spacing
 - Responsive utilities for all breakpoints

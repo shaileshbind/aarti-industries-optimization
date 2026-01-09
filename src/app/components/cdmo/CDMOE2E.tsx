@@ -14,8 +14,6 @@ import { CDMOE2EProps } from "@/app/types/cdmo.type";
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
   const [active, setActive] = useState(0);
-  // const [activeIndex, setActiveIndex] = useState(0);
-  // const [activeImg, setActiveImg] = useState<string>("");
 
   const contentRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -51,7 +49,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -62,7 +60,10 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="pt-[22px] lg:pt-[100px] overflow-hidden fluid-container">
+    <div
+      ref={sectionRef}
+      className="pt-[22px] lg:pt-[100px] overflow-hidden fluid-container"
+    >
       <div className="flex flex-col-reverse lg:flex-row  lg:gap-20">
         {/* LEFT SIDE – TEXT + SWIPER */}
         <div
@@ -96,11 +97,10 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
               loop={false}
               spaceBetween={30}
               onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-              // onSlideChangeTransitionStart={(swiper) => setActive(swiper.activeIndex)}
               modules={[Pagination, Navigation, Mousewheel, Autoplay]}
               autoplay={{
                 delay: 15000,
-                disableOnInteraction: false
+                disableOnInteraction: false,
               }}
               navigation={{
                 prevEl: ".swiper-button-prev-useBySection",
@@ -175,7 +175,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                                   {item?.title}
                                 </BodyText2>
                               </li>
-                            ))
+                            )),
                           )}
                       </ul>
                     </div>

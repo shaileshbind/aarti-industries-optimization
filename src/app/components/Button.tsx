@@ -33,7 +33,6 @@ const Button = ({
               font-normal leading-[100%] font-alte-hans underline underline-offset-[4px]
               [text-underline-position:under] ${className}`}
           >
-            {/* {title} */}
             {titleCased}
           </button>
         </Link>
@@ -49,7 +48,6 @@ const Button = ({
               font-alte-hans overflow-hidden transition-all duration-200 ${className}`}
           >
             <span className="relative z-10 text-white">
-              {/* <SplitText text={title} /> */}
               <SplitText text={titleCased} />
             </span>
           </button>

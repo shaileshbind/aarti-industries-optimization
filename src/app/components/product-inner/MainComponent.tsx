@@ -166,7 +166,7 @@ export default function ProductInnerPage({
                               height={20}
                             />
                           </div>
-                        )
+                        ),
                     )}
                   </div>
                 )}
@@ -257,7 +257,7 @@ export default function ProductInnerPage({
                                 )}
                               </div>
                             );
-                          }
+                          },
                         )}
                       </div>
                     </div>

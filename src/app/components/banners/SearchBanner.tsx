@@ -93,7 +93,7 @@ const SearchBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "-=0.1"
+        "-=0.1",
       )
       .to(
         hLine,
@@ -102,7 +102,7 @@ const SearchBanner = ({
           duration: 0.8,
           ease: "power2.out",
         },
-        "<"
+        "<",
       )
       .to(
         stars,
@@ -113,7 +113,7 @@ const SearchBanner = ({
           ease: "sine.out",
           stagger: 0.2,
         },
-        "<"
+        "<",
       );
   }, []);
 
@@ -164,7 +164,7 @@ const SearchBanner = ({
                     <H2
                       className={clsx(
                         `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
-                        centerText && "pr-0 lg:pr-[0]"
+                        centerText && "pr-0 lg:pr-[0]",
                       )}
                     >
                       {title}
@@ -262,7 +262,7 @@ const SearchBanner = ({
                 ref={lineVertical}
                 className={clsx(
                   `absolute min-h-screen h-screen bg-white w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5`,
-                  lineClassName
+                  lineClassName,
                 )}
               />
               {!centerText && (
@@ -279,7 +279,7 @@ const SearchBanner = ({
               right-[57px] lg:right-[166px] 
               w-[38px] lg:w-[72px] 
               z-5 `,
-                  bottomMiddleStarClassName
+                  bottomMiddleStarClassName,
                 )}
               >
                 <Image

@@ -4,25 +4,18 @@
 
 // Supporting interface for product specifications
 export interface ProductSpecifications {
-  casNumber: string;        // e.g., "106-46-7"
-  abbreviation: string;     // e.g., "PDCB"
-  iupacName: string;       // e.g., "1,4-Dichlorobenzene"
+  casNumber: string; // e.g., "106-46-7"
+  abbreviation: string; // e.g., "PDCB"
+  iupacName: string; // e.g., "1,4-Dichlorobenzene"
   chemicalFormula: string; // e.g., "C6H4Cl2"
-  commonName: string;      // e.g., "-"
-  valueChain: string;      // e.g., "Di Chloro Benzene"
+  commonName: string; // e.g., "-"
+  valueChain: string; // e.g., "Di Chloro Benzene"
 }
 
-// Supporting interface for product documents
-// export interface ProductDocument {
-//   type: 'TDS' | 'SDS' | 'RDS';
-//   url?: string;
-//   available: boolean;
-// }
-
 export interface ProductDocument {
-  id: number,
-  documentName : string,
-  link : string,
+  id: number;
+  documentName: string;
+  link: string;
 }
 
 // Collection of product documents
@@ -77,8 +70,8 @@ export interface ChemicalStructureProps {
 }
 
 export interface appDetails {
-  id: number,
-  application: string
+  id: number;
+  application: string;
 }
 export interface FeaturesApplicationsProps {
   features: string[];
@@ -106,13 +99,13 @@ export interface ProductListApiResponse {
 
 // Error handling types
 export interface ProductError {
-  code: 'NOT_FOUND' | 'INVALID_ID' | 'SERVER_ERROR' | 'NETWORK_ERROR';
+  code: "NOT_FOUND" | "INVALID_ID" | "SERVER_ERROR" | "NETWORK_ERROR";
   message: string;
   details?: string;
 }
 
 // Loading state types
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+export type LoadingState = "idle" | "loading" | "success" | "error";
 
 export interface ProductPageState {
   product?: ProductData;

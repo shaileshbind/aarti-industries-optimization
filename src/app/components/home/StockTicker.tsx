@@ -7,7 +7,7 @@ import { fetchNews } from "@/_lib/fetchNews";
 type ItemProps = {
   id?: string;
   heading?: string;
-  slug?:string;
+  slug?: string;
 };
 export default function StockTicker() {
   const [pressReleases, setPressReleases] = useState<ItemProps[][]>([]);
@@ -25,7 +25,7 @@ export default function StockTicker() {
         <div className="container lg:mx-auto flex items-center gap-[110px]">
           {/* News */}
           <div className="flex gap-[110px] items-center">
-            {tickerData?.slice(0,3)?.map((item: ItemProps) => {
+            {tickerData?.slice(0, 3)?.map((item: ItemProps) => {
               if (!item?.slug) return null;
               return (
                 <Link

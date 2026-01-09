@@ -107,12 +107,12 @@ export default function SearchResults() {
   const urlSearchValue = searchParams.get("search") || "";
   const urlPage = parseInt(searchParams.get("page") || "1");
   const urlLimit = parseInt(
-    searchParams.get("limit") || String(ITEMS_PER_PAGE)
+    searchParams.get("limit") || String(ITEMS_PER_PAGE),
   );
 
   const [searchValue, setSearchValue] = useState(urlSearchValue);
   const [searchedData, setsearchedData] = useState<SearchDataProps | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -129,8 +129,8 @@ export default function SearchResults() {
     // Reset to page 1 on new search
     router.push(
       `/search-results?search=${encodeURIComponent(
-        searchValue.trim()
-      )}&page=1&limit=${limit}`
+        searchValue.trim(),
+      )}&page=1&limit=${limit}`,
     );
   };
 
@@ -162,8 +162,8 @@ export default function SearchResults() {
     // Update URL with new page number
     router.push(
       `/search-results?search=${encodeURIComponent(
-        searchValue
-      )}&page=${page}&limit=${limit}`
+        searchValue,
+      )}&page=${page}&limit=${limit}`,
     );
     // Scroll to top on page change
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -172,7 +172,7 @@ export default function SearchResults() {
   const getSearchedData = async (
     query: string,
     page: number = 1,
-    limit: number = ITEMS_PER_PAGE
+    limit: number = ITEMS_PER_PAGE,
   ) => {
     if (!query.trim()) {
       setsearchedData(null);
@@ -185,7 +185,7 @@ export default function SearchResults() {
 
     try {
       const response = await fetch(
-        `/api/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
+        `/api/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`,
       );
       const data = await response.json();
       setsearchedData(data?.data);

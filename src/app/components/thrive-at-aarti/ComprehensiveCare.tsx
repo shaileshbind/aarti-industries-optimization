@@ -41,7 +41,7 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
             }px)`;
           },
         },
-      }
+      },
     );
 
     gridRefs.current.forEach((grid) => {
@@ -58,7 +58,7 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
             end: "top 50%",
             scrub: true,
           },
-        }
+        },
       );
     });
   }, []);
@@ -73,8 +73,16 @@ const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
             (ctaButton?.hasExternalLink == "true"
               ? ctaButton?.externalLink
               : ctaButton?.link?.link) && (
-            <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} useTargetBlank={ctaButton?.hasExternalLink == "true"} />
-          )}
+              <Button
+                title={ctaButton?.title}
+                href={
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }
+                useTargetBlank={ctaButton?.hasExternalLink == "true"}
+              />
+            )}
         </FadeInRevealBlur>
 
         {cards?.length > 0 && (

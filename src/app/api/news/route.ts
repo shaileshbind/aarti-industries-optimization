@@ -16,12 +16,12 @@ export async function GET(req: NextRequest) {
           Authorization: `Bearer ${token}`,
         },
         cache: "no-store",
-      }
+      },
     );
     if (!response.ok) {
       return NextResponse.json(
         { error: `External API error: ${response.status}` },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const data = await response.json();
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     console.error("API route error:", err);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

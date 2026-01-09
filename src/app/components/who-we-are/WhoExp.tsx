@@ -8,19 +8,19 @@ const WhoExp: React.FC<WhoExpProps> = ({ data }) => {
   return (
     <div className="py-[50px] md:py-[100px] container max-w-[1130px]!">
       <FadeInReveal delay={0.6}>
-      <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
-        <ExploreCard
-          title={ExlporeCard?.[0]?.title}
-          ctaButton={ExlporeCard?.[0]?.ctaButton}
-          formTitle={ExlporeCard?.[0]?.formTitle}
-        />
-        <ExploreCard
-          lightVariant
-          title={ExlporeCard?.[1]?.title}
-          ctaButton={ExlporeCard?.[1]?.ctaButton}
-           formTitle={ExlporeCard?.[1]?.formTitle}
-        />
-      </div>
+        <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
+          <ExploreCard
+            title={ExlporeCard?.[0]?.title}
+            ctaButton={ExlporeCard?.[0]?.ctaButton}
+            formTitle={ExlporeCard?.[0]?.formTitle}
+          />
+          <ExploreCard
+            lightVariant
+            title={ExlporeCard?.[1]?.title}
+            ctaButton={ExlporeCard?.[1]?.ctaButton}
+            formTitle={ExlporeCard?.[1]?.formTitle}
+          />
+        </div>
       </FadeInReveal>
     </div>
   );

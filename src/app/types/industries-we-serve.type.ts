@@ -14,7 +14,7 @@ export type IndustryInfoProps = {
     description?: string;
     image?: ImageProps;
     mobImage?: ImageProps;
-    subDescription?:string;
+    subDescription?: string;
   };
 };
 
@@ -44,7 +44,7 @@ export type IndustryExpProps = {
     exploreMore: {
       title?: string;
       ctaButton?: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     }[];
   };
 };

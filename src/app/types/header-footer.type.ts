@@ -13,11 +13,11 @@ export type HeaderProps = {
       subMenu?: {
         id?: number;
         title?: string;
-        item?:{
-          id?:number;
-          title?:string;
-          externalLink?:string | null;
-          target?:string;
+        item?: {
+          id?: number;
+          title?: string;
+          externalLink?: string | null;
+          target?: string;
           cta_link?: {
             id?: number;
             documentId?: string;
@@ -27,16 +27,16 @@ export type HeaderProps = {
             publishedAt?: string | null;
             locale?: string | null;
           } | null;
-        }[]
+        }[];
       }[];
     }[];
     ctaButton?: {
       id?: number;
       title?: string;
       link?: string;
-      externalLink?:string;
-      target?:string;
-    }
+      externalLink?: string;
+      target?: string;
+    };
   };
 };
 export type FooterProps = {

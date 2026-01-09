@@ -23,7 +23,7 @@ export type RDInfoProps = {
 export type RDInnovatingChemProps = {
   data: {
     heading: string;
-    description?:string;
+    description?: string;
     cards: {
       id: string;
       title: string;
@@ -103,7 +103,7 @@ export type RDCardProps = {
     BulletPoints: {
       title: string;
     }[];
-    repeatableCta?:ButtonProps[];
+    repeatableCta?: ButtonProps[];
   }[];
 };
 
@@ -118,7 +118,7 @@ export type RDExploreProps = {
     exploreMore: {
       title: string;
       ctaButton: ButtonProps[];
-      formTitle?:string;
+      formTitle?: string;
     };
   }[];
 };

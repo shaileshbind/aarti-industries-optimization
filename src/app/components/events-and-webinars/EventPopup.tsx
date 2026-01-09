@@ -31,33 +31,28 @@ const EventPopup = ({ event }: EventPopupProps) => {
   const { title, description, image, mobImage, gallery } = event;
 
   // Combine gallery images if available, otherwise use main images
-  const imagesToShow = gallery && gallery.length > 0 
-    ? gallery 
-    : [
-        { url: image.url, alternativeText: image.alternativeText },
-        { url: mobImage.url, alternativeText: mobImage.alternativeText },
-      ].filter(img => img.url);
+  const imagesToShow =
+    gallery && gallery.length > 0
+      ? gallery
+      : [
+          { url: image.url, alternativeText: image.alternativeText },
+          { url: mobImage.url, alternativeText: mobImage.alternativeText },
+        ].filter((img) => img.url);
   return (
     <div className="w-full" data-lenis-prevent>
       {/* Title */}
-      {title && (
-        <SubH1 className="text-blue-200 mb-[16px] pr-8">
-          {title}
-        </SubH1>
-      )}
+      {title && <SubH1 className="text-blue-200 mb-[16px] pr-8">{title}</SubH1>}
 
       {/* Description */}
       {description && (
-        <BodyText1 className="text-grey-400 mb-[24px]">
-          {description}
-        </BodyText1>
+        <BodyText1 className="text-grey-400 mb-[24px]">{description}</BodyText1>
       )}
 
       {/* Image Gallery */}
       {imagesToShow && imagesToShow.length > 0 && (
         <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
           <Swiper
-            modules={[FreeMode,Mousewheel]}
+            modules={[FreeMode, Mousewheel]}
             freeMode={{
               enabled: true,
               momentum: true,

@@ -52,7 +52,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -66,9 +66,9 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
     <div ref={sectionRef} className="mt-[unset] mb-[72px] lg:my-[120px]">
       {title && (
         <FadeInReveal>
-        <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
-          {title}
-        </H2>
+          <H2 className="mx-[20px] lg:mx-[auto] text-left lg:text-center">
+            {title}
+          </H2>
         </FadeInReveal>
       )}
       <FadeInReveal className="mt-[28px] lg:mt-[48px] container mx-auto">

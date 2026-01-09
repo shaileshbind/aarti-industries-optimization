@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function SustainabilityReportPage() {
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   return (

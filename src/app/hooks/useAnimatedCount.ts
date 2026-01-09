@@ -20,7 +20,7 @@ function useAnimatedCount(value: number, duration: number = 1000): number {
         animationFrameId = requestAnimationFrame(animate);
       } else {
         setCount(end);
-        previousValue.current = end; 
+        previousValue.current = end;
       }
     }
 

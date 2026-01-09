@@ -47,7 +47,6 @@ export type YearAndPressReleaseLayout = {
 
 // Press Release Year Listing Props
 export type PressReleaseYearListingProps = {
-  // yearAndPressReleases: YearAndPressReleaseLayout[];
-   yearAndPressReleases: unknown;
+  yearAndPressReleases: unknown;
   latestReleases?: PressReleaseItem[];
 };

@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 export default async function page() {
   const data = await getPageData("/pages/by-slug/digital-transformation");
   const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*"
+    "/globally-certified-datas?populate=*",
   );
 
   const {
@@ -29,12 +29,15 @@ export default async function page() {
 
   return (
     <div>
-       <SEO
+      <SEO
         title={seo?.title ?? "Digital Transformation"}
         metaTitle={seo?.metaTitle}
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
-        canonical={seo?.canonical ?? "https://www.aarti-industries.com/digital-transformation"}
+        canonical={
+          seo?.canonical ??
+          "https://www.aarti-industries.com/digital-transformation"
+        }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
         ogImg={seo?.ogImg?.url}
@@ -53,9 +56,7 @@ export default async function page() {
         </div>
       )}
       {section_three && <MiddleBanner data={section_three} />}
-      {section_four && (
-        <DrivingCrossFunctional data={section_four} />
-      )}
+      {section_four && <DrivingCrossFunctional data={section_four} />}
       {section_five && (
         <div className="my-[72px] lg:my-[140px]">
           <FrameworkForged data={section_five} />

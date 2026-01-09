@@ -17,14 +17,8 @@ type PodcastCardProps = {
 };
 
 const PodcastCard = ({ podcast }: PodcastCardProps) => {
-  const { 
-    title, 
-    episodeLabel, 
-    duration, 
-    date, 
-    speakerInfo, 
-    ctaButton 
-  } = podcast;
+  const { title, episodeLabel, duration, date, speakerInfo, ctaButton } =
+    podcast;
 
   return (
     <div className="group relative transition-all duration-300 bg-grey-100 rounded-[10px] p-[20px] lg:p-[24px] flex flex-col h-full">
@@ -33,53 +27,48 @@ const PodcastCard = ({ podcast }: PodcastCardProps) => {
         {/* Episode Label & Duration */}
         <div className="flex items-center gap-2">
           {episodeLabel && (
-            <BodyText3 className="text-blue-200">
-              {episodeLabel}
-            </BodyText3>
+            <BodyText3 className="text-blue-200">{episodeLabel}</BodyText3>
           )}
           {duration && (
             <>
               <span className="text-blue-200">|</span>
-              <BodyText3 className="text-blue-200">
-                {duration}
-              </BodyText3>
+              <BodyText3 className="text-blue-200">{duration}</BodyText3>
             </>
           )}
         </div>
-        
+
         {/* Date */}
-        {date && (
-          <BodyText3 className="text-blue-200">
-            {date}
-          </BodyText3>
-        )}
+        {date && <BodyText3 className="text-blue-200">{date}</BodyText3>}
       </div>
 
       {/* Title */}
       {title && (
-        <SubH2 className="text-blue-200 mb-[12px] flex-1">
-          {title}
-        </SubH2>
+        <SubH2 className="text-blue-200 mb-[12px] flex-1">{title}</SubH2>
       )}
 
       {/* Speaker Info */}
       <div className="flex items-center gap-2 justify-between mb-[5px]">
-      {speakerInfo && (
-        <BodyText2 className="text-blue-200 ">
-          {speakerInfo}
-        </BodyText2>
-      )}
+        {speakerInfo && (
+          <BodyText2 className="text-blue-200 ">{speakerInfo}</BodyText2>
+        )}
 
-      {/* CTA Link - Listen Now */}
-      {ctaButton?.title &&
-        (ctaButton?.hasExternalLink == "true"
-          ? ctaButton?.externalLink
-          : ctaButton?.link?.link) && (
-        <div className="mt-auto min-w-[85px]">
-          <Button title={ctaButton?.title} href={ctaButton?.hasExternalLink == "true" ? ctaButton?.externalLink : ctaButton?.link?.link} secondary />
-           
-        </div>
-      )}
+        {/* CTA Link - Listen Now */}
+        {ctaButton?.title &&
+          (ctaButton?.hasExternalLink == "true"
+            ? ctaButton?.externalLink
+            : ctaButton?.link?.link) && (
+            <div className="mt-auto min-w-[85px]">
+              <Button
+                title={ctaButton?.title}
+                href={
+                  ctaButton?.hasExternalLink == "true"
+                    ? ctaButton?.externalLink
+                    : ctaButton?.link?.link
+                }
+                secondary
+              />
+            </div>
+          )}
       </div>
     </div>
   );

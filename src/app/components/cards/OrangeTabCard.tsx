@@ -18,7 +18,7 @@ const OrangeTabCard = ({
   link,
   scale = false,
   useTargetBlank = true,
-  titleClassName
+  titleClassName,
 }: ProductListProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -29,7 +29,7 @@ const OrangeTabCard = ({
         scale && "button-subtle-scale ",
         isHovered
           ? `bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2`
-          : `"bg-white border-gray-200 `
+          : `"bg-white border-gray-200 `,
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -41,7 +41,7 @@ const OrangeTabCard = ({
             className={clsxN(
               "text-sm lg:text-lg font-medium pr-4 ",
               isHovered ? "text-white" : "text-blue-200",
-              titleClassName
+              titleClassName,
             )}
           >
             {title}
@@ -59,7 +59,7 @@ const OrangeTabCard = ({
               "w-8 h-8 flex items-center justify-center border rounded-[18px] cursor-pointer  after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full",
               isHovered
                 ? "border-white text-white hover:text-orange-600"
-                : "border-orange-800 text-orange-800 hover:bg-orange-800"
+                : "border-orange-800 text-orange-800 hover:bg-orange-800",
             )}
           >
             <div className="w-[20px] h-[20px] relative">

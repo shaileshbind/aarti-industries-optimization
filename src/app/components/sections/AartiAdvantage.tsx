@@ -92,12 +92,12 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           invalidateOnRefresh: true,
           onEnter: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              triggerId
+              triggerId,
             ) as ScrollTriggerInstance | null;
           },
           onRefresh: () => {
             scrollTriggerRef.current = ScrollTrigger.getById(
-              triggerId
+              triggerId,
             ) as ScrollTriggerInstance | null;
           },
         },
@@ -110,31 +110,36 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             headinRight.current,
             { x: 0, y: 0 },
             { y: 150, duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
             { height: "0px" },
             { height: "203px", duration: 0.5 },
-             "<"
+            "<",
           )
           .fromTo(
             sustainInner.current,
-            { width: '200px', height: '200px', opacity: 0,  },
-            { width: window.innerWidth - 40 + "px",opacity: 1,  
-              height: window.innerWidth - 40 + "px", ease:"power4.inOut", duration: 0.5},
-            "<"
+            { width: "200px", height: "200px", opacity: 0 },
+            {
+              width: window.innerWidth - 40 + "px",
+              opacity: 1,
+              height: window.innerWidth - 40 + "px",
+              ease: "power4.inOut",
+              duration: 0.5,
+            },
+            "<",
           )
           .fromTo(
             headinLeft.current,
             { y: -150, opacity: 1 },
-            { y: -180, opacity: 0, duration: 0.5 },  
+            { y: -180, opacity: 0, duration: 0.5 },
           )
           .fromTo(
             headinRight.current,
             { y: 150, opacity: 1 },
             { y: 180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
@@ -155,46 +160,51 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               x: "-50%",
               duration: 1,
             },
-            "<"
+            "<",
           )
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<"
+            "<",
           )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
             { opacity: 1, duration: 5 },
-            "<"
+            "<",
           );
       } else {
         mainTl
           .fromTo(
             headinLeft.current,
             { x: 0, y: "unset" },
-            { x: -150, duration: 1 }
+            { x: -150, duration: 1 },
           )
           .fromTo(
             headinRight.current,
             { x: 0, y: "unset" },
             { x: 150, duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
             sustainbleLogo.current,
             { width: "0px" },
             { width: "200px", duration: 1 },
-            "<"
+            "<",
           )
           .fromTo(
-            sustainInner.current ,
+            sustainInner.current,
             { opacity: 0, scale: 0.5, transformOrigin: "center center" },
-            { opacity: 1, scale: 1, transformOrigin: "center center", duration: 0.3, ease:"power4.inOut",  
+            {
+              opacity: 1,
+              scale: 1,
+              transformOrigin: "center center",
+              duration: 0.3,
+              ease: "power4.inOut",
             },
-            "<0.4"
+            "<0.4",
           )
           .fromTo(
             sustainbleLogo.current,
@@ -207,44 +217,52 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               x: "-50%",
             },
             {
-              width: window.innerWidth > 1280 ? "600px" : window.innerWidth > 1024 && window.innerWidth < 1280 ? "400px" : "100%",
-              height: window.innerWidth > 1280 ? "600px" : window.innerWidth > 1024 && window.innerWidth < 1280 ? "400px" : "100vh",
+              width:
+                window.innerWidth > 1280
+                  ? "600px"
+                  : window.innerWidth > 1024 && window.innerWidth < 1280
+                    ? "400px"
+                    : "100%",
+              height:
+                window.innerWidth > 1280
+                  ? "600px"
+                  : window.innerWidth > 1024 && window.innerWidth < 1280
+                    ? "400px"
+                    : "100vh",
               left: "0%",
               top: "50%",
               y: "-50%",
               x: "0%",
               duration: 1,
             },
-             
           )
           .fromTo(
             headinLeft.current,
             { x: -150, opacity: 1 },
             { x: -180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .fromTo(
             headinRight.current,
             { x: 150, opacity: 1 },
             { x: 180, opacity: 0, duration: 0.5 },
-            "<"
+            "<",
           )
           .to(titleSection.current, {
             opacity: 0,
             duration: 1,
-             
           })
           .fromTo(
             envSlider.current,
             { opacity: 0 },
             { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<"
+            "<",
           )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
             { opacity: 1, duration: 5 },
-            "<"
+            "<",
           );
       }
     });
@@ -326,7 +344,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -390,8 +408,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           ref={envSlider}
           className="w-full opacity-0 absolute top-50% translate-y-[-47%] left-0 "
         >
-          <div ref={sliderContainerRef} className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]">
-            <div ref={contentContainerRef} className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center">
+          <div
+            ref={sliderContainerRef}
+            className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]"
+          >
+            <div
+              ref={contentContainerRef}
+              className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center"
+            >
               <div className="relative w-full randdImageHeight pt-[100%] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
@@ -448,68 +472,42 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
-                  modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
-                  autoplay={{
-                    delay: 15000,
-                    disableOnInteraction: false,
-                  }}
-                  navigation={{
+                    modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                    autoplay={{
+                      delay: 15000,
+                      disableOnInteraction: false,
+                    }}
+                    navigation={{
                       nextEl: ".swiper-button-next-analytical",
                       prevEl: ".swiper-button-prev-analytical",
                     }}
-                  // slidesOffsetAfter={offsetAfter}
-                  onSwiper={(swiper) => {
-                    swiperRef.current = swiper;
-                    // Don't start autoplay immediately - wait for viewport intersection
-                    if (swiper.autoplay) {
-                      swiper.autoplay.stop();
-                    }
-                  }}
-                  onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-                  breakpoints={{
-                    0: {
-                      slidesPerView: 1,
-                      spaceBetween: 0,
-                      allowTouchMove: true,
-                    },
-                    768: {
-                      
-                      spaceBetween: 80,
-                      allowTouchMove: false,
-                    },
-                  }}
-                  scrollbar={{ draggable: true }}
-                  direction="horizontal"
-                  mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                  }}
-                  className="framework-forged-swiper"
-                    // slidesPerView={
-                    //   typeof window !== "undefined" && window.innerWidth < 1024
-                    //     ? 1
-                    //     : 1.2
-                    // }
-                    // spaceBetween={80}
-                    // loop={false}
-                    // onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-                    // speed={800}
-                    // modules={[Navigation, Mousewheel, Autoplay]}
-                    // autoplay={{
-                    //   delay: 15000,
-                    //   disableOnInteraction: false,
-                    // }}
-                    // className="w-full relative"
-                    // navigation={{
-                    //   nextEl: ".swiper-button-next-analytical",
-                    //   prevEl: ".swiper-button-prev-analytical",
-                    // }}
-                    // mousewheel={{
-                    //   forceToAxis: true,
-                    //   sensitivity: 1,
-                    //   releaseOnEdges: true,
-                    // }}
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      // Don't start autoplay immediately - wait for viewport intersection
+                      if (swiper.autoplay) {
+                        swiper.autoplay.stop();
+                      }
+                    }}
+                    onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+                    breakpoints={{
+                      0: {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        allowTouchMove: true,
+                      },
+                      768: {
+                        spaceBetween: 80,
+                        allowTouchMove: false,
+                      },
+                    }}
+                    scrollbar={{ draggable: true }}
+                    direction="horizontal"
+                    mousewheel={{
+                      forceToAxis: true,
+                      sensitivity: 1,
+                      releaseOnEdges: true,
+                    }}
+                    className="framework-forged-swiper"
                   >
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
@@ -588,7 +586,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-        // document={document}
         prefillCategory="Business Products / Services"
         prefillSubCategory="LAB Testing (Analytical/ Safety)"
       />

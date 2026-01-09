@@ -46,7 +46,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
 
   const internationalData: AddressCardItem[] = apiData
     .filter(
-      (item: WhereWeOperateDataItem) => item.regionName === "International"
+      (item: WhereWeOperateDataItem) => item.regionName === "International",
     )
     .map((item: WhereWeOperateDataItem) => ({
       location: item.locationName || "",
@@ -81,7 +81,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     },
   ];
   const [active, setActive] = useState<string>(
-    card?.[0]?.post_category?.slug || "india"
+    card?.[0]?.post_category?.slug || "india",
   );
   const [activeIndex, setactiveIndex] = useState<number>(0);
   const [showAll, setShowAll] = useState<boolean>(false);
@@ -125,7 +125,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
       {
         threshold: 0.2, // Trigger when 20% of section is visible
         rootMargin: "0px",
-      }
+      },
     );
 
     observer.observe(section);
@@ -153,7 +153,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
             start: "top 87%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     }
     return () => {
@@ -317,12 +317,12 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                             url={item?.url}
                             registeredOffice={item?.registeredOffice}
                             corporateOffice={item?.address?.includes(
-                              "Vikhroli"
+                              "Vikhroli",
                             )}
                           />
                         </div>
                       </SwiperSlide>
-                    )
+                    ),
                   )}
                 </Swiper>
               </div>
