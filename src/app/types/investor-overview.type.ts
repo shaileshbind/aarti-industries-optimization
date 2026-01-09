@@ -65,6 +65,7 @@ export type InvestorContactProps = {
       email?: string;
       fax?: string;
       website?: string;
+      designation?:string;
     }[];
   };
 };

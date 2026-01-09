@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1 } from "../Typography2";
+import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
@@ -328,6 +329,33 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                             ),
                           )}
                       </ul>
+                      {item?.repeatableCta && item.repeatableCta.length > 0 && (
+                        <div className="mt-[10px]">
+                          {item.repeatableCta.map((cta, ctaIndex) => {
+                            const hasValidLink =
+                              (cta?.link?.link && cta.link.link.trim() !== "") ||
+                              (cta?.externalLink && cta.externalLink.trim() !== "");
+                            
+                            if (!cta?.title || !hasValidLink) {
+                              return null;
+                            }
+                            const href =
+                              cta?.hasExternalLink === "true"
+                                ? cta?.externalLink || ""
+                                : cta?.link?.link || "";                      
+                            const useTargetBlank = cta?.hasExternalLink === "true";
+                            return (
+                              <Button
+                                key={ctaIndex}
+                                title={cta?.title}
+                                href={href}
+                                secondary
+                                useTargetBlank={useTargetBlank}
+                              />
+                            );
+                          })}
+                        </div>
+                      )}
                     </SwiperSlide>
                   );
                 })}
