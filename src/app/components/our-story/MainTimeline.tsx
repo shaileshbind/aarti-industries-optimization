@@ -257,7 +257,7 @@ export default function MainTimeline({
         </div>
 
         {/* Desktop Navigation Arrows */}
-        <div className="flex items-center gap-4 lg:-mb-[10px] relative z-[1]">
+        <div className="flex items-center gap-4 lg:-mb-[10px] relative z-[1] min-w-[80px]">
           <button
             onClick={handlePrev}
             disabled={activePhase === 0 && activeYear === phases[0].years[0]}
@@ -268,7 +268,7 @@ export default function MainTimeline({
               alt="prev"
               width={34}
               height={34}
-              className={`-rotate-180 swiper-button-prev transition-opacity`}
+              className={`-rotate-180 transition-opacity`}
             />
           </button>
 
