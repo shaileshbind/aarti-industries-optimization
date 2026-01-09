@@ -110,7 +110,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                   {items?.email && (
                     <a
                       href={`mailto:${items?.email}`}
-                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline"
+                      className="mt-[10px] !flex gap-x-[4px] items-start footer-animated-underline w-full"
                     >
                       <Image
                         src="/images/mail.svg"
@@ -119,7 +119,7 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                         height={16}
                         className="h-4 w-4 object-contain shrink-0 mt-[5px]"
                       />
-                      <BodyText2 className="!text-[14px] lg:!text-[16px]">
+                      <BodyText2 className="!text-[14px] lg:!text-[16px] break-all w-full">
                         {items?.email}
                       </BodyText2>
                     </a>

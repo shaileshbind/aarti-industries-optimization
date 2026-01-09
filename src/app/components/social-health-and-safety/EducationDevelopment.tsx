@@ -226,7 +226,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="prev"
                   width={34}
                   height={34}
-                  className={`-rotate-180 swiper-button-prev transition-opacity ${
+                  className={`-rotate-180 swiper-button-prev-education-development transition-opacity ${
                     activeIndex > 0
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -238,7 +238,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   alt="next"
                   width={34}
                   height={34}
-                  className={`swiper-button-next transition-opacity ${
+                  className={`swiper-button-next-education-development transition-opacity ${
                     activeIndex < cards?.length - 1
                       ? "cursor-pointer opacity-100"
                       : "pointer-events-none opacity-30"
@@ -257,8 +257,8 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   disableOnInteraction: false,
                 }}
                 navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
+                  nextEl: ".swiper-button-next-education-development",
+                  prevEl: ".swiper-button-prev-education-development",
                 }}
                 slidesOffsetAfter={offsetAfter}
                 onSwiper={(swiper) => {

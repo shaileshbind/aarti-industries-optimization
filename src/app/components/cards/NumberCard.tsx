@@ -42,7 +42,10 @@ const NumberCard = ({
             {title && (
               <H2
                 className={clsx(
-                  `text-orange-200 text-[40px] md:text-[44px]`,
+                  `text-orange-200`,
+                  title?.includes("★★★★★")
+                    ? "!text-[24px] md:!text-[28px] xl:!text-[34px] min-h-[60px]"
+                    : "text-[40px] md:text-[44px]",
                   titleClassName,
                 )}
               >

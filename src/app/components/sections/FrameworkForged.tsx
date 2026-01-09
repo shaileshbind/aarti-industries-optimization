@@ -203,7 +203,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     alt="prev"
                     width={34}
                     height={34}
-                    className={`-rotate-180 swiper-button-prev transition-opacity ${
+                    className={`-rotate-180 swiper-button-prev-frame transition-opacity ${
                       activeIndex > 0
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
@@ -215,7 +215,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     alt="next"
                     width={34}
                     height={34}
-                    className={`swiper-button-next transition-opacity ${
+                    className={`swiper-button-next-frame transition-opacity ${
                       activeIndex < card?.length - 1
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
@@ -230,8 +230,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                 <Swiper
                   modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
                   navigation={{
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
+                    nextEl: ".swiper-button-next-frame",
+                    prevEl: ".swiper-button-prev-frame",
                   }}
                   autoplay={{
                     delay: 15000,
