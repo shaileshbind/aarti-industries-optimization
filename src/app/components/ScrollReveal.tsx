@@ -96,7 +96,7 @@ export const FadeInReveal = ({
   ...props
 }: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
-    from={{ autoAlpha: 0, y: 20 }}
+    from={{ autoAlpha: 0, y: 16 }}
     to={{ autoAlpha: 1, y: 0 }}
     duration={duration}
     delay={delay}
@@ -119,7 +119,7 @@ export const FadeInRevealBlur = ({
   ...props
 }: Omit<ScrollRevealProps, "from" | "to">) => (
   <ScrollReveal
-    from={{ autoAlpha: 0, y: 20, filter: "blur(8px)" }} // start slightly blurred
+    from={{ autoAlpha: 0, y: 16, filter: "blur(1px)" }} // start slightly blurred
     to={{ autoAlpha: 1, y: 0, filter: "blur(0px)" }} // animate to normal
     duration={duration}
     delay={delay}

@@ -46,11 +46,11 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
     gridRefs.current.forEach((grid) => {
       gsap.fromTo(
         grid,
-        { opacity: 0.2, y: 50 },
+        { opacity: 0},
         {
           opacity: 1,
-          y: 0,
-          ease: "power2.out",
+           
+          ease: "power3.out",
           scrollTrigger: {
             trigger: grid,
             start: "top 80%",
