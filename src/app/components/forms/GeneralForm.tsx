@@ -83,6 +83,8 @@ export default function GeneralForm({
   const [productOptions, setProductOptions] = useState<string[]>([]);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string>("");
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
 
   const {
     register,
@@ -91,6 +93,8 @@ export default function GeneralForm({
     control,
     setValue,
     reset,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -108,6 +112,16 @@ export default function GeneralForm({
       recievedEmail: "",
     },
   });
+
+  // Initialize country code from default phone value
+  useEffect(() => {
+    const defaultPhone = getValues("phone");
+    // Handle both "+91" and "91" formats
+    const phoneDigits = defaultPhone?.replace(/^\+/, "") || "";
+    if (phoneDigits.startsWith("91")) {
+      setSelectedCountryCode("91");
+    }
+  }, [getValues]);
 
   // Fetch categories and initial products for dropdown
   useEffect(() => {
@@ -286,6 +300,9 @@ export default function GeneralForm({
   ]);
 
   const onSubmit = async (data: FormValues) => {
+    // Clear any previous error messages
+    setSubmitError("");
+    
     // Determine if Salesforce lead applies
     const sendEmail = true;
     const hasSalesforceLead =
@@ -331,6 +348,7 @@ export default function GeneralForm({
 
       if (response.ok) {
         setformSubmitted(true);
+        setSubmitError("");
 
         setTimeout(() => {
           setshowGeneralPopup?.(false);
@@ -348,13 +366,27 @@ export default function GeneralForm({
           window.document.body.removeChild(link);
         }
       } else {
-        const error = await response.json();
-        setshowGeneralPopup?.(false);
-        console.error("Error:", error);
+        setSubmitError("Failed to submit the form. Please try again later.");
+        try {
+          const errorData = await response.json();
+          console.error("Error:", errorData);
+        } catch (parseError) {
+          console.error("Error parsing response:", parseError);
+        }
+        
+        // Auto-clear error message after 5 seconds
+        setTimeout(() => {
+          setSubmitError("");
+        }, 5000);
       }
     } catch (error) {
-      setshowGeneralPopup?.(false);
+      setSubmitError("Failed to submit the form. Please try again later.");
       console.error("Request failed:", error);
+      
+      // Auto-clear error message after 5 seconds
+      setTimeout(() => {
+        setSubmitError("");
+      }, 5000);
     }
   };
 
@@ -414,6 +446,23 @@ export default function GeneralForm({
                 e.preventDefault();
               }
             }}
+            onPaste={(e) => {
+              e.preventDefault();
+              const pastedText = e.clipboardData.getData("text");
+              // Filter out special characters and numbers, keep only letters and spaces
+              const sanitizedText = pastedText.replace(/[^a-zA-Z\s]/g, "");
+              const currentValue = watch("fullName") || "";
+              const input = e.target as HTMLInputElement;
+              const start = input.selectionStart || 0;
+              const end = input.selectionEnd || 0;
+              const newValue =
+                currentValue.slice(0, start) + sanitizedText + currentValue.slice(end);
+              setValue("fullName", newValue);
+              // Set cursor position after pasted content
+              setTimeout(() => {
+                input.setSelectionRange(start + sanitizedText.length, start + sanitizedText.length);
+              }, 0);
+            }}
           />
 
           {/* Email */}
@@ -440,18 +489,35 @@ export default function GeneralForm({
             rules={{
               required: "Phone number is required",
               validate: (value) => {
-                // Most countries: 7-15 digits total (E.164 standard allows up to 15 digits)
+                if (!value) {
+                  return "Phone number is required";
+                }
+                
+                // Must contain only digits (country code + phone number)
+                if (!/^\d+$/.test(value)) {
+                  return "Phone number must contain only digits";
+                }
+                
+                // Check if India (+91) is selected or if value starts with 91
+                const isIndia = selectedCountryCode === "91" || value.startsWith("91");
+                
+                if (isIndia) {
+                  // For India: exactly 10 digits after country code (total 12 digits)
+                  const phoneDigits = value.replace(/^91/, ""); // Remove country code
+                  if (phoneDigits.length !== 10) {
+                    return "Indian mobile number must be exactly 10 digits";
+                  }
+                  return true;
+                }
+                
+                // For other countries: 7-15 digits total (E.164 standard allows up to 15 digits)
                 // Setting reasonable min of 8 to account for short country codes + phone digits
-                if (!value || value.length < 8) {
+                if (value.length < 8) {
                   return "Please enter a valid phone number";
                 }
                 // Maximum length per E.164 standard
                 if (value.length > 15) {
                   return "Phone number is too long";
-                }
-                // Must contain only digits (country code + phone number)
-                if (!/^\d+$/.test(value)) {
-                  return "Phone number must contain only digits";
                 }
                 return true;
               },
@@ -479,7 +545,32 @@ export default function GeneralForm({
                     errors.phone && "!border-[#d32f2f]"
                   }`}
                   placeholder="Phone no *"
-                  onChange={(value) => field.onChange(value)}
+                  onChange={(value, countryData) => {
+                    // Extract country code from the country object or value
+                    let countryCode = "";
+                    if (countryData && typeof countryData === 'object') {
+                      // react-phone-input-2 provides dialCode in the country object
+                      const countryObj = countryData as { dialCode?: string };
+                      countryCode = countryObj.dialCode || "";
+                    }
+                    // Fallback: extract from value if it starts with known country codes
+                    if (!countryCode && value) {
+                      if (value.startsWith("91")) {
+                        countryCode = "91";
+                      } else if (value.startsWith("1")) {
+                        countryCode = "1"; // US/Canada
+                      }
+                      // Add more country codes as needed
+                    }
+                    if (countryCode) {
+                      setSelectedCountryCode(countryCode);
+                    }
+                    field.onChange(value);
+                    // Trigger validation when country or value changes
+                    setTimeout(() => {
+                      trigger("phone");
+                    }, 0);
+                  }}
                 />
                 {errors.phone && (
                   <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
@@ -526,6 +617,23 @@ export default function GeneralForm({
                 if (!/^[a-zA-Z\s]$/.test(e.key)) {
                   e.preventDefault();
                 }
+              }}
+              onPaste={(e) => {
+                e.preventDefault();
+                const pastedText = e.clipboardData.getData("text");
+                // Filter out special characters and numbers, keep only letters and spaces
+                const sanitizedText = pastedText.replace(/[^a-zA-Z\s]/g, "");
+                const currentValue = watch("jobRole") || "";
+                const input = e.target as HTMLInputElement;
+                const start = input.selectionStart || 0;
+                const end = input.selectionEnd || 0;
+                const newValue =
+                  currentValue.slice(0, start) + sanitizedText + currentValue.slice(end);
+                setValue("jobRole", newValue);
+                // Set cursor position after pasted content
+                setTimeout(() => {
+                  input.setSelectionRange(start + sanitizedText.length, start + sanitizedText.length);
+                }, 0);
               }}
             />
 
@@ -806,6 +914,12 @@ export default function GeneralForm({
         {formSubmitted && (
           <p className="pt-4 text-[#F36633] font-medium">
             Thank you for reaching out. Our team will get back to you shortly.
+          </p>
+        )}
+
+        {submitError && (
+          <p className="pt-4 text-[#ff0000] font-medium">
+            {submitError}
           </p>
         )}
 
