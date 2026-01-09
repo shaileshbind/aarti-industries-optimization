@@ -21,22 +21,32 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Audit Committee",
       members: [
         {
-          name: "Shri Lalitkumar S. Naik",
-          role1: "Independent Director",
-          role2: null,
-        },
-        {
-          name: "Shri Shekhar S. Khanolkar",
-          role1: "Independent Director",
-          role2: null,
-        },
-        {
-          name: "Shri Nikhil J. Bhatia",
-          role1: "Independent Director",
-          role2: null,
-        },
-        {
           name: "Shri Ashok Kumar Barat",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Lalitkumar Shantaram Naik",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Shekhar Shreedhar Khanolkar",
+          role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Nikhil Jaysinh Bhatia",
           role1: "Independent Director",
           role2: null,
         },
@@ -46,12 +56,17 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Nomination & Remuneration Committee",
       members: [
         {
-          name: "Prof. Aniruddha B. Pandit",
+          name: "Shri Aniruddha Bhalchandra Pandit",
           role1: "Independent Director",
           role2: null,
         },
         {
-          name: "Shri Belur K. Sethuram",
+          name: "Shri Rajendra Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Belur Krishna Murthy Sethuram",
           role1: "Independent Director",
           role2: null,
         },
@@ -67,12 +82,17 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       members: [
         {
           name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
         {
           name: "Smt. Rupa Devi Singh",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
           role2: null,
         },
       ],
@@ -82,12 +102,27 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       members: [
         {
           name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
         {
-          name: "Prof. Aniruddha B. Pandit",
+          name: "Shri Aniruddha Bhalchandra Pandit",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Manoj Mulji Chheda",
+          role1: "Executive Directors",
           role2: null,
         },
       ],
@@ -96,13 +131,43 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Risk Management Committee",
       members: [
         {
-          name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          name: "Shri Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
         },
         {
-          name: "Shri Belur K. Sethuram",
+          name: "Shri Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Smt. Hetal Gogri Gala",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Renil Rajendra Gogri",
+          role1: "Vice Chairman and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Shri Suyog Kalyanji Kotecha",
+          role1: "CEO and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Shri Belur Krishna Murthy Sethuram",
           role1: "Independent Director",
+          role2: null,
+        },
+        {
+          name: "Shri Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
+          role2: null,
+        },
+        {
+          name: "Shri Manoj Mulji Chheda",
+          role1: "Executive Directors",
           role2: null,
         },
       ],
@@ -111,9 +176,39 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       committee: "Finance & Investment Committee",
       members: [
         {
+          name: "Shri Rajendra Vallabhaji Gogri",
+          role1: "Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Rashesh Chandrakant Gogri",
+          role1: "Vice Chairman and Managing Director",
+          role2: null,
+        },
+        {
+          name: "Shri Renil Rajendra Gogri",
+          role1: "Vice Chairman and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Shri Manoj Mulji Chheda",
+          role1: "Executive Directors",
+          role2: null,
+        },
+        {
+          name: "Shri Suyog Kalyanji Kotecha",
+          role1: "CEO and Executive Director",
+          role2: null,
+        },
+        {
+          name: "Shri Ajay Kumar Gupta",
+          role1: "Executive Director and CMO",
+          role2: null,
+        },
+        {
           name: "Smt. Hetal Gogri Gala",
-          role1: "Non-Executive",
-          role2: "Non-Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
+          role2: null,
         },
       ],
     },

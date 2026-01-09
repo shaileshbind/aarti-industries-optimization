@@ -949,3 +949,6 @@ body {
   height: calc(100vh - 200px);
   object-fit: contain;
 }
+
+.fadeInSlider .swiper-slide{ visibility: hidden;}
+.fadeInSlider .swiper-slide.swiper-slide-visible{ visibility: visible;}

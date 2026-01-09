@@ -16,6 +16,13 @@ import { FadeInReveal } from "../ScrollReveal";
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
 
+type ContentSection = NonNullable<
+  NonNullable<LAAVisionProps["data"]>["content"]
+>[number];
+type ContentCard = NonNullable<
+  NonNullable<ContentSection["card"]>[number]
+>;
+
 const PeopleVision = ({ data }: LAAVisionProps) => {
   const isTablet = useMediaQuery("(max-width:1023px)");
   const { title, content } = data;
@@ -618,8 +625,8 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                     setActiveTab(swiper.activeIndex);
                   }}
                 >
-                  {content?.map((section: any) =>
-                    section?.card?.map((slide: any, index: number) => (
+                  {content?.map((section: ContentSection) =>
+                    section?.card?.map((slide: ContentCard, index: number) => (
                       <SwiperSlide key={slide?.id}>
                         <SliderCard
                           imgSrc={slide?.image?.url}
@@ -667,7 +674,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       />
                       {/* Buttons */}
                       {content?.map(
-                        (items: any, index: number) =>
+                        (items: ContentSection, index: number) =>
                           items?.category && (
                             <div
                               key={index}
@@ -720,7 +727,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
                           {/* Tab Buttons */}
                           {content?.map(
-                            (items: any, index: number) =>
+                            (items: ContentSection, index: number) =>
                               items?.category && (
                                 <div
                                   key={index}
@@ -765,8 +772,8 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                           setActiveTab(swiper.activeIndex);
                         }}
                       >
-                        {content?.map((section: any) =>
-                          section?.card?.map((slide: any, index: number) => (
+                        {content?.map((section: ContentSection) =>
+                          section?.card?.map((slide: ContentCard, index: number) => (
                             <SwiperSlide key={slide?.id}>
                               <SliderCard
                                 imgSrc={slide?.image?.url}
