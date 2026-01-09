@@ -39,9 +39,9 @@ const InvestorContacts = ({ data }: InvestorContactProps) => {
                 {items?.name && (
                   <SubH3 className="mt-[10px]">{items?.name}</SubH3>
                 )}
-                <BodyText3 className="mt-[8px] !text-[14px]">
-                  Company Secretary & Compliance Officer
-                </BodyText3>
+              {items?.designation && <BodyText3 className="mt-[8px] !text-[14px]">
+                  {items?.designation}
+                </BodyText3>}
                 {items?.address && (
                   <BodyText3 className="mt-[6px] !text-[14px]">
                     {items?.address}

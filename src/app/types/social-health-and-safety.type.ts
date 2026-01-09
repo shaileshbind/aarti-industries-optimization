@@ -63,6 +63,7 @@ export type EducationDevelopmentProps = {
       BulletPoints?: {
         title?: string;
       }[];
+      repeatableCta?:ButtonProps[];
     }[];
   };
 };
