@@ -767,6 +767,21 @@ body {
   font-family: "Alte Hans Grotesk";
 }
 
+.investorScrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.investorScrollbar::-webkit-scrollbar-button {
+  background: #ffffff;
+}
+.investorScrollbar::-webkit-scrollbar-track-piece {
+  background: #ffffff;
+}
+.investorScrollbar::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 20px;
+  border: 1px solid #cecece;
+}
+
 @media (max-width: 1024px) {
   .potential-accordion:nth-child(2)::after {
     right: 5.5%;

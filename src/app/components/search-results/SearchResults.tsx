@@ -141,10 +141,12 @@ export default function SearchResults() {
       return `/investors/disclosures/${hit.slug}`;
     if (hit?.type === "case-study") return `/case-studies/${hit.slug}`;
     if (hit?.type === "blog") return `/blogs/${hit.slug}`;
-    if (hit?.type === "blog") return `/blogs/${hit.slug}`;
     if (hit?.slug === "sustainability-report") return `/sustainability-report`;
+    if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
+    if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
+    if (hit?._index === "pages") return `/${hit?.slug}`;
 
-    return `/${hit?.searchUrl}`;
+    return `/${hit?.searchUrl}` || `/${hit?.slug}`;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

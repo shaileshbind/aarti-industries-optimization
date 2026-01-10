@@ -29,27 +29,43 @@ const DrivingTabsSection = ({
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<string | false>("panel0");
   const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
+  const pausedProgressRef = useRef<number>(0);
+  const pauseTimeRef = useRef<number>(0);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const startProgress = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
-    setProgress(0);
+
+    const initialProgress = pausedProgressRef.current;
+    setProgress(initialProgress);
     startTimeRef.current = performance.now();
     const duration = 8000;
 
     const animate = (time: number) => {
+      if (isPaused || !isInViewport) {
+        pauseTimeRef.current = time;
+        return;
+      }
+
       const elapsed = time - startTimeRef.current;
-      const progressPercent = Math.min((elapsed / duration) * 100, 100);
+      const progressPercent = Math.min(
+        initialProgress + (elapsed / duration) * 100,
+        100,
+      );
       setProgress(progressPercent);
 
       if (progressPercent < 100) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
         // Move to next slide
+        pausedProgressRef.current = 0;
         const nextIndex = (active + 1) % data.length;
         setActive(nextIndex);
         setExpanded(`panel${nextIndex}`);
@@ -60,17 +76,72 @@ const DrivingTabsSection = ({
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, [active, data.length]);
+  }, [active, data.length, isPaused, isInViewport]);
+
+  // Intersection Observer to detect when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInViewport(true);
+          } else {
+            setIsInViewport(false);
+            // Reset progress when leaving viewport
+            if (rafRef.current) {
+              cancelAnimationFrame(rafRef.current);
+            }
+            setProgress(0);
+            pausedProgressRef.current = 0;
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
+    }
+
+    return () => {
+      if (currentSection) {
+        observer.unobserve(currentSection);
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    startProgress();
+    if (isInViewport && !isPaused) {
+      startProgress();
+    } else {
+      // Pause animation when not in viewport or paused
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    }
 
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, startProgress]);
+  }, [active, startProgress, isPaused, isInViewport]);
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+    pausedProgressRef.current = progress;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+  };
 
   const handleTabClick = (index: number) => {
     if (index === active) return;
@@ -79,6 +150,7 @@ const DrivingTabsSection = ({
       cancelAnimationFrame(rafRef.current);
     }
 
+    pausedProgressRef.current = 0;
     setActive(index);
     setExpanded(`panel${index}`);
     if (swiperRef.current) {
@@ -92,6 +164,7 @@ const DrivingTabsSection = ({
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
+      pausedProgressRef.current = 0;
       setActive(realIndex);
       setExpanded(`panel${realIndex}`);
     }
@@ -104,12 +177,14 @@ const DrivingTabsSection = ({
         if (rafRef.current) {
           cancelAnimationFrame(rafRef.current);
         }
+        pausedProgressRef.current = 0;
         setActive(panelIndex);
         setExpanded(panel);
       }
     };
   return (
-    <FadeInReveal>
+    <div ref={sectionRef}>
+      <FadeInReveal>
       {title && (
         <div className="max-w-full lg:max-w-[740px] mx-5 lg:mx-[60px] mb-[30px] lg:mb-[50px]">
           <H2>{title}</H2>
@@ -218,7 +293,10 @@ const DrivingTabsSection = ({
                         </>
                       )}
                     </div>
-                    <div>
+                    <div
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       {tabItem.cards[0]?.title && (
                         <SubH2 className="mt-[24px] !font-roboto">
                           {tabItem.cards[0].title}
@@ -407,7 +485,8 @@ const DrivingTabsSection = ({
           ))}
         </div>
       )}
-    </FadeInReveal>
+      </FadeInReveal>
+    </div>
   );
 };
 
