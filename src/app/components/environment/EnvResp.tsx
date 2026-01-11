@@ -141,8 +141,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
               >
                 <SubH2
                   className={clsxN(
-                    `${
-                      index === active ? "text-orange-200" : "text-grey-300"
+                    `${index === active ? "text-orange-200" : "text-grey-300"
                     } py-[20px] relative z-10 transition-colors duration-300 group-hover:text-orange-200`,
                   )}
                 >
@@ -178,8 +177,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                   src={cardWithCategory[active]?.content?.image?.url}
                   alt={
                     cardWithCategory[active]?.content.image?.alternativeText
-                      ? cardWithCategory[active]?.content.image?.alternativeText
-                      : "img"
+                    || "img"
                   }
                   fill
                   className="absolute object-cover object-top  blur-md "
@@ -361,18 +359,18 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                         <div className="relative w-full h-[300px] rounded-[14px] overflow-hidden">
                           <div className="absolute right-0 top-0 w-full h-[300px] rounded-[20px] overflow-hidden! ">
                             <Image
-                              src={item.content?.image?.url || ""}
+                              src={item.content?.mobImage?.url || ""}
                               alt={
-                                item.content?.image?.alternativeText || "img"
+                                item.content?.mobImage?.alternativeText || "img"
                               }
                               fill
                               className="absolute object-cover  overflow-hidden rounded-lg!"
                             />
                             <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg!"></i>
                             <Image
-                              src={item.content?.image?.url || ""}
+                              src={item.content?.mobImage?.url || ""}
                               alt={
-                                item.content?.image?.alternativeText || "img"
+                                item.content?.mobImage?.alternativeText || "img"
                               }
                               width={500}
                               height={300}
@@ -489,7 +487,7 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                 secondary
                                 href={
                                   item?.content?.ctaButton?.hasExternalLink ===
-                                  "true"
+                                    "true"
                                     ? item?.content?.ctaButton?.externalLink
                                     : item?.content?.ctaButton?.link?.link
                                 }

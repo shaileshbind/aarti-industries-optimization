@@ -6,10 +6,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CorporateVideo from "./CorporateVideo";
 import Photos from "./Photos";
 import Logos from "./Logos";
-import BrandGuidelines from "./BrandGuidelines";
+// import BrandGuidelines from "./BrandGuidelines";
 import Brochures from "./Brochures";
 import { MediaContainerProps, TabProps } from "@/app/types/media-kit.type";
 import { FadeInReveal } from "../ScrollReveal";
+import AILVideo from "./AILVideo";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,10 +121,12 @@ export default function MediaContainer({ data }: MediaContainerProps) {
         return <Photos data={activeData} />;
       case 2:
         return <Logos data={activeData} />;
+      // case 3:
+      //   return <BrandGuidelines data={activeData} />;
       case 3:
-        return <BrandGuidelines data={activeData} />;
-      case 4:
         return <Brochures data={activeData} />;
+      case 4:
+        return <AILVideo data={activeData} />;
       default:
         return <div>No content available</div>;
     }
