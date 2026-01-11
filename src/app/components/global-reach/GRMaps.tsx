@@ -329,7 +329,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         <Image
                           src={
                             active === 0
-                              ? "/images/global-reach/bachauImg.jpg"
+                              ? "/images/global-reach/BhachauUpdated.webp"
                               : active === 1
                                 ? "/images/global-reach/Dahej.webp"
                                 : active === 2
@@ -349,7 +349,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                           <Image
                             src={
                               active === 0
-                                ? "/images/global-reach/bachauImg.jpg"
+                                ? "/images/global-reach/BhachauUpdated.webp"
                                 : active === 1
                                   ? "/images/global-reach/Dahej.webp"
                                   : active === 2
@@ -451,7 +451,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     key={activeMob}
                     src={
                       activeMob === 0
-                        ? "/images/global-reach/bachauImg.jpg"
+                        ? "/images/global-reach/BhachauUpdated.webp"
                         : activeMob === 1
                           ? "/images/global-reach/Dahej.webp"
                           : activeMob === 2
@@ -472,7 +472,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       key={`inner-${activeMob}`}
                       src={
                         activeMob === 0
-                          ? "/images/global-reach/bachauImg.jpg"
+                          ? "/images/global-reach/BhachauUpdated.webp"
                           : activeMob === 1
                             ? "/images/global-reach/Dahej.webp"
                             : activeMob === 2
