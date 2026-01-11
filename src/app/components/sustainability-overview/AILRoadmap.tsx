@@ -91,12 +91,16 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
         gsap.set(star, { y: 0 });
         gsap.set(line, { height: 0 });
 
+        // Normalize timeline spacing for smooth animation
+        const totalItems = positions.length;
+        const spacing = totalItems > 1 ? 1 / (totalItems - 1) : 1;
+
         const tl = gsap.timeline({
           scrollTrigger: {
             id: "ailRoadmapTrigger11",
             trigger: wrapper,
             start: "top top",
-            end: "+=1500",
+            end: "+=800",
             scrub: true,
             pin: true,
             pinSpacing: true,
@@ -108,17 +112,31 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
               const starY = starRect.top + window.scrollY;
               let activeIndex: number | null = null;
 
-              for (let i = 0; i < itemRefs.current.length; i++) {
-                const item = itemRefs.current[i];
-                if (!item) continue;
+              // If near the end of scroll, use the last item
+              if (self.progress >= 0.95) {
+                activeIndex = totalItems - 1;
+              } else {
+                for (let i = 0; i < itemRefs.current.length; i++) {
+                  const item = itemRefs.current[i];
+                  if (!item) continue;
 
-                const rect = item.getBoundingClientRect();
-                const itemTop = rect.top + window.scrollY;
-                const itemBottom = rect.bottom + window.scrollY;
+                  const rect = item.getBoundingClientRect();
+                  const itemTop = rect.top + window.scrollY;
+                  const itemBottom = rect.bottom + window.scrollY;
 
-                if (starY >= itemTop && starY <= itemBottom) {
-                  activeIndex = i;
-                  break;
+                  if (starY >= itemTop && starY <= itemBottom) {
+                    activeIndex = i;
+                    break;
+                  }
+                }
+
+                // Fallback: use progress to determine index if position detection fails
+                if (activeIndex === null && totalItems > 0) {
+                  const progressIndex = Math.min(
+                    Math.floor(self.progress * (totalItems - 1)),
+                    totalItems - 1,
+                  );
+                  activeIndex = progressIndex;
                 }
               }
 
@@ -130,21 +148,11 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                 animateImageTransition(activeIndex, self.direction);
               }
             },
-            onLeave: () => {
-              requestAnimationFrame(() => {
-                ScrollTrigger.refresh();
-              });
-            },
-            onEnterBack: () => {
-              requestAnimationFrame(() => {
-                ScrollTrigger.refresh();
-              });
-            },
           },
         });
 
         positions.forEach((pos, index) => {
-          const time = index * 0.25;
+          const time = index * spacing;
           tl.to(star, { y: pos, ease: "none" }, time);
           tl.to(line, { height: pos, ease: "none" }, time);
         });
@@ -223,7 +231,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
               />
               <div
                 ref={starRef}
-                className="absolute left-[50px] min-w-[20px] ml-[-10px]"
+                className="absolute left-[51px] min-w-[20px] ml-[-10px]"
               >
                 <Image
                   src="/images/home/star-white.svg"

@@ -144,6 +144,7 @@ export default function SearchResults() {
     if (hit?.slug === "sustainability-report") return `/sustainability-report`;
     if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
     if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
+    if (hit?.slug === "home-page") return `/`;
     if (hit?._index === "pages") return `/${hit?.slug}`;
 
     return `/${hit?.searchUrl}` || `/${hit?.slug}`;
