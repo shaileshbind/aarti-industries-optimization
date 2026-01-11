@@ -21,7 +21,7 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
             </SubH1>
           )}
           <div
-            className="mt-[24px] lg:mt-[28px] max-h-[unset] lg:max-h-[550px] lg:overflow-y-auto scrollbar grid gap-y-[18px] bg-gradient-orange-1 rounded-[12px] px-[20px] py-[30px] lg:p-[36px]"
+            className="mt-[24px] lg:mt-[28px] max-h-[unset] lg:max-h-[550px] lg:overflow-y-auto investorScrollbar grid gap-y-[18px] bg-gradient-orange-1 rounded-[12px] px-[20px] py-[30px] lg:p-[36px]"
             data-lenis-prevent
           >
             {leftSection?.content?.map((items) => {

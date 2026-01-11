@@ -329,13 +329,13 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         <Image
                           src={
                             active === 0
-                              ? "/images/global-reach/Bachau.webp"
+                              ? "/images/global-reach/bachauImg.jpg"
                               : active === 1
                                 ? "/images/global-reach/Dahej.webp"
                                 : active === 2
                                   ? "/images/global-reach/Tarapur.webp"
                                   : active === 3
-                                    ? "/images/global-reach/NaviM.webp"
+                                    ? "/images/global-reach/naviMumbai.webp"
                                     : active === 4
                                       ? "/images/global-reach/Vapi.webp"
                                       : "/images/global-reach/Jhagadia.webp"
@@ -349,13 +349,13 @@ const GRMaps = ({ data }: GRMapsProps) => {
                           <Image
                             src={
                               active === 0
-                                ? "/images/global-reach/Bachau.webp"
+                                ? "/images/global-reach/bachauImg.jpg"
                                 : active === 1
                                   ? "/images/global-reach/Dahej.webp"
                                   : active === 2
                                     ? "/images/global-reach/Tarapur.webp"
                                     : active === 3
-                                      ? "/images/global-reach/NaviM.webp"
+                                      ? "/images/global-reach/naviMumbai.webp"
                                       : active === 4
                                         ? "/images/global-reach/Vapi.webp"
                                         : "/images/global-reach/Jhagadia.webp"
@@ -451,13 +451,13 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     key={activeMob}
                     src={
                       activeMob === 0
-                        ? "/images/global-reach/Bachau.webp"
+                        ? "/images/global-reach/bachauImg.jpg"
                         : activeMob === 1
                           ? "/images/global-reach/Dahej.webp"
                           : activeMob === 2
                             ? "/images/global-reach/Tarapur.webp"
                             : activeMob === 3
-                              ? "/images/global-reach/NaviM.webp"
+                              ? "/images/global-reach/naviMumbai.webp"
                               : activeMob === 4
                                 ? "/images/global-reach/Vapi.webp"
                                 : "/images/global-reach/Jhagadia.webp"
@@ -472,13 +472,13 @@ const GRMaps = ({ data }: GRMapsProps) => {
                       key={`inner-${activeMob}`}
                       src={
                         activeMob === 0
-                          ? "/images/global-reach/Bachau.webp"
+                          ? "/images/global-reach/bachauImg.jpg"
                           : activeMob === 1
                             ? "/images/global-reach/Dahej.webp"
                             : activeMob === 2
                               ? "/images/global-reach/Tarapur.webp"
                               : activeMob === 3
-                                ? "/images/global-reach/NaviM.webp"
+                                ? "/images/global-reach/naviMumbai.webp"
                                 : activeMob === 4
                                   ? "/images/global-reach/Vapi.webp"
                                   : "/images/global-reach/Jhagadia.webp"
