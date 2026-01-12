@@ -29,12 +29,26 @@ gsap.registerPlugin(ScrollTrigger);
 
 const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   // Transform API data to group by regionName and map to AddressCard format
+  // Preserve the original order from API response
   const apiData = data || [];
 
-  // Group data by regionName
+  // Group data by regionName while preserving API order
+  // Use order field if available, otherwise maintain original array order
   const indiaData: AddressCardItem[] = apiData
-    .filter((item: WhereWeOperateDataItem) => item.regionName === "India")
-    .map((item: WhereWeOperateDataItem) => ({
+    .map((item: WhereWeOperateDataItem, index: number) => ({
+      item,
+      originalIndex: index,
+      order: item.order ?? index,
+    }))
+    .filter(({ item }) => item.regionName === "India")
+    .sort((a, b) => {
+      // Sort by order field if available, otherwise by original index
+      if (a.item.order !== null && b.item.order !== null) {
+        return a.item.order - b.item.order;
+      }
+      return a.originalIndex - b.originalIndex;
+    })
+    .map(({ item }) => ({
       location: item.locationName || "",
       company: item.companyName || "",
       address: item.address || "",
@@ -45,10 +59,20 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     }));
 
   const internationalData: AddressCardItem[] = apiData
-    .filter(
-      (item: WhereWeOperateDataItem) => item.regionName === "International",
-    )
-    .map((item: WhereWeOperateDataItem) => ({
+    .map((item: WhereWeOperateDataItem, index: number) => ({
+      item,
+      originalIndex: index,
+      order: item.order ?? index,
+    }))
+    .filter(({ item }) => item.regionName === "International")
+    .sort((a, b) => {
+      // Sort by order field if available, otherwise by original index
+      if (a.item.order !== null && b.item.order !== null) {
+        return a.item.order - b.item.order;
+      }
+      return a.originalIndex - b.originalIndex;
+    })
+    .map(({ item }) => ({
       location: item.locationName || "",
       company: item.companyName || "",
       address: item.address || "",
@@ -278,6 +302,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       },
                     },
                   }}
+                  slidesPerGroup={3}
                   navigation={{
                     prevEl: ".swiper-button-prev-where-we-operate",
                     nextEl: ".swiper-button-next-where-we-operate",
@@ -291,9 +316,9 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                   pagination={
                     showProgressBar
                       ? {
-                          el: ".home-latest-at-swiper",
-                          type: "progressbar",
-                        }
+                        el: ".home-latest-at-swiper",
+                        type: "progressbar",
+                      }
                       : undefined
                   }
                   mousewheel={{

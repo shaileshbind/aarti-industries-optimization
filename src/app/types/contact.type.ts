@@ -40,6 +40,7 @@ export type AddressCardItem = {
   url: string;
   registeredOffice: boolean;
   type: string;
+  order?: number | null;
 };
 
 export type WhereWeOperateTab = {
