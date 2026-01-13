@@ -7,11 +7,11 @@ const environment = process.env.NEXT_PUBLIC_IS_PRODUCTION;
 const nextConfig = async () => {
   const awsSecrets =
     secretName && environment === "true" ? await getSecret(secretName) : null;
-  console.log("AWS_SECRET_NAME:", secretName);
-  console.log("ENVIRONMENT:", environment);
+  // console.log("AWS_SECRET_NAME:", secretName);
+  // console.log("ENVIRONMENT:", environment);
 
   if (environment === "true" && awsSecrets) {
-    console.log("Fetched AWS Secrets for production true:", awsSecrets);
+    // console.log("Fetched AWS Secrets for production true:", awsSecrets);
   }
 
   const nextConfigObject: Partial<NextConfig> = {
@@ -42,7 +42,7 @@ const nextConfig = async () => {
     nextConfigObject.env = { ...(awsSecrets as Record<string, string>) };
   }
 
-  console.log("Final nextConfigObject:", nextConfigObject);
+  // console.log("Final nextConfigObject:", nextConfigObject);
 
   return nextConfigObject as NextConfig;
 };
