@@ -17,6 +17,7 @@ interface HitProps {
   productName?: string;
   category?: string;
   _index?: string;
+  heading?: string;
 }
 
 interface SearchDataProps {
@@ -145,6 +146,8 @@ export default function SearchResults() {
     if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
     if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
     if (hit?.slug === "home-page") return `/`;
+    if (hit?.slug === "press-release") return `/press-releases`;
+    if (hit?._index === "press_releases") return `/press-releases/${hit?.slug}`;
     if (hit?._index === "pages") return `/${hit?.slug}`;
 
     return `/${hit?.searchUrl}` || `/${hit?.slug}`;
@@ -251,7 +254,7 @@ export default function SearchResults() {
           searchedData?.hits?.map((hit, resultIndex) => (
             <OrangeTabCard
               key={`result-${searchedData.page}-${resultIndex}`}
-              title={hit?.title || hit?.productName || hit?.category || ""}
+              title={hit?.title || hit?.productName || hit?.category || hit?.heading || ""}
               link={getUrl(hit)}
               useTargetBlank={false}
               titleClassName="capitalize"

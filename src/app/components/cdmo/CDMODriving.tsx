@@ -1,11 +1,129 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BodyText1, BodyText2, H2, SubH2 } from "../Typography2";
 import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
 import { FadeInGroup, FadeInReveal } from "../ScrollReveal";
 import Button from "../Button";
+
+// Component for animated counter value
+interface CounterValueProps {
+  value: string;
+  duration?: number;
+  className?: string;
+}
+
+const CounterValue: React.FC<CounterValueProps> = ({
+  value,
+  duration = 2000,
+  className,
+}) => {
+  const [displayValue, setDisplayValue] = useState<string>("0");
+  const hasAnimatedRef = useRef<boolean>(false);
+  const elementRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element || hasAnimatedRef.current) return;
+
+    // Extract numeric value and suffix from the string
+    const match = value.match(/^([\d,]+\.?\d*)(.*)$/);
+    if (!match) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const numericStr = match[1].replace(/,/g, "");
+    const suffix = match[2] || "";
+    const targetValue = parseFloat(numericStr);
+
+    if (isNaN(targetValue)) {
+      setDisplayValue(value);
+      return;
+    }
+
+    // Set initial display with suffix if present
+    if (suffix) {
+      setDisplayValue("0" + suffix);
+    }
+
+    // Intersection Observer to trigger animation when element enters viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimatedRef.current) {
+            hasAnimatedRef.current = true;
+            observer.disconnect();
+
+            // Animate the counter
+            let startTime: number | null = null;
+            const startValue = 0;
+
+            const animate = (currentTime: number) => {
+              if (startTime === null) {
+                startTime = currentTime;
+              }
+
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+
+              // Easing function (ease-out)
+              const easeOut = 1 - Math.pow(1 - progress, 3);
+
+              const currentValue = startValue + (targetValue - startValue) * easeOut;
+
+              // Format the number (preserve decimals if original had them)
+              const formattedValue = numericStr.includes(".")
+                ? currentValue.toFixed(1)
+                : Math.floor(currentValue).toString();
+
+              // Add back commas for thousands
+              const formattedWithCommas = formattedValue.replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                ",",
+              );
+
+              setDisplayValue(formattedWithCommas + suffix);
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                // Ensure final value is exact
+                const finalFormatted = numericStr.includes(".")
+                  ? targetValue.toFixed(1)
+                  : Math.floor(targetValue).toString();
+                const finalWithCommas = finalFormatted.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ",",
+                );
+                setDisplayValue(finalWithCommas + suffix);
+              }
+            };
+
+            requestAnimationFrame(animate);
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of element is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [value, duration]);
+
+  return (
+    <span ref={elementRef} className={className}>
+      {displayValue}
+    </span>
+  );
+};
 
 const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
   const { image, leftSection, righSection } = data;
@@ -214,7 +332,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
             >
               {item?.value && (
                 <H2 className="text-orange-200 !text-[40px] lg:!text-[60px]">
-                  {item?.value}
+                  <CounterValue value={item.value} duration={2000} />
                 </H2>
               )}
               {item?.description && (
