@@ -41,7 +41,7 @@ const BreadCrumb = ({ breadcrumbArr }: BreadCrumbProps) => {
             <div className="px-2 flex items-center">
               <Image
                 src="/images/breadcrumb-divider.svg"
-                alt=""
+                alt="breadcrumb-divider"
                 width={17}
                 height={17}
               />

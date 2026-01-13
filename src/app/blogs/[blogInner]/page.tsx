@@ -5,7 +5,7 @@ import Share from "@/app/components/blogs/Share";
 import DateCard from "@/app/components/cards/DateCard";
 import ContactBanner from "@/app/components/ContactBanner";
 import GloballyCertified from "@/app/components/GloballyCertified";
-import { BodyText2, H2, H3, SubH1 } from "@/app/components/Typography2";
+import { BodyText2, H1, H2, SubH1 } from "@/app/components/Typography2";
 import {
   BlogInnerProps,
   PointerProps,
@@ -79,7 +79,7 @@ export default async function page({ params }: BlogInnerProps) {
               <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
             )}
 
-            {title && <H3 className="py-1">{title}</H3>}
+            {title && <H1 className="py-1 text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]">{title}</H1>}
 
             {bannerImageDesktop?.url && (
               <FadeInReveal className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">
@@ -180,7 +180,7 @@ export default async function page({ params }: BlogInnerProps) {
           <div
             className={clsx(
               (relatedBlogs?.data?.length === 0 || !relatedBlogs) &&
-                "mt-[72px] lg:mt-[140px]",
+              "mt-[72px] lg:mt-[140px]",
             )}
           >
             <GloballyCertified itemsData={globallyCertifiedData} />
