@@ -172,12 +172,12 @@ export default function TimeLine({ data }: TimelineData) {
         >
           {currentYear.slice(2, 3)}
         </h1>
-        <h1
+        <h2
           ref={yearDigit2Ref}
           className="font-inter text-gray-200 lg:text-[550px] text-[170px] font-bold"
         >
           {currentYear.slice(-1)}
-        </h1>
+        </h2>
       </div>
 
       <div className="flex justify-center flex-col-reverse lg:flex-row gap-16 items-start md:items-center lg:items-end fluid-container">
