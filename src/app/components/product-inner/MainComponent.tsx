@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/app/components/BreadCrumb";
-import { BodyText1, BodyText2, H3, SubH1 } from "@/app/components/Typography2";
+import { BodyText1, BodyText2, H1, SubH1 } from "@/app/components/Typography2";
 import Image from "next/image";
 import ProductList from "@/app/components/products/ProdutList";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
@@ -89,7 +89,7 @@ export default function ProductInnerPage({
                 </p>
               </div>
 
-              {product?.productName && <H3>{product?.productName}</H3>}
+              {product?.productName && <H1 className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]">{product?.productName}</H1>}
 
               {product?.description && (
                 <BodyText1 className="mt-2">{product?.description}</BodyText1>
@@ -142,34 +142,34 @@ export default function ProductInnerPage({
                 {/* msds only - via cms */}
                 {product?.productDetails?.documentSection?.documents
                   ?.length && (
-                  <div className="flex flex-col gap-[10px] mt-[10px]">
-                    {product?.productDetails?.documentSection?.documents?.map(
-                      (item, index) =>
-                        item?.documentName && (
-                          <div
-                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
-                            key={"index_" + index}
-                            onClick={() => {
-                              if (index === 0) {
-                                setshowMSDSPopup(true);
-                              } else {
-                                setshowGeneralPopup(true);
-                              }
-                              setdocument(item?.file?.url);
-                            }}
-                          >
-                            {item?.documentName}
-                            <Image
-                              src="/images/download-icon-grey2.svg"
-                              alt="globe"
-                              width={20}
-                              height={20}
-                            />
-                          </div>
-                        ),
-                    )}
-                  </div>
-                )}
+                    <div className="flex flex-col gap-[10px] mt-[10px]">
+                      {product?.productDetails?.documentSection?.documents?.map(
+                        (item, index) =>
+                          item?.documentName && (
+                            <div
+                              className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                              key={"index_" + index}
+                              onClick={() => {
+                                if (index === 0) {
+                                  setshowMSDSPopup(true);
+                                } else {
+                                  setshowGeneralPopup(true);
+                                }
+                                setdocument(item?.file?.url);
+                              }}
+                            >
+                              {item?.documentName}
+                              <Image
+                                src="/images/download-icon-grey2.svg"
+                                alt="globe"
+                                width={20}
+                                height={20}
+                              />
+                            </div>
+                          ),
+                      )}
+                    </div>
+                  )}
                 <button
                   className="text-[#DC4C03] text-base pt-4 md:pt-6 group cursor-pointer"
                   onClick={() => {
@@ -237,9 +237,8 @@ export default function ProductInnerPage({
                             return (
                               <div
                                 key={"application" + index}
-                                className={`flex items-start gap-2 ${
-                                  isLastItem && isOddCount ? "col-span-2" : ""
-                                }`}
+                                className={`flex items-start gap-2 ${isLastItem && isOddCount ? "col-span-2" : ""
+                                  }`}
                               >
                                 {hasDesc && (
                                   <Image
@@ -272,9 +271,8 @@ export default function ProductInnerPage({
                     .map((item, index) => (
                       <div
                         key={index}
-                        className={`${
-                          index % 2 === 0 ? "" : "bg-[#F7F9FA]"
-                        } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
+                        className={`${index % 2 === 0 ? "" : "bg-[#F7F9FA]"
+                          } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
                       >
                         <BodyText2 className="text-[#002F50]">
                           {item.title + " :"}

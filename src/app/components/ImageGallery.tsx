@@ -364,7 +364,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
               {imageData?.src && (
                 <Image
                   src={imageData?.src}
-                  alt={imageData?.alt || ""}
+                  alt={imageData?.alt || "banner"}
                   className="swiper-lazy w-full h-full object-cover"
                   width={800}
                   height={600}
@@ -484,7 +484,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
             <div className="relative w-full h-[70vh] rounded-[20px] overflow-hidden">
               <Image
                 src={selectedImage.src}
-                alt={selectedImage.alt || ""}
+                alt={selectedImage.alt || "banner"}
                 fill
                 className="object-contain"
                 sizes="90vw"

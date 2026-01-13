@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../SearchBar";
-import { SubH1 } from "../Typography2";
+import { H1, SubH1 } from "../Typography2";
 import { useRouter, useSearchParams } from "next/navigation";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Pagination from "@mui/material/Pagination";
@@ -17,6 +17,7 @@ interface HitProps {
   productName?: string;
   category?: string;
   _index?: string;
+  heading?: string;
 }
 
 interface SearchDataProps {
@@ -145,6 +146,8 @@ export default function SearchResults() {
     if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
     if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
     if (hit?.slug === "home-page") return `/`;
+    if (hit?.slug === "press-release") return `/press-releases`;
+    if (hit?._index === "press_releases") return `/press-releases/${hit?.slug}`;
     if (hit?._index === "pages") return `/${hit?.slug}`;
 
     return `/${hit?.searchUrl}` || `/${hit?.slug}`;
@@ -251,7 +254,7 @@ export default function SearchResults() {
           searchedData?.hits?.map((hit, resultIndex) => (
             <OrangeTabCard
               key={`result-${searchedData.page}-${resultIndex}`}
-              title={hit?.title || hit?.productName || hit?.category || ""}
+              title={hit?.title || hit?.productName || hit?.category || hit?.heading || ""}
               link={getUrl(hit)}
               useTargetBlank={false}
               titleClassName="capitalize"
@@ -259,9 +262,9 @@ export default function SearchResults() {
           ))}
 
         {!isLoading && hasSearched && !hasResults && (
-          <SubH1 className="text-center w-full py-10">
+          <H1 className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]">
             No results found for &apos;{searchValue}&apos;.
-          </SubH1>
+          </H1>
         )}
 
         {/* Show pagination only if there are results and more than 1 page */}

@@ -41,20 +41,49 @@ export default function StockTicker() {
           cache: "no-store",
         });
         const nseData = await nseResponse.json();
+        // console.log("nseData", nseData)
 
         // Handle API response structure: { success: true, data: [...] }
         if (nseData?.success && nseData?.data && Array.isArray(nseData.data) && nseData.data.length > 0) {
           const stock = nseData.data[0];
 
-          // Calculate change and changePercent from ltp and closePrice
-          const change = stock.ltp - stock.closePrice;
-          const changePercent = stock.closePrice !== 0
-            ? (change / stock.closePrice) * 100
+          // Determine the previous day's closing price for change calculation
+          // Always use the latest data from the API response
+          let previousClose: number | null = null;
+
+          // Strategy 1: Check rawData first - it often contains the actual previous close
+          if (stock.rawData) {
+            const rawClose = stock.rawData.closePrice;
+            if (rawClose && typeof rawClose === 'number' && rawClose !== stock.ltp) {
+              previousClose = rawClose;
+            } else if (stock.rawData.indicativeClosePrice &&
+              typeof stock.rawData.indicativeClosePrice === 'number' &&
+              stock.rawData.indicativeClosePrice !== stock.ltp) {
+              previousClose = stock.rawData.indicativeClosePrice;
+            }
+          }
+
+          // Strategy 2: Use top-level closePrice if it's different from ltp
+          if (previousClose === null && stock.closePrice && stock.closePrice !== stock.ltp) {
+            previousClose = stock.closePrice;
+          }
+
+          // Strategy 3: Use openPrice as fallback
+          if (previousClose === null && stock.openPrice &&
+            stock.openPrice !== stock.ltp &&
+            Math.abs(stock.openPrice - stock.ltp) > 0.01) {
+            previousClose = stock.openPrice;
+          }
+
+          // Calculate change and changePercent from previous close using latest ltp
+          const change = previousClose !== null ? stock.ltp - previousClose : 0;
+          const changePercent = previousClose !== null && previousClose !== 0
+            ? (change / previousClose) * 100
             : 0;
 
           // Determine direction
           const changeDirection: "up" | "down" | "neutral" =
-            change > 0 ? "up" : change < 0 ? "down" : "neutral";
+            change > 0.01 ? "up" : change < -0.01 ? "down" : "neutral";
 
           const stockData: StockData = {
             id: stock.id,
