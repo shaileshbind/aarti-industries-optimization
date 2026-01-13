@@ -20,7 +20,11 @@
  * @returns The title-cased string
  */
 export function toTitleCase(text: string): string {
-  if (!text || text.trim().length === 0) return text;
+  // Handle non-string inputs or empty values
+  if (text == null || typeof text !== "string") {
+    return text == null ? "" : String(text);
+  }
+  if (text.trim().length === 0) return text;
 
   // Case-sensitive exception list
   const exceptions = new Set([

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../SearchBar";
-import { SubH1 } from "../Typography2";
+import { H1, SubH1 } from "../Typography2";
 import { useRouter, useSearchParams } from "next/navigation";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Pagination from "@mui/material/Pagination";
@@ -262,9 +262,9 @@ export default function SearchResults() {
           ))}
 
         {!isLoading && hasSearched && !hasResults && (
-          <SubH1 className="text-center w-full py-10">
+          <H1 className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]">
             No results found for &apos;{searchValue}&apos;.
-          </SubH1>
+          </H1>
         )}
 
         {/* Show pagination only if there are results and more than 1 page */}

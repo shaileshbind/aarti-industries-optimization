@@ -3,7 +3,7 @@ import React, { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { FadeInRevealBlur } from "../ScrollReveal";
-import { BodyText2, H2 } from "../Typography2";
+import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
 import { useMediaQuery } from "@mui/material";
 
@@ -68,9 +68,9 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         )}
         {title && (
           <FadeInRevealBlur delay={0.2}>
-            <H2 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center">
+            <H1 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]">
               {title}
-            </H2>
+            </H1>
           </FadeInRevealBlur>
         )}
       </div>
