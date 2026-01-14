@@ -1,20 +1,5 @@
 @import "tailwindcss";
 
-/* Fonts */
-@font-face {
-  font-family: "Alte Hans Grotesk";
-  src: url("/fonts/AlteHaasGroteskRegular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Alte Hans Grotesk";
-  src: url("/fonts/AlteHaasGroteskBold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 :root {
   /* Base colors */
@@ -33,9 +18,6 @@
   --grey-200: #e1e1e1;
   --grey-300: #9997a2;
   --grey-400: #4c5861;
-
-  /* Font families */
-  --font-alte-hans: "Alte Hans Grotesk", sans-serif;
 
   /* Gradients */
   --gradient-orange-1: linear-gradient(
@@ -109,7 +91,7 @@ html.lenis {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Alte Hans Grotesk", sans-serif;
+  font-family: var(--font-alte-hans), sans-serif;
   overflow-x: hidden;
   /* Optimize for smooth scrolling */
   -webkit-font-smoothing: antialiased;
@@ -720,7 +702,7 @@ body {
 .blogInner li {
   font-size: 16px;
   color: #4c5861;
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
 }
 
 .blogInner h1,
@@ -730,7 +712,7 @@ body {
 .blogInner h5,
 .blogInner h6 {
   color: #002f50;
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
 }
 
 .blogInner h3 {
@@ -749,14 +731,14 @@ body {
 
 .blogInner figcaption span {
   color: #002f50;
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
   font-size: 16px;
 }
 
 .valueDescription p,
 .valueDescription span {
   line-height: 154%;
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
   color: #002f50;
 }
 
@@ -764,7 +746,7 @@ body {
 .ourStoryNote span {
   font-size: 12px;
   color: #4c5861;
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
 }
 
 .investorScrollbar::-webkit-scrollbar {
@@ -879,20 +861,20 @@ body {
 
 /* Dangerous HTML CSS - Press */
 .dangerousHTMLPress {
-  font-family: "Alte Hans Grotesk";
+  font-family: var(--font-alte-hans), sans-serif;
   table {
     width: 100%;
     overflow-x: unset;
   }
   p {
-    font-family: "Alte Hans Grotesk";
+    font-family: var(--font-alte-hans), sans-serif;
     font-weight: 400;
     font-size: 16px;
     color: #363940;
     margin-bottom: 16px;
   }
   h4 {
-    font-family: "Alte Hans Grotesk";
+    font-family: var(--font-alte-hans), sans-serif;
     font-weight: 600;
     line-height: 150%;
     font-size: 18px;
@@ -903,7 +885,7 @@ body {
     color: #f36633;
   }
   ul li {
-    font-family: "Alte Hans Grotesk";
+    font-family: var(--font-alte-hans), sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 160%;
@@ -922,7 +904,7 @@ body {
     font-weight: bold;
   }
   ol li {
-    font-family: "Alte Hans Grotesk";
+    font-family: var(--font-alte-hans), sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 160%;
