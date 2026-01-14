@@ -136,3 +136,14 @@ export type ContactBannerProps = {
   src?: string;
   className?: string;
 };
+
+
+export type HomeExploreProps = {
+  data: {
+    exploreMore: {
+      title?: string;
+      ctaButton?: ButtonProps[];
+      formTitle?: string;
+    };
+  }[];
+};

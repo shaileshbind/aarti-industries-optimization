@@ -82,7 +82,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       members: [
         {
           name: "Hetal Gogri Gala",
-          role1: "Non-Executive and Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
           role2: null,
         },
         {
@@ -102,7 +102,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
       members: [
         {
           name: "Hetal Gogri Gala",
-          role1: "Non-Executive and Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
           role2: null,
         },
         {
@@ -142,7 +142,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
         },
         {
           name: "Hetal Gogri Gala",
-          role1: "Non-Executive and Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
           role2: null,
         },
         {
@@ -207,7 +207,7 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
         },
         {
           name: "Hetal Gogri Gala",
-          role1: "Non-Executive and Independent Director",
+          role1: "Non-Executive and Non-Independent Director",
           role2: null,
         },
       ],

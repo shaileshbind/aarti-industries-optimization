@@ -15,6 +15,43 @@ import MobileFilter from "./MobileFilter";
 import Button from "../Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+// Custom sorting function for product names with numbers (e.g., "2,6 Di Fluoro Benzamide")
+const sortProductNames = (a: ProductData, b: ProductData): number => {
+  const nameA = (a.productName || "").toLowerCase().trim();
+  const nameB = (b.productName || "").toLowerCase().trim();
+  // Extract leading numbers (including comma-separated numbers like "2,6")
+  const getLeadingNumbers = (str: string): number[] => {
+    const match = str.match(/^(\d+(?:,\d+)*)/);
+    if (!match) return [];
+    return match[1].split(",").map(Number);
+  };
+  const numsA = getLeadingNumbers(nameA);
+  const numsB = getLeadingNumbers(nameB);
+  // If both have leading numbers, compare them numerically
+  if (numsA.length > 0 && numsB.length > 0) {
+    const minLength = Math.min(numsA.length, numsB.length);
+    for (let i = 0; i < minLength; i++) {
+      if (numsA[i] !== numsB[i]) {
+        return numsA[i] - numsB[i];
+      }
+    }
+    // If one has more numbers, it comes after
+    if (numsA.length !== numsB.length) {
+      return numsA.length - numsB.length;
+    }
+    // If numbers are equal, compare the rest alphabetically
+    const restA = nameA.replace(/^\d+(?:,\d+)*\s*/, "");
+    const restB = nameB.replace(/^\d+(?:,\d+)*\s*/, "");
+    return restA.localeCompare(restB, undefined, { numeric: true, sensitivity: "base" });
+  }
+  // If only one has leading numbers, numbers come first
+  if (numsA.length > 0) return -1;
+  if (numsB.length > 0) return 1;
+
+  // If neither has leading numbers, use standard alphabetical sort
+  return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: "base" });
+};
+
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
   searchQuery = "",
@@ -108,7 +145,10 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       }`;
       const res = await fetch(url);
       const result = await res.json();
-      setFilteredProducts(result.data || []);
+      const products = result.data || [];
+      // Sort products using custom function that handles numbers and commas
+      const sortedProducts = products.sort(sortProductNames);
+      setFilteredProducts(sortedProducts);
       setTotalProducts(result.total || 0);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -128,8 +168,11 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       const url = `/api/product-search?q=${encodeURIComponent(query)}`;
       const res = await fetch(url);
       const result = await res.json();
-      setFilteredProducts(result.products || []);
-      setTotalProducts(result.products?.length || 0);
+      const products = result.products || [];
+      // Sort products using custom function that handles numbers and commas
+      const sortedProducts = products.sort(sortProductNames);
+      setFilteredProducts(sortedProducts);
+      setTotalProducts(sortedProducts.length);
     } catch (error) {
       console.error("Error searching products:", error);
       setFilteredProducts([]);
@@ -224,9 +267,17 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
           isOpen={showSubCategories}
         >
           <div className="flex flex-wrap gap-3 p-4 rounded-2xl bg-[#F7F9FA] max-w-5xl mx-auto justify-center">
-            {catagoriesData
-              .find((item) => item.slug === activeTab)
-              ?.product_sub_categories?.map((sub: SubCategory) => {
+            {(() => {
+              const subCategories = catagoriesData
+                .find((item) => item.slug === activeTab)
+                ?.product_sub_categories || [];
+              return [...subCategories]
+                .sort((a: SubCategory, b: SubCategory) => {
+                  const subA = (a.subCategory || "").trim().toLowerCase();
+                  const subB = (b.subCategory || "").trim().toLowerCase();
+                  return subA.localeCompare(subB, undefined, { numeric: true, sensitivity: "base" });
+                })
+                .map((sub: SubCategory) => {
                 const selected = selectedSubCategories.includes(sub.slug);
                 return (
                   <button
@@ -254,7 +305,8 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                     )}
                   </button>
                 );
-              })}
+                });
+            })()}
           </div>
         </SmoothCollapseGSAP>
       )}
@@ -285,8 +337,14 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
       {!desktop && showMobileFilter && (
         <MobileFilter
           subCategories={
-            catagoriesData.find((item) => item.slug === activeTab)
-              ?.product_sub_categories || []
+            catagoriesData
+              .find((item) => item.slug === activeTab)
+              ?.product_sub_categories?.slice()
+              .sort((a: SubCategory, b: SubCategory) => {
+                const subA = (a.subCategory || "").trim().toLowerCase();
+                const subB = (b.subCategory || "").trim().toLowerCase();
+                return subA.localeCompare(subB, undefined, { numeric: true, sensitivity: "base" });
+              }) || []
           }
           selected={selectedSubCategories}
           onClose={() => setShowMobileFilter(false)}

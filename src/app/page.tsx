@@ -66,6 +66,7 @@ export default async function Home() {
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
       {sectionTen && <ContactBanner data={sectionTen} />}
+        {/* <HomeExplore/> */}
     </div>
   );
 }
