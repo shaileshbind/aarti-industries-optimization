@@ -2,6 +2,7 @@ import ExploreCard from "../cards/ExploreCard";
 import { CampusExpProps } from "@/app/types/campus.type";
 
 const CampusExp = ({ data }: CampusExpProps) => {
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
   return (
     <div className="py-[50px] lg:py-[100px] container !max-w-[1130px]">
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">

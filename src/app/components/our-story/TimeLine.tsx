@@ -54,6 +54,12 @@ export default function TimeLine({ data }: TimelineData) {
   const yearDigit2Ref = useRef<HTMLHeadingElement>(null);
   const isInitialYearRender = useRef(true);
 
+  // Autoplay timer ref and section visibility
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [, setIsSectionVisible] = useState(false);
+  const [shouldAutoplay, setShouldAutoplay] = useState(false);
+
   const content = yearContent?.[currentYear] || {
     title: "",
     description: "",
@@ -68,6 +74,82 @@ export default function TimeLine({ data }: TimelineData) {
   };
   const handleYearClick = (year: string) => setCurrentYear(year);
   const handleMobilePhaseSelect = (i: number) => handlePhaseClick(i);
+
+  // Intersection Observer to detect when section is visible
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsSectionVisible(entry.isIntersecting);
+          // Start autoplay once section becomes visible for the first time
+          if (entry.isIntersecting && !shouldAutoplay) {
+            setShouldAutoplay(true);
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of the section is visible
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [shouldAutoplay]);
+
+  // Autoplay functionality - advances through years and phases every 3 seconds
+  // Starts once section becomes visible, then continues indefinitely
+  useEffect(() => {
+    if (phases.length === 0 || !shouldAutoplay) {
+      // Clear interval if autoplay shouldn't run
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+      return;
+    }
+
+    const advanceTimeline = () => {
+      const currentPhaseData = phases[currentPhase];
+      if (!currentPhaseData || currentPhaseData.years.length === 0) return;
+
+      const currentYearIndex = currentPhaseData.years.indexOf(currentYear);
+
+      // If there's a next year in the current phase, go to it
+      if (currentYearIndex < currentPhaseData.years.length - 1) {
+        setCurrentYear(currentPhaseData.years[currentYearIndex + 1]);
+      }
+      // If we're at the last year of the current phase, move to the next phase
+      else if (currentPhase < phases.length - 1) {
+        const nextPhase = currentPhase + 1;
+        setCurrentPhase(nextPhase);
+        setCurrentYear(phases[nextPhase].years[0]);
+      }
+      // If we're at the last year of the last phase, loop back to the beginning
+      else {
+        setCurrentPhase(0);
+        setCurrentYear(phases[0].years[0]);
+      }
+    };
+
+    // Set up interval for autoplay (3 seconds)
+    autoplayIntervalRef.current = setInterval(advanceTimeline, 3000);
+
+    // Cleanup interval on unmount or when dependencies change
+    return () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    };
+  }, [currentPhase, currentYear, phases, shouldAutoplay]);
 
   // Animation for images
   useEffect(() => {
@@ -157,7 +239,10 @@ export default function TimeLine({ data }: TimelineData) {
   }, [currentYear]);
 
   return (
-    <section className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[80px] relative lg:pt-0 pt-4">
+    <section
+      ref={sectionRef}
+      className="overflow-hidden flex flex-col justify-between my-[50px] lg:mb-[100px] lg:mt-[80px] relative lg:pt-0 pt-4"
+    >
       <FadeInRevealBlur className="fluid-container">
         <div className="lg:w-[35%] static lg:absolute lg:top-10 mb-5 lg:mb-[unset]">
           <H3>{sectionTitle}</H3>

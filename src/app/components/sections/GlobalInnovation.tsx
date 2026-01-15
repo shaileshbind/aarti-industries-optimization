@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import AnimatedText from "../AnimatedText";
-import { BodyText1, BodyText3, H2, SubH2 } from "../Typography2";
+import { BodyText1, BodyText3, SubH2 } from "../Typography2";
 import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
@@ -36,9 +36,9 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
           </BodyText3>
         )}
         {/* Animated Heading */}
-        <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-10">
-          <H2>{title}</H2>
-        </AnimatedText>
+        {title && <AnimatedText className="lg:w-[60%] w-full lg:mb-16 mb-10">
+          <div className="font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-200 font-alte-hans" dangerouslySetInnerHTML={{__html:title}}/>
+        </AnimatedText>}
 
         <FadeInReveal className="flex flex-col lg:flex-row justify-between items-start">
           {/* Image Section */}

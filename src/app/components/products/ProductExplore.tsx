@@ -1,18 +1,17 @@
 import React from "react";
 import ExploreCard from "../cards/ExploreCard";
-import { ExploreCardsProps } from "@/app/types/digital-transformation.type";
+import { ProductExploreProps } from "@/app/types/product.listing.type";
 
-const ExploreCards: React.FC<ExploreCardsProps> = ({ data }) => {
-  if (!data || !Array.isArray(data) || data.length === 0) return null;
+const ProductExplore: React.FC<ProductExploreProps> = ({ data }) => {
+  if (!data || !Array.isArray(data) || data.length === 0 ) return null;
   return (
-    <div className="py-[50px] lg:py-[100px] container !max-w-[1130px]">
+    <div className="py-[50px] md:py-[100px] container !max-w-[1130px]">
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px]">
         <ExploreCard
           title={data?.[0]?.title}
           ctaButton={data?.[0]?.ctaButton}
           formTitle={data?.[0]?.formTitle}
         />
-
         <ExploreCard
           lightVariant
           title={data?.[1]?.title}
@@ -24,4 +23,4 @@ const ExploreCards: React.FC<ExploreCardsProps> = ({ data }) => {
   );
 };
 
-export default ExploreCards;
+export default ProductExplore;
