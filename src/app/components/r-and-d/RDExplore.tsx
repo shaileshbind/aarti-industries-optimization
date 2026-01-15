@@ -4,6 +4,7 @@ import { RDExploreProps } from "@/app/types/r-and-d.type";
 import { FadeInReveal } from "../ScrollReveal";
 
 const RDExplore: React.FC<RDExploreProps> = ({ data }) => {
+  if (!data || !Array.isArray(data) || data.length === 0 || !data[0]?.exploreMore || !data[1]?.exploreMore) return null;
   return (
     <div className="py-[50px] lg:py-[100px] container max-w-[1130px]!">
       <FadeInReveal delay={0.2}>

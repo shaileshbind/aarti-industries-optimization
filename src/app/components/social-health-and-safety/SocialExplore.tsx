@@ -3,6 +3,7 @@ import ExploreCard from "../cards/ExploreCard";
 import { SocialExploreProps } from "@/app/types/social-health-and-safety.type";
 
 const SocialExplore: React.FC<SocialExploreProps> = ({ data }) => {
+  if (!data || !data.exploreMore || !Array.isArray(data.exploreMore) || data.exploreMore.length === 0) return null;
   return (
     <div className="py-[50px] md:py-[100px] container max-w-[1130px]!">
       <div className="w-full grid md:flex gap-y-[10px] md:gap-x-[25px] ">

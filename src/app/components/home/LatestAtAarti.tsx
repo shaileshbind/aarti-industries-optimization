@@ -144,19 +144,23 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
             </div>
           )}
 
-          <div className="hidden lg:block">
-            <Button
-              title={currentCard?.ctaButton?.title || ""}
-              href={
-                currentCard?.ctaButton?.hasExternalLink == "true"
-                  ? currentCard?.ctaButton?.externalLink
-                  : currentCard?.ctaButton?.link?.link
-              }
-              useTargetBlank={
-                currentCard?.ctaButton?.hasExternalLink === "true"
-              }
-            />
-          </div>
+          {currentCard?.ctaButton?.title &&
+            (currentCard?.ctaButton?.externalLink ||
+              currentCard?.ctaButton?.link?.link) && (
+            <div className="hidden lg:block">
+              <Button
+                title={currentCard?.ctaButton?.title}
+                href={
+                  currentCard?.ctaButton?.hasExternalLink == "true"
+                    ? currentCard?.ctaButton?.externalLink
+                    : currentCard?.ctaButton?.link?.link
+                }
+                useTargetBlank={
+                  currentCard?.ctaButton?.hasExternalLink === "true"
+                }
+              />
+            </div>
+          )}
         </div>
       </FadeInReveal>
 
@@ -250,17 +254,21 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           </FadeInReveal>
         )}
 
-        <div className="flex lg:hidden justify-center mt-10">
-          <Button
-            title={currentCard?.ctaButton?.title || ""}
-            href={
-              currentCard?.ctaButton?.hasExternalLink == "true"
-                ? currentCard?.ctaButton?.externalLink
-                : currentCard?.ctaButton?.link?.link
-            }
-            useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true"}
-          />
-        </div>
+        {currentCard?.ctaButton?.title &&
+          (currentCard?.ctaButton?.externalLink ||
+            currentCard?.ctaButton?.link?.link) && (
+          <div className="flex lg:hidden justify-center mt-10">
+            <Button
+              title={currentCard?.ctaButton?.title}
+              href={
+                currentCard?.ctaButton?.hasExternalLink == "true"
+                  ? currentCard?.ctaButton?.externalLink
+                  : currentCard?.ctaButton?.link?.link
+              }
+              useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true"}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

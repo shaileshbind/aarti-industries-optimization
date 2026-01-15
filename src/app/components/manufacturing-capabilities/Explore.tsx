@@ -4,6 +4,7 @@ import { ExploreProps } from "@/app/types/manufacturing-capabilities.type";
 
 const Explore: React.FC<ExploreProps> = ({ data }) => {
   const { exploreMore } = data;
+  if (!data || !exploreMore || !Array.isArray(exploreMore) || exploreMore.length === 0) return null;
 
   return (
     <div className="py-[50px] md:py-[100px] container !max-w-[1130px]">

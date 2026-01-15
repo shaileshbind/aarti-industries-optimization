@@ -3,6 +3,7 @@ import ProductWrapper from "../components/products/ProductWrapper";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import SEO from "../components/SEO";
+import ProductExplore from "../components/products/ProductExplore";
 export const dynamic = "force-dynamic";
 
 export default async function Product() {
@@ -10,7 +11,7 @@ export default async function Product() {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*",
   );
-  const { section_one, product_categories } = data?.data;
+  const { section_one, product_categories, exploreMore } = data?.data;
   const seo = data?.seo;
 
   return (
@@ -45,6 +46,7 @@ export default async function Product() {
           <GloballyCertified itemsData={globallyCertifiedData} />
         </div>
       )}
+      {exploreMore && <ProductExplore data={exploreMore} />}
     </>
   );
 }

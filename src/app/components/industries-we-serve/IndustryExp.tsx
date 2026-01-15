@@ -4,6 +4,7 @@ import { IndustryExpProps } from "@/app/types/industries-we-serve.type";
 import { FadeInReveal } from "../ScrollReveal";
 
 const IndustryExp: React.FC<IndustryExpProps> = ({ data }) => {
+  if (!data || !data.exploreMore || !Array.isArray(data.exploreMore) || data.exploreMore.length === 0) return null;
   return (
     <div className="py-[50px] lg:py-[100px] container max-w-[1130px]!">
       <FadeInReveal delay={0.2}>

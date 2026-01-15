@@ -3,6 +3,7 @@ import { InvestorExpProps } from "@/app/types/investor-overview.type";
 
 const InvestorExplore = ({ data }: InvestorExpProps) => {
   const { exploreMore } = data;
+  if (!data || !exploreMore || !Array.isArray(exploreMore) || exploreMore.length === 0) return null;
   return (
     <div className="py-[50px] lg:py-[100px] container !max-w-[1130px]">
       <div className="w-full grid lg:flex gap-y-[10px] lg:gap-x-[25px]">
