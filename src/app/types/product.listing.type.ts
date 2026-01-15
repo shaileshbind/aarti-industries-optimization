@@ -1,3 +1,5 @@
+import { ButtonProps } from "./global.type";
+
 interface ImageFormat {
   ext: string;
   url: string;
@@ -100,4 +102,12 @@ export type SearchBarProps = {
   onSearch: (query: string) => void;
   setActiveTab: (tab: string) => void;
   clearTrigger: number;
+};
+
+export type ProductExploreProps = {
+  data: {
+      title?: string;
+      ctaButton?: ButtonProps[];
+      formTitle?: string;
+  }[];
 };

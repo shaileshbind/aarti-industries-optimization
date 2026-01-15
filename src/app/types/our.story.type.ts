@@ -7,6 +7,11 @@ export type OurStoryHeroProps = {
     title: string;
     image: ImageProps;
     mobImage: ImageProps;
+    ctaButton?: {
+      title?:string;
+      ctaButton?:ButtonProps[];
+      formTitle?:string;
+    }[]
   };
 };
 

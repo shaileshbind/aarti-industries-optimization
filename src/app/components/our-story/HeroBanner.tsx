@@ -6,6 +6,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
 import { useMediaQuery } from "@mui/material";
+import Button from "../Button";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   const image = data?.image?.url || "";
   const mobImage = data?.mobImage?.url || "";
   const alt = data?.image?.alternativeText || "Hero Image";
+  const ctaButton = data?.ctaButton;
 
   // GSAP Animations
   useLayoutEffect(() => {
@@ -71,6 +73,39 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             <H1 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]">
               {title}
             </H1>
+          </FadeInRevealBlur>
+        )}
+        {ctaButton && ctaButton.length > 0 && (
+          <FadeInRevealBlur delay={0.3}>
+            <div className="flex flex-wrap gap-[12px] mt-[12px] justify-left lg:justify-center">
+              {ctaButton?.map((items, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    {items?.ctaButton?.map((button, btnIndex) => {
+                      if (
+                        button?.title &&
+                        (button?.externalLink || button?.link?.link)
+                      ) {
+                        return (
+                          <Button
+                            key={btnIndex}
+                            title={button.title}
+                            href={
+                              button?.hasExternalLink === "true"
+                                ? button?.externalLink
+                                : button?.link?.link
+                            }
+                            useTargetBlank={button?.hasExternalLink === "true"}
+                            secondary
+                          />
+                        );
+                      }
+                      return null;
+                    })}
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </FadeInRevealBlur>
         )}
       </div>

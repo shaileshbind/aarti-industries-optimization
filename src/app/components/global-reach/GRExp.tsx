@@ -4,6 +4,7 @@ import { FadeInRevealBlur } from "../ScrollReveal";
 
 const GRExplore = ({ data }: GRExpProps) => {
   const { exploreMore } = data;
+  if (!data || !exploreMore || !Array.isArray(exploreMore) || exploreMore.length === 0) return null;
   return (
     <FadeInRevealBlur
       delay={0.2}
