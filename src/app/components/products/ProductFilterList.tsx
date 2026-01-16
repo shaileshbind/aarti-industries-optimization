@@ -291,7 +291,13 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
                         : "border-[#4C5861] hover:bg-gray-100",
                     )}
                   >
-                    <span className="">{sub.subCategory}</span>
+                    <span className="">
+                      {sub.subCategory?.startsWith("Other-")
+                        ? "Other"
+                        : sub.subCategory?.startsWith("Acid-")
+                          ? "Acid"
+                          : sub.subCategory}
+                    </span>
                     {selected && (
                       <div
                         onClick={(e) => {
