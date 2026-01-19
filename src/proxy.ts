@@ -2,21 +2,27 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getRedirects, type RedirectMapping } from "./_lib/getRedirects";
 
-// Cache redirects in memory to avoid fetching on every request
-let redirectCache: RedirectMapping[] | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+function stripTrailingSlash(path: string): string {
+  if (path === "/") return path;
+  return path.endsWith("/") ? path.slice(0, -1) : path;
+}
 
-async function getCachedRedirects(): Promise<RedirectMapping[]> {
-  const now = Date.now();
-  // Return cached redirects if still valid
-  if (redirectCache && now - cacheTimestamp < CACHE_DURATION) {
-    return redirectCache;
+function safePathnameFromUrl(value: string): string {
+  // Supports both absolute URLs and relative paths stored in CMS.
+  try {
+    if (value.startsWith("http://") || value.startsWith("https://")) {
+      return new URL(value).pathname || "/";
+    }
+  } catch {
+    // fall through
   }
-  // Fetch fresh redirects
-  redirectCache = await getRedirects();
-  cacheTimestamp = now;
-  return redirectCache;
+  // Ensure it behaves like a pathname
+  return value.startsWith("/") ? value : `/${value}`;
+}
+
+function getRedirectStatus(mapping: RedirectMapping): 301 | 302 | 303 | 307 | 308 {
+  const s = mapping.redirectionType;
+  return s === 301 || s === 302 || s === 303 || s === 307 || s === 308 ? s : 301;
 }
 
 export async function proxy(request: NextRequest) {
@@ -31,29 +37,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
   try {
-    // Get redirect mappings from backend
-    const redirects = await getCachedRedirects();
+    // Get redirect mappings from backend (no in-memory cache; reflects changes immediately)
+    const redirects = await getRedirects();
 
     // Normalize the current pathname (remove trailing slash for comparison)
-    const normalizedPath =
-      pathname.endsWith("/") && pathname !== "/"
-        ? pathname.slice(0, -1)
-        : pathname;
+    const normalizedPath = stripTrailingSlash(pathname);
 
     // Check if current URL matches any old URL
     for (const redirect of redirects) {
-      // Normalize old URL (remove trailing slash)
-      const normalizedOldUrl =
-        redirect.oldUrl.endsWith("/") && redirect.oldUrl !== "/"
-          ? redirect.oldUrl.slice(0, -1)
-          : redirect.oldUrl;
+      // Old URL can be absolute (https://...) or relative (/path). We match by pathname.
+      const oldPath = stripTrailingSlash(safePathnameFromUrl(redirect.oldUrl));
 
       // Check for exact match or match with trailing slash
-      if (
-        normalizedPath === normalizedOldUrl ||
-        pathname === redirect.oldUrl ||
-        normalizedPath === redirect.oldUrl
-      ) {
+      if (normalizedPath === oldPath) {
         // Build the new URL
         let newUrl: URL;
 
@@ -68,13 +64,15 @@ export async function proxy(request: NextRequest) {
           newUrl = new URL(redirect.newUrl, request.url);
         }
 
-        // Preserve query parameters from the original request
+        // Preserve query parameters from the original request (without clobbering newUrl params)
         if (search) {
-          newUrl.search = search;
+          const incoming = new URLSearchParams(search);
+          for (const [k, v] of incoming.entries()) {
+            if (!newUrl.searchParams.has(k)) newUrl.searchParams.append(k, v);
+          }
         }
 
-        // Perform 301 permanent redirect
-        return NextResponse.redirect(newUrl, 301);
+        return NextResponse.redirect(newUrl, getRedirectStatus(redirect));
       }
     }
   } catch {
