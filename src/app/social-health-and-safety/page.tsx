@@ -11,6 +11,7 @@ import EducationDevelopment from "../components/social-health-and-safety/Educati
 import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
 import SocialExplore from "../components/social-health-and-safety/SocialExplore";
 import StatsSection from "../components/social-health-and-safety/StatsSection";
+import SocialTestimonials from "../components/social-health-and-safety/SocialTestimonials";
 
 export const dynamic = "force-dynamic";
 const page = async () => {
@@ -28,6 +29,7 @@ const page = async () => {
     section_seven,
     section_eight,
     section_nine,
+    testimonial_section,
   } = data?.data;
   const seo = data?.seo;
   return (
@@ -67,6 +69,7 @@ const page = async () => {
         </div>
       )}
       {section_nine && <StatsSection data={section_nine} />}
+     {testimonial_section && <SocialTestimonials data={testimonial_section}/>}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

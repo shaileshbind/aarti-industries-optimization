@@ -22,13 +22,47 @@ const GRMaps = ({ data }: GRMapsProps) => {
   const [active, setActive] = useState<number | null>(null);
   const [activeMob, setActiveMob] = useState(0);
   const [activeBlip, setActiveBlip] = useState<number | null>();
+  const [jhagadiaZone, setJhagadiaZone] = useState(0);
+  const [jhagadiaZoneMob, setJhagadiaZoneMob] = useState(0);
   const totalCities = 6;
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveMob((prev) => (prev + 1) % totalCities);
-    }, 4000);
+    }, 6000);
     return () => clearInterval(interval);
+  }, [activeMob]);
+
+  // Reset Jhagadia zone when switching away from Jhagadia on desktop
+  useEffect(() => {
+    if (active !== 5) {
+      setJhagadiaZone(0);
+    }
+  }, [active]);
+
+  // Reset Jhagadia zone when switching away from Jhagadia on mobile
+  useEffect(() => {
+    if (activeMob !== 5) {
+      setJhagadiaZoneMob(0);
+    }
+  }, [activeMob]);
+  // Autoplay for Jhagadia zones on desktop
+  useEffect(() => {
+    if (active === 5) {
+      const interval = setInterval(() => {
+        setJhagadiaZone((prev) => (prev + 1) % 2);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [active]);
+  // Autoplay for Jhagadia zones on mobile
+  useEffect(() => {
+    if (activeMob === 5) {
+      const interval = setInterval(() => {
+        setJhagadiaZoneMob((prev) => (prev + 1) % 2);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
   }, [activeMob]);
 
   useEffect(() => {
@@ -327,6 +361,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     <div className="relative w-full h-[240px] overflow-hidden rounded-[1rem] flex items-center justify-center">
                       <div className="absolute inset-0 overflow-hidden">
                         <Image
+                          key={`${active}-${active === 5 ? jhagadiaZone : ""}`}
                           src={
                             active === 0
                               ? "/images/global-reach/BhachauUpdated.webp"
@@ -338,7 +373,9 @@ const GRMaps = ({ data }: GRMapsProps) => {
                                     ? "/images/global-reach/naviMumbai.webp"
                                     : active === 4
                                       ? "/images/global-reach/Vapi.webp"
-                                      : "/images/global-reach/Jhagadia.webp"
+                                      : jhagadiaZone === 0
+                                        ? "/images/global-reach/zone2.webp"
+                                        : "/images/global-reach/zone4.webp"
                           }
                           alt="img"
                           fill
@@ -347,6 +384,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
                         <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                           <Image
+                            key={`inner-${active}-${active === 5 ? jhagadiaZone : ""}`}
                             src={
                               active === 0
                                 ? "/images/global-reach/BhachauUpdated.webp"
@@ -358,7 +396,9 @@ const GRMaps = ({ data }: GRMapsProps) => {
                                       ? "/images/global-reach/naviMumbai.webp"
                                       : active === 4
                                         ? "/images/global-reach/Vapi.webp"
-                                        : "/images/global-reach/Jhagadia.webp"
+                                        : jhagadiaZone === 0
+                                          ? "/images/global-reach/zone2.webp"
+                                          : "/images/global-reach/zone4.webp"
                             }
                             alt="img"
                             fill
@@ -366,6 +406,29 @@ const GRMaps = ({ data }: GRMapsProps) => {
                           />
                         </span>
                       </div>
+                      {/* Navigation dots for Jhagadia only */}
+                      {active === 5 && (
+                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                          <button
+                            onClick={() => setJhagadiaZone(0)}
+                            className={`w-2 h-2 rounded-full transition-all ${
+                              jhagadiaZone === 0
+                                ? "bg-white"
+                                : "bg-white/50"
+                            }`}
+                            aria-label="Jhagadia Zone II"
+                          />
+                          <button
+                            onClick={() => setJhagadiaZone(1)}
+                            className={`w-2 h-2 rounded-full transition-all ${
+                              jhagadiaZone === 1
+                                ? "bg-white"
+                                : "bg-white/50"
+                            }`}
+                            aria-label="Jhagadia Zone IV"
+                          />
+                        </div>
+                      )}
                     </div>
                     <BodyText2 className="text-white mt-[14px] text-center">
                       {active === 0
@@ -378,7 +441,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                               ? "Navi Mumbai"
                               : active === 4
                                 ? "Vapi"
-                                : "Jhagadia"}
+                                : `Jhagadia Zone ${jhagadiaZone === 0 ? "II" : "IV"}`}
                     </BodyText2>
                   </div>
                 )}
@@ -448,7 +511,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               <div className="relative w-full h-[93px] overflow-hidden rounded-[6px] flex items-center justify-center">
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
-                    key={activeMob}
+                    key={`${activeMob}-${jhagadiaZoneMob}`}
                     src={
                       activeMob === 0
                         ? "/images/global-reach/BhachauUpdated.webp"
@@ -460,7 +523,9 @@ const GRMaps = ({ data }: GRMapsProps) => {
                               ? "/images/global-reach/naviMumbai.webp"
                               : activeMob === 4
                                 ? "/images/global-reach/Vapi.webp"
-                                : "/images/global-reach/Jhagadia.webp"
+                                : jhagadiaZoneMob === 0
+                                  ? "/images/global-reach/zone2.webp"
+                                  : "/images/global-reach/zone4.webp"
                     }
                     alt="img"
                     fill
@@ -469,7 +534,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-3xl"></i>
                   <span className="absolute bottom-0 right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[100%] h-[100%]">
                     <Image
-                      key={`inner-${activeMob}`}
+                      key={`inner-${activeMob}-${jhagadiaZoneMob}`}
                       src={
                         activeMob === 0
                           ? "/images/global-reach/BhachauUpdated.webp"
@@ -481,7 +546,9 @@ const GRMaps = ({ data }: GRMapsProps) => {
                                 ? "/images/global-reach/naviMumbai.webp"
                                 : activeMob === 4
                                   ? "/images/global-reach/Vapi.webp"
-                                  : "/images/global-reach/Jhagadia.webp"
+                                  : jhagadiaZoneMob === 0
+                                    ? "/images/global-reach/zone2.webp"
+                                    : "/images/global-reach/zone4.webp"
                       }
                       alt="img"
                       fill
@@ -489,8 +556,31 @@ const GRMaps = ({ data }: GRMapsProps) => {
                     />
                   </span>
                 </div>
+                {/* Navigation dots for Jhagadia only - Mobile */}
+                {activeMob === 5 && (
+                  <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-10">
+                    <button
+                      onClick={() => setJhagadiaZoneMob(0)}
+                      className={`w-1.5 h-1.5 rounded-full transition-all ${
+                        jhagadiaZoneMob === 0
+                          ? "bg-white"
+                          : "bg-white/50"
+                      }`}
+                      aria-label="Jhagadia Zone II"
+                    />
+                    <button
+                      onClick={() => setJhagadiaZoneMob(1)}
+                      className={`w-1.5 h-1.5 rounded-full transition-all ${
+                        jhagadiaZoneMob === 1
+                          ? "bg-white"
+                          : "bg-white/50"
+                      }`}
+                      aria-label="Jhagadia Zone IV"
+                    />
+                  </div>
+                )}
               </div>
-              <BodyText2 className="text-white mt-[5px] text-center">
+              <BodyText2 className="text-white mt-[5px] text-center text-[10px] leading-tight">
                 {activeMob === 0
                   ? "Bhachau"
                   : activeMob === 1
@@ -501,7 +591,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
                         ? "Navi Mumbai"
                         : activeMob === 4
                           ? "Vapi"
-                          : "Jhagadia"}
+                          : `Jhagadia Zone ${jhagadiaZoneMob === 0 ? "II" : "IV"}`}
               </BodyText2>
             </div>
           </div>
