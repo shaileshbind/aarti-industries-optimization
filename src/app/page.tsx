@@ -1,6 +1,5 @@
 import { getPageData } from "@/_lib/pageData.fetch";
 import ByUseSection from "./components/home/ByUseSection";
-import ContactBanner from "./components/ContactBanner";
 import FrameworkForged from "./components/sections/FrameworkForged";
 import GlobalPartner from "./components/home/GlobalPartner";
 import HomeHero from "./components/home/HomeHero";
@@ -11,6 +10,7 @@ import GloballyCertified from "./components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import SEO from "./components/SEO";
 import HomeSections from "./components/home/HomeSections";
+import HomeExplore from "./components/home/HomeExplore";
 
 export const dynamic = "force-dynamic";
 
@@ -65,8 +65,7 @@ export default async function Home() {
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
-      {sectionTen && <ContactBanner data={sectionTen} />}
-        {/* <HomeExplore/> */}
+      {sectionTen && <HomeExplore data={sectionTen} />}
     </div>
   );
 }
