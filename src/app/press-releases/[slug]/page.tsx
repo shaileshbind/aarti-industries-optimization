@@ -37,7 +37,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       />
       <div className="my-[50px] lg:my-[100px] container">
         <BodyText2 className="text-orange-200">{data.date}</BodyText2>
-        <H1 className="lg:!text-[36px]">{data.heading}</H1>
+        <H1 className="lg:!text-[36px]" applyTitleCase={true}>{data.heading}</H1>
         <div
           className="mt-[20px] dangerousHTMLPress font-alte-hans"
           dangerouslySetInnerHTML={{ __html: data?.pdfContent }}

@@ -89,7 +89,7 @@ export default function ProductInnerPage({
                 </p>
               </div>
 
-              {product?.productName && <H1 className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]">{product?.productName}</H1>}
+              {product?.productName && <H1 className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]" applyTitleCase={true}>{product?.productName}</H1>}
 
               {product?.description && (
                 <BodyText1 className="mt-2">{product?.description}</BodyText1>

@@ -79,7 +79,7 @@ export default async function page({ params }: BlogInnerProps) {
               <p className="text-sm text-[#DC4C03]">{formatDate(date)}</p>
             )}
 
-            {title && <H1 className="py-1 text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]">{title}</H1>}
+            {title && <H1 className="py-1 text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]" applyTitleCase={true}>{title}</H1>}
 
             {bannerImageDesktop?.url && (
               <FadeInReveal className="w-full h-[280px] md:h-[350px] lg:h-[406px] rounded-[20px] overflow-hidden mt-6 mb-4 md:mb-[30px]">

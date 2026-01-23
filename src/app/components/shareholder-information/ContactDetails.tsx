@@ -26,13 +26,13 @@ const CONTACT_DATA = [
     subCategory: "Registrars & Share Transfer Agent",
     address: {
       name: "MUFG Intime India Pvt. Ltd.",
-      position: "Company Secretary & Compliance Officer",
+      position: "Registrar and Share Transfer Agent",
       address:
         "C-101, 247 Park, L.B.S Marg,Vikhroli (W), Mumbai - 400083,Maharashtra, India",
       phone: "+91 22 4918 6000",
-      email: "rnt.helpdesk@linkintime.co.in",
+      email: "investor.helpdesk@in.mpms.mufg.com",
       fax: "+91 22 4918 6060",
-      website: "http://linkintime.co.in",
+      website: " https://in.mpms.mufg.com",
       unit: "Unit: Aarti Industries Limited",
     },
   },

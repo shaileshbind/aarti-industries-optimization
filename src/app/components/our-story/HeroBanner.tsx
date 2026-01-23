@@ -70,7 +70,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
         )}
         {title && (
           <FadeInRevealBlur delay={0.2}>
-            <H1 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]">
+            <H1 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]" applyTitleCase={true}>
               {title}
             </H1>
           </FadeInRevealBlur>
