@@ -10,7 +10,7 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
   return (
     <section className="w-full ">
       <div className="container">
-        <H1 className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]">
+        <H1 className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]" applyTitleCase={true}>
           {data?.sectionTitle}
         </H1>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-4 gap-y-[50px] w-full">

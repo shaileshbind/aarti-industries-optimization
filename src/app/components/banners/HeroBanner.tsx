@@ -220,6 +220,7 @@ const HeroBanner = ({
                         centerText && "pr-0 lg:pr-[0]",
                         centerTitleClassName,
                       )}
+                      applyTitleCase={true}
                     >
                       {title}
                     </H1>
@@ -361,7 +362,7 @@ const HeroBanner = ({
             )}
             {title && (
               <FadeInRevealBlur delay={0.1}>
-                <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full">
+                <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full" applyTitleCase={true}>
                   {title}
                 </H1>
               </FadeInRevealBlur>
