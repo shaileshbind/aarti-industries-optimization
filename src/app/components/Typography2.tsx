@@ -5,9 +5,10 @@ import { useTitleCase } from "../../../utils/toTitleCase";
 type TypographyProps = {
   className?: string;
   children: React.ReactNode;
+  applyTitleCase?: boolean;
 };
 
-export const H1 = ({ className, children }: TypographyProps) => {
+export const H1 = ({ className, children, applyTitleCase = false }: TypographyProps) => {
   return (
     <h1
       className={clsxN(
@@ -15,7 +16,7 @@ export const H1 = ({ className, children }: TypographyProps) => {
         className,
       )}
     >
-      {useTitleCase(children as string)}
+      {applyTitleCase ? useTitleCase(children as string) : children}
     </h1>
   );
 };

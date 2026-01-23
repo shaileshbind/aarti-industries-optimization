@@ -262,7 +262,7 @@ export default function SearchResults() {
           ))}
 
         {!isLoading && hasSearched && !hasResults && (
-          <H1 className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]">
+          <H1 className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]" applyTitleCase={true}>
             No results found for &apos;{searchValue}&apos;.
           </H1>
         )}

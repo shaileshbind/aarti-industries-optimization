@@ -149,8 +149,10 @@ export function toTitleCase(text: string): string {
 
   /**
    * Applies title case to a single word
+   * @param word - The word to process
+   * @param isFirstWord - Whether this is the first word in the title (should be capitalized even if small word)
    */
-  function titleCaseWord(word: string): string {
+  function titleCaseWord(word: string, isFirstWord: boolean = false): string {
     if (!word) return word;
 
     // Special handling for AIL variations - preserve exactly as written
@@ -162,8 +164,12 @@ export function toTitleCase(text: string): string {
     // Normalize to lowercase first for consistent processing
     const normalizedWord = word.toLowerCase();
 
-    // Check if it's a small word (keep lowercase)
+    // Check if it's a small word (keep lowercase unless it's the first word)
     if (smallWords.has(normalizedWord)) {
+      // Capitalize if it's the first word
+      if (isFirstWord) {
+        return normalizedWord.charAt(0).toUpperCase() + normalizedWord.slice(1);
+      }
       return normalizedWord;
     }
 
@@ -173,21 +179,28 @@ export function toTitleCase(text: string): string {
 
   /**
    * Handles hyphenated words
+   * @param word - The hyphenated word to process
+   * @param isFirstWord - Whether this is the first word in the title
    */
-  function titleCaseHyphenated(word: string): string {
-    if (!word.includes("-")) return titleCaseWord(word);
+  function titleCaseHyphenated(word: string, isFirstWord: boolean = false): string {
+    if (!word.includes("-")) return titleCaseWord(word, isFirstWord);
 
     // Split on hyphens
     const parts = word.split("-");
-    const processedParts = parts.map((part) => {
+    const processedParts = parts.map((part, index) => {
       // Preserve if it matches exceptions (check original part for case-sensitive exceptions)
       if (shouldPreserve(part)) return part;
 
       // Normalize to lowercase first
       const lowerPart = part.toLowerCase();
 
-      // For hyphenated words, capitalize both sides unless it's a small word
+      // For hyphenated words, capitalize the first part if it's the first word of the title
+      // Otherwise, capitalize both sides unless it's a small word
       if (smallWords.has(lowerPart)) {
+        // Capitalize if it's the first part and this is the first word of the title
+        if (isFirstWord && index === 0) {
+          return lowerPart.charAt(0).toUpperCase() + lowerPart.slice(1);
+        }
         return lowerPart;
       }
 
@@ -310,7 +323,9 @@ export function toTitleCase(text: string): string {
   const words = mergedTokens
     .filter((t) => t.type === "word")
     .map((t) => t.value);
-  const processedWords = words.map((word) => {
+  const processedWords = words.map((word, index) => {
+    const isFirstWord = index === 0;
+    
     // Special handling for AIL variations - preserve exactly as written, bypassing all rules
     if (isAILVariation(word)) return word;
 
@@ -328,7 +343,7 @@ export function toTitleCase(text: string): string {
       return word;
     }
 
-    return titleCaseHyphenated(word);
+    return titleCaseHyphenated(word, isFirstWord);
   });
 
   // Reconstruct the string with original separators
