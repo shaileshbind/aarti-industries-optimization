@@ -21,7 +21,7 @@ const Banner: React.FC<
         <div className="bg-[#ffffff] opacity-50 rounded-[646px] w-[80%] md:w-[35%] h-[90%] absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl z-[1]" />
         {/* Text Content */}
         <div className="h-auto max-w-[65%] md:max-w-[30%] lg:mt-20 z-10">
-          <H1 className="text-h2-l text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-100">{title}</H1>
+          <H1 className="text-h2-l text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-100" applyTitleCase={true}>{title}</H1>
           <BodyText1 className="text-body-m mt-1 mb-5 lg:mb-9 text-[#646464]">
             {description}
           </BodyText1>
