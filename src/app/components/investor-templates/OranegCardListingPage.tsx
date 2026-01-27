@@ -12,7 +12,7 @@ const OrangeCardListingPage = async ({
   params,
 }: OrangeCardListingPageProps) => {
   const data = await getPageData(`/pages/by-slug/${params}`);
-  const key = Object.keys(data?.data).pop();
+  const key = data?.data ? Object.keys(data.data).pop() : "";
   const seo = data?.seo;
 
   return (
