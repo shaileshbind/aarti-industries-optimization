@@ -12,6 +12,7 @@ import {
 import MSDSPopup from "../Popups/MSDSPopup";
 import { useEffect, useState } from "react";
 import GeneralPopup from "../Popups/GeneralPopup";
+import Link from "next/link";
 
 interface ProductInnerPageProps {
   data?: ProductData;
@@ -31,6 +32,7 @@ export default function ProductInnerPage({
   const relatedProducts = relatedData;
 
   const productTable = [
+    { title: "IUPAC Name", desc: productDetails?.iupacName },
     { title: "Chemistries", desc: productDetails?.chemistries },
     {
       title: "Common Names",
@@ -47,7 +49,6 @@ export default function ProductInnerPage({
       title: "Abbreviation",
       desc: productDetails?.abbreviation,
     },
-    { title: "IUPAC Name", desc: productDetails?.iupacName },
   ];
 
   useEffect(() => {
@@ -142,34 +143,51 @@ export default function ProductInnerPage({
                 {/* msds only - via cms */}
                 {product?.productDetails?.documentSection?.documents
                   ?.length && (
-                    <div className="flex flex-col gap-[10px] mt-[10px]">
-                      {product?.productDetails?.documentSection?.documents?.map(
-                        (item, index) =>
-                          item?.documentName && (
-                            <div
-                              className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
-                              key={"index_" + index}
-                              onClick={() => {
-                                if (index === 0) {
-                                  setshowMSDSPopup(true);
-                                } else {
-                                  setshowGeneralPopup(true);
-                                }
-                                setdocument(item?.file?.url);
-                              }}
-                            >
-                              {item?.documentName}
-                              <Image
-                                src="/images/download-icon-grey2.svg"
-                                alt="globe"
-                                width={20}
-                                height={20}
-                              />
-                            </div>
-                          ),
-                      )}
-                    </div>
-                  )}
+                  <div className="flex flex-col gap-[10px] mt-[10px]">
+                    {product?.productDetails?.documentSection?.documents?.map(
+                      (item, index) =>
+                        item?.documentName && (
+                          <div
+                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                            key={"index_" + index}
+                            onClick={() => {
+                              if (index === 0) {
+                                setshowMSDSPopup(true);
+                              } else {
+                                setshowGeneralPopup(true);
+                              }
+                              setdocument(item?.file?.url);
+                            }}
+                          >
+                            {item?.documentName}
+                            <Image
+                              src="/images/download-icon-grey2.svg"
+                              alt="globe"
+                              width={20}
+                              height={20}
+                            />
+                          </div>
+                        ),
+                    )}
+                  </div>
+                )}
+                {/* t&c cta - static */}
+                <div className="flex flex-col gap-[10px] mt-[10px]">
+                  <Link
+                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    target="_blank"
+                    href="https://d9bnjb3uan3b2.cloudfront.net/general_terms_and_conditions_for_supply_e8e0d286c3.pdf"
+                  >
+                    General T&C
+                    <Image
+                      src="/images/download-icon-grey2.svg"
+                      alt="globe"
+                      width={20}
+                      height={20}
+                    />
+                  </Link>
+                </div>
+
                 <button
                   className="text-[#DC4C03] text-base pt-4 md:pt-6 group cursor-pointer"
                   onClick={() => {
