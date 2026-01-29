@@ -1,6 +1,6 @@
 "use client";
 import { useLayoutEffect, useRef } from "react";
-import { BodyText1, BodyText2, H2 } from "../Typography2";
+import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
@@ -161,14 +161,14 @@ const SearchBanner = ({
                 )}
                 {title && (
                   <div>
-                    <H2
+                    <H1
                       className={clsx(
-                        `text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
+                        `font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] font-alte-hans text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
                       )}
                     >
                       {title}
-                    </H2>
+                    </H1>
                   </div>
                 )}
                 {desc && leftDesc && (
@@ -327,9 +327,9 @@ const SearchBanner = ({
             )}
             {title && (
               <FadeInRevealBlur delay={0.1}>
-                <H2 className="mt-[12px] max-w-full lg:max-w-[480px]">
-                  {title}
-                </H2>
+                <H1 className="font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-200 font-alte-hans mt-[12px] max-w-full lg:max-w-[480px]">
+                  {title} 
+                </H1>
               </FadeInRevealBlur>
             )}
             {desc && (
