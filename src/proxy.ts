@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 import { getRedirects, type RedirectMapping } from "./_lib/getRedirects";
+
+/** When false (or unset), redirect unauthenticated users to /login. Prod (true) = no gate. */
+const REQUIRE_LOGIN = process.env.NEXT_PUBLIC_IS_PRODUCTION !== "true";
 
 function stripTrailingSlash(path: string): string {
   if (path === "/") return path;
@@ -79,10 +83,39 @@ export async function proxy(request: NextRequest) {
     // Continue with normal request if redirect check fails
   }
 
+  // Auth gate: redirect unauthenticated users to /login when not production
+  if (REQUIRE_LOGIN) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    const valid = !!token;
+    const isLogin = pathname === "/login";
+
+    if (valid && isLogin) {
+      const next =
+        request.nextUrl.searchParams.get("callbackUrl") ??
+        request.nextUrl.searchParams.get("next") ??
+        "/";
+      const path = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+      const url = request.nextUrl.clone();
+      url.pathname = path;
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+    if (valid) return NextResponse.next();
+    if (!isLogin) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(url);
+    }
+  }
+
   return NextResponse.next();
 }
 
-// Configure which routes the middleware should run on
+// Configure which routes the proxy runs on
 export const config = {
   matcher: [
     /*

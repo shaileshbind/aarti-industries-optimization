@@ -13,6 +13,7 @@ import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
 import { useMediaQuery } from "@mui/material";
+import { useMargin } from "@/app/contexts/MarginContext";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);
@@ -44,6 +45,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const leafBigImg = useRef<HTMLSpanElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
   const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
+  const tabBarContainerRef = useRef<HTMLDivElement>(null);
+  const { marginBottom, setMarginBottom } = useMargin();
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
@@ -100,7 +103,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     };
   }, [mainSection.length]);
 
-  const indicatorColor = "#F97316";
+  const indicatorColor = "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
@@ -108,7 +111,9 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     const container = containerRef.current;
     if (!container) return;
 
-    const activeButton = tabRefs.current[activeTab] ?? null;
+    // Use activeTabMob for mobile, activeTab for desktop
+    const currentActiveTab = isTablet ? activeTabMob : activeTab;
+    const activeButton = tabRefs.current[currentActiveTab] ?? null;
 
     if (!activeButton) {
       setIndicator((prev) =>
@@ -117,14 +122,17 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       return;
     }
 
-    const left = activeButton.offsetLeft - (container.scrollLeft || 0);
+    // On mobile, the scrollable element is the outer wrapper (overflow-x-auto), not the inner flex
+    const scrollContainer = isTablet ? container.parentElement : container;
+    const scrollLeft = scrollContainer?.scrollLeft ?? 0;
+    const left = activeButton.offsetLeft - scrollLeft;
     const width = activeButton.offsetWidth;
     setIndicator((prev) => {
       if (prev.left === left && prev.width === width && prev.visible)
         return prev;
       return { left, width, visible: true };
     });
-  }, [activeTab]);
+  }, [activeTab, activeTabMob, isTablet]);
 
   const handleTabClick = (index: number) => {
     const st = scrollTriggerRef.current;
@@ -179,8 +187,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
       // Animation timeline - handles the initial animations and slide sync
       const animationEndProgress = ANIMATION_END_PROGRESS;
+      // For tablet, add marginBottom to scroll distance to account for content overflow on small screens
+      // Increased multiplier from 1.5 to 1.8 for balanced scroll space on mobile
       const animationScrollDistance = isTablet
-        ? window.innerHeight * 1.5
+        ? window.innerHeight * 1.8 + marginBottom
         : window.innerHeight * 4;
 
       const mainTl = gsap.timeline({
@@ -499,18 +509,25 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length, slideWidth, isTablet]);
+  }, [mainSection.length, slideWidth, isTablet, marginBottom]);
 
   useLayoutEffect(() => {
     measureIndicator();
 
     const resizeObserver = new ResizeObserver(measureIndicator);
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
+    const container = containerRef.current;
+    if (container) {
+      resizeObserver.observe(container);
       tabRefs.current.forEach((button) => {
         if (button) resizeObserver.observe(button);
       });
+    }
+
+    // On mobile, tab bar scrolls horizontally; keep indicator in sync
+    const scrollContainer = isTablet ? container?.parentElement : null;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", measureIndicator);
     }
 
     const handleResize = () => measureIndicator();
@@ -518,9 +535,60 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
     return () => {
       resizeObserver.disconnect();
+      scrollContainer?.removeEventListener("scroll", measureIndicator);
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeTab, mainSection.length, measureIndicator]);
+  }, [activeTab, activeTabMob, mainSection.length, measureIndicator, isTablet]);
+
+  useLayoutEffect(() => {
+    const calculateMarginBottom = () => {
+      const sliderContainer = sliderContainerRef.current;
+      const tabBarContainer = tabBarContainerRef.current;
+      const mobileContainer = mobileSliderContainerRef.current;
+      if (!sliderContainer || !tabBarContainer || !mobileContainer) {
+        setMarginBottom(0);
+        return;
+      }
+      const sliderHeight = sliderContainer.offsetHeight;
+      const tabBarHeight = tabBarContainerRef.current?.offsetHeight || 0;
+      const screenHeight = window.innerHeight;
+
+      // Calculate total content height needed:
+      // 90px (pt-[90px] on tabBarContainer) + tabBarHeight + 16px (mt-[16px]) + sliderHeight + 50px (pb-[50px])
+      const fixedPadding = 90 + 16 + 50;
+      const totalContentHeight = fixedPadding + tabBarHeight + sliderHeight;
+
+      if (totalContentHeight > screenHeight) {
+        // Content overflows - add exactly what's needed to prevent overlap
+        const overflow = totalContentHeight - screenHeight + 50;
+        setMarginBottom(overflow);
+      } else {
+        setMarginBottom(0);
+      }
+    };
+
+    calculateMarginBottom();
+
+    const resizeObserver = new ResizeObserver(calculateMarginBottom);
+    if (sliderContainerRef.current) {
+      resizeObserver.observe(sliderContainerRef.current);
+    }
+    if (tabBarContainerRef.current) {
+      resizeObserver.observe(tabBarContainerRef.current);
+    }
+    if (mobileSliderContainerRef.current) {
+      resizeObserver.observe(mobileSliderContainerRef.current);
+    }
+
+    const handleResize = () => calculateMarginBottom();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeTab, activeTabMob, mainSection.length, setMarginBottom, isTablet]);
+
   const handlMobileTabClick = (index: number) => {
     if (index === activeTabMob) return;
     const swiper = swiperRef.current;
@@ -532,7 +600,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   return (
     <div
       ref={triggerRef}
-      className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
+      className="w-full relative lg:min-h-[40vh] mt-[0px] lg:mt-[unset]"
+      style={{ minHeight: isTablet ? `calc(100vh + ${marginBottom}px)` : undefined }}
     >
       <div
         ref={titleSection}
@@ -740,14 +809,15 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       </div>
       <div
         ref={mobileSliderContainerRef}
-        className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
+        className="block lg:hidden container absolute top-0 left-0 w-full"
+        style={{ minHeight: isTablet ? `calc(100vh + ${marginBottom}px)` : '100vh' }}
       >
-        <div className="pt-[110px]">
+        <div className="pt-[90px]" ref={tabBarContainerRef}>
           {mainSection?.length > 0 && isTablet && (
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto overflow-y-hidden whitespace-nowrap w-full max-w-full">
               <div
                 ref={containerRef}
-                className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                className="relative flex gap-x-2 sm:gap-x-[14px] z-10 px-1 w-max"
               >
                 {/* Animated Indicator */}
                 <div
@@ -776,7 +846,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                           tabRefs.current[index] = element;
                         }}
                         onClick={() => handlMobileTabClick(index)}
-                        className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                        className={`relative z-10 text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 shrink-0 ${
                           activeTabMob === index
                             ? "text-white"
                             : "hover:bg-grey-200"
@@ -790,7 +860,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             </div>
           )}
         </div>
-        <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
+        <div
+          className="mt-[16px] lg:mt-[32px] pb-[50px] lg:pb-[unset]"
+          ref={sliderContainerRef}
+        >
           <div className="grid items-center">
             {isTablet && (
               <Swiper
