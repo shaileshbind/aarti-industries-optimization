@@ -87,6 +87,12 @@ export type ContactMapProps = {
     title?: string;
     image?: ImageProps;
     mobImage?: ImageProps;
+    address?: {
+      id?: number;
+      officeLabel?: string;
+      regionName?: string;
+      companyName?: string;
+      address?: string;
+    }[];
   };
-  data2: WhereWeOperateDataItem[] | null;
 };

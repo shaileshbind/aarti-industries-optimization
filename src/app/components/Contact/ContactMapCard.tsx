@@ -90,7 +90,7 @@ const ContactMapCard = ({
                     color: "#DC4C03",
                     fontSize: "12px",
                     fontWeight: "400",
-                    fontFamily: "Alte Hans Grotesk",
+                    fontFamily: "var(--font-alte-hans), sans-serif",
                     marginBottom: "10px",
                     backgroundColor: "white",
                     border: "1px",
@@ -113,7 +113,7 @@ const ContactMapCard = ({
                     color: "white",
                     fontSize: "20px",
                     fontWeight: "400",
-                    fontFamily: "Alte Hans Grotesk",
+                    fontFamily: "var(--font-alte-hans), sans-serif",
                     marginBottom: "6px",
                   }}
                 >
