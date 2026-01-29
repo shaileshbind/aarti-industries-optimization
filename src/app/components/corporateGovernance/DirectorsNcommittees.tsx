@@ -26,15 +26,15 @@ const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
           data?.independentDirectors?.title || "Independent Directors",
         management_boards:
           data?.independentDirectors?.independent_directors?.map((item) => ({
-            id: String(item.id || ""),
-            name: item.name || "",
-            designation: item.designation || "",
+            id: String(item?.id ?? ""),
+            name: item?.name ?? "",
+            designation: item?.designation ?? "",
             image: {
-              url: "",
-              alternativeText: item.name || "Director",
+              url: item?.image?.url ?? "",
+              alternativeText: item?.image?.alternativeText ?? "",
             },
-            bio: "",
-          })) || [],
+            bio: item?.bio ?? "",
+          })) ?? [],
       },
     },
     ...(data?.committee && data?.committee.length > 0
