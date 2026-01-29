@@ -40,7 +40,7 @@ export default async function page() {
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
         canonical={
-          seo?.canonical ?? "https://www.aarti-industries.com/partnership"
+          seo?.canonical ?? "https://www.aarti-industries.com/responsible-supply-chain"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

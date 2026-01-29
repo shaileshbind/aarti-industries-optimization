@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { H2 } from "../Typography2";
 import Image from "next/image";
@@ -11,9 +11,77 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
 
   const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  const startAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (content) {
+        setActive((prevActive) => (prevActive + 1) % content.length);
+      }
+    }, 5000);
+  };
+
+  const stopAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Control autoplay based on viewport and hover
+  useEffect(() => {
+    if (!isInViewport || isHovered) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
+    }
+    return () => stopAutoplay();
+  }, [isInViewport, isHovered, content && content.length]);
+
+  const handleTabClick = (index: number) => {
+    setActive(index);
+    // Restart autoplay after manual click
+    if (!isHovered) {
+      startAutoplay();
+    }
+  };
 
   return (
-    <section className="max-w-5xl mx-auto lg:py-[140px] py-[50px]">
+    <section
+      ref={sectionRef}
+      className="max-w-5xl mx-auto lg:py-[140px] py-[50px]"
+    >
       {description && (
         <FadeInReveal delay={0.6}>
           <H2 className="max-w-xl mx-auto text-center py-3 md:py-9">
@@ -24,7 +92,11 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
       {/* Desktop Layout */}
       <FadeInReveal delay={0.6}>
         {content?.length > 0 && (
-          <div className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container">
+          <div
+            className="hidden md:flex flex-row items-stretch overflow-hidden relative fluid-container"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {/* Left Tabs + Progress Bar */}
             <div className="relative bg-white text-white lg:w-[40%] flex flex-col justify-center">
               <div className="relative flex gap-4">
@@ -53,7 +125,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                         tab?.value && (
                           <button
                             key={tab.id}
-                            onClick={() => setActive(index)}
+                            onClick={() => handleTabClick(index)}
                             className="relative"
                           >
                             <H2
@@ -94,6 +166,7 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
             <div className="bg-[#F5F8FA] text-[#0D2B3E] flex-1 p-4 flex items-center rounded-r-2xl">
               {content[active]?.description && (
                 <div
+                  key={active}
                   dangerouslySetInnerHTML={{
                     __html: content[active].description,
                   }}
