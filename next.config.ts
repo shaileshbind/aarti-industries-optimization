@@ -15,6 +15,9 @@ const nextConfig = async () => {
   }
 
   const nextConfigObject: Partial<NextConfig> = {
+    turbopack: {
+      root: process.cwd(),
+    },
     images: {
       unoptimized: true,
     },

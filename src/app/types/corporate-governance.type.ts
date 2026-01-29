@@ -30,20 +30,18 @@ export type OurCodeAndPoliciesProps = {
 };
 
 export type LeaderProps = {
-  id: number | string;
-  image: ImageProps;
-  mobImage: ImageProps;
-  name: string;
-  bio: string;
-  designation: string;
+  id?: number;
+  name?: string;
+  designation?: string;
 };
 
 export type IndependentDirectorsProps = {
   data: {
-    committee: {
-      title: string;
-      committees: LeaderProps[];
-    };
+    committee?: {
+      id?: number;
+      committeenName?: string;
+      members: LeaderProps[];
+    }[];
     independentDirectors: {
       title: string;
       independent_directors: LeaderProps[];

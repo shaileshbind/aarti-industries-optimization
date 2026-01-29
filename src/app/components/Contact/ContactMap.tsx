@@ -3,8 +3,8 @@ import Image from "next/image";
 import { ContactMapProps } from "@/app/types/contact.type";
 import ContactMapSvg from "./ContactMapSvg";
 
-const ContactMap = ({ data, data2 }: ContactMapProps) => {
-  const { title, image } = data;
+const ContactMap = ({ data }: ContactMapProps) => {
+  const { title, image, address } = data;
   return (
     <div className="my-[50px] lg:my-[100px]">
       {title && (
@@ -30,17 +30,25 @@ const ContactMap = ({ data, data2 }: ContactMapProps) => {
       </div>
       <div className="block lg:hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[42px] gap-y-[42px] mt-[50px] container">
-          {data2?.map((items, index) => {
+          {address?.map((items, index) => {
             return (
               <div key={index}>
-                <div className="text-white bg-gradient-orange-3 w-fit px-[24px] py-[6px] rounded-full text-[12px] uppercase">
-                  {items?.officeLabel}
-                </div>
-                <SubH3 className="mt-[10px] !text-[20px]">
-                  {items?.regionName}
-                </SubH3>
-                <BodyText2 className="mt-[6px]">{items?.companyName}</BodyText2>
-                <BodyText2>{items?.address}</BodyText2>
+                {items?.officeLabel && (
+                  <div className="text-white bg-gradient-orange-3 w-fit px-[24px] py-[6px] rounded-full text-[12px] uppercase">
+                    {items?.officeLabel}
+                  </div>
+                )}
+                {items?.regionName && (
+                  <SubH3 className="mt-[10px] !text-[20px]">
+                    {items?.regionName}
+                  </SubH3>
+                )}
+                {items?.companyName && (
+                  <BodyText2 className="mt-[6px]">
+                    {items?.companyName}
+                  </BodyText2>
+                )}
+                {items?.address && <BodyText2>{items?.address}</BodyText2>}
               </div>
             );
           })}
