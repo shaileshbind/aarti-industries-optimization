@@ -33,6 +33,9 @@ export type LeaderProps = {
   id?: number;
   name?: string;
   designation?: string;
+  bio?:string;
+  image?:ImageProps;
+  mobImage?:ImageProps;
 };
 
 export type IndependentDirectorsProps = {
