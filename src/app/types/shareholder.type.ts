@@ -83,6 +83,37 @@ export type ReportLayout =
   | YearAndQuarterLayout
   | SimpleListLayout;
 
+/** Single contact entry from API (reports.contact-details) – tag, name, address, mobileNo, location */
+export type ContactDetailsRawEntry = {
+  id?: number;
+  tag?: string | null;
+  name?: string | null;
+  address?: string | null;
+  mobileNo?: string | null;
+  location?: string | null;
+  [key: string]: unknown;
+};
+
+export type ContactDetailsLayoutItem = {
+  category: string;
+  contact: ContactDetailsRawEntry | null | undefined;
+};
+
+/** Raw reportLayout item from API (_component: "reports.contact-details") */
+export type ContactDetailsRawItem = {
+  id?: number;
+  _component?: string;
+  category?: string;
+  subCategory?: string;
+  contactDetails?: ContactDetailsRawEntry[];
+  address?: ContactDetailsRawEntry; // legacy single object
+};
+
+export type ContactDetailsTabData = {
+  category: string;
+  reportLayout: ContactDetailsRawItem[];
+};
+
 // Main container props
 export type TabsYearsContainerProps = {
   data: {
@@ -93,20 +124,3 @@ export type TabsYearsContainerProps = {
   }[];
 };
 
-export type DynamicReportsData = {
-  [key: string]: Array<{
-    reportLayout: Array<{
-      id?: number;
-      reports?: Array<{
-        id: string | number;
-        heading: string;
-        link: string;
-        date?: string | null;
-        file?: string | null;
-      }>;
-    }>;
-  }>;
-};
-
-// Legacy type for backwards compatibility
-export type ReportsProps = YearAndReportLayout;
