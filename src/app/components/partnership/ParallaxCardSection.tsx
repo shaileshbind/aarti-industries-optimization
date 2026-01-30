@@ -260,7 +260,7 @@ export default function ParallaxCardSection({
           </FadeInReveal>
 
           {accordion?.length > 0 && (
-            <FadeInReveal className="pt-6 xl:pt-18 accordionWidth">
+            <FadeInReveal className="pt-6 xl:pt-10 accordionWidth">
               {accordion?.map((item, index) => (
                 <MainAccordion
                   key={`accordion-${index}`}
