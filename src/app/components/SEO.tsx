@@ -73,7 +73,9 @@ const SEO = ({
 
       {process.env.NEXT_PUBLIC_IS_PRODUCTION === "true" && (
         <>
-         <meta name="google-site-verification" content="OLmTSpUVBh-u1lFFDhiVDM7x7wuOGJIuIo-VTleJN9M" />
+         {/* old gsc tag */}
+         <meta name="google-site-verification" content="GA8nyFDRjrpm5mj-qBTeQujkpWYo6s9vkMeCh2iiGbw" />
+         {/* <meta name="google-site-verification" content="OLmTSpUVBh-u1lFFDhiVDM7x7wuOGJIuIo-VTleJN9M" /> */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=GT-NNZ3VBMJ"
             strategy="afterInteractive"
