@@ -72,8 +72,14 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
     PaperProps: {
       sx: {
         borderRadius: "8px",
+        maxWidth: "calc(100vw - 56px)",
       },
     },
+  };
+
+  const menuItemStyles = {
+    whiteSpace: "normal",
+    wordWrap: "break-word",
   };
 
   const mobStyles = {
@@ -185,7 +191,13 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
         <div className="block lg:hidden mb-6">
           <FormControl fullWidth>
             <Select
-              sx={mobStyles}
+              sx={{
+                ...mobStyles,
+                "& .MuiSelect-select": {
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                },
+              }}
               MenuProps={menuProps}
               value={activeSubCategory}
               onChange={(e) => handleSubCategoryClick(e.target.value as string)}
@@ -195,6 +207,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                 <MenuItem
                   key={`mobile_subcat_${idx}`}
                   value={subCat.subCategory}
+                  sx={menuItemStyles}
                 >
                   {subCat.subCategory}
                 </MenuItem>

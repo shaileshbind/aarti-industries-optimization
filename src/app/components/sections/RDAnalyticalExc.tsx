@@ -522,13 +522,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                 {slide?.BulletPoints?.map((items) => (
                                   <div
                                     key={items?.id}
-                                    className="flex lg:gap-4 lg:mb-4 mb-2 gap-2 items-center"
+                                    className="flex lg:gap-4 lg:mb-4 mb-2 gap-2 items-start"
                                   >
                                     <Image
                                       src="/images/home/star.svg"
                                       alt="star"
                                       width={16}
                                       height={16}
+                                      className="mt-[5px]"
                                     />
                                     {items?.title && (
                                       <BodyText2 className="text-grey-400">

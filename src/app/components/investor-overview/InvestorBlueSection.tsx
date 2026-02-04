@@ -16,10 +16,12 @@ type StockData = {
 
 const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   const { reports } = data;
+  const isProductionEnv = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
   const nseRef = useRef<HTMLDivElement>(null);
   const [nseStock, setNseStock] = useState<StockData | null>(null);
 
   useEffect(() => {
+    if (!isProductionEnv) return;
     const loadStockData = async () => {
       try {
         const nseResponse = await fetch("/api/nse-stock", {
@@ -96,7 +98,7 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   return (
     <div className="bg-blue-200">
       <div className="container">
-        <FadeInReveal className={`py-[24px] lg:py-[40px] grid ${nseStock ? 'xl:grid-cols-[70%_30%]' : ''} gap-y-[40px] gap-x-[100px]`}>
+        <FadeInReveal className={`py-[24px] lg:py-[40px] grid ${isProductionEnv && nseStock ? "xl:grid-cols-[70%_30%]" : ""} gap-y-[40px] gap-x-[100px]`}>
           <div className="grid lg:grid-cols-2 gap-x-[10px] lg:gap-x-[50px] gap-y-[16px] lg:gap-y-[10px] xl:justify-between ">
           {reports?.map((items) => {
             const url = items?.file?.url ?? items?.link;
@@ -134,7 +136,7 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
             );
           })}
           </div>
-          {nseStock && (
+          {isProductionEnv && nseStock && (
             <div className="flex gap-x-[40px] lg:gap-x-[50px] justify-between ">
               <div ref={nseRef}>
                 <BodyText2 className="text-white">NSE</BodyText2>
