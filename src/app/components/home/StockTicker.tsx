@@ -24,6 +24,7 @@ export default function StockTicker() {
   const [pressReleases, setPressReleases] = useState<ItemProps[][]>([]);
   const [nseStock, setNseStock] = useState<StockData | null>(null);
   // const [bseStock, setBseStock] = useState<StockData | null>(null);
+  const isProductionEnv = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
 
   useEffect(() => {
     const loadNews = async () => {
@@ -34,6 +35,7 @@ export default function StockTicker() {
   }, []);
 
   useEffect(() => {
+    if (!isProductionEnv) return;
     const loadStockData = async () => {
       try {
         // ===== NSE DATA =====

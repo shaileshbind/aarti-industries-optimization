@@ -61,7 +61,7 @@ const page = async () => {
           <ComprehensiveCare data={section_four} />
         </div>
       )}
-      a{section_five && <ImageGallery imgArr={section_five} />}
+      {section_five && <ImageGallery imgArr={section_five} />}
       {section_six && <ThePeople data={section_six} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />

@@ -438,7 +438,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               </div>
               <div className="w-full overflow-hidden">
                 <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
-                  <BodyText2 className="text-orange-200">
+                  <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
                   <div className="hidden lg:block">
@@ -493,13 +493,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                         slidesPerView: 1,
                         spaceBetween: 0,
                         allowTouchMove: true,
+                        scrollbar: false,
                       },
                       768: {
                         spaceBetween: 80,
                         allowTouchMove: false,
+                        scrollbar: { draggable: true },
                       },
                     }}
-                    scrollbar={{ draggable: true }}
                     direction="horizontal"
                     mousewheel={{
                       forceToAxis: true,
@@ -533,13 +534,14 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                                 {slide?.BulletPoints?.map((items) => (
                                   <div
                                     key={items?.id}
-                                    className="flex lg:gap-4 lg:mb-4 mb-2 gap-2 items-center"
+                                    className="flex lg:gap-4 lg:mb-4 mb-2 gap-2 items-start"
                                   >
                                     <Image
                                       src="/images/home/star.svg"
                                       alt="star"
                                       width={16}
                                       height={16}
+                                      className="mt-[5px]"
                                     />
                                     {items?.title && (
                                       <BodyText2 className="text-grey-400">
