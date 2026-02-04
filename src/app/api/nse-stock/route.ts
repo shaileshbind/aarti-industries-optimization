@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const base = "https://admin.aarti-industries.com/api/nse-stock/find";
+  const base = process.env.NEXT_PUBLIC_BASE_URL;
   const token = process.env.API_TOKEN;
 
-  if (!token) {
+  if (!base || !token) {
     return NextResponse.json(
       { error: "Missing server environment variables" },
       { status: 500 },
@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   try {
-    const res = await fetch(`${base}`, {
+    const res = await fetch(`${base}/nse-stock/find`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
