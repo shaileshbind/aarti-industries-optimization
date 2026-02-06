@@ -814,7 +814,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       >
         <div className="pt-[90px]" ref={tabBarContainerRef}>
           {mainSection?.length > 0 && isTablet && (
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto overflow-y-hidden whitespace-nowrap w-full max-w-full">
+            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto overflow-y-hidden whitespace-nowrap w-fit max-w-full">
               <div
                 ref={containerRef}
                 className="relative flex gap-x-2 sm:gap-x-[14px] z-10 px-1 w-max"

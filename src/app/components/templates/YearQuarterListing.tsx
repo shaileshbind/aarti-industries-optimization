@@ -328,9 +328,7 @@ export default function YearQuarterListing({
                   >
                     <h3 className="text-sm xl:text-base text-[#4C5861]">
                       {quarterItem.quarter}
-                      {showFinancialYear &&
-                        "-" +
-                          quarterItem?.financial_year?.year?.replace("-", " ")}
+                      {/* {showFinancialYear && quarterItem?.financial_year?.year?.replace("-", " ")} */}
                     </h3>
                   </div>
 

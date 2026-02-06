@@ -26,7 +26,7 @@ const ContactExp = ({ data }: ContactExpProps) => {
           >
             <div className="w-fit bg-white group rounded-[6px] flex gap-x-[8px] py-[14px] px-[22px] min-h-[47px] cursor-pointer relative z-10">
               <Cta className="text-orange-200 ">
-                <SplitText text={ctaButton?.title} />
+                <SplitText text={ctaButton?.title ?? ""} />
               </Cta>
               <Image
                 src="/images/download-icon-orange.svg"
