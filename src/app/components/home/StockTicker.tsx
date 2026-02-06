@@ -119,6 +119,9 @@ export default function StockTicker() {
   }, []);
 
   const tickerData = pressReleases?.[0];
+  const hasPressItems =
+    Array.isArray(tickerData) && tickerData.some((item) => Boolean(item?.slug));
+  const hasMarqueeContent = Boolean(nseStock) || hasPressItems;
 
   const renderStock = (stock: StockData, exchange: string) => {
     const changeColor =
@@ -157,7 +160,7 @@ export default function StockTicker() {
 
   return (
     <div className="bg-[#10456A] min-h-[45px] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50">
-      <div className="marquee">
+      <div className={`marquee ${hasMarqueeContent ? "marquee--active" : "marquee--idle"}`}>
         <div className="container lg:mx-auto flex items-center gap-[110px]">
           <div className="flex gap-[60px]">
             {nseStock && renderStock(nseStock, "NSE")}

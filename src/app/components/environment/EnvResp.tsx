@@ -297,13 +297,14 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                       {item.performance?.bulletPoints?.map((bp) => (
                         <div
                           key={bp.id}
-                          className="mb-[10px] flex gap-x-[10px]"
+                          className="mb-[10px] flex gap-x-[10px] items-start"
                         >
                           <Image
                             src="/images/star-orange.svg"
                             alt="icon"
                             width={14}
                             height={14}
+                            className="mt-1.25"
                           />
                           <BodyText2>{bp.title}</BodyText2>
                         </div>
@@ -463,13 +464,14 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
                                     (bp) => (
                                       <div
                                         key={bp?.id}
-                                        className="mb-[10px] flex gap-x-[10px]"
+                                        className="mb-[10px] flex gap-x-[10px] items-start"
                                       >
                                         <Image
                                           src="/images/star-orange.svg"
                                           alt="icon"
                                           width={14}
                                           height={14}
+                                          className="mt-1.25"
                                         />
                                         <BodyText2>{bp?.title}</BodyText2>
                                       </div>
