@@ -136,21 +136,30 @@ export default function SearchResults() {
   };
 
   const getUrl = (hit: HitProps) => {
-    console.log(hit);
+    const rawSearchUrl = hit?.searchUrl || "";
+    if (rawSearchUrl) {
+      const normalizedSearchUrl = rawSearchUrl.startsWith("/")
+        ? rawSearchUrl
+        : `/${rawSearchUrl}`;
+      console.log("Search result URL:", normalizedSearchUrl, hit);
+      return normalizedSearchUrl;
+    }
+
+    console.log("Search result hit without searchUrl:", hit);
     if (hit?._index === "products") return `/products/${hit.slug}`;
     if (hit?._index === "disclosures_reports")
       return `/investors/disclosures/${hit.slug}`;
     if (hit?.type === "case-study") return `/case-studies/${hit.slug}`;
     if (hit?.type === "blog") return `/blogs/${hit.slug}`;
     if (hit?.slug === "sustainability-report") return `/sustainability-report`;
-    if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
-    if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
+    // if (hit?.slug === "sustainable-overview") return `/sustainability-overview`;
+    // if (hit?.slug === "social-health-safety") return `/social-health-and-safety`;
     if (hit?.slug === "home-page") return `/`;
     if (hit?.slug === "press-release") return `/press-releases`;
     if (hit?._index === "press_releases") return `/press-releases/${hit?.slug}`;
     if (hit?._index === "pages") return `/${hit?.slug}`;
 
-    return `/${hit?.searchUrl}` || `/${hit?.slug}`;
+    return `/${hit?.searchUrl}`;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

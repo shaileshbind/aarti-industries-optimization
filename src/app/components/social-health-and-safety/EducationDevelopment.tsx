@@ -315,13 +315,14 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                             (bulletPoint, idx) => (
                               <li
                                 key={`${idx}-${bulletPoint?.title}`}
-                                className="text-sm text-gray-300 flex items-center gap-2"
+                                className="text-sm text-gray-300 flex items-start gap-2"
                               >
                                 <Image
                                   src="/images/star-orange.svg"
                                   alt="star"
                                   height={15}
                                   width={15}
+                                  className="mt-1.25"
                                 />
 
                                 <BodyText2>{bulletPoint?.title}</BodyText2>

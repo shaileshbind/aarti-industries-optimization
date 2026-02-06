@@ -91,7 +91,13 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
           {/* content */}
           <div className="relative">
             {/* tabs */}
-            <div className="flex gap-x-[8px] w-full">
+            <div
+              className={`flex gap-x-0 sm:gap-x-[8px] sm:justify-start ${
+                leadersCard && leadersCard.length > 5
+                  ? "w-full overflow-x-auto"
+                  : "w-full justify-between"
+              }`}
+            >
               {leadersCard?.map((items, index) => {
                 return (
                   <div
@@ -100,7 +106,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                       swiperRef.current?.slideTo(index);
                       setActive(index);
                     }}
-                    className="leader-thumb p-[6px] relative"
+                    className="leader-thumb p-[6px] relative shrink-0"
                   >
                     <svg
                       className={`progress-border ${

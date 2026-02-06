@@ -66,8 +66,14 @@ export default function ContactDetails({
     PaperProps: {
       sx: {
         borderRadius: "8px",
+        maxWidth: "calc(100vw - 56px)",
       },
     },
+  };
+
+  const menuItemStyles = {
+    whiteSpace: "normal",
+    wordWrap: "break-word",
   };
 
   const mobStyles = {
@@ -119,14 +125,24 @@ export default function ContactDetails({
       <div className="block lg:hidden mb-6">
         <FormControl fullWidth>
           <Select
-            sx={mobStyles}
+            sx={{
+              ...mobStyles,
+              "& .MuiSelect-select": {
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+              },
+            }}
             MenuProps={menuProps}
             value={activeSubCategory}
             onChange={(e) => handleSubCategoryClick(e.target.value as string)}
             IconComponent={KeyboardArrowDownIcon}
           >
             {data.map((subCat, idx) => (
-              <MenuItem key={`mobile_subcat_${idx}`} value={subCat.category}>
+              <MenuItem
+                key={`mobile_subcat_${idx}`}
+                value={subCat.category}
+                sx={menuItemStyles}
+              >
                 {subCat.category}
               </MenuItem>
             ))}

@@ -589,10 +589,17 @@ body {
   white-space: nowrap;
   animation: marquee 80s linear infinite;
 }
+.marquee--idle {
+  animation: none;
+  transform: translateX(0%);
+}
+.marquee--active {
+  animation-play-state: running;
+}
 
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
   100% {
     transform: translateX(-100%);
@@ -826,7 +833,7 @@ body {
   }
 
   .marquee {
-    animation: marquee 90s linear infinite;
+    animation: marquee 60s linear infinite;
   }
 
   .bannerBottomStar {

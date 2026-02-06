@@ -83,8 +83,14 @@ export default function YearQuarterListing({
     PaperProps: {
       sx: {
         borderRadius: "8px",
+        maxWidth: "calc(100vw - 56px)",
       },
     },
+  };
+
+  const menuItemStyles = {
+    whiteSpace: "normal",
+    wordWrap: "break-word",
   };
 
   const mobStyles = {
@@ -200,7 +206,13 @@ export default function YearQuarterListing({
         <div className="block lg:hidden mb-6">
           <FormControl fullWidth>
             <Select
-              sx={mobStyles}
+              sx={{
+                ...mobStyles,
+                "& .MuiSelect-select": {
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                },
+              }}
               MenuProps={menuProps}
               value={activeSubCategory}
               onChange={(e) => handleSubCategoryClick(e.target.value as string)}
@@ -210,6 +222,7 @@ export default function YearQuarterListing({
                 <MenuItem
                   key={`mobile_subcat_${idx}`}
                   value={subCat.subCategory}
+                  sx={menuItemStyles}
                 >
                   {subCat.subCategory}
                 </MenuItem>
@@ -315,9 +328,7 @@ export default function YearQuarterListing({
                   >
                     <h3 className="text-sm xl:text-base text-[#4C5861]">
                       {quarterItem.quarter}
-                      {showFinancialYear &&
-                        "-" +
-                          quarterItem?.financial_year?.year?.replace("-", " ")}
+                      {/* {showFinancialYear && quarterItem?.financial_year?.year?.replace("-", " ")} */}
                     </h3>
                   </div>
 

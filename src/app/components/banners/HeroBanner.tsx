@@ -442,13 +442,13 @@ const HeroBanner = ({
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white/40 bottom-[82px] lg:bottom-[120px] h-[1px] z-5"
+              className="absolute w-full bg-white/40 bottom-[52px] lg:bottom-[120px] h-[1px] z-5"
             />
             <div
               ref={starRef}
               className="absolute 
-              bottom-[64px] lg:bottom-[84px] 
-              right-[57px] lg:right-[177px] 
+              bottom-[33.4px] lg:bottom-[84px] 
+              right-[56.5px] lg:right-[177px] 
               w-[38px] lg:w-[72px] 
               z-5 "
             >
