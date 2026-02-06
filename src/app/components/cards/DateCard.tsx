@@ -38,7 +38,7 @@ const DateCard = ({
           <SubH3 className="mt-[16px] font-roboto text-[14px] leading-[140%] font-normal text-orange-200">
             {date}
           </SubH3>
-          <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
+          <div className="mt-[8px] pb-[2px] pl-[1px] font-roboto text-[16px] leading-[160%] font-normal text-grey-400 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
             {desc}
           </div>
         </div>
@@ -54,10 +54,10 @@ const DateCard = ({
               />
             )}
           </div>
-          <div className="mt-[16px] font-roboto text-[14px] leading-[140%] font-normal text-orange-200">
+          <SubH3 className="mt-[16px] font-roboto text-[14px] leading-[140%] font-normal text-orange-200">
             {date}
-          </div>
-          <div className="mt-[8px] font-roboto text-[16px] leading-[156%] font-normal text-grey-400">
+          </SubH3>
+          <div className="mt-[8px] pb-[2px] pl-[1px] font-roboto text-[16px] leading-[160%] font-normal text-grey-400 overflow-hidden [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]">
             {desc}
           </div>
         </div>

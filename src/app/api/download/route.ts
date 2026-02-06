@@ -9,7 +9,28 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(url);
+    const requestLanguage = request.headers.get("accept-language");
+    const requestUserAgent = request.headers.get("user-agent");
+
+    const upstreamHeaders = new Headers();
+    // Some CDNs respond 406 to Safari's accept header; prefer generic accept.
+    upstreamHeaders.set("accept", "*/*");
+    if (requestLanguage) upstreamHeaders.set("accept-language", requestLanguage);
+    if (requestUserAgent) upstreamHeaders.set("user-agent", requestUserAgent);
+
+    let response = await fetch(url, { headers: upstreamHeaders });
+
+    if (response.status === 406) {
+      const fallbackHeaders = new Headers({
+        accept: "application/pdf,*/*;q=0.8",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent":
+          requestUserAgent ||
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      });
+
+      response = await fetch(url, { headers: fallbackHeaders });
+    }
 
     if (!response.ok) {
       throw new Error("Failed to fetch file");

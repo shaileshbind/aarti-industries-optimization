@@ -1,5 +1,15 @@
 import { ButtonProps, ImageProps, ValueProps } from "./global.type";
 
+export type ButtonHomeProps = {
+  title?: string;
+  link?: {
+    link?: string;
+    target?: string;
+  };
+  externalLink?: string;
+  hasExternalLink?: "true" | "false";
+};
+
 export type HomeHeroProps = {
   data: {
     banner: {
@@ -103,20 +113,51 @@ export type FrameworkForgedProps = {
 
 export type LatestAtAartiProps = {
   data: {
-    sectionTitle: string;
-    card: {
+    sectionTitle?: string;
+    card?: {
       id?: number;
-      category?: string;
-      ctaButton?: ButtonProps;
-      postContent?: {
-        id?: string;
-        description?: string;
-        date?: string;
-        link?: string;
-        image?: ImageProps;
-        mobImage?: ImageProps;
+      news?: {
+        id?: number;
+        category?: string;
+        ctaButton?: ButtonProps;
+        news?: {
+          id?: string;
+          newsDescription?: string;
+          date?: string;
+          link?: string;
+          image?: ImageProps;
+          mobImage?: ImageProps;
+          ctaButton?: ButtonHomeProps;
+        }[];
       };
-    }[];
+      report_and_publication?: {
+        id?: number;
+        category?: string;
+        ctaButton?: ButtonProps;
+        reports_and_publications?: {
+          id?: string;
+          description?: string;
+          date?: string;
+          image?: ImageProps;
+          mobImage?: ImageProps;
+          ctaButton?: ButtonHomeProps;
+        };
+      };
+      events?: {
+        id?: number;
+        category?: string;
+        ctaButton?: ButtonProps;
+        events?: {
+          id?: string;
+          description?: string;
+          date?: string;
+          link?: string;
+          image?: ImageProps;
+          mobImage?: ImageProps;
+          ctaButton?: ButtonHomeProps;
+        };
+      };
+    };
   };
 };
 
@@ -137,11 +178,10 @@ export type ContactBannerProps = {
   className?: string;
 };
 
-
 export type HomeExploreProps = {
   data: {
-      title?: string;
-      ctaButton?: ButtonProps[];
-      formTitle?: string;
+    title?: string;
+    ctaButton?: ButtonProps[];
+    formTitle?: string;
   }[];
 };

@@ -386,24 +386,24 @@ const StickyImage: React.FC<StickyImageProps> = ({
             alt={"banner"}
             width={500}
             height={548}
-            className="absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px]  h-[calc(100%-71px)] lg:h-[calc(100%-93px)] w-[calc(100%-71px)] lg:w-[calc(100%-210px)]"
+            className="absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px]  h-[calc(100%-40px)] lg:h-[calc(100%-93px)] w-[calc(100%-66px)] lg:w-[calc(100%-210px)]"
           />
           <Image
             src="/images/home/star-white.svg"
             alt="img"
             width={72}
             height={72}
-            className="absolute top-[-36px] z-10 right-[50px] lg:right-[174px] w-[42px] lg:w-[72px]"
+            className="hidden lg:block absolute top-[-36px] z-10 right-[50px] lg:right-[174px] w-[42px] lg:w-[72px]"
           />
           <Image
             src="/images/home/star-white.svg"
             alt="img"
             width={72}
             height={72}
-            className="absolute bottom-[50px] lg:bottom-[57px] z-10 right-[50px] lg:right-[174px] w-[42px] lg:w-[72px]"
+            className="absolute bottom-[20px] lg:bottom-[57px] z-10 right-[44px] lg:right-[174px] w-[42px] lg:w-[72px]"
           />
-          <div className="absolute min-h-screen bg-white w-[1px] right-[71px] lg:right-[209.5px]" />
-          <div className="absolute w-full bg-white bottom-[71px] lg:bottom-[92.5px] h-[1px]" />
+          <div className="absolute min-h-screen bg-white w-[1px] right-[64.5px] lg:right-[209.5px]" />
+          <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[92.5px] h-[1px]" />
         </div>
       </div>
     </div>
