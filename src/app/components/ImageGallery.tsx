@@ -418,8 +418,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
       </div>
       <div
         className="mt-[100px] relative overflow-hidden"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={isDesktop ? () => setIsHovered(true) : undefined}
+        onMouseLeave={isDesktop ? () => setIsHovered(false) : undefined}
       >
         <style
           dangerouslySetInnerHTML={{
@@ -443,7 +443,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         />
         <div
           ref={marqueeRef}
-          className="image-gallery-marquee"
+          className="image-gallery-marquee pointer-events-none lg:pointer-events-auto"
           style={{
             animationPlayState: isHovered ? "paused" : "running",
           }}
