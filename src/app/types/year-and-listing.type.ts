@@ -1,7 +1,12 @@
-import { YearAndReportLayout } from "./shareholder.type";
+import {
+  YearAndReportLayout,
+  SubCategoryWithCkLayout,
+} from "./shareholder.type";
+
+export type YearAndListingLayout = YearAndReportLayout | SubCategoryWithCkLayout;
 
 export interface YearAndListingProps {
-  reportLayout: YearAndReportLayout[];
+  reportLayout: YearAndListingLayout[];
 }
 
 // Re-export for convenience

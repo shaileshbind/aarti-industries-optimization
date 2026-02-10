@@ -47,14 +47,21 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
     if (matchingSubCategory) {
       setActiveSubCategory(targetSubCategory);
-      const firstYear = matchingSubCategory.yearAndReport?.[0]?.year || "";
+      const firstYear =
+        "yearAndReport" in matchingSubCategory
+          ? matchingSubCategory.yearAndReport?.[0]?.year || ""
+          : "";
       setActiveYear(firstYear);
       setDropdownClicked(false);
       setMobileVisibleCount(5);
     } else if (reportLayout[0]) {
       // Fallback to first subcategory if URL param doesn't match
       setActiveSubCategory(reportLayout[0].subCategory);
-      setActiveYear(reportLayout[0].yearAndReport?.[0]?.year || "");
+      setActiveYear(
+        "yearAndReport" in reportLayout[0]
+          ? reportLayout[0].yearAndReport?.[0]?.year || ""
+          : "",
+      );
       setDropdownClicked(false);
       setMobileVisibleCount(5);
     }
@@ -100,7 +107,12 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
   const currentSubCategory = reportLayout?.find(
     (item) => item.subCategory === activeSubCategory,
   );
-  const yearAndReport = currentSubCategory?.yearAndReport || [];
+  const isCkEditorLayout =
+    currentSubCategory?.__component === "reports.sub-category-with-ck";
+  const yearAndReport =
+    currentSubCategory && "yearAndReport" in currentSubCategory
+      ? currentSubCategory.yearAndReport || []
+      : [];
 
   // Get current reports based on active year
   const currentReports = yearAndReport?.find(
@@ -129,7 +141,11 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
     const newSubCategory = reportLayout?.find(
       (item) => item.subCategory === subCat,
     );
-    setActiveYear(newSubCategory?.yearAndReport?.[0]?.year || "");
+    setActiveYear(
+      newSubCategory && "yearAndReport" in newSubCategory
+        ? newSubCategory.yearAndReport?.[0]?.year || ""
+        : "",
+    );
     setDropdownClicked(false);
     setMobileVisibleCount(5);
 
@@ -218,6 +234,17 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
 
         {/* Years and Reports Section */}
         <div className="lg:p-10 lg:bg-[#F7F9FA] lg:w-[75%] w-full rounded-[12px] relative">
+          {isCkEditorLayout &&
+          currentSubCategory &&
+          "content" in currentSubCategory ? (
+            <div
+              className="mt-6 lg:mt-10"
+              dangerouslySetInnerHTML={{
+                __html: currentSubCategory.content ?? "",
+              }}
+            />
+          ) : (
+            <>
           <div className="flex w-full border-b-2 border-b-[#E1E1E1] justify-between">
             {yearAndReport?.length > 0 && (
               <div
@@ -359,6 +386,8 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
               </div>
             )}
           </div>
+            </>
+          )}
         </div>
 
         {/* Archive dropdown - Mobile */}

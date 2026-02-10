@@ -1,4 +1,4 @@
-import { ImageProps } from "./global.type";
+import { ButtonProps, ImageProps } from "./global.type";
 
 export type MahasuperBannerProps = {
   data: {
@@ -6,8 +6,8 @@ export type MahasuperBannerProps = {
     description: string;
     image: ImageProps;
     mobImage: ImageProps;
-    ctaTitle: string;
-    ctaLink: string;
+    formTitle?:string;
+    ctaButton?:ButtonProps;
   };
 };
 

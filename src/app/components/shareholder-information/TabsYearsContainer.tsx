@@ -8,6 +8,7 @@ import YearQuarterListing from "../templates/YearQuarterListing";
 import ContactDetails from "./ContactDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import OrangeCardListing from "../templates/OrangeCardListing";
+import CkEditorListing from "../templates/CkEditorListing";
 import { DynamicReportsData } from "@/app/types/annual-reports.type";
 
 export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
@@ -58,8 +59,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         return <SimpleListing reportLayout={simpleListLayouts} />;
 
       case "reports.sub-year-and-report":
-        // Year and Report template (Others category)
-        // Filter only sub-year-and-report layouts
+        // Year and Report template - include sub-category-with-ck if present (e.g. "Others")
         const yearReportLayouts = currentCategory.reportLayout.filter(
           (
             layout,
@@ -68,7 +68,16 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             { __component: "reports.sub-year-and-report" }
           > => layout.__component === "reports.sub-year-and-report",
         );
-        return <YearAndListing reportLayout={yearReportLayouts} />;
+        const ckLayouts = currentCategory.reportLayout.filter(
+          (
+            layout,
+          ): layout is Extract<
+            typeof layout,
+            { __component: "reports.sub-category-with-ck" }
+          > => layout.__component === "reports.sub-category-with-ck",
+        );
+        const combinedLayouts = [...yearReportLayouts, ...ckLayouts];
+        return <YearAndListing reportLayout={combinedLayouts} />;
 
       case "reports.sub-year-and-quarter":
         // Year, Quarter and Report template (IEPF category)
@@ -113,6 +122,17 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
             reportKey={currentCategory.category}
           />
         );
+
+      case "reports.sub-category-with-ck":
+        const ckEditorLayouts = currentCategory.reportLayout.filter(
+          (
+            layout,
+          ): layout is Extract<
+            typeof layout,
+            { __component: "reports.sub-category-with-ck" }
+          > => layout.__component === "reports.sub-category-with-ck",
+        );
+        return <CkEditorListing reportLayout={ckEditorLayouts} />;
 
       default:
         return null;
