@@ -20,12 +20,18 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   const nseRef = useRef<HTMLDivElement>(null);
   const [nseStock, setNseStock] = useState<StockData | null>(null);
 
+  let signal: AbortController = new AbortController();
+  const firsRequest = useRef(true);
+  const [promiseState, setPromiseState] = useState<"pending" | "fulfilled" | "rejected">("pending");
+
   useEffect(() => {
     if (!isProductionEnv) return;
     const loadStockData = async () => {
+      setPromiseState("pending");
       try {
         const nseResponse = await fetch("/api/nse-stock", {
           cache: "no-store",
+          signal: signal.signal,
         });
 
         // Check if response is ok before parsing JSON
@@ -40,6 +46,7 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
         }
 
         const nseData = await nseResponse.json();
+        setPromiseState("fulfilled");
 
         // Handle API response structure: { success: true, data: [...] }
         if (nseData?.success && nseData?.data && Array.isArray(nseData.data) && nseData.data.length > 0) {
@@ -90,14 +97,31 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
         }
       } catch (error) {
         console.error("Error loading stock data:", error);
+        setPromiseState("rejected");
       }
     };
 
-    loadStockData();
+    if(firsRequest.current) {
+      firsRequest.current = false;
+      loadStockData();
+    }
 
-    // Set up polling for real-time updates (every 60 seconds)
-    const interval = setInterval(loadStockData, 60000);
-    return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      if(promiseState === "fulfilled" || promiseState === "rejected") {
+        loadStockData();
+      }
+
+      if(promiseState === "pending") {
+        signal.abort();
+        signal = new AbortController();
+        loadStockData();
+      }
+    }, 60000);
+
+    return () => {
+      clearInterval(interval);
+      signal.abort();
+    };
   }, []);
 
   // Format change display
