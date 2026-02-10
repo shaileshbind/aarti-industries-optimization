@@ -28,6 +28,7 @@ export type ParallaxCardSectionProps = {
       description: string;
       description_two: string;
       ctaButton: ButtonProps;
+      formTitle?:String;
       bulletPoints: {
         title: string;
       }[];

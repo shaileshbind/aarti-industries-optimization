@@ -46,6 +46,14 @@ export type YearAndReportLayout = {
   }[];
 };
 
+// Sub-category with CKEditor HTML content
+export type SubCategoryWithCkLayout = {
+  __component: "reports.sub-category-with-ck";
+  id: number;
+  subCategory: string;
+  content?: string;
+};
+
 // Year and Quarter Layout
 export type FinancialYear = {
   id: number;
@@ -79,6 +87,7 @@ export type YearAndQuarterLayout = {
 // Union type for all possible report layouts
 export type ReportLayout =
   | SubCategoryWithReportLayout
+  | SubCategoryWithCkLayout
   | YearAndReportLayout
   | YearAndQuarterLayout
   | SimpleListLayout;

@@ -18,7 +18,7 @@ import { fetchNews } from "@/_lib/fetchNews";
 gsap.registerPlugin(ScrollTrigger);
 
 type PostContent = {
-  id?: string;
+  id?: string | number;
   description?: string;
   newsDescription?: string;
   date?: string;
@@ -28,9 +28,34 @@ type PostContent = {
   ctaButton?: ButtonProps;
 };
 
+type ReportItem = {
+  id?: number | string;
+  heading?: string;
+  description?: string;
+  date?: string;
+  link?: string;
+  thumbnailImageDesktop?: ImageProps;
+  file?: { url?: string };
+};
+
+type ReportLayout = {
+  reports?: ReportItem[];
+};
+
+type AnnualReportBlock = {
+  reportLayout?: {
+    reports?: ReportItem[];
+  }[];
+};
+
+type ReportContainer = {
+  reportLayout?: ReportLayout[];
+  annual_reports?: AnnualReportBlock | AnnualReportBlock[];
+};
+
 type NormalizedCard = {
   id?: number | string;
-  type?: "news" | "reports" | "events";
+  type?: "news" | "annualReports" | "events";
   category?: string;
   postContent?: PostContent[];
   ctaButton?: ButtonProps;
@@ -44,6 +69,67 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     button?.hasExternalLink === "true"
       ? button?.externalLink
       : button?.link?.link;
+
+  const mapReportToPostContent = (report: ReportItem): PostContent => ({
+    id: report?.id,
+    description: report?.heading,
+    date: report?.date,
+    link: report?.link ?? report?.file?.url,
+    image: report?.thumbnailImageDesktop,
+  });
+
+  const normalizeReports = (
+    reportsAndPublications?: ReportContainer[] | ReportContainer,
+  ): PostContent[] => {
+    const containers = toArray(reportsAndPublications);
+    const fromAnnualReports = containers.flatMap((container) =>
+      toArray(container?.annual_reports).flatMap((annualReportBlock) =>
+        toArray(annualReportBlock?.reportLayout).flatMap((layout) =>
+          toArray(layout?.reports).map(mapReportToPostContent),
+        ),
+      ),
+    );
+    if (fromAnnualReports.length > 0) return fromAnnualReports.slice(0, 4);
+    const fromLayouts = containers.flatMap((container) =>
+      toArray(container?.reportLayout).flatMap((layout) =>
+        toArray(layout?.reports).map(mapReportToPostContent),
+      ),
+    );
+    return fromLayouts.length > 0 ? fromLayouts.slice(0, 4) : [];
+  };
+
+  const reportPub = card?.report_and_publication;
+  const reportPubRoot = Array.isArray(reportPub) ? reportPub[0] : reportPub;
+  const sectionNineRaw = (() => {
+    if (
+      reportPubRoot &&
+      "reports_and_publications" in reportPubRoot &&
+      reportPubRoot.reports_and_publications
+    )
+      return reportPubRoot.reports_and_publications;
+    if (Array.isArray(reportPub)) return reportPub;
+    return reportPub ?? undefined;
+  })();
+  const fromSectionNine = normalizeReports(
+    sectionNineRaw as ReportContainer | ReportContainer[] | undefined,
+  );
+  const dataRoot = data as Record<string, unknown>;
+  const apiAnnualReports =
+    data?.annualReports ??
+    (dataRoot?.data && typeof dataRoot.data === "object"
+      ? (dataRoot.data as Record<string, unknown>)?.annualReports
+      : undefined);
+  const rawReportsData =
+    fromSectionNine.length > 0
+      ? sectionNineRaw
+      : toArray(apiAnnualReports).length > 0
+        ? (toArray(apiAnnualReports) as ReportContainer[])
+        : sectionNineRaw;
+
+  const reportsPostContent = normalizeReports(
+    rawReportsData as ReportContainer | ReportContainer[] | undefined,
+  );
+
   const cards: NormalizedCard[] = Array.isArray(card)
     ? (card as NormalizedCard[])
     : ([
@@ -58,17 +144,12 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           })),
           ctaButton: card.news.ctaButton,
         },
-        card?.report_and_publication && {
-          id: card.report_and_publication.id ?? "reports",
-          type: "reports",
-          category: card.report_and_publication.category ?? "Reports",
-          postContent: toArray(
-            card.report_and_publication.reports_and_publications,
-          ).map((item) => ({
-            ...item,
-            link: resolveLink(item.ctaButton),
-          })),
-          ctaButton: card.report_and_publication.ctaButton,
+        reportPub && {
+          id: reportPubRoot?.id ?? "annualReports",
+          type: "annualReports",
+          category: reportPubRoot?.category ?? "Reports",
+          postContent: reportsPostContent,
+          ctaButton: reportPubRoot?.ctaButton,
         },
         card?.events && {
           id: card.events.id ?? "events",
@@ -98,9 +179,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   const missingTabs = {
     news: toArray(card?.news?.news).length === 0,
-    reports:
-      toArray(card?.report_and_publication?.reports_and_publications).length ===
-      0,
+    reports: reportsPostContent.length === 0,
     events: toArray(card?.events?.events).length === 0,
   };
   const shouldFetchEventsFeed =
@@ -115,12 +194,16 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const root = (data.data ?? data) as Record<string, unknown>;
     const raw =
       type === "news"
-        ? root.news ?? root.news_and_media ?? root.newsAndMedia
-        : type === "reports"
-          ? root.reports ??
+        ? (root.news ?? root.news_and_media ?? root.newsAndMedia)
+        : type === "annualReports"
+          ? (root.annualReports ??
+            root.annual_reports ??
             root.reports_and_publications ??
-            root.report_and_publication
-          : root.events ?? root.events_and_exhibitions;
+            root.report_and_publication)
+          : (root.events ?? root.events_and_exhibitions);
+    if (type === "annualReports") {
+      return normalizeReports(raw as ReportContainer | ReportContainer[]);
+    }
     const items = toArray(raw as PostContent | PostContent[]);
     return items.map((item) => {
       if (type === "news") {
@@ -142,7 +225,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   const buildFallbackCards = (feedData: unknown): NormalizedCard[] => {
     const newsPosts = getFallbackPostContent(feedData, "news");
-    const reportsPosts = getFallbackPostContent(feedData, "reports");
+    const reportsPosts = getFallbackPostContent(feedData, "annualReports");
     const eventsPosts = getFallbackPostContent(feedData, "events");
     return [
       newsPosts.length > 0 && {
@@ -152,8 +235,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         postContent: newsPosts,
       },
       reportsPosts.length > 0 && {
-        id: "reports",
-        type: "reports",
+        id: "annualReports",
+        type: "annualReports",
         category: "Reports",
         postContent: reportsPosts,
       },
@@ -176,7 +259,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     const updated = cards.map((item) => {
       const needsFallback =
         (item.type === "news" && missingTabs.news) ||
-        (item.type === "reports" && missingTabs.reports) ||
+        (item.type === "annualReports" && missingTabs.reports) ||
         (item.type === "events" && missingTabs.events);
       if (!needsFallback) return item;
       const fallbackPostContent = getFallbackPostContent(
@@ -193,7 +276,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       if (!fallback.type) return;
       const needsFallback =
         (fallback.type === "news" && missingTabs.news) ||
-        (fallback.type === "reports" && missingTabs.reports) ||
+        (fallback.type === "annualReports" && missingTabs.reports) ||
         (fallback.type === "events" && missingTabs.events);
       if (needsFallback && !hasType.has(fallback.type)) {
         updated.push(fallback);
@@ -237,7 +320,11 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (!shouldFetchEventsFeed || eventsFeedData || hasFetchedEventsFeed.current) {
+    if (
+      !shouldFetchEventsFeed ||
+      eventsFeedData ||
+      hasFetchedEventsFeed.current
+    ) {
       return;
     }
     const eventsFeedUrl = "/api/events/feed";
@@ -329,7 +416,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       ? [currentCard.postContent]
       : [];
   const postsCount = postsContent.length;
- 
+
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
       <FadeInReveal delay={0.6}>
@@ -339,7 +426,6 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
               <H2 className="text-blue-200">{sectionTitle}</H2>
             </div>
           )}
-
         </div>
       </FadeInReveal>
 
@@ -370,7 +456,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                             zIndex: 0,
                           }}
                         />
-                    {displayCards.map((item, index) => (
+                        {displayCards.map((item, index) => (
                           <div
                             key={`${item.id ?? item.category ?? "tab"}-${index}`}
                             ref={(el) => {
@@ -395,20 +481,20 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 {hasCards &&
                   (currentCard?.ctaButton?.externalLink ||
                     currentCard?.ctaButton?.link?.link) && (
-                  <div className="hidden lg:block">
-                    <Button
-                      title={currentCard?.ctaButton?.title ?? ""}
-                      href={
-                        currentCard?.ctaButton?.hasExternalLink == "true"
-                          ? currentCard?.ctaButton?.externalLink
-                          : currentCard?.ctaButton?.link?.link
-                      }
-                      useTargetBlank={
-                        currentCard?.ctaButton?.hasExternalLink === "true"
-                      }
-                    />
-                  </div>
-                )}
+                    <div className="hidden lg:block">
+                      <Button
+                        title={currentCard?.ctaButton?.title ?? ""}
+                        href={
+                          currentCard?.ctaButton?.hasExternalLink == "true"
+                            ? currentCard?.ctaButton?.externalLink
+                            : currentCard?.ctaButton?.link?.link
+                        }
+                        useTargetBlank={
+                          currentCard?.ctaButton?.hasExternalLink === "true"
+                        }
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </FadeInReveal>
@@ -446,6 +532,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                         desc={item?.description}
                         link={item?.link}
                         animate={Boolean(item?.link)}
+                        showStatusTag={currentCard?.type === "events"}
                       />
                     </div>
                   </SwiperSlide>
@@ -461,18 +548,20 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         {hasCards &&
           (currentCard?.ctaButton?.externalLink ||
             currentCard?.ctaButton?.link?.link) && (
-          <div className="flex lg:hidden justify-center mt-10">
-            <Button
-              title={currentCard?.ctaButton?.title ?? ""}
-              href={
-                currentCard?.ctaButton?.hasExternalLink == "true"
-                  ? currentCard?.ctaButton?.externalLink
-                  : currentCard?.ctaButton?.link?.link
-              }
-              useTargetBlank={currentCard?.ctaButton?.hasExternalLink === "true"}
-            />
-          </div>
-        )}
+            <div className="flex lg:hidden justify-center mt-10">
+              <Button
+                title={currentCard?.ctaButton?.title ?? ""}
+                href={
+                  currentCard?.ctaButton?.hasExternalLink == "true"
+                    ? currentCard?.ctaButton?.externalLink
+                    : currentCard?.ctaButton?.link?.link
+                }
+                useTargetBlank={
+                  currentCard?.ctaButton?.hasExternalLink === "true"
+                }
+              />
+            </div>
+          )}
       </div>
     </div>
   );
