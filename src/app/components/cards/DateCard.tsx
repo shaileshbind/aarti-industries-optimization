@@ -10,6 +10,24 @@ type DateCardProps = {
   desc?: string;
   animate?: boolean;
   useTargetBlank?: boolean;
+  showStatusTag?: boolean;
+};
+
+const getDateStatusLabel = (eventDate?: string) => {
+  if (!eventDate) return null;
+
+  const parsedEventDate = new Date(eventDate);
+  if (Number.isNaN(parsedEventDate.getTime())) return null;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const eventDay = new Date(parsedEventDate);
+  eventDay.setHours(0, 0, 0, 0);
+
+  if (today.getTime() > eventDay.getTime()) return "Past";
+  if (today.getTime() < eventDay.getTime()) return "Upcoming";
+  return "Today";
 };
 
 const DateCard = ({
@@ -20,11 +38,18 @@ const DateCard = ({
   desc,
   animate,
   useTargetBlank = true,
+  showStatusTag = false,
 }: DateCardProps) => {
+  const statusLabel = showStatusTag ? getDateStatusLabel(date) : null;
   const CardContent = () => (
     <>
       {animate ? (
         <div className="group relative inverted-radius transition-all duration-500 ease-in-out">
+          {statusLabel && (
+            <div className="absolute left-3 top-3 z-[3] bg-gradient-orange-1 text-white text-[12px] leading-[100%] font-normal font-roboto px-[10px] py-[6px] rounded-full">
+              {statusLabel}
+            </div>
+          )}
           <div className="relative group-hover:rounded-[20px] transition-all duration-300 rounded-[10px] w-full h-[190px] lg:h-[230px] overflow-hidden z-[2]">
             {imageSrc && (
               <Image
@@ -44,6 +69,11 @@ const DateCard = ({
         </div>
       ) : (
         <div className="group relative transition-all duration-300">
+          {statusLabel && (
+            <div className="absolute left-3 top-3 z-[3] bg-gradient-orange-1 text-white text-[12px] leading-[100%] font-normal font-roboto px-[10px] py-[6px] rounded-full">
+              {statusLabel}
+            </div>
+          )}
           <div className="relative  transition-all duration-300 rounded-[10px] w-full h-[230px] overflow-hidden z-[2]">
             {imageSrc && (
               <Image
