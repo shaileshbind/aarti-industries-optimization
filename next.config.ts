@@ -21,9 +21,9 @@ const nextConfig = async () => {
     images: {
       unoptimized: true,
     },
-    // compiler: {
-    //   removeConsole: environment === "true",
-    // },
+    compiler: {
+      removeConsole: environment === "true",
+    },
 
     async redirects() {
       return [

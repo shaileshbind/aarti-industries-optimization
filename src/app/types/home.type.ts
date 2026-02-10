@@ -114,6 +114,20 @@ export type FrameworkForgedProps = {
 export type LatestAtAartiProps = {
   data: {
     sectionTitle?: string;
+    //api fallback mapping type
+    annualReports?: {
+      reportLayout?: {
+        reports?: {
+          id?: number;
+          heading?: string;
+          date?: string;
+          link?: string;
+          description?: string;
+          thumbnailImageDesktop?: ImageProps;
+          file?: { url?: string };
+        }[];
+      }[];
+    }[];
     card?: {
       id?: number;
       news?: {
@@ -134,14 +148,19 @@ export type LatestAtAartiProps = {
         id?: number;
         category?: string;
         ctaButton?: ButtonProps;
-        reports_and_publications?: {
-          id?: string;
-          description?: string;
-          date?: string;
-          image?: ImageProps;
-          mobImage?: ImageProps;
-          ctaButton?: ButtonHomeProps;
-        };
+        annual_reports?: {
+          reportLayout?: {
+            reports?: {
+              id?: number;
+              heading?: string;
+              date?: string;
+              description?: string;
+              link?: string;
+              thumbnailImageDesktop?: ImageProps;
+              file?: { url?: string };
+            }[];
+          }[];
+        }[];
       };
       events?: {
         id?: number;
@@ -158,6 +177,42 @@ export type LatestAtAartiProps = {
         };
       };
     };
+  };
+};
+
+export type LatestAtAartiPropsAPI = {
+  data?: {
+    annualReports?: {
+      reportLayout?: {
+        reports?: {
+          id?: number;
+          heading?: string;
+          date?: string;
+          link?: string;
+          description?: string;
+          thumbnailImageDesktop?: ImageProps;
+          file?: { url?: string };
+        }[];
+      }[];
+    }[];
+    news?: {
+      id?: string;
+      newsDescription?: string;
+      date?: string;
+      link?: string;
+      image?: ImageProps;
+      mobImage?: ImageProps;
+      ctaButton?: ButtonHomeProps;
+    }[];
+    events?: {
+      id?: string;
+      description?: string;
+      date?: string;
+      link?: string;
+      image?: ImageProps;
+      mobImage?: ImageProps;
+      ctaButton?: ButtonHomeProps;
+    }[];
   };
 };
 

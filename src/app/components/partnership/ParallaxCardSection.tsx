@@ -7,6 +7,7 @@ import { BodyText2, H3, SubH2 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import Image from "next/image";
 import Button from "../Button";
+import GeneralPopup from "../Popups/GeneralPopup";
 import MainAccordion from "../Accordion";
 import { useMediaQuery } from "@mui/material";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
@@ -39,6 +40,7 @@ export default function ParallaxCardSection({
   const mobileBottomImageRef = useRef<HTMLDivElement>(null);
 
   const [expanded, setExpanded] = useState<number>(0);
+  const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const isMobile = useMediaQuery("(max-width:820px)");
 
   useLayoutEffect(() => {
@@ -322,23 +324,38 @@ export default function ParallaxCardSection({
                       </BodyText2>
                     )}
 
+                    {item?.formTitle && (
+                      <div className="mb-2">
+                        <button
+                          onClick={() => {
+                            setshowGeneralPopup(true);
+                          }}
+                          className="animated-underline w-fit cursor-pointer text-orange-200 text-[16px] font-normal leading-[100%] font-alte-hans underline underline-offset-[4px] [text-underline-position:under]"
+                        >
+                          {item?.formTitle}
+                        </button>
+                      </div>
+                    )}
+
                     {item?.ctaButton?.title &&
                       (item?.ctaButton?.hasExternalLink == "true"
                         ? item?.ctaButton?.externalLink
                         : item?.ctaButton?.link?.link) && (
-                        <Button
-                          secondary
-                          title={item?.ctaButton?.title}
-                          href={`${
-                            item?.ctaButton?.hasExternalLink == "true"
-                              ? item?.ctaButton?.externalLink
-                              : item?.ctaButton?.link?.link
-                          }`}
-                          className=" mb-2"
-                          useTargetBlank={
-                            item?.ctaButton?.hasExternalLink == "true"
-                          }
-                        />
+                        <div>
+                          <Button
+                            secondary
+                            title={item?.ctaButton?.title}
+                            href={`${
+                              item?.ctaButton?.hasExternalLink == "true"
+                                ? item?.ctaButton?.externalLink
+                                : item?.ctaButton?.link?.link
+                            }`}
+                            className=" mb-2"
+                            useTargetBlank={
+                              item?.ctaButton?.hasExternalLink == "true"
+                            }
+                          />
+                        </div>
                       )}
                   </div>
                 </MainAccordion>
@@ -358,6 +375,10 @@ export default function ParallaxCardSection({
           </div>
         )}
       </div>
+      <GeneralPopup
+        isOpen={showGeneralPopup}
+        setshowGeneralPopup={setshowGeneralPopup}
+      />
     </div>
   );
 }
