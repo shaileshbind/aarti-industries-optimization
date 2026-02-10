@@ -42,6 +42,16 @@ export default function StockTicker() {
         const nseResponse = await fetch("/api/nse-stock", {
           cache: "no-store",
         });
+        // Check if response is ok before parsing JSON
+        if (!nseResponse.ok) {
+          const errorData = await nseResponse.json().catch(() => ({}));
+          console.error("NSE stock API error:", {
+            status: nseResponse.status,
+            statusText: nseResponse.statusText,
+            error: errorData,
+          });
+          return; // Silently fail - don't show error to users
+        }
         const nseData = await nseResponse.json();
         // console.log("nseData", nseData)
 
