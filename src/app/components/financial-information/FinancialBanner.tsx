@@ -2,7 +2,7 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ImageProps } from "@/app/types/global.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export type FinancialBannerProps = {
   data: {

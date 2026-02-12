@@ -1,11 +1,16 @@
+import nextDynamic from "next/dynamic";
 import GRBanner from "../components/global-reach/GRBanner";
 import GRInfo from "../components/global-reach/GRInfo";
 import GloballyCertified from "../components/GloballyCertified";
 import GRExplore from "../components/global-reach/GRExp";
-import GRMaps from "../components/global-reach/GRMaps";
-import { getPageData } from "@/_lib/pageData.fetch";
-import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
+import { getData } from "@/_lib/getData.fetch";
+import { getPageData } from "@/_lib/pageData.fetch";
+
+const GRMaps = nextDynamic(
+  () => import("../components/global-reach/GRMaps").then((m) => m.default),
+  { ssr: true },
+);
 
 export const dynamic = "force-dynamic";
 

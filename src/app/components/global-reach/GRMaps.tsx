@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { BodyText2, H2, H3, SubH3 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
-import DesktopMapSvg from "./DesktopMapSvg";
-import StateMapSvg from "./StateMapSvg";
+import DesktopMapSvgClient from "./DesktopMapSvgClient";
+import StateMapSvgClient from "./StateMapSvgClient";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRMapsProps } from "@/app/types/global-reach.type";
@@ -136,7 +136,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
           <div className="relative w-full h-[180px] lg:h-[550px]">
             <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
               <FadeInRevealBlur className="w-full">
-                <DesktopMapSvg
+                <DesktopMapSvgClient
                   hoverRestWorld={() => setActiveBlip(0)}
                   hoverNorthAmerica={() => setActiveBlip(1)}
                   hoverEurope={() => setActiveBlip(2)}
@@ -327,7 +327,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
               </div>
               <div className="relative">
                 {/* desktop statemap */}
-                <StateMapSvg
+                <StateMapSvgClient
                   width="737"
                   height="569"
                   active={active}
@@ -478,7 +478,7 @@ const GRMaps = ({ data }: GRMapsProps) => {
           </div>
           {/* state map */}
           <div className="mt-[40px] w-[100%] h-[300px] relative">
-            <StateMapSvg
+            <StateMapSvgClient
               width="100%"
               height="300"
               active={activeMob}

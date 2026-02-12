@@ -1,5 +1,5 @@
 "use client";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import HeroBanner from "../banners/HeroBanner";
 import { CPBannerProps } from "@/app/types/code-and-policies.type";
 

@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import clsx from "clsx";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SubCategoryWithCkLayout } from "@/app/types/shareholder.type";

@@ -12,7 +12,7 @@ import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollTrigger);

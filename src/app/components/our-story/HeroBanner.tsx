@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "../Button";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {

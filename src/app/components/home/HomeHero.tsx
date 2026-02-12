@@ -12,7 +12,7 @@ import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");

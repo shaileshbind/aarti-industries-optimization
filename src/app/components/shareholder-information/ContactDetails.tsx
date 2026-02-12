@@ -1,5 +1,7 @@
 "use client";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import clsx from "clsx";
 import { useState, useEffect, useMemo } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
