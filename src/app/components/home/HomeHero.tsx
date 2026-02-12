@@ -338,7 +338,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
                     fill
-                    priority
+                    priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                     className="hidden md:block object-cover"
                   />
                 )}
@@ -349,7 +350,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                       items?.card?.[0]?.mobImage?.alternativeText || "banner"
                     }
                     fill
-                    priority
+                    priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                     className="block md:hidden object-cover"
                   />
                 )}

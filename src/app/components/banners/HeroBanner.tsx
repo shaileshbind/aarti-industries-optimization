@@ -179,6 +179,8 @@ const HeroBanner = ({
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
+                  priority
+                  fetchPriority="high"
                   className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
                     isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
                   }`}
@@ -191,6 +193,8 @@ const HeroBanner = ({
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
+                  priority
+                  fetchPriority="high"
                   className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
                     isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
                   }`}
@@ -418,6 +422,8 @@ const HeroBanner = ({
                 src={image}
                 alt={alt ? alt : "img"}
                 fill
+                priority
+                fetchPriority="high"
                 className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
                   isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
                 }`}
@@ -429,6 +435,8 @@ const HeroBanner = ({
                 src={mobImage}
                 alt={mobAlt ? mobAlt : "img"}
                 fill
+                priority
+                fetchPriority="high"
                 className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
                   isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
                 }`}
