@@ -14,25 +14,30 @@ export default function Logos({ data }: LogosProps) {
 
     if (!downloadUrl) return;
 
-    try {
-      // Use API route to bypass CORS
-      const filenameParam = filename
-        ? `&filename=${encodeURIComponent(filename)}`
-        : "";
-      const proxyUrl = `/api/download?url=${encodeURIComponent(
-        downloadUrl,
-      )}${filenameParam}`;
-      const response = await fetch(proxyUrl);
+    const filenameParam = filename
+      ? `&filename=${encodeURIComponent(filename)}`
+      : "";
+    const proxyUrl = `/api/download?url=${encodeURIComponent(
+      downloadUrl,
+    )}${filenameParam}`;
 
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      window.open(proxyUrl, "_blank");
+      return;
+    }
+
+    try {
+      const response = await fetch(proxyUrl);
       if (!response.ok) throw new Error("Download failed");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      // Get filename from Content-Disposition header or use provided filename
       const contentDisposition = response.headers.get("Content-Disposition");
       let downloadFilename = filename || "download";
-
       if (contentDisposition) {
         const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
         if (filenameMatch) {
@@ -46,12 +51,10 @@ export default function Logos({ data }: LogosProps) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download failed:", error);
-      // Fallback: open in new tab
-      window.open(downloadUrl, "_blank");
+      window.open(proxyUrl, "_blank");
     }
   };
 

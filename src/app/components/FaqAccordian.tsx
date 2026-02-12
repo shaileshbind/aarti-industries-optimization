@@ -1,7 +1,7 @@
 import React from "react";
 import clsxN from "../../../utils/clsxN";
 import Accordion from "@mui/material/Accordion";
-import { SxProps, Theme } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Image from "next/image";

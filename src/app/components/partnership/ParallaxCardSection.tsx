@@ -9,7 +9,7 @@ import Image from "next/image";
 import Button from "../Button";
 import GeneralPopup from "../Popups/GeneralPopup";
 import MainAccordion from "../Accordion";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
 
 // Register ScrollTrigger plugin

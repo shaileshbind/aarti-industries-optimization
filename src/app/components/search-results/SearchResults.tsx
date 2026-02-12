@@ -5,7 +5,7 @@ import { H1, SubH1 } from "../Typography2";
 import { useRouter, useSearchParams } from "next/navigation";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Pagination from "@mui/material/Pagination";
-import { PaginationItem } from "@mui/material";
+import PaginationItem from "@mui/material/PaginationItem";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 

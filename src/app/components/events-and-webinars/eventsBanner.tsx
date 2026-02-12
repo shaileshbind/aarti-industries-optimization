@@ -1,7 +1,7 @@
 "use client";
 import HeroBanner from "../banners/HeroBanner";
 import { EventsBannerProps } from "../../types/events-and-webinars.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const EventsBanner = ({ data }: EventsBannerProps) => {
   const isMobile = useMediaQuery("(max-width:820px)");
