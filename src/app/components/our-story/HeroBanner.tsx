@@ -122,6 +122,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             fill
             className="object-cover hidden md:block"
             priority
+            fetchPriority="high"
           />
         )}
         {mobImage && isTablet && (
@@ -131,6 +132,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             fill
             className="object-cover block md:hidden"
             priority
+            fetchPriority="high"
           />
         )}
 

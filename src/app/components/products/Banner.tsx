@@ -41,6 +41,8 @@ const Banner: React.FC<
             alt={image?.alternativeText || "banner"}
             width={image?.width || 1000}
             height={image?.height || 306}
+            priority
+            fetchPriority="high"
             className="h-full w-full object-cover md:block hidden"
           />
           <Image
@@ -50,6 +52,8 @@ const Banner: React.FC<
             alt={mobImage?.alternativeText || "banner-mobile"}
             width={mobImage?.width || 1000}
             height={mobImage?.height || 306}
+            priority
+            fetchPriority="high"
             className="h-full w-full object-cover md:hidden block"
           />
         </div>
