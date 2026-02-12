@@ -1,5 +1,5 @@
 "use client";
-import { ShareSharp } from "@mui/icons-material";
+import ShareSharpIcon from "@mui/icons-material/ShareSharp";
 
 const Share = () => {
   const handleShare = async () => {
@@ -22,7 +22,7 @@ const Share = () => {
       className="w-[36px] h-[36px] lg:w-[40px] lg:h-[40px] rounded-full bg-[#DC4C03] grid place-items-center cursor-pointer"
       onClick={handleShare}
     >
-      <ShareSharp className="text-[#FFF]" />
+      <ShareSharpIcon className="text-[#FFF]" />
     </div>
   );
 };

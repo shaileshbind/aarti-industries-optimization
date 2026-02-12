@@ -141,8 +141,7 @@ export default function ProductInnerPage({
                   </div>
                 </div>
                 {/* msds only - via cms */}
-                {product?.productDetails?.documentSection?.documents
-                  ?.length && (
+                {(product?.productDetails?.documentSection?.documents ?? []).some(() => true) && (
                   <div className="flex flex-col gap-[10px] mt-[10px]">
                     {product?.productDetails?.documentSection?.documents?.map(
                       (item, index) =>
@@ -238,10 +237,12 @@ export default function ProductInnerPage({
                     </div>
                   )}
                 </div>
-                <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
+                {(product?.productDetails?.application ?? []).some(() => true) && (
+                  <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
+                )}
                 {/* Applications */}
                 <div>
-                  {product?.productDetails?.application?.length && (
+                  {(product?.productDetails?.application ?? []).some(() => true) && (
                     <div>
                       <p className="pb-4 text-[#002F50] text-base md:text-lg">
                         Applications :
@@ -308,7 +309,7 @@ export default function ProductInnerPage({
         <FadeInReveal>
           <div className="mt-[70px] lg:mt-[120px] bg-grey-100 rounded-[14px] lg:rounded-[20px] p-5 py-7 lg:p-10 w-full">
             <SubH1 className="text-blue-100">Related Products</SubH1>
-            {relatedProducts?.length && (
+            {(relatedProducts ?? []).some(() => true) && (
               <div className="mt-2 lg:mt-[40px] w-full grid lg:grid-cols-2 gap-x-[40px] lg:gap-y-[20px]">
                 {relatedProducts?.map((item) => (
                   <ProductList

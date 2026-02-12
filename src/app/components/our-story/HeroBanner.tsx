@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Button from "../Button";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
@@ -122,6 +122,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             fill
             className="object-cover hidden md:block"
             priority
+            fetchPriority="high"
           />
         )}
         {mobImage && isTablet && (
@@ -131,6 +132,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             fill
             className="object-cover block md:hidden"
             priority
+            fetchPriority="high"
           />
         )}
 

@@ -7,7 +7,7 @@ import "swiper/css/effect-fade";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { FadeInReveal } from "../ScrollReveal";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {

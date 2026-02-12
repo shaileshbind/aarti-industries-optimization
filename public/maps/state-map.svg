@@ -1,30 +1,6 @@
-interface StateMapProps {
-  hoverBachau?: () => void;
-  hoverDahej?: () => void;
-  hoverTarapur?: () => void;
-  hoverNaviM?: () => void;
-  hoverVapi?: () => void;
-  hoverJhagadia?: () => void;
-  width?: string;
-  height?: string;
-  active?: number | null;
-}
-
-const StateMapSvg = ({
-  width,
-  height,
-  hoverBachau,
-  hoverDahej,
-  hoverTarapur,
-  hoverNaviM,
-  hoverVapi,
-  hoverJhagadia,
-  active,
-}: StateMapProps) => {
-  return (
-    <svg
-      width={width}
-      height={height}
+<svg
+      width="100%"
+      height="100%"
       viewBox="0 0 737 569"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -45,9 +21,8 @@ const StateMapSvg = ({
         fill="white"
         mask="url(#path-2-inside-1_40_29)"
       />
-      {/* Bachau */}
       <g
-        onMouseEnter={hoverBachau}
+        data-region="bhachau" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 0 ? "opacity-100" : "opacity-40"
         }`}
@@ -55,9 +30,8 @@ const StateMapSvg = ({
         <circle cx="96.4048" cy="82.5554" r="10.8886" fill="#F9C095" />
         <circle cx="96.4048" cy="82.5553" r="6.53319" fill="#F36633" />
       </g>
-      {/* Dahej */}
       <g
-        onMouseEnter={hoverDahej}
+        data-region="dahej" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 1 ? "opacity-100" : "opacity-40"
         }`}
@@ -65,9 +39,8 @@ const StateMapSvg = ({
         <circle cx="255.984" cy="178.387" r="10.8886" fill="#F9C095" />
         <circle cx="255.984" cy="178.387" r="6.53319" fill="#F36633" />
       </g>
-      {/* Jhagadia */}
       <g
-        onMouseEnter={hoverJhagadia}
+        data-region="jhagadia" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 5 ? "opacity-100" : "opacity-40"
         }`}
@@ -75,9 +48,8 @@ const StateMapSvg = ({
         <circle cx="280.984" cy="178.387" r="10.8886" fill="#F9C095" />
         <circle cx="280.984" cy="178.387" r="6.53319" fill="#F36633" />
       </g>
-      {/* Tarapur */}
       <g
-        onMouseEnter={hoverTarapur}
+        data-region="tarapur" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 2 ? "opacity-100" : "opacity-40"
         }`}
@@ -85,9 +57,8 @@ const StateMapSvg = ({
         <circle cx="281.512" cy="327.55" r="10.8886" fill="#F9C095" />
         <circle cx="281.512" cy="327.55" r="6.53319" fill="#F36633" />
       </g>
-      {/* Navi Mumbai */}
       <g
-        onMouseEnter={hoverNaviM}
+        data-region="navi-mumbai" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 3 ? "opacity-100" : "opacity-40"
         }`}
@@ -95,9 +66,8 @@ const StateMapSvg = ({
         <circle cx="293.761" cy="377.91" r="10.8886" fill="#9FB5C3" />
         <circle cx="293.761" cy="377.909" r="6.53319" fill="#002F50" />
       </g>
-      {/* Vapi */}
       <g
-        onMouseEnter={hoverVapi}
+        data-region="vapi" 
         className={`cursor-pointer transition-opacity duration-200 ${
           active === 4 ? "opacity-100" : "opacity-40"
         }`}
@@ -106,7 +76,3 @@ const StateMapSvg = ({
         <circle cx="278.79" cy="218.663" r="6.53319" fill="#002F50" />
       </g>
     </svg>
-  );
-};
-
-export default StateMapSvg;

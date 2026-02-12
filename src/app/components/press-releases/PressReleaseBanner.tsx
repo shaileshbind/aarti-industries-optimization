@@ -2,7 +2,7 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { PressReleaseBannerProps } from "@/app/types/press-release.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const PressReleaseBanner: React.FC<PressReleaseBannerProps> = ({ data }) => {
   const { sectionTitle, description, image, mobImage } = data;

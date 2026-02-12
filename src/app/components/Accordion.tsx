@@ -1,11 +1,10 @@
 import React from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  useMediaQuery,
-} from "@mui/material";
-import { Add, Remove } from "@mui/icons-material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 type MainAccordionProps = {
   key?: string;
@@ -68,9 +67,9 @@ export default function MainAccordion({
                   icon
                 ) : // Otherwise use default Add/Remove icons
                 expanded ? (
-                  <Remove className="text-[#DC4C03]" />
+                  <RemoveIcon className="text-[#DC4C03]" />
                 ) : (
-                  <Add className="text-[#DC4C03]" />
+                  <AddIcon className="text-[#DC4C03]" />
                 )}
               </div>
             )

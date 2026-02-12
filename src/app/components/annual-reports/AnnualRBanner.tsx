@@ -1,7 +1,7 @@
 "use client";
 import HeroBanner from "../banners/HeroBanner";
 import { AnnualRBannerProps } from "@/app/types/annual-reports.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const AnnualRBanner = ({ data }: AnnualRBannerProps) => {
   const isMobile = useMediaQuery("(max-width:820px)");

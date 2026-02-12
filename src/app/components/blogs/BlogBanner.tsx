@@ -1,7 +1,7 @@
 "use client";
 import HeroBanner from "../banners/HeroBanner";
 import { BlogBannerProps } from "@/app/types/blogs.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const BlogBanner = ({ data }: BlogBannerProps) => {
   const isMobile = useMediaQuery("(max-width:820px)");

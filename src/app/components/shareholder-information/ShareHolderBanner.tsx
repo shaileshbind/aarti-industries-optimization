@@ -2,7 +2,7 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ShareHolderBannerProps } from "@/app/types/shareholder.type";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ShareHolderBanner: React.FC<ShareHolderBannerProps> = ({ data }) => {
   const { title, description, image, mobImage } = data;

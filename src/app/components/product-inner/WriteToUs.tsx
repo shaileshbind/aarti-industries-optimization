@@ -1,12 +1,10 @@
 "use client";
 import { useForm, Controller } from "react-hook-form";
-import {
-  TextField,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
