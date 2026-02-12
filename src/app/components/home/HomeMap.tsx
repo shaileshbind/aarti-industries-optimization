@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { BodyText2, H2 } from "../Typography2";
-import DesktopMapSvg from "../global-reach/DesktopMapSvg";
+import DesktopMapSvgClient from "../global-reach/DesktopMapSvgClient";
 import Image from "next/image";
 import { useMargin } from "@/app/contexts/MarginContext";
 
@@ -27,7 +27,7 @@ const HomeMap = () => {
         </H2>
         <div className="relative w-full h-[180px] lg:h-[550px] mb-[50px] lg:mb-[100px] ">
           <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
-            <DesktopMapSvg
+            <DesktopMapSvgClient
               hoverRestWorld={() => setActiveBlip(0)}
               hoverNorthAmerica={() => setActiveBlip(1)}
               hoverEurope={() => setActiveBlip(2)}
@@ -40,12 +40,12 @@ const HomeMap = () => {
               fillMiddleEast={activeBlip === 3 ? "#898698" : "#E7EBED"}
               fillIndia={activeBlip === 4 ? "#898698" : "#E7EBED"}
               fillRestOfAsia={activeBlip === 5 ? "#898698" : "#E7EBED"}
-              isActive0={activeBlip === 0 ? true : false}
-              isActive1={activeBlip === 1 ? true : false}
-              isActive2={activeBlip === 2 ? true : false}
-              isActive3={activeBlip === 3 ? true : false}
-              isActive4={activeBlip === 4 ? true : false}
-              isActive5={activeBlip === 5 ? true : false}
+              isActive0={activeBlip === 0}
+              isActive1={activeBlip === 1}
+              isActive2={activeBlip === 2}
+              isActive3={activeBlip === 3}
+              isActive4={activeBlip === 4}
+              isActive5={activeBlip === 5}
             />
           </div>
           <Image

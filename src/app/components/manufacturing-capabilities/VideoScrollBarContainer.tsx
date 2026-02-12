@@ -5,7 +5,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { ScaleInReveal } from "../ScrollReveal";
 import Button from "../Button";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   VideoScrollBarContainerProps,
   WebinarApiItem,

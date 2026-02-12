@@ -10,7 +10,7 @@ import SliderCard from "../cards/SliderCard";
 import { H2 } from "../Typography2";
 import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { FadeInReveal } from "../ScrollReveal";
 
 const ScrollTrigger = ScrollTriggerModule;

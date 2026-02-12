@@ -12,7 +12,7 @@ import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");
@@ -338,7 +338,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
                     fill
-                    priority
+                    priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                     className="hidden md:block object-cover"
                   />
                 )}
@@ -349,7 +350,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                       items?.card?.[0]?.mobImage?.alternativeText || "banner"
                     }
                     fill
-                    priority
+                    priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                     className="block md:hidden object-cover"
                   />
                 )}
