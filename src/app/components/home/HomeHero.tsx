@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -31,7 +31,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const orangeScroll = useRef<HTMLDivElement>(null);
   const navTitles = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (
       !wrapperRef.current ||
       !starRef.current ||
@@ -44,93 +44,63 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     )
       return;
 
-    const star = starRef.current;
-    const star2 = starRef2.current;
-    const star3 = starRef3.current;
-    const stars = [star, star2, star3];
-    const vLine = lineVertical.current;
-    const hLine = lineHorizontal.current;
-    const orangeBar = orangeScroll.current;
-    const navTitle = navTitles.current;
+    const isMobileView = window.innerWidth <= 768;
 
-    gsap.set(stars, {
-      opacity: 0,
-      scale: 0,
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        const star = starRef.current!;
+        const star2 = starRef2.current!;
+        const star3 = starRef3.current!;
+        const stars = [star, star2, star3];
+        const vLine = lineVertical.current!;
+        const hLine = lineHorizontal.current!;
+        const orangeBar = orangeScroll.current!;
+        const navTitle = navTitles.current!;
+
+        if (!isMobileView) {
+          gsap.set(wrapperRef.current, { opacity: 0, scale: 0.95 });
+        }
+
+        // Safe to hide decorative elements
+        gsap.set(stars, { opacity: 0, scale: 0 });
+        gsap.set(vLine, { scaleY: 0, transformOrigin: "top center" });
+        gsap.set(hLine, { scaleX: 0, transformOrigin: "left center" });
+        gsap.set(orangeBar, { opacity: 0 });
+        gsap.set(navTitle, { opacity: 0, y: 20 });
+
+        const tl = gsap.timeline();
+
+        // Animate wrapper ONLY on desktop
+        if (!isMobileView) {
+          tl.to(wrapperRef.current, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.5,
+            ease: "power3.out",
+          });
+        }
+
+        tl.to(vLine, { scaleY: 1, duration: 0.8, ease: "power2.out" }, "<")
+          .to(hLine, { scaleX: 1, duration: 0.8, ease: "power2.out" }, "<")
+          .to(orangeBar, { opacity: 1, duration: 0.1 }, "<")
+          .to(
+            stars,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.6,
+              ease: "sine.out",
+              stagger: 0.2,
+            },
+            "<",
+          )
+          .to(navTitle, { opacity: 1, y: 0, duration: 0.4 }, "<");
+      });
+
+      return () => cancelAnimationFrame(raf2);
     });
-    gsap.set(vLine, {
-      scaleY: 0,
-      transformOrigin: "top center",
-    });
-    gsap.set(hLine, {
-      scaleX: 0,
-      transformOrigin: "left center",
-    });
-    gsap.set(orangeBar, {
-      opacity: 0,
-    });
-    gsap.set(navTitle, {
-      opacity: 0,
-      y: 20,
-    });
-    gsap.set(wrapperRef.current, {
-      opacity: 0,
-      scale: 0.95,
-    });
-    const tl = gsap.timeline();
-    tl.to(wrapperRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.5,
-      ease: "power3.out",
-    })
-      .to(
-        vLine,
-        {
-          scaleY: 1,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.1",
-      )
-      .to(
-        hLine,
-        {
-          scaleX: 1,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "<",
-      )
-      .to(
-        orangeBar,
-        {
-          opacity: 1,
-          duration: 0.1,
-          ease: "power2.out",
-        },
-        "<",
-      )
-      .to(
-        stars,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          ease: "sine.out",
-          stagger: 0.2,
-        },
-        "<",
-      )
-      .to(
-        navTitle,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        "<",
-      );
+
+    return () => cancelAnimationFrame(raf1);
   }, []);
 
   const handleTabClick = (index: number) => {
@@ -333,6 +303,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
+                {/* Desktop banner */}
                 {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -340,9 +311,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    quality={index === 0 ? 70 : 80}
                     className="hidden md:block object-cover"
                   />
                 )}
+
+                {/* Mobile banner */}
                 {items?.card?.[0]?.mobImage?.url && isTablet && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
@@ -352,6 +327,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
+                    sizes="100vw"
+                    quality={index === 0 ? 70 : 80}
                     className="block md:hidden object-cover"
                   />
                 )}

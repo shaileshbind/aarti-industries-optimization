@@ -9,7 +9,7 @@ import ConditionalLayout from "./components/ConditionalLayout";
 import type { Metadata } from "next";
 import clsx from "clsx";
 
-export const revalidate = 1;
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   icons: {

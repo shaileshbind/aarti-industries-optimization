@@ -60,7 +60,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     const measureSlideWidth = () => {
       if (imageWrapperRef.current) {
         const width = imageWrapperRef.current.offsetWidth;
-        console.log("width", width);
         if (width > 0) {
           setSlideWidth(width);
         }

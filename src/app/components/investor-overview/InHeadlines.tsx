@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { BodyText2, H2, SubH2 } from "../Typography2";
 import Button from "../Button";
 import DateCard from "../cards/DateCard";
@@ -10,9 +11,63 @@ import { InvestorHeadlines } from "@/app/types/investor-overview.type";
 import Link from "next/link";
 import { formatDate } from "../../../../utils/formatDate";
 import { FadeInReveal } from "../ScrollReveal";
+import { fetchNews } from "@/_lib/fetchNews";
+
+type HeadlineItem = {
+  heading?: string;
+  date?: string | null;
+  href?: string | null;
+};
+
+function flattenPressHeadlines(
+  data: Record<string, { items?: unknown[] }> | null
+): HeadlineItem[] {
+  if (!data || typeof data !== "object") return [];
+  const flat: HeadlineItem[] = [];
+  const years = Object.keys(data).sort((a, b) => Number(b) - Number(a));
+  for (const year of years) {
+    const yearData = data[year];
+    const items = yearData?.items;
+    if (!Array.isArray(items)) continue;
+    for (const item of items) {
+      const report = (item as { report?: unknown[] })?.report;
+      if (!Array.isArray(report)) continue;
+      for (const quarter of report) {
+        const entries = (quarter as { report?: unknown[] })?.report;
+        if (!Array.isArray(entries)) continue;
+        for (const entry of entries) {
+          const e = entry as {
+            heading?: string;
+            date?: string | null;
+            link?: string | null;
+            file?: { url?: string };
+          };
+          if (!e?.heading) continue;
+          const href = e?.file?.url ?? e?.link ?? null;
+          flat.push({
+            heading: e.heading,
+            date: e?.date ?? null,
+            href: href ?? null,
+          });
+        }
+      }
+    }
+  }
+  return flat;
+}
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
+  const [headlines, setHeadlines] = useState<HeadlineItem[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const apiData = await fetchNews("/api/press");
+      setHeadlines(flattenPressHeadlines(apiData));
+    };
+    load();
+  }, []);
+
   return (
     <FadeInReveal className="my-[72px] lg:my-[120px]">
       {sectionTitle && <H2 className="fluid-container">{sectionTitle}</H2>}
@@ -23,28 +78,28 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-          {pressRelease?.press_releases
-            ?.filter((release) => release?.file?.url || release?.slug)
-            .slice(0, 4)
-            .map((release, index) => {
-              const href =
-                release?.file?.url || `press-releases/${release?.slug}`;
-              if (!href) return null;
+          {headlines.slice(0, 4).map((release, index) => {
+            const content = (
+              <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
+                {release?.heading && (
+                  <BodyText2>{release.heading}</BodyText2>
+                )}
+                {release?.date && (
+                  <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
+                    {formatDate(release.date)}
+                  </BodyText2>
+                )}
+              </div>
+            );
+            if (release.href) {
               return (
-                <Link href={href} target="_blank" key={index}>
-                  <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
-                    {release?.heading && (
-                      <BodyText2>{release.heading}</BodyText2>
-                    )}
-                    {release?.date && (
-                      <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
-                        {formatDate(release.date)}
-                      </BodyText2>
-                    )}
-                  </div>
+                <Link href={release.href} target="_blank" key={index}>
+                  {content}
                 </Link>
               );
-            })}
+            }
+            return <div key={index}>{content}</div>;
+          })}
           {pressRelease?.ctaButton?.title &&
             (pressRelease?.ctaButton?.hasExternalLink == "true"
               ? pressRelease?.ctaButton?.externalLink
