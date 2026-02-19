@@ -3,6 +3,7 @@ import GloballyCertified from "@/app/components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import { ProductPageProps } from "../../types/product.type";
 import SEO from "@/app/components/SEO";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -11,13 +12,15 @@ export default async function ProductInner({ params }: ProductPageProps) {
   let relatedData;
 
   const mainData = await getData(`/products-details/${productId}`);
+  if (!mainData) notFound();
+
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*",
   );
 
   if (mainData) {
     relatedData = await getData(
-      `/related-products/${mainData.product_sub_categories[0].slug || ""}`,
+      `/related-products/${mainData.product_sub_categories[0]?.slug || ""}`,
     );
   }
   const seo = mainData?.seo;
