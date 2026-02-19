@@ -24,7 +24,7 @@ export async function getPageData(slug: string) {
     }
 
     const data = await response.json();
-    console.log("data", data?.layout?.[0]);
+   //console.log("data", data?.layout?.[0]);
     return {
       data: data?.layout?.[0],
       seo: data?.seo,

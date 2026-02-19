@@ -9,12 +9,72 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
 import Button from "../Button";
 import { YearQuarterListingProps } from "@/app/types/year-quarter-listing.type";
 import { useRouter, useSearchParams } from "next/navigation";
+import { fetchNews } from "@/_lib/fetchNews";
+import type { Quarter } from "@/app/types/shareholder.type";
+
+function isPressReleasesSubCategory(subCat: string): boolean {
+  return subCat?.toLowerCase().replace(/\s+/g, " ").trim() === "press releases";
+}
+
+function buildPressReleasesYearAndQuarter(
+  data: Record<string, { items?: unknown[] }> | null,
+): { year: string | number; quarter: Quarter[] }[] {
+  if (!data || typeof data !== "object") return [];
+  const years = Object.keys(data).sort((a, b) => Number(b) - Number(a));
+  const result: { year: string | number; quarter: Quarter[] }[] = [];
+
+  for (const year of years) {
+    const yearData = data[year];
+    const items = yearData?.items;
+    if (!Array.isArray(items)) continue;
+
+    const quarters: Quarter[] = [];
+    let quarterId = 0;
+
+    for (const item of items) {
+      const report = (item as { report?: unknown[] })?.report;
+      if (!Array.isArray(report)) continue;
+      for (const qBlock of report) {
+        const q = qBlock as { id?: number; quarter?: string; report?: unknown[] };
+        const entries = q?.report;
+        if (!Array.isArray(entries)) continue;
+        const reports = entries.map((e: unknown) => {
+          const entry = e as {
+            id?: number;
+            heading?: string;
+            slug?: string | null;
+            link?: string | null;
+            file?: { url?: string };
+          };
+          const link = entry?.file?.url ?? entry?.link ?? "";
+          return {
+            id: entry.id ?? entry.heading ?? 0,
+            heading: entry.heading ?? "",
+            link,
+            ...(entry?.file?.url && { file: { url: entry.file.url } }),
+          };
+        });
+        quarters.push({
+          id: q.id ?? ++quarterId,
+          quarter: q.quarter ?? "",
+          financial_year: null,
+          report: reports,
+        });
+      }
+    }
+
+    if (quarters.length > 0) result.push({ year, quarter: quarters });
+  }
+
+  return result;
+}
 
 export default function YearQuarterListing({
   reportLayout,
@@ -36,10 +96,31 @@ export default function YearQuarterListing({
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
   const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
 
+  const [pressReleasesYearAndQuarter, setPressReleasesYearAndQuarter] =
+    useState<{ year: string | number; quarter: Quarter[] }[] | null>(null);
+
   // refs
   const yearsRowRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<Map<string | number, HTMLDivElement>>(new Map());
   const [underline, setUnderline] = useState({ left: 0, width: 0 });
+
+  // Fetch press releases from /api/press when Press Releases subcategory is selected
+  useEffect(() => {
+    if (!isPressReleasesSubCategory(activeSubCategory)) {
+      setPressReleasesYearAndQuarter(null);
+      return;
+    }
+    let cancelled = false;
+    const load = async () => {
+      const data = await fetchNews("/api/press");
+      if (cancelled) return;
+      setPressReleasesYearAndQuarter(buildPressReleasesYearAndQuarter(data));
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeSubCategory]);
 
   // Update activeSubCategory when URL changes
   useEffect(() => {
@@ -104,11 +185,31 @@ export default function YearQuarterListing({
     },
   };
 
-  // Get current subcategory data
+  // Get current subcategory data; when Press Releases, use /api/press data
   const currentSubCategory = reportLayout?.find(
     (item) => item.subCategory === activeSubCategory,
   );
-  const yearAndQuarter = currentSubCategory?.yearAndQuarter || [];
+  const yearAndQuarter = useMemo(() => {
+    if (isPressReleasesSubCategory(activeSubCategory) && pressReleasesYearAndQuarter?.length) {
+      return pressReleasesYearAndQuarter;
+    }
+    return currentSubCategory?.yearAndQuarter || [];
+  }, [
+    activeSubCategory,
+    pressReleasesYearAndQuarter,
+    currentSubCategory?.yearAndQuarter,
+  ]);
+
+  // When press releases API data loads, set active year to first year if current year not in list
+  useEffect(() => {
+    if (
+      isPressReleasesSubCategory(activeSubCategory) &&
+      pressReleasesYearAndQuarter?.length &&
+      !pressReleasesYearAndQuarter.some((y) => String(y.year) === String(activeYear))
+    ) {
+      setActiveYear(pressReleasesYearAndQuarter[0]?.year ?? "");
+    }
+  }, [activeSubCategory, pressReleasesYearAndQuarter, activeYear]);
 
   // Get quarters for active year - reversed order (last quarter first)
   const currentYearData = yearAndQuarter?.find(

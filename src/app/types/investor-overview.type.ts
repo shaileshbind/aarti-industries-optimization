@@ -75,16 +75,6 @@ export type InvestorHeadlines = {
     sectionTitle?: string;
     pressRelease?: {
       title?: string;
-      press_releases?: {
-        id?: number;
-        heading?: string;
-        date?: string;
-        slug?: string;
-        file?: {
-          id?: number;
-          url?: string;
-        };
-      }[];
       ctaButton?: ButtonProps;
     };
     mediaCoverage?: {

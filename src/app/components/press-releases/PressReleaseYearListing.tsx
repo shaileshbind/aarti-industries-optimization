@@ -12,13 +12,13 @@ import {
   useMemo,
 } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import Image from "next/image";
 import { PressReleaseYearListingProps } from "@/app/types/press-release.type";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BodyText2, BodyText3, SubH1 } from "../Typography2";
 import Button from "../Button";
 import Link from "next/link";
 import { formatDate } from "../../../../utils/formatDate";
+import { fetchNews } from "@/_lib/fetchNews";
 
 export type PressItem = {
   id?: number;
@@ -27,34 +27,121 @@ export type PressItem = {
   date?: string;
   slug?: string;
   shortDescription?: string;
+  quarter?: string;
   file?: {
     id?: number;
     url?: string;
   };
 };
 
-type YearValue =
-  | PressItem[]
-  | {
-      report?: PressItem[];
-      [k: string]: unknown;
+/* Left section */
+type LatestItem = {
+  heading?: string;
+  date?: string | null;
+  ctaButtonUrl?: string | null;
+};
+
+function buildFromApiResponse(data: Record<string, { items?: unknown[] }> | null): {
+  latestTwo: LatestItem[];
+  yearAndPressReleases: Record<string, PressItem[]>;
+} {
+  const allLatest: LatestItem[] = [];
+  const yearAndPressReleases: Record<string, PressItem[]> = {};
+  if (!data || typeof data !== "object")
+    return { latestTwo: [], yearAndPressReleases };
+
+  const years = Object.keys(data).sort((a, b) => Number(b) - Number(a)); // newest first
+
+  for (const year of years) {
+    const yearData = data[year];
+    const items = yearData?.items;
+    if (!Array.isArray(items)) continue;
+
+    const yearEntries: PressItem[] = [];
+
+    for (const item of items) {
+      const report = (item as { report?: unknown[] })?.report;
+      if (!Array.isArray(report)) continue;
+      for (const quarterBlock of report) {
+        const q = quarterBlock as { quarter?: string; report?: unknown[] };
+        const entries = q?.report;
+        if (!Array.isArray(entries)) continue;
+        for (const entry of entries) {
+          const e = entry as {
+            id?: number;
+            heading?: string;
+            date?: string | null;
+            slug?: string | null;
+            link?: string | null;
+            file?: { id?: number; url?: string };
+          };
+          if (!e?.heading) continue;
+          const pressItem: PressItem = {
+            id: e.id,
+            heading: e.heading,
+            date: e.date ?? undefined,
+            slug: e.slug ?? undefined,
+            link: e.link ?? undefined,
+            file: e.file,
+            quarter: q.quarter,
+          };
+          yearEntries.push(pressItem);
+          allLatest.push({
+            heading: e.heading,
+            date: e.date ?? null,
+            ctaButtonUrl: e?.file?.url ?? e?.link ?? null,
+          });
+        }
+      }
     }
-  | null
-  | undefined;
+    if (yearEntries.length > 0) yearAndPressReleases[year] = yearEntries;
+  }
+
+  return { latestTwo: allLatest.slice(0, 2), yearAndPressReleases };
+}
 
 export default function PressReleaseYearListing({
   latestReleases = [],
-  yearAndPressReleases,
+  yearAndPressReleases: propsYearAndPressReleases,
 }: PressReleaseYearListingProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeYear, setActiveYear] = useState<string>("");
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
 
-  // Convert object keys -> year tabs
+  const [apiLatestTwo, setApiLatestTwo] = useState<LatestItem[]>([]);
+  const [apiYearAndPressReleases, setApiYearAndPressReleases] = useState<
+    Record<string, PressItem[]>
+  >({});
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await fetchNews("/api/press");
+      const { latestTwo, yearAndPressReleases } = buildFromApiResponse(data);
+      setApiLatestTwo(latestTwo);
+      setApiYearAndPressReleases(yearAndPressReleases);
+    };
+    load();
+  }, []);
+
+  // Use API data when available, else fall back to props
+  const yearAndPressReleases = useMemo(
+    () =>
+      Object.keys(apiYearAndPressReleases).length > 0
+        ? apiYearAndPressReleases
+        : (propsYearAndPressReleases as Record<string, PressItem[]> | undefined) ?? {},
+    [apiYearAndPressReleases, propsYearAndPressReleases],
+  );
+  const latestTwo = apiLatestTwo.length > 0 ? apiLatestTwo : latestReleases.slice(0, 2).map((r) => ({
+    heading: r.heading ?? r.shortDescription,
+    date: r.date ?? null,
+    ctaButtonUrl: r?.file?.url ?? r?.link ?? null,
+  }));
+
+  // Convert object keys -> year tabs (newest first)
   const yearsList = useMemo(() => {
-    if (!yearAndPressReleases) return [];
-    return Object.keys(yearAndPressReleases);
+    if (!yearAndPressReleases || typeof yearAndPressReleases !== "object") return [];
+    return Object.keys(yearAndPressReleases).sort((a, b) => Number(b) - Number(a));
   }, [yearAndPressReleases]);
 
   // Initialize active year
@@ -69,26 +156,11 @@ export default function PressReleaseYearListing({
     setDropdownClicked(false);
   }, [yearsList, searchParams]);
 
-  // Safely derive array of press releases for activeYear
+  // Press releases for the active year (array of PressItem)
   const currentPressReleases: PressItem[] = useMemo(() => {
     if (!activeYear || !yearAndPressReleases) return [];
-    const val = yearAndPressReleases[
-      activeYear as keyof typeof yearAndPressReleases
-    ] as YearValue;
-    // If it's already an array, return a shallow copy
-    if (Array.isArray(val)) {
-      return val.slice();
-    }
-    // If it's an object with report array
-    if (
-      val &&
-      typeof val === "object" &&
-      "report" in val &&
-      Array.isArray(val.report)
-    ) {
-      return val.report.slice();
-    }
-    // Unexpected shape -> empty
+    const val = yearAndPressReleases[activeYear];
+    if (Array.isArray(val)) return val.slice();
     return [];
   }, [activeYear, yearAndPressReleases]);
 
@@ -148,31 +220,31 @@ export default function PressReleaseYearListing({
   return (
     <div className="fluid-container pt-10 pb-10 md:pb-[80px]">
       <div className="lg:flex justify-between gap-8">
-        {/* Left Sidebar - Latest Release */}
-        {latestReleases && latestReleases.length > 0 && (
+        {/* Left Sidebar - Latest */}
+        {latestTwo.length > 0 && (
           <div className="w-full lg:w-[20%] mb-8 lg:mb-0">
             <SubH1 className="mt-4 mb-8">Latest Release</SubH1>
             <div className="flex flex-col gap-[30px]">
-              {latestReleases.slice(0, 2).map((item, index) => (
+              {latestTwo.map((item, index) => (
                 <div key={`latest_${index}`} className="flex flex-col gap-5">
                   <div className="flex flex-col gap-3">
                     {item?.date && (
                       <BodyText3 className="text-[#9997A2]">
-                        {formatDate(item?.date)}
+                        {formatDate(item.date)}
                       </BodyText3>
                     )}
                     <BodyText2 className="text-[#10456A] text-base leading-[1.54]">
-                      {item?.shortDescription}
+                      {item?.heading}
                     </BodyText2>
                   </div>
-                  {item?.file?.url && (
+                  {item?.ctaButtonUrl && (
                     <Button
                       title="Download PDF"
                       secondary
-                      href={item.file.url}
+                      href={item.ctaButtonUrl}
                     />
                   )}
-                  {index < latestReleases.slice(0, 2).length - 1 && (
+                  {index < latestTwo.length - 1 && (
                     <div className="bg-[#D9D9D9] h-px w-full mt-2" />
                   )}
                 </div>
@@ -210,7 +282,7 @@ export default function PressReleaseYearListing({
                           : "text-[#4C5861]",
                       )}
                     >
-                      {year}
+                      FY{year}
                     </p>
                   </div>
                 ))}
@@ -244,7 +316,7 @@ export default function PressReleaseYearListing({
                     <MenuItem value={"Archive"}>Archive</MenuItem>
                     {yearsList.slice(4).map((y) => (
                       <MenuItem value={y} key={`archive_${y}`}>
-                        {y}
+                        FY{y}
                       </MenuItem>
                     ))}
                   </Select>
@@ -258,29 +330,40 @@ export default function PressReleaseYearListing({
             className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
             data-lenis-prevent
           >
-            {/* Desktop - show all */}
+            {/* Desktop  */}
             <div className="hidden lg:block">
               {currentPressReleases.map((item) => (
                 <div
-                  key={item?.id ?? `${item?.heading}-${Math.random()}`}
+                  key={item?.id ?? `${item?.heading}-${item?.date}`}
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1">
-                    <Link
-                      href={`/press-releases/${item?.slug}`}
-                      target="_blank"
-                    >
+                    {/* {item?.quarter && (
+                      <p className="text-[#4C5861] text-sm leading-[1.4]">
+                        {item.quarter}
+                      </p>
+                    )} */}
+                    {item?.slug ? (
+                      <Link
+                        href={`/press-releases/${item.slug}`}
+                        target="_blank"
+                      >
+                        <p className="text-[#0F3557] text-lg leading-[1.6]">
+                          {item?.heading}
+                        </p>
+                      </Link>
+                    ) : (
                       <p className="text-[#0F3557] text-lg leading-[1.6]">
                         {item?.heading}
                       </p>
-                    </Link>
+                    )}
                     {item?.date && (
                       <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item?.date)}
+                        {formatDate(item.date)}
                       </p>
                     )}
                   </div>
-                  {item?.file?.url && (
+                  {/* {item?.file?.url && (
                     <a
                       href={item.file.url}
                       download
@@ -296,7 +379,7 @@ export default function PressReleaseYearListing({
                         className="object-contain"
                       />
                     </a>
-                  )}
+                  )} */}
                 </div>
               ))}
               {currentPressReleases.length === 0 && (
@@ -306,29 +389,40 @@ export default function PressReleaseYearListing({
               )}
             </div>
 
-            {/* Mobile - show all */}
+            {/* Mobile */}
             <div className="block lg:hidden">
               {currentPressReleases.map((item) => (
                 <div
-                  key={item?.id ?? `${item?.heading}-${Math.random()}`}
+                  key={item?.id ?? `${item?.heading}-${item?.date}`}
                   className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                 >
                   <div className="flex flex-col gap-[6px] flex-1 pr-4">
-                    <Link
-                      href={`/press-releases/${item?.slug}`}
-                      target="_blank"
-                    >
+                    {/* {item?.quarter && (
+                      <p className="text-[#4C5861] text-sm leading-[1.4]">
+                        {item.quarter}
+                      </p>
+                    )} */}
+                    {item?.slug ? (
+                      <Link
+                        href={`/press-releases/${item.slug}`}
+                        target="_blank"
+                      >
+                        <p className="text-[#0F3557] text-lg leading-[1.6]">
+                          {item?.heading}
+                        </p>
+                      </Link>
+                    ) : (
                       <p className="text-[#0F3557] text-lg leading-[1.6]">
                         {item?.heading}
                       </p>
-                    </Link>
+                    )}
                     {item?.date && (
                       <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item?.date)}
+                        {formatDate(item.date)}
                       </p>
                     )}
                   </div>
-                  {item?.file?.url && (
+                  {/* {item?.file?.url && (
                     <a
                       href={item.file.url}
                       download
@@ -344,7 +438,7 @@ export default function PressReleaseYearListing({
                         className="object-contain"
                       />
                     </a>
-                  )}
+                  )} */}
                 </div>
               ))}
               {currentPressReleases.length === 0 && (

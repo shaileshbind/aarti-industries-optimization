@@ -20,33 +20,34 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
   const nseRef = useRef<HTMLDivElement>(null);
   const [nseStock, setNseStock] = useState<StockData | null>(null);
 
-  let signal: AbortController = new AbortController();
-  const firsRequest = useRef(true);
-  const [promiseState, setPromiseState] = useState<"pending" | "fulfilled" | "rejected">("pending");
+  const signalRef = useRef<AbortController>(new AbortController());
+  const firstRequest = useRef(true);
+  const promiseStateRef = useRef<"pending" | "fulfilled" | "rejected">("pending");
 
   useEffect(() => {
     if (!isProductionEnv) return;
     const loadStockData = async () => {
-      setPromiseState("pending");
+      promiseStateRef.current = "pending";
       try {
-        const nseResponse = await fetch("/api/nse-stock", {
+        const stockDataResponse = await fetch("/api/stock-data", {
           cache: "no-store",
-          signal: signal.signal,
+          signal: signalRef.current.signal,
         });
 
         // Check if response is ok before parsing JSON
-        if (!nseResponse.ok) {
-          const errorData = await nseResponse.json().catch(() => ({}));
-          console.error("NSE stock API error:", {
-            status: nseResponse.status,
-            statusText: nseResponse.statusText,
+        if (!stockDataResponse.ok) {
+          const errorData = await stockDataResponse.json().catch(() => ({}));
+          console.error("Stock data API error:", {
+            status: stockDataResponse.status,
+            statusText: stockDataResponse.statusText,
             error: errorData,
           });
+          promiseStateRef.current = "rejected";
           return; // Silently fail - don't show error to users
         }
 
-        const nseData = await nseResponse.json();
-        setPromiseState("fulfilled");
+        const nseData = await stockDataResponse.json();
+        promiseStateRef.current = "fulfilled";
 
         // Handle API response structure: { success: true, data: [...] }
         if (nseData?.success && nseData?.data && Array.isArray(nseData.data) && nseData.data.length > 0) {
@@ -97,30 +98,31 @@ const InvestorBlueSection = ({ data }: InvestorsBlueProps) => {
         }
       } catch (error) {
         console.error("Error loading stock data:", error);
-        setPromiseState("rejected");
+        promiseStateRef.current = "rejected";
       }
     };
 
-    if(firsRequest.current) {
-      firsRequest.current = false;
+    if (firstRequest.current) {
+      firstRequest.current = false;
+      promiseStateRef.current = "pending";
       loadStockData();
     }
 
     const interval = setInterval(() => {
-      if(promiseState === "fulfilled" || promiseState === "rejected") {
+      const state = promiseStateRef.current;
+      if (state === "fulfilled" || state === "rejected") {
+        promiseStateRef.current = "pending";
         loadStockData();
-      }
-
-      if(promiseState === "pending") {
-        signal.abort();
-        signal = new AbortController();
+      } else if (state === "pending") {
+        signalRef.current.abort();
+        signalRef.current = new AbortController();
         loadStockData();
       }
     }, 60000);
 
     return () => {
       clearInterval(interval);
-      signal.abort();
+      signalRef.current.abort();
     };
   }, []);
 
