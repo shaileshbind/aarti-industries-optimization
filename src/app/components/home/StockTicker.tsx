@@ -1,15 +1,49 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Link from "next/link";
 import { fetchNews } from "@/_lib/fetchNews";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
-type ItemProps = {
-  id?: string;
+type TickerItem = {
   heading?: string;
-  slug?: string;
+  link?: string | null;
+  date?: string | null;
 };
+
+function flattenPressReleases(data: Record<string, { items?: unknown[] }> | null): TickerItem[] {
+  if (!data || typeof data !== "object") return [];
+  const flat: TickerItem[] = [];
+  const years = Object.keys(data).sort((a, b) => Number(b) - Number(a)); // newest first
+  for (const year of years) {
+    const yearData = data[year];
+    const items = yearData?.items;
+    if (!Array.isArray(items)) continue;
+    for (const item of items) {
+      const report = (item as { report?: unknown[] })?.report;
+      if (!Array.isArray(report)) continue;
+      for (const quarter of report) {
+        const entries = (quarter as { report?: unknown[] })?.report;
+        if (!Array.isArray(entries)) continue;
+        for (const entry of entries) {
+          const e = entry as {
+            heading?: string;
+            link?: string | null;
+            date?: string | null;
+            file?: { url?: string };
+          };
+          const link = e?.link ?? e?.file?.url ?? null;
+          if (e?.heading)
+            flat.push({
+              heading: e.heading,
+              link: link ?? null,
+              date: e?.date ?? null,
+            });
+        }
+      }
+    }
+  }
+  return flat;
+}
 
 type StockData = {
   id: number;
@@ -21,19 +55,19 @@ type StockData = {
 };
 
 export default function StockTicker() {
-  const [pressReleases, setPressReleases] = useState<ItemProps[][]>([]);
+  const [pressReleases, setPressReleases] = useState<TickerItem[]>([]);
   const [nseStock, setNseStock] = useState<StockData | null>(null);
   // const [bseStock, setBseStock] = useState<StockData | null>(null);
   const isProductionEnv = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
 
-  let signal: AbortController = new AbortController();
-  const firsRequest = useRef(true);
-  const [promiseState, setPromiseState] = useState<"pending" | "fulfilled" | "rejected">("pending");
+  const signalRef = useRef<AbortController>(new AbortController());
+  const firstRequest = useRef(true);
+  const promiseStateRef = useRef<"pending" | "fulfilled" | "rejected">("pending");
 
   useEffect(() => {
     const loadNews = async () => {
       const data = await fetchNews("/api/press");
-      setPressReleases(Object.values(data));
+      setPressReleases(flattenPressReleases(data));
     };
     loadNews();
   }, []);
@@ -42,27 +76,28 @@ export default function StockTicker() {
     if (!isProductionEnv) return;
 
     const loadStockData = async () => {
-      setPromiseState("pending");
+      promiseStateRef.current = "pending";
       try {
         // ===== NSE DATA =====
-        const nseResponse = await fetch("/api/nse-stock", {
+        const stockDataResponse = await fetch("/api/stock-data", {
           cache: "no-store",
-          signal: signal.signal,
+          signal: signalRef.current.signal,
         });
 
         // Check if response is ok before parsing JSON
-        if (!nseResponse.ok) {
-          const errorData = await nseResponse.json().catch(() => ({}));
-          console.error("NSE stock API error:", {
-            status: nseResponse.status,
-            statusText: nseResponse.statusText,
+        if (!stockDataResponse.ok) {
+          const errorData = await stockDataResponse.json().catch(() => ({}));
+          console.error("Stock data API error:", {
+            status: stockDataResponse.status,
+            statusText: stockDataResponse.statusText,
             error: errorData,
           });
+          promiseStateRef.current = "rejected";
           return; // Silently fail - don't show error to users
         }
 
-        const nseData = await nseResponse.json();
-        setPromiseState("fulfilled");
+        const nseData = await stockDataResponse.json();
+        promiseStateRef.current = "fulfilled";
 
         // Handle API response structure: { success: true, data: [...] }
         if (
@@ -136,36 +171,35 @@ export default function StockTicker() {
         // }
       } catch (error) {
         console.error("Error loading stock data:", error);
-        setPromiseState("rejected");
+        promiseStateRef.current = "rejected";
       }
     };
 
-    if (firsRequest.current) {
-      firsRequest.current = false;
+    if (firstRequest.current) {
+      firstRequest.current = false;
+      promiseStateRef.current = "pending";
       loadStockData();
     }
 
     const interval = setInterval(() => {
-      if (promiseState === "fulfilled" || promiseState === "rejected") {
+      const state = promiseStateRef.current;
+      if (state === "fulfilled" || state === "rejected") {
+        promiseStateRef.current = "pending";
         loadStockData();
-      }
-
-      if (promiseState === "pending") {
-        signal.abort();
-        signal = new AbortController();
+      } else if (state === "pending") {
+        signalRef.current.abort();
+        signalRef.current = new AbortController();
         loadStockData();
       }
     }, 60000);
 
     return () => {
       clearInterval(interval);
-      signal.abort();
+      signalRef.current.abort();
     };
   }, []);
 
-  const tickerData = pressReleases?.[0];
-  const hasPressItems =
-    Array.isArray(tickerData) && tickerData.some((item) => Boolean(item?.slug));
+  const hasPressItems = pressReleases.some((item) => item?.heading && item?.link);
   const hasMarqueeContent = Boolean(nseStock) || hasPressItems;
 
   const renderStock = (stock: StockData, exchange: string) => {
@@ -214,21 +248,25 @@ export default function StockTicker() {
 
           {/* News */}
           <div className="flex gap-[110px] items-center">
-            {tickerData?.slice(0, 3)?.map((item: ItemProps) => {
-              if (!item?.slug) return null;
+            {pressReleases.slice(0, 2).map((item) => {
+              if (!item?.heading || !item?.link) return null;
               return (
-                <Link
-                  href={`/press-releases/${item?.slug}`}
+                <a
+                  href={item.link}
                   className="text-sm text-[#FFF]"
-                  key={item.id}
+                  key={item.link + (item.date ?? "")}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {item?.heading}
+                  {item.heading}
+                  {item.date && (
+                    <span className="ml-1 opacity-90 text-xs">({item.date})</span>
+                  )}
                   <ArrowForwardIcon
                     className="rotate-325 ml-1"
                     fontSize="small"
                   />
-                </Link>
+                </a>
               );
             })}
           </div>

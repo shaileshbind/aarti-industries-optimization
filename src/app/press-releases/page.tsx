@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/press-release");
-  const pressListing = await getPageData("/press-releases");
   const seo = data?.seo;
   return (
     <div>
@@ -30,12 +29,7 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       {data?.data && <PressReleaseBanner data={data?.data} />}
-      {data?.data?.press_releases && (
-        <PressReleaseYearListing
-          latestReleases={data?.data?.press_releases}
-          yearAndPressReleases={pressListing?.pressData}
-        />
-      )}
+      <PressReleaseYearListing />
     </div>
   );
 };
