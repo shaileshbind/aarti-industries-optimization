@@ -59,7 +59,7 @@ const NewsCard = ({
                 )}
               </div>
             )}
-            {tag && date && (
+            {tag && date && date.trim() !== "" && (
               <div className="rounded-full w-[6px] h-[6px] bg-grey-300" />
             )}
             {date && (
