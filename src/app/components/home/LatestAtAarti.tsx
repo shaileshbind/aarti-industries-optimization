@@ -528,7 +528,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                     <div className="date-card-anim">
                       <DateCard
                         imageSrc={item?.image?.url}
-                        date={formatDate(item?.date || "")}
+                        date={item?.date ? formatDate(item?.date) : ""}
                         desc={item?.description}
                         link={item?.link}
                         animate={Boolean(item?.link)}
