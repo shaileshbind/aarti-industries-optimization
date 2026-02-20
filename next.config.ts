@@ -39,19 +39,6 @@ const nextConfig = async () => {
         },
       ];
     },
-
-    // Proxy nse-stock API to backend (avoids exposing backend URL, helps with CORS)
-    async rewrites() {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      if (!baseUrl) return [];
-      const destination = baseUrl.replace(/\/$/, "");
-      return [
-        {
-          source: "/api/nse-stock",
-          destination: `${destination}/nse-stock/find`,
-        },
-      ];
-    },
   };
 
   if (environment === "true" && awsSecrets) {

@@ -7,55 +7,11 @@ export default function DownloadCard({
   src,
   className,
   downloadUrl,
-  filename,
 }: DownloadCardProps) {
-  const handleDownload = async (e: React.MouseEvent) => {
+  const handleDownload = (e: React.MouseEvent) => {
     e.preventDefault();
-
     if (!downloadUrl) return;
-
-    const filenameParam = filename
-      ? `&filename=${encodeURIComponent(filename)}`
-      : "";
-    const proxyUrl = `/api/download?url=${encodeURIComponent(
-      downloadUrl,
-    )}${filenameParam}`;
-
-    const isIOS =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    if (isIOS) {
-      window.open(proxyUrl, "_blank");
-      return;
-    }
-
-    try {
-      const response = await fetch(proxyUrl);
-      if (!response.ok) throw new Error("Download failed");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const contentDisposition = response.headers.get("Content-Disposition");
-      let downloadFilename = filename || "download";
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-        if (filenameMatch) {
-          downloadFilename = filenameMatch[1];
-        }
-      }
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = downloadFilename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download failed:", error);
-      window.open(proxyUrl, "_blank");
-    }
+    window.open(downloadUrl, "_blank");
   };
 
   return (

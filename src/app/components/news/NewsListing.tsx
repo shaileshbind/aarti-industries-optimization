@@ -333,7 +333,7 @@ const NewsListing = () => {
                   >
                     <NewsCard
                       imageSrc={item?.image?.url}
-                      date={formatDate(item?.date || "")}
+                      date={item?.date ? formatDate(item?.date) : " "}
                       desc={item?.newsDescription}
                       link={item?.ctaButton?.externalLink || "#"}
                       animate

@@ -956,3 +956,14 @@ body {
 
 .fadeInSlider .swiper-slide{ visibility: hidden;}
 .fadeInSlider .swiper-slide.swiper-slide-visible{ visibility: visible;}
+
+
+/* Globally Certified Section Marquee */
+@keyframes globally-certified-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: globally-certified-marquee 80s linear infinite;
+}
