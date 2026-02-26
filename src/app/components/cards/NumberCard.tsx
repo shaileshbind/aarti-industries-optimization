@@ -34,6 +34,7 @@ const NumberCard = ({
           src={imageSrc}
           alt={imageAlt ? imageAlt : "img"}
           fill
+          sizes="(max-width: 767px) 50vw, (max-width: 1023px) 50vw, 200px"
           className="object-cover absolute object-top transition-all duration-500 group-hover:scale-105"
         />
       ) : (

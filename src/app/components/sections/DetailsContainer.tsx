@@ -1,15 +1,10 @@
 "use client";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Image from "next/image";
 import { H2, BodyText1 } from "../Typography2";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import Button from "../Button";
 import { FourtyYearsProps } from "@/app/types/home.type";
-import isMobile from "react-device-detect";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const DetailsContainer: React.FC<FourtyYearsProps> = ({
   data,
@@ -17,48 +12,64 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
 }) => {
   const { sectionTitle, description, title, ctaButton } = data;
 
-  const wrapperRef = useRef(null);
-  const topLineRef = useRef(null);
-  const starRef = useRef(null);
-  const bottomLineRef = useRef(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const topLineRef = useRef<HTMLDivElement>(null);
+  const starRef = useRef<HTMLDivElement>(null);
+  const bottomLineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        topLineRef.current,
-        { height: "0px", transformOrigin: "top center" },
-        {
-          height: isMobile ? "64px" : "120px",
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top 85%",
-            end: "bottom 65%",
-            scrub: true,
-          },
-        },
-      );
-      const starLineTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: bottomLineRef.current,
-          start: "top 80%",
-          end: "bottom 50%",
-          scrub: true,
-        },
-      });
-      starLineTl.fromTo(
-        starRef.current,
-        { opacity: 0, scale: 0.5 },
-        { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 },
-      );
-      starLineTl.fromTo(
-        bottomLineRef.current,
-        { scaleY: 0, transformOrigin: "top center" },
-        { scaleY: 1, ease: "power2.out", duration: 0.8 },
-      );
-    }, wrapperRef);
+    if (!wrapperRef.current || !topLineRef.current) return;
 
-    return () => ctx.revert();
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
+
+    void import("gsap").then(({ default: gsap }) => {
+      return import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+        if (cancelled) return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        ctx = gsap.context(() => {
+          // GPU-accelerated scaleY animation (no layout reflow)
+          gsap.fromTo(
+            topLineRef.current,
+            { scaleY: 0, transformOrigin: "top center" },
+            {
+              scaleY: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: wrapperRef.current,
+                start: "top 85%",
+                end: "bottom 65%",
+                scrub: true,
+              },
+            },
+          );
+          const starLineTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: bottomLineRef.current,
+              start: "top 80%",
+              end: "bottom 50%",
+              scrub: true,
+            },
+          });
+          starLineTl.fromTo(
+            starRef.current,
+            { opacity: 0, scale: 0.5 },
+            { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 },
+          );
+          starLineTl.fromTo(
+            bottomLineRef.current,
+            { scaleY: 0, transformOrigin: "top center" },
+            { scaleY: 1, ease: "power2.out", duration: 0.8 },
+          );
+        }, wrapperRef);
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
   }, []);
 
   return (
@@ -71,7 +82,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         <div className="relative w-full h-[64px] md:h-[120px]">
           <div
             ref={topLineRef}
-            className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100"
+            className="mx-auto h-[64px] md:h-[120px] w-[2px] md:w-[1px] mb-6 lg:mb-0 border-l border-orange-100 scale-y-0 origin-top"
           ></div>
         </div>
         {/* Text content */}
@@ -123,6 +134,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
                 alt="star"
                 width={37}
                 height={37}
+                sizes="37px"
               />
             </div>
             <div
@@ -134,6 +146,7 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
                 alt="star-line"
                 width={1}
                 height={144}
+                sizes="1px"
               />
             </div>
           </div>

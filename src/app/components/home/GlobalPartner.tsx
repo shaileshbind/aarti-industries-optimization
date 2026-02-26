@@ -91,6 +91,7 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
             alt="img"
             width={295}
             height={295}
+            sizes="(max-width: 767px) 151px, 295px"
             className="absolute bottom-[30px] md:bottom-[-86px] right-[-40px] md:right-[-90px] w-[151px] h-[151px] md:w-[295px] md:h-[295px]"
           />
         </FadeInReveal>

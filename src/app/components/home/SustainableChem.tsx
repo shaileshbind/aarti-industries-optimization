@@ -596,6 +596,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="100px"
                       className=" scale-110 object-cover"
                     />
                   </i>
@@ -615,6 +616,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         alt={"icon"}
                         fill
                         priority
+                        sizes="100px"
                         className=" object-cover blur scale-110"
                       />
                     </span>
@@ -627,6 +629,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         alt={"icon"}
                         fill
                         priority
+                        sizes="100px"
                         className="leafBigImg scale-110 object-cover"
                       />
                     </span>
@@ -642,6 +645,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="100px"
                       className="scale-110 object-cover"
                     />
                   </i>
@@ -656,6 +660,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="100px"
                       className="scale-110 object-cover"
                     />
                   </i>

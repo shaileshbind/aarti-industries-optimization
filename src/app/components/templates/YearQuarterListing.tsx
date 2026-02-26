@@ -211,12 +211,19 @@ export default function YearQuarterListing({
     }
   }, [activeSubCategory, pressReleasesYearAndQuarter, activeYear]);
 
-  // Get quarters for active year - reversed order (last quarter first)
+  // Sort Q4 first -----> Q1
+  const quarterSortOrder = (q: Quarter) => {
+    const match = String(q?.quarter ?? "").match(/Q(\d)/i);
+    return match ? Number(match[1]) : 0;
+  };
+
   const currentYearData = yearAndQuarter?.find(
     (item) => item.year === activeYear,
   );
   const quarters = currentYearData?.quarter
-    ? [...currentYearData.quarter].reverse()
+    ? [...currentYearData.quarter].sort(
+        (a, b) => quarterSortOrder(b) - quarterSortOrder(a),
+      )
     : [];
 
   // Handler for Archive year dropdown
