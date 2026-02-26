@@ -203,6 +203,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     alt="prev"
                     width={34}
                     height={34}
+                    sizes="34px"
                     className={`-rotate-180 swiper-button-prev-frame transition-opacity ${
                       activeIndex > 0
                         ? "cursor-pointer opacity-100"
@@ -215,6 +216,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     alt="next"
                     width={34}
                     height={34}
+                    sizes="34px"
                     className={`swiper-button-next-frame transition-opacity ${
                       activeIndex < card?.length - 1
                         ? "cursor-pointer opacity-100"
@@ -349,6 +351,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                 alt="img"
                                 width={72}
                                 height={72}
+                                sizes="(max-width: 1023px) 42px, 72px"
                                 className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                               />
                               <Image
@@ -356,6 +359,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                 alt="img"
                                 width={72}
                                 height={72}
+                                sizes="(max-width: 1023px) 42px, 72px"
                                 className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                               />
                               <div className="absolute min-h-screen bg-white w-[1px] right-[69px] lg:right-[206.5px] top-0" />
@@ -389,6 +393,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                       className="object-cover object-top w-[16px] h-[16px] mt-[3px]"
                                       width={16}
                                       height={16}
+                                      sizes="16px"
                                     />
                                     <p className="text-[#4C5861]">
                                       {item?.title}
@@ -497,6 +502,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   alt="img"
                   width={72}
                   height={72}
+                  sizes="(max-width: 1023px) 42px, 72px"
                   className="absolute top-[-21px] lg:top-[-36px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                 />
                 <Image
@@ -504,6 +510,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   alt="img"
                   width={72}
                   height={72}
+                  sizes="(max-width: 1023px) 42px, 72px"
                   className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                 />
                 <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />

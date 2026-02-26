@@ -218,16 +218,10 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     ? generateSwiperSlides(imgArr?.images)
     : generateMobileSwiperSlides(imgArr?.images);
 
-  // Duplicate slides multiple times for seamless looping
+  // Single set of slides; we render it twice in the DOM for seamless loop with translateX(-50%)
   const slidesToRender = useMemo(() => {
     if (!baseSlides || baseSlides.length === 0) return [];
-    // Duplicate slides 3 times to ensure smooth continuous loop
-    const duplicated = [...baseSlides, ...baseSlides, ...baseSlides];
-    // Update IDs to be unique
-    return duplicated.map((slide, index) => ({
-      ...slide,
-      id: index,
-    }));
+    return baseSlides;
   }, [baseSlides]);
 
   // Get all unique images for navigation
@@ -349,9 +343,9 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isPopupOpen, handleNextImage, handlePrevImage, handleClosePopup]);
 
-  const renderSlide = (slide: Slide): React.ReactElement => {
+  const renderSlide = (slide: Slide, keyPrefix: string): React.ReactElement => {
     return (
-      <div key={slide.id} className="px-[2px] w-[236px] lg:w-[350px] ">
+      <div key={`${keyPrefix}-${slide.id}`} className="px-[2px] w-[236px] lg:w-[350px] ">
         {slide?.images?.length > 0 &&
           slide?.images?.map((imageData, index) => (
             <div
@@ -448,10 +442,10 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
             animationPlayState: isHovered ? "paused" : "running",
           }}
         >
-          {/* First set of slides */}
-          {slidesToRender?.map((slide) => renderSlide(slide))}
-          {/* Duplicate for seamless loop */}
-          {slidesToRender?.map((slide) => renderSlide(slide))}
+          {/* First set */}
+          {slidesToRender?.map((slide) => renderSlide(slide, "a"))}
+          {/* Dplicate - with translateX(-50%) */}
+          {slidesToRender?.map((slide) => renderSlide(slide, "b"))}
         </div>
       </div>
 
@@ -475,6 +469,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                   alt="next"
                   width={45}
                   height={45}
+                  sizes="45px"
                   className="rotate-180"
                 />
               </button>
@@ -503,6 +498,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                   alt="next"
                   width={45}
                   height={45}
+                  sizes="45px"
                 />
               </button>
             )}

@@ -97,7 +97,12 @@ function buildFromApiResponse(data: Record<string, { items?: unknown[] }> | null
     if (yearEntries.length > 0) yearAndPressReleases[year] = yearEntries;
   }
 
-  return { latestTwo: allLatest.slice(0, 2), yearAndPressReleases };
+  const sorted = [...allLatest].sort((a, b) => {
+    const tA = a?.date ? new Date(a.date).getTime() : 0;
+    const tB = b?.date ? new Date(b.date).getTime() : 0;
+    return tB - tA;
+  });
+  return { latestTwo: sorted.slice(0, 2), yearAndPressReleases };
 }
 
 export default function PressReleaseYearListing({
@@ -132,11 +137,19 @@ export default function PressReleaseYearListing({
         : (propsYearAndPressReleases as Record<string, PressItem[]> | undefined) ?? {},
     [apiYearAndPressReleases, propsYearAndPressReleases],
   );
-  const latestTwo = apiLatestTwo.length > 0 ? apiLatestTwo : latestReleases.slice(0, 2).map((r) => ({
-    heading: r.heading ?? r.shortDescription,
-    date: r.date ?? null,
-    ctaButtonUrl: r?.file?.url ?? r?.link ?? null,
-  }));
+  const latestTwo = useMemo(() => {
+    if (apiLatestTwo.length > 0) return apiLatestTwo;
+    const byDate = [...latestReleases].sort((a, b) => {
+      const tA = a?.date ? new Date(a.date).getTime() : 0;
+      const tB = b?.date ? new Date(b.date).getTime() : 0;
+      return tB - tA;
+    });
+    return byDate.slice(0, 2).map((r) => ({
+      heading: r.heading ?? r.shortDescription,
+      date: r.date ?? null,
+      ctaButtonUrl: r?.file?.url ?? r?.link ?? null,
+    }));
+  }, [apiLatestTwo, latestReleases]);
 
   // Convert object keys -> year tabs (newest first)
   const yearsList = useMemo(() => {
@@ -156,12 +169,16 @@ export default function PressReleaseYearListing({
     setDropdownClicked(false);
   }, [yearsList, searchParams]);
 
-  // Press releases for the active year (array of PressItem)
+  // Press releases for the active year, sorted by date (latest first)
   const currentPressReleases: PressItem[] = useMemo(() => {
     if (!activeYear || !yearAndPressReleases) return [];
     const val = yearAndPressReleases[activeYear];
-    if (Array.isArray(val)) return val.slice();
-    return [];
+    if (!Array.isArray(val)) return [];
+    return [...val].sort((a, b) => {
+      const dateA = a?.date ? new Date(a.date).getTime() : 0;
+      const dateB = b?.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA; // latest first
+    });
   }, [activeYear, yearAndPressReleases]);
 
   // Refs for underline animation
@@ -359,7 +376,7 @@ export default function PressReleaseYearListing({
                     )}
                     {item?.date && (
                       <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item.date)}
+                        {formatDate(item.date)} 
                       </p>
                     )}
                   </div>

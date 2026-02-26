@@ -53,7 +53,11 @@ function flattenPressHeadlines(
       }
     }
   }
-  return flat;
+  return flat.sort((a, b) => {
+    const tA = a?.date ? new Date(a.date).getTime() : 0;
+    const tB = b?.date ? new Date(b.date).getTime() : 0;
+    return tB - tA;
+  });
 }
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
