@@ -189,6 +189,13 @@ export default function YearQuarterListing({
   const currentSubCategory = reportLayout?.find(
     (item) => item.subCategory === activeSubCategory,
   );
+  const formatYearForDisplay = useCallback(
+    (y: string | number) => {
+      if (y === undefined || y === null) return "";
+      return isPressReleasesSubCategory(activeSubCategory) ? `FY ${y}` : String(y);
+    },
+    [activeSubCategory],
+  );
   const yearAndQuarter = useMemo(() => {
     if (isPressReleasesSubCategory(activeSubCategory) && pressReleasesYearAndQuarter?.length) {
       return pressReleasesYearAndQuarter;
@@ -369,7 +376,7 @@ export default function YearQuarterListing({
                           : "text-[#4C5861]",
                       )}
                     >
-                      {item?.year}
+                      {formatYearForDisplay(item?.year)}
                     </p>
                   </div>
                 ))}
@@ -405,7 +412,7 @@ export default function YearQuarterListing({
                     <MenuItem value={"Archive"}>Archive</MenuItem>
                     {yearAndQuarter?.slice(4)?.map((items, index2) => (
                       <MenuItem value={items?.year} key={`archive_${index2}`}>
-                        {items?.year}
+                        {formatYearForDisplay(items?.year)}
                       </MenuItem>
                     ))}
                   </Select>
@@ -543,7 +550,7 @@ export default function YearQuarterListing({
                     value={items?.year}
                     key={`mobile_archive_${index2}`}
                   >
-                    {items?.year}
+                    {formatYearForDisplay(items?.year)}
                   </MenuItem>
                 ))}
               </Select>
