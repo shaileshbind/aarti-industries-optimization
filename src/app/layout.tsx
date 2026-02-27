@@ -8,6 +8,7 @@ import AuthProvider from "./components/AuthProvider";
 import ConditionalLayout from "./components/ConditionalLayout";
 import type { Metadata } from "next";
 import clsx from "clsx";
+import Script from "next/script";
 
 export const revalidate = 300;
 
@@ -68,6 +69,7 @@ export default async function RootLayout({
             </ConditionalLayout>
           </GSAPProvider>
         </AuthProvider>
+        <Script src="/js/investor-notice.js" strategy="afterInteractive" />
       </body>
     </html>
   );
