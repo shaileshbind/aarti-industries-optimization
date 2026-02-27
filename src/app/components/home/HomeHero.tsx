@@ -303,7 +303,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
-                {/* Desktop banner */}
+                {/* Desktop banner - only rendered when !isTablet (md and up), so not loaded on mobile */}
                 {items?.card?.[0]?.image?.url && !isTablet && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
@@ -311,13 +311,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(max-width: 768px) 100vw, 80vw"
+                    sizes="(min-width: 769px) 100vw, 0px"
                     quality={index === 0 ? 70 : 80}
                     className="hidden md:block object-cover"
                   />
                 )}
 
-                {/* Mobile banner */}
+                {/* Mobile banner - only rendered when isTablet (≤768px), so not loaded on desktop */}
                 {items?.card?.[0]?.mobImage?.url && isTablet && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
@@ -327,7 +327,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 0px"
                     quality={index === 0 ? 70 : 80}
                     className="block md:hidden object-cover"
                   />
@@ -421,6 +421,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           alt="star"
           width={72}
           height={72}
+          sizes="(max-width: 1023px) 42px, 72px"
         />
       </div>
       <div
@@ -432,6 +433,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           alt="img"
           width={72}
           height={72}
+          sizes="(max-width: 1023px) 42px, 72px"
         />
       </div>
       <div
@@ -443,6 +445,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           alt="img"
           width={72}
           height={72}
+          sizes="(max-width: 1023px) 42px, 72px"
         />
       </div>
 

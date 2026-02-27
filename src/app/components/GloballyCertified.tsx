@@ -90,6 +90,7 @@ const MarqueeItem = ({
           alt={item?.heading || "global certified"}
           height={80}
           width={160}
+          sizes="(max-width: 767px) 112px, 160px"
           loading="lazy"
           className="object-contain h-[68px] md:h-[80px] w-[112px] md:w-[160px] group-hover:scale-110 transition-transform duration-300"
         />

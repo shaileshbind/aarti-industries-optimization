@@ -63,7 +63,7 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
 // Custom arrow components
 const PreviousIcon = () => (
   <Image
-    src="/images/chevron-right-orange.svg"
+    src="/images/home/chevron-right-orange.svg"
     alt="arrow"
     width={34}
     height={34}
@@ -73,7 +73,7 @@ const PreviousIcon = () => (
 
 const NextIcon = () => (
   <Image
-    src="/images/chevron-right-orange.svg"
+    src="/images/home/chevron-right-orange.svg"
     alt="arrow"
     width={34}
     height={34}

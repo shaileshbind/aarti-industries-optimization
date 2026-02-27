@@ -19,6 +19,14 @@ type HeadlineItem = {
   href?: string | null;
 };
 
+type MediaCardItem = {
+  id?: number;
+  imageSrc?: string;
+  date?: string;
+  desc?: string;
+  link?: string;
+};
+
 function flattenPressHeadlines(
   data: Record<string, { items?: unknown[] }> | null
 ): HeadlineItem[] {
@@ -53,12 +61,43 @@ function flattenPressHeadlines(
       }
     }
   }
-  return flat;
+  return flat.sort((a, b) => {
+    const tA = a?.date ? new Date(a.date).getTime() : 0;
+    const tB = b?.date ? new Date(b.date).getTime() : 0;
+    return tB - tA;
+  });
+}
+
+function cmsNewsToMediaCards(
+  news: NonNullable<InvestorHeadlines["data"]["mediaCoverage"]>["news"]
+): MediaCardItem[] {
+  if (!Array.isArray(news)) return [];
+  return news.slice(0, 3).map((n) => ({
+    id: n?.id,
+    imageSrc: n?.image?.url,
+    date: n?.date ?? "",
+    desc: n?.newsDescription,
+    link: n?.ctaButton?.externalLink,
+  }));
+}
+
+function apiResultsToMediaCards(
+  results: { id?: number; image?: { url?: string }; date?: string; newsDescription?: string; ctaButton?: { externalLink?: string } }[]
+): MediaCardItem[] {
+  if (!Array.isArray(results)) return [];
+  return results.slice(0, 3).map((r) => ({
+    id: r?.id,
+    imageSrc: r?.image?.url,
+    date: r?.date ?? "",
+    desc: r?.newsDescription,
+    link: r?.ctaButton?.externalLink,
+  }));
 }
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
   const [headlines, setHeadlines] = useState<HeadlineItem[]>([]);
+  const [mediaItems, setMediaItems] = useState<MediaCardItem[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -67,6 +106,26 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
     };
     load();
   }, []);
+
+  useEffect(() => {
+    const cmsFallback = cmsNewsToMediaCards(mediaCoverage?.news);
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const apiData = await fetchNews("/api/news?_limit=3&_page=1");
+        if (cancelled) return;
+        const results = (apiData as { results?: unknown[] })?.results ?? [];
+        const fromApi = apiResultsToMediaCards(results as Parameters<typeof apiResultsToMediaCards>[0]);
+        setMediaItems(fromApi.length > 0 ? fromApi : cmsFallback);
+      } catch {
+        if (!cancelled) setMediaItems(cmsFallback);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [mediaCoverage?.news]);
 
   return (
     <FadeInReveal className="my-[72px] lg:my-[120px]">
@@ -176,19 +235,16 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               }}
               className="!px-[20px] lg:!px-[0px]"
             >
-              {mediaCoverage?.news?.map((news, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <DateCard
-                      key={news?.id}
-                      imageSrc={news?.image?.url}
-                      date={formatDate(news?.date ?? "")}
-                      desc={news?.newsDescription}
-                      link={news?.ctaButton?.externalLink}
-                    />
-                  </SwiperSlide>
-                );
-              })}
+              {mediaItems.map((news, index) => (
+                <SwiperSlide key={news?.id ?? index}>
+                  <DateCard
+                    imageSrc={news?.imageSrc}
+                    date={formatDate(news?.date ?? "")}
+                    desc={news?.desc}
+                    link={news?.link}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <div className="w-full pt-[24px] lg:hidden">
