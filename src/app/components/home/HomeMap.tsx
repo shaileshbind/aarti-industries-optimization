@@ -52,6 +52,7 @@ const HomeMap = () => {
             src="/images/global-reach/gr-map-m.svg"
             alt="img"
             fill
+            sizes="(max-width: 1023px) 100vw, 0px"
             className="object-contain block lg:hidden"
           />
           <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:block hidden">

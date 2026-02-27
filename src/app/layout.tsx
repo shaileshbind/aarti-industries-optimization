@@ -11,6 +11,11 @@ import clsx from "clsx";
 
 export const revalidate = 300;
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   icons: {
     icon: "/images/favicon.png",

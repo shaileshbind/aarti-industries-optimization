@@ -1,15 +1,22 @@
 "use client";
 import { useLayoutEffect, useRef, useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur } from "../ScrollReveal";
-import gsap from "gsap";
-import clsx from "clsx";
-import GeneralPopup from "../Popups/GeneralPopup";
-import SplitText from "../SplitText";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "../../hooks/useMatchMedia";
 import { useTitleCase } from "../../../../utils/toTitleCase";
+import clsxN from "../../../../utils/clsxN";
+
+const GeneralPopup = dynamic(
+  () => import("../Popups/GeneralPopup").then((m) => m.default),
+  { ssr: false }
+);
+
+const SplitText = dynamic(() => import("../SplitText").then((m) => m.default), {
+  ssr: false,
+});
 
 type HeroBannerProps = {
   centerText?: boolean;
@@ -72,15 +79,17 @@ const HeroBanner = ({
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
   const [isMobImageLoading, setIsMobImageLoading] = useState<boolean>(!!mobImage);
-  const isTablet = useMediaQuery("(max-width:768px)");
+  const isTablet = useMatchMedia("(max-width:768px)");
   // Call hooks unconditionally at the top level
   const titleCasedSecondaryBtnFormTitle = useTitleCase(
     secondaryBtnFormTitle || "",
   );
   const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
-  
+  useEffect(() => setHasMounted(true), []);
+
   // Reset loading states when image sources change
   useEffect(() => {
     setIsImageLoading(true);
@@ -91,71 +100,69 @@ const HeroBanner = ({
     if (!wrapperRef.current || !lineVertical.current || !lineHorizontal.current)
       return;
 
-    // build star list dynamically
     const stars: HTMLDivElement[] = [];
-
-    if (starRef.current) stars.push(starRef.current); // star 1 always
-    if (showStar2 && starRef2.current) stars.push(starRef2.current); // optional
-    if (showStar3 && starRef3.current) stars.push(starRef3.current); // optional
+    if (starRef.current) stars.push(starRef.current);
+    if (showStar2 && starRef2.current) stars.push(starRef2.current);
+    if (showStar3 && starRef3.current) stars.push(starRef3.current);
 
     const vLine = lineVertical.current;
     const hLine = lineHorizontal.current;
 
-    gsap.set(wrapperRef.current, {
-      opacity: 0,
-      scale: 0.95,
-    });
-    // Set initial state - all stars are completely hidden
-    gsap.set(stars, {
-      opacity: 0,
-      scale: 0,
-    });
-    // Set initial state for lines - hidden by scaling
-    gsap.set(vLine, {
-      scaleY: 0,
-      transformOrigin: "top center",
-    });
-    gsap.set(hLine, {
-      scaleX: 0,
-      transformOrigin: "left center",
-    });
+    void import("gsap").then(({ default: gsap }) => {
+      gsap.set(wrapperRef.current, {
+        opacity: 0,
+        scale: 0.95,
+      });
+      gsap.set(stars, {
+        opacity: 0,
+        scale: 0,
+      });
+      gsap.set(vLine, {
+        scaleY: 0,
+        transformOrigin: "top center",
+      });
+      gsap.set(hLine, {
+        scaleX: 0,
+        transformOrigin: "left center",
+      });
 
-    const tl = gsap.timeline();
-    tl.to(wrapperRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.5,
-      ease: "power3.out",
-    })
-      .to(
-        vLine,
-        {
-          scaleY: 1,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.1",
-      )
-      .to(
-        hLine,
-        {
-          scaleX: 1,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "<",
-      )
-      .to(
-        stars,
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          ease: "sine.out",
-          stagger: 0.2,
-        },
-        "<",
-      );
+      const tl = gsap.timeline();
+      tl.to(wrapperRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        ease: "power3.out",
+      })
+        .to(
+          vLine,
+          {
+            scaleY: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.1",
+        )
+        .to(
+          hLine,
+          {
+            scaleX: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "<",
+        )
+        .to(
+          stars,
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            ease: "sine.out",
+            stagger: 0.2,
+          },
+          "<",
+        );
+    });
   }, [showStar2, showStar3]);
 
   return (
@@ -165,7 +172,7 @@ const HeroBanner = ({
           <div className={` w-full relative overflow-hidden `}>
             <div
               ref={wrapperRef}
-              className={`relative overflow-hidden ${
+              className={`relative overflow-hidden opacity-0 scale-[0.95] ${
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
@@ -219,7 +226,7 @@ const HeroBanner = ({
                 {title && (
                   <FadeInRevealBlur delay={0.1}>
                     <H1
-                      className={clsx(
+                      className={clsxN(
                         `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
                         centerTitleClassName,
@@ -300,21 +307,21 @@ const HeroBanner = ({
               {/* starts & lines */}
               <div
                 ref={lineVertical}
-                className={clsx(
-                  `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5`,
+                className={clsxN(
+                  `absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[86px] lg:right-[212.5px] z-5 scale-y-0 origin-top`,
                   lineClassName,
                 )}
               />
               <div
                 ref={lineHorizontal}
-                className={clsx(
-                  `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5`,
+                className={clsxN(
+                  `absolute w-full bg-white/40 bottom-[82px] lg:bottom-[110px] h-[1px] z-5 scale-x-0 origin-left`,
                 )}
               />
               <div
                 ref={starRef}
-                className={clsx(
-                  `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5`,
+                className={clsxN(
+                  `absolute bottom-[64px] lg:bottom-[84px] right-[67.5px] lg:right-[186px] w-[38px] lg:w-[54px] z-5 opacity-0 scale-0`,
                   bottomMiddleStarClassName,
                 )}
               >
@@ -328,7 +335,7 @@ const HeroBanner = ({
               {showStar2 && (
                 <div
                   ref={starRef2}
-                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[67px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 bannerBottomStar opacity-0 scale-0"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -341,7 +348,7 @@ const HeroBanner = ({
               {showStar3 && (
                 <div
                   ref={starRef3}
-                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-19.5px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                  className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-19.5px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5 opacity-0 scale-0"
                 >
                   <Image
                     src="/images/home/star-white.svg"
@@ -410,7 +417,7 @@ const HeroBanner = ({
           </div>
           <div
             ref={wrapperRef}
-            className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
+            className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full opacity-0 scale-[0.95]"
           >
             {/* Skeleton loader with blur effect */}
             {((image && !isTablet && isImageLoading) ||
@@ -446,11 +453,11 @@ const HeroBanner = ({
             {/* starts & lines */}
             <div
               ref={lineVertical}
-              className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5"
+              className="absolute min-h-screen h-screen bg-white/40 w-[1px] top-0 right-[75px] lg:right-[212.5px] z-5 scale-y-0 origin-top"
             />
             <div
               ref={lineHorizontal}
-              className="absolute w-full bg-white/40 bottom-[52px] lg:bottom-[120px] h-[1px] z-5"
+              className="absolute w-full bg-white/40 bottom-[52px] lg:bottom-[120px] h-[1px] z-5 scale-x-0 origin-left"
             />
             <div
               ref={starRef}
@@ -458,7 +465,7 @@ const HeroBanner = ({
               bottom-[33.4px] lg:bottom-[84px] 
               right-[56.5px] lg:right-[177px] 
               w-[38px] lg:w-[72px] 
-              z-5 "
+              z-5 opacity-0 scale-0"
             >
               <Image
                 src="/images/home/star-white.svg"
@@ -470,7 +477,7 @@ const HeroBanner = ({
             {showStar2 && (
               <div
                 ref={starRef2}
-                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 "
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[57px] lg:right-[177px]  w-[38px] lg:w-[72px]  z-5 opacity-0 scale-0"
               >
                 <Image
                   src="/images/home/star-white.svg"
@@ -483,7 +490,7 @@ const HeroBanner = ({
             {showStar3 && (
               <div
                 ref={starRef3}
-                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5"
+                className="absolute bottom-[-19px] lg:bottom-[-36px] right-[-21px] lg:right-[-36px]  w-[38px] lg:w-[72px] z-5 opacity-0 scale-0"
               >
                 <Image
                   src="/images/home/star-white.svg"
@@ -496,10 +503,12 @@ const HeroBanner = ({
           </div>
         </div>
       )}
-      <GeneralPopup
-        isOpen={showGeneralPopup}
-        setshowGeneralPopup={setshowGeneralPopup}
-      />
+      {hasMounted && (
+        <GeneralPopup
+          isOpen={showGeneralPopup}
+          setshowGeneralPopup={setshowGeneralPopup}
+        />
+      )}
     </>
   );
 };

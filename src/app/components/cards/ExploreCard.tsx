@@ -34,6 +34,7 @@ const ExploreCard = ({
           alt="img"
           width={151}
           height={151}
+          sizes="(max-width: 767px) 93px, 151px"
           className="absolute top-[-35px] md:top-[-40px] -right-[18px] md:-right-[30px] w-[93px] h-[93px] md:w-[151px] md:h-[151px]"
         />
         <SubH2 className="text-white w-[80%]">{title}</SubH2>
@@ -58,6 +59,7 @@ const ExploreCard = ({
                   alt="icon-primary"
                   width={imageSize}
                   height={imageSize}
+                  sizes="20px"
                   className={`absolute transition-transform duration-500 ease-in-out 
                                w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                                group-hover:translate-x-[187.5%] group-hover:-translate-y-[187.5%] 
@@ -68,6 +70,7 @@ const ExploreCard = ({
                   alt="icon-secondary"
                   width={imageSize}
                   height={imageSize}
+                  sizes="20px"
                   className={`absolute transition-transform duration-500 ease-in-out 
                                w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                                translate-x-[-187.5%] translate-y-[187.5%] 
@@ -106,6 +109,7 @@ const ExploreCard = ({
                     alt="icon-primary"
                     width={imageSize}
                     height={imageSize}
+                    sizes="20px"
                     className={`absolute transition-transform duration-500 ease-in-out 
                                w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                                group-hover:translate-x-[187.5%] group-hover:-translate-y-[187.5%] 
@@ -116,6 +120,7 @@ const ExploreCard = ({
                     alt="icon-secondary"
                     width={imageSize}
                     height={imageSize}
+                    sizes="20px"
                     className={`absolute transition-transform duration-500 ease-in-out 
                                w-[16px] h-[16px] lg:w-[20px] lg:h-[20px] 
                                translate-x-[-187.5%] translate-y-[187.5%] 

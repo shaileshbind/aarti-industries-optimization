@@ -56,6 +56,7 @@ const DateCard = ({
                 src={imageSrc}
                 alt={imageAlt ? imageAlt : "img"}
                 fill
+                sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
                 className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
               />
             )}
@@ -80,6 +81,7 @@ const DateCard = ({
                 src={imageSrc}
                 alt={imageAlt ? imageAlt : "img"}
                 fill
+                sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
                 className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
               />
             )}
@@ -108,6 +110,7 @@ const DateCard = ({
             alt={"arrow"}
             width={24}
             height={24}
+            sizes="24px"
           />
         </div>
       )}
