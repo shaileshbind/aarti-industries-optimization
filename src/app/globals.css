@@ -587,7 +587,7 @@ body {
   display: flex;
   width: fit-content;
   white-space: nowrap;
-  animation: marquee 80s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 .marquee--idle {
   animation: none;
@@ -599,10 +599,10 @@ body {
 
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(calc(-1 * var(--marquee-width, 0px)));
   }
 }
 
