@@ -8,8 +8,6 @@ import AnimatedText from "../AnimatedText";
 import NumberCard from "../cards/NumberCard";
 import { SusCoreData } from "@/app/types/sustainability.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const SusCore = ({ data }: SusCoreData) => {
   const { sectionTitle, leftImage, rightSection } = data;
   const wrapperRef = useRef(null);

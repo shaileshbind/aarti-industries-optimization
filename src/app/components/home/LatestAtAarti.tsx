@@ -4,18 +4,15 @@ import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Mousewheel, Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps, ButtonHomeProps } from "@/app/types/home.type";
 import { ButtonProps, ImageProps } from "@/app/types/global.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type PostContent = {
   id?: string | number;
@@ -341,11 +338,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     if (latestAtAartiRef.current) {
       tabsAnim = gsap.fromTo(
         latestAtAartiRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -510,13 +506,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   1024: { slidesPerView: 4 },
                   600: { slidesPerView: 2.2 },
                 }}
-                modules={[Pagination, Mousewheel]}
+                modules={[Pagination]}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
                 pagination={{
                   el: ".home-latest-at-swiper",
                   type: "progressbar",

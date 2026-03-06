@@ -10,10 +10,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GRMapsProps } from "@/app/types/global-reach.type";
 import { FadeInRevealBlur } from "../ScrollReveal";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 const GRMaps = ({ data }: GRMapsProps) => {
   const { sectionTitle, title, description, ctaButton } = data;
   const sectionOne = useRef<HTMLDivElement | null>(null);

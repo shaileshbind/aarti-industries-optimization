@@ -2,7 +2,6 @@
 import { useState, useRef, useEffect } from "react";
 import SimpleTabs from "../SimpleTabs";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CorporateVideo from "./CorporateVideo";
 import Photos from "./Photos";
 import Logos from "./Logos";
@@ -11,8 +10,6 @@ import Brochures from "./Brochures";
 import { MediaContainerProps, TabProps } from "@/app/types/media-kit.type";
 import { FadeInReveal } from "../ScrollReveal";
 import AILVideo from "./AILVideo";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function MediaContainer({ data }: MediaContainerProps) {
   // Transform data into tabs format

@@ -4,11 +4,9 @@ import { BodyText2, H2, SubH1 } from "./Typography2";
 import Image from "next/image";
 import Tags from "./Tags";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInRevealBlur } from "./ScrollReveal";
 import { RDInnovatingChemProps } from "@/app/types/r-and-d.type";
 
-gsap.registerPlugin(ScrollTrigger);
 const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
   const { heading, cards, description } = data;
 

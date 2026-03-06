@@ -7,12 +7,9 @@ import PaginationItem from "@mui/material/PaginationItem";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import { BlogAndCaseStudiesProps, BlogDataProps } from "@/app/types/blogs.type";
 import { FadeInReveal } from "../ScrollReveal";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Custom styled Pagination
 const StyledPagination = styled(Pagination)(({ theme }) => ({

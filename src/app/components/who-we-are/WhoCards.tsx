@@ -5,8 +5,6 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import NumberCard from "../cards/NumberCard";
 import { WhoCardsProps } from "@/app/types/who-we-are.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const WhoCards: React.FC<WhoCardsProps> = ({ data }) => {
   const { cards } = data;
   const wrapperRef = useRef(null);

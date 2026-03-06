@@ -15,7 +15,6 @@ import {
 } from "swiper/modules";
 import Tabs from "../Tabs";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AddressCard from "../cards/AddressCard";
 import {
   WhereWeOperateProps,
@@ -24,8 +23,6 @@ import {
   WhereWeOperateTab,
 } from "@/app/types/contact.type";
 import type { Swiper as SwiperType } from "swiper";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   // Transform API data to group by regionName and map to AddressCard format

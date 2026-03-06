@@ -44,34 +44,33 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
   };
 
   useEffect(() => {
-    // Initialize Lenis Smooth Scroll with optimal settings for smooth scrolling
     const lenis = new Lenis({
       duration: 1.3,
-      autoRaf: true
+      syncTouch: true,
+      syncTouchLerp: 0.1,
+      touchMultiplier: 1,
     });
     lenisRef.current = lenis;
 
-    // Connect Lenis to ScrollTrigger - update on scroll
     lenis.on("scroll", ScrollTrigger.update);
 
-    // Use requestAnimationFrame for smooth Lenis updates
-    // This is the recommended approach by Lenis
-    let rafId: number;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    // Single unified animation loop: GSAP ticker drives Lenis
+    const tickerCallback = (time: number) => {
+      lenis.raf(time * 1000);
     };
-    rafId = requestAnimationFrame(raf);
+    gsap.ticker.add(tickerCallback);
+    gsap.ticker.lagSmoothing(500, 33);
 
-    // Configure GSAP ticker for better performance
-    gsap.ticker.lagSmoothing(200);
-
-    // Refresh ScrollTrigger after DOM is ready
+    // ScrollTrigger refresh after components have mounted
     const refreshTimeout = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    }, 500);
 
-    // Refresh ScrollTrigger on window resize with debounce
+    // Secondary refresh for late-loading async content (e.g. fetched data that changes page height)
+    const lateRefreshTimeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 2000);
+
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
@@ -83,13 +82,12 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      // Clean up
       clearTimeout(refreshTimeout);
+      clearTimeout(lateRefreshTimeout);
       clearTimeout(resizeTimeout);
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       window.removeEventListener("resize", handleResize);
-      // Clean up ScrollTrigger instances
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
