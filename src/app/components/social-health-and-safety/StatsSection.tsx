@@ -7,7 +7,6 @@ import { H3 } from "../Typography2";
 import NumberCard from "../cards/NumberCard";
 import { FadeInReveal } from "../ScrollReveal";
 import { StatsSectionProps } from "@/app/types/social-health-and-safety.type";
-gsap.registerPlugin(ScrollTrigger);
 
 const StatsSection: React.FC<StatsSectionProps> = ({ data }) => {
   const { leftText, rightSection } = data;

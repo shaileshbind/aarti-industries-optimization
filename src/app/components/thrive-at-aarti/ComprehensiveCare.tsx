@@ -2,13 +2,10 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H2, SubH2 } from "../Typography2";
 import Button from "../Button";
 import { ComprehensiveCareProps } from "@/app/types/thrive-at-aarti.type";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const ComprehensiveCare: React.FC<ComprehensiveCareProps> = ({ data }) => {
   const { title, cards, ctaButton } = data;

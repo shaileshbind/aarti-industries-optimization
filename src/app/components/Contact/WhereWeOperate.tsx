@@ -13,9 +13,9 @@ import {
   Navigation,
   Autoplay,
 } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import Tabs from "../Tabs";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AddressCard from "../cards/AddressCard";
 import {
   WhereWeOperateProps,
@@ -25,9 +25,8 @@ import {
 } from "@/app/types/contact.type";
 import type { Swiper as SwiperType } from "swiper";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   // Transform API data to group by regionName and map to AddressCard format
   // Preserve the original order from API response
   const apiData = data || [];
@@ -265,7 +264,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
             <div className="w-full hidden lg:block">
               <div className="mt-[unset] lg:mt-[52px]" ref={cardsWrapRef}>
                 <Swiper
-                  key={active}
+                  key={`${active}-${isDesktopPointer}`}
                   onSwiper={(swiper) => {
                     swiperRef.current = swiper;
                     // Don't start autoplay immediately - wait for viewport intersection
@@ -307,7 +306,13 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                     prevEl: ".swiper-button-prev-where-we-operate",
                     nextEl: ".swiper-button-next-where-we-operate",
                   }}
-                  modules={[Pagination, Mousewheel, Grid, Navigation, Autoplay]}
+                  modules={[
+                    Pagination,
+                    ...(isDesktopPointer ? [Mousewheel] : []),
+                    Grid,
+                    Navigation,
+                    Autoplay,
+                  ]}
                   autoplay={{
                     delay: 15000,
                     disableOnInteraction: false,
@@ -321,11 +326,13 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       }
                       : undefined
                   }
-                  mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                  }}
+                  {...(isDesktopPointer && {
+                    mousewheel: {
+                      forceToAxis: true,
+                      sensitivity: 1,
+                      releaseOnEdges: true,
+                    },
+                  })}
                   className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
                 >
                   {card[activeIndex]?.post_category?.address?.map(

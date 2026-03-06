@@ -7,16 +7,16 @@ import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { Navigation, Mousewheel, Autoplay, Scrollbar } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 interface ScrollTriggerInstance {
   start: number | { value: number };
@@ -32,6 +32,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 }) => {
   const { leftText, rightText } = data;
   const { details } = sliderData;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -471,7 +472,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
-                    modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                    key={`aarti-advantage-${isDesktopPointer}`}
+                    modules={[
+                      Navigation,
+                      Scrollbar,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     autoplay={{
                       delay: 15000,
                       disableOnInteraction: false,
@@ -502,11 +509,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       },
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="framework-forged-swiper"
                   >
                     {details?.map((slide, index) => (

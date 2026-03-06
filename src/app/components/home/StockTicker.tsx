@@ -317,7 +317,7 @@ export default function StockTicker() {
   };
 
   return (
-    <div className="bg-[#10456A] min-h-[45px] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50">
+    <div className="bg-[#10456A] min-h-[45px] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50 will-change-transform">
       <div
         ref={marqueeRef}
         className={`marquee ${hasMarqueeContent ? "marquee--active" : "marquee--idle"}`}

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { formatDate } from "../../../../utils/formatDate";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type HeadlineItem = {
   heading?: string;
@@ -96,6 +97,7 @@ function apiResultsToMediaCards(
 
 const InHeadlines = ({ data }: InvestorHeadlines) => {
   const { sectionTitle, pressRelease, mediaCoverage } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [headlines, setHeadlines] = useState<HeadlineItem[]>([]);
   const [mediaItems, setMediaItems] = useState<MediaCardItem[]>([]);
 
@@ -205,14 +207,21 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
           </div>
           <div className="mt-[28px]">
             <Swiper
+              key={`in-headlines-${isDesktopPointer}`}
               spaceBetween={15}
               slidesPerView={1.2}
-              modules={[Navigation, Pagination, Mousewheel]}
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
+              modules={[
+                Navigation,
+                Pagination,
+                ...(isDesktopPointer ? [Mousewheel] : []),
+              ]}
+              {...(isDesktopPointer && {
+                mousewheel: {
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                },
+              })}
               pagination={{
                 el: ".in-headlines-section-progressbar",
                 type: "progressbar",

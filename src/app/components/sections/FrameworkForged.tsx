@@ -5,16 +5,14 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
+import { Autoplay, Navigation, Scrollbar,Mousewheel } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
-import { isMobile } from "react-device-detect";
 import { FadeInReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
-gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
@@ -24,6 +22,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   layout,
 }) => {
   const { title, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -109,11 +108,33 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
+  // Preload adjacent slide images to avoid flicker on slide change (desktop synced panel + mobile)
+  useEffect(() => {
+    if (!card?.length) return;
+    const indices = [
+      activeIndex,
+      Math.min(activeIndex + 1, card.length - 1),
+      Math.max(activeIndex - 1, 0),
+    ].filter((i) => i >= 0 && card[i]?.image?.url);
+    const seen = new Set<number>();
+    indices.forEach((i) => {
+      if (seen.has(i)) return;
+      seen.add(i);
+      const url = card[i]?.image?.url;
+      if (url) {
+        const img = new window.Image();
+        img.src = url;
+      }
+    });
+  }, [activeIndex, card]);
+
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
   const secondaryImageClasses =
     "absolute object-cover rounded-tl-[20px] lg:rounded-tl-[30px] !h-[calc(100%-42px)] lg:!h-[calc(100%-93px)] !w-[calc(100%-71px)] lg:!w-[calc(100%-210px)]";
-  const imageTransitionClasses = "transition-all duration-700 ease-out";
+  // Targeted transitions (transform + opacity only) for better mobile performance than transition-all
+  const imageTransitionClasses =
+    "transition-[transform,opacity] duration-700 ease-out";
   const imageInitialClasses = "transform scale-[0.99] opacity-0";
   const imageFinalScaleClasses = "transform scale-[1.01]";
   const backgroundFinalOpacityClass = "opacity-40";
@@ -124,23 +145,27 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const mainAnimationClasses = isImageAnimating
     ? `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}`
     : `${imageTransitionClasses} ${imageInitialClasses}`;
+  const backgroundStaticClasses = `${imageTransitionClasses} ${imageFinalScaleClasses} ${backgroundFinalOpacityClass}`;
+  const mainStaticClasses = `${imageTransitionClasses} ${imageFinalScaleClasses} ${mainFinalOpacityClass}`;
+  // GPU layer hint for animated/sliding content (smoother on iOS)
+  const gpuLayerClasses =
+    "will-change-transform [transform:translateZ(0)]";
 
   useEffect(() => {
     let tabsAnim: gsap.core.Tween | undefined;
     if (frameworkForgedRef.current) {
       tabsAnim = gsap.fromTo(
         frameworkForgedRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
           scrollTrigger: {
             trigger: frameworkForgedRef.current,
-            start: "top 87%",
+            start: "top 95%",
             toggleActions: "play none none reverse",
           },
         },
@@ -230,7 +255,13 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             {card?.length > 0 && (
               <div ref={containerRef} className="w-full">
                 <Swiper
-                  modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                  key={`framework-forged-${isDesktopPointer}`}
+                  modules={[
+                    Navigation,
+                    Scrollbar,
+                    ...(isDesktopPointer ? [Mousewheel] : []),
+                    Autoplay,
+                  ]}
                   navigation={{
                     nextEl: ".swiper-button-next-frame",
                     prevEl: ".swiper-button-prev-frame",
@@ -242,12 +273,13 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   slidesOffsetAfter={offsetAfter}
                   onSwiper={(swiper) => {
                     swiperRef.current = swiper;
-                    // Don't start autoplay immediately - wait for viewport intersection
-                    if (swiper.autoplay) {
-                      swiper.autoplay.stop();
-                    }
+                    if (swiper.autoplay) swiper.autoplay.stop();
                   }}
                   onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                  speed={400}
+                  touchRatio={1}
+                  resistanceRatio={0.85}
+                  watchSlidesProgress
                   breakpoints={{
                     0: {
                       slidesPerView: 1,
@@ -262,22 +294,29 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   }}
                   scrollbar={{ draggable: true }}
                   direction="horizontal"
-                  mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                  }}
-                  className="framework-forged-swiper cursor-grab"
+                  {...(isDesktopPointer && {
+                    mousewheel: {
+                      forceToAxis: true,
+                      sensitivity: 1,
+                      releaseOnEdges: true,
+                    },
+                  })}
+                  className={clsx(
+                    "framework-forged-swiper cursor-grab",
+                    gpuLayerClasses,
+                  )}
                 >
                   {card?.map((items, index) => {
                     return (
                       <SwiperSlide
                         key={items?.id}
-                        className={`transition-all duration-500  ${
+                        className={clsx(
+                          "transition-[opacity,filter] duration-500",
+                          gpuLayerClasses,
                           index === activeIndex
                             ? ""
-                            : "lg:blur-xs lg:opacity-50"
-                        }`}
+                            : "lg:blur-xs lg:opacity-50",
+                        )}
                       >
                         <div
                           className={clsx(
@@ -289,7 +328,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                           )}
                         >
                           {layout === "imgLeftContentRight" ? (
-                            <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+                            <div
+                              className={clsx(
+                                "relative w-full pt-[100%] rounded-2xl overflow-hidden",
+                                gpuLayerClasses,
+                              )}
+                            >
                               <div className="absolute inset-0 overflow-hidden">
                                 <Image
                                   src={card?.[currentImageIndex]?.image?.url}
@@ -316,34 +360,40 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                             </div>
                           ) : (
                             <div
-                              className={`absolute right-0 top-0 md:pt-[unset] pt-[100%]   md:min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+                              className={clsx(
+                                "absolute right-0 top-0 md:pt-[unset] pt-[100%] md:min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
+                                gpuLayerClasses,
+                              )}
                             >
+                              {/* Mobile (lg:hidden): per-slide image with static classes so no activeIndex sync = no lag on fast swipes. */}
                               {items?.image?.url && (
                                 <Image
-                                  key={`outer-${currentImageIndex}`}
+                                  key={`outer-mobile-${items?.id ?? index}`}
                                   src={items?.image?.url}
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
                                   fill
-                                  sizes="(max-width: 768px) 768px, 
-                (max-width: 1200px) 1200px, 
-                1000px"
-                                  className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
+                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  loading={
+                                    index <= 1 ? "eager" : undefined
+                                  }
+                                  className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg`}
                                 />
                               )}
                               {items?.image?.url && (
                                 <Image
-                                  key={`main-${currentImageIndex}`}
+                                  key={`main-mobile-${items?.id ?? index}`}
                                   src={items?.image?.url}
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
                                   fill
-                                  sizes="(max-width: 768px) 768px, 
-                (max-width: 1200px) 1200px, 
-                1000px"
-                                  className={`${secondaryImageClasses} ${isMobile ? "scale-100" : mainAnimationClasses}`} // Applied main classes
+                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  loading={
+                                    index <= 1 ? "eager" : undefined
+                                  }
+                                  className={`${secondaryImageClasses} ${mainStaticClasses}`}
                                 />
                               )}
                               <Image
@@ -437,7 +487,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             )}
           >
             {layout === "imgLeftContentRight" ? (
-              <div className="relative w-full pt-[100%] rounded-2xl overflow-hidden">
+              <div
+                className={clsx(
+                  "relative w-full pt-[100%] rounded-2xl overflow-hidden",
+                  gpuLayerClasses,
+                )}
+              >
                 <div className="absolute inset-0 overflow-hidden">
                   <Image
                     src={card?.[currentImageIndex]?.image?.url}
@@ -464,7 +519,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
               </div>
             ) : (
               <div
-                className={`absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset] `}
+                className={clsx(
+                  "absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
+                  gpuLayerClasses,
+                )}
               >
                 {card?.[currentImageIndex]?.image?.url && (
                   <Image
@@ -475,9 +533,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       "banner"
                     }
                     fill
-                    sizes="(max-width: 768px) 768px, 
-                (max-width: 1200px) 1200px, 
-                1000px"
+                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                    loading="eager"
                     className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
                   />
                 )}
@@ -491,10 +548,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
-                    sizes="(max-width: 768px) 768px, 
-                (max-width: 1200px) 1200px, 
-                1000px"
-                    className={`${secondaryImageClasses} ${mainAnimationClasses}`} // Applied main classes
+                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                    loading="eager"
+                    className={`${secondaryImageClasses} ${mainAnimationClasses}`}
                   />
                 )}
                 <Image

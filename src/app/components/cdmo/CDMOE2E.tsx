@@ -10,9 +10,11 @@ import SwipeImage from "./SwipeImage";
 import { WordReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOE2EProps } from "@/app/types/cdmo.type";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -86,6 +88,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
 
           <div className="relative">
             <Swiper
+              key={`cdmo-e2e-${isDesktopPointer}`}
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
                 // Don't start autoplay immediately - wait for viewport intersection
@@ -97,7 +100,12 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
               loop={false}
               spaceBetween={30}
               onSlideChange={(swiper) => setActive(swiper.activeIndex)}
-              modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+              modules={[
+                Pagination,
+                Navigation,
+                ...(isDesktopPointer ? [Mousewheel] : []),
+                Autoplay,
+              ]}
               autoplay={{
                 delay: 15000,
                 disableOnInteraction: false,
@@ -110,11 +118,13 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                 el: ".home-by-use-section-swiper",
                 type: "progressbar",
               }}
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
+              {...(isDesktopPointer && {
+                mousewheel: {
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                },
+              })}
               className="rounded-xl overflow-hidden"
             >
               {content?.length > 0 &&

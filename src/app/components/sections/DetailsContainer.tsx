@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 import { H2, BodyText1 } from "../Typography2";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import Button from "../Button";
@@ -20,56 +21,42 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
   useEffect(() => {
     if (!wrapperRef.current || !topLineRef.current) return;
 
-    let ctx: { revert: () => void } | null = null;
-    let cancelled = false;
-
-    void import("gsap").then(({ default: gsap }) => {
-      return import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
-        if (cancelled) return;
-        gsap.registerPlugin(ScrollTrigger);
-
-        ctx = gsap.context(() => {
-          // GPU-accelerated scaleY animation (no layout reflow)
-          gsap.fromTo(
-            topLineRef.current,
-            { scaleY: 0, transformOrigin: "top center" },
-            {
-              scaleY: 1,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: wrapperRef.current,
-                start: "top 85%",
-                end: "bottom 65%",
-                scrub: true,
-              },
-            },
-          );
-          const starLineTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: bottomLineRef.current,
-              start: "top 80%",
-              end: "bottom 50%",
-              scrub: true,
-            },
-          });
-          starLineTl.fromTo(
-            starRef.current,
-            { opacity: 0, scale: 0.5 },
-            { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 },
-          );
-          starLineTl.fromTo(
-            bottomLineRef.current,
-            { scaleY: 0, transformOrigin: "top center" },
-            { scaleY: 1, ease: "power2.out", duration: 0.8 },
-          );
-        }, wrapperRef);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        topLineRef.current,
+        { scaleY: 0, transformOrigin: "top center" },
+        {
+          scaleY: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top 85%",
+            end: "bottom 65%",
+            scrub: true,
+          },
+        },
+      );
+      const starLineTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: bottomLineRef.current,
+          start: "top 80%",
+          end: "bottom 50%",
+          scrub: true,
+        },
       });
-    });
+      starLineTl.fromTo(
+        starRef.current,
+        { opacity: 0, scale: 0.5 },
+        { opacity: 1, scale: 1, ease: "back.out(1.7)", duration: 0.3 },
+      );
+      starLineTl.fromTo(
+        bottomLineRef.current,
+        { scaleY: 0, transformOrigin: "top center" },
+        { scaleY: 1, ease: "power2.out", duration: 0.8 },
+      );
+    }, wrapperRef);
 
-    return () => {
-      cancelled = true;
-      ctx?.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (

@@ -4,9 +4,6 @@ import { H3 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import { EthicsAndCodeProps } from "../../types/ethics.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const EthicsAndCode: React.FC<EthicsAndCodeProps> = ({ data }) => {
   const { description } = data;

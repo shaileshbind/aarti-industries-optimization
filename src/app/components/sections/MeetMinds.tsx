@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import {
   ManagementBoardProps,
   MeetMindsProps,
@@ -27,7 +28,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   navigationPrevClass,
 }) => {
   const { sectionTitle, management_boards } = data;
-
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -95,6 +96,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
           {management_boards?.length > 0 && (
             <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
               <Swiper
+                key={`meet-minds-${isDesktopPointer}`}
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
                   // Don't start autoplay immediately - wait for viewport intersection
@@ -115,12 +117,19 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                 observer={true}
                 observeParents={true}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
-                modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
+                modules={[
+                  Pagination,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Navigation,
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,

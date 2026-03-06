@@ -2,9 +2,7 @@
 "use client";
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import ScrollTriggerModule, {
-  ScrollTrigger as ScrollTriggerType,
-} from "gsap/ScrollTrigger";
+import { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,9 +12,6 @@ import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useMargin } from "@/app/contexts/MarginContext";
-
-const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger);
 
 const ANIMATION_END_PROGRESS = 0.55;
 

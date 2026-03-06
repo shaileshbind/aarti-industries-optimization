@@ -8,16 +8,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import type { Swiper as SwiperType } from "swiper";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   data,
 }) => {
   const { cards } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -252,7 +251,13 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
           {cards?.length > 0 && (
             <div ref={containerRef} className="w-full">
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                key={`education-development-${isDesktopPointer}`}
+                modules={[
+                  Navigation,
+                  Scrollbar,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 15000,
                   disableOnInteraction: false,
@@ -284,11 +289,13 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                 }}
                 scrollbar={{ draggable: true }}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 className="framework-forged-swiper"
               >
                 {cards?.map((item, index) => {

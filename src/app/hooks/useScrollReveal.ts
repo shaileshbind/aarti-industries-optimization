@@ -73,7 +73,7 @@ export const useScrollReveal = (
         trigger,
         start = "top 90%",
         end,
-        toggleActions = "play reverse play reverse", // Allow re-triggering on scroll
+        toggleActions = "play none none none",
         scrub = false,
         pin = false,
         pinSpacing = true,
@@ -121,7 +121,7 @@ export const useScrollReveal = (
         animation,
         start,
         end,
-        toggleActions, // 'play reverse play reverse' allows animation to play again when scrolling
+        toggleActions,
         scrub,
         pin,
         pinSpacing,
@@ -131,11 +131,6 @@ export const useScrollReveal = (
       animationRef.current = animation;
       scrollTriggerRef.current = scrollTrigger;
       isInitializedRef.current = true;
-
-      // Refresh ScrollTrigger after a brief delay to ensure it's properly initialized
-      requestAnimationFrame(() => {
-        ST.refresh();
-      });
     };
 
     // Use double requestAnimationFrame to ensure DOM is fully ready

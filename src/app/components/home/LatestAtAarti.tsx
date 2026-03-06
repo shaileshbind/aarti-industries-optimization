@@ -5,17 +5,15 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Pagination } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps, ButtonHomeProps } from "@/app/types/home.type";
 import { ButtonProps, ImageProps } from "@/app/types/global.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type PostContent = {
   id?: string | number;
@@ -63,6 +61,7 @@ type NormalizedCard = {
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const toArray = <T,>(value?: T | T[]) =>
     Array.isArray(value) ? value : value ? [value] : [];
   const resolveLink = (button?: ButtonHomeProps | ButtonProps) =>
@@ -341,11 +340,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     if (latestAtAartiRef.current) {
       tabsAnim = gsap.fromTo(
         latestAtAartiRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -503,20 +501,22 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           <FadeInReveal delay={0.6}>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
-                key={activeTab}
+                key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
                 breakpoints={{
                   1024: { slidesPerView: 4 },
                   600: { slidesPerView: 2.2 },
                 }}
-                modules={[Pagination, Mousewheel]}
+                modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 pagination={{
                   el: ".home-latest-at-swiper",
                   type: "progressbar",

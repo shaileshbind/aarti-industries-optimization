@@ -11,9 +11,11 @@ import { ChemCreatesProps } from "@/app/types/who-we-are.type";
 import Image from "next/image";
 import { formatDate } from "../../../../utils/formatDate";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const { sectionTitle, blog_case_studies } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -36,6 +38,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
         <FadeInReveal delay={0.6}>
           <div className="mt-[36px] lg:mt-[40px]">
             <Swiper
+              key={`chem-creates-${isDesktopPointer}`}
               slidesPerView={1.2}
               spaceBetween={24}
               breakpoints={{
@@ -43,13 +46,15 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
               }}
-              modules={[Pagination, Mousewheel]}
+              modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
               direction="horizontal"
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
+              {...(isDesktopPointer && {
+                mousewheel: {
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                },
+              })}
               pagination={{
                 el: ".whoweare-chem-creates-swiper",
                 type: "progressbar",
