@@ -2,55 +2,31 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { H3 } from "../Typography2";
 import NumberCard from "../cards/NumberCard";
 import { GlobalPartnerProps } from "@/app/types/home.type";
 import { FadeInReveal } from "../ScrollReveal";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
   const { leftTitle, righSection } = data;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
-    // Clear any existing ScrollTrigger instances for this element
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === wrapper) {
-        trigger.kill();
-      }
-    });
-
-    // Small delay to ensure DOM is ready and scroll position is settled
-    const timer = setTimeout(() => {
-      // Refresh ScrollTrigger to recalculate positions
-      ScrollTrigger.refresh();
-
-      // Get all stat-box elements within this component
+    const ctx = gsap.context(() => {
       const statBoxes = wrapper.querySelectorAll(".stat-box");
 
-      // Reset elements to initial state
-      gsap.set(statBoxes, {
-        y: 80,
-        opacity: 0,
-      });
+      gsap.set(statBoxes, { y: 80, opacity: 0 });
 
-      // Create the animation
-      animationRef.current = gsap.to(statBoxes, {
+      gsap.to(statBoxes, {
         y: 0,
         opacity: 1,
         duration: 0.8,
         ease: "power3.out",
-        stagger: {
-          each: 0.2,
-          from: "random",
-        },
+        stagger: { each: 0.2, from: "random" },
         scrollTrigger: {
           trigger: wrapper,
           start: "top 85%",
@@ -58,16 +34,9 @@ const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
           toggleActions: "play none none reset",
         },
       });
-    }, 100);
+    }, wrapper);
 
-    return () => {
-      clearTimeout(timer);
-      if (animationRef.current) {
-        animationRef.current.scrollTrigger?.kill();
-        animationRef.current.kill();
-        animationRef.current = null;
-      }
-    };
+    return () => ctx.revert();
   }, []);
 
   return (

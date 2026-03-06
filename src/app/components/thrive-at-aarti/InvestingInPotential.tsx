@@ -7,8 +7,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { InvestingInPotentialProps } from "@/app/types/thrive-at-aarti.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function InvestingInPotential({
   data,
 }: InvestingInPotentialProps) {

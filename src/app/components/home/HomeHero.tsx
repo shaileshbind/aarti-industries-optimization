@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Mousewheel } from "swiper/modules";
+import { Autoplay, EffectFade } from "swiper/modules";
 import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import gsap from "gsap";
@@ -279,7 +279,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             },
           }}
           slidesPerView={1}
-          modules={[Autoplay, EffectFade, Mousewheel]}
+          modules={[Autoplay, EffectFade]}
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
@@ -294,11 +294,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             waitForTransition: true,
           }}
           direction="horizontal"
-          mousewheel={{
-            forceToAxis: true,
-            sensitivity: 1,
-            releaseOnEdges: true,
-          }}
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">

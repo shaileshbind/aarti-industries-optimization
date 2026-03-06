@@ -5,8 +5,6 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import NumberCard from "../cards/NumberCard";
 import { EnvInfoProps } from "@/app/types/environment.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const EnvCards = ({ data }: EnvInfoProps) => {
   const { card } = data;
   const wrapperRef = useRef(null);

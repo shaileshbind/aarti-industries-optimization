@@ -8,11 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import type { Swiper as SwiperType } from "swiper";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   data,

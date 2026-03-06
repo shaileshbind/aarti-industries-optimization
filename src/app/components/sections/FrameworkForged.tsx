@@ -5,16 +5,14 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
+import { Autoplay, Navigation, Scrollbar } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { isMobile } from "react-device-detect";
 import { FadeInReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 
-gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
@@ -130,11 +128,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
     if (frameworkForgedRef.current) {
       tabsAnim = gsap.fromTo(
         frameworkForgedRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -230,7 +227,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             {card?.length > 0 && (
               <div ref={containerRef} className="w-full">
                 <Swiper
-                  modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                  modules={[Navigation, Scrollbar, Autoplay]}
                   navigation={{
                     nextEl: ".swiper-button-next-frame",
                     prevEl: ".swiper-button-prev-frame",
@@ -262,11 +259,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   }}
                   scrollbar={{ draggable: true }}
                   direction="horizontal"
-                  mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 1,
-                    releaseOnEdges: true,
-                  }}
                   className="framework-forged-swiper cursor-grab"
                 >
                   {card?.map((items, index) => {

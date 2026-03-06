@@ -8,8 +8,6 @@ import AnimatedText from "../AnimatedText";
 import NumberCard from "../cards/NumberCard";
 import { GRInfoProps } from "@/app/types/global-reach.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const GRInfo = ({ data }: GRInfoProps) => {
   const { description, content } = data;
   const wrapperRef = useRef(null);

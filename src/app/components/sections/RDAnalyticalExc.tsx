@@ -16,7 +16,7 @@ import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 interface ScrollTriggerInstance {
   start: number | { value: number };

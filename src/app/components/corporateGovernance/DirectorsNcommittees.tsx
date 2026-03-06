@@ -4,9 +4,6 @@ import { BodyText1, BodyText2, BodyText3, H2 } from "../Typography2";
 import { IndependentDirectorsProps } from "@/app/types/corporate-governance.type";
 import MeetMinds from "../sections/MeetMinds";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const DirectorsNcommittees: React.FC<IndependentDirectorsProps> = ({
   data,

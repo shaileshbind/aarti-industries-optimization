@@ -13,7 +13,7 @@ import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 interface ScrollTriggerInstance {
   start: number | { value: number };

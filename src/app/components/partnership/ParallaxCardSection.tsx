@@ -12,9 +12,6 @@ import MainAccordion from "../Accordion";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
 
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
-
 interface StickyImageProps {
   stickyImageRef?: RefObject<HTMLDivElement>;
   className?: string;
@@ -60,9 +57,6 @@ export default function ParallaxCardSection({
     );
 
     const ctx = gsap.context(() => {
-      // Register ScrollTrigger
-      gsap.registerPlugin(ScrollTrigger);
-
       if (!isMobile) {
         // --- BASIC PARALLAX FOR STATIC IMAGES ---
         const images = [

@@ -18,7 +18,7 @@ interface PrivacyPolicyProps {
 }
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  gsap.registerPlugin(ScrollToPlugin);
 }
 
 interface NavItem {

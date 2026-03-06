@@ -8,8 +8,6 @@ import AnimatedText from "../AnimatedText";
 import NumberCard from "../cards/NumberCard";
 import { RDInfoProps } from "@/app/types/r-and-d.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
   const { description, valuesCard, rightSectionImage } = data;
   const wrapperRef = useRef(null);

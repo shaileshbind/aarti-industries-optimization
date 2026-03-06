@@ -1,9 +1,7 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import ScrollTriggerModule, {
-  ScrollTrigger as ScrollTriggerType,
-} from "gsap/ScrollTrigger";
+import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,9 +11,6 @@ import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger);
 
 const ANIMATION_END_PROGRESS = 0.55;
 
@@ -51,14 +46,16 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     visible: false,
   });
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [slideWidth, setSlideWidth] = useState(0);
+  const slideWidthRef = useRef(0);
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
 
   useLayoutEffect(() => {
     const measureSlideWidth = () => {
       if (imageWrapperRef.current) {
         const width = imageWrapperRef.current.offsetWidth;
         if (width > 0) {
-          setSlideWidth(width);
+          slideWidthRef.current = width;
         }
       }
     };
@@ -145,6 +142,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   };
 
   useLayoutEffect(() => {
+    if (!hasMounted) return;
     const ctx = gsap.context(() => {
       if (isTablet) {
         gsap.set(sustainbleLogo.current, {
@@ -424,8 +422,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             susLogotr.current,
             { width: "100px", height: "100px" },
             {
-              width: () => `${slideWidth}px`,
-              height: () => `${slideWidth}px`,
+              width: () => `${slideWidthRef.current}px`,
+              height: () => `${slideWidthRef.current}px`,
               duration: 1,
             },
           )
@@ -439,8 +437,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               top: "50%",
             },
             {
-              width: () => `${slideWidth}px`,
-              height: () => `${slideWidth}px`,
+              width: () => `${slideWidthRef.current}px`,
+              height: () => `${slideWidthRef.current}px`,
 
               left: "0%",
               top: "50%",
@@ -489,7 +487,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length, slideWidth, isTablet]);
+  }, [mainSection.length, isTablet, hasMounted]);
 
   useLayoutEffect(() => {
     measureIndicator();

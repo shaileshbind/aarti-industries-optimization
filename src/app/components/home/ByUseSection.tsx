@@ -5,15 +5,13 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TitleCard from "../cards/TitleCard";
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
 import Link from "next/link";
-gsap.registerPlugin(ScrollTrigger);
 
 const ByUseSection: React.FC<ByUseSectionProps> = ({
   data,
@@ -108,11 +106,10 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
     if (tabsRef.current) {
       tabsAnim = gsap.fromTo(
         tabsRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -347,7 +344,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                    modules={[Pagination, Navigation, Autoplay]}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
                       nextEl: ".swiper-button-next-useBySection",
@@ -395,11 +392,6 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                       setIsEnd(swiper.isEnd);
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
                     className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {data?.[active]?.card?.map((item, index) => (

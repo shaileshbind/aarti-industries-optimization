@@ -8,12 +8,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { CampusFlagshipProps } from "@/app/types/campus.type";
 import type { Swiper as SwiperType } from "swiper";
 
-gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }

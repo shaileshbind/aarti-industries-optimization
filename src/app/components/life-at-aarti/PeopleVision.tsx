@@ -14,7 +14,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { FadeInReveal } from "../ScrollReveal";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger);
 
 type ContentSection = NonNullable<
   NonNullable<LAAVisionProps["data"]>["content"]
