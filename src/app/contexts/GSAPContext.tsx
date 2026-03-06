@@ -47,7 +47,7 @@ export const GSAPProvider = ({ children }: GSAPProviderProps) => {
     const lenis = new Lenis({
       duration: 1.3,
       syncTouch: true,
-      syncTouchLerp: 0.075,
+      syncTouchLerp: 0.1,
       touchMultiplier: 1,
     });
     lenisRef.current = lenis;
