@@ -340,21 +340,27 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             "<",
           )
           .fromTo(
-            ".sliderStagger",
-            { opacity: 0, x: 100 },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.7,
-              stagger: 0.1,
-              ease: "power4.inOut",
-            },
+            tabBarContainerRef.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.5, zIndex: 22 },
             "<",
           )
+          // .fromTo(
+          //   ".sliderStagger",
+          //   { opacity: 0, x: 100 },
+          //   {
+          //     opacity: 1,
+          //     x: 0,
+          //     duration: 0.7,
+          //     stagger: 0.1,
+          //     ease: "power4.inOut",
+          //   },
+          //   "<",
+          // )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
-            { opacity: 1, duration: 5 },
+            { opacity: 1, duration: 1 },
             "<",
           );
       } else {
@@ -550,16 +556,94 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     };
   }, [activeTabMob, mainSection.length, setMarginBottom]);
 
+  const isClickScrolling = useRef(false);
+  // const tabBarHidden = useRef(false);
+
   const handlMobileTabClick = (index: number) => {
-    if (index === activeTabMob) return;
-    const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) {
-      swiper.slideTo(index);
-      setActiveTabMob(index);
-    }
+    const el = document.getElementById(`tabsustain-${index}`);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 120;
+    isClickScrolling.current = true;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    setActiveTabMob(index);
+    setActiveTab(index);
+    setTimeout(() => {
+      isClickScrolling.current = false;
+    }, 800);
   };
 
+  useEffect(() => {
+    if (!isTablet || !mainSection.length) return;
+
+    let ticking = false;
+    let prevIndex = -1;
+
+    const handleScroll = () => {
+      if (ticking || isClickScrolling.current) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const offset = 150;
+        let activeIndex = 0;
+
+        for (let i = 0; i < mainSection.length; i++) {
+          const el = document.getElementById(`tabsustain-${i}`);
+          if (!el) continue;
+          if (el.getBoundingClientRect().top <= offset) {
+            activeIndex = i;
+          }
+        }
+        // console.log('activeIndex', activeIndex);
+
+        if (activeIndex !== prevIndex) {
+          prevIndex = activeIndex;
+          setActiveTabMob(activeIndex);
+          setActiveTab(activeIndex);
+        }
+        // if (tabBarContainerRef.current) {
+        //   const firstEl = document.getElementById(`tabsustain-0`);
+        //   const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
+          
+        //   if (firstEl && lastEl) {
+        //     const lastBottom = lastEl.getBoundingClientRect().bottom;
+        //     const firstTop = firstEl.getBoundingClientRect().top;
+        //     // console.log('firstTop', firstTop, 'lastBottom', lastBottom);
+        
+        //     // Hide when last slide bottom goes past 50% of screen
+        //     const shouldHide = lastBottom < window.innerHeight / 0.5 ;
+            
+        //     // Only re-show when user has scrolled back up enough to see first slide area
+        //     const shouldShow = firstTop > -100;
+        
+        //     if (shouldHide && !tabBarHidden.current) {
+        //       tabBarHidden.current = true;
+        //       // gsap.to(tabBarContainerRef.current, {
+        //       //   opacity: 0,
+        //       //   duration: 0.3,
+        //       //   pointerEvents: "none",
+        //       // });
+        //     } else if (!shouldHide && shouldShow && tabBarHidden.current) {
+        //       tabBarHidden.current = false;
+        //       // gsap.to(tabBarContainerRef.current, {
+        //       //   opacity: 1,
+        //       //   duration: 0.3,
+        //       //   pointerEvents: "auto",
+        //       // });
+        //     }
+        //   }
+        // }
+       
+
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isTablet, mainSection]);
+
   return (
+    <>
     <div
       ref={triggerRef}
       className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
@@ -772,84 +856,19 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           </div>
         </div>
       </div>
+      
       <div
         ref={mobileSliderContainerRef}
         className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
       >
-        <div className="pt-[110px]" ref={tabBarContainerRef}>
-          {mainSection?.length > 0 && isTablet && (
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-              <div
-                ref={containerRef}
-                className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-              >
-                {/* Animated Indicator */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: indicator.visible ? indicator.left : 0,
-                    top: 0,
-                    height: "100%",
-                    borderRadius: 9999,
-                    background: indicatorColor,
-                    width: indicator.visible ? indicator.width : 0,
-                    transition: indicatorTransition,
-                    zIndex: 0,
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Tab Buttons */}
-                {mainSection?.map(
-                  (items, index) =>
-                    items?.category && (
-                      <div
-                        key={index}
-                        ref={(element) => {
-                          tabRefs.current[index] = element;
-                        }}
-                        onClick={() => handlMobileTabClick(index)}
-                        className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                          activeTab === index
-                            ? "text-white"
-                            : "hover:bg-grey-200"
-                        }`}
-                      >
-                        {items?.category}
-                      </div>
-                    ),
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]" >
+        
         <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
           <div className="grid items-center">
             {isTablet && (
-              <Swiper
-                slidesPerView={1}
-                loop={false}
-                allowTouchMove={true}
-                speed={600}
-                watchSlidesProgress={true}
-                updateOnWindowResize={true}
-                className="w-full h-auto"
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                  swiper.on("resize", () => {
-                    swiper.updateSize();
-                    swiper.updateSlides();
-                    swiper.updateProgress();
-                    swiper.updateSlidesClasses();
-                  });
-                }}
-                onSlideChange={(swiper) => {
-                  setActiveTab(swiper.activeIndex);
-                }}
-              >
+             <div className="flex flex-col gap-y-[40px]">
                 {mainSection.map((slide, index) => (
-                  <SwiperSlide key={slide.id}>
+                   <div key={index} id={`tabsustain-${index}`}>
                     <SliderCard
                       imgSrc={slide?.image?.url}
                       imgAlt={slide?.image?.alternativeText || "banner"}
@@ -862,14 +881,64 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                       }
                       index={index}
                     />
-                  </SwiperSlide>
+                    </div>
                 ))}
-              </Swiper>
+              </div>
             )}
           </div>
         </div>
+        </div>
       </div>
     </div>
+    <div className="fixed top-[110px] w-full flex justify-center items-center hideinnextsection" ref={tabBarContainerRef}>
+    {mainSection?.length > 0 && isTablet && (
+      <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+        <div
+          ref={containerRef}
+          className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+        >
+          {/* Animated Indicator */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: indicator.visible ? indicator.left : 0,
+              top: 0,
+              height: "100%",
+              borderRadius: 9999,
+              background: indicatorColor,
+              width: indicator.visible ? indicator.width : 0,
+              transition: indicatorTransition,
+              zIndex: 0,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Tab Buttons */}
+          {mainSection?.map(
+            (items, index) =>
+              items?.category && (
+                <div
+                  key={index}
+                  ref={(element) => {
+                    tabRefs.current[index] = element;
+                  }}
+                  onClick={() => handlMobileTabClick(index)}
+                  className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                    activeTab === index
+                      ? "text-white"
+                      : "hover:bg-grey-200"
+                  }`}
+                >
+                  {items?.category}
+                </div>
+              ),
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+  </>
   );
 };
 

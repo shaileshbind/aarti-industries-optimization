@@ -8,6 +8,7 @@ import { BodyText1, BodyText2, H2 } from "./Typography2";
 import Image from "next/image";
 import { ImageProps } from "../types/global.type";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 interface Testimonials {
   id: number;
@@ -27,6 +28,7 @@ interface ThePeopleProps {
 
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -75,12 +77,18 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
       {testimonials?.length > 0 && (
         <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
           <Swiper
+            key={`the-people-${isDesktopPointer}`}
             spaceBetween={15}
             slidesPerView={1}
             centeredSlides={true}
             autoHeight={false}
             loop={false}
-            modules={[Navigation, Pagination, Mousewheel, Autoplay]}
+            modules={[
+            Navigation,
+            Pagination,
+            ...(isDesktopPointer ? [Mousewheel] : []),
+            Autoplay,
+          ]}
             autoplay={{
               delay: 15000,
               disableOnInteraction: false,
@@ -100,11 +108,13 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
               nextEl: ".swiper-button-next-people",
               prevEl: ".swiper-button-prev-people",
             }}
-            mousewheel={{
-              forceToAxis: true,
-              sensitivity: 1,
-              releaseOnEdges: true,
-            }}
+            {...(isDesktopPointer && {
+              mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              },
+            })}
             className="people-swiper !overflow-visible"
             breakpoints={{
               1024: {

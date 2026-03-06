@@ -11,9 +11,11 @@ import { Pagination, Navigation, Mousewheel, Autoplay } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import CategoryCard from "../cards/CategoryCard";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
   const { title, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -75,6 +77,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
               {card?.length > 0 && (
                 <div>
                   <Swiper
+                    key={`category-products-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}
                     breakpoints={{
@@ -95,7 +98,12 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                    modules={[
+                      Pagination,
+                      Navigation,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     autoplay={{
                       delay: 5000,
                       disableOnInteraction: false,
@@ -133,11 +141,13 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       setIsEnd(swiper.isEnd);
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {card?.map((item, index) => (

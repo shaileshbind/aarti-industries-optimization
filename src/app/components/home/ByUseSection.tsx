@@ -5,9 +5,10 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import TitleCard from "../cards/TitleCard";
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
@@ -17,6 +18,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
   data,
   sectionFiveTitle,
 }) => {
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const [, setIsTransitioning] = useState(false);
   const [isBeginning, setIsBeginning] = useState(true);
@@ -323,7 +325,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>
                   <Swiper
-                    key={`swiper-${active}`}
+                    key={`swiper-${active}-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}
                     breakpoints={{
@@ -344,7 +346,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Autoplay]}
+                    modules={[
+                      Pagination,
+                      Navigation,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
                       nextEl: ".swiper-button-next-useBySection",
@@ -392,6 +399,13 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                       setIsEnd(swiper.isEnd);
                     }}
                     direction="horizontal"
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {data?.[active]?.card?.map((item, index) => (

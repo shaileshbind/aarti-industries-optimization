@@ -13,6 +13,7 @@ import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollToPlugin);
@@ -31,6 +32,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 }) => {
   const { leftText, rightText } = data;
   const { details } = sliderData;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -470,7 +472,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
-                    modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                    key={`aarti-advantage-${isDesktopPointer}`}
+                    modules={[
+                      Navigation,
+                      Scrollbar,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     autoplay={{
                       delay: 15000,
                       disableOnInteraction: false,
@@ -501,11 +509,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       },
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="framework-forged-swiper"
                   >
                     {details?.map((slide, index) => (

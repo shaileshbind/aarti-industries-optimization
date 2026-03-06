@@ -11,6 +11,7 @@ import "swiper/css";
 import { Navigation, Mousewheel } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
 import GeneralPopup from "../Popups/GeneralPopup";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollToPlugin);
@@ -27,6 +28,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 }) => {
   const { leftText, rightText, image } = data;
   const { details } = sliderData;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -375,6 +377,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
+                    key={`rd-analytical-${isDesktopPointer}`}
                     slidesPerView={
                       typeof window !== "undefined" && window.innerWidth < 1024
                         ? 1
@@ -383,17 +386,19 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     loop={false}
                     onSlideChange={(swiper) => setActive(swiper.activeIndex)}
                     speed={800}
-                    modules={[Navigation, Mousewheel]}
+                    modules={[Navigation, ...(isDesktopPointer ? [Mousewheel] : [])]}
                     className="w-full relative"
                     navigation={{
                       nextEl: ".swiper-button-next-analytical",
                       prevEl: ".swiper-button-prev-analytical",
                     }}
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                   >
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>

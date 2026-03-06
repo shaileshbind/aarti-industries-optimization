@@ -9,9 +9,11 @@ import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { LAAWorldProps } from "@/app/types/life-at-aarti.type";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const { title, leadersCard } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -151,15 +153,22 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
 
             <div className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]">
               <Swiper
+                key={`aarti-world-leader-${isDesktopPointer}`}
                 slidesPerView={1}
                 spaceBetween={24}
-                modules={[Navigation, Mousewheel, Autoplay]}
+                modules={[
+                  Navigation,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 navigation={{
                   prevEl: ".swiper-button-prev-aartiWorld",
                   nextEl: ".swiper-button-next-aartiWorld",

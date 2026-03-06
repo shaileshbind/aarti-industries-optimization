@@ -12,9 +12,10 @@ import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
-
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -285,6 +286,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       {awards?.[active]?.card?.length > 0 && (
         <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]">
           <Swiper
+            key={`industry-accolades-${isDesktopPointer}`}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
               // Don't start autoplay immediately - wait for viewport intersection
@@ -303,12 +305,19 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
             observer={true}
             observeParents={true}
             direction="horizontal"
-            mousewheel={{
-              forceToAxis: true,
-              sensitivity: 1,
-              releaseOnEdges: true,
-            }}
-            modules={[Pagination, Mousewheel, Navigation, Autoplay]}
+            {...(isDesktopPointer && {
+              mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              },
+            })}
+            modules={[
+              Pagination,
+              ...(isDesktopPointer ? [Mousewheel] : []),
+              Navigation,
+              Autoplay,
+            ]}
             autoplay={{
               delay: 5000,
               disableOnInteraction: false,

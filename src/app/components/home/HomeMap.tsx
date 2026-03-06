@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BodyText2, H2 } from "../Typography2";
 import DesktopMapSvgClient from "../global-reach/DesktopMapSvgClient";
 import Image from "next/image";
@@ -8,6 +10,7 @@ import { useMargin } from "@/app/contexts/MarginContext";
 const HomeMap = () => {
   const [activeBlip, setActiveBlip] = useState(4);
   const { marginBottom } = useMargin();
+  const sectionRef = useRef<HTMLDivElement>(null);
   const mobileStatsData = [
     { id: 0, percent: "46%", title: "India" },
     { id: 1, percent: "23%", title: "Middle East" },
@@ -16,10 +19,36 @@ const HomeMap = () => {
     { id: 4, percent: "6%", title: "Rest of Asia" },
     { id: 5, percent: "3%", title: "Rest of the world" },
   ];
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const els = document.querySelectorAll(".hideinnextsection");
+    if (!els.length || !sectionRef.current) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: `bottom  bottom+500px`,
+        end: `bottom bottom`, 
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    tl.fromTo(els, { opacity: 1 }, { opacity: 0, duration: 0.4 });
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
+
   return (
     <div
+      ref={sectionRef}
       className="w-full relative z-10 bg-white pt-20"
-      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+      style={{ marginTop: marginBottom > 0 ? `${marginBottom + 100}px` : undefined }}
     >
       <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">

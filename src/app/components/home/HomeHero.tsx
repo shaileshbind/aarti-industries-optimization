@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade } from "swiper/modules";
+import { Autoplay, EffectFade, Mousewheel } from "swiper/modules";
 import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import gsap from "gsap";
@@ -13,9 +13,11 @@ import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -278,8 +280,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
               setActive(realIndex);
             },
           }}
+          key={`home-hero-${isDesktopPointer}`}
           slidesPerView={1}
-          modules={[Autoplay, EffectFade]}
+          modules={[
+            Autoplay,
+            EffectFade,
+            ...(isDesktopPointer ? [Mousewheel] : []),
+          ]}
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
@@ -294,6 +301,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             waitForTransition: true,
           }}
           direction="horizontal"
+          {...(isDesktopPointer && {
+            mousewheel: {
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            },
+          })}
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
@@ -409,7 +423,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       />
       <div
         ref={starRef}
-        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60  "
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-[11]  "
       >
         <Image
           src="/images/home/star-white.svg"
