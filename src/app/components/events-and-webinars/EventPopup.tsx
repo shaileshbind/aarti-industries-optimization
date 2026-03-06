@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type EventPopupProps = {
   event: {
@@ -29,6 +30,7 @@ type EventPopupProps = {
 
 const EventPopup = ({ event }: EventPopupProps) => {
   const { title, description, image, mobImage, gallery } = event;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
 
   // Combine gallery images if available, otherwise use main images
   const imagesToShow =
@@ -52,7 +54,8 @@ const EventPopup = ({ event }: EventPopupProps) => {
       {imagesToShow && imagesToShow.length > 0 && (
         <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
           <Swiper
-            modules={[FreeMode, Mousewheel]}
+            key={`event-gallery-${isDesktopPointer}`}
+            modules={[FreeMode, ...(isDesktopPointer ? [Mousewheel] : [])]}
             freeMode={{
               enabled: true,
               momentum: true,
@@ -74,11 +77,13 @@ const EventPopup = ({ event }: EventPopupProps) => {
                 spaceBetween: 20,
               },
             }}
-            mousewheel={{
-              forceToAxis: true,
-              sensitivity: 1,
-              releaseOnEdges: true,
-            }}
+            {...(isDesktopPointer && {
+              mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              },
+            })}
             className="event-gallery-swiper !px-5"
           >
             {imagesToShow.map((image, index) => (

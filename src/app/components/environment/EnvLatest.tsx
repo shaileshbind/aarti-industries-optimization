@@ -10,9 +10,11 @@ import { EnvLifeProps } from "@/app/types/environment.type";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const EnvLatest = ({ data }: EnvLifeProps) => {
   const { post_categories, sectionTitle } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const slides = post_categories[0]?.posts || [];
@@ -22,6 +24,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
       <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
       <div className="lg:mt-[52px] mt-[30px]">
         <Swiper
+          key={`env-latest-${isDesktopPointer}`}
           spaceBetween={24}
           slidesPerView={1.5}
           breakpoints={{
@@ -29,17 +32,19 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
             1024: { slidesPerView: 3 },
             1440: { slidesPerView: 4 },
           }}
-          modules={[Pagination, Mousewheel]}
+          modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
           pagination={{
             el: ".env-latest-at-swiper",
             type: "progressbar",
           }}
           direction="horizontal"
-          mousewheel={{
-            forceToAxis: true,
-            sensitivity: 1,
-            releaseOnEdges: true,
-          }}
+          {...(isDesktopPointer && {
+            mousewheel: {
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            },
+          })}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           className="w-full !px-[20px] lg:!px-[60px] "

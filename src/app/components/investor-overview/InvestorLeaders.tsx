@@ -9,9 +9,11 @@ import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { InvestorPeopleProps } from "@/app/types/investor-overview.type";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
   const { title, testimonials } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -145,15 +147,22 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
 
             <div className="mt-[30px] max-w-[unset] xl:max-w-[560px]">
               <Swiper
+                key={`investor-leaders-${isDesktopPointer}`}
                 slidesPerView={1}
                 spaceBetween={24}
-                modules={[Navigation, Mousewheel, Autoplay]}
+                modules={[
+                  Navigation,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 navigation={{
                   prevEl: ".swiper-button-prev-aartiWorld",
                   nextEl: ".swiper-button-next-aartiWorld",

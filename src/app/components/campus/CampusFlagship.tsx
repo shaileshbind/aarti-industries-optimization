@@ -11,6 +11,7 @@ import gsap from "gsap";
 import clsx from "clsx";
 import { CampusFlagshipProps } from "@/app/types/campus.type";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
@@ -21,6 +22,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   layout,
 }) => {
   const { card, partnerWithUsCta, sectionTitle } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -217,7 +219,13 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
           {card?.length > 0 && (
             <div ref={containerRef} className="w-full">
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                key={`campus-flagship-${isDesktopPointer}`}
+                modules={[
+                  Navigation,
+                  Scrollbar,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 15000,
                   disableOnInteraction: false,
@@ -249,11 +257,13 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                 }}
                 scrollbar={{ draggable: true }}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 className="framework-forged-swiper"
               >
                 {card?.map((items, index) => {

@@ -4,7 +4,8 @@ import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import { Mousewheel, Pagination } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps, ButtonHomeProps } from "@/app/types/home.type";
 import { ButtonProps, ImageProps } from "@/app/types/global.type";
@@ -60,6 +61,7 @@ type NormalizedCard = {
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const toArray = <T,>(value?: T | T[]) =>
     Array.isArray(value) ? value : value ? [value] : [];
   const resolveLink = (button?: ButtonHomeProps | ButtonProps) =>
@@ -499,15 +501,22 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           <FadeInReveal delay={0.6}>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
-                key={activeTab}
+                key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
                 breakpoints={{
                   1024: { slidesPerView: 4 },
                   600: { slidesPerView: 2.2 },
                 }}
-                modules={[Pagination]}
+                modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
                 direction="horizontal"
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 pagination={{
                   el: ".home-latest-at-swiper",
                   type: "progressbar",
