@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
+import { LenisProvider } from "@/app/contexts/LenisContext";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 import SEO from "./components/SEO";
 import AuthProvider from "./components/AuthProvider";
@@ -68,11 +69,13 @@ export default async function RootLayout({
       <SEO />
       <body className={clsx(alteHansGrotesk.variable, roboto.variable, inter.variable)}>
         <AuthProvider>
-          <GSAPProvider>
-            <ConditionalLayout headerData={data?.Header} footerData={data?.Footer}>
-              <main>{children}</main>
-            </ConditionalLayout>
-          </GSAPProvider>
+          <LenisProvider>
+            <GSAPProvider>
+              <ConditionalLayout headerData={data?.Header} footerData={data?.Footer}>
+                <main>{children}</main>
+              </ConditionalLayout>
+            </GSAPProvider>
+          </LenisProvider>
         </AuthProvider>
         <Script src="/js/investor-notice.js" strategy="afterInteractive" />
       </body>
