@@ -6,6 +6,7 @@ import ParallaxImage from "../ParallaxImage";
 import { CDMODrivingProps } from "@/app/types/cdmo.type";
 import { FadeInGroup, FadeInReveal } from "../ScrollReveal";
 import Button from "../Button";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 
 // Component for animated counter value
 interface CounterValueProps {
@@ -224,8 +225,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
               )}
               {/* Accordion Content - Collapsible */}
               {leftSection?.accordion?.items?.length > 0 && (
-                <div
-                  data-lenis-prevent
+                <SmoothScrollContainer
                   className={`transition-all duration-700 ease-in-out h-[calc(100%-84px)]  overflow-scroll scrollbar-style relative`}
                 >
                   {/* <Image
@@ -257,7 +257,7 @@ const CDMODriving: React.FC<CDMODrivingProps> = ({ data }) => {
                       )}
                     </div>
                   </div>
-                </div>
+                </SmoothScrollContainer>
               )}
             </div>
           </div>

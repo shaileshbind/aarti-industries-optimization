@@ -12,6 +12,7 @@ import {
 } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 import Button from "../Button";
 import { YearAndListingProps } from "@/app/types/year-and-listing.type";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -318,9 +319,8 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
           </div>
 
           {/* Report list */}
-          <div
+          <SmoothScrollContainer
             className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
-            data-lenis-prevent
           >
             {/* Desktop - show all */}
             <div className="hidden lg:block">
@@ -382,7 +382,7 @@ export default function YearAndListing({ reportLayout }: YearAndListingProps) {
                 <Button secondary title="View more" />
               </div>
             )}
-          </div>
+          </SmoothScrollContainer>
             </>
           )}
         </div>

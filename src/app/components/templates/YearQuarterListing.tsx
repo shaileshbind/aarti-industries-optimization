@@ -13,6 +13,7 @@ import {
 } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 import Button from "../Button";
 import { YearQuarterListingProps } from "@/app/types/year-quarter-listing.type";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -42,7 +43,11 @@ function buildPressReleasesYearAndQuarter(
       const report = (item as { report?: unknown[] })?.report;
       if (!Array.isArray(report)) continue;
       for (const qBlock of report) {
-        const q = qBlock as { id?: number; quarter?: string; report?: unknown[] };
+        const q = qBlock as {
+          id?: number;
+          quarter?: string;
+          report?: unknown[];
+        };
         const entries = q?.report;
         if (!Array.isArray(entries)) continue;
         const reports = entries.map((e: unknown) => {
@@ -192,12 +197,17 @@ export default function YearQuarterListing({
   const formatYearForDisplay = useCallback(
     (y: string | number) => {
       if (y === undefined || y === null) return "";
-      return isPressReleasesSubCategory(activeSubCategory) ? `FY ${y}` : String(y);
+      return isPressReleasesSubCategory(activeSubCategory)
+        ? `FY ${y}`
+        : String(y);
     },
     [activeSubCategory],
   );
   const yearAndQuarter = useMemo(() => {
-    if (isPressReleasesSubCategory(activeSubCategory) && pressReleasesYearAndQuarter?.length) {
+    if (
+      isPressReleasesSubCategory(activeSubCategory) &&
+      pressReleasesYearAndQuarter?.length
+    ) {
       return pressReleasesYearAndQuarter;
     }
     return currentSubCategory?.yearAndQuarter || [];
@@ -212,7 +222,9 @@ export default function YearQuarterListing({
     if (
       isPressReleasesSubCategory(activeSubCategory) &&
       pressReleasesYearAndQuarter?.length &&
-      !pressReleasesYearAndQuarter.some((y) => String(y.year) === String(activeYear))
+      !pressReleasesYearAndQuarter.some(
+        (y) => String(y.year) === String(activeYear),
+      )
     ) {
       setActiveYear(pressReleasesYearAndQuarter[0]?.year ?? "");
     }
@@ -422,7 +434,9 @@ export default function YearQuarterListing({
           </div>
 
           {/* Report list - All quarters displayed in reverse order */}
-          <div className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
+          <SmoothScrollContainer
+            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
+          >
             {quarters?.length > 0 ? (
               quarters.map((quarterItem, qIdx) => (
                 <div
@@ -524,7 +538,7 @@ export default function YearQuarterListing({
                 No quarters available
               </p>
             )}
-          </div>
+          </SmoothScrollContainer>
         </div>
 
         {/* Archive dropdown - Mobile */}

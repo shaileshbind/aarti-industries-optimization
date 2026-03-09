@@ -49,9 +49,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div 
-    {...(investorTemplate !== 'annual-report' ? { 'data-lenis-prevent': true } : {})}
-    >
+    <div>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (
