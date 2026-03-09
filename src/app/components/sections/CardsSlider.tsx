@@ -105,7 +105,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
 
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[22px] lg:mt-[40px]">
-            <FadeInGroup delay={0.2} className="relative">
+            <FadeInGroup delay={0.2} className="relative" data-lenis-prevent-touch>
               <Swiper
                 key={`cards-slider-${isDesktopPointer}`}
                 spaceBetween={14}

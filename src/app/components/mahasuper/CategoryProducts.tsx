@@ -75,7 +75,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
           >
             <div className="relative">
               {card?.length > 0 && (
-                <div>
+                <div data-lenis-prevent-touch>
                   <Swiper
                     key={`category-products-${isDesktopPointer}`}
                     spaceBetween={14}

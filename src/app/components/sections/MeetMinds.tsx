@@ -94,7 +94,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
         {/* Swiper */}
         <FadeInReveal delay={0.6}>
           {management_boards?.length > 0 && (
-            <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]">
+            <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]" data-lenis-prevent-touch>
               <Swiper
                 key={`meet-minds-${isDesktopPointer}`}
                 onSwiper={(swiper) => {

@@ -762,7 +762,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         >
           <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
             {mainSection?.length > 0 && !isTablet && (
-              <div>
+              <div data-lenis-prevent-touch>
                 <Swiper
                   slidesPerView={1.2}
                   loop={false}

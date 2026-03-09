@@ -75,7 +75,7 @@ const SocialTestimonials: React.FC<ThePeopleProps> = ({ data }) => {
     >
       {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
-        <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
+        <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10" data-lenis-prevent-touch>
           <Swiper
             key={`social-testimonials-${isDesktopPointer}`}
             spaceBetween={15}

@@ -253,7 +253,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </div>
 
             {card?.length > 0 && (
-              <div ref={containerRef} className="w-full">
+              <div ref={containerRef} className="w-full" data-lenis-prevent-touch>
                 <Swiper
                   key={`framework-forged-${isDesktopPointer}`}
                   modules={[

@@ -460,6 +460,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
+                    data-lenis-prevent-touch
                     key={`rd-analytical-section-${isDesktopPointer}`}
                     modules={[
                       Navigation,

@@ -501,6 +501,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           <FadeInReveal delay={0.6}>
             <div className="mt-[52px]" ref={cardsWrapRef}>
               <Swiper
+                data-lenis-prevent-touch
                 key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
