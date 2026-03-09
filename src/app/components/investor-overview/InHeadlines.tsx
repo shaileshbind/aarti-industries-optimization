@@ -205,7 +205,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 />
               )}
           </div>
-          <div className="mt-[28px]">
+          <div className="mt-[28px]" data-lenis-prevent-touch>
             <Swiper
               key={`in-headlines-${isDesktopPointer}`}
               spaceBetween={15}

@@ -3,7 +3,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
-import { useGSAP } from "../contexts/GSAPContext";
+import { useLenis } from "../contexts/LenisContext";
 
 type PopupProps = {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export default function Popup({
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(isOpen);
   const isAnimatingRef = useRef(false);
-  const { stopLenis, startLenis } = useGSAP();
+  const { stopLenis, startLenis } = useLenis();
 
   // Handle body overflow when popup is open
   useEffect(() => {

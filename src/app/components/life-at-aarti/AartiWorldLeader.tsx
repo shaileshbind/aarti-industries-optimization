@@ -151,7 +151,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
               })}
             </div>
 
-            <div className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]">
+            <div className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]" data-lenis-prevent-touch>
               <Swiper
                 key={`aarti-world-leader-${isDesktopPointer}`}
                 slidesPerView={1}

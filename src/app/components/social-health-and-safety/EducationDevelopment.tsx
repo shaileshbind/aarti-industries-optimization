@@ -249,7 +249,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
           </div>
 
           {cards?.length > 0 && (
-            <div ref={containerRef} className="w-full">
+            <div ref={containerRef} className="w-full" data-lenis-prevent-touch>
               <Swiper
                 key={`education-development-${isDesktopPointer}`}
                 modules={[

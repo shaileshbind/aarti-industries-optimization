@@ -52,7 +52,7 @@ const EventPopup = ({ event }: EventPopupProps) => {
 
       {/* Image Gallery */}
       {imagesToShow && imagesToShow.length > 0 && (
-        <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
+        <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]" data-lenis-prevent-touch>
           <Swiper
             key={`event-gallery-${isDesktopPointer}`}
             modules={[FreeMode, ...(isDesktopPointer ? [Mousewheel] : [])]}

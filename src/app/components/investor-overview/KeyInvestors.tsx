@@ -4,6 +4,7 @@ import { BodyText2, SubH1 } from "../Typography2";
 import Link from "next/link";
 import Image from "next/image";
 import InvestorBarChart from "../InvestorBarChart";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 import { InvestorKeyProps } from "@/app/types/investor-overview.type";
 import { FadeInReveal } from "../ScrollReveal";
 
@@ -20,9 +21,8 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
               {leftSection?.title}
             </SubH1>
           )}
-          <div
+          <SmoothScrollContainer
             className="mt-[24px] lg:mt-[28px] max-h-[unset] lg:max-h-[550px] lg:overflow-y-auto investorScrollbar grid gap-y-[18px] bg-gradient-orange-1 rounded-[12px] px-[20px] py-[30px] lg:p-[36px]"
-            data-lenis-prevent
           >
             {leftSection?.content?.map((items) => {
               const url = items?.file?.url ?? items?.link;
@@ -57,7 +57,7 @@ const KeyInvestors = ({ data }: InvestorKeyProps) => {
                 </div>
               );
             })}
-          </div>
+          </SmoothScrollContainer>
         </div>
         <div>
           {rightSection?.title && (

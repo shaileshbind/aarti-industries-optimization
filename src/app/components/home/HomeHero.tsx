@@ -227,6 +227,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       })()}
       {data?.banner?.length > 0 && (
         <Swiper
+          data-lenis-prevent-touch
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
             if (swiper.autoplay) {

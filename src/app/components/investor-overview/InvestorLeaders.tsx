@@ -145,7 +145,7 @@ const InvestorLeaders = ({ data }: InvestorPeopleProps) => {
               })}
             </div>
 
-            <div className="mt-[30px] max-w-[unset] xl:max-w-[560px]">
+            <div className="mt-[30px] max-w-[unset] xl:max-w-[560px]" data-lenis-prevent-touch>
               <Swiper
                 key={`investor-leaders-${isDesktopPointer}`}
                 slidesPerView={1}

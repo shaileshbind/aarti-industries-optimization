@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import OrangeTabCard from "../cards/OrangeTabCard";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 import Button from "../Button";
 import clsx from "clsx";
 import FormControl from "@mui/material/FormControl";
@@ -148,9 +149,8 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
         )}
       >
         {/* Report list */}
-        <div
+        <SmoothScrollContainer
           className="lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
-          data-lenis-prevent
         >
           {/* Desktop - show all */}
           <div className="hidden lg:block">
@@ -208,7 +208,7 @@ export default function SimpleListing({ reportLayout }: SimpleListingProps) {
               <Button secondary title="View more" />
             </div>
           )}
-        </div>
+        </SmoothScrollContainer>
       </div>
     </div>
   );

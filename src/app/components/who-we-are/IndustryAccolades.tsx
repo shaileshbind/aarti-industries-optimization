@@ -284,7 +284,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       )}
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
-        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]">
+        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]" data-lenis-prevent-touch>
           <Swiper
             key={`industry-accolades-${isDesktopPointer}`}
             onSwiper={(swiper) => {
