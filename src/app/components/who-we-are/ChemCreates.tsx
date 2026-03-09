@@ -36,7 +36,7 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
 
       {blog_case_studies && blog_case_studies.length > 0 && (
         <FadeInReveal delay={0.6}>
-          <div className="mt-[36px] lg:mt-[40px]">
+          <div className="mt-[36px] lg:mt-[40px]" data-lenis-prevent-touch>
             <Swiper
               key={`chem-creates-${isDesktopPointer}`}
               slidesPerView={1.2}

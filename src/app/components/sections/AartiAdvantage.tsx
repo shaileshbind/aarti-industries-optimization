@@ -472,6 +472,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <Swiper
+                    data-lenis-prevent-touch
                     key={`aarti-advantage-${isDesktopPointer}`}
                     modules={[
                       Navigation,

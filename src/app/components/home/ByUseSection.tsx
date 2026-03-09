@@ -325,6 +325,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>
                   <Swiper
+                    data-lenis-prevent-touch
                     key={`swiper-${active}-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}

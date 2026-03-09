@@ -103,7 +103,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
 
         {/* Swiper */}
         {card?.length > 0 && (
-          <div className="grid grid-cols-2 gap-[60px]">
+          <div className="grid grid-cols-2 gap-[60px]" data-lenis-prevent-touch>
             <Swiper
               effect="fade"
               modules={[Autoplay]}

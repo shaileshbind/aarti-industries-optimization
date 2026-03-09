@@ -22,7 +22,7 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
   return (
     <div className="my-[50px] lg:my-[100px] mb-[80px] lg:mb-[100px]">
       <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
-      <div className="lg:mt-[52px] mt-[30px]">
+      <div className="lg:mt-[52px] mt-[30px]" data-lenis-prevent-touch>
         <Swiper
           key={`env-latest-${isDesktopPointer}`}
           spaceBetween={24}

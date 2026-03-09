@@ -217,7 +217,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
           </div>
 
           {card?.length > 0 && (
-            <div ref={containerRef} className="w-full">
+            <div ref={containerRef} className="w-full" data-lenis-prevent-touch>
               <Swiper
                 key={`campus-flagship-${isDesktopPointer}`}
                 modules={[

@@ -601,7 +601,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           >
             {/* Desktop Slider */}
             <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
-              <div>
+              <div data-lenis-prevent-touch>
                 <Swiper
                   slidesPerView={1.2}
                   spaceBetween={32}
@@ -748,7 +748,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       </div>
                     )}
                   </div>
-                  <div className="grid items-center gap-6 mt-4">
+                  <div className="grid items-center gap-6 mt-4" data-lenis-prevent-touch>
                     {isMobile && (
                       <Swiper
                         slidesPerView={1}
