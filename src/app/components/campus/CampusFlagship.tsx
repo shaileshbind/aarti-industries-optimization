@@ -257,7 +257,6 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
             <div
               ref={containerRef}
               className="w-full"
-              data-lenis-prevent-touch
               onTouchStart={handleSliderTouchStart}
               onTouchMove={handleSliderTouchMove}
               onTouchEnd={handleSliderTouchEnd}
