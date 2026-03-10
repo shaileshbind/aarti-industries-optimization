@@ -12,6 +12,7 @@ import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ANIMATION_END_PROGRESS = 0.55;
 
@@ -49,6 +50,41 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   });
   const [slideWidth, setSlideWidth] = useState(0);
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Get slideWidth from the actual div width after component mounts
   useLayoutEffect(() => {
@@ -706,7 +742,11 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         >
           <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
             {mainSection?.length > 0 && !isTablet && (
-              <div>
+              <div
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+              >
                 <Swiper
                   slidesPerView={1.2}
                   spaceBetween={32}
@@ -858,7 +898,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           className="mt-[16px] lg:mt-[32px] pb-[50px] lg:pb-[unset]"
           ref={sliderContainerRef}
         >
-          <div className="grid items-center">
+          <div className="grid items-center" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
             {isTablet && (
               <Swiper
                 slidesPerView={1}

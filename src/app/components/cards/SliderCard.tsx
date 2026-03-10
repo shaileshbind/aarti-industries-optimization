@@ -26,6 +26,7 @@ interface SliderCardProps {
   bullets?: bulletProp[];
   imageWrapperRef?: React.RefObject<HTMLDivElement>;
   index?: number;
+  slideForHomePage?: boolean;
 }
 
 const SliderCard: FC<SliderCardProps> = ({
@@ -39,6 +40,7 @@ const SliderCard: FC<SliderCardProps> = ({
   bullets,
   imageWrapperRef,
   index,
+  slideForHomePage = false,
 }) => {
   return (
     <>
@@ -46,7 +48,8 @@ const SliderCard: FC<SliderCardProps> = ({
       <div className="lg:hidden">
         <div
           className={clsx(
-            "relative w-full pt-[60%] h-[250px] lg:h-[300px] mb-[10px] lg:mb-[unset]",
+            "relative w-full " + (slideForHomePage ? "aspect-[1/1]" : "pt-[60%] h-[250px] lg:h-[300px]"),
+            "mb-[10px] lg:mb-[unset]",
             "overflow-hidden rounded-[1rem] flex items-center justify-center",
           )}
         >

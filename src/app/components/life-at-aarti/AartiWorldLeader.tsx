@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import "swiper/css";
@@ -10,6 +10,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { LAAWorldProps } from "@/app/types/life-at-aarti.type";
 import { FadeInReveal } from "../ScrollReveal";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const { title, leadersCard } = data;
@@ -19,6 +20,41 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   useEffect(() => {
     const swiper = swiperRef.current;
@@ -151,7 +187,12 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
               })}
             </div>
 
-            <div className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]" data-lenis-prevent-touch>
+            <div
+              className="mt-[30px] md:max-w-[350px] lg:max-w-[560px]"
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
+            >
               <Swiper
                 key={`aarti-world-leader-${isDesktopPointer}`}
                 slidesPerView={1}

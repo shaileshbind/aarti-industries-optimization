@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { H3, SubH3 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";
 import { Autoplay } from "swiper/modules";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const { title, description, card } = data;
@@ -18,6 +19,41 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState<number>(0);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Intersection Observer for autoplay control
   useEffect(() => {
@@ -103,7 +139,12 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
 
         {/* Swiper */}
         {card?.length > 0 && (
-          <div className="grid grid-cols-2 gap-[60px]" data-lenis-prevent-touch>
+          <div
+            className="grid grid-cols-2 gap-[60px]"
+            onTouchStart={handleSliderTouchStart}
+            onTouchMove={handleSliderTouchMove}
+            onTouchEnd={handleSliderTouchEnd}
+          >
             <Swiper
               effect="fade"
               modules={[Autoplay]}

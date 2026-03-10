@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,6 +19,7 @@ import Popup from "../Popup";
 import clsx from "clsx";
 import { FadeInReveal } from "../ScrollReveal";
 import SplitText from "../SplitText";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const MeetMinds: React.FC<MeetMindsProps> = ({
   data,
@@ -38,6 +39,41 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   );
   const [hoveredIndex, sethoveredIndex] = useState<number | null>(null);
   const [isInViewport, setIsInViewport] = useState(false);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Intersection Observer for viewport detection
   useEffect(() => {
@@ -94,7 +130,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
         {/* Swiper */}
         <FadeInReveal delay={0.6}>
           {management_boards?.length > 0 && (
-            <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]" data-lenis-prevent-touch>
+            <div className="mt-[36px] lg:mt-[40px] ml-[20px] lg:ml-[60px]"  onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
               <Swiper
                 key={`meet-minds-${isDesktopPointer}`}
                 onSwiper={(swiper) => {
