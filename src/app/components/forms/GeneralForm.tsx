@@ -300,7 +300,7 @@ export default function GeneralForm({
   const onSubmit = async (data: FormValues) => {
     // Clear any previous error messages
     setSubmitError("");
-    
+
     // Determine if Salesforce lead applies
     const sendEmail = true;
     const hasSalesforceLead =
@@ -371,7 +371,7 @@ export default function GeneralForm({
         } catch (parseError) {
           console.error("Error parsing response:", parseError);
         }
-        
+
         // Auto-clear error message after 5 seconds
         setTimeout(() => {
           setSubmitError("");
@@ -380,7 +380,7 @@ export default function GeneralForm({
     } catch (error) {
       setSubmitError("Failed to submit the form. Please try again later.");
       console.error("Request failed:", error);
-      
+
       // Auto-clear error message after 5 seconds
       setTimeout(() => {
         setSubmitError("");
@@ -390,7 +390,7 @@ export default function GeneralForm({
 
   // --- Form JSX ---
   return (
-    <div data-lenis-prevent className="w-full">
+    <div className="w-full">
       {showTitle && (
         <div>
           <p className="text-xl text-[#002F50]">Recipient Information</p>
@@ -490,15 +490,15 @@ export default function GeneralForm({
                 if (!value) {
                   return "Phone number is required";
                 }
-                
+
                 // Must contain only digits (country code + phone number)
                 if (!/^\d+$/.test(value)) {
                   return "Phone number must contain only digits";
                 }
-                
+
                 // Check if India (+91) is selected or if value starts with 91
                 const isIndia = selectedCountryCode === "91" || value.startsWith("91");
-                
+
                 if (isIndia) {
                   // For India: exactly 10 digits after country code (total 12 digits)
                   const phoneDigits = value.replace(/^91/, ""); // Remove country code
@@ -507,7 +507,7 @@ export default function GeneralForm({
                   }
                   return true;
                 }
-                
+
                 // For other countries: 7-15 digits total (E.164 standard allows up to 15 digits)
                 // Setting reasonable min of 8 to account for short country codes + phone digits
                 if (value.length < 8) {
@@ -539,9 +539,8 @@ export default function GeneralForm({
                   enableSearch
                   searchPlaceholder="Search Country"
                   disableSearchIcon
-                  buttonClass={`w-[60px] border-2 ${
-                    errors.phone && "!border-[#d32f2f]"
-                  }`}
+                  buttonClass={`w-[60px] border-2 ${errors.phone && "!border-[#d32f2f]"
+                    }`}
                   placeholder="Phone no *"
                   onChange={(value, countryData) => {
                     // Extract country code from the country object or value

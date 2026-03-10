@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { H2, BodyText1 } from "../Typography2";
-import { FadeInRevealBlur } from "../ScrollReveal";
+import { FadeInReveal } from "../ScrollReveal";
 import Button from "../Button";
 import { FourtyYearsProps } from "@/app/types/home.type";
 
@@ -75,18 +75,18 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
         {/* Text content */}
         <div className="max-w-[unset] lg:max-w-[880px] mx-auto text-center mt-4">
           {sectionTitle && (
-            <FadeInRevealBlur>
+            <FadeInReveal>
               {<H2 className="text-orange-100 font-light">{sectionTitle}</H2>}
-            </FadeInRevealBlur>
+            </FadeInReveal>
           )}
 
           {title && (
-            <FadeInRevealBlur delay={0.1}>
+            <FadeInReveal delay={0.1}>
               <H2 className="text-[#002F50]">{title}</H2>
-            </FadeInRevealBlur>
+            </FadeInReveal>
           )}
 
-          <FadeInRevealBlur>
+          <FadeInReveal>
             {description && (
               <BodyText1 className="mt-[16px] md:mt-[20px] text-grey-400">
                 {description}
@@ -100,17 +100,16 @@ const DetailsContainer: React.FC<FourtyYearsProps> = ({
                 <div className="my-[36px]">
                   <Button
                     title={ctaButton?.title}
-                    href={`${
-                      ctaButton?.hasExternalLink == "true"
+                    href={`${ctaButton?.hasExternalLink == "true"
                         ? ctaButton?.externalLink
                         : ctaButton?.link?.link
-                    }`}
+                      }`}
                     className="!px-2 md:!px-[22px]"
                     useTargetBlank={ctaButton?.hasExternalLink == "true"}
                   />
                 </div>
               )}
-          </FadeInRevealBlur>
+          </FadeInReveal>
         </div>
         {/* Bottom Line */}
         {showBottomLine && (
