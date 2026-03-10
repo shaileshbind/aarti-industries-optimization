@@ -46,6 +46,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     width: 0,
     visible: false,
   });
+  const [showMobileTabs, setShowMobileTabs] = useState(false);
+  const showMobileTabsRef = useRef(false);
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const slideWidthRef = useRef(0);
   const [hasMounted, setHasMounted] = useState(false);
@@ -668,15 +670,37 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         //     }
         //   }
         // }
-       
+     
+        const firstEl = document.getElementById("tabsustain-0");
+        const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
+        if (firstEl && lastEl) {
+          const firstTop = firstEl.getBoundingClientRect().top;
+          const lastBottom = lastEl.getBoundingClientRect().bottom;
+          const enteredSection = firstTop <= window.innerHeight * 0.45;
+          const notPastSection = lastBottom > 160;
+          const shouldShowTabs = enteredSection && notPastSection;
+
+          if (shouldShowTabs !== showMobileTabsRef.current) {
+            showMobileTabsRef.current = shouldShowTabs;
+            setShowMobileTabs(shouldShowTabs);
+          }
+        }
 
         ticking = false;
       });
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isTablet, mainSection]);
+
+  useEffect(() => {
+    if (!isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
+  }, [isTablet]);
 
   return (
     <>
@@ -931,7 +955,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         </div>
       </div>
     </div>
-    <div className="fixed top-[110px] w-full flex justify-center items-center hideinnextsection" ref={tabBarContainerRef}>
+    <div className={`fixed top-[110px] w-full flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}ref={tabBarContainerRef}>
     {mainSection?.length > 0 && isTablet && (
       <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
         <div
