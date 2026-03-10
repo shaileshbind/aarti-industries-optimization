@@ -60,7 +60,6 @@ const EnvLatest = ({ data }: EnvLifeProps) => {
       <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
       <div
         className="lg:mt-[52px] mt-[30px]"
-        data-lenis-prevent-touch
         onTouchStart={handleSliderTouchStart}
         onTouchMove={handleSliderTouchMove}
         onTouchEnd={handleSliderTouchEnd}

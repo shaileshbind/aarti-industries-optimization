@@ -501,7 +501,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     onTouchEnd={handleSliderTouchEnd}
                   >
                   <Swiper
-                    data-lenis-prevent-touch
                     key={`rd-analytical-section-${isDesktopPointer}`}
                     modules={[
                       Navigation,
