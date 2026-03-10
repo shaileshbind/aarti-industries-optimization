@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
@@ -12,6 +12,7 @@ import clsx from "clsx";
 import { FadeInReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
@@ -28,7 +29,40 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const [offsetAfter, setOffsetAfter] = useState(0);
   const [isImageAnimating, setIsImageAnimating] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Holds the index of the image being displayed
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
 
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
   const slidesPerView = 1;
   const spaceBetween = 80;
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
@@ -253,7 +287,11 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </div>
 
             {card?.length > 0 && (
-              <div ref={containerRef} className="w-full" data-lenis-prevent-touch>
+              <div ref={containerRef} className="w-full"
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
+              >
                 <Swiper
                   key={`framework-forged-${isDesktopPointer}`}
                   modules={[

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -14,6 +14,8 @@ import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
+
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");
@@ -208,10 +210,49 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     };
   }, []);
 
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
+
   return (
     <div
       ref={wrapperRef}
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
+      onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
     >
       {/* Conditional overlay - lighter for video slides on desktop */}
       {(() => {
@@ -227,7 +268,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       })()}
       {data?.banner?.length > 0 && (
         <Swiper
-          data-lenis-prevent-touch
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
             if (swiper.autoplay) {

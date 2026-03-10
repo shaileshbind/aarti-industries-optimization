@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
@@ -13,6 +13,7 @@ import TitleCard from "../cards/TitleCard";
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
 import Link from "next/link";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ByUseSection: React.FC<ByUseSectionProps> = ({
   data,
@@ -23,7 +24,40 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
   const [, setIsTransitioning] = useState(false);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
 
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -321,11 +355,15 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
           </div>
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">
-            <div className="relative">
+            <div className="relative"
+            
+            onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+            >
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>
                   <Swiper
-                    data-lenis-prevent-touch
                     key={`swiper-${active}-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}
