@@ -14,6 +14,7 @@ import { formatDate } from "../../../../utils/formatDate";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 type PostContent = {
   id?: string | number;
@@ -62,6 +63,40 @@ type NormalizedCard = {
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
   const toArray = <T,>(value?: T | T[]) =>
     Array.isArray(value) ? value : value ? [value] : [];
   const resolveLink = (button?: ButtonHomeProps | ButtonProps) =>
@@ -499,9 +534,13 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         )}
         {postsCount > 0 && (
           <FadeInReveal delay={0.6}>
-            <div className="mt-[52px]" ref={cardsWrapRef}>
+            <div className="mt-[52px]" ref={cardsWrapRef}
+               onTouchStart={handleSliderTouchStart}
+               onTouchMove={handleSliderTouchMove}
+               onTouchEnd={handleSliderTouchEnd}
+            >
               <Swiper
-                data-lenis-prevent-touch
+                
                 key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
