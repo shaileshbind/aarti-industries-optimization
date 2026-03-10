@@ -178,12 +178,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
 
   useEffect(() => {
     const section = wrapperRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper) return;
+
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (swiper.autoplay && !swiper.autoplay.running) {
@@ -193,6 +194,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           } else {
             if (swiper.autoplay && swiper.autoplay.running) {
               swiper.autoplay.stop();
+              resetProgressBar();
             }
           }
         });
@@ -208,7 +210,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isDesktopPointer]);
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -270,12 +272,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         <Swiper
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
-            if (swiper.autoplay) {
-              swiper.autoplay.stop();
-            }
-            setTimeout(() => {
-              controlVideos(activeIndexRef.current);
-            }, 100);
+            controlVideos(activeIndexRef.current);
+            startProgressBar();
           }}
           onSlideChangeTransitionStart={(swiper) => {
             const realIndex =
@@ -293,33 +291,15 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
               !isMobile
                 ? 30000
                 : 5000;
-            if (swiperRef.current && swiperRef.current.autoplay) {
-              swiperRef.current.autoplay.stop();
-              if (
-                swiperRef.current.params.autoplay &&
-                typeof swiperRef.current.params.autoplay === "object"
-              ) {
-                swiperRef.current.params.autoplay.delay = delay;
-              }
+            if (
+              swiperRef.current?.params.autoplay &&
+              typeof swiperRef.current.params.autoplay === "object"
+            ) {
+              swiperRef.current.params.autoplay.delay = delay;
             }
           }}
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
-            // Restart autoplay with updated delay
-            if (swiperRef.current && swiperRef.current.autoplay) {
-              swiperRef.current.autoplay.start();
-            }
-          }}
-          on={{
-            transitionStart: (swiper: SwiperType) => {
-              const realIndex =
-                swiper.realIndex !== undefined
-                  ? swiper.realIndex
-                  : swiper.activeIndex % data?.banner?.length;
-
-              activeIndexRef.current = realIndex;
-              setActive(realIndex);
-            },
           }}
           key={`home-hero-${isDesktopPointer}`}
           slidesPerView={1}

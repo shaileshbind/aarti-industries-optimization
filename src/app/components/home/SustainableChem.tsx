@@ -10,6 +10,7 @@ import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { useLenis } from "@/app/contexts/LenisContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ANIMATION_END_PROGRESS = 0.55;
@@ -49,6 +50,41 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const slideWidthRef = useRef(0);
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => { setHasMounted(true); }, []);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   useLayoutEffect(() => {
     const measureSlideWidth = () => {
@@ -296,9 +332,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             susLogotr.current,
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
-              width: window.innerWidth - 40,
-              height: "250px",
-              right: 20,
+              width: window.innerWidth - 30,
+              height: window.innerWidth - 30,
+              right: 15,
               top: "170px",
               duration: 1,
             },
@@ -762,7 +798,11 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         >
           <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
             {mainSection?.length > 0 && !isTablet && (
-              <div>
+              <div
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+              >
                 <Swiper
                   slidesPerView={1.2}
                   loop={false}
@@ -880,6 +920,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         imageWrapperRef as React.RefObject<HTMLDivElement>
                       }
                       index={index}
+                      slideForHomePage={true}
                     />
                     </div>
                 ))}

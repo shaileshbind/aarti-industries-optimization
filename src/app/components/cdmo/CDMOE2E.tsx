@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH2 } from "../Typography2";
 import "swiper/css";
@@ -11,6 +11,7 @@ import { WordReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { CDMOE2EProps } from "@/app/types/cdmo.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
@@ -20,6 +21,41 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   const handleSlideChange = (index: number) => {
     swiperRef.current?.slideTo(index);
@@ -86,7 +122,12 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
 
           {/* RIGHT SIDE – DYNAMIC IMAGE SECTION */}
 
-          <div className="relative">
+          <div
+            className="relative"
+            onTouchStart={handleSliderTouchStart}
+            onTouchMove={handleSliderTouchMove}
+            onTouchEnd={handleSliderTouchEnd}
+          >
             <Swiper
               key={`cdmo-e2e-${isDesktopPointer}`}
               onSwiper={(swiper) => {

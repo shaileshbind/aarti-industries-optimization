@@ -12,6 +12,7 @@ import FaqAccordion from "../FaqAccordian";
 import clsxN from "../../../../utils/clsxN";
 import { DrivingTabsSectionProps as DrivingTabsSectionPropsType } from "@/app/types/social-health-and-safety.type";
 import { FadeInReveal } from "../ScrollReveal";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 type DrivingTabsSectionProps = {
   data: DrivingTabsSectionPropsType[];
@@ -37,6 +38,41 @@ const DrivingTabsSection = ({
   const pausedProgressRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   const startProgress = useCallback(() => {
     if (rafRef.current) {
@@ -230,6 +266,11 @@ const DrivingTabsSection = ({
           </div>
         )}
         {/* Content Slides */}
+        <div
+          onTouchStart={handleSliderTouchStart}
+          onTouchMove={handleSliderTouchMove}
+          onTouchEnd={handleSliderTouchEnd}
+        >
         <Swiper
           modules={[EffectFade]}
           effect="fade"
@@ -358,6 +399,7 @@ const DrivingTabsSection = ({
             </SwiperSlide>
           ))}
         </Swiper>
+        </div>
       </div>
       {/* Mobile Accordion */}
       {data?.length > 0 && (

@@ -13,6 +13,7 @@ import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const { title, awards } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
@@ -29,6 +30,41 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const [isInViewport, setIsInViewport] = useState(false);
   const progressAnimationRef = useRef<gsap.core.Tween | null>(null);
   const savedProgressRef = useRef<{ [key: number]: number }>({});
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Scroll active tab into view
   const scrollActiveTabIntoView = useCallback((index: number) => {
@@ -284,7 +320,7 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       )}
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
-        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]" data-lenis-prevent-touch>
+        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
           <Swiper
             key={`industry-accolades-${isDesktopPointer}`}
             onSwiper={(swiper) => {
