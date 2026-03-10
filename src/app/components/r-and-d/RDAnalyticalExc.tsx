@@ -418,7 +418,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     onTouchEnd={handleSliderTouchEnd}
                   >
                   <Swiper
-                    data-lenis-prevent-touch
                     key={`rd-analytical-${isDesktopPointer}`}
                     slidesPerView={
                       typeof window !== "undefined" && window.innerWidth < 1024
