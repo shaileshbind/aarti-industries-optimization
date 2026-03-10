@@ -78,8 +78,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
 
   type ImageArrayType =
     | {
-        image?: ImageProps;
-      }[]
+      image?: ImageProps;
+    }[]
     | undefined;
 
   // if not enough images on mobile add one -
@@ -382,7 +382,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         )}
 
         {description && (
-          <FadeInReveal delay={0.3}>
+          <FadeInReveal>
             <BodyText1 className="mt-[20px] text-grey-400  max-w-[unset] lg:max-w-[640px] mx-auto text-center font-roboto">
               {description}
             </BodyText1>
@@ -390,7 +390,7 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
         )}
 
         {ctaButton?.title && (
-          <FadeInReveal delay={0.3}>
+          <FadeInReveal>
             <div className="mt-[36px] w-fit mx-auto">
               {ctaButton?.title &&
                 (ctaButton?.hasExternalLink === "true"

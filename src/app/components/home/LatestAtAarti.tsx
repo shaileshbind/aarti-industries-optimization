@@ -167,35 +167,35 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cards: NormalizedCard[] = Array.isArray(card)
     ? (card as NormalizedCard[])
     : ([
-        card?.news && {
-          id: card.news.id ?? "news",
-          type: "news",
-          category: card.news.category ?? "News",
-          postContent: toArray(card.news.news).map((item) => ({
-            ...item,
-            description: item.newsDescription,
-            link: resolveLink(item.ctaButton),
-          })),
-          ctaButton: card.news.ctaButton,
-        },
-        reportPub && {
-          id: reportPubRoot?.id ?? "annualReports",
-          type: "annualReports",
-          category: reportPubRoot?.category ?? "Reports",
-          postContent: reportsPostContent,
-          ctaButton: reportPubRoot?.ctaButton,
-        },
-        card?.events && {
-          id: card.events.id ?? "events",
-          type: "events",
-          category: card.events.category ?? "Events",
-          postContent: toArray(card.events.events).map((item) => ({
-            ...item,
-            link: resolveLink(item.ctaButton),
-          })),
-          ctaButton: card.events.ctaButton,
-        },
-      ].filter(Boolean) as NormalizedCard[]);
+      card?.news && {
+        id: card.news.id ?? "news",
+        type: "news",
+        category: card.news.category ?? "News",
+        postContent: toArray(card.news.news).map((item) => ({
+          ...item,
+          description: item.newsDescription,
+          link: resolveLink(item.ctaButton),
+        })),
+        ctaButton: card.news.ctaButton,
+      },
+      reportPub && {
+        id: reportPubRoot?.id ?? "annualReports",
+        type: "annualReports",
+        category: reportPubRoot?.category ?? "Reports",
+        postContent: reportsPostContent,
+        ctaButton: reportPubRoot?.ctaButton,
+      },
+      card?.events && {
+        id: card.events.id ?? "events",
+        type: "events",
+        category: card.events.category ?? "Events",
+        postContent: toArray(card.events.events).map((item) => ({
+          ...item,
+          link: resolveLink(item.ctaButton),
+        })),
+        ctaButton: card.events.ctaButton,
+      },
+    ].filter(Boolean) as NormalizedCard[]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
@@ -452,7 +452,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
-      <FadeInReveal delay={0.6}>
+      <FadeInReveal>
         <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
           {sectionTitle && (
             <div className="max-w-[100%] md:max-w-fit">
@@ -464,7 +464,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
         {hasCards && (
-          <FadeInReveal delay={0.6}>
+          <FadeInReveal>
             <div className="px-[20px] lg:px-[60px]">
               <div className="flex items-center justify-between gap-6">
                 <div className="max-w-[100%] md:max-w-fit overflow-x-auto">
@@ -498,11 +498,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                               }
                             }}
                             onClick={() => handleTabClick(index)}
-                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
-                              activeTab === index
-                                ? "text-white"
-                                : "hover:bg-grey-200"
-                            }`}
+                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${activeTab === index
+                              ? "text-white"
+                              : "hover:bg-grey-200"
+                              }`}
                           >
                             {item.category}
                           </div>
@@ -533,14 +532,14 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           </FadeInReveal>
         )}
         {postsCount > 0 && (
-          <FadeInReveal delay={0.6}>
+          <FadeInReveal>
             <div className="mt-[52px]" ref={cardsWrapRef}
-               onTouchStart={handleSliderTouchStart}
-               onTouchMove={handleSliderTouchMove}
-               onTouchEnd={handleSliderTouchEnd}
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
             >
               <Swiper
-                
+
                 key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}

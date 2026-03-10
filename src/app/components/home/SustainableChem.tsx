@@ -379,9 +379,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           )
           .fromTo(
             tabBarContainerRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.5, zIndex: 22 },
-            "<",
+            { opacity: 0, y: -100 },
+            { opacity: 1, y: 0, duration: 0.3, zIndex: 22 },
+            "<0.2",
           )
           // .fromTo(
           //   ".sliderStagger",
@@ -641,18 +641,18 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         // if (tabBarContainerRef.current) {
         //   const firstEl = document.getElementById(`tabsustain-0`);
         //   const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
-          
+
         //   if (firstEl && lastEl) {
         //     const lastBottom = lastEl.getBoundingClientRect().bottom;
         //     const firstTop = firstEl.getBoundingClientRect().top;
         //     // console.log('firstTop', firstTop, 'lastBottom', lastBottom);
-        
+
         //     // Hide when last slide bottom goes past 50% of screen
         //     const shouldHide = lastBottom < window.innerHeight / 0.5 ;
-            
+
         //     // Only re-show when user has scrolled back up enough to see first slide area
         //     const shouldShow = firstTop > -100;
-        
+
         //     if (shouldHide && !tabBarHidden.current) {
         //       tabBarHidden.current = true;
         //       // gsap.to(tabBarContainerRef.current, {
@@ -670,7 +670,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         //     }
         //   }
         // }
-     
+
         const firstEl = document.getElementById("tabsustain-0");
         const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
         if (firstEl && lastEl) {
@@ -704,215 +704,249 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
   return (
     <>
-    <div
-      ref={triggerRef}
-      className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
-    >
       <div
-        ref={titleSection}
-        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
+        ref={triggerRef}
+        className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
       >
-        <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
-          {leftText && (
-            <span ref={headinLeft}>
-              <H2>{leftText}</H2>
-            </span>
-          )}
-
-          {mainSection?.[0]?.image?.url && (
-            <div
-              ref={sustainbleLogo}
-              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
-            >
-              <span
-                ref={sustainInner}
-                className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
-              >
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotl}
-                    className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className=" scale-110 object-cover"
-                    />
-                  </i>
-                )}
-
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotr}
-                    className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
-                  >
-                    <span
-                      ref={susLogoinnerblurtr}
-                      className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="100px"
-                        className=" object-cover blur scale-110"
-                      />
-                    </span>
-                    <span
-                      ref={leafBigImg}
-                      className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="100px"
-                        className="leafBigImg scale-110 object-cover"
-                      />
-                    </span>
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobr}
-                    className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobl}
-                    className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-              </span>
-            </div>
-          )}
-          {rightText && (
-            <span ref={headinRight}>
-              <H2>{rightText}</H2>
-            </span>
-          )}
-        </div>
         <div
-          ref={envSlider}
-          className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          ref={titleSection}
+          className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
         >
-          <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-            {mainSection?.length > 0 && !isTablet && (
+          <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
+            {leftText && (
+              <span ref={headinLeft}>
+                <H2>{leftText}</H2>
+              </span>
+            )}
+
+            {mainSection?.[0]?.image?.url && (
               <div
-                onTouchStart={handleSliderTouchStart}
-                onTouchMove={handleSliderTouchMove}
-                onTouchEnd={handleSliderTouchEnd}
+                ref={sustainbleLogo}
+                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
               >
-                <Swiper
-                  slidesPerView={1.2}
-                  loop={false}
-                  allowTouchMove={false}
-                  speed={600}
-                  watchSlidesProgress={true}
-                  updateOnWindowResize={true}
-                  className="w-full h-auto"
-                  onSwiper={(swiper) => {
-                    swiperRef.current = swiper;
-                    swiper.on("resize", () => {
-                      swiper.updateSize();
-                      swiper.updateSlides();
-                      swiper.updateProgress();
-                      swiper.updateSlidesClasses();
-                    });
-                  }}
-                  onSlideChange={(swiper) => {
-                    setActiveTab(swiper.activeIndex);
-                  }}
+                <span
+                  ref={sustainInner}
+                  className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
                 >
-                  {mainSection.map((slide, index) => (
-                    <SwiperSlide key={slide.id}>
-                      <SliderCard
-                        imgSrc={slide?.image?.url}
-                        imgAlt={slide?.image?.alternativeText || "banner"}
-                        title={slide?.category}
-                        description={slide?.description}
-                        values={slide?.values}
-                        ctaButton={slide?.ctaButton}
-                        imageWrapperRef={
-                          imageWrapperRef as React.RefObject<HTMLDivElement>
-                        }
-                        index={index}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotl}
+                      className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className=" scale-110 object-cover"
                       />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                    </i>
+                  )}
+
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotr}
+                      className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
+                    >
+                      <span
+                        ref={susLogoinnerblurtr}
+                        className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="100px"
+                          className=" object-cover blur scale-110"
+                        />
+                      </span>
+                      <span
+                        ref={leafBigImg}
+                        className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="100px"
+                          className="leafBigImg scale-110 object-cover"
+                        />
+                      </span>
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobr}
+                      className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobl}
+                      className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                </span>
               </div>
             )}
-            <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
-              <div className="w-fit mx-auto">
-                {mainSection?.length > 0 && !isTablet && (
-                  <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-                    <div
-                      ref={containerRef}
-                      className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-                    >
-                      {/* Animated Indicator */}
+            {rightText && (
+              <span ref={headinRight}>
+                <H2>{rightText}</H2>
+              </span>
+            )}
+          </div>
+          <div
+            ref={envSlider}
+            className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          >
+            <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
+              {mainSection?.length > 0 && !isTablet && (
+                <div
+                  onTouchStart={handleSliderTouchStart}
+                  onTouchMove={handleSliderTouchMove}
+                  onTouchEnd={handleSliderTouchEnd}
+                >
+                  <Swiper
+                    slidesPerView={1.2}
+                    loop={false}
+                    allowTouchMove={false}
+                    speed={600}
+                    watchSlidesProgress={true}
+                    updateOnWindowResize={true}
+                    className="w-full h-auto"
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      swiper.on("resize", () => {
+                        swiper.updateSize();
+                        swiper.updateSlides();
+                        swiper.updateProgress();
+                        swiper.updateSlidesClasses();
+                      });
+                    }}
+                    onSlideChange={(swiper) => {
+                      setActiveTab(swiper.activeIndex);
+                    }}
+                  >
+                    {mainSection.map((slide, index) => (
+                      <SwiperSlide key={slide.id}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              )}
+              <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
+                <div className="w-fit mx-auto">
+                  {mainSection?.length > 0 && !isTablet && (
+                    <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                       <div
-                        aria-hidden="true"
-                        style={{
-                          position: "absolute",
-                          left: indicator.visible ? indicator.left : 0,
-                          top: 0,
-                          height: "100%",
-                          borderRadius: 9999,
-                          background: indicatorColor,
-                          width: indicator.visible ? indicator.width : 0,
-                          transition: indicatorTransition,
-                          zIndex: 0,
-                          pointerEvents: "none",
-                        }}
-                      />
+                        ref={containerRef}
+                        className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                      >
+                        {/* Animated Indicator */}
+                        <div
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            left: indicator.visible ? indicator.left : 0,
+                            top: 0,
+                            height: "100%",
+                            borderRadius: 9999,
+                            background: indicatorColor,
+                            width: indicator.visible ? indicator.width : 0,
+                            transition: indicatorTransition,
+                            zIndex: 0,
+                            pointerEvents: "none",
+                          }}
+                        />
 
-                      {/* Tab Buttons */}
-                      {mainSection?.map(
-                        (items, index) =>
-                          items?.category && (
-                            <div
-                              key={index}
-                              ref={(element) => {
-                                tabRefs.current[index] = element;
-                              }}
-                              onClick={() => handleTabClick(index)}
-                              className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${
-                                activeTab === index
-                                  ? "text-white"
-                                  : "hover:bg-grey-200"
-                              }`}
-                            >
-                              {items?.category}
-                            </div>
-                          ),
-                      )}
+                        {/* Tab Buttons */}
+                        {mainSection?.map(
+                          (items, index) =>
+                            items?.category && (
+                              <div
+                                key={index}
+                                ref={(element) => {
+                                  tabRefs.current[index] = element;
+                                }}
+                                onClick={() => handleTabClick(index)}
+                                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${activeTab === index
+                                    ? "text-white"
+                                    : "hover:bg-grey-200"
+                                  }`}
+                              >
+                                {items?.category}
+                              </div>
+                            ),
+                        )}
+                      </div>
                     </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          ref={mobileSliderContainerRef}
+          className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
+        >
+          <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]" >
+
+            <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
+              <div className="grid items-center">
+                {isTablet && (
+                  <div className="flex flex-col gap-y-[40px]">
+                    {mainSection.map((slide, index) => (
+                      <div key={index} id={`tabsustain-${index}`}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                          slideForHomePage={true}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -920,90 +954,54 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      
-      <div
-        ref={mobileSliderContainerRef}
-        className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
-      >
-        <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]" >
-        
-        <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
-          <div className="grid items-center">
-            {isTablet && (
-             <div className="flex flex-col gap-y-[40px]">
-                {mainSection.map((slide, index) => (
-                   <div key={index} id={`tabsustain-${index}`}>
-                    <SliderCard
-                      imgSrc={slide?.image?.url}
-                      imgAlt={slide?.image?.alternativeText || "banner"}
-                      title={slide?.category}
-                      description={slide?.description}
-                      values={slide?.values}
-                      ctaButton={slide?.ctaButton}
-                      imageWrapperRef={
-                        imageWrapperRef as React.RefObject<HTMLDivElement>
-                      }
-                      index={index}
-                      slideForHomePage={true}
-                    />
-                    </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-    <div className={`fixed top-[110px] w-full flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}ref={tabBarContainerRef}>
-    {mainSection?.length > 0 && isTablet && (
-      <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-        <div
-          ref={containerRef}
-          className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-        >
-          {/* Animated Indicator */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              left: indicator.visible ? indicator.left : 0,
-              top: 0,
-              height: "100%",
-              borderRadius: 9999,
-              background: indicatorColor,
-              width: indicator.visible ? indicator.width : 0,
-              transition: indicatorTransition,
-              zIndex: 0,
-              pointerEvents: "none",
-            }}
-          />
+      <div className={`fixed top-[110px] w-full flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`} ref={tabBarContainerRef}>
+        {mainSection?.length > 0 && isTablet && (
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+            <div
+              ref={containerRef}
+              className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+            >
+              {/* Animated Indicator */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: indicator.visible ? indicator.left : 0,
+                  top: 0,
+                  height: "100%",
+                  borderRadius: 9999,
+                  background: indicatorColor,
+                  width: indicator.visible ? indicator.width : 0,
+                  transition: indicatorTransition,
+                  zIndex: 0,
+                  pointerEvents: "none",
+                }}
+              />
 
-          {/* Tab Buttons */}
-          {mainSection?.map(
-            (items, index) =>
-              items?.category && (
-                <div
-                  key={index}
-                  ref={(element) => {
-                    tabRefs.current[index] = element;
-                  }}
-                  onClick={() => handlMobileTabClick(index)}
-                  className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                    activeTab === index
-                      ? "text-white"
-                      : "hover:bg-grey-200"
-                  }`}
-                >
-                  {items?.category}
-                </div>
-              ),
-          )}
-        </div>
+              {/* Tab Buttons */}
+              {mainSection?.map(
+                (items, index) =>
+                  items?.category && (
+                    <div
+                      key={index}
+                      ref={(element) => {
+                        tabRefs.current[index] = element;
+                      }}
+                      onClick={() => handlMobileTabClick(index)}
+                      className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${activeTab === index
+                          ? "text-white"
+                          : "hover:bg-grey-200"
+                        }`}
+                    >
+                      {items?.category}
+                    </div>
+                  ),
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    )}
-  </div>
-  </>
+    </>
   );
 };
 

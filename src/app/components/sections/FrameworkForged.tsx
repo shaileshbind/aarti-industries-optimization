@@ -5,7 +5,7 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Scrollbar,Mousewheel } from "swiper/modules";
+import { Autoplay, Navigation, Scrollbar, Mousewheel } from "swiper/modules";
 import { FrameworkForgedProps } from "@/app/types/home.type";
 import gsap from "gsap";
 import clsx from "clsx";
@@ -219,28 +219,26 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
       }}
     >
       {title && (
-        <FadeInReveal delay={0.6}>
+        <FadeInReveal >
           <H2 className="container block lg:hidden mb-[24px] text-blue-200">
             {title}
           </H2>
         </FadeInReveal>
       )}
-      <FadeInReveal delay={0.6}>
+      <FadeInReveal >
         <div
           className={clsx(
-            `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset] gap-x-[40px]  ${
-              layout === "imgLeftContentRight"
-                ? "lg:grid-cols-[45%_55%]"
-                : "lg:grid-cols-[45%_55%]"
+            `relative w-full grid grid-cols-1  px-[20px] lg:px-[unset] gap-x-[40px]  ${layout === "imgLeftContentRight"
+              ? "lg:grid-cols-[45%_55%]"
+              : "lg:grid-cols-[45%_55%]"
             }`,
           )}
         >
           <div
             className={clsx(
-              `${
-                layout === "imgLeftContentRight"
-                  ? " order-2 lg:order-2 lg:pl-20"
-                  : "lg:ml-[60px] order-2 lg:order-1"
+              `${layout === "imgLeftContentRight"
+                ? " order-2 lg:order-2 lg:pl-20"
+                : "lg:ml-[60px] order-2 lg:order-1"
               }`,
             )}
           >
@@ -263,11 +261,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     width={34}
                     height={34}
                     sizes="34px"
-                    className={`-rotate-180 swiper-button-prev-frame transition-opacity ${
-                      activeIndex > 0
+                    className={`-rotate-180 swiper-button-prev-frame transition-opacity ${activeIndex > 0
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
-                    }`}
+                      }`}
                   />
 
                   <Image
@@ -276,11 +273,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     width={34}
                     height={34}
                     sizes="34px"
-                    className={`swiper-button-next-frame transition-opacity ${
-                      activeIndex < card?.length - 1
+                    className={`swiper-button-next-frame transition-opacity ${activeIndex < card?.length - 1
                         ? "cursor-pointer opacity-100"
                         : "pointer-events-none opacity-30"
-                    }`}
+                      }`}
                   />
                 </div>
               </div>
@@ -288,9 +284,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
 
             {card?.length > 0 && (
               <div ref={containerRef} className="w-full"
-              onTouchStart={handleSliderTouchStart}
-              onTouchMove={handleSliderTouchMove}
-              onTouchEnd={handleSliderTouchEnd}
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
               >
                 <Swiper
                   key={`framework-forged-${isDesktopPointer}`}
@@ -358,10 +354,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       >
                         <div
                           className={clsx(
-                            ` relative w-full overflow-hidden ${
-                              layout === "imgLeftContentRight"
-                                ? " order-1 lg:order-1"
-                                : "lg:mr-[60px] order-1 lg:order-2 pt-[100%] md:pt-[unset]  md:h-[317px] lg:h-[640px]  lg:hidden block"
+                            ` relative w-full overflow-hidden ${layout === "imgLeftContentRight"
+                              ? " order-1 lg:order-1"
+                              : "lg:mr-[60px] order-1 lg:order-2 pt-[100%] md:pt-[unset]  md:h-[317px] lg:h-[640px]  lg:hidden block"
                             }`,
                           )}
                         >
@@ -517,10 +512,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
           </div>
           <div
             className={clsx(
-              ` relative w-full overflow-hidden ${
-                layout === "imgLeftContentRight"
-                  ? " order-1 lg:order-1"
-                  : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px]  lg:block hidden"
+              ` relative w-full overflow-hidden ${layout === "imgLeftContentRight"
+                ? " order-1 lg:order-1"
+                : "lg:mr-[60px] order-1 lg:order-2 h-[317px] lg:h-[640px]  lg:block hidden"
               }`,
             )}
           >
