@@ -338,7 +338,7 @@ export default function ProductInnerPage({
           isOpen={showGeneralPopup}
           setshowGeneralPopup={setshowGeneralPopup}
           document={document}
-          prefillCategory="Business Products / Services"
+          prefillCategory="Purchase from AIL"
           prefillSubCategory="Chemicals Products"
           prefillProduct={product?.productName}
         />

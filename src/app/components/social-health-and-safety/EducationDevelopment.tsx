@@ -338,7 +338,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                           )}
                       </ul>
                       {item?.repeatableCta && item.repeatableCta.length > 0 && (
-                        <div className="mt-[10px]">
+                        <div className="mt-[10px] grid gap-y-2">
                           {item.repeatableCta.map((cta, ctaIndex) => {
                             const hasValidLink =
                               (cta?.link?.link && cta.link.link.trim() !== "") ||

@@ -263,6 +263,7 @@ export default function YearQuarterListing({
 
   // Handler for subcategory selection - UPDATED
   const handleSubCategoryClick = (subCat: string) => {
+    if (subCat === activeSubCategory) return;
     setActiveSubCategory(subCat);
     const newSubCategory = reportLayout?.find(
       (item) => item.subCategory === subCat,
@@ -314,10 +315,10 @@ export default function YearQuarterListing({
             <div
               key={`subcat_${idx}`}
               className={clsx(
-                `py-5 px-2 border-b-2 border-b-[#E1E1E1] cursor-pointer text-base transition-all duration-300`,
+                `py-5 px-2 border-b-2 border-b-[#E1E1E1] text-base transition-all duration-300`,
                 activeSubCategory === subCat.subCategory
-                  ? "text-[#002F50]"
-                  : "text-[#9997A2] hover:text-[#002F50]",
+                  ? "text-[#002F50] cursor-default pointer-events-none"
+                  : "text-[#9997A2] hover:text-[#002F50] cursor-pointer",
               )}
               onClick={() => handleSubCategoryClick(subCat.subCategory)}
             >
@@ -339,7 +340,10 @@ export default function YearQuarterListing({
               }}
               MenuProps={menuProps}
               value={activeSubCategory}
-              onChange={(e) => handleSubCategoryClick(e.target.value as string)}
+              onChange={(e) => {
+                const value = e.target.value as string;
+                if (value !== activeSubCategory) handleSubCategoryClick(value);
+              }}
               IconComponent={KeyboardArrowDownIcon}
             >
               {reportLayout?.map((subCat, idx) => (
