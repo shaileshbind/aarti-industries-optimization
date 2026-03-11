@@ -3,11 +3,13 @@
 import { createContext, useContext, useEffect, useRef, useCallback } from "react";
 // import { createPortal } from "react-dom";
 import Lenis from "lenis";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface LenisContextType {
   stopLenis: () => void;
   startLenis: () => void;
+  scrollTo: (target: number) => void;
 }
 
 const LenisContext = createContext<LenisContextType | null>(null);
@@ -51,34 +53,38 @@ interface LenisProviderProps {
 
 export const LenisProvider = ({ children }: LenisProviderProps) => {
   const lenisRef = useRef<Lenis | null>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
-
+    // No custom `content` element — Lenis defaults to document.documentElement,
+    // which is the same node the browser scrollbar measures. Using a wrapper div
+    // as the content reference caused a height mismatch (Lenis scroll limit <
+    // actual page height), making the footer unreachable via smooth scroll.
     const lenis = new Lenis({
-      duration: 1.3,
-      syncTouch: true,
+      duration: 2.5,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
-      // Transform this div instead of <html>, so position:fixed elements
-      // outside this div are not affected by Lenis's syncTouch transform.
-      content: contentRef.current,
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
     });
     lenisRef.current = lenis;
 
     // Keep ScrollTrigger in sync with Lenis scroll position
     lenis.on("scroll", ScrollTrigger.update);
 
-    let running = true;
-    function raf(time: number) {
-      if (!running) return;
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    // Drive Lenis via GSAP's ticker so both run in the same animation frame.
+    // This eliminates the frame desync that causes scroll jitter when Lenis
+    // and GSAP/ScrollTrigger run their own separate rAF loops.
+    gsap.ticker.lagSmoothing(0);
+    const tickerCallback = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(tickerCallback);
 
     return () => {
-      running = false;
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       lenisRef.current = null;
     };
@@ -92,11 +98,14 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
     lenisRef.current?.start();
   }, []);
 
+  const scrollTo = useCallback((target: number) => {
+    lenisRef.current?.scrollTo(target);
+  }, []);
+
   return (
-    <LenisContext.Provider value={{ stopLenis, startLenis }}>
-      <div ref={contentRef}>
-        {children}
-      </div>
+    <LenisContext.Provider value={{ stopLenis, startLenis, scrollTo }}>
+      {children}
     </LenisContext.Provider>
   );
 };
+
