@@ -3,12 +3,13 @@
 import { useState, Suspense } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Eye, EyeOff } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
 
   const [username, setUsername] = useState("");
@@ -17,9 +18,15 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const rawCallback = searchParams.get("callbackUrl") ?? "/";
+  const callbackUrl =
+    rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+      ? rawCallback
+      : "/";
+
   // Redirect if already logged in
   if (session) {
-    router.replace("/");
+    router.replace(callbackUrl);
     return null;
   }
 
@@ -31,7 +38,7 @@ function LoginForm() {
       const res = await signIn("credentials", {
         username: username.trim(),
         password,
-        callbackUrl: "/",
+        callbackUrl,
         redirect: false,
       });
       if (res?.error) {
@@ -40,8 +47,7 @@ function LoginForm() {
         return;
       }
       if (res?.ok) {
-        // Force a hard refresh to ensure session is loaded
-        window.location.href = "/";
+        window.location.href = callbackUrl;
       } else {
         setError("Something went wrong");
         setLoading(false);
