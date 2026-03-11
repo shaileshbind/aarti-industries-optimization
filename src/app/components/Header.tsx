@@ -216,9 +216,9 @@ const Header = ({ data }: HeaderProps) => {
     const checkTouchDevice = () => {
       setIsTouchDevice(
         "ontouchstart" in window ||
-          navigator.maxTouchPoints > 0 ||
-          // @ts-expect-error - msMaxTouchPoints is a legacy IE property
-          navigator.msMaxTouchPoints > 0,
+        navigator.maxTouchPoints > 0 ||
+        // @ts-expect-error - msMaxTouchPoints is a legacy IE property
+        navigator.msMaxTouchPoints > 0,
       );
     };
     checkTouchDevice();
@@ -530,7 +530,6 @@ const Header = ({ data }: HeaderProps) => {
 
   return (
     <>
-      {pathname === "/" && <StockTicker />}
 
       {/* Fixed Header Container */}
       <div
@@ -539,6 +538,7 @@ const Header = ({ data }: HeaderProps) => {
           pathname === "/" ? `top-9 lgx:top-11` : `top-0`,
         )}
       >
+        {pathname === "/" && <StockTicker />}
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
           <div className="ml-[0px] lgx:ml-[60px] w-full h-auto relative z-10">
@@ -598,18 +598,17 @@ const Header = ({ data }: HeaderProps) => {
                             handleDropdownToggle(index);
                           }
                         }}
-                        className={`flex items-center transition-colors hover:text-orange-200 ${
-                          isMenuActive
-                            ? "text-[#DC4C03] font-medium"
-                            : "text-gray-700"
-                        }`}
+                        className={`flex items-center transition-colors hover:text-orange-200 ${isMenuActive
+                          ? "text-[#DC4C03] font-medium"
+                          : "text-gray-700"
+                          }`}
                       >
                         <AnimateTextOnHover
                           staggered
                           activeHover={isActive(
                             item.subMenu?.[0]?.item?.[0]?.cta_link?.link ||
-                              item.subMenu?.[0]?.item?.[0]?.externalLink ||
-                              "",
+                            item.subMenu?.[0]?.item?.[0]?.externalLink ||
+                            "",
                           )}
                           className="text-sm font-medium"
                         >
@@ -617,9 +616,8 @@ const Header = ({ data }: HeaderProps) => {
                         </AnimateTextOnHover>
                         {item.subMenu && item.subMenu.length > 0 && (
                           <svg
-                            className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                              openDropdown === index ? "rotate-180" : ""
-                            }`}
+                            className={`ml-1 h-4 w-4 transition-transform duration-200 ${openDropdown === index ? "rotate-180" : ""
+                              }`}
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -952,21 +950,18 @@ const Header = ({ data }: HeaderProps) => {
                 <div className="w-6 h-6 relative">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
-                      isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
-                    }`}
+                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
+                      }`}
                   />
                   <span
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${
-                      isMenuOpen ? "opacity-0" : "opacity-100"
-                    }`}
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${isMenuOpen ? "opacity-0" : "opacity-100"
+                      }`}
                   />
                   <span
-                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
-                      isMenuOpen
-                        ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
-                        : ""
-                    }`}
+                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen
+                      ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
+                      : ""
+                      }`}
                   />
                 </div>
               </button>
@@ -1027,7 +1022,9 @@ const Header = ({ data }: HeaderProps) => {
               <SplitText text="Get In Touch" />
             </span>
             <span className="block lgx:hidden">
-              <SplitText text="Contact" />
+              {/* <SplitText text="Contact" /> */}
+              Contact
+
             </span>
           </Link>
 
@@ -1092,11 +1089,10 @@ const Header = ({ data }: HeaderProps) => {
                   {hasDropdown ? (
                     <button
                       onClick={() => toggleMobileMenu(index)}
-                      className={`flex-1 text-left transition-all duration-200 py-3 ${
-                        isMenuActive
-                          ? "text-orange-200 font-medium"
-                          : "text-gray-700"
-                      }`}
+                      className={`flex-1 text-left transition-all duration-200 py-3 ${isMenuActive
+                        ? "text-orange-200 font-medium"
+                        : "text-gray-700"
+                        }`}
                     >
                       <Typography variant="body-l">{item.menuTitle}</Typography>
                     </button>
@@ -1107,11 +1103,10 @@ const Header = ({ data }: HeaderProps) => {
                         item.subMenu?.[0]?.item?.[0]?.externalLink ||
                         "#"
                       }
-                      className={`flex-1 transition-all duration-200 py-3 ${
-                        isMenuActive
-                          ? "text-orange-200 font-medium"
-                          : "text-gray-700"
-                      }`}
+                      className={`flex-1 transition-all duration-200 py-3 ${isMenuActive
+                        ? "text-orange-200 font-medium"
+                        : "text-gray-700"
+                        }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Typography variant="body-l">{item.menuTitle}</Typography>

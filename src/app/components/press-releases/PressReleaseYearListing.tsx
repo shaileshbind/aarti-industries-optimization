@@ -12,6 +12,7 @@ import {
   useMemo,
 } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 import { PressReleaseYearListingProps } from "@/app/types/press-release.type";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BodyText2, BodyText3, SubH1 } from "../Typography2";
@@ -343,9 +344,8 @@ export default function PressReleaseYearListing({
           </div>
 
           {/* Press Release list */}
-          <div
+          <SmoothScrollContainer
             className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
-            data-lenis-prevent
           >
             {/* Desktop  */}
             <div className="hidden lg:block">
@@ -376,7 +376,7 @@ export default function PressReleaseYearListing({
                     )}
                     {item?.date && (
                       <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item.date)} 
+                        {formatDate(item.date)}
                       </p>
                     )}
                   </div>
@@ -464,7 +464,7 @@ export default function PressReleaseYearListing({
                 </p>
               )}
             </div>
-          </div>
+          </SmoothScrollContainer>
         </div>
 
         {/* Archive dropdown - Mobile */}

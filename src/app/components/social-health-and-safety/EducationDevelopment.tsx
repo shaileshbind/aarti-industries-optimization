@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1 } from "../Typography2";
 import Button from "../Button";
@@ -8,16 +8,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import type { Swiper as SwiperType } from "swiper";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   data,
 }) => {
   const { cards } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -29,6 +29,41 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Intersection Observer for autoplay control
   useEffect(() => {
@@ -250,9 +285,21 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
           </div>
 
           {cards?.length > 0 && (
-            <div ref={containerRef} className="w-full">
+            <div
+              ref={containerRef}
+              className="w-full"
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
+            >
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                key={`education-development-${isDesktopPointer}`}
+                modules={[
+                  Navigation,
+                  Scrollbar,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 15000,
                   disableOnInteraction: false,
@@ -284,11 +331,13 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                 }}
                 scrollbar={{ draggable: true }}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 className="framework-forged-swiper"
               >
                 {cards?.map((item, index) => {
@@ -331,7 +380,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                           )}
                       </ul>
                       {item?.repeatableCta && item.repeatableCta.length > 0 && (
-                        <div className="mt-[10px]">
+                        <div className="mt-[10px] grid gap-y-2">
                           {item.repeatableCta.map((cta, ctaIndex) => {
                             const hasValidLink =
                               (cta?.link?.link && cta.link.link.trim() !== "") ||

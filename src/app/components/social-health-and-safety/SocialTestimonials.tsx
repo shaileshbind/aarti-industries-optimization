@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 import { ImageProps } from "@/app/types/global.type";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 
@@ -27,8 +29,44 @@ interface ThePeopleProps {
 
 const SocialTestimonials: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Intersection Observer for autoplay control
   useEffect(() => {
@@ -73,14 +111,20 @@ const SocialTestimonials: React.FC<ThePeopleProps> = ({ data }) => {
     >
       {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
-        <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10">
+        <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
           <Swiper
+            key={`social-testimonials-${isDesktopPointer}`}
             spaceBetween={15}
             slidesPerView={1}
             centeredSlides={true}
             autoHeight={false}
             loop={false}
-            modules={[Navigation, Pagination, Mousewheel, Autoplay]}
+            modules={[
+              Navigation,
+              Pagination,
+              ...(isDesktopPointer ? [Mousewheel] : []),
+              Autoplay,
+            ]}
             autoplay={{
               delay: 15000,
               disableOnInteraction: false,
@@ -100,11 +144,13 @@ const SocialTestimonials: React.FC<ThePeopleProps> = ({ data }) => {
               nextEl: ".swiper-button-next-people",
               prevEl: ".swiper-button-prev-people",
             }}
-            mousewheel={{
-              forceToAxis: true,
-              sensitivity: 1,
-              releaseOnEdges: true,
-            }}
+            {...(isDesktopPointer && {
+              mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              },
+            })}
             className="people-swiper !overflow-visible"
             breakpoints={{
               1024: {

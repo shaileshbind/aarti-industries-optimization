@@ -45,7 +45,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div data-lenis-prevent>
+    <div>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (

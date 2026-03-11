@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -13,9 +13,13 @@ import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { isMobile } from "react-device-detect";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
+
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMediaQuery("(max-width:768px)");
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -174,12 +178,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
 
   useEffect(() => {
     const section = wrapperRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper) return;
+
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (swiper.autoplay && !swiper.autoplay.running) {
@@ -189,6 +194,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           } else {
             if (swiper.autoplay && swiper.autoplay.running) {
               swiper.autoplay.stop();
+              resetProgressBar();
             }
           }
         });
@@ -204,12 +210,51 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isDesktopPointer]);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
 
   return (
     <div
       ref={wrapperRef}
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
+      onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
     >
       {/* Conditional overlay - lighter for video slides on desktop */}
       {(() => {
@@ -227,12 +272,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         <Swiper
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
-            if (swiper.autoplay) {
-              swiper.autoplay.stop();
-            }
-            setTimeout(() => {
-              controlVideos(activeIndexRef.current);
-            }, 100);
+            controlVideos(activeIndexRef.current);
+            startProgressBar();
           }}
           onSlideChangeTransitionStart={(swiper) => {
             const realIndex =
@@ -250,36 +291,23 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
               !isMobile
                 ? 30000
                 : 5000;
-            if (swiperRef.current && swiperRef.current.autoplay) {
-              swiperRef.current.autoplay.stop();
-              if (
-                swiperRef.current.params.autoplay &&
-                typeof swiperRef.current.params.autoplay === "object"
-              ) {
-                swiperRef.current.params.autoplay.delay = delay;
-              }
+            if (
+              swiperRef.current?.params.autoplay &&
+              typeof swiperRef.current.params.autoplay === "object"
+            ) {
+              swiperRef.current.params.autoplay.delay = delay;
             }
           }}
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
-            // Restart autoplay with updated delay
-            if (swiperRef.current && swiperRef.current.autoplay) {
-              swiperRef.current.autoplay.start();
-            }
           }}
-          on={{
-            transitionStart: (swiper: SwiperType) => {
-              const realIndex =
-                swiper.realIndex !== undefined
-                  ? swiper.realIndex
-                  : swiper.activeIndex % data?.banner?.length;
-
-              activeIndexRef.current = realIndex;
-              setActive(realIndex);
-            },
-          }}
+          key={`home-hero-${isDesktopPointer}`}
           slidesPerView={1}
-          modules={[Autoplay, EffectFade, Mousewheel]}
+          modules={[
+            Autoplay,
+            EffectFade,
+            ...(isDesktopPointer ? [Mousewheel] : []),
+          ]}
           effect="fade"
           fadeEffect={{ crossFade: true }}
           loop={true}
@@ -294,11 +322,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             waitForTransition: true,
           }}
           direction="horizontal"
-          mousewheel={{
-            forceToAxis: true,
-            sensitivity: 1,
-            releaseOnEdges: true,
-          }}
+          {...(isDesktopPointer && {
+            mousewheel: {
+              forceToAxis: true,
+              sensitivity: 1,
+              releaseOnEdges: true,
+            },
+          })}
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
@@ -414,7 +444,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       />
       <div
         ref={starRef}
-        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-60  "
+        className="absolute bottom-[84px] right-[68px] lg:right-[177px] w-[42px] lg:w-[72px] z-[11]  "
       >
         <Image
           src="/images/home/star-white.svg"

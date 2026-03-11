@@ -1,9 +1,7 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import ScrollTriggerModule, {
-  ScrollTrigger as ScrollTriggerType,
-} from "gsap/ScrollTrigger";
+import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,10 +10,8 @@ import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { useLenis } from "@/app/contexts/LenisContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
-const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger);
 
 const ANIMATION_END_PROGRESS = 0.55;
 
@@ -50,15 +46,54 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     width: 0,
     visible: false,
   });
+  const [showMobileTabs, setShowMobileTabs] = useState(false);
+  const showMobileTabsRef = useRef(false);
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
-  const [slideWidth, setSlideWidth] = useState(0);
+  const slideWidthRef = useRef(0);
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   useLayoutEffect(() => {
     const measureSlideWidth = () => {
       if (imageWrapperRef.current) {
         const width = imageWrapperRef.current.offsetWidth;
         if (width > 0) {
-          setSlideWidth(width);
+          slideWidthRef.current = width;
         }
       }
     };
@@ -145,6 +180,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   };
 
   useLayoutEffect(() => {
+    if (!hasMounted) return;
     const ctx = gsap.context(() => {
       if (isTablet) {
         gsap.set(sustainbleLogo.current, {
@@ -298,9 +334,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             susLogotr.current,
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
-              width: window.innerWidth - 40,
-              height: "250px",
-              right: 20,
+              width: window.innerWidth - 30,
+              height: window.innerWidth - 30,
+              right: 15,
               top: "170px",
               duration: 1,
             },
@@ -342,21 +378,27 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             "<",
           )
           .fromTo(
-            ".sliderStagger",
-            { opacity: 0, x: 100 },
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.7,
-              stagger: 0.1,
-              ease: "power4.inOut",
-            },
-            "<",
+            tabBarContainerRef.current,
+            { opacity: 0, y: -100 },
+            { opacity: 1, y: 0, duration: 0.3, zIndex: 22 },
+            "<0.2",
           )
+          // .fromTo(
+          //   ".sliderStagger",
+          //   { opacity: 0, x: 100 },
+          //   {
+          //     opacity: 1,
+          //     x: 0,
+          //     duration: 0.7,
+          //     stagger: 0.1,
+          //     ease: "power4.inOut",
+          //   },
+          //   "<",
+          // )
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
-            { opacity: 1, duration: 5 },
+            { opacity: 1, duration: 1 },
             "<",
           );
       } else {
@@ -424,8 +466,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             susLogotr.current,
             { width: "100px", height: "100px" },
             {
-              width: () => `${slideWidth}px`,
-              height: () => `${slideWidth}px`,
+              width: () => `${slideWidthRef.current}px`,
+              height: () => `${slideWidthRef.current}px`,
               duration: 1,
             },
           )
@@ -439,8 +481,8 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               top: "50%",
             },
             {
-              width: () => `${slideWidth}px`,
-              height: () => `${slideWidth}px`,
+              width: () => `${slideWidthRef.current}px`,
+              height: () => `${slideWidthRef.current}px`,
 
               left: "0%",
               top: "50%",
@@ -489,7 +531,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     return () => {
       ctx.revert();
     };
-  }, [mainSection.length, slideWidth, isTablet]);
+  }, [mainSection.length, isTablet, hasMounted]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -552,221 +594,359 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
     };
   }, [activeTabMob, mainSection.length, setMarginBottom]);
 
+  const isClickScrolling = useRef(false);
+  // const tabBarHidden = useRef(false);
+
   const handlMobileTabClick = (index: number) => {
-    if (index === activeTabMob) return;
-    const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) {
-      swiper.slideTo(index);
-      setActiveTabMob(index);
-    }
+    const el = document.getElementById(`tabsustain-${index}`);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 120;
+    isClickScrolling.current = true;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    setActiveTabMob(index);
+    setActiveTab(index);
+    setTimeout(() => {
+      isClickScrolling.current = false;
+    }, 800);
   };
 
+  useEffect(() => {
+    if (!isTablet || !mainSection.length) return;
+
+    let ticking = false;
+    let prevIndex = -1;
+
+    const handleScroll = () => {
+      if (ticking || isClickScrolling.current) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const offset = 150;
+        let activeIndex = 0;
+
+        for (let i = 0; i < mainSection.length; i++) {
+          const el = document.getElementById(`tabsustain-${i}`);
+          if (!el) continue;
+          if (el.getBoundingClientRect().top <= offset) {
+            activeIndex = i;
+          }
+        }
+        // console.log('activeIndex', activeIndex);
+
+        if (activeIndex !== prevIndex) {
+          prevIndex = activeIndex;
+          setActiveTabMob(activeIndex);
+          setActiveTab(activeIndex);
+        }
+        // if (tabBarContainerRef.current) {
+        //   const firstEl = document.getElementById(`tabsustain-0`);
+        //   const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
+
+        //   if (firstEl && lastEl) {
+        //     const lastBottom = lastEl.getBoundingClientRect().bottom;
+        //     const firstTop = firstEl.getBoundingClientRect().top;
+        //     // console.log('firstTop', firstTop, 'lastBottom', lastBottom);
+
+        //     // Hide when last slide bottom goes past 50% of screen
+        //     const shouldHide = lastBottom < window.innerHeight / 0.5 ;
+
+        //     // Only re-show when user has scrolled back up enough to see first slide area
+        //     const shouldShow = firstTop > -100;
+
+        //     if (shouldHide && !tabBarHidden.current) {
+        //       tabBarHidden.current = true;
+        //       // gsap.to(tabBarContainerRef.current, {
+        //       //   opacity: 0,
+        //       //   duration: 0.3,
+        //       //   pointerEvents: "none",
+        //       // });
+        //     } else if (!shouldHide && shouldShow && tabBarHidden.current) {
+        //       tabBarHidden.current = false;
+        //       // gsap.to(tabBarContainerRef.current, {
+        //       //   opacity: 1,
+        //       //   duration: 0.3,
+        //       //   pointerEvents: "auto",
+        //       // });
+        //     }
+        //   }
+        // }
+
+        const firstEl = document.getElementById("tabsustain-0");
+        const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
+        if (firstEl && lastEl) {
+          const firstTop = firstEl.getBoundingClientRect().top;
+          const lastBottom = lastEl.getBoundingClientRect().bottom;
+          const enteredSection = firstTop <= window.innerHeight * 0.45;
+          const notPastSection = lastBottom > 160;
+          const shouldShowTabs = enteredSection && notPastSection;
+
+          if (shouldShowTabs !== showMobileTabsRef.current) {
+            showMobileTabsRef.current = shouldShowTabs;
+            setShowMobileTabs(shouldShowTabs);
+          }
+        }
+
+        ticking = false;
+      });
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isTablet, mainSection]);
+
+  useEffect(() => {
+    if (!isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
+  }, [isTablet]);
+
   return (
-    <div
-      ref={triggerRef}
-      className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
-    >
+    <>
       <div
-        ref={titleSection}
-        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
+        ref={triggerRef}
+        className="w-full relative  lg:min-h-[40vh] min-h-[100vh] mt-[0px] lg:mt-[unset]"
       >
-        <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
-          {leftText && (
-            <span ref={headinLeft}>
-              <H2>{leftText}</H2>
-            </span>
-          )}
-
-          {mainSection?.[0]?.image?.url && (
-            <div
-              ref={sustainbleLogo}
-              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
-            >
-              <span
-                ref={sustainInner}
-                className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
-              >
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotl}
-                    className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className=" scale-110 object-cover"
-                    />
-                  </i>
-                )}
-
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotr}
-                    className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
-                  >
-                    <span
-                      ref={susLogoinnerblurtr}
-                      className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="100px"
-                        className=" object-cover blur scale-110"
-                      />
-                    </span>
-                    <span
-                      ref={leafBigImg}
-                      className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="100px"
-                        className="leafBigImg scale-110 object-cover"
-                      />
-                    </span>
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobr}
-                    className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobl}
-                    className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="100px"
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-              </span>
-            </div>
-          )}
-          {rightText && (
-            <span ref={headinRight}>
-              <H2>{rightText}</H2>
-            </span>
-          )}
-        </div>
         <div
-          ref={envSlider}
-          className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          ref={titleSection}
+          className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
         >
-          <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-            {mainSection?.length > 0 && !isTablet && (
-              <div>
-                <Swiper
-                  slidesPerView={1.2}
-                  loop={false}
-                  allowTouchMove={false}
-                  speed={600}
-                  watchSlidesProgress={true}
-                  updateOnWindowResize={true}
-                  className="w-full h-auto"
-                  onSwiper={(swiper) => {
-                    swiperRef.current = swiper;
-                    swiper.on("resize", () => {
-                      swiper.updateSize();
-                      swiper.updateSlides();
-                      swiper.updateProgress();
-                      swiper.updateSlidesClasses();
-                    });
-                  }}
-                  onSlideChange={(swiper) => {
-                    setActiveTab(swiper.activeIndex);
-                  }}
+          <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
+            {leftText && (
+              <span ref={headinLeft}>
+                <H2>{leftText}</H2>
+              </span>
+            )}
+
+            {mainSection?.[0]?.image?.url && (
+              <div
+                ref={sustainbleLogo}
+                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+              >
+                <span
+                  ref={sustainInner}
+                  className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
                 >
-                  {mainSection.map((slide, index) => (
-                    <SwiperSlide key={slide.id}>
-                      <SliderCard
-                        imgSrc={slide?.image?.url}
-                        imgAlt={slide?.image?.alternativeText || "banner"}
-                        title={slide?.category}
-                        description={slide?.description}
-                        values={slide?.values}
-                        ctaButton={slide?.ctaButton}
-                        imageWrapperRef={
-                          imageWrapperRef as React.RefObject<HTMLDivElement>
-                        }
-                        index={index}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotl}
+                      className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className=" scale-110 object-cover"
                       />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                    </i>
+                  )}
+
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotr}
+                      className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
+                    >
+                      <span
+                        ref={susLogoinnerblurtr}
+                        className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="100px"
+                          className=" object-cover blur scale-110"
+                        />
+                      </span>
+                      <span
+                        ref={leafBigImg}
+                        className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="100px"
+                          className="leafBigImg scale-110 object-cover"
+                        />
+                      </span>
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobr}
+                      className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobl}
+                      className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="100px"
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                </span>
               </div>
             )}
-            <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
-              <div className="w-fit mx-auto">
-                {mainSection?.length > 0 && !isTablet && (
-                  <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-                    <div
-                      ref={containerRef}
-                      className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-                    >
-                      {/* Animated Indicator */}
+            {rightText && (
+              <span ref={headinRight}>
+                <H2>{rightText}</H2>
+              </span>
+            )}
+          </div>
+          <div
+            ref={envSlider}
+            className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          >
+            <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
+              {mainSection?.length > 0 && !isTablet && (
+                <div
+                  onTouchStart={handleSliderTouchStart}
+                  onTouchMove={handleSliderTouchMove}
+                  onTouchEnd={handleSliderTouchEnd}
+                >
+                  <Swiper
+                    slidesPerView={1.2}
+                    loop={false}
+                    allowTouchMove={false}
+                    speed={600}
+                    watchSlidesProgress={true}
+                    updateOnWindowResize={true}
+                    className="w-full h-auto"
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      swiper.on("resize", () => {
+                        swiper.updateSize();
+                        swiper.updateSlides();
+                        swiper.updateProgress();
+                        swiper.updateSlidesClasses();
+                      });
+                    }}
+                    onSlideChange={(swiper) => {
+                      setActiveTab(swiper.activeIndex);
+                    }}
+                  >
+                    {mainSection.map((slide, index) => (
+                      <SwiperSlide key={slide.id}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              )}
+              <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
+                <div className="w-fit mx-auto">
+                  {mainSection?.length > 0 && !isTablet && (
+                    <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                       <div
-                        aria-hidden="true"
-                        style={{
-                          position: "absolute",
-                          left: indicator.visible ? indicator.left : 0,
-                          top: 0,
-                          height: "100%",
-                          borderRadius: 9999,
-                          background: indicatorColor,
-                          width: indicator.visible ? indicator.width : 0,
-                          transition: indicatorTransition,
-                          zIndex: 0,
-                          pointerEvents: "none",
-                        }}
-                      />
+                        ref={containerRef}
+                        className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                      >
+                        {/* Animated Indicator */}
+                        <div
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            left: indicator.visible ? indicator.left : 0,
+                            top: 0,
+                            height: "100%",
+                            borderRadius: 9999,
+                            background: indicatorColor,
+                            width: indicator.visible ? indicator.width : 0,
+                            transition: indicatorTransition,
+                            zIndex: 0,
+                            pointerEvents: "none",
+                          }}
+                        />
 
-                      {/* Tab Buttons */}
-                      {mainSection?.map(
-                        (items, index) =>
-                          items?.category && (
-                            <div
-                              key={index}
-                              ref={(element) => {
-                                tabRefs.current[index] = element;
-                              }}
-                              onClick={() => handleTabClick(index)}
-                              className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${
-                                activeTab === index
-                                  ? "text-white"
-                                  : "hover:bg-grey-200"
-                              }`}
-                            >
-                              {items?.category}
-                            </div>
-                          ),
-                      )}
+                        {/* Tab Buttons */}
+                        {mainSection?.map(
+                          (items, index) =>
+                            items?.category && (
+                              <div
+                                key={index}
+                                ref={(element) => {
+                                  tabRefs.current[index] = element;
+                                }}
+                                onClick={() => handleTabClick(index)}
+                                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${activeTab === index
+                                    ? "text-white"
+                                    : "hover:bg-grey-200"
+                                  }`}
+                              >
+                                {items?.category}
+                              </div>
+                            ),
+                        )}
+                      </div>
                     </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          ref={mobileSliderContainerRef}
+          className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
+        >
+          <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]" >
+
+            <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
+              <div className="grid items-center">
+                {isTablet && (
+                  <div className="flex flex-col gap-y-[40px]">
+                    {mainSection.map((slide, index) => (
+                      <div key={index} id={`tabsustain-${index}`}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                          slideForHomePage={true}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -774,104 +954,54 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <div
-        ref={mobileSliderContainerRef}
-        className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
-      >
-        <div className="pt-[110px]" ref={tabBarContainerRef}>
-          {mainSection?.length > 0 && isTablet && (
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+      <div className={`fixed top-[110px] w-full flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`} ref={tabBarContainerRef}>
+        {mainSection?.length > 0 && isTablet && (
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+            <div
+              ref={containerRef}
+              className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+            >
+              {/* Animated Indicator */}
               <div
-                ref={containerRef}
-                className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-              >
-                {/* Animated Indicator */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: indicator.visible ? indicator.left : 0,
-                    top: 0,
-                    height: "100%",
-                    borderRadius: 9999,
-                    background: indicatorColor,
-                    width: indicator.visible ? indicator.width : 0,
-                    transition: indicatorTransition,
-                    zIndex: 0,
-                    pointerEvents: "none",
-                  }}
-                />
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: indicator.visible ? indicator.left : 0,
+                  top: 0,
+                  height: "100%",
+                  borderRadius: 9999,
+                  background: indicatorColor,
+                  width: indicator.visible ? indicator.width : 0,
+                  transition: indicatorTransition,
+                  zIndex: 0,
+                  pointerEvents: "none",
+                }}
+              />
 
-                {/* Tab Buttons */}
-                {mainSection?.map(
-                  (items, index) =>
-                    items?.category && (
-                      <div
-                        key={index}
-                        ref={(element) => {
-                          tabRefs.current[index] = element;
-                        }}
-                        onClick={() => handlMobileTabClick(index)}
-                        className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                          activeTab === index
-                            ? "text-white"
-                            : "hover:bg-grey-200"
+              {/* Tab Buttons */}
+              {mainSection?.map(
+                (items, index) =>
+                  items?.category && (
+                    <div
+                      key={index}
+                      ref={(element) => {
+                        tabRefs.current[index] = element;
+                      }}
+                      onClick={() => handlMobileTabClick(index)}
+                      className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${activeTab === index
+                          ? "text-white"
+                          : "hover:bg-grey-200"
                         }`}
-                      >
-                        {items?.category}
-                      </div>
-                    ),
-                )}
-              </div>
+                    >
+                      {items?.category}
+                    </div>
+                  ),
+              )}
             </div>
-          )}
-        </div>
-        <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
-          <div className="grid items-center">
-            {isTablet && (
-              <Swiper
-                slidesPerView={1}
-                loop={false}
-                allowTouchMove={true}
-                speed={600}
-                watchSlidesProgress={true}
-                updateOnWindowResize={true}
-                className="w-full h-auto"
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                  swiper.on("resize", () => {
-                    swiper.updateSize();
-                    swiper.updateSlides();
-                    swiper.updateProgress();
-                    swiper.updateSlidesClasses();
-                  });
-                }}
-                onSlideChange={(swiper) => {
-                  setActiveTab(swiper.activeIndex);
-                }}
-              >
-                {mainSection.map((slide, index) => (
-                  <SwiperSlide key={slide.id}>
-                    <SliderCard
-                      imgSrc={slide?.image?.url}
-                      imgAlt={slide?.image?.alternativeText || "banner"}
-                      title={slide?.category}
-                      description={slide?.description}
-                      values={slide?.values}
-                      ctaButton={slide?.ctaButton}
-                      imageWrapperRef={
-                        imageWrapperRef as React.RefObject<HTMLDivElement>
-                      }
-                      index={index}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
           </div>
-        </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

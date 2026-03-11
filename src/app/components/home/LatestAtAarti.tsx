@@ -5,17 +5,16 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Mousewheel, Pagination } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps, ButtonHomeProps } from "@/app/types/home.type";
 import { ButtonProps, ImageProps } from "@/app/types/global.type";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { formatDate } from "../../../../utils/formatDate";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useLenis } from "@/app/contexts/LenisContext";
 
 type PostContent = {
   id?: string | number;
@@ -63,6 +62,41 @@ type NormalizedCard = {
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
   const toArray = <T,>(value?: T | T[]) =>
     Array.isArray(value) ? value : value ? [value] : [];
   const resolveLink = (button?: ButtonHomeProps | ButtonProps) =>
@@ -133,35 +167,35 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cards: NormalizedCard[] = Array.isArray(card)
     ? (card as NormalizedCard[])
     : ([
-        card?.news && {
-          id: card.news.id ?? "news",
-          type: "news",
-          category: card.news.category ?? "News",
-          postContent: toArray(card.news.news).map((item) => ({
-            ...item,
-            description: item.newsDescription,
-            link: resolveLink(item.ctaButton),
-          })),
-          ctaButton: card.news.ctaButton,
-        },
-        reportPub && {
-          id: reportPubRoot?.id ?? "annualReports",
-          type: "annualReports",
-          category: reportPubRoot?.category ?? "Reports",
-          postContent: reportsPostContent,
-          ctaButton: reportPubRoot?.ctaButton,
-        },
-        card?.events && {
-          id: card.events.id ?? "events",
-          type: "events",
-          category: card.events.category ?? "Events",
-          postContent: toArray(card.events.events).map((item) => ({
-            ...item,
-            link: resolveLink(item.ctaButton),
-          })),
-          ctaButton: card.events.ctaButton,
-        },
-      ].filter(Boolean) as NormalizedCard[]);
+      card?.news && {
+        id: card.news.id ?? "news",
+        type: "news",
+        category: card.news.category ?? "News",
+        postContent: toArray(card.news.news).map((item) => ({
+          ...item,
+          description: item.newsDescription,
+          link: resolveLink(item.ctaButton),
+        })),
+        ctaButton: card.news.ctaButton,
+      },
+      reportPub && {
+        id: reportPubRoot?.id ?? "annualReports",
+        type: "annualReports",
+        category: reportPubRoot?.category ?? "Reports",
+        postContent: reportsPostContent,
+        ctaButton: reportPubRoot?.ctaButton,
+      },
+      card?.events && {
+        id: card.events.id ?? "events",
+        type: "events",
+        category: card.events.category ?? "Events",
+        postContent: toArray(card.events.events).map((item) => ({
+          ...item,
+          link: resolveLink(item.ctaButton),
+        })),
+        ctaButton: card.events.ctaButton,
+      },
+    ].filter(Boolean) as NormalizedCard[]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
@@ -341,11 +375,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     if (latestAtAartiRef.current) {
       tabsAnim = gsap.fromTo(
         latestAtAartiRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -419,7 +452,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
   return (
     <div className="w-full my-24 lg:my-[100px]" ref={latestAtAartiRef}>
-      <FadeInReveal delay={0.6}>
+      <FadeInReveal>
         <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
           {sectionTitle && (
             <div className="max-w-[100%] md:max-w-fit">
@@ -431,7 +464,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
 
       <div className="mt-[18px] md:mt-[30px] w-full ">
         {hasCards && (
-          <FadeInReveal delay={0.6}>
+          <FadeInReveal>
             <div className="px-[20px] lg:px-[60px]">
               <div className="flex items-center justify-between gap-6">
                 <div className="max-w-[100%] md:max-w-fit overflow-x-auto">
@@ -465,11 +498,10 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                               }
                             }}
                             onClick={() => handleTabClick(index)}
-                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
-                              activeTab === index
-                                ? "text-white"
-                                : "hover:bg-grey-200"
-                            }`}
+                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${activeTab === index
+                              ? "text-white"
+                              : "hover:bg-grey-200"
+                              }`}
                           >
                             {item.category}
                           </div>
@@ -500,23 +532,30 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           </FadeInReveal>
         )}
         {postsCount > 0 && (
-          <FadeInReveal delay={0.6}>
-            <div className="mt-[52px]" ref={cardsWrapRef}>
+          <FadeInReveal>
+            <div className="mt-[52px]" ref={cardsWrapRef}
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
+            >
               <Swiper
-                key={activeTab}
+
+                key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
                 breakpoints={{
                   1024: { slidesPerView: 4 },
                   600: { slidesPerView: 2.2 },
                 }}
-                modules={[Pagination, Mousewheel]}
+                modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 pagination={{
                   el: ".home-latest-at-swiper",
                   type: "progressbar",

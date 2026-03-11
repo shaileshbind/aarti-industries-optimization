@@ -16,7 +16,6 @@ export default async function page({ params }: PageProps) {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*",
   );
-
   const templates = ["shareholder-information", "financial-information"];
 
   const orangeCardListingPages = [
@@ -50,7 +49,7 @@ export default async function page({ params }: PageProps) {
   };
 
   return (
-    <div data-lenis-prevent>
+    <div>
       {getTemplateComponent()}
 
       {globallyCertifiedData && (

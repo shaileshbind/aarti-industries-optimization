@@ -223,13 +223,16 @@ export default function StockTicker() {
   useEffect(() => {
     const rowEl = rowRef.current;
     const marqueeEl = marqueeRef.current;
+    const windowWidth = window.innerWidth;
     if (!hasMarqueeContent || !rowEl || !marqueeEl) {
       marqueeEl?.style.setProperty("--marquee-width", "0px");
+      marqueeEl?.style.setProperty("--window-width", "0px");
       return;
     }
     const updateWidth = () => {
       const width = rowEl.scrollWidth;
       marqueeEl.style.setProperty("--marquee-width", `${width}px`);
+      marqueeEl.style.setProperty("--window-width", `${windowWidth}px`);
     };
     const rafId = requestAnimationFrame(() => {
       updateWidth();
@@ -299,8 +302,8 @@ export default function StockTicker() {
     const changeSign = stock?.change > 0 ? "+" : "";
     const percentSign = stock?.changePercent > 0 ? "+" : "";
 
-  return (
-    <div className="flex gap-4 flex-shrink-0 whitespace-nowrap">
+    return (
+      <div className="flex gap-4 flex-shrink-0 whitespace-nowrap">
         <p className="text-[#FFFFFF] text-sm font-roboto">
           {exchange}: {stock?.symbol}
         </p>
@@ -317,19 +320,19 @@ export default function StockTicker() {
   };
 
   return (
-    <div className="bg-[#10456A] min-h-[45px] py-[6px] lg:py-[10px] overflow-hidden fixed w-full top-0 left-0 z-50">
+    <div className="bg-[#10456A] h-[45px] py-[6px] lg:py-[10px] overflow-hidden absolute w-full bottom-full flex items-center left-0 z-50">
       <div
         ref={marqueeRef}
-        className={`marquee ${hasMarqueeContent ? "marquee--active" : "marquee--idle"}`}
+        className={`marquee  ${hasMarqueeContent ? "marquee--active" : "marquee--idle"}`}
       >
         <div
           ref={rowRef}
-          className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px]"
+          className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px]  pt-[4px] lg:pt-[0px]"
         >
           <MarqueeRow nseStock={nseStock} pressReleases={pressReleases} renderStock={renderStock} />
         </div>
         {/* Second copy */}
-        <div className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px]">
+        <div className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px] pt-[4px] lg:pt-[0px]">
           <MarqueeRow nseStock={nseStock} pressReleases={pressReleases} renderStock={renderStock} isDuplicate />
         </div>
       </div>

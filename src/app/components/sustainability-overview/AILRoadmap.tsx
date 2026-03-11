@@ -6,8 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import { AILRoadmapData } from "@/app/types/sustainability.type";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const AILRoadmap = ({ data }: AILRoadmapData) => {
   const { sectionTitle, leftSection, rightSection } = data;
   const [active, setActive] = useState(0);

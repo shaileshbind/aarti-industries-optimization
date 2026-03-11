@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { H2 } from "../Typography2";
 import DateCard from "../cards/DateCard";
 import "swiper/css";
@@ -11,11 +11,49 @@ import { ChemCreatesProps } from "@/app/types/who-we-are.type";
 import Image from "next/image";
 import { formatDate } from "../../../../utils/formatDate";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
   const { sectionTitle, blog_case_studies } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   const getSlidesPerView = (): number => {
     const slidesPerView = swiperRef.current?.params.slidesPerView;
@@ -34,8 +72,14 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
 
       {blog_case_studies && blog_case_studies.length > 0 && (
         <FadeInReveal delay={0.6}>
-          <div className="mt-[36px] lg:mt-[40px]">
+          <div
+            className="mt-[36px] lg:mt-[40px]"
+            onTouchStart={handleSliderTouchStart}
+            onTouchMove={handleSliderTouchMove}
+            onTouchEnd={handleSliderTouchEnd}
+          >
             <Swiper
+              key={`chem-creates-${isDesktopPointer}`}
               slidesPerView={1.2}
               spaceBetween={24}
               breakpoints={{
@@ -43,13 +87,15 @@ const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
                 768: { slidesPerView: 3 },
                 1024: { slidesPerView: 4 },
               }}
-              modules={[Pagination, Mousewheel]}
+              modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
               direction="horizontal"
-              mousewheel={{
-                forceToAxis: true,
-                sensitivity: 1,
-                releaseOnEdges: true,
-              }}
+              {...(isDesktopPointer && {
+                mousewheel: {
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                },
+              })}
               pagination={{
                 el: ".whoweare-chem-creates-swiper",
                 type: "progressbar",

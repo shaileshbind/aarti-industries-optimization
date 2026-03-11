@@ -12,9 +12,9 @@ import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { FadeInReveal } from "../ScrollReveal";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger);
 
 type ContentSection = NonNullable<
   NonNullable<LAAVisionProps["data"]>["content"]
@@ -51,6 +51,41 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const susLogoinnerblurtr = useRef<HTMLSpanElement>(null);
   const [slideWidth, setSlideWidth] = useState(0);
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   useLayoutEffect(() => {
     const measureSlideWidth = () => {
@@ -602,7 +637,11 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           >
             {/* Desktop Slider */}
             <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
-              <div>
+              <div
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+              >
                 <Swiper
                   slidesPerView={1.2}
                   spaceBetween={32}
@@ -749,7 +788,12 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                       </div>
                     )}
                   </div>
-                  <div className="grid items-center gap-6 mt-4">
+                  <div
+                    className="grid items-center gap-6 mt-4"
+                    onTouchStart={handleSliderTouchStart}
+                    onTouchMove={handleSliderTouchMove}
+                    onTouchEnd={handleSliderTouchEnd}
+                  >
                     {isMobile && (
                       <Swiper
                         slidesPerView={1}

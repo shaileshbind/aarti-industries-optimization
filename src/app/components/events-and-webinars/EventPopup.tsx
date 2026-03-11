@@ -1,10 +1,13 @@
 "use client";
+import React, { useCallback, useRef } from "react";
 import Image from "next/image";
 import { BodyText1, SubH1 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 type EventPopupProps = {
   event: {
@@ -29,6 +32,7 @@ type EventPopupProps = {
 
 const EventPopup = ({ event }: EventPopupProps) => {
   const { title, description, image, mobImage, gallery } = event;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
 
   // Combine gallery images if available, otherwise use main images
   const imagesToShow =
@@ -38,6 +42,42 @@ const EventPopup = ({ event }: EventPopupProps) => {
           { url: image.url, alternativeText: image.alternativeText },
           { url: mobImage.url, alternativeText: mobImage.alternativeText },
         ].filter((img) => img.url);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
   return (
     <div className="w-full" data-lenis-prevent>
       {/* Title */}
@@ -50,9 +90,15 @@ const EventPopup = ({ event }: EventPopupProps) => {
 
       {/* Image Gallery */}
       {imagesToShow && imagesToShow.length > 0 && (
-        <div className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]">
+        <div
+          className="mt-[40px] w-[calc(100%+40px)] mx-[-20px] md:w-[calc(100%+60px)] md:mx-[-30px]"
+          onTouchStart={handleSliderTouchStart}
+          onTouchMove={handleSliderTouchMove}
+          onTouchEnd={handleSliderTouchEnd}
+        >
           <Swiper
-            modules={[FreeMode, Mousewheel]}
+            key={`event-gallery-${isDesktopPointer}`}
+            modules={[FreeMode, ...(isDesktopPointer ? [Mousewheel] : [])]}
             freeMode={{
               enabled: true,
               momentum: true,
@@ -74,11 +120,13 @@ const EventPopup = ({ event }: EventPopupProps) => {
                 spaceBetween: 20,
               },
             }}
-            mousewheel={{
-              forceToAxis: true,
-              sensitivity: 1,
-              releaseOnEdges: true,
-            }}
+            {...(isDesktopPointer && {
+              mousewheel: {
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: true,
+              },
+            })}
             className="event-gallery-swiper !px-5"
           >
             {imagesToShow.map((image, index) => (

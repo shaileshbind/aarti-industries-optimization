@@ -1,11 +1,13 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 import { CDMOSplchemProps } from "@/app/types/cdmo.type";
 import { FadeInGroup, FadeInRevealBlur } from "../ScrollReveal";
 import { H2, SubH2 } from "../Typography2";
@@ -19,6 +21,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   useLink = false,
 }) => {
   const { sectionTitle, cards } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -26,6 +29,41 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   const [isInViewport, setIsInViewport] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   const updateNavState = (swiper: SwiperType) => {
     setIsBeginning(swiper.isBeginning);
@@ -104,7 +142,13 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[22px] lg:mt-[40px]">
             <FadeInGroup delay={0.2} className="relative">
+              <div
+                onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+              >
               <Swiper
+                key={`cards-slider-${isDesktopPointer}`}
                 spaceBetween={14}
                 slidesPerView={1.2}
                 breakpoints={{
@@ -120,7 +164,12 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     slidesOffsetBefore: 40,
                   },
                 }}
-                modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                modules={[
+                  Pagination,
+                  Navigation,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,
@@ -146,11 +195,13 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 observer={true}
                 observeParents={true}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
               >
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
@@ -177,6 +228,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     </SwiperSlide>
                   ))}
               </Swiper>
+              </div>
 
               {cards && cards.length > 1 && (
                 <div

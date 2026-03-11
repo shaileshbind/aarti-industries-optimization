@@ -1,29 +1,63 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import TitleCard from "../cards/TitleCard";
 import type { Swiper as SwiperType } from "swiper";
 import { ByUseSectionProps } from "@/app/types/home.type";
 import Link from "next/link";
-gsap.registerPlugin(ScrollTrigger);
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ByUseSection: React.FC<ByUseSectionProps> = ({
   data,
   sectionFiveTitle,
 }) => {
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
   const [, setIsTransitioning] = useState(false);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
 
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -108,11 +142,10 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
     if (tabsRef.current) {
       tabsAnim = gsap.fromTo(
         tabsRef.current,
-        { opacity: 0, y: 30, filter: "blur(10px)" },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
           delay: 0.1,
@@ -322,11 +355,16 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
           </div>
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">
-            <div className="relative">
+            <div className="relative"
+            
+            onTouchStart={handleSliderTouchStart}
+                onTouchMove={handleSliderTouchMove}
+                onTouchEnd={handleSliderTouchEnd}
+            >
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>
                   <Swiper
-                    key={`swiper-${active}`}
+                    key={`swiper-${active}-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}
                     breakpoints={{
@@ -347,7 +385,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                    modules={[
+                      Pagination,
+                      Navigation,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
                       nextEl: ".swiper-button-next-useBySection",
@@ -395,11 +438,13 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
                       setIsEnd(swiper.isEnd);
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {data?.[active]?.card?.map((item, index) => (

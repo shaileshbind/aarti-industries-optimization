@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
@@ -8,12 +8,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import clsx from "clsx";
 import { CampusFlagshipProps } from "@/app/types/campus.type";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
-gsap.registerPlugin(ScrollTrigger);
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
@@ -23,6 +23,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   layout,
 }) => {
   const { card, partnerWithUsCta, sectionTitle } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -34,6 +35,42 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
   const frameworkForgedRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
   // Intersection Observer for autoplay control
   useEffect(() => {
     const section = sectionRef.current;
@@ -217,9 +254,21 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
           </div>
 
           {card?.length > 0 && (
-            <div ref={containerRef} className="w-full">
+            <div
+              ref={containerRef}
+              className="w-full"
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
+            >
               <Swiper
-                modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                key={`campus-flagship-${isDesktopPointer}`}
+                modules={[
+                  Navigation,
+                  Scrollbar,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                  Autoplay,
+                ]}
                 autoplay={{
                   delay: 15000,
                   disableOnInteraction: false,
@@ -251,11 +300,13 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                 }}
                 scrollbar={{ draggable: true }}
                 direction="horizontal"
-                mousewheel={{
-                  forceToAxis: true,
-                  sensitivity: 1,
-                  releaseOnEdges: true,
-                }}
+                {...(isDesktopPointer && {
+                  mousewheel: {
+                    forceToAxis: true,
+                    sensitivity: 1,
+                    releaseOnEdges: true,
+                  },
+                })}
                 className="framework-forged-swiper"
               >
                 {card?.map((items, index) => {

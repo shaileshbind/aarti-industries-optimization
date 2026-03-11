@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTriggerModule from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
@@ -14,9 +14,11 @@ import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ScrollTrigger = ScrollTriggerModule;
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollToPlugin);
 
 interface ScrollTriggerInstance {
   start: number | { value: number };
@@ -32,6 +34,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
 }) => {
   const { leftText, rightText } = data;
   const { details } = sliderData;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -49,6 +52,41 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const { setMarginBottom } = useMargin();
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   useLayoutEffect(() => {
     const isMobile = window.innerWidth < 1024;
@@ -457,8 +495,19 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 </div>
                 {/* Swiper section */}
                 {details?.length > 0 && (
+                  <div
+                    onTouchStart={handleSliderTouchStart}
+                    onTouchMove={handleSliderTouchMove}
+                    onTouchEnd={handleSliderTouchEnd}
+                  >
                   <Swiper
-                    modules={[Navigation, Scrollbar, Mousewheel, Autoplay]}
+                    key={`rd-analytical-section-${isDesktopPointer}`}
+                    modules={[
+                      Navigation,
+                      Scrollbar,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     autoplay={{
                       delay: 15000,
                       disableOnInteraction: false,
@@ -491,11 +540,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     }}
                     scrollbar={{ draggable: true }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                   >
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
@@ -557,6 +608,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                  </div>
                 )}
                 {/* Mobile progress bar */}
                 <div className="block lg:hidden mt-9 w-full h-[2px] bg-gray-200 rounded-full overflow-hidden">
@@ -575,7 +627,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
       <GeneralPopup
         isOpen={showGeneralPopup}
         setshowGeneralPopup={setshowGeneralPopup}
-        prefillCategory="Business Products / Services"
+        prefillCategory="Purchase from AIL"
         prefillSubCategory="LAB Testing (Analytical/ Safety)"
       />
     </>

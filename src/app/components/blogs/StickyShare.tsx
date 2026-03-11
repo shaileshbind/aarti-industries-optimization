@@ -6,8 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Share from "./Share";
 import CopyLink from "./CopyLink";
 
-gsap.registerPlugin(ScrollTrigger);
-
 interface StickyShareProps {
   title?: string;
 }

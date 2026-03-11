@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SubH1 } from "../Typography2";
 import { CategoryProductsProps } from "@/app/types/mahasuper.type";
 import "swiper/css";
@@ -11,13 +11,51 @@ import { Pagination, Navigation, Mousewheel, Autoplay } from "swiper/modules";
 import { Swiper as SwiperType } from "swiper";
 import CategoryCard from "../cards/CategoryCard";
 import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
   const { title, card } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
 
   // Intersection Observer for autoplay control
   useEffect(() => {
@@ -73,8 +111,13 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
           >
             <div className="relative">
               {card?.length > 0 && (
-                <div>
+                <div
+                  onTouchStart={handleSliderTouchStart}
+                  onTouchMove={handleSliderTouchMove}
+                  onTouchEnd={handleSliderTouchEnd}
+                >
                   <Swiper
+                    key={`category-products-${isDesktopPointer}`}
                     spaceBetween={14}
                     slidesPerView={1.2}
                     breakpoints={{
@@ -95,7 +138,12 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                         spaceBetween: 24,
                       },
                     }}
-                    modules={[Pagination, Navigation, Mousewheel, Autoplay]}
+                    modules={[
+                      Pagination,
+                      Navigation,
+                      ...(isDesktopPointer ? [Mousewheel] : []),
+                      Autoplay,
+                    ]}
                     autoplay={{
                       delay: 5000,
                       disableOnInteraction: false,
@@ -133,11 +181,13 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       setIsEnd(swiper.isEnd);
                     }}
                     direction="horizontal"
-                    mousewheel={{
-                      forceToAxis: true,
-                      sensitivity: 1,
-                      releaseOnEdges: true,
-                    }}
+                    {...(isDesktopPointer && {
+                      mousewheel: {
+                        forceToAxis: true,
+                        sensitivity: 1,
+                        releaseOnEdges: true,
+                      },
+                    })}
                     className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
                   >
                     {card?.map((item, index) => (
