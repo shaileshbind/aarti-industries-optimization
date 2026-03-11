@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import ScrollToTop from "./ScrollToTop";
 import ScrollToTopButton from "./ScrollToTopButton";
 import { GlobalCursor } from "../GlobalCursor";
+// import { LenisFixed } from "@/app/contexts/LenisContext";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,6 +26,9 @@ export default function ConditionalLayout({
 
   return (
     <>
+      {/* Fixed-position elements rendered outside Lenis content wrapper via portal.
+          This prevents Lenis's syncTouch transform from causing flicker/jitter. */}
+      {/* <LenisFixed> */}
       {!isLoginPage && (
         <Link
           href="/contact"
@@ -40,9 +44,12 @@ export default function ConditionalLayout({
         </Link>
       )}
       {!isLoginPage && <ScrollToTopButton />}
-      {!isLoginPage && <ScrollToTop />}
       {!isLoginPage && <GlobalCursor />}
       {!isLoginPage && <Header data={headerData} />}
+      {/* </LenisFixed> */}
+
+      {/* Non-fixed elements stay inside the Lenis content wrapper */}
+      {!isLoginPage && <ScrollToTop />}
       {children}
       {!isLoginPage && <Footer data={footerData} />}
     </>

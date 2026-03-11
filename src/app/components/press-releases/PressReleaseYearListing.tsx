@@ -376,7 +376,7 @@ export default function PressReleaseYearListing({
                     )}
                     {item?.date && (
                       <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item.date)} 
+                        {formatDate(item.date)}
                       </p>
                     )}
                   </div>

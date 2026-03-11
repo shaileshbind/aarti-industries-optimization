@@ -31,12 +31,12 @@ const HomeMap = () => {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: `bottom  bottom+500px`,
-        end: `bottom bottom`, 
+        end: `bottom bottom`,
         toggleActions: "play none none reverse",
       },
     });
 
-    tl.fromTo(els, { opacity: 1 }, { opacity: 0, duration: 0.4 });
+    tl.fromTo(els, { opacity: 1, y: 0 }, { opacity: 0, y: -100, duration: 0.4 });
 
     return () => {
       tl.scrollTrigger?.kill();
