@@ -69,40 +69,28 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  // Intersection Observer for autoplay control
+  // Intersection Observer: start/stop autoplay by visibility. Read swiper from ref so it works after mount.
   useEffect(() => {
     const section = sectionRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Start autoplay when section enters viewport
-            if (swiper.autoplay && !swiper.autoplay.running) {
-              swiper.autoplay.start();
-            }
+            if (!swiper.autoplay.running) swiper.autoplay.start();
           } else {
-            // Stop autoplay when section leaves viewport
-            if (swiper.autoplay && swiper.autoplay.running) {
-              swiper.autoplay.stop();
-            }
+            if (swiper.autoplay.running) swiper.autoplay.stop();
           }
         });
       },
-      {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: "0px",
-      },
+      { threshold: 0.2, rootMargin: "0px" },
     );
 
     observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {

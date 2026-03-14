@@ -25,8 +25,6 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
   const [, setActiveIndex] = useState(0);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isInViewport, setIsInViewport] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -76,47 +74,29 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
     if (swiper) updateNavState(swiper);
   }, []);
 
-  // Intersection Observer for viewport detection
+  // Intersection Observer: start/stop autoplay by visibility. Read swiper from ref so it works after mount.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay) return;
         entries.forEach((entry) => {
-          setIsInViewport(entry.isIntersecting);
+          if (entry.isIntersecting) {
+            if (!swiper.autoplay.running) swiper.autoplay.start();
+          } else {
+            if (swiper.autoplay.running) swiper.autoplay.stop();
+          }
         });
       },
-      {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: "0px",
-      },
+      { threshold: 0.2, rootMargin: "0px" },
     );
 
     observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
-
-  // Control autoplay based on viewport and hover state
-  useEffect(() => {
-    const swiper = swiperRef.current;
-    if (!swiper || !swiper.autoplay) return;
-
-    // Stop autoplay if section is out of viewport or hovered
-    if (!isInViewport || isHovered) {
-      if (swiper.autoplay.running) {
-        swiper.autoplay.stop();
-      }
-    } else {
-      // Start autoplay if section is in viewport and not hovered
-      if (!swiper.autoplay.running) {
-        swiper.autoplay.start();
-      }
-    }
-  }, [isInViewport, isHovered]);
 
   return (
     <div
@@ -173,6 +153,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
                 }}
                 navigation={{
                   prevEl: ".swiper-button-prev-simplified",
@@ -205,11 +186,7 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
               >
                 {cards?.length > 0 &&
                   cards?.map((item, index) => (
-                    <SwiperSlide
-                      key={index}
-                      onMouseEnter={() => setIsHovered(true)}
-                      onMouseLeave={() => setIsHovered(false)}
-                    >
+                    <SwiperSlide key={index}>
                       {useLink ? (
                         <Link href={item?.link || "#"}>
                           <Card
@@ -228,17 +205,20 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                     </SwiperSlide>
                   ))}
               </Swiper>
-              </div>
 
               {cards && cards.length > 1 && (
                 <div
                   className={clsx(
-                    "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] lg:mx-[unset]",
+                    "relative py-[30px] mt-0 md:mt-[40px] mb-[20px] mx-[20px] lg:mx-[60px]",
+                    "lg:flex lg:justify-between lg:items-center lg:gap-4 lg:pr-[50px]",
                     cards.length <= 4 && "lg:hidden",
                   )}
                 >
+                  <div className="w-full lg:max-w-[calc(100%-150px)] min-w-0">
+                    <div className="simplified-swiper-pagination h-[2px] w-full !relative" />
+                  </div>
                   {cards?.length > 4 && (
-                    <div className="hidden lg:flex w-fit gap-3 mt-8 px-5 lg:px-0 absolute bottom-[15px] right-[100px]">
+                    <div className="hidden lg:flex w-fit gap-3 shrink-0 ml-5">
                       <button
                         className={`swiper-button-prev-simplified transition-opacity ${
                           isBeginning
@@ -272,9 +252,9 @@ const CardsSlider: React.FC<CDMOSplchemProps> = ({
                       </button>
                     </div>
                   )}
-                  <div className="simplified-swiper-pagination lg:!ml-10 ml-0 mt-4 bottom-6 h-[2px] mx-[20px] lg:mx-[unset] max-w-[100%] lg:max-w-[calc(100%-250px)]" />
                 </div>
               )}
+              </div>
             </FadeInGroup>
           </div>
         </div>

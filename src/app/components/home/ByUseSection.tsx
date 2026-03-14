@@ -214,7 +214,29 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
     };
   }, [active]);
 
-  // Intersection Observer for autoplay control
+  // Start autoplay when tab changes: new Swiper mounts and needs same viewport-based autoplay
+  const startAutoplayIfInView = useCallback(() => {
+    const swiper = swiperRef.current;
+    const section = sectionRef.current;
+    if (!swiper?.autoplay || !section) return;
+    const rect = section.getBoundingClientRect();
+    const isInViewport =
+      rect.top < window.innerHeight * 0.8 &&
+      rect.bottom > window.innerHeight * 0.2;
+    if (isInViewport && !swiper.autoplay.running) {
+      swiper.autoplay.start();
+    }
+  }, []);
+
+  useEffect(() => {
+    // When tab changes, Swiper is recreated (new key). Defer so new instance is in ref, then start autoplay if in view.
+    const id = requestAnimationFrame(() => {
+      startAutoplayIfInView();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [active, startAutoplayIfInView]);
+
+  // Intersection Observer for autoplay control (all tabs use same logic via ref)
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -222,18 +244,14 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Always get the current swiper instance inside callback
-          // This ensures we use the new swiper after tab changes
           const swiper = swiperRef.current;
           if (!swiper || !swiper.autoplay) return;
 
           if (entry.isIntersecting) {
-            // Start autoplay when section enters viewport
             if (!swiper.autoplay.running) {
               swiper.autoplay.start();
             }
           } else {
-            // Stop autoplay when section leaves viewport
             if (swiper.autoplay.running) {
               swiper.autoplay.stop();
             }
@@ -241,7 +259,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
         });
       },
       {
-        threshold: 0.2, // Trigger when 20% of section is visible
+        threshold: 0.2,
         rootMargin: "0px",
       },
     );
@@ -251,7 +269,7 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, []); // Only set up observer once - it will check current swiper instance dynamically
+  }, []);
 
   return (
     <div

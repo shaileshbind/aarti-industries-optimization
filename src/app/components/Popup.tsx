@@ -136,7 +136,7 @@ export default function Popup({
           className,
         )}
       >
-        <div className="absolute right-4 top-6 md:right-8 md:top-8 cursor-pointer hover:rotate-[90deg] transition-all duration-300">
+        <div className="popup-close absolute right-4 top-6 md:right-8 md:top-8 cursor-pointer hover:rotate-[90deg] transition-all duration-300">
           <CloseIcon onClick={onOverlayClick} />
         </div>
         {children}

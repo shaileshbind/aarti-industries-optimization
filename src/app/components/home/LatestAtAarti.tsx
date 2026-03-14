@@ -4,7 +4,7 @@ import { H2 } from "../Typography2";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/pagination";
-import { Mousewheel, Pagination } from "swiper/modules";
+import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import DateCard from "../cards/DateCard";
 import { LatestAtAartiProps, ButtonHomeProps } from "@/app/types/home.type";
@@ -15,6 +15,7 @@ import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import { fetchNews } from "@/_lib/fetchNews";
 import { useLenis } from "@/app/contexts/LenisContext";
+import type { Swiper as SwiperType } from "swiper";
 
 type PostContent = {
   id?: string | number;
@@ -198,6 +199,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     ].filter(Boolean) as NormalizedCard[]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [, setIsMobile] = useState<boolean>(false);
@@ -396,6 +398,47 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     };
   }, []);
 
+  const startAutoplayIfInView = useCallback(() => {
+    const swiper = swiperRef.current;
+    const section = latestAtAartiRef.current;
+    if (!swiper?.autoplay || !section) return;
+    const rect = section.getBoundingClientRect();
+    const isInViewport =
+      rect.top < window.innerHeight * 0.8 &&
+      rect.bottom > window.innerHeight * 0.2;
+    if (isInViewport && !swiper.autoplay.running) swiper.autoplay.start();
+  }, []);
+
+  // Intersection Observer: start/stop autoplay by visibility. Read swiper from ref so it works after mount.
+  useEffect(() => {
+    const section = latestAtAartiRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay) return;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!swiper.autoplay.running) swiper.autoplay.start();
+          } else {
+            if (swiper.autoplay.running) swiper.autoplay.stop();
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px" },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // When tab changes, Swiper remounts (new key). Start autoplay if section is still in view.
+  useEffect(() => {
+    const id = requestAnimationFrame(() => startAutoplayIfInView());
+    return () => cancelAnimationFrame(id);
+  }, [activeTab, startAutoplayIfInView]);
+
   const handleTabClick = (index: number) => {
     if (!cardsWrapRef.current) {
       setActiveTab(index);
@@ -547,7 +590,20 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   1024: { slidesPerView: 4 },
                   600: { slidesPerView: 2.2 },
                 }}
-                modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
+                modules={[
+                  Pagination,
+                  Autoplay,
+                  ...(isDesktopPointer ? [Mousewheel] : []),
+                ]}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  if (swiper.autoplay) swiper.autoplay.stop();
+                }}
                 direction="horizontal"
                 {...(isDesktopPointer && {
                   mousewheel: {

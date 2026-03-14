@@ -88,7 +88,7 @@ const LifeAtValues = ({ data2 }: LAAValueProps) => {
         </FadeInReveal>
       )}
       {/* Desktop Layout - Only renders if data exists and has valid content */}
-      <FadeInReveal delay={0.6} className="w-full">
+      <FadeInReveal delay={0.2} className="w-full">
         {data &&
           data.length > 0 &&
           data.some((item) => item?.value || item?.description) && (
