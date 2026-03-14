@@ -1,8 +1,9 @@
 /* eslint-disable */
 "use client";
-import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import React, { useLayoutEffect, useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,6 +17,7 @@ import { useLenis } from "@/app/contexts/LenisContext";
 
 const ANIMATION_END_PROGRESS = 0.55;
 
+/** Tab/card count is dynamic (mainSection.length); supports 3, 4, or any number of items. */
 const SustainableChem = ({ data }: RespGrowthProps) => {
   const isTablet = useMediaQuery("(max-width:1023px)");
   const { leftText, rightText, mainSection } = data;
@@ -42,14 +44,22 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const sliderContainerRef = useRef<HTMLDivElement>(null);
   const mobileSliderContainerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);
-  const { marginBottom, setMarginBottom } = useMargin();
+  const mobileTabBarRef = useRef<HTMLDivElement>(null);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+  const { setMarginBottom } = useMargin();
+  /** Mobile: extra height beyond first viewport (contentHeight - innerHeight) for spacer only. */
+  const [extraHeight, setExtraHeight] = useState(0);
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
     visible: false,
   });
+  const [showMobileTabs, setShowMobileTabs] = useState(false);
+  const showMobileTabsRef = useRef(false);
+  const mainTlRef = useRef<gsap.core.Timeline | null>(null);
   const [slideWidth, setSlideWidth] = useState(0);
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
+  const isClickScrolling = useRef(false);
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -137,6 +147,12 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
+  const getMobileTabAnchorOffset = useCallback(() => {
+    const tabBarRect = mobileTabBarRef.current?.getBoundingClientRect();
+    if (!tabBarRect) return 120;
+    return tabBarRect.bottom + 8;
+  }, []);
+
   const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -189,6 +205,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   };
 
   useLayoutEffect(() => {
+    if (isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
     const ctx = gsap.context(() => {
       if (isTablet) {
         gsap.set(sustainbleLogo.current, {
@@ -215,12 +235,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         transformOrigin: "center center",
       });
 
-      // Animation timeline - handles the initial animations and slide sync
+      // Animation timeline — mobile: 3× viewport so section has enough scroll (like PeopleVision); desktop unchanged
       const animationEndProgress = ANIMATION_END_PROGRESS;
-      // For tablet, add marginBottom to scroll distance to account for content overflow on small screens
-      // Increased multiplier from 1.5 to 1.8 for balanced scroll space on mobile
       const animationScrollDistance = isTablet
-        ? window.innerHeight * 1.8 + marginBottom
+        ? window.innerHeight * 3
         : window.innerHeight * 4;
 
       const mainTl = gsap.timeline({
@@ -234,7 +252,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           pinSpacing: true,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            // Sync slides after animation phase (55% progress) - similar to test slider logic
             if (!isTablet) {
               if (
                 self.progress >= animationEndProgress &&
@@ -242,7 +259,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                 mainSection.length > 0
               ) {
                 const slides = mainSection.length;
-                // Map progress from 0.55 to 1.0 to slide indices 0 to slides-1
                 const slideProgress =
                   (self.progress - animationEndProgress) /
                   (1 - animationEndProgress);
@@ -261,7 +277,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             }
           },
           onLeave: () => {
-            if (!isTablet && tabsRef.current) {
+            if (isTablet) {
+              showMobileTabsRef.current = false;
+              setShowMobileTabs(false);
+            } else if (tabsRef.current) {
               gsap.to(tabsRef.current, {
                 opacity: 0,
                 duration: 0.6,
@@ -279,8 +298,16 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
               });
             }
           },
+          onLeaveBack: () => {
+            if (isTablet) {
+              showMobileTabsRef.current = false;
+              setShowMobileTabs(false);
+            }
+          },
         },
       });
+
+      mainTlRef.current = mainTl;
 
       // Store ScrollTrigger instance for tab click handling
       if (mainTl.scrollTrigger) {
@@ -385,6 +412,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             { borderRadius: "0% 0% 0% 0%", opacity: 1, duration: 0.5 },
           )
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
+          .addLabel("sliderReveal")
           .fromTo(
             mobileSliderContainerRef.current,
             { opacity: 0 },
@@ -537,9 +565,11 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     });
 
     return () => {
+      mainTlRef.current = null;
       ctx.revert();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     };
-  }, [mainSection.length, slideWidth, isTablet, marginBottom]);
+  }, [mainSection.length, slideWidth, isTablet]);
 
   useLayoutEffect(() => {
     measureIndicator();
@@ -570,44 +600,38 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     };
   }, [activeTab, activeTabMob, mainSection.length, measureIndicator, isTablet]);
 
+  // Mobile-only: reserve enough document height so order is last slide → GloballyCertified → footer; gap = marginTop on next section.
   useLayoutEffect(() => {
     const calculateMarginBottom = () => {
-      const sliderContainer = sliderContainerRef.current;
-      const tabBarContainer = tabBarContainerRef.current;
-      const mobileContainer = mobileSliderContainerRef.current;
-      if (!sliderContainer || !tabBarContainer || !mobileContainer) {
+      if (!isTablet) {
         setMarginBottom(0);
+        setExtraHeight(0);
         return;
       }
-      const sliderHeight = sliderContainer.offsetHeight;
-      const tabBarHeight = tabBarContainerRef.current?.offsetHeight || 0;
-      const screenHeight = window.innerHeight;
-
-      // Calculate total content height needed:
-      // 90px (pt-[90px] on tabBarContainer) + tabBarHeight + 16px (mt-[16px]) + sliderHeight + 50px (pb-[50px])
-      const fixedPadding = 90 + 16 + 50;
-      const totalContentHeight = fixedPadding + tabBarHeight + sliderHeight;
-
-      if (totalContentHeight > screenHeight) {
-        // Content overflows - add exactly what's needed to prevent overlap
-        const overflow = totalContentHeight - screenHeight + 50;
-        setMarginBottom(overflow);
-      } else {
+      const contentContainer = contentContainerRef.current;
+      if (!contentContainer) {
         setMarginBottom(0);
+        setExtraHeight(0);
+        return;
       }
+      const contentHeight =
+        contentContainer.scrollHeight || contentContainer.offsetHeight;
+      const screenHeight = window.innerHeight;
+      const extra = Math.max(0, contentHeight - screenHeight);
+      setExtraHeight(extra);
+      const buffer = 32;
+      const minGap = 32;
+      const maxGap = 64;
+      const overflow = Math.max(0, contentHeight - screenHeight);
+      const needed = overflow + buffer;
+      setMarginBottom(Math.min(Math.max(needed, minGap), maxGap));
     };
 
     calculateMarginBottom();
 
     const resizeObserver = new ResizeObserver(calculateMarginBottom);
-    if (sliderContainerRef.current) {
-      resizeObserver.observe(sliderContainerRef.current);
-    }
-    if (tabBarContainerRef.current) {
-      resizeObserver.observe(tabBarContainerRef.current);
-    }
-    if (mobileSliderContainerRef.current) {
-      resizeObserver.observe(mobileSliderContainerRef.current);
+    if (contentContainerRef.current) {
+      resizeObserver.observe(contentContainerRef.current);
     }
 
     const handleResize = () => calculateMarginBottom();
@@ -619,23 +643,115 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     };
   }, [activeTab, activeTabMob, mainSection.length, setMarginBottom, isTablet]);
 
+  // Re-run ScrollTrigger after height calculation so pin spacing and scroll distances are correct.
+  useEffect(() => {
+    if (!isTablet) return;
+    const id = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [isTablet, extraHeight]);
+
   const handlMobileTabClick = (index: number) => {
-    if (index === activeTabMob) return;
-    const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) {
-      swiper.slideTo(index);
-      setActiveTabMob(index);
-    }
+    const el = document.getElementById(`tabrespgrowth-${index}`);
+    if (!el) return;
+    const y =
+      el.getBoundingClientRect().top +
+      window.pageYOffset -
+      getMobileTabAnchorOffset();
+    isClickScrolling.current = true;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    setActiveTabMob(index);
+    setActiveTab(index);
+    setTimeout(() => {
+      isClickScrolling.current = false;
+    }, 800);
   };
+
+  useEffect(() => {
+    if (!isTablet || !mainSection.length) return;
+
+    let ticking = false;
+    let prevIndex = -1;
+
+    const handleScroll = () => {
+      if (ticking || isClickScrolling.current) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const offset = getMobileTabAnchorOffset();
+        const tabActivateOffset = offset + 80;
+        let activeIndex = 0;
+
+        for (let i = 0; i < mainSection.length; i++) {
+          const el = document.getElementById(`tabrespgrowth-${i}`);
+          if (!el) continue;
+          if (el.getBoundingClientRect().top <= tabActivateOffset) {
+            activeIndex = i;
+          }
+        }
+
+        if (activeIndex !== prevIndex) {
+          prevIndex = activeIndex;
+          setActiveTabMob(activeIndex);
+          setActiveTab(activeIndex);
+        }
+
+        const firstEl = document.getElementById("tabrespgrowth-0");
+        const lastEl = document.getElementById(
+          `tabrespgrowth-${mainSection.length - 1}`,
+        );
+        if (firstEl && lastEl) {
+          const firstTop = firstEl.getBoundingClientRect().top;
+          const lastBottom = lastEl.getBoundingClientRect().bottom;
+          const tl = mainTlRef.current;
+          const sliderRevealProgress =
+            tl && typeof tl.labels.sliderReveal === "number"
+              ? tl.labels.sliderReveal / tl.duration()
+              : 0.72;
+          const hasRevealed =
+            (tl?.scrollTrigger?.progress ?? 0) >= sliderRevealProgress;
+          const enteredSection = firstTop <= offset;
+          const stillInSection = lastBottom > 200;
+          const pastSection = lastBottom < 80;
+          const leftSection = firstTop > offset + 40;
+          const shouldShowTabs = showMobileTabsRef.current
+            ? hasRevealed && !pastSection && !leftSection
+            : hasRevealed && enteredSection && stillInSection;
+
+          if (shouldShowTabs !== showMobileTabsRef.current) {
+            showMobileTabsRef.current = shouldShowTabs;
+            setShowMobileTabs(shouldShowTabs);
+          }
+        }
+
+        ticking = false;
+      });
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isTablet, mainSection, getMobileTabAnchorOffset]);
+
+  useEffect(() => {
+    if (!isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
+  }, [isTablet]);
+
   return (
+    <>
     <div
       ref={triggerRef}
-      className="w-full relative lg:min-h-[40vh] mt-[0px] lg:mt-[unset]"
-      style={{ minHeight: isTablet ? `calc(100vh + ${marginBottom}px)` : undefined }}
+      className="w-full relative min-h-[100vh] lg:min-h-[40vh] mt-[0px] lg:mt-[unset]"
+      style={isTablet ? { minHeight: "100vh" } : undefined}
     >
+      {/* Match SustainableChem: hero and slider both centered so morphing happens in the same place. */}
       <div
         ref={titleSection}
-        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-20 bg-white"
+        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-[30] lg:z-20 bg-white"
       >
         <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
           {leftText && (
@@ -647,7 +763,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           {mainSection?.[0]?.image?.url && (
             <div
               ref={sustainbleLogo}
-              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-visible lg:overflow-hidden absolute"
             >
               <span
                 ref={sustainInner}
@@ -841,108 +957,100 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           </div>
         </div>
       </div>
+      {/* Mobile: same position as hero (top-1/2 -translate-y-1/2) so slider appears in place when leaf morph completes. */}
       <div
         ref={mobileSliderContainerRef}
-        className="block lg:hidden container absolute top-0 left-0 w-full"
-        style={{ minHeight: isTablet ? `calc(100vh + ${marginBottom}px)` : '100vh' }}
+        className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh]"
       >
-        <div className="pt-[90px]" ref={tabBarContainerRef}>
-          {mainSection?.length > 0 && isTablet && (
-            <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto overflow-y-hidden whitespace-nowrap w-fit max-w-full">
-              <div
-                ref={containerRef}
-                className="relative flex gap-x-2 sm:gap-x-[14px] z-10 px-1 w-max"
-              >
-                {/* Animated Indicator */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    left: indicator.visible ? indicator.left : 0,
-                    top: 0,
-                    height: "100%",
-                    borderRadius: 9999,
-                    background: indicatorColor,
-                    width: indicator.visible ? indicator.width : 0,
-                    transition: indicatorTransition,
-                    zIndex: 0,
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Tab Buttons */}
-                {mainSection?.map(
-                  (items, index) =>
-                    items?.category && (
-                      <div
-                        key={index}
-                        ref={(element) => {
-                          tabRefs.current[index] = element;
-                        }}
-                        onClick={() => handlMobileTabClick(index)}
-                        className={`relative z-10 text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 shrink-0 ${
-                          activeTabMob === index
-                            ? "text-white"
-                            : "hover:bg-grey-200"
-                        }`}
-                      >
-                        {items?.category}
-                      </div>
-                    ),
-                )}
-              </div>
+        <div className="relative" ref={contentContainerRef}>
+          <div className="w-full pt-[155px] pb-[100px]">
+            <div className="grid items-center gap-6 mt-4" ref={sliderContainerRef}>
+              {isTablet && (
+                <div className="flex flex-col gap-y-[40px]">
+                  {mainSection.map((slide, index) => (
+                    <div key={slide.id} id={`tabrespgrowth-${index}`}>
+                      <SliderCard
+                        imgSrc={slide?.image?.url}
+                        imgAlt={slide?.image?.alternativeText || "banner"}
+                        title={slide?.category}
+                        description={slide?.description}
+                        values={slide?.values}
+                        ctaButton={slide?.ctaButton}
+                        imageWrapperRef={
+                          imageWrapperRef as React.RefObject<HTMLDivElement>
+                        }
+                        index={index}
+                        slideForHomePage={true}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div
-          className="mt-[16px] lg:mt-[32px] pb-[50px] lg:pb-[unset]"
-          ref={sliderContainerRef}
-        >
-          <div className="grid items-center" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
-            {isTablet && (
-              <Swiper
-                slidesPerView={1}
-                loop={false}
-                allowTouchMove={true}
-                speed={600}
-                watchSlidesProgress={true}
-                updateOnWindowResize={true}
-                className="w-full h-auto"
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                  swiper.on("resize", () => {
-                    swiper.updateSize();
-                    swiper.updateSlides();
-                    swiper.updateProgress();
-                    swiper.updateSlidesClasses();
-                  });
-                }}
-                onSlideChange={(swiper) => {
-                  setActiveTabMob(swiper.activeIndex);
-                }}
-              >
-                {mainSection.map((slide, index) => (
-                  <SwiperSlide key={slide.id}>
-                    <SliderCard
-                      imgSrc={slide?.image?.url}
-                      imgAlt={slide?.image?.alternativeText || "banner"}
-                      title={slide?.category}
-                      description={slide?.description}
-                      values={slide?.values}
-                      ctaButton={slide?.ctaButton}
-                      imageWrapperRef={
-                        imageWrapperRef as React.RefObject<HTMLDivElement>
-                      }
-                      index={index}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
           </div>
         </div>
       </div>
     </div>
+    {/* Mobile: spacer reserves only the overflow beyond first viewport to avoid overlap and large gap. */}
+    {isTablet && extraHeight > 0 && (
+      <div
+        aria-hidden="true"
+        className="block lg:hidden w-full shrink-0 bg-white"
+        style={{ height: `${extraHeight}px` }}
+      />
+    )}
+    <div
+      ref={(element) => {
+        mobileTabBarRef.current = element;
+        tabBarContainerRef.current = element;
+      }}
+      className={`fixed top-[110px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
+      aria-hidden={!showMobileTabs}
+    >
+      {mainSection?.length > 0 && isTablet && (
+        <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit max-w-[calc(100vw-32px)]">
+          <div
+            ref={containerRef}
+            className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+          >
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                left: indicator.visible ? indicator.left : 0,
+                top: 0,
+                height: "100%",
+                borderRadius: 9999,
+                background: indicatorColor,
+                width: indicator.visible ? indicator.width : 0,
+                transition: indicatorTransition,
+                zIndex: 0,
+                pointerEvents: "none",
+              }}
+            />
+
+            {mainSection?.map(
+              (items, index) =>
+                items?.category && (
+                  <div
+                    key={index}
+                    ref={(element) => {
+                      tabRefs.current[index] = element;
+                    }}
+                    onClick={() => handlMobileTabClick(index)}
+                    className={`relative z-10 text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                      activeTab === index ? "text-white" : "hover:bg-grey-200"
+                    }`}
+                  >
+                    {items?.category}
+                  </div>
+                ),
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+    </>
   );
 };
 

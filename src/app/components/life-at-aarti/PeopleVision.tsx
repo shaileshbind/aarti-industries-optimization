@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import React, { useLayoutEffect, useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import ScrollTriggerModule from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -26,9 +26,9 @@ type ContentCard = NonNullable<
 const PeopleVision = ({ data }: LAAVisionProps) => {
   const isTablet = useMediaQuery("(max-width:1023px)");
   const { title, content } = data;
-  const isMobile = useMediaQuery("(max-width:600px)");
   const triggerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);
+  const mobileTabBarRef = useRef<HTMLDivElement>(null);
   const sustainbleLogo = useRef<HTMLDivElement>(null);
   const susLogotl = useRef<HTMLElement>(null);
   const susLogotr = useRef<HTMLElement>(null);
@@ -44,6 +44,13 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [activeTabMob, setActiveTabMob] = useState<number>(0);
+  const [showMobileTabs, setShowMobileTabs] = useState(false);
+  const showMobileTabsRef = useRef(false);
+  const mainTlRef = useRef<gsap.core.Timeline | null>(null);
+  const desktopTabsVisibleRef = useRef(false);
+  const desktopScrollTweenRef = useRef<gsap.core.Tween | null>(null);
+  const isClickScrolling = useRef(false);
+  const clickScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -139,11 +146,18 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
+  const getMobileTabAnchorOffset = useCallback(() => {
+    const tabBarRect = mobileTabBarRef.current?.getBoundingClientRect();
+    if (!tabBarRect) return 120;
+    return tabBarRect.bottom + 8;
+  }, []);
+
   const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    const activeButton = tabRefs.current[activeTab] ?? null;
+    const currentActiveTab = isTablet ? activeTabMob : activeTab;
+    const activeButton = tabRefs.current[currentActiveTab] ?? null;
 
     if (!activeButton) {
       setIndicator((prev) =>
@@ -160,24 +174,58 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
         return prev;
       return { left, width, visible: true };
     });
-  }, [activeTab]);
+  }, [activeTab, activeTabMob, isTablet]);
 
   const handleTabClick = useCallback(
     (index: number, e?: React.MouseEvent) => {
       e?.preventDefault();
       e?.stopPropagation();
-      if (index === activeTab) return;
+      if (index === activeTab && !isTablet) return;
 
-      const swiper = swiperRef.current;
-      if (swiper && !swiper.destroyed) {
-        swiper.slideTo(index);
-        setActiveTab(index);
+      if (isTablet) {
+        const swiper = swiperRef.current;
+        if (swiper && !swiper.destroyed) {
+          swiper.slideTo(index);
+          setActiveTab(index);
+        }
+        return;
       }
+
+      const st = mainTlRef.current?.scrollTrigger;
+      if (!st || !content?.length) return;
+
+      const total = content.length;
+      const clampedIndex = Math.max(0, Math.min(index, total - 1));
+      const slideProgress = total > 1 ? clampedIndex / (total - 1) : 0;
+      const progress = 0.55 + slideProgress * (1 - 0.55);
+      const start =
+        typeof st.start === "number" ? st.start : (st.start as number) || 0;
+      const end = typeof st.end === "number" ? st.end : (st.end as number) || 0;
+      const targetY = start + (end - start) * progress;
+
+      desktopScrollTweenRef.current?.kill();
+      const scrollProxy = { y: st.scroll() };
+      desktopScrollTweenRef.current = gsap.to(scrollProxy, {
+        y: targetY,
+        duration: 0.9,
+        ease: "power2.inOut",
+        overwrite: true,
+        onUpdate: () => {
+          st.scroll(scrollProxy.y);
+        },
+        onComplete: () => {
+          desktopScrollTweenRef.current = null;
+        },
+      });
     },
-    [activeTab],
+    [activeTab, content, isTablet],
   );
 
   useLayoutEffect(() => {
+    if (isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
     const ctx = gsap.context(() => {
       if (isTablet) {
         gsap.set(sustainbleLogo.current, {
@@ -197,6 +245,10 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
         });
       }
       gsap.set(envSlider.current, { opacity: 0 });
+      if (!isTablet) {
+        gsap.set(tabsRef.current, { opacity: 0 });
+        desktopTabsVisibleRef.current = false;
+      }
       gsap.set(".leafStag", {
         opacity: 0,
         scale: 0.5,
@@ -205,11 +257,11 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       const animationEndProgress = 0.55;
       const animationScrollDistance = isTablet
         ? window.innerHeight * 1.5
-        : window.innerHeight * 4;
+        : window.innerHeight * 3;
 
       const mainTl = gsap.timeline({
         scrollTrigger: {
-          id: "respGrowthTrigger11",
+          id: "peopleVisionTrigger",
           trigger: triggerRef.current,
           start: "top 50%",
           end: `+=${animationScrollDistance}`,
@@ -221,52 +273,67 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           refreshPriority: 0,
           onUpdate: (self) => {
             if (!isTablet) {
+              const shouldShowDesktopTabs =
+                self.isActive && self.progress >= animationEndProgress;
               if (
-                self.progress >= animationEndProgress &&
-                swiperRef.current &&
-                content &&
-                content.length > 0
+                tabsRef.current &&
+                shouldShowDesktopTabs !== desktopTabsVisibleRef.current
               ) {
-                const slides = content.length;
+                desktopTabsVisibleRef.current = shouldShowDesktopTabs;
+                gsap.to(tabsRef.current, {
+                  opacity: shouldShowDesktopTabs ? 1 : 0,
+                  duration: 0.45,
+                  ease: shouldShowDesktopTabs ? "power2.in" : "power2.out",
+                  overwrite: "auto",
+                });
+              }
 
-                const slideProgress =
-                  (self.progress - animationEndProgress) /
-                  (1 - animationEndProgress);
-                const progress = slideProgress * (slides - 1);
-                const index = Math.round(progress);
+              if (swiperRef.current && content && content.length > 0) {
+                const slides = content.length;
+                const index =
+                  self.progress >= animationEndProgress
+                    ? Math.round(
+                        ((self.progress - animationEndProgress) /
+                          (1 - animationEndProgress)) *
+                          (slides - 1),
+                      )
+                    : 0;
 
                 if (
-                  swiperRef.current &&
                   !swiperRef.current.destroyed &&
                   index !== swiperRef.current.activeIndex
                 ) {
                   swiperRef.current.slideTo(index);
-                  setActiveTab(index);
                 }
+
+                setActiveTab((prev) => (prev === index ? prev : index));
               }
             }
           },
           onLeave: () => {
-            if (!isTablet && tabsRef.current) {
-              gsap.to(tabsRef.current, {
-                opacity: 0,
-                duration: 0.6,
-                ease: "power2.out",
-                delay: 0.2,
-              });
+            if (isTablet) {
+              showMobileTabsRef.current = false;
+              setShowMobileTabs(false);
             }
           },
-          onEnterBack: () => {
-            if (!isTablet && tabsRef.current) {
-              gsap.to(tabsRef.current, {
-                opacity: 1,
-                duration: 0.6,
-                ease: "power2.in",
-              });
+          onLeaveBack: () => {
+            if (!isTablet) {
+              desktopTabsVisibleRef.current = false;
+              desktopScrollTweenRef.current?.kill();
+              desktopScrollTweenRef.current = null;
+              if (tabsRef.current) {
+                gsap.set(tabsRef.current, { opacity: 0 });
+              }
+              const swiper = swiperRef.current;
+              if (swiper && !swiper.destroyed && swiper.activeIndex !== 0) {
+                swiper.slideTo(0);
+              }
+              setActiveTab(0);
             }
           },
         },
       });
+      mainTlRef.current = mainTl;
 
       if (isTablet) {
         mainTl
@@ -338,6 +405,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             { borderRadius: "50% 50% 50% 50%", opacity: 1 },
             { borderRadius: "0% 0% 0% 0%", opacity: 1, duration: 0.5 },
           )
+          .addLabel("sliderReveal")
           .fromTo(
             envSlider.current,
             { opacity: 0 },
@@ -449,6 +517,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     });
 
     return () => {
+      mainTlRef.current = null;
       ctx.revert();
       requestAnimationFrame(() => ScrollTrigger.refresh());
     };
@@ -516,17 +585,114 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   }, [activeTab, content?.length, setMarginBottom]);
 
   const handlMobileTabClick = (index: number) => {
-    if (index === activeTabMob) return;
-    const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) {
-      swiper.slideTo(index);
-      setActiveTabMob(index);
+    const el = document.getElementById(`tabpeoplevision-${index}`);
+    if (!el) return;
+    const y =
+      el.getBoundingClientRect().top +
+      window.pageYOffset -
+      getMobileTabAnchorOffset();
+    if (clickScrollTimeoutRef.current) {
+      clearTimeout(clickScrollTimeoutRef.current);
     }
+    isClickScrolling.current = true;
+    showMobileTabsRef.current = true;
+    setShowMobileTabs(true);
+    window.scrollTo({ top: y, behavior: "smooth" });
+    setActiveTabMob(index);
+    setActiveTab(index);
+    clickScrollTimeoutRef.current = setTimeout(() => {
+      isClickScrolling.current = false;
+      clickScrollTimeoutRef.current = null;
+    }, 900);
   };
+
+  useEffect(() => {
+    if (!isTablet || !content?.length) return;
+    let ticking = false;
+    let prevIndex = -1;
+
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (isClickScrolling.current) {
+          showMobileTabsRef.current = true;
+          setShowMobileTabs(true);
+          ticking = false;
+          return;
+        }
+        const offset = getMobileTabAnchorOffset();
+        let activeIndex = 0;
+        for (let i = 0; i < content.length; i++) {
+          const el = document.getElementById(`tabpeoplevision-${i}`);
+          if (!el) continue;
+          if (el.getBoundingClientRect().top <= offset) {
+            activeIndex = i;
+          }
+        }
+        if (activeIndex !== prevIndex) {
+          prevIndex = activeIndex;
+          setActiveTabMob(activeIndex);
+          setActiveTab(activeIndex);
+        }
+
+        const firstEl = document.getElementById("tabpeoplevision-0");
+        const lastEl = document.getElementById(
+          `tabpeoplevision-${content.length - 1}`,
+        );
+        if (firstEl && lastEl) {
+          const firstRect = firstEl.getBoundingClientRect();
+          const lastBottom = lastEl.getBoundingClientRect().bottom;
+          const tabEntryOffset = getMobileTabAnchorOffset();
+          const tl = mainTlRef.current;
+          const sliderRevealProgress =
+            tl && typeof tl.labels.sliderReveal === "number"
+              ? tl.labels.sliderReveal / tl.duration()
+              : 0.72;
+          const hasRevealed =
+            (tl?.scrollTrigger?.progress ?? 0) >= sliderRevealProgress;
+          const enteredSection = firstRect.top <= tabEntryOffset;
+          const stillInSection = lastBottom > 200;
+          const pastSection = lastBottom < 80;
+          const leftSection = firstRect.top > tabEntryOffset + 40;
+          const shouldShowTabs = showMobileTabsRef.current
+            ? hasRevealed && !pastSection && !leftSection
+            : hasRevealed && enteredSection && stillInSection;
+
+          if (shouldShowTabs !== showMobileTabsRef.current) {
+            showMobileTabsRef.current = shouldShowTabs;
+            setShowMobileTabs(shouldShowTabs);
+          }
+        }
+        ticking = false;
+      });
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isTablet, content, getMobileTabAnchorOffset]);
+
+  useEffect(() => {
+    if (!isTablet) {
+      showMobileTabsRef.current = false;
+      setShowMobileTabs(false);
+    }
+  }, [isTablet]);
+
+  useEffect(() => {
+    return () => {
+      desktopScrollTweenRef.current?.kill();
+      desktopScrollTweenRef.current = null;
+      if (clickScrollTimeoutRef.current) {
+        clearTimeout(clickScrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
       {title && (
-        <FadeInReveal delay={0.6}>
+        <FadeInReveal delay={0.2}>
           <H2 className="text-center max-w-[780px] mx-[20px] lg:mx-auto ">
             {title}
           </H2>
@@ -633,7 +799,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
           {/* Slider Section */}
           <div
             ref={envSlider}
-            className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0 z-20 xxx"
+            className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0% left-0 z-20"
           >
             {/* Desktop Slider */}
             <div className="hidden lg:flex w-full h-screen relative flex-col justify-center">
@@ -736,113 +902,90 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                 </div>
               </div>
             </div>
-            {/* Mobile */}
+            {/* Mobile: vertical stack, tabs in fixed bar */}
             <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh] ">
               <div className="relative" ref={contentContainerRef}>
                 <div className="w-full absolute mt-[70px]">
-                  <div className="pt-[10px]" ref={tabBarContainerRef}>
-                    {content && content.length > 0 && isMobile && (
-                      <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-                        <div
-                          ref={containerRef}
-                          className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-                        >
-                          {/* Animated Indicator */}
-                          <div
-                            aria-hidden="true"
-                            style={{
-                              position: "absolute",
-                              left: indicator.visible ? indicator.left : 0,
-                              top: 0,
-                              height: "100%",
-                              borderRadius: 9999,
-                              background: indicatorColor,
-                              width: indicator.visible ? indicator.width : 0,
-                              transition: indicatorTransition,
-                              zIndex: 0,
-                              pointerEvents: "none",
-                            }}
-                          />
-
-                          {/* Tab Buttons */}
-                          {content?.map(
-                            (items: ContentSection, index: number) =>
-                              items?.category && (
-                                <div
-                                  key={index}
-                                  ref={(element) => {
-                                    tabRefs.current[index] = element;
-                                  }}
-                                  onClick={() => handlMobileTabClick(index)}
-                                  className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                                    activeTab === index
-                                      ? "text-white"
-                                      : "hover:bg-grey-200"
-                                  }`}
-                                >
-                                  {items?.category}
-                                </div>
-                              ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className="grid items-center gap-6 mt-4"
-                    onTouchStart={handleSliderTouchStart}
-                    onTouchMove={handleSliderTouchMove}
-                    onTouchEnd={handleSliderTouchEnd}
-                  >
-                    {isMobile && (
-                      <Swiper
-                        slidesPerView={1}
-                        loop={false}
-                        allowTouchMove={true}
-                        speed={600}
-                        watchSlidesProgress={true}
-                        updateOnWindowResize={true}
-                        className="w-full h-auto"
-                        onSwiper={(swiper) => {
-                          swiperRef.current = swiper;
-                          swiper.on("resize", () => {
-                            swiper.updateSize();
-                            swiper.updateSlides();
-                            swiper.updateProgress();
-                            swiper.updateSlidesClasses();
-                          });
-                        }}
-                        onSlideChange={(swiper) => {
-                          setActiveTab(swiper.activeIndex);
-                        }}
-                      >
-                        {content?.map((section: ContentSection) =>
-                          section?.card?.map((slide: ContentCard, index: number) => (
-                            <SwiperSlide key={slide?.id}>
+                  <div className="pt-[10px]" ref={tabBarContainerRef} />
+                  <div className="grid items-center gap-6 mt-4">
+                    {isTablet &&
+                      content?.map((section: ContentSection, sectionIndex: number) => (
+                        <div key={sectionIndex} id={`tabpeoplevision-${sectionIndex}`}>
+                          <div className="flex flex-col gap-y-[40px]">
+                            {section?.card?.map((slide: ContentCard, index: number) => (
                               <SliderCard
+                                key={slide?.id}
                                 imgSrc={slide?.image?.url}
-                                imgAlt={
-                                  slide?.image?.alternativeText || "banner"
-                                }
+                                imgAlt={slide?.image?.alternativeText || "banner"}
                                 title={section?.category}
                                 description={slide?.description}
                                 values={slide?.values}
                                 ctaButton={slide?.ctaButton}
                                 heading={slide?.title}
                                 bullets={slide?.BulletPoints}
+                                imageWrapperRef={
+                                  imageWrapperRef as React.RefObject<HTMLDivElement>
+                                }
                                 index={index}
+                                slideForHomePage={true}
                               />
-                            </SwiperSlide>
-                          )),
-                        )}
-                      </Swiper>
-                    )}
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        ref={mobileTabBarRef}
+        className={`fixed top-[110px] left-0 right-0 flex justify-center items-center transition-opacity duration-200 ${showMobileTabs ? "z-30 opacity-100 pointer-events-auto visible" : "z-0 opacity-0 pointer-events-none invisible"}`}
+        aria-hidden={!showMobileTabs}
+      >
+        {content && content.length > 0 && isTablet && (
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit max-w-[calc(100vw-32px)]">
+            <div
+              ref={containerRef}
+              className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+            >
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: indicator.visible ? indicator.left : 0,
+                  top: 0,
+                  height: "100%",
+                  borderRadius: 9999,
+                  background: indicatorColor,
+                  width: indicator.visible ? indicator.width : 0,
+                  transition: indicatorTransition,
+                  zIndex: 0,
+                  pointerEvents: "none",
+                }}
+              />
+              {content?.map(
+                (items: ContentSection, index: number) =>
+                  items?.category && (
+                    <div
+                      key={index}
+                      ref={(element) => {
+                        tabRefs.current[index] = element;
+                      }}
+                      onClick={() => handlMobileTabClick(index)}
+                      className={`text-grey-400 text-[11px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                        activeTab === index ? "text-white" : "hover:bg-grey-200"
+                      }`}
+                    >
+                      {items?.category}
+                    </div>
+                  ),
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
