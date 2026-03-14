@@ -18,6 +18,7 @@ type SustainabilityOverviewSectionsProps = {
   globallyCertifiedData: GloballyCertifiedItem[] | null | undefined;
 };
 
+
 /** Wraps RespGrowth + spacer + GloballyCertified in MarginProvider. Order: last slide → spacer → Global section → footer. */
 export default function SustainabilityOverviewSections({
   sectionFour,
