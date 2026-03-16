@@ -2,8 +2,6 @@ import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "@/app/components/GloballyCertified";
 import OrangeCardListingPage from "@/app/components/investor-templates/OranegCardListingPage";
 
-export const dynamic = "force-dynamic";
-
 export default async function SustainabilityReportPage() {
   const globallyCertifiedData = await getData(
     "/globally-certified-datas?populate=*",

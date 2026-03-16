@@ -12,13 +12,11 @@ import SEO from "./components/SEO";
 import HomeSections from "./components/home/HomeSections";
 import HomeExplore from "./components/home/HomeExplore";
 
-export const dynamic = "force-dynamic";
-
 export default async function Home() {
-  const data = await getPageData("/pages/by-slug/home-page");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/home-page"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     sectionOne,
     sectionTwo,

@@ -9,13 +9,12 @@ import EnvResp from "../components/environment/EnvResp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/environment");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/environment"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,

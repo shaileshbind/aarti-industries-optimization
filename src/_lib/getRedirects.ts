@@ -52,7 +52,17 @@ function normalizeRedirectItem(item: RedirectItem): RedirectMapping | null {
   return { oldUrl, newUrl, redirectionType };
 }
 
+// In-memory cache to avoid fetching redirects from the CMS on every request
+let cachedRedirects: RedirectMapping[] | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 export async function getRedirects(): Promise<RedirectMapping[]> {
+  const now = Date.now();
+  if (cachedRedirects && now - cacheTimestamp < CACHE_TTL_MS) {
+    return cachedRedirects;
+  }
+
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const apiToken = process.env.API_TOKEN;
@@ -75,7 +85,7 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
         `&pagination[page]=${page}` +
         `&pagination[pageSize]=100` +
         `&sort=id:asc`;
-      const response = await fetch(endpoint, { cache: "no-store", headers });
+      const response = await fetch(endpoint, { next: { revalidate: 300 }, headers });
       if (!response.ok) return { items: [] };
       const data = await response.json();
 
@@ -101,7 +111,6 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
       if (pagination?.pageCount && Number.isFinite(pagination.pageCount)) {
         pageCount = pagination.pageCount;
       } else {
-        // If meta pagination is missing, assume single page.
         pageCount = 1;
       }
       page += 1;
@@ -111,6 +120,8 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
       .map(normalizeRedirectItem)
       .filter((x): x is RedirectMapping => x !== null);
 
+    cachedRedirects = normalized;
+    cacheTimestamp = Date.now();
     return normalized;
   } catch {
     return [];

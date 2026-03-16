@@ -10,13 +10,12 @@ import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import SEO from "../components/SEO";
 import { getPageData } from "@/_lib/pageData.fetch";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/investor-overview");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/investor-overview"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,

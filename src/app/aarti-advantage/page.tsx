@@ -8,14 +8,11 @@ import AdvExplore from "../components/aarti-advantage/AdvExplore";
 import SEO from "../components/SEO";
 import { getPageData } from "@/_lib/pageData.fetch";
 
-export const dynamic = "force-dynamic";
-
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/aarti-advantage");
-
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/aarti-advantage"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

@@ -7,13 +7,11 @@ import GlobalInnovation from "../components/sections/GlobalInnovation";
 import SEO from "../components/SEO";
 import SocialExplore from "../components/social-health-and-safety/SocialExplore";
 
-export const dynamic = "force-dynamic";
-
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/ethics");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/ethics"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const { section_one, section_two, section_three, section_four } = data?.data;
   const seo = data?.seo;
 

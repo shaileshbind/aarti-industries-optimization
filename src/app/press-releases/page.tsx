@@ -1,8 +1,8 @@
+import { Suspense } from "react";
 import PressReleaseBanner from "../components/press-releases/PressReleaseBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 import PressReleaseYearListing from "../components/press-releases/PressReleaseYearListing";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/press-release");
@@ -29,7 +29,9 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       {data?.data && <PressReleaseBanner data={data?.data} />}
-      <PressReleaseYearListing />
+      <Suspense>
+        <PressReleaseYearListing />
+      </Suspense>
     </div>
   );
 };

@@ -9,13 +9,12 @@ import ParallaxCardSection from "../components/partnership/ParallaxCardSection";
 import WhyAarti from "../components/partnership/WhyAarti";
 import WorksWithPartners from "../components/sections/WorksWithPartners";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const Page = async () => {
-  const data = await getPageData("/pages/by-slug/partnership");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/partnership"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

@@ -9,13 +9,11 @@ import CategoryProducts from "@/app/components/mahasuper/CategoryProducts";
 import EmpoweringFarmers from "@/app/components/mahasuper/EmpoweringFarmers";
 import ContactBanner from "@/app/components/ContactBanner";
 
-export const dynamic = "force-dynamic";
-
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/maha-super");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/maha-super"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
