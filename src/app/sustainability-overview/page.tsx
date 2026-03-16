@@ -1,9 +1,8 @@
 import SusBanner from "../components/sustainability-overview/SusBanner";
-import GloballyCertified from "../components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
 import SusCore from "../components/sustainability-overview/SusCore";
 import AILRoadmap from "../components/sustainability-overview/AILRoadmap";
-import RespGrowth from "../components/sustainability-overview/RespGrowth";
+import SustainabilityOverviewSections from "../components/sustainability-overview/SustainabilityOverviewSections";
 import { getPageData } from "@/_lib/pageData.fetch";
 import SEO from "../components/SEO";
 
@@ -42,12 +41,10 @@ const page = async () => {
         <SusBanner data={section_one} />
         <SusCore data={section_two} />
         <AILRoadmap data={section_three} />
-        <div className="pt-[160px] pb-[80px] mb-[50px]">
-          <RespGrowth data={section_four} />
-        </div>
-        {globallyCertifiedData && (
-          <GloballyCertified itemsData={globallyCertifiedData} />
-        )}
+        <SustainabilityOverviewSections
+          sectionFour={section_four}
+          globallyCertifiedData={globallyCertifiedData}
+        />
       </div>
     </>
   );
