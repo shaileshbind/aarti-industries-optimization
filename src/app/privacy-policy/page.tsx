@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import PrivacyPolicyBanner from "@/app/components/privacy-policy/privacyPolicyBanner";
 import PrivacyPolicyContent from "../components/privacy-policy/PrivacyPolicyContent";
 import { getPageData } from "@/_lib/pageData.fetch";

@@ -1,8 +1,7 @@
+import { Suspense } from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import SEO from "../components/SEO";
 import SearchResults from "../components/search-results/SearchResults";
-
-export const dynamic = "force-dynamic";
 
 const page = async () => {
   const data = await getPageData("/pages/by-slug/ethics");
@@ -30,7 +29,9 @@ const page = async () => {
         schemaData={seo?.schemaData}
       />
       <div className="container">
-        <SearchResults />
+        <Suspense>
+          <SearchResults />
+        </Suspense>
       </div>
     </div>
   );

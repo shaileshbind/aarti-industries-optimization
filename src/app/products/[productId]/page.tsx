@@ -5,18 +5,15 @@ import { ProductPageProps } from "../../types/product.type";
 import SEO from "@/app/components/SEO";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export default async function ProductInner({ params }: ProductPageProps) {
   const { productId } = await params;
   let relatedData;
 
-  const mainData = await getData(`/products-details/${productId}`);
+  const [mainData, globallyCertifiedData] = await Promise.all([
+    getData(`/products-details/${productId}`),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   if (!mainData) notFound();
-
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
 
   if (mainData) {
     relatedData = await getData(

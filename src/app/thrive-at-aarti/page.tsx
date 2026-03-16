@@ -9,13 +9,12 @@ import InvestingInPotential from "../components/thrive-at-aarti/InvestingInPoten
 import ThriveBanner from "../components/thrive-at-aarti/ThriveBanner";
 import ThePeople from "../components/ThePeople";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/thrive-at-aarti");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/thrive-at-aarti"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

@@ -8,10 +8,12 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import ContactBanner from "../components/ContactBanner";
 import AartiWorldLeader from "../components/life-at-aarti/AartiWorldLeader";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/life-at-aarti");
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/life-at-aarti"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
@@ -23,10 +25,6 @@ const page = async () => {
     gallery,
   } = data?.data;
   const seo = data?.seo;
-
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
 
   return (
     <div>
