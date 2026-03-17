@@ -2,11 +2,11 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ShareHolderBannerProps } from "@/app/types/shareholder.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ShareHolderBanner: React.FC<ShareHolderBannerProps> = ({ data }) => {
   const { title, description, image, mobImage } = data;
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   return (
     <HeroBanner

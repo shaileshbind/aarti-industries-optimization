@@ -1,9 +1,6 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useCallback } from "react";
-// import { createPortal } from "react-dom";
-import Lenis from "lenis";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface LenisContextType {
   stopLenis: () => void;
@@ -50,36 +47,45 @@ interface LenisProviderProps {
 }
 
 export const LenisProvider = ({ children }: LenisProviderProps) => {
-  const lenisRef = useRef<Lenis | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lenisRef = useRef<any>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!contentRef.current) return;
 
-    const lenis = new Lenis({
-      duration: 1.3,
-      syncTouch: true,
-      orientation: "vertical",
-      // Transform this div instead of <html>, so position:fixed elements
-      // outside this div are not affected by Lenis's syncTouch transform.
-      content: contentRef.current,
-    });
-    lenisRef.current = lenis;
-
-    // Keep ScrollTrigger in sync with Lenis scroll position
-    lenis.on("scroll", ScrollTrigger.update);
-
     let running = true;
-    function raf(time: number) {
-      if (!running) return;
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+
+    // Defer heavy library loading until after first paint
+    Promise.all([import("lenis"), import("gsap/ScrollTrigger")]).then(
+      ([lenisModule, stModule]) => {
+        if (!running || !contentRef.current) return;
+
+        const Lenis = lenisModule.default;
+        const { ScrollTrigger } = stModule;
+
+        const lenis = new Lenis({
+          duration: 1.3,
+          syncTouch: true,
+          orientation: "vertical",
+          content: contentRef.current,
+        });
+        lenisRef.current = lenis;
+
+        lenis.on("scroll", ScrollTrigger.update);
+
+        function raf(time: number) {
+          if (!running) return;
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      },
+    );
 
     return () => {
       running = false;
-      lenis.destroy();
+      lenisRef.current?.destroy();
       lenisRef.current = null;
     };
   }, []);

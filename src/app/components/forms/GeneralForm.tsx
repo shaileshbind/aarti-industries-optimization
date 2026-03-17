@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -83,6 +83,34 @@ export default function GeneralForm({
   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>("");
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleOpenSelect = useCallback((name: string) => () => setOpenSelect(name), []);
+  const handleCloseSelect = useCallback(() => setOpenSelect(null), []);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target?.closest?.(".MuiMenu-paper")) return;
+      setOpenSelect(null);
+    };
+    const container = scrollContainerRef.current;
+    container?.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const selectMenuProps = {
+    disableScrollLock: true,
+    PaperProps: {
+      "data-lenis-prevent": true,
+      sx: { maxHeight: 300 },
+    },
+  };
 
   const {
     register,
@@ -403,6 +431,7 @@ export default function GeneralForm({
         onSubmit={handleSubmit(onSubmit)}
       >
         <div
+          ref={scrollContainerRef}
           className={clsxN(
             `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
             className,
@@ -646,15 +675,10 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="country"
                     IconComponent={KeyboardArrowDownIcon}
-                    MenuProps={{
-                      disableScrollLock: true,
-                      PaperProps: {
-                        "data-lenis-prevent": true,
-                        sx: {
-                          maxHeight: 300,
-                        },
-                      },
-                    }}
+                    open={openSelect === "country"}
+                    onOpen={handleOpenSelect("country")}
+                    onClose={handleCloseSelect}
+                    MenuProps={selectMenuProps}
                   >
                     {Countries.map((country) => (
                       <MenuItem key={country.code} value={country.name}>
@@ -685,6 +709,10 @@ export default function GeneralForm({
                     value={field.value || ""}
                     labelId="category"
                     IconComponent={KeyboardArrowDownIcon}
+                    open={openSelect === "category"}
+                    onOpen={handleOpenSelect("category")}
+                    onClose={handleCloseSelect}
+                    MenuProps={selectMenuProps}
                   >
                     {categorySubcategoryData?.map((item, index) => (
                       <MenuItem key={index} value={item?.category}>
@@ -727,6 +755,10 @@ export default function GeneralForm({
                       availableSubcategories.length !== 1 &&
                       availableSubcategories.length === 0
                     }
+                    open={openSelect === "subCategory"}
+                    onOpen={handleOpenSelect("subCategory")}
+                    onClose={handleCloseSelect}
+                    MenuProps={selectMenuProps}
                   >
                     {availableSubcategories?.length > 0 &&
                       availableSubcategories?.map((subCat, index) => (
@@ -856,6 +888,10 @@ export default function GeneralForm({
                   value={field.value || ""}
                   labelId="hearAboutAil"
                   IconComponent={KeyboardArrowDownIcon}
+                  open={openSelect === "hearAboutAil"}
+                  onOpen={handleOpenSelect("hearAboutAil")}
+                  onClose={handleCloseSelect}
+                  MenuProps={selectMenuProps}
                 >
                   {[
                     "Articles",

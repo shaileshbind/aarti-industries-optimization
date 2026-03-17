@@ -13,7 +13,6 @@ import { FadeInReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
-
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
@@ -32,7 +31,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
-
+  const isDesktop = useMatchMedia("(min-width:1024px)");
   const handleSliderTouchStart = useCallback(
     (e: React.TouchEvent) => {
       touchStartRef.current = {
@@ -498,6 +497,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
               </div>
             )}
           </div>
+          {isDesktop && (
           <div
             className={clsx(
               ` relative w-full overflow-hidden ${layout === "imgLeftContentRight"
@@ -521,6 +521,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       "banner"
                     }
                     fill
+                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                     className="object-cover scale-110"
                   />
                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
@@ -532,6 +533,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                         "banner"
                       }
                       fill
+                      sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                       className="object-cover scale-110"
                     />
                   </span>
@@ -553,7 +555,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       "banner"
                     }
                     fill
-                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                     loading="eager"
                     className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
                   />
@@ -568,7 +570,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
-                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                     loading="eager"
                     className={`${secondaryImageClasses} ${mainAnimationClasses}`}
                   />
@@ -594,6 +596,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
               </div>
             )}
           </div>
+          )}
         </div>
       </FadeInReveal>
     </div>

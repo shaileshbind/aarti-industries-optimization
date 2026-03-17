@@ -11,12 +11,12 @@ import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
 import { useLenis } from "@/app/contexts/LenisContext";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ANIMATION_END_PROGRESS = 0.55;
 
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
-  const isTablet = useMediaQuery("(max-width:1023px)");
+  const isTablet = useMatchMedia("(max-width:1023px)");
   const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
