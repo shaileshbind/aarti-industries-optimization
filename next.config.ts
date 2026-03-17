@@ -22,7 +22,7 @@ const nextConfig = async () => {
       remotePatterns: [
         {
           protocol: "https",
-          hostname: "admin.aarti-industries.com",
+          hostname: environment === "true" ? "admin.aarti-industries.com" : "staging.api.aarti-industries.com",
         },
         {
           protocol: "https",
