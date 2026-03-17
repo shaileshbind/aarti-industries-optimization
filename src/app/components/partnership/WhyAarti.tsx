@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { WhyAartiProps } from "@/app/types/partnership.type";
 import { FadeInReveal } from "../ScrollReveal";
 
@@ -26,7 +26,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
   const pausedProgressRef = useRef<number>(0);
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   const startProgressAnimation = (startFrom: number = 0) => {
     if (progressIntervalRef.current) {

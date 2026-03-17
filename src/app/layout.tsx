@@ -66,6 +66,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://admin.aarti-industries.com" />
+        <link rel="dns-prefetch" href="https://admin.aarti-industries.com" />
+        <link rel="preconnect" href="https://d9bnjb3uan3b2.cloudfront.net" />
+        <link rel="dns-prefetch" href="https://d9bnjb3uan3b2.cloudfront.net" />
+      </head>
       <SEO />
       <body className={clsx(alteHansGrotesk.variable, roboto.variable, inter.variable)}>
         <AuthProvider>

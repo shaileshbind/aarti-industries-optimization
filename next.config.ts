@@ -19,7 +19,19 @@ const nextConfig = async () => {
       root: process.cwd(),
     },
     images: {
-      unoptimized: true,
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "admin.aarti-industries.com",
+        },
+        {
+          protocol: "https",
+          hostname: "**.cloudfront.net",
+        },
+      ],
+      formats: ["image/avif", "image/webp"],
+      deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+      qualities: [70, 75, 80],
     },
     compiler: {
       removeConsole: environment === "true",

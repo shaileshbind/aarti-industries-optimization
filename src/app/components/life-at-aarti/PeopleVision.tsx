@@ -10,7 +10,7 @@ import SliderCard from "../cards/SliderCard";
 import { H2 } from "../Typography2";
 import { LAAVisionProps } from "@/app/types/life-at-aarti.type";
 import { useMargin } from "@/app/contexts/MarginContext";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { FadeInReveal } from "../ScrollReveal";
 import { useLenis } from "@/app/contexts/LenisContext";
 
@@ -24,7 +24,7 @@ type ContentCard = NonNullable<
 >;
 
 const PeopleVision = ({ data }: LAAVisionProps) => {
-  const isTablet = useMediaQuery("(max-width:1023px)");
+  const isTablet = useMatchMedia("(max-width:1023px)");
   const { title, content } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const tabBarContainerRef = useRef<HTMLDivElement>(null);

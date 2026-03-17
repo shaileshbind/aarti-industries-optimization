@@ -5,7 +5,7 @@ import RespGrowth from "./RespGrowth";
 import GloballyCertified from "../GloballyCertified";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
 import { ImageProps } from "@/app/types/global.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type GloballyCertifiedItem = {
   id?: number;
@@ -42,7 +42,7 @@ export default function SustainabilityOverviewSections({
 /** Consumes margin from context as a real spacer so Global section and footer stay below RespGrowth. Hidden on mobile to avoid extra gap (RespGrowth’s extraHeight spacer handles mobile). */
 function MarginSpacer() {
   const { marginBottom } = useMargin();
-  const isTablet = useMediaQuery("(max-width:1023px)");
+  const isTablet = useMatchMedia("(max-width:1023px)");
   if (marginBottom <= 0 || isTablet) return null;
   return (
     <div

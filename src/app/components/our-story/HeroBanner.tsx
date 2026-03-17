@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { FadeInRevealBlur } from "../ScrollReveal";
 import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import Button from "../Button";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
@@ -13,7 +13,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   const starRef = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
-  const isTablet = useMediaQuery("(max-width:768px)");
+  const isTablet = useMatchMedia("(max-width:768px)");
   // Extract data safely
   const tag = data?.sectionTitle || "";
   const title = data?.title || "";
