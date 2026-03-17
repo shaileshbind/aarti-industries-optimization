@@ -1,6 +1,6 @@
 "use client";
 import { SearchBarProps } from "@/app/types/product.listing.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
@@ -10,7 +10,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   clearTrigger, // Add this prop
 }) => {
   const [query, setQuery] = useState("");
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   // Clear query when clearTrigger changes
   useEffect(() => {

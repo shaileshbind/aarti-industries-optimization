@@ -1,14 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { CampusBannerProps } from "@/app/types/campus.type";
-import { isMobile } from "react-device-detect";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const CampusBanner = ({ data }: CampusBannerProps) => {
-  const [isClientMobile, setIsClientMobile] = useState(false);
-  useEffect(() => {
-    setIsClientMobile(isMobile);
-  }, []);
+  const isClientMobile = useMatchMedia("(pointer: coarse)");
   const { title, sectionTitle, ctaButton, description, image, mobImage } = data;
 
   return (

@@ -1,11 +1,11 @@
 "use client";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import HeroBanner from "../banners/HeroBanner";
 import { CPBannerProps } from "@/app/types/code-and-policies.type";
 
 const CodePolicyBanner = ({ data }: CPBannerProps) => {
   const { title, description, image, mobImage } = data;
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   return (
     <HeroBanner

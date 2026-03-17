@@ -11,15 +11,14 @@ import Button from "../Button";
 import gsap from "gsap";
 import { FadeInReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
-import { isMobile } from "react-device-detect";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
-  const isTablet = useMediaQuery("(max-width:768px)");
+  const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(pointer: coarse)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);

@@ -1,14 +1,10 @@
 "use client";
 import HeroBanner from "../banners/HeroBanner";
 import { LAABannerProps } from "@/app/types/life-at-aarti.type";
-import { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const LifeAtBanner = ({ data }: LAABannerProps) => {
-  const [isClientMobile, setIsClientMobile] = useState(false);
-  useEffect(() => {
-    setIsClientMobile(isMobile);
-  }, []);
+  const isClientMobile = useMatchMedia("(pointer: coarse)");
   const { sectionTitle, title, image, mobImage, ctaButton, description } = data;
   return (
     <div>

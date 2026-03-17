@@ -11,7 +11,7 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useMargin } from "@/app/contexts/MarginContext";
 import { useLenis } from "@/app/contexts/LenisContext";
 
@@ -19,7 +19,7 @@ const ANIMATION_END_PROGRESS = 0.55;
 
 /** Tab/card count is dynamic (mainSection.length); supports 3, 4, or any number of items. */
 const SustainableChem = ({ data }: RespGrowthProps) => {
-  const isTablet = useMediaQuery("(max-width:1023px)");
+  const isTablet = useMatchMedia("(max-width:1023px)");
   const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);

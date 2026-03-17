@@ -2,7 +2,7 @@
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ImageProps } from "@/app/types/global.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 export type PrivacyPolicyProps = {
   data: {
@@ -15,7 +15,7 @@ export type PrivacyPolicyProps = {
 
 const PrivacyPolicyBanner: React.FC<PrivacyPolicyProps> = ({ data }) => {
   const { title, description, image, mobImage } = data;
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   return (
     <HeroBanner
