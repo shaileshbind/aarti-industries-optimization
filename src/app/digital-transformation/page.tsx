@@ -9,13 +9,11 @@ import GloballyCertified from "../components/GloballyCertified";
 import ExploreCards from "../components/digital-transformation/ExploreCards";
 import SEO from "../components/SEO";
 
-export const dynamic = "force-dynamic";
-
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/digital-transformation");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/digital-transformation"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

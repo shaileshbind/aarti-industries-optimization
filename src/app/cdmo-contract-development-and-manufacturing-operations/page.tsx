@@ -10,13 +10,11 @@ import CardsSlider from "../components/sections/CardsSlider";
 import GridCardsContainer from "../components/sections/GridCardsContainer";
 import SEO from "../components/SEO";
 
-export const dynamic = "force-dynamic";
-
 const Page = async () => {
-  const data = await getPageData("/pages/by-slug/cdmo");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/cdmo"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,

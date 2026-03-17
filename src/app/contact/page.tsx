@@ -7,8 +7,6 @@ import ContactExp from "../components/Contact/ContactExp";
 import ContactMap from "../components/Contact/ContactMap";
 import SEO from "../components/SEO";
 
-export const dynamic = "force-dynamic";
-
 const Page = async () => {
   const [data, whereWeOperateData, globallyCertifiedData] = await Promise.all([
     getPageData("/pages/by-slug/contact-us"),

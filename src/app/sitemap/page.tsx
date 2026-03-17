@@ -1,7 +1,6 @@
 import { getPageData } from "@/_lib/pageData.fetch";
 import SitemapMenu from "../components/sitemap/SitemapMenu";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
   const pageData = await getPageData("/pages/by-slug/sitemap");

@@ -8,8 +8,6 @@ import VideoScrollBarContainer from "../components/manufacturing-capabilities/Vi
 import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";
 
-export const dynamic = "force-dynamic";
-
 const EVENTS_QUERY =
   "sort[1]=date:desc" +
   "&populate[eventGallery][fields][0]=url&populate[eventGallery][fields][1]=alternativeText&populate[eventGallery][fields][2]=mime&populate[eventGallery][fields][3]=ext" +
@@ -19,22 +17,25 @@ const EVENTS_QUERY =
 
 export default async function page() {
   const currentDate = new Date().toISOString();
-  const data = await getPageData("/pages/by-slug/events-and-webinars");
-  const upcomingEventsData = await getData(
-    `/events?filters[date][$gte]=${currentDate}&${EVENTS_QUERY}`,
-  );
-  const podcastsData = await getData(
-    "/podcasts?sort[0]=title:asc&sort[1]=date:desc&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[image][fields][2]=mime&populate[image][fields][3]=ext&populate[mobImage][fields][0]=url&populate[mobImage][fields][1]=alternativeText&populate[mobImage][fields][2]=mime&populate[mobImage][fields][3]=ext&populate[file][fields][0]=url&populate[file][fields][1]=alternativeText&populate[file][fields][2]=mime&populate[file][fields][3]=ext&pagination[pageSize]=10&pagination[page]=1&status=published",
-  );
-  const webinarsData = await getData(
-    "/webinars?sort[0]=title:asc&sort[1]=date:desc&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[image][fields][2]=mime&populate[image][fields][3]=ext&populate[mobImage][fields][0]=url&populate[mobImage][fields][1]=alternativeText&populate[mobImage][fields][2]=mime&populate[mobImage][fields][3]=ext&populate[media][fields][0]=url&populate[media][fields][1]=alternativeText&populate[media][fields][2]=mime&populate[media][fields][3]=ext&pagination[pageSize]=10&pagination[page]=1&status=published",
-  );
-  const pastEventsData = await getData(
-    `/events?filters[date][$lt]=${currentDate}&${EVENTS_QUERY}`,
-  );
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [
+    data,
+    upcomingEventsData,
+    podcastsData,
+    webinarsData,
+    pastEventsData,
+    globallyCertifiedData,
+  ] = await Promise.all([
+    getPageData("/pages/by-slug/events-and-webinars"),
+    getData(`/events?filters[date][$gte]=${currentDate}&${EVENTS_QUERY}`),
+    getData(
+      "/podcasts?sort[0]=title:asc&sort[1]=date:desc&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[image][fields][2]=mime&populate[image][fields][3]=ext&populate[mobImage][fields][0]=url&populate[mobImage][fields][1]=alternativeText&populate[mobImage][fields][2]=mime&populate[mobImage][fields][3]=ext&populate[file][fields][0]=url&populate[file][fields][1]=alternativeText&populate[file][fields][2]=mime&populate[file][fields][3]=ext&pagination[pageSize]=10&pagination[page]=1&status=published",
+    ),
+    getData(
+      "/webinars?sort[0]=title:asc&sort[1]=date:desc&populate[image][fields][0]=url&populate[image][fields][1]=alternativeText&populate[image][fields][2]=mime&populate[image][fields][3]=ext&populate[mobImage][fields][0]=url&populate[mobImage][fields][1]=alternativeText&populate[mobImage][fields][2]=mime&populate[mobImage][fields][3]=ext&populate[media][fields][0]=url&populate[media][fields][1]=alternativeText&populate[media][fields][2]=mime&populate[media][fields][3]=ext&pagination[pageSize]=10&pagination[page]=1&status=published",
+    ),
+    getData(`/events?filters[date][$lt]=${currentDate}&${EVENTS_QUERY}`),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

@@ -8,13 +8,12 @@ import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import Explore from "../components/manufacturing-capabilities/Explore";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/manufacturing-capabilities");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/manufacturing-capabilities"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,

@@ -6,12 +6,11 @@ import SustainabilityOverviewSections from "../components/sustainability-overvie
 import { getPageData } from "@/_lib/pageData.fetch";
 import SEO from "../components/SEO";
 
-export const dynamic = "force-dynamic";
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/sustainable-overview");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/sustainable-overview"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const { section_one, section_two, section_three, section_four } = data?.data;
   const seo = data?.seo;
 

@@ -17,8 +17,6 @@ import SEO from "@/app/components/SEO";
 import clsx from "clsx";
 import StickyShare from "@/app/components/blogs/StickyShare";
 
-export const dynamic = "force-dynamic";
-
 export default async function page({ params }: CaseStuydInnerProps) {
   const { caseStudyInner } = await params;
   const data = await getBlogsCasestudies(

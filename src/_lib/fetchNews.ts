@@ -1,7 +1,7 @@
 export const fetchNews = async (slug: string) => {
   try {
     const response = await fetch(slug, {
-      cache: "no-store",
+      next: { revalidate: 300 },
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.status}`);
