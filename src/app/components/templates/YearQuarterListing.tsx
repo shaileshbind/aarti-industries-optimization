@@ -100,6 +100,7 @@ export default function YearQuarterListing({
   );
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
   const [mobileVisibleCount, setMobileVisibleCount] = useState<number>(5);
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
 
   const [pressReleasesYearAndQuarter, setPressReleasesYearAndQuarter] =
     useState<{ year: string | number; quarter: Quarter[] }[] | null>(null);
@@ -297,6 +298,18 @@ export default function YearQuarterListing({
     [activeYear],
   );
 
+  // Close all dropdowns on scroll / touch-scroll
+  useEffect(() => {
+    if (!openSelect) return;
+    const close = () => setOpenSelect(null);
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("touchmove", close, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("touchmove", close);
+    };
+  }, [openSelect]);
+
   // measure after layout and when activeYear changes
   useLayoutEffect(() => {
     measure(activeYear);
@@ -331,6 +344,9 @@ export default function YearQuarterListing({
         <div className="block lg:hidden mb-6">
           <FormControl fullWidth>
             <Select
+              open={openSelect === "subCategory"}
+              onOpen={() => setOpenSelect("subCategory")}
+              onClose={() => setOpenSelect(null)}
               sx={{
                 ...mobStyles,
                 "& .MuiSelect-select": {
@@ -416,6 +432,9 @@ export default function YearQuarterListing({
               <div className="w-[90px] hidden md:block">
                 <FormControl variant="standard" fullWidth>
                   <Select
+                    open={openSelect === "archiveDesktop"}
+                    onOpen={() => setOpenSelect("archiveDesktop")}
+                    onClose={() => setOpenSelect(null)}
                     sx={styles}
                     MenuProps={menuProps}
                     labelId="archiveYear-label"
@@ -550,6 +569,9 @@ export default function YearQuarterListing({
           <div className="mt-10 block md:hidden">
             <FormControl fullWidth>
               <Select
+                open={openSelect === "archiveMobile"}
+                onOpen={() => setOpenSelect("archiveMobile")}
+                onClose={() => setOpenSelect(null)}
                 sx={{
                   ...mobStyles,
                   backgroundColor: "#EFF3F5",

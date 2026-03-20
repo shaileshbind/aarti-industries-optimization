@@ -114,6 +114,18 @@ export default function PressReleaseYearListing({
   const searchParams = useSearchParams();
   const [activeYear, setActiveYear] = useState<string>("");
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!openSelect) return;
+    const close = () => setOpenSelect(null);
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("touchmove", close, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("touchmove", close);
+    };
+  }, [openSelect]);
 
   const [apiLatestTwo, setApiLatestTwo] = useState<LatestItem[]>([]);
   const [apiYearAndPressReleases, setApiYearAndPressReleases] = useState<
@@ -323,6 +335,9 @@ export default function PressReleaseYearListing({
               <div className="w-[100px] hidden md:flex items-center gap-2">
                 <FormControl variant="standard" fullWidth>
                   <Select
+                    open={openSelect === "archiveDesktop"}
+                    onOpen={() => setOpenSelect("archiveDesktop")}
+                    onClose={() => setOpenSelect(null)}
                     sx={{ "&::before": { borderBottom: "none" } }}
                     labelId="archiveYear-label"
                     id="archiveYear-select"
@@ -472,6 +487,9 @@ export default function PressReleaseYearListing({
           <div className="mt-10 block md:hidden">
             <FormControl fullWidth>
               <Select
+                open={openSelect === "archiveMobile"}
+                onOpen={() => setOpenSelect("archiveMobile")}
+                onClose={() => setOpenSelect(null)}
                 sx={{
                   backgroundColor: "#F7F9FA",
                   borderRadius: "10px",

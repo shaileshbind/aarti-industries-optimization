@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useRef, useCallback } from "react
 interface LenisContextType {
   stopLenis: () => void;
   startLenis: () => void;
+  resizeLenis: () => void;
 }
 
 const LenisContext = createContext<LenisContextType | null>(null);
@@ -49,17 +50,14 @@ interface LenisProviderProps {
 export const LenisProvider = ({ children }: LenisProviderProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lenisRef = useRef<any>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
-
     let running = true;
 
-    // Defer heavy library loading until after first paint
     Promise.all([import("lenis"), import("gsap/ScrollTrigger")]).then(
       ([lenisModule, stModule]) => {
-        if (!running || !contentRef.current) return;
+        if (!running) return;
 
         const Lenis = lenisModule.default;
         const { ScrollTrigger } = stModule;
@@ -68,11 +66,23 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
           duration: 1.3,
           syncTouch: true,
           orientation: "vertical",
-          content: contentRef.current,
         });
         lenisRef.current = lenis;
 
         lenis.on("scroll", ScrollTrigger.update);
+
+        // Every time ScrollTrigger recalculates (e.g. after pin spacers
+        // change the document height), tell Lenis to re-measure its
+        // scroll limits so the scrollbar can reach the true bottom.
+        const onSTRefresh = () => lenis.resize();
+        ScrollTrigger.addEventListener("refresh", onSTRefresh);
+        cleanupRef.current = () => {
+          ScrollTrigger.removeEventListener("refresh", onSTRefresh);
+        };
+
+        requestAnimationFrame(() => {
+          if (running) ScrollTrigger.refresh();
+        });
 
         function raf(time: number) {
           if (!running) return;
@@ -85,6 +95,7 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
 
     return () => {
       running = false;
+      cleanupRef.current?.();
       lenisRef.current?.destroy();
       lenisRef.current = null;
     };
@@ -98,11 +109,13 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
     lenisRef.current?.start();
   }, []);
 
+  const resizeLenis = useCallback(() => {
+    lenisRef.current?.resize();
+  }, []);
+
   return (
-    <LenisContext.Provider value={{ stopLenis, startLenis }}>
-      <div ref={contentRef}>
-        {children}
-      </div>
+    <LenisContext.Provider value={{ stopLenis, startLenis, resizeLenis }}>
+      {children}
     </LenisContext.Provider>
   );
 };

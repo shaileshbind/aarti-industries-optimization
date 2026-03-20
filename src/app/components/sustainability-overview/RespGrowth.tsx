@@ -96,44 +96,35 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     }
   }, [startLenis]);
 
-  // Get slideWidth from the actual div width after component mounts
   useLayoutEffect(() => {
     const measureSlideWidth = () => {
       if (imageWrapperRef.current) {
         const width = imageWrapperRef.current.offsetWidth;
-        if (width > 0) {
-          setSlideWidth(width);
-        }
+        if (width > 0) setSlideWidth(width);
       }
     };
 
-    // Small delay to ensure the ref is attached
-    const timeoutId = setTimeout(() => {
-      measureSlideWidth();
-    }, 0);
-
-    // Measure on resize
+    const timeoutId = setTimeout(measureSlideWidth, 0);
     window.addEventListener("resize", measureSlideWidth);
 
-    // Use ResizeObserver for more accurate measurements
-    const resizeObserver = new ResizeObserver(() => {
-      measureSlideWidth();
-    });
+    const resizeObserver = new ResizeObserver(measureSlideWidth);
 
-    // Try to observe immediately, and also check periodically if ref becomes available
     if (imageWrapperRef.current) {
       resizeObserver.observe(imageWrapperRef.current);
     } else {
-      // Check again after a short delay in case ref wasn't ready
-      const checkRef = setInterval(() => {
+      // Ref may not be attached yet on first layout; retry once after paint
+      const rafId = requestAnimationFrame(() => {
         if (imageWrapperRef.current) {
           resizeObserver.observe(imageWrapperRef.current);
-          clearInterval(checkRef);
+          measureSlideWidth();
         }
-      }, 50);
-
-      // Clear interval after 1 second to avoid infinite checking
-      setTimeout(() => clearInterval(checkRef), 1000);
+      });
+      return () => {
+        cancelAnimationFrame(rafId);
+        clearTimeout(timeoutId);
+        window.removeEventListener("resize", measureSlideWidth);
+        resizeObserver.disconnect();
+      };
     }
 
     return () => {
@@ -779,6 +770,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="99px"
+                      quality={70}
                       className="scale-110 object-cover"
                     />
                   </i>
@@ -798,6 +791,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                         alt={"icon"}
                         fill
                         priority
+                        sizes="(max-width: 1023px) 100vw, 50vw"
+                        quality={70}
                         className="leafBigImg object-cover blur"
                       />
                     </span>
@@ -810,6 +805,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                         alt={"icon"}
                         fill
                         priority
+                        sizes="(max-width: 1023px) 100vw, 50vw"
+                        quality={75}
                         className="leafBigImg scale-110 object-cover "
                       />
                     </span>
@@ -825,6 +822,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="99px"
+                      quality={70}
                       className="scale-110 object-cover"
                     />
                   </i>
@@ -839,6 +838,8 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
                       alt={"icon"}
                       fill
                       priority
+                      sizes="99px"
+                      quality={70}
                       className="scale-110 object-cover"
                     />
                   </i>

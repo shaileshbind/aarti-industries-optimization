@@ -16,8 +16,8 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const { title, leadersCard } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [active, setActive] = useState(0);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
+  const [swiperReady, setSwiperReady] = useState(false);
+  const [inView, setInView] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,49 +56,32 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
     }
   }, [startLenis]);
 
-  useEffect(() => {
-    const swiper = swiperRef.current;
-    if (swiper) {
-      setIsBeginning(swiper.isBeginning);
-      setIsEnd(swiper.isEnd);
-    }
-  }, [active]);
 
-  // Intersection Observer for autoplay control
+  // Pause autoplay when section leaves viewport, resume when it enters
   useEffect(() => {
     const section = sectionRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section || !swiperReady) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Start autoplay when section enters viewport
-            if (swiper.autoplay && !swiper.autoplay.running) {
-              swiper.autoplay.start();
-            }
-          } else {
-            // Stop autoplay when section leaves viewport
-            if (swiper.autoplay && swiper.autoplay.running) {
-              swiper.autoplay.stop();
-            }
-          }
-        });
+      ([entry]) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay || swiper.destroyed) return;
+
+        if (entry.isIntersecting) {
+          setInView(true);
+          swiper.autoplay.start();
+        } else {
+          setInView(false);
+          swiper.autoplay.stop();
+        }
       },
-      {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: "0px",
-      },
+      { threshold: 0.1 },
     );
 
     observer.observe(section);
 
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+    return () => observer.disconnect();
+  }, [swiperReady]);
 
   return (
     <div ref={sectionRef} className="mt-[unset] mb-[72px] lg:my-[120px]">
@@ -141,14 +124,14 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                   <div
                     key={index}
                     onClick={() => {
-                      swiperRef.current?.slideTo(index);
+                      swiperRef.current?.slideToLoop(index);
                       setActive(index);
                     }}
                     className="leader-thumb p-[6px] relative shrink-0"
                   >
                     <svg
                       className={`progress-border ${
-                        active === index ? "active" : ""
+                        active === index && inView ? "active" : ""
                       }`}
                       width="60"
                       height="60"
@@ -197,6 +180,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                 key={`aarti-world-leader-${isDesktopPointer}`}
                 slidesPerView={1}
                 spaceBetween={24}
+                loop={true}
                 modules={[
                   Navigation,
                   ...(isDesktopPointer ? [Mousewheel] : []),
@@ -215,22 +199,15 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                   nextEl: ".swiper-button-next-aartiWorld",
                 }}
                 autoplay={{
-                  delay: 5000,
+                  delay: 15000,
                   disableOnInteraction: false,
                 }}
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
-                  setIsBeginning(swiper.isBeginning);
-                  setIsEnd(swiper.isEnd);
-                  // Don't start autoplay immediately - wait for viewport intersection
-                  if (swiper.autoplay) {
-                    swiper.autoplay.stop();
-                  }
+                  setSwiperReady(true);
                 }}
                 onSlideChange={(swiper) => {
-                  setActive(swiper.activeIndex);
-                  setIsBeginning(swiper.isBeginning);
-                  setIsEnd(swiper.isEnd);
+                  setActive(swiper.realIndex);
                 }}
                 className="w-full"
               >
@@ -253,13 +230,8 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
               {leadersCard && leadersCard?.length > 1 && (
                 <div className="mt-[8px] flex gap-x-4 justify-end ">
                   <button
-                    className={`swiper-button-prev-aartiWorld transition-opacity ${
-                      isBeginning
-                        ? "pointer-events-none opacity-30"
-                        : "cursor-pointer opacity-100"
-                    }`}
+                    className="swiper-button-prev-aartiWorld cursor-pointer transition-opacity"
                     aria-label="Previous slide"
-                    aria-disabled={isBeginning}
                   >
                     <Image
                       src="/images/home/chevron-right-orange.svg"
@@ -270,13 +242,8 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                     />
                   </button>
                   <button
-                    className={`swiper-button-next-aartiWorld transition-opacity ${
-                      isEnd
-                        ? "pointer-events-none opacity-30"
-                        : "cursor-pointer opacity-100"
-                    }`}
+                    className="swiper-button-next-aartiWorld cursor-pointer transition-opacity"
                     aria-label="Next slide"
-                    aria-disabled={isEnd}
                   >
                     <Image
                       src="/images/home/chevron-right-orange.svg"
@@ -312,7 +279,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
 
   /* when active: animate continuously around */
   .progress-border.active rect {
-    animation: traceBorder 5s linear forwards;
+    animation: traceBorder 15s linear forwards;
   }
 
   /* perfect continuous clockwise trace */

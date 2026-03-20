@@ -107,12 +107,9 @@ const SusCore = ({ data }: SusCoreData) => {
               {leftImage?.url && (
                 <Image
                   src={leftImage?.url}
-                  alt={
-                    leftImage?.alternativeText
-                      ? leftImage?.alternativeText
-                      : "img"
-                  }
+                  alt={leftImage?.alternativeText ?? "Sustainability"}
                   fill
+                  sizes="(max-width: 767px) 100vw, 312px"
                   className="object-cover"
                 />
               )}
