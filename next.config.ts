@@ -31,7 +31,7 @@ const nextConfig = async () => {
       ],
       formats: ["image/avif", "image/webp"],
       imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 400],
-      deviceSizes: [350, 640, 750, 828, 1080, 1200, 1920],
+      deviceSizes: [350, 450, 640, 750, 828, 1080, 1200, 1920],
       qualities: [70, 75, 80],
     },
     compiler: {

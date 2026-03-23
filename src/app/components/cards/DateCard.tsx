@@ -55,9 +55,10 @@ const DateCard = ({
               <Image
                 src={imageSrc}
                 alt={imageAlt ? imageAlt : "img"}
-                fill
-                sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
-                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                width={312}
+                height={230}
+                // sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
+                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full"
               />
             )}
           </div>
@@ -80,9 +81,10 @@ const DateCard = ({
               <Image
                 src={imageSrc}
                 alt={imageAlt ? imageAlt : "img"}
-                fill
-                sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
-                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                width={312}
+                height={230}
+                // sizes="(max-width: 767px) 90vw, (max-width: 1023px) 50vw, 25vw"
+                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full"
               />
             )}
           </div>
