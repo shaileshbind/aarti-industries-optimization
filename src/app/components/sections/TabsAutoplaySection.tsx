@@ -13,7 +13,7 @@ import clsxN from "../../../../utils/clsxN";
 import { RDCardProps } from "@/app/types/r-and-d.type";
 import { FadeInReveal } from "../ScrollReveal";
 import Link from "next/link";
-import { useLenis } from "@/app/contexts/LenisContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 interface ArrowCtaProps {
   id?: string;
@@ -49,42 +49,8 @@ const TabsAutoplaySection = ({
   const pauseTimeRef = useRef<number>(0);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const imageSize = 20;
-
-  const { stopLenis, startLenis } = useLenis();
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const lenisStoppedRef = useRef(false);
-
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
-
-  const handleSliderTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!touchStartRef.current || lenisStoppedRef.current) return;
-      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
-      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
-      if (dx > dy && dx > 10) {
-        stopLenis();
-        lenisStoppedRef.current = true;
-      }
-    },
-    [stopLenis],
-  );
-
-  const handleSliderTouchEnd = useCallback(() => {
-    touchStartRef.current = null;
-    if (lenisStoppedRef.current) {
-      startLenis();
-      lenisStoppedRef.current = false;
-    }
-  }, [startLenis]);
-
+  const isTablet = useMatchMedia("(max-width:1280px)");
+  
   const startProgress = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -240,7 +206,7 @@ const TabsAutoplaySection = ({
         </div>
       )}
       {/* Desktop */}
-      <FadeInReveal>
+      {!isTablet ? <FadeInReveal>
         <div className="mx-[20px] lg:mx-[60px] hidden xl:grid grid-cols-[20%_1fr] gap-x-[60px]">
           {/* Tabs */}
           {data?.length > 0 && (
@@ -262,7 +228,7 @@ const TabsAutoplaySection = ({
                   </BodyText1>
 
                   {/* Grey line */}
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
+                  <span className="absolute flex bottom-0 left-0 w-full h-[2px] bg-gray-200" />
 
                   {/* Orange progress bar only for active tab */}
                   {index === active && (
@@ -280,9 +246,7 @@ const TabsAutoplaySection = ({
           )}
           {/* Content Slides */}
           <div
-            onTouchStart={handleSliderTouchStart}
-            onTouchMove={handleSliderTouchMove}
-            onTouchEnd={handleSliderTouchEnd}
+            
             className="grid grid-cols-[1fr] gap-x-[40px]"
           >
             <Swiper
@@ -312,8 +276,9 @@ const TabsAutoplaySection = ({
                                       tabItem.card[0].image.alternativeText ||
                                       "img"
                                     }
-                                    fill
-                                    className="absolute object-cover blur-md"
+                                    width={50}
+                                    height={50}
+                                    className="absolute object-cover blur-md w-full h-full top-0 left-0"
                                   />
                                   <Image
                                     src={tabItem.card[0].image.url}
@@ -341,8 +306,9 @@ const TabsAutoplaySection = ({
                                   alt={
                                     tabItem.card[0].image.alternativeText || "img"
                                   }
-                                  fill
-                                  className="object-cover object-top"
+                                  width={500}
+                                    height={548}
+                                  className="object-cover object-top w-full h-full top-0 left-0 absolute"
                                 />
                               )}
                             </>
@@ -473,7 +439,7 @@ const TabsAutoplaySection = ({
             </Swiper>
           </div>
         </div>
-      </FadeInReveal>
+      </FadeInReveal> :<>
       {/* Mobile Accordion */}
       {data?.length > 0 && (
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] xl:py-[70px]">
@@ -512,8 +478,9 @@ const TabsAutoplaySection = ({
                                       item.card[0].image.alternativeText ||
                                       "img"
                                     }
-                                    fill
-                                    className="absolute object-cover"
+                                    width={50}
+                                    height={50}
+                                    className="absolute object-cover w-full h-full top-0 left-0"
                                   />
                                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-lg!"></i>
                                   <Image
@@ -522,8 +489,8 @@ const TabsAutoplaySection = ({
                                       item.card[0].image.alternativeText ||
                                       "img"
                                     }
-                                    width={500}
-                                    height={200}
+                                    width={390}
+                                    height={300}
                                     className="absolute object-cover h-[calc(100%-39px)] w-[calc(100%-66px)]"
                                   />
                                   <Image
@@ -671,7 +638,7 @@ const TabsAutoplaySection = ({
                 className="!mb-0"
               />
               {/* Grey line */}
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
+              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200 flex" />
               {/* Orange progress bar only for active accordion */}
               {index === active && (
                 <div
@@ -686,6 +653,8 @@ const TabsAutoplaySection = ({
           ))}
         </div>
       )}
+      </>
+    }
     </div>
   );
 };

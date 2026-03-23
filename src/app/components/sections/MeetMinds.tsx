@@ -208,6 +208,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
                               alt={item?.image?.alternativeText || "leader"}
                               fill
                               className="object-cover object-top"
+                              sizes="(min-width: 1024px) 500px, 300px"
                             />
                           </div>
                         )}

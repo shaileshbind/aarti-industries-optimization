@@ -194,7 +194,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
       >
         <div
           className={clsx(
-            ` relative w-full overflow-hidden pt-[80%]
+            ` relative w-full overflow-hidden pt-[80%] h-[320px] md:h-[400px] xl:h-[648px]
             `,
           )}
         >
@@ -208,11 +208,12 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                 alt={
                   cards?.[currentImageIndex]?.image?.alternativeText || "banner"
                 }
-                fill
-                sizes="(max-width: 768px) 768px, 
-                (max-width: 1200px) 1200px, 
-                1000px"
-                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`} // Applied background classes
+                width={500}
+                height={548}
+                // sizes="(max-width: 768px) 768px, 
+                // (max-width: 1200px) 1200px, 
+                // 1000px"
+                className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg w-full h-full`} // Applied background classes
               />
             )}
             {cards?.[currentImageIndex]?.image?.url && (

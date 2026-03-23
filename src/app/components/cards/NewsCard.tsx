@@ -34,8 +34,9 @@ const NewsCard = ({
                 <Image
                   src={imageSrc}
                   alt={imageAlt ? imageAlt : "img"}
-                  fill
-                  className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                  width={400}
+                  height={230}
+                  className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full absolute inset-0"
                 />
               )}
             </div>
@@ -79,8 +80,9 @@ const NewsCard = ({
               <Image
                 src={imageSrc}
                 alt={imageAlt ? imageAlt : "img"}
-                fill
-                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+                width={400}
+                  height={230}
+                className="object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full absolute inset-0"
               />
             )}
           </div>
