@@ -5,14 +5,17 @@ import { BodyText1, BodyText2, H1, SubH2 } from "../Typography2";
 import Link from "next/link";
 import { ContactBannerProps } from "@/app/types/contact.type";
 import GeneralForm from "../forms/GeneralForm";
+import { LetterReveal } from "../ScrollReveal";
 
 const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
   return (
     <section className="w-full ">
       <div className="container">
+        <LetterReveal delay={0.1} className="w-full text-center">
         <H1 className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]" applyTitleCase={true}>
           {data?.sectionTitle}
         </H1>
+        </LetterReveal>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-4 gap-y-[50px] w-full">
           <div className="lg:col-span-5">
             <div className="relative w-full rounded-[20px] overflow-hidden bg-[#EFF3F5]">
