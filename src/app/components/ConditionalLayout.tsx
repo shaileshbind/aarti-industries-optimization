@@ -8,6 +8,10 @@ import ScrollToTop from "./ScrollToTop";
 // import { LenisFixed } from "@/app/contexts/LenisContext";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  TransitionProvider,
+  TransitionWrapper,
+} from "@/app/contexts/TransitionContext";
 
 const ScrollToTopButton = dynamic(() => import("./ScrollToTopButton"), {
   ssr: false,
@@ -32,7 +36,7 @@ export default function ConditionalLayout({
   const isLoginPage = pathname === "/login";
 
   return (
-    <>
+    <TransitionProvider>
       {/* Fixed-position elements rendered outside Lenis content wrapper via portal.
           This prevents Lenis's syncTouch transform from causing flicker/jitter. */}
       {/* <LenisFixed> */}
@@ -56,9 +60,11 @@ export default function ConditionalLayout({
       {/* </LenisFixed> */}
 
       {/* Non-fixed elements stay inside the Lenis content wrapper */}
-      {!isLoginPage && <ScrollToTop />}
-      {children}
-      {!isLoginPage && <Footer data={footerData} />}
-    </>
+      <TransitionWrapper>
+        {!isLoginPage && <ScrollToTop />}
+        {children}
+        {!isLoginPage && <Footer data={footerData} />}
+      </TransitionWrapper>
+    </TransitionProvider>
   );
 }
