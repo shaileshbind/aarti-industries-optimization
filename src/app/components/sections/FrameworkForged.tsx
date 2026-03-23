@@ -361,8 +361,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                     card?.[currentImageIndex]?.image
                                       ?.alternativeText || "banner"
                                   }
-                                  fill
-                                  className="object-cover scale-110"
+                                  width={50}
+                                  height={54}
+                                  className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                                 />
                                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                                 <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
@@ -372,8 +373,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                       card?.[currentImageIndex]?.image
                                         ?.alternativeText || "banner"
                                     }
-                                    fill
-                                    className="object-cover scale-110"
+                                    width={500}
+                                    height={548}
+                                    className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                                   />
                                 </span>
                               </div>
@@ -393,12 +395,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
-                                  fill
-                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  width={50}
+                                  height={54}
                                   loading={
                                     index <= 1 ? "eager" : undefined
                                   }
-                                  className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg`}
+                                  className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
                               {items?.image?.url && (
@@ -408,12 +410,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
-                                  fill
-                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  width={500}
+                                  height={548}
                                   loading={
                                     index <= 1 ? "eager" : undefined
                                   }
-                                  className={`${secondaryImageClasses} ${mainStaticClasses}`}
+                                  className={`${secondaryImageClasses} ${mainStaticClasses} w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
                               <Image
@@ -520,9 +522,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       card?.[currentImageIndex]?.image?.alternativeText ||
                       "banner"
                     }
-                    fill
-                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
-                    className="object-cover scale-110"
+                    width={50}
+                    height={54}
+                    className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                   />
                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                   <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
@@ -532,9 +534,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                         card?.[currentImageIndex]?.image?.alternativeText ||
                         "banner"
                       }
-                      fill
-                      sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
-                      className="object-cover scale-110"
+                      width={500}
+                      height={548}
+                      className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                     />
                   </span>
                 </div>
@@ -554,10 +556,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       card?.[currentImageIndex]?.image?.alternativeText ||
                       "banner"
                     }
-                    fill
-                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
+                    width={50}
+                    height={54}
                     loading="eager"
-                    className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
+                    className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                   />
                 )}
                 {card?.[currentImageIndex]?.image?.url && (
@@ -570,9 +572,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
-                    sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                     loading="eager"
-                    className={`${secondaryImageClasses} ${mainAnimationClasses}`}
+                    className={`${secondaryImageClasses} ${mainAnimationClasses} w-full h-full top-0 left-0 absolute`}
                   />
                 )}
                 <Image

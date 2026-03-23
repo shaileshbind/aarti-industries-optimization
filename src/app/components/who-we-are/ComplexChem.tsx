@@ -190,6 +190,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                               alt="img"
                               fill
                               className="object-cover object-top"
+                              sizes="360px"
                             />
                           )}
                         </div>

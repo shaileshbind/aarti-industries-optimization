@@ -364,8 +364,9 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                     card?.[currentImageIndex]?.image?.alternativeText ||
                     "banner"
                   }
-                  fill
-                  className={`object-cover scale-110 transition-opacity duration-700 ease-out ${
+                  width={70}
+                  height={70}
+                  className={`object-cover scale-110 transition-opacity duration-700 ease-out w-full h-full absolute inset-0 blur-lg ${
                     isImageAnimating ? "opacity-40" : "opacity-0"
                   }`}
                 />
@@ -378,8 +379,9 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                       card?.[currentImageIndex]?.image?.alternativeText ||
                       "banner"
                     }
-                    fill
-                    className={`object-cover scale-110 transition-opacity duration-700 ease-out ${
+                    width={500}
+                    height={500}
+                    className={`object-cover scale-110 transition-opacity duration-700 ease-out w-full h-full absolute inset-0 ${
                       isImageAnimating ? "opacity-100" : "opacity-0"
                     }`}
                   />

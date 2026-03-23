@@ -268,8 +268,9 @@ const LayoutImage: React.FC<LayoutImageProps> = ({ src, imageFade }) => {
         <Image
           src={src || "img"}
           alt={"banner"}
-          fill
-          className={`absolute object-cover rounded-[20px] transition-opacity duration-300 ${
+          width={850}
+          height={600}
+          className={`absolute object-cover rounded-[20px] transition-opacity duration-300 w-full h-full top-0 left-0 ${
             imageFade ? "opacity-100" : "opacity-0"
           }`}
         />

@@ -360,8 +360,8 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
                   src={imageData?.src}
                   alt={imageData?.alt || "banner"}
                   className="swiper-lazy w-full h-full object-cover"
-                  width={800}
-                  height={600}
+                  width={350}
+                  height={270}
                 />
               )}
             </div>

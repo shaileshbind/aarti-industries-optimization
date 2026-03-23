@@ -52,8 +52,8 @@ export default function WhatSets({ data }: WhatSetsProps) {
               <Image
                 src={mobImage?.url}
                 alt={"banner"}
-                width={1440}
-                height={720}
+                width={390}
+                height={250}
                 className="object-cover w-full h-full"
               />
             </div>

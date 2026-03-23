@@ -311,7 +311,8 @@ export default function TimeLine({ data }: TimelineData) {
               <Image
                 src={images[2]}
                 alt={phases[currentPhase]?.title}
-                fill
+                width={239}
+                height={200}
                 className="h-full w-full object-cover lg:rounded-3xl rounded-xl"
               />
             </div>

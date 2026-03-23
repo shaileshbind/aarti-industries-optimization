@@ -376,8 +376,8 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
                       <Image
                         src={item?.image?.url}
                         alt={item?.image?.alternativeText || "award"}
-                        width={70}
-                        height={190}
+                        width={350}
+                        height={330}
                         className="object-cover w-full h-full"
                       />
                     </div>

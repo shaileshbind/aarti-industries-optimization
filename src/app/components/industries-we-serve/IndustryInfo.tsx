@@ -18,16 +18,18 @@ const IndustryInfo: React.FC<IndustryInfoProps> = ({ data }) => {
                 <Image
                   src={image?.url}
                   alt={image?.alternativeText || "banner"}
-                  fill
-                  className="object-cover scale-110"
+                  width={50}
+                  height={50}
+                  className="object-cover scale-110 w-full h-full"
                 />
                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
-                <span className="absolute right-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[94%] h-[100%]">
+                <span className="absolute z-[1] right-0 top-0 rounded-br-[20px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[300px] overflow-hidden w-[94%] h-[100%]">
                   <Image
                     src={image?.url}
                     alt={image?.alternativeText || "banner"}
-                    fill
-                    className="object-cover scale-110"
+                    width={550}
+                    height={550}
+                    className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                   />
                 </span>
               </div>
