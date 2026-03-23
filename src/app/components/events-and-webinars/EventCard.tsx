@@ -2,6 +2,7 @@ import Image from "next/image";
 import { BodyText1, BodyText2, BodyText3, SubH3 } from "../Typography2";
 import Button from "../Button";
 import { ButtonProps } from "@/app/types/global.type";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type EventCardProps = {
   pastEvent?: boolean;
@@ -30,25 +31,27 @@ const EventCard = ({
 }: EventCardProps) => {
   const { title, date, location, description, image, mobImage, ctaButton } =
     event;
-
+  const isMobile = useMatchMedia("(max-width: 768px)");
   return (
     <div className="group relative transition-all duration-300">
       {/* Image Section */}
       <div className="relative w-full aspect-[424/313] overflow-hidden rounded-[10px]">
-        {image?.url && (
+        {image?.url && !isMobile && (
           <Image
             src={image.url}
             alt={image.alternativeText || title}
-            fill
-            className="hidden lg:block object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+            width={424}
+            height={313}
+            className="hidden lg:block object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full absolute inset-0"
           />
         )}
-        {mobImage?.url && (
+        {mobImage?.url && isMobile && (
           <Image
             src={mobImage.url}
             alt={mobImage.alternativeText || title}
-            fill
-            className="block lg:hidden object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1]"
+            width={424}
+            height={313}
+            className="block lg:hidden object-cover object-top transition-transform duration-[2s] ease-out group-hover:scale-[1.1] w-full h-full absolute inset-0"
           />
         )}
       </div>

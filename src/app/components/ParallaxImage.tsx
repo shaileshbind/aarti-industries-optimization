@@ -53,7 +53,7 @@ const ParallaxImage: React.FC<ParallaxImageProps> = ({
       style={{ willChange: "transform" }}
     >
       <div ref={imgRef} className="w-full h-full relative">
-        <Image src={src} alt={alt || "banner"} className="object-cover" priority fill />
+        <Image src={src} alt={alt || "banner"} className="object-cover" priority fill sizes="100vw" />
       </div>
     </div>
   );

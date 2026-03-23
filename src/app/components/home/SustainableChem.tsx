@@ -776,7 +776,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                           alt={"icon"}
                           fill
                           priority
-                          sizes="100px"
+                          sizes="700px"
                           className="leafBigImg scale-110 object-cover"
                         />
                       </span>

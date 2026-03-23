@@ -202,7 +202,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
-            { opacity: 1, duration: 5 },
+            { opacity: 1, duration: 1 },
             "<",
           );
       } else {
@@ -414,8 +414,9 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     alt={
                       details[active]?.title ? details[active]?.title : "img"
                     }
-                    fill
-                    className="object-cover"
+                    width={600}
+                    height={600}
+                    className="object-cover w-full h-full top-0 left-0 absolute"
                   />
                 </span>
               </div>
@@ -434,7 +435,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         >
           <div
             ref={sliderContainerRef}
-            className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]"
+            className="flex w-full h-screen relative flex-col lg:justify-center pt-[60px] lg:pt-[unset]"
           >
             <div
               ref={contentContainerRef}
@@ -446,16 +447,18 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     <Image
                       src={details[active]?.image?.url}
                       alt={details[active]?.title}
-                      fill
-                      className="object-cover scale-110"
+                      width={60}
+                      height={60}
+                      className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                     />
                     <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                     <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
                       <Image
                         src={details[active]?.image?.url}
                         alt={details[active]?.image?.url}
-                        fill
-                        className="object-cover scale-110"
+                        width={600}
+                        height={600}
+                        className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                       />
                     </span>
                   </div>

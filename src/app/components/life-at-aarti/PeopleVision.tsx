@@ -376,9 +376,9 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
               width: window.innerWidth - 40,
-              height: "250px",
+              height: window.innerWidth - 40,  
               right: 20,
-              top: "140px",
+              top: "170px",
               duration: 1,
             },
           )
@@ -905,7 +905,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             {/* Mobile: vertical stack, tabs in fixed bar */}
             <div className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh] ">
               <div className="relative" ref={contentContainerRef}>
-                <div className="w-full absolute mt-[70px]">
+                <div className="w-full absolute mt-[115px]">
                   <div className="pt-[10px]" ref={tabBarContainerRef} />
                   <div className="grid items-center gap-6 mt-4">
                     {isTablet &&
@@ -942,7 +942,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       </div>
       <div
         ref={mobileTabBarRef}
-        className={`fixed top-[110px] left-0 right-0 flex justify-center items-center transition-opacity duration-200 ${showMobileTabs ? "z-30 opacity-100 pointer-events-auto visible" : "z-0 opacity-0 pointer-events-none invisible"}`}
+        className={`fixed top-[80px] left-0 right-0 flex justify-center items-center transition-opacity duration-200 ${showMobileTabs ? "z-30 opacity-100 pointer-events-auto visible" : "z-0 opacity-0 pointer-events-none invisible"}`}
         aria-hidden={!showMobileTabs}
       >
         {content && content.length > 0 && isTablet && (
