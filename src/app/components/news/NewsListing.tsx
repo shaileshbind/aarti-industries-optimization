@@ -103,6 +103,21 @@ const NextIcon = () => (
   />
 );
 
+const NewsCardSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="rounded-[10px] w-full h-[190px] lg:h-[230px] bg-grey-200" />
+    <div className="flex mt-[16px] gap-x-[14px] items-center">
+      <div className="h-3 w-20 rounded bg-grey-200" />
+      <div className="rounded-full w-[6px] h-[6px] bg-grey-200" />
+      <div className="h-3 w-24 rounded bg-grey-200" />
+    </div>
+    <div className="mt-[8px] space-y-2">
+      <div className="h-4 w-full rounded bg-grey-200" />
+      <div className="h-4 w-3/4 rounded bg-grey-200" />
+    </div>
+  </div>
+);
+
 const NewsListing = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [activeCat, setActiveCat] = useState(tabs[0].slug);
@@ -308,10 +323,12 @@ const NewsListing = () => {
             </div>
           </div>
         </div>
-        {/* Loading/Error */}
+        {/* Loading Skeletons */}
         {isLoading && (
-          <div className="mt-[40px] flex justify-center items-center min-h-[400px]">
-            <p className="text-grey-400 text-lg">Loading...</p>
+          <div className="mt-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[24px] gap-y-6 lg:gap-y-[50px]">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <NewsCardSkeleton key={i} />
+            ))}
           </div>
         )}
         {error && !isLoading && (

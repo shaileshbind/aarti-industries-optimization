@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   EventsListingProps,
   UpcomingEventData,
@@ -10,6 +10,25 @@ import Popup from "../Popup";
 import { H2 } from "../Typography2";
 import clsx from "clsx";
 import { ButtonProps } from "@/app/types/global.type";
+
+const EventCardSkeleton = ({ pastEvent = false }: { pastEvent?: boolean }) => (
+  <div className="animate-pulse">
+    <div className="relative w-full aspect-[424/313] rounded-[10px] bg-grey-200" />
+    <div className="mt-[16px]">
+      <div className="h-3 w-28 rounded bg-grey-200 mb-[8px]" />
+      <div className="h-5 w-3/4 rounded bg-grey-200 mb-[8px]" />
+      <div className="h-4 w-1/2 rounded bg-grey-200 mb-[8px]" />
+      {!pastEvent && (
+        <>
+          <div className="h-3 w-full rounded bg-grey-200 mb-[4px]" />
+          <div className="h-3 w-2/3 rounded bg-grey-200 mb-[12px]" />
+          <div className="h-10 w-32 rounded-full bg-grey-200" />
+        </>
+      )}
+      {pastEvent && <div className="h-4 w-24 rounded bg-grey-200" />}
+    </div>
+  </div>
+);
 
 // Helper function to format date from ISO string to readable format
 const formatDate = (dateString: string): string => {
@@ -104,6 +123,11 @@ const EventsListing = ({
 }: EventsListingProps) => {
   const [selectedEvent, setSelectedEvent] = useState<DisplayEvent | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   // Transform upcoming events data if available
   // Handle both direct API response structure and getPageData wrapped structure
@@ -176,24 +200,28 @@ const EventsListing = ({
                 : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
             )}
           >
-            {eventsToDisplay.map((event, index) => (
-              <EventCard
-                key={event.title + index}
-                event={{
-                  title: event.title,
-                  date: event.date,
-                  location: event.location,
-                  description: event.description,
-                  image: event.image,
-                  mobImage: event.mobImage,
-                  ctaButton: event.ctaButton as ButtonProps,
-                }}
-                pastEvent={pastEvent}
-                onButtonClick={
-                  !pastEvent ? undefined : () => handleButtonClick(event)
-                }
-              />
-            ))}
+            {!hydrated || eventsToDisplay.length === 0
+              ? Array.from({ length: pastEvent ? 4 : 3 }).map((_, i) => (
+                  <EventCardSkeleton key={i} pastEvent={pastEvent} />
+                ))
+              : eventsToDisplay.map((event, index) => (
+                  <EventCard
+                    key={event.title + index}
+                    event={{
+                      title: event.title,
+                      date: event.date,
+                      location: event.location,
+                      description: event.description,
+                      image: event.image,
+                      mobImage: event.mobImage,
+                      ctaButton: event.ctaButton as ButtonProps,
+                    }}
+                    pastEvent={pastEvent}
+                    onButtonClick={
+                      !pastEvent ? undefined : () => handleButtonClick(event)
+                    }
+                  />
+                ))}
           </div>
         </div>
       </section>
