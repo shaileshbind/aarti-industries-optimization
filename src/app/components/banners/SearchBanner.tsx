@@ -3,11 +3,12 @@ import { useLayoutEffect, useRef } from "react";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
-import { FadeInRevealBlur } from "../ScrollReveal";
+import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
 import gsap from "gsap";
 import { SearchBannerProps } from "@/app/types/disclosure.type";
 import SearchBar from "../SearchBar";
 import clsx from "clsx";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const SearchBanner = ({
   centerText,
@@ -41,7 +42,7 @@ const SearchBanner = ({
   const starRef3 = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
-
+  const isMobile = useMatchMedia("(max-width:768px)");
   useLayoutEffect(() => {
     if (
       !wrapperRef.current ||
@@ -128,20 +129,22 @@ const SearchBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
-              {image && (
+              {image && !isMobile && (
                 <Image
                   src={image}
                   alt={alt ? alt : "img"}
                   fill
                   className="object-cover hidden lg:block"
+                  sizes="(min-width: 769px) 100vw, 0px"
                 />
               )}
-              {mobImage && (
+              {mobImage && isMobile && (
                 <Image
                   src={mobImage}
                   alt={mobAlt ? mobAlt : "img"}
                   fill
                   className="object-cover block lg:hidden"
+                  sizes="(max-width: 768px) 100vw, 0px"
                 />
               )}
               <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
@@ -153,14 +156,14 @@ const SearchBanner = ({
                 }`}
               >
                 {tag && (
-                  <div>
+                  <LetterReveal delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container">
                       {tag}
                     </BodyText2>
-                  </div>
+                  </LetterReveal>
                 )}
                 {title && (
-                  <div>
+                  <LetterReveal delay={0.1}>
                     <H1
                       className={clsx(
                         `font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] font-alte-hans text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
@@ -169,21 +172,21 @@ const SearchBanner = ({
                     >
                       {title}
                     </H1>
-                  </div>
+                  </LetterReveal>
                 )}
                 {desc && leftDesc && (
-                  <div>
+                  <FadeInRevealBlur delay={0.1}>
                     <BodyText1 className="text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container">
                       {desc}
                     </BodyText1>
-                  </div>
+                  </FadeInRevealBlur>
                 )}
                 {desc && centerText && (
-                  <div>
+                  <FadeInRevealBlur delay={0.1}>
                     <BodyText1 className="text-white mt-3 md:mt-[20px] max-w-[260px] md:max-w-[480px]">
                       {desc}
                     </BodyText1>
-                  </div>
+                  </FadeInRevealBlur>
                 )}
 
                 {/* SearchBar */}

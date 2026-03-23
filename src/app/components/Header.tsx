@@ -41,24 +41,21 @@ const Header = ({ data }: HeaderProps) => {
   const desktopNavRef = useRef<HTMLElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
+  const closeMobileMenu = () => {
+    setIsMenuOpen(false);
+    setIsSearchOpen(false);
+    setMobileExpandedMenu(null);
+    setMobileExpandedSubMenu(null);
+    gsap.fromTo(
+      mobileNavRef.current,
+      { top: "0%" },
+      { top: "-100%", duration: 0.6, ease: "power3.inOut" },
+    );
+  };
+
   const mobileMenuToggle = () => {
     if (isMenuOpen) {
-      setIsMenuOpen(false);
-      setIsSearchOpen(false);
-      // Reset expanded menus when closing
-      setMobileExpandedMenu(null);
-      setMobileExpandedSubMenu(null);
-      gsap.fromTo(
-        mobileNavRef.current,
-        {
-          top: "0%",
-        },
-        {
-          top: "-100%",
-          duration: 0.6,
-          ease: "power3.inOut",
-        },
-      );
+      closeMobileMenu();
     } else {
       setIsMenuOpen(true);
       setIsSearchOpen(false);
@@ -1107,7 +1104,7 @@ const Header = ({ data }: HeaderProps) => {
                         ? "text-orange-200 font-medium"
                         : "text-gray-700"
                         }`}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={closeMobileMenu}
                     >
                       <Typography variant="body-l">{item.menuTitle}</Typography>
                     </Link>
@@ -1221,7 +1218,7 @@ const Header = ({ data }: HeaderProps) => {
                                         target="_self"
                                         rel="noopener noreferrer"
                                         className="block py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={closeMobileMenu}
                                       >
                                         {item.title}
                                       </a>
@@ -1238,7 +1235,7 @@ const Header = ({ data }: HeaderProps) => {
                                           ? "text-orange-200 bg-orange-50 font-medium"
                                           : "text-gray-700",
                                       )}
-                                      onClick={() => setIsMenuOpen(false)}
+                                      onClick={closeMobileMenu}
                                     >
                                       {item.title}
                                     </Link>
@@ -1293,7 +1290,7 @@ const Header = ({ data }: HeaderProps) => {
                                             ? "text-orange-200 bg-orange-50 font-medium"
                                             : "text-gray-700",
                                         )}
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={closeMobileMenu}
                                       >
                                         {item.title}
                                       </a>
@@ -1310,7 +1307,7 @@ const Header = ({ data }: HeaderProps) => {
                                           ? "text-orange-200 bg-orange-50 font-medium"
                                           : "text-gray-700",
                                       )}
-                                      onClick={() => setIsMenuOpen(false)}
+                                      onClick={closeMobileMenu}
                                     >
                                       {item.title}
                                     </Link>

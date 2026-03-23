@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
-import { FadeInRevealBlur } from "../ScrollReveal";
+import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
 import { useMatchMedia } from "../../hooks/useMatchMedia";
 import { useTitleCase } from "../../../../utils/toTitleCase";
 import clsxN from "../../../../utils/clsxN";
@@ -217,14 +217,14 @@ const HeroBanner = ({
                 }`}
               >
                 {tag && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <LetterReveal delay={0.1}>
                     <BodyText2 className="text-white font-alte-hans fluid-container w-[82%] lg:w-full">
                       {tag}
                     </BodyText2>
-                  </FadeInRevealBlur>
+                  </LetterReveal>
                 )}
                 {title && (
-                  <FadeInRevealBlur delay={0.1}>
+                  <LetterReveal delay={0.1}>
                     <H1
                       className={clsxN(
                         `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
@@ -235,7 +235,7 @@ const HeroBanner = ({
                     >
                       {title}
                     </H1>
-                  </FadeInRevealBlur>
+                  </LetterReveal>
                 )}
                 {desc && leftDesc && (
                   <FadeInRevealBlur delay={0.1}>
@@ -365,18 +365,18 @@ const HeroBanner = ({
         <div className="h-auto mt-[unset] lg:mt-[72px] lg:h-screen max-h-[680px] w-full relative overflow-hidden grid lg:grid-cols-[40%_1fr] gap-y-[40px] gap-x-[80px] mb-[72px] lg:mb-[unset]">
           <div className="px-[20px] lg:pl-[60px] lg:pr-[unset] pt-[30px] lg:pt-[unset] self-center">
             {tag && (
-              <FadeInRevealBlur delay={0.1}>
+              <LetterReveal delay={0.1}>
                 <BodyText2 className="text-orange-100 font-alte-hans max-w-full lg:max-w-[480px] 2xl:max-w-full">
                   {tag}
                 </BodyText2>
-              </FadeInRevealBlur>
+              </LetterReveal>
             )}
             {title && (
-              <FadeInRevealBlur delay={0.1}>
+              <LetterReveal delay={0.1}>
                 <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full" applyTitleCase={true}>
                   {title}
                 </H1>
-              </FadeInRevealBlur>
+              </LetterReveal>
             )}
             {desc && (
               <FadeInRevealBlur delay={0.1}>
