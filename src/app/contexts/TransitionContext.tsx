@@ -22,10 +22,10 @@ export const useTransition = () => {
   return ctx;
 };
 
-const MAX_BLUR = 6;
-const MIN_OPACITY = 0.15;
-const LEAVE_DURATION = 0.3;
-const ENTER_DURATION = 0.3;
+const MAX_BLUR = 8;
+const MIN_OPACITY = 0.08;
+const LEAVE_DURATION = 0.55;
+const ENTER_DURATION = 0.65;
 
 export function TransitionProvider({ children }: { children: React.ReactNode }) {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -44,18 +44,25 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
     contentRef.current.style.opacity = opacity >= 0.99 ? "" : String(opacity);
   }, []);
 
-  const playLeave = useCallback(() => {
-    activeTween.current?.kill();
-    proxy.current = { blur: 0, opacity: 1 };
-    activeTween.current = gsap.to(proxy.current, {
-      blur: MAX_BLUR,
-      opacity: MIN_OPACITY,
-      duration: LEAVE_DURATION,
-      ease: "sine.in",
-      onUpdate: applyStyle,
-      onComplete: () => { activeTween.current = null; },
-    });
-  }, [applyStyle]);
+  const playLeave = useCallback(
+    () =>
+      new Promise<void>((resolve) => {
+        activeTween.current?.kill();
+        proxy.current = { blur: 0, opacity: 1 };
+        activeTween.current = gsap.to(proxy.current, {
+          blur: MAX_BLUR,
+          opacity: MIN_OPACITY,
+          duration: LEAVE_DURATION,
+          ease: "power2.in",
+          onUpdate: applyStyle,
+          onComplete: () => {
+            activeTween.current = null;
+            resolve();
+          },
+        });
+      }),
+    [applyStyle],
+  );
 
   const playEnter = useCallback(() => {
     activeTween.current?.kill();
@@ -65,12 +72,12 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       applyStyle();
       return;
     }
-    const duration = Math.max(ENTER_DURATION * progress, 0.15);
+    const duration = Math.max(ENTER_DURATION * progress, 0.35);
     activeTween.current = gsap.to(proxy.current, {
       blur: 0,
       opacity: 1,
       duration,
-      ease: "sine.out",
+      ease: "power2.out",
       onUpdate: applyStyle,
       onComplete: () => {
         proxy.current = { blur: 0, opacity: 1 };
@@ -121,9 +128,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       e.preventDefault();
       isTransitioning.current = true;
 
-      // Start blur and navigate simultaneously -- no waiting
-      playLeave();
-      router.push(href);
+      playLeave().then(() => router.push(href));
     };
 
     document.addEventListener("click", handleClick, { capture: true });
