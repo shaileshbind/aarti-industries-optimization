@@ -5,6 +5,7 @@ import Image from "next/image";
 import SearchBar from "./SearchBar";
 import { BodyText1, H1 } from "../Typography2";
 import { BannerProps } from "@/app/types/product.listing.type";
+import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
 
 const Banner: React.FC<
   BannerProps & { onSearch: (q: string) => void; clearTrigger: number }
@@ -21,10 +22,14 @@ const Banner: React.FC<
         <div className="bg-[#ffffff] opacity-50 rounded-[646px] w-[80%] md:w-[35%] h-[90%] absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl z-[1]" />
         {/* Text Content */}
         <div className="h-auto max-w-[65%] md:max-w-[30%] lg:mt-20 z-10">
-          <H1 className="text-h2-l text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-100" applyTitleCase={true}>{title}</H1>
+          <LetterReveal delay={0.1}>
+            <H1 className="text-h2-l text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-blue-100" applyTitleCase={true}>{title}</H1>
+          </LetterReveal>
+          <FadeInRevealBlur delay={0.1}>
           <BodyText1 className="text-body-m mt-1 mb-5 lg:mb-9 text-[#646464]">
             {description}
           </BodyText1>
+          </FadeInRevealBlur>
         </div>
 
         {/* Search */}
