@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import Image from "next/image";
 import { BodyText2 } from "../Typography2";
 import { FadeInReveal } from "../ScrollReveal";
@@ -24,7 +25,7 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
   flipImg,
 }) => {
   const canFlip = !image && !mobImage && !!flipImg;
-
+  const isMobile = useMatchMedia("(max-width: 768px)");
   return (
     <FadeInReveal
       key={id}
@@ -59,21 +60,23 @@ const NirvanaCard: React.FC<NirvanaCardProps> = ({
 
       {image || mobImage ? (
         <>
-          {image && (
+          {image && !isMobile && (
             <Image
-              fill
+              width={246}
+              height={246}
               src={image}
               alt="img"
-              className="hidden lg:block object-cover hover:scale-105 transition-all duration-500"
+              className="hidden lg:block object-cover hover:scale-105 transition-all duration-500 w-full h-full absolute inset-0"
             />
           )}
 
-          {mobImage && (
+          {mobImage && isMobile && (
             <Image
-              fill
+              width={246}
+              height={246}
               src={mobImage}
               alt="img"
-              className="block lg:hidden object-cover"
+              className="block lg:hidden object-cover w-full h-full absolute inset-0"
             />
           )}
         </>

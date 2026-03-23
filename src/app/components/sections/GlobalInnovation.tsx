@@ -48,8 +48,11 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
                 <Image
                   src={displayImage}
                   alt={displayAlt}
-                  fill
-                  className="absolute object-cover rounded-[20px]"
+                  width={600}
+                  height={600}
+                  className="absolute object-cover rounded-[20px] w-full h-full top-0 left-0"
+                  sizes="(min-width: 1024px) 50vw, 50vw"
+
                 />
 
                 {/* Decorative overlays */}

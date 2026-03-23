@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { BodyText2, H2 } from "../Typography2";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
 import ParallaxImage from "../ParallaxImage";
 import clsx from "clsx";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type BlackInfoSectionProps = {
   image?: string;
@@ -28,21 +31,25 @@ const BlackInfoSection = ({
   ctaLink,
   overlayClassName,
 }: BlackInfoSectionProps) => {
+
+  const isTablet = useMatchMedia("(max-width:1024px)");
+  console.log(isTablet);
   return (
     <>
-      {mobImage && (
-        <div className="rounded-[14px] overflow-hidden mb-[20px] h-[240px] md:h-[340px] relative block lg:hidden mx-[20px]">
+      {mobImage && isTablet && (
+        <div className="rounded-[14px] overflow-hidden mb-[20px] relative block lg:hidden mx-[20px]">
           <Image
             src={mobImage}
             alt={mobAlt ? mobAlt : "banner"}
-            fill
-            className="object-cover"
+            width={400}
+            height={220}
+            className="object-cover w-full "
           />
           {/* <div className="absolute inset-0 bg-black/20 " /> */}
         </div>
       )}
       <div className="w-full relative lg:h-[calc(100vh-70px)]">
-        {image && (
+        {image && !isTablet && (
           <div className="relative w-full h-full">
             <ParallaxImage
               src={image}
@@ -65,10 +72,10 @@ const BlackInfoSection = ({
               </H2>
             </FadeInReveal>
           )}
-          <div className="grid mt-[12px] lg:mt-[90px] xl:justify-end max-w-[540px] ml-auto">
+          <div className="grid mt-[12px] lg:mt-[90px] xl:justify-end w-full lg:max-w-[540px] ml-auto">
             <FadeInReveal>
               {description && (
-                <BodyText2 className="max-w-[540px] text-grey-400 lg:text-[#F7F9FA]">
+                <BodyText2 className="lg:max-w-[540px] text-grey-400 lg:text-[#F7F9FA]">
                   {description}
                 </BodyText2>
               )}

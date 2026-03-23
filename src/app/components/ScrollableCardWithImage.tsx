@@ -4,7 +4,7 @@ import { BodyText2, H2, SubH1 } from "./Typography2";
 import Image from "next/image";
 import Tags from "./Tags";
 import gsap from "gsap";
-import { FadeInRevealBlur } from "./ScrollReveal";
+import { FadeInReveal } from "./ScrollReveal";
 import { RDInnovatingChemProps } from "@/app/types/r-and-d.type";
 
 const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
@@ -63,16 +63,20 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
   return (
     <div>
       {(heading || description) && (
-        <FadeInRevealBlur>
+        <div>
           {heading && (
+            <FadeInReveal>
             <H2 className="max-w-[600px] mx-[20px] lg:mx-[60px]">{heading}</H2>
+            </FadeInReveal>
           )}
           {description && (
+            <FadeInReveal>
             <BodyText2 className="text-grey-400 mt-[8px] mx-[20px] lg:mx-[60px] max-w-[700px]">
               {description}
             </BodyText2>
+            </FadeInReveal>
           )}
-        </FadeInRevealBlur>
+        </div>
       )}
 
       {cards?.length > 0 && (

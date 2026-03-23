@@ -241,8 +241,9 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                     alt={
                       card?.[activeIndex]?.image?.alternativeText || "banner"
                     }
-                    fill
-                    className="absolute object-cover opacity-40 blur-sm transition-opacity duration-700"
+                    width={50}
+                    height={52}
+                    className="absolute object-cover opacity-40 blur-sm transition-opacity duration-700 w-full h-full top-0 left-0"
                   />
                   <Image
                     src={card?.[activeIndex]?.image?.url}

@@ -147,8 +147,9 @@ const RDInfo: React.FC<RDInfoProps> = ({ data, showLine }) => {
                 <Image
                   src={rightSectionImage?.url}
                   alt={rightSectionImage?.alternativeText || "img"}
-                  fill
-                  className="object-cover transition-all duration-300 hover:scale-105"
+                  width={412}
+                  height={450}
+                  className="object-cover transition-all duration-300 w-full h-full top-0 left-0 absolute hover:scale-105"
                 />
               </div>
             )}
