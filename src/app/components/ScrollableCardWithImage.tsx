@@ -96,8 +96,8 @@ const ScrollableCardWithImage: React.FC<RDInnovatingChemProps> = ({ data }) => {
                       src={items?.image?.url}
                       alt={items?.image?.alternativeText || "banner"}
                       width={424}
-                      height={286}
-                      className="object-cover w-full h-full top-0 left-0 absolute"
+                      height={298}
+                      className="object-cover w-full h-full"
                     />
                   </div>
                 )}

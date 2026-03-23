@@ -23,28 +23,31 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
   // Memoize right section data
   const rightSectionData = useMemo(() => rightSection?.[0], [rightSection]);
 
-  // 🔹 Animation function for image transition (same as InvestingInPotential)
   const animateImageTransition = useCallback(
-    (newIndex: number, direction: number) => {
+    (newIndex: number) => {
+      const prev = prevIndexRef.current;
+      if (newIndex === prev) return;
+
       const incoming = imageRefs.current[newIndex];
-      const outgoing = imageRefs.current[prevIndexRef.current];
+      const outgoing = imageRefs.current[prev];
+      if (!incoming || !outgoing) return;
 
-      if (newIndex === prevIndexRef.current || !incoming || !outgoing) return;
+      const goingDown = newIndex > prev;
 
-      // Animate outgoing image
       gsap.to(outgoing, {
-        clipPath:
-          direction > 0 ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)",
+        clipPath: goingDown
+          ? "inset(0% 0% 100% 0%)"
+          : "inset(100% 0% 0% 0%)",
         duration: 0.6,
         ease: "power2.in",
       });
 
-      // Animate incoming image
       gsap.fromTo(
         incoming,
         {
-          clipPath:
-            direction > 0 ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
+          clipPath: goingDown
+            ? "inset(100% 0% 0% 0%)"
+            : "inset(0% 0% 100% 0%)",
         },
         {
           clipPath: "inset(0% 0% 0% 0%)",
@@ -89,68 +92,57 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
         gsap.set(star, { y: 0 });
         gsap.set(line, { height: 0 });
 
-        // Normalize timeline spacing for smooth animation
         const totalItems = positions.length;
-        const spacing = totalItems > 1 ? 1 / (totalItems - 1) : 1;
+        if (totalItems < 2) return;
+
+        const scrollPerGap = 1000;
+        const totalScroll = (totalItems - 1) * scrollPerGap;
+        const snapIncrement = 1 / (totalItems - 1);
+
+        const snapPoints: number[] = [];
+        for (let i = 0; i < totalItems; i++) {
+          snapPoints.push(i * snapIncrement);
+        }
 
         const tl = gsap.timeline({
           scrollTrigger: {
             id: "ailRoadmapTrigger11",
             trigger: wrapper,
             start: "top top",
-            end: "+=800",
+            end: `+=${totalScroll}`,
             scrub: true,
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             refreshPriority: 1,
+            snap: {
+              snapTo: snapPoints,
+              duration: { min: 0.15, max: 0.35 },
+              delay: 0.05,
+              ease: "power1.inOut",
+            },
             onUpdate: (self) => {
-              const starRect = star.getBoundingClientRect();
-              const starY = starRect.top + window.scrollY;
-              let activeIndex: number | null = null;
+              const p = self.progress;
+              let activeIndex = 0;
 
-              // If near the end of scroll, use the last item
-              if (self.progress >= 0.95) {
-                activeIndex = totalItems - 1;
-              } else {
-                for (let i = 0; i < itemRefs.current.length; i++) {
-                  const item = itemRefs.current[i];
-                  if (!item) continue;
-
-                  const rect = item.getBoundingClientRect();
-                  const itemTop = rect.top + window.scrollY;
-                  const itemBottom = rect.bottom + window.scrollY;
-
-                  if (starY >= itemTop && starY <= itemBottom) {
-                    activeIndex = i;
-                    break;
-                  }
-                }
-
-                // Fallback: use progress to determine index if position detection fails
-                if (activeIndex === null && totalItems > 0) {
-                  const progressIndex = Math.min(
-                    Math.floor(self.progress * (totalItems - 1)),
-                    totalItems - 1,
-                  );
-                  activeIndex = progressIndex;
+              for (let i = totalItems - 1; i >= 0; i--) {
+                if (p >= snapPoints[i] - 0.01) {
+                  activeIndex = i;
+                  break;
                 }
               }
 
-              if (
-                activeIndex !== null &&
-                activeIndex !== prevIndexRef.current
-              ) {
+              if (activeIndex !== prevIndexRef.current) {
                 setActive(activeIndex);
-                animateImageTransition(activeIndex, self.direction);
+                animateImageTransition(activeIndex);
               }
             },
           },
         });
 
         positions.forEach((pos, index) => {
-          const time = index * spacing;
+          const time = index * snapIncrement;
           tl.to(star, { y: pos, ease: "none" }, time);
           tl.to(line, { height: pos, ease: "none" }, time);
         });
