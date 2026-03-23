@@ -1,6 +1,7 @@
 import { getPageData } from "@/_lib/pageData.fetch";
 import SitemapMenu from "../components/sitemap/SitemapMenu";
 import SEO from "../components/SEO";
+import HeroBanner from "../components/banners/HeroBanner";
 
 const page = async () => {
   const pageData = await getPageData("/pages/by-slug/sitemap");
@@ -26,6 +27,17 @@ const page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+
+      <HeroBanner
+        title={"Sitemap"}
+        image={"/images/cdmo/cdmo-driving-banner.png"}
+        mobImage={"/images/cdmo/cdmo-driving-banner.png"}
+        alt="Sitemap"
+        mobAlt="Sitemap"
+        fullBg
+        centerText
+      />
+
       {menu && <SitemapMenu menu={menu} />}
     </div>
   );
