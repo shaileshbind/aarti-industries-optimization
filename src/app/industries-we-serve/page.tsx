@@ -12,7 +12,7 @@ const page = async () => {
     getPageData("/pages/by-slug/industries-we-serve"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { section_one, section_two, section_three, section_four } = data?.data;
+  const { section_one, section_two, section_three, section_four } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

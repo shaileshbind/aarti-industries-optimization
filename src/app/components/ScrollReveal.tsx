@@ -670,8 +670,14 @@ export const LetterReveal = ({
 
     const text = textRef.current;
 
-    const split = new SplitType(text, { types: "chars" });
+    const split = new SplitType(text, { types: "words,chars" });
     splitRef.current = split;
+
+    if (split.words) {
+      split.words.forEach((word) => {
+        (word as HTMLElement).style.whiteSpace = "nowrap";
+      });
+    }
 
     // Set initial state
     gsap.set(split.chars, { y: fromY, opacity: 0 });

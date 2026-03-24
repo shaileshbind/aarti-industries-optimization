@@ -74,8 +74,14 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const finalFilename =
-      filename?.replace(/[^a-zA-Z0-9 ]/g, "") || `download.${extension}`;
+    const sanitize = (name: string) => name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    let finalFilename: string;
+    if (filename) {
+      const hasExtension = /\.\w{2,5}$/.test(filename);
+      finalFilename = sanitize(hasExtension ? filename : `${filename}.${extension}`);
+    } else {
+      finalFilename = `download.${extension}`;
+    }
 
     return new NextResponse(blob, {
       headers: {

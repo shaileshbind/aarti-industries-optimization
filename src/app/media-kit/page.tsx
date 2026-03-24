@@ -12,7 +12,7 @@ export default async function page() {
     getData("/globally-certified-datas?populate=*"),
   ]);
 
-  const { section_one, section_two, section_three } = data?.data;
+  const { section_one, section_two, section_three } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

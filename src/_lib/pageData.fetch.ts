@@ -31,9 +31,7 @@ export async function getPageData(slug: string) {
       pressData: data,
     };
   } catch (error: unknown) {
-    // Handle fetch error
-    if (error instanceof Error) {
-      throw new Error(`Failed to fetch page data: ${error?.message}`);
-    }
+    console.error("Error fetching page data:", error);
+    return null;
   }
 }

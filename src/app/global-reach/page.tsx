@@ -17,7 +17,7 @@ const page = async () => {
     getPageData("/pages/by-slug/global-reach"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { Section_one, section_two, section_three, section_four } = data?.data;
+  const { Section_one, section_two, section_three, section_four } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <>
