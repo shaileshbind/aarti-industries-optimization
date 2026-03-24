@@ -31,7 +31,7 @@ export default async function Home() {
     sectionNine,
     sectionTen,
     sectionFiveTitle,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

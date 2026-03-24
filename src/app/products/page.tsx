@@ -11,7 +11,7 @@ export default async function Product() {
     getPageData("/pages/by-slug/product-listing"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { section_one, product_categories, exploreMore } = data?.data;
+  const { section_one, product_categories, exploreMore } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

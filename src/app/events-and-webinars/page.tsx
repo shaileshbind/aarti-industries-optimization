@@ -44,7 +44,7 @@ export default async function page() {
     section_four,
     section_five,
     section_six,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

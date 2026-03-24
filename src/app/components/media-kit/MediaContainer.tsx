@@ -110,7 +110,6 @@ export default function MediaContainer({ data }: MediaContainerProps) {
   // Render component based on activeIndex
   const renderContent = () => {
     if (!activeData) return <div>No content available</div>;
-
     switch (activeIndex) {
       case 0:
         return <CorporateVideo data={activeData} />;

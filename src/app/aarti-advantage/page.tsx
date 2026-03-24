@@ -22,7 +22,7 @@ export default async function page() {
     section_five,
     section_six,
     section_seven,
-  } = data?.data;
+  } = data?.data ?? {};
 
   const seo = data?.seo;
 

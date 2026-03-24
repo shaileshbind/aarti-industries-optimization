@@ -26,7 +26,7 @@ const page = async () => {
     section_eight,
     section_nine,
     section_ten,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

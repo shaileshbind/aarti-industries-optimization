@@ -26,7 +26,7 @@ export default async function page() {
     section_six,
     section_seven,
     section_eight,
-  } = data?.data;
+  } = data?.data ?? {};
 
   const seo = data?.seo;
 

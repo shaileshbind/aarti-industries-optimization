@@ -11,7 +11,7 @@ const page = async () => {
     getPageData("/pages/by-slug/news"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { section_one, section_two } = data?.data;
+  const { section_one, section_two } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

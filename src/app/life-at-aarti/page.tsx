@@ -23,7 +23,7 @@ const page = async () => {
     section_six,
     section_seven,
     gallery,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

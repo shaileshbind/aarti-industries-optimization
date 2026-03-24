@@ -13,7 +13,7 @@ const Page = async () => {
     getData("/where-we-operates?populate=*"),
     getData("/globally-certified-datas?populate=*"),
   ]);
-  const { leftSection, section_two, mapSection } = data?.data;
+  const { leftSection, section_two, mapSection } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

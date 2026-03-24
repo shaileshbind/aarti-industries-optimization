@@ -29,7 +29,7 @@ const page = async () => {
     section_eight,
     section_nine,
     testimonial_section,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>
