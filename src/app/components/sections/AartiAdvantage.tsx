@@ -191,7 +191,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             },
             {
               width: "100%",
-              height: "90vh",
+              height: "100vh",
               left: "50%",
               top: "50%",
               y: "-50%",
@@ -199,7 +199,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               duration: 1,
             },
             "<",
-          )
+          ).to(sustainInner.current, {y: "40px"}, "<")
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
             envSlider.current,
@@ -444,11 +444,11 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         </div>
         <div
           ref={envSlider}
-          className="w-full opacity-0 absolute top-50% translate-y-[-47%] left-0 "
+          className="w-full opacity-0 absolute top-50% translate-y-[-50%] lg:translate-y-[-47%] left-0 "
         >
           <div
             ref={sliderContainerRef}
-            className="flex w-full h-screen relative flex-col lg:justify-center pt-[60px] lg:pt-[unset]"
+            className="flex w-full h-screen relative flex-col lg:justify-center pt-[80px] lg:pt-[unset]"
           >
             <div
               ref={contentContainerRef}
@@ -463,7 +463,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       alt={details[active]?.title}
                       width={60}
                       height={60}
-                      className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
+                      className="object-cover w-full h-full top-0 left-0 absolute"
                     />
                     <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-white/30"></i>
                     <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
@@ -472,7 +472,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                         alt={details[active]?.image?.url}
                         width={600}
                         height={600}
-                        className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
+                        className="object-cover w-full h-full top-0 left-0 absolute"
                       />
                     </span>
                   </div>
@@ -480,13 +480,13 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               </div>
               )}
               <div className="w-full overflow-hidden">
-                
+              {!isTablet && (
                 <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
-                  {!isTablet && (
+                  
                   <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
-                  )}
+                  
                   <div className="hidden lg:block">
                     <div className="flex gap-3">
                       <Image
@@ -514,6 +514,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     </div>
                   </div>
                 </div>
+                )}
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <div  onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
@@ -583,7 +584,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                         alt={slide.title}
                         width={60}
                         height={60}
-                        className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
+                        className="object-cover w-full h-full top-0 left-0 absolute"
                       />
                       <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-white/30"></i>
                       <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
@@ -592,7 +593,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                           alt={slide.title}
                           width={600}
                           height={600}
-                          className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
+                          className="object-cover w-full h-full top-0 left-0 absolute"
                         />
                       </span>
                     </div>
