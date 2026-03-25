@@ -559,7 +559,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
                         <div
-                          className={`grid gap-12 lg:pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                          className={`grid gap-3 lg:gap-12 lg:pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
                             active !== index
                               ? "lg:blur-sm lg:opacity-70"
                               : "lg:blur-0 lg:opacity-100"
