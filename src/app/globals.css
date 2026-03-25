@@ -1116,3 +1116,26 @@ body {
     background: #c24402 !important;
   }
 }
+
+
+.catgoryProductsSwiper .swiper {
+  height: 100%;
+}
+
+.catgoryProductsSwiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.catgoryProductsSwiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.catgoryProductsSwiper .slide-content {
+  display: flex;
+  flex-direction: column;
+  
+}
+.catgoryProductsSwiper  .title-card-anim {
+  display: flex; width: 100%;
+} 
