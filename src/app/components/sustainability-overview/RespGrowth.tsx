@@ -366,10 +366,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             susLogotr.current,
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
-              width: window.innerWidth - 40,
-              height: "250px",
-              right: 20,
-              top: "170px",
+              width: window.innerWidth - 30,
+              height:  window.innerWidth - 30,
+              right: 15,
+              top: "135px",
               duration: 1,
             },
           )
@@ -964,7 +964,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh]"
       >
         <div className="relative" ref={contentContainerRef}>
-          <div className="w-full pt-[155px] pb-[100px]">
+          <div className="w-full pt-[120px] pb-[100px]">
             <div className="grid items-center gap-6 mt-4" ref={sliderContainerRef}>
               {isTablet && (
                 <div className="flex flex-col gap-y-[40px]">
@@ -1005,7 +1005,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
         mobileTabBarRef.current = element;
         tabBarContainerRef.current = element;
       }}
-      className={`fixed top-[110px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
+      className={`fixed top-[90px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
       aria-hidden={!showMobileTabs}
     >
       {mainSection?.length > 0 && isTablet && (

@@ -375,10 +375,10 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             susLogotr.current,
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
-              width: window.innerWidth - 40,
-              height: window.innerWidth - 40,  
-              right: 20,
-              top: "170px",
+              width: window.innerWidth - 30,
+              height: window.innerWidth - 30,  
+              right: 15,
+              top: "140px",
               duration: 1,
             },
           )
