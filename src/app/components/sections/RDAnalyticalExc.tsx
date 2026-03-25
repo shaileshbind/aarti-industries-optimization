@@ -16,7 +16,6 @@ import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
-import { isTablet } from "react-device-detect";
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollToPlugin);
