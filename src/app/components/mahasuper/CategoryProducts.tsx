@@ -132,7 +132,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       Autoplay,
                     ]}
                     autoplay={{
-                      delay: 115000,
+                      delay: 5000,
                       disableOnInteraction: false,
                       pauseOnMouseEnter: false,
                     }}
