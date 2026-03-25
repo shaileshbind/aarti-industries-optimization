@@ -182,6 +182,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                             imageAlt={item?.image?.alternativeText}
                             title={item?.title}
                             description={item?.description}
+                            className="h-[410px]"
                           />
                         </div>
                       </SwiperSlide>
