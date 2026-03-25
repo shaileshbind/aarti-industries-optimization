@@ -22,7 +22,7 @@ const TitleCard = ({
   return (
     <div
       className={clsxN(
-        "relative rounded-[20px] w-full   bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden",
+        "relative rounded-[20px] w-full   bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden flex flex-col",
         className,
       )}
     >
@@ -34,7 +34,7 @@ const TitleCard = ({
       </div>
       <div
         className={clsxN(
-          "relative bottom-0 w-full aspect-[312/180] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden",
+          "relative bottom-0 w-full aspect-[312/180] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden mt-auto",
           imageClassName,
         )}
       >

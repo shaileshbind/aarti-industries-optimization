@@ -132,7 +132,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       Autoplay,
                     ]}
                     autoplay={{
-                      delay: 5000,
+                      delay: 115000,
                       disableOnInteraction: false,
                       pauseOnMouseEnter: false,
                     }}
@@ -172,7 +172,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                         releaseOnEdges: true,
                       },
                     })}
-                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
+                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0 catgoryProductsSwiper"
                   >
                     {card?.map((item, index) => (
                       <SwiperSlide key={`${index}`}>
@@ -182,7 +182,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                             imageAlt={item?.image?.alternativeText}
                             title={item?.title}
                             description={item?.description}
-                            className="h-[410px]"
+                            // className="h-[410px]"
                           />
                         </div>
                       </SwiperSlide>
