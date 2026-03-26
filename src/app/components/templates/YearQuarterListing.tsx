@@ -104,6 +104,8 @@ export default function YearQuarterListing({
 
   const [pressReleasesYearAndQuarter, setPressReleasesYearAndQuarter] =
     useState<{ year: string | number; quarter: Quarter[] }[] | null>(null);
+  const [isPressReleasesLoading, setIsPressReleasesLoading] =
+    useState<boolean>(false);
 
   // refs
   const yearsRowRef = useRef<HTMLDivElement | null>(null);
@@ -114,13 +116,21 @@ export default function YearQuarterListing({
   useEffect(() => {
     if (!isPressReleasesSubCategory(activeSubCategory)) {
       setPressReleasesYearAndQuarter(null);
+      setIsPressReleasesLoading(false);
       return;
     }
     let cancelled = false;
     const load = async () => {
-      const data = await fetchNews("/api/press");
-      if (cancelled) return;
-      setPressReleasesYearAndQuarter(buildPressReleasesYearAndQuarter(data));
+      setIsPressReleasesLoading(true);
+      try {
+        const data = await fetchNews("/api/press");
+        if (cancelled) return;
+        setPressReleasesYearAndQuarter(
+          buildPressReleasesYearAndQuarter(data),
+        );
+      } finally {
+        if (!cancelled) setIsPressReleasesLoading(false);
+      }
     };
     load();
     return () => {
@@ -460,7 +470,10 @@ export default function YearQuarterListing({
           <SmoothScrollContainer
             className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
           >
-            {quarters?.length > 0 ? (
+            {isPressReleasesSubCategory(activeSubCategory) &&
+            isPressReleasesLoading ? (
+              <PressReleaseSkeleton />
+            ) : quarters?.length > 0 ? (
               quarters.map((quarterItem, qIdx) => (
                 <div
                   key={`quarter_section_${qIdx}`}
@@ -598,6 +611,23 @@ export default function YearQuarterListing({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function PressReleaseSkeleton() {
+  return (
+    <div className="flex flex-col">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="border-b border-[#E1E1E1] py-4 flex flex-col gap-[6px]"
+        >
+          <div className="h-5 w-full max-w-[80%] bg-[#E1E1E1] rounded animate-pulse" />
+          <div className="h-5 w-full max-w-[50%] bg-[#E1E1E1] rounded animate-pulse" />
+          <div className="h-4 w-24 bg-[#E1E1E1] rounded animate-pulse mt-1" />
+        </div>
+      ))}
     </div>
   );
 }

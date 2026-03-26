@@ -5,11 +5,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import { AILRoadmapData } from "@/app/types/sustainability.type";
+import {useMatchMedia} from "@/app/hooks/useMatchMedia";
 
 const AILRoadmap = ({ data }: AILRoadmapData) => {
   const { sectionTitle, leftSection, rightSection } = data;
   const [active, setActive] = useState(0);
-
+  const isMobile = useMatchMedia("(max-width: 768px)");
   // Refs
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -70,7 +71,8 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
 
     if (!wrapper || !star || !line || !container) return;
 
-    const timeoutId = setTimeout(() => {
+    // Using rAF instead of setTimeout reduces "start" lag on mobile.
+    const rafId = requestAnimationFrame(() => {
       // Initialize clip paths
       imageRefs.current.forEach((el, i) => {
         if (el) {
@@ -95,7 +97,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
         const totalItems = positions.length;
         if (totalItems < 2) return;
 
-        const scrollPerGap = 1000;
+        const scrollPerGap = isMobile ? 500 : 1000;
         const totalScroll = (totalItems - 1) * scrollPerGap;
         const snapIncrement = 1 / (totalItems - 1);
 
@@ -110,7 +112,8 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             trigger: wrapper,
             start: "top top",
             end: `+=${totalScroll}`,
-            scrub: true,
+            // `scrub: true` adds smoothing (~1s) which can feel like a delay on mobile.
+            scrub: isMobile ? 0.3 : true,
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
@@ -119,7 +122,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             snap: {
               snapTo: snapPoints,
               duration: { min: 0.15, max: 0.35 },
-              delay: 0.05,
+              delay: isMobile ? 0 : 0.05,
               ease: "power1.inOut",
             },
             onUpdate: (self) => {
@@ -147,16 +150,16 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
           tl.to(line, { height: pos, ease: "none" }, time);
         });
       });
-    }, 100);
+    });
 
     return () => {
-      clearTimeout(timeoutId);
+      cancelAnimationFrame(rafId);
       gsapContextRef.current?.revert();
       requestAnimationFrame(() => {
         ScrollTrigger.refresh();
       });
     };
-  }, [animateImageTransition]);
+  }, [animateImageTransition, isMobile]);
 
   // Memoized ref callback
   const setItemRef = useCallback(
@@ -174,7 +177,9 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
       >
         {/* Background Images with clip-path animation */}
         {leftSection && leftSection?.length > 0 && (
-          <div className="absolute inset-0 z-[0]">
+          <div className="absolute inset-0 z-0">
+            {/* Keep a constant dark background so clip-path transitions don't reveal the white page */}
+            <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)]" />
             {leftSection?.map(
               (item, index) =>
                 item?.image?.url && (
@@ -202,9 +207,9 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             )}
           </div>
         )}
-        <div className="w-full h-full absolute z-[2]">
+        <div className="w-full h-full absolute z-2">
           <div className="relative w-full h-full">
-            <div className="h-full w-[1px] bg-gray-300/30 absolute left-[90px]" />
+            <div className="h-full w-px bg-gray-300/30 absolute left-[90px]" />
             {sectionTitle && (
               <H2 className="text-white left-[120px] mt-[100px] xl:mt-[120px] absolute mr-[20px] lg:mr-[20px]">
                 {sectionTitle}
@@ -216,7 +221,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             >
               <div
                 ref={lineRef}
-                className="w-[1px] bg-white/60 absolute left-[50px]"
+                className="w-px bg-white/60 absolute left-[50px]"
                 style={{ height: "0px" }}
               />
               <div
@@ -266,7 +271,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
                   className="object-cover z-[-2]"
                 />
                 {rightSectionData.heading && (
-                  <SubH3 className="text-white md:!text-[16px] lg:!text-[20px]">
+                  <SubH3 className="text-white md:text-[16px]! lg:text-[20px]!">
                     {rightSectionData.heading}
                   </SubH3>
                 )}
@@ -302,7 +307,7 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
               </div>
             )}
             {/* Mobile grey box - Inside pinned section */}
-            <div className="block lg:hidden absolute w-[100%] h-auto bottom-0">
+            <div className="block lg:hidden absolute w-full h-auto bottom-0">
               {rightSectionData && (
                 <div className=" bg-[#102533] absolute left-0 w-full px-[24px] py-[40px] z-10">
                   {rightSectionData.heading && (

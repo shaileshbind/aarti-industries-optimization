@@ -285,7 +285,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           .fromTo(
             sustainbleLogo.current,
             { height: "0px" },
-            { height: "203px", duration: 6 },
+            { height: "205px", duration: 6 },
             "<",
           )
           .fromTo(
@@ -727,7 +727,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
             {mainSection?.[0]?.image?.url && (
               <div
                 ref={sustainbleLogo}
-                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] lg:overflow-hidden absolute"
               >
                 <span
                   ref={sustainInner}
