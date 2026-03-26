@@ -1,5 +1,13 @@
 "use client";
-import { useLayoutEffect, useRef, useState, useCallback } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useCallback,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
+import { useLenis } from "@/app/contexts/LenisContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type SimpleTab = {
   title: string;
@@ -93,6 +101,45 @@ const SimpleTabs: React.FC<SimpleTabsProps> = ({
     measureIndicator,
   ]);
 
+  const isMobileTouch = useMatchMedia("(pointer: coarse)");
+  const { stopLenis, startLenis } = useLenis();
+
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleTabsTouchStart = useCallback((e: ReactTouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
+
+  const handleTabsTouchMove = useCallback(
+    (e: ReactTouchEvent) => {
+      if (!isMobileTouch) return;
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+
+      // If user is clearly swiping horizontally inside the scroller,
+      // stop Lenis so it doesn't fight native horizontal scrolling.
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [isMobileTouch, stopLenis],
+  );
+
+  const handleTabsTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${
       isActive ? activeButtonClassName : inactiveButtonClassName
@@ -106,7 +153,14 @@ const SimpleTabs: React.FC<SimpleTabsProps> = ({
   };
 
   return (
-    <div className="overflow-scroll lg:overflow-hidden mb-[42px] w-[calc(100%+30px)] mx-[-15px] px-[15px]">
+    <div
+      className="overflow-scroll lg:overflow-hidden mb-[42px] w-[calc(100%+30px)] mx-[-15px] px-[15px]"
+      data-lenis-prevent
+      onTouchStart={handleTabsTouchStart}
+      onTouchMove={handleTabsTouchMove}
+      onTouchEnd={handleTabsTouchEnd}
+      onTouchCancel={handleTabsTouchEnd}
+    >
       <div
         className={`relative flex justify-center mb-2 ${containerClassName} ${className} ${
           !leftAlign && "mx-auto "

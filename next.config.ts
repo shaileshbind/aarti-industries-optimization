@@ -18,24 +18,21 @@ const nextConfig = async () => {
     turbopack: {
       root: process.cwd(),
     },
-    // images: {
-    //   remotePatterns: [
-    //     {
-    //       protocol: "https",
-    //       hostname: environment === "true" ? "admin.aarti-industries.com" : "staging.api.aarti-industries.com",
-    //     },
-    //     {
-    //       protocol: "https",
-    //       hostname: "**.cloudfront.net",
-    //     },
-    //   ],
-    //   formats: ["image/avif", "image/webp"],
-    //   imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 400],
-    //   deviceSizes: [350, 450, 640, 750, 828, 1080, 1200, 1920],
-    //   qualities: [70, 75, 80],
-    // },
     images: {
-      unoptimized: true,
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: environment === "true" ? "admin.aarti-industries.com" : "staging.api.aarti-industries.com",
+        },
+        {
+          protocol: "https",
+          hostname: "**.cloudfront.net",
+        },
+      ],
+      formats: ["image/avif", "image/webp"],
+      imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 400],
+      deviceSizes: [350, 450, 640, 750, 828, 1080, 1200, 1920],
+      qualities: [70, 75, 80],
     },
     compiler: {
       removeConsole: environment === "true",
