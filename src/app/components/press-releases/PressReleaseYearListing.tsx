@@ -114,18 +114,35 @@ export default function PressReleaseYearListing({
   const searchParams = useSearchParams();
   const [activeYear, setActiveYear] = useState<string>("");
   const [dropdownClicked, setDropdownClicked] = useState<boolean>(false);
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!openSelect) return;
+    const close = () => setOpenSelect(null);
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("touchmove", close, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("touchmove", close);
+    };
+  }, [openSelect]);
 
   const [apiLatestTwo, setApiLatestTwo] = useState<LatestItem[]>([]);
   const [apiYearAndPressReleases, setApiYearAndPressReleases] = useState<
     Record<string, PressItem[]>
   >({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const data = await fetchNews("/api/press");
-      const { latestTwo, yearAndPressReleases } = buildFromApiResponse(data);
-      setApiLatestTwo(latestTwo);
-      setApiYearAndPressReleases(yearAndPressReleases);
+      try {
+        const data = await fetchNews("/api/press");
+        const { latestTwo, yearAndPressReleases } = buildFromApiResponse(data);
+        setApiLatestTwo(latestTwo);
+        setApiYearAndPressReleases(yearAndPressReleases);
+      } finally {
+        setIsLoading(false);
+      }
     };
     load();
   }, []);
@@ -239,7 +256,24 @@ export default function PressReleaseYearListing({
     <div className="fluid-container pt-10 pb-10 md:pb-[80px]">
       <div className="lg:flex justify-between gap-8">
         {/* Left Sidebar - Latest */}
-        {latestTwo.length > 0 && (
+        {isLoading ? (
+          <div className="w-full lg:w-[20%] mb-8 lg:mb-0">
+            <div className="h-7 w-40 bg-[#E1E1E1] rounded animate-pulse mt-4 mb-8" />
+            <div className="flex flex-col gap-[30px]">
+              {[0, 1].map((i) => (
+                <div key={i} className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-3">
+                    <div className="h-4 w-24 bg-[#E1E1E1] rounded animate-pulse" />
+                    <div className="h-4 w-full bg-[#E1E1E1] rounded animate-pulse" />
+                    <div className="h-4 w-3/4 bg-[#E1E1E1] rounded animate-pulse" />
+                  </div>
+                  <div className="h-10 w-32 bg-[#E1E1E1] rounded animate-pulse" />
+                  {i === 0 && <div className="bg-[#D9D9D9] h-px w-full mt-2" />}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : latestTwo.length > 0 ? (
           <div className="w-full lg:w-[20%] mb-8 lg:mb-0">
             <SubH1 className="mt-4 mb-8">Latest Release</SubH1>
             <div className="flex flex-col gap-[30px]">
@@ -269,12 +303,18 @@ export default function PressReleaseYearListing({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Years and Press Releases Section */}
         <div className="lg:p-10 lg:bg-[#F7F9FA] lg:w-[75%] w-full rounded-[12px] relative">
           <div className="flex w-full border-b-2 border-b-[#E1E1E1] justify-between">
-            {yearsList.length > 0 && (
+            {isLoading ? (
+              <div className="flex gap-x-8 lg:gap-x-[54px] pb-3">
+                {[0, 1, 2, 3].map((i) => (
+                  <div key={i} className="h-5 w-16 bg-[#E1E1E1] rounded animate-pulse" />
+                ))}
+              </div>
+            ) : yearsList.length > 0 ? (
               <div
                 ref={yearsRowRef}
                 className="flex gap-x-8 lg:gap-x-[54px] relative pb-3"
@@ -316,13 +356,16 @@ export default function PressReleaseYearListing({
                   />
                 )}
               </div>
-            )}
+            ) : null}
 
             {/* Archive dropdown - Desktop */}
-            {yearsList.length > 4 && (
+            {!isLoading && yearsList.length > 4 && (
               <div className="w-[100px] hidden md:flex items-center gap-2">
                 <FormControl variant="standard" fullWidth>
                   <Select
+                    open={openSelect === "archiveDesktop"}
+                    onOpen={() => setOpenSelect("archiveDesktop")}
+                    onClose={() => setOpenSelect(null)}
                     sx={{ "&::before": { borderBottom: "none" } }}
                     labelId="archiveYear-label"
                     id="archiveYear-select"
@@ -347,131 +390,96 @@ export default function PressReleaseYearListing({
           <SmoothScrollContainer
             className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
           >
-            {/* Desktop  */}
-            <div className="hidden lg:block">
-              {currentPressReleases.map((item) => (
-                <div
-                  key={item?.id ?? `${item?.heading}-${item?.date}`}
-                  className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
-                >
-                  <div className="flex flex-col gap-[6px] flex-1">
-                    {/* {item?.quarter && (
-                      <p className="text-[#4C5861] text-sm leading-[1.4]">
-                        {item.quarter}
-                      </p>
-                    )} */}
-                    {item?.slug ? (
-                      <Link
-                        href={`/press-releases/${item.slug}`}
-                        target="_blank"
-                      >
-                        <p className="text-[#0F3557] text-lg leading-[1.6]">
-                          {item?.heading}
-                        </p>
-                      </Link>
-                    ) : (
-                      <p className="text-[#0F3557] text-lg leading-[1.6]">
-                        {item?.heading}
-                      </p>
-                    )}
-                    {item?.date && (
-                      <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item.date)}
-                      </p>
-                    )}
-                  </div>
-                  {/* {item?.file?.url && (
-                    <a
-                      href={item.file.url}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+            {isLoading ? (
+              <PressReleaseSkeleton />
+            ) : (
+              <>
+                {/* Desktop  */}
+                <div className="hidden lg:block">
+                  {currentPressReleases.map((item) => (
+                    <div
+                      key={item?.id ?? `${item?.heading}-${item?.date}`}
+                      className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                     >
-                      <Image
-                        src="/images/pdfIcon.svg"
-                        alt="Download PDF"
-                        width={28}
-                        height={28}
-                        className="object-contain"
-                      />
-                    </a>
-                  )} */}
+                      <div className="flex flex-col gap-[6px] flex-1">
+                        {item?.slug ? (
+                          <Link
+                            href={`/press-releases/${item.slug}`}
+                            target="_blank"
+                          >
+                            <p className="text-[#0F3557] text-lg leading-[1.6]">
+                              {item?.heading}
+                            </p>
+                          </Link>
+                        ) : (
+                          <p className="text-[#0F3557] text-lg leading-[1.6]">
+                            {item?.heading}
+                          </p>
+                        )}
+                        {item?.date && (
+                          <p className="text-[#9997A2] text-sm leading-[1.4]">
+                            {formatDate(item.date)}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {currentPressReleases.length === 0 && activeYear && (
+                    <p className="text-center text-[#4C5861] py-8">
+                      No press releases available
+                    </p>
+                  )}
                 </div>
-              ))}
-              {currentPressReleases.length === 0 && (
-                <p className="text-center text-[#4C5861] py-8">
-                  No press releases available
-                </p>
-              )}
-            </div>
 
-            {/* Mobile */}
-            <div className="block lg:hidden">
-              {currentPressReleases.map((item) => (
-                <div
-                  key={item?.id ?? `${item?.heading}-${item?.date}`}
-                  className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
-                >
-                  <div className="flex flex-col gap-[6px] flex-1 pr-4">
-                    {/* {item?.quarter && (
-                      <p className="text-[#4C5861] text-sm leading-[1.4]">
-                        {item.quarter}
-                      </p>
-                    )} */}
-                    {item?.slug ? (
-                      <Link
-                        href={`/press-releases/${item.slug}`}
-                        target="_blank"
-                      >
-                        <p className="text-[#0F3557] text-lg leading-[1.6]">
-                          {item?.heading}
-                        </p>
-                      </Link>
-                    ) : (
-                      <p className="text-[#0F3557] text-lg leading-[1.6]">
-                        {item?.heading}
-                      </p>
-                    )}
-                    {item?.date && (
-                      <p className="text-[#9997A2] text-sm leading-[1.4]">
-                        {formatDate(item.date)}
-                      </p>
-                    )}
-                  </div>
-                  {/* {item?.file?.url && (
-                    <a
-                      href={item.file.url}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-7 h-7 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
+                {/* Mobile */}
+                <div className="block lg:hidden">
+                  {currentPressReleases.map((item) => (
+                    <div
+                      key={item?.id ?? `${item?.heading}-${item?.date}`}
+                      className="border-b border-[#E1E1E1] py-4 flex items-center justify-between"
                     >
-                      <Image
-                        src="/images/download-icon-grey2.svg"
-                        alt="Download PDF"
-                        width={28}
-                        height={28}
-                        className="object-contain"
-                      />
-                    </a>
-                  )} */}
+                      <div className="flex flex-col gap-[6px] flex-1 pr-4">
+                        {item?.slug ? (
+                          <Link
+                            href={`/press-releases/${item.slug}`}
+                            target="_blank"
+                          >
+                            <p className="text-[#0F3557] text-lg leading-[1.6]">
+                              {item?.heading}
+                            </p>
+                          </Link>
+                        ) : (
+                          <p className="text-[#0F3557] text-lg leading-[1.6]">
+                            {item?.heading}
+                          </p>
+                        )}
+                        {item?.date && (
+                          <p className="text-[#9997A2] text-sm leading-[1.4]">
+                            {formatDate(item.date)}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {currentPressReleases.length === 0 && activeYear && (
+                    <p className="text-center text-[#4C5861] py-8">
+                      No press releases available
+                    </p>
+                  )}
                 </div>
-              ))}
-              {currentPressReleases.length === 0 && (
-                <p className="text-center text-[#4C5861] py-8">
-                  No press releases available
-                </p>
-              )}
-            </div>
+              </>
+            )}
           </SmoothScrollContainer>
         </div>
 
         {/* Archive dropdown - Mobile */}
-        {yearsList.length > 4 && (
+        {!isLoading && yearsList.length > 4 && (
           <div className="mt-10 block md:hidden">
             <FormControl fullWidth>
               <Select
+                open={openSelect === "archiveMobile"}
+                onOpen={() => setOpenSelect("archiveMobile")}
+                onClose={() => setOpenSelect(null)}
                 sx={{
                   backgroundColor: "#F7F9FA",
                   borderRadius: "10px",
@@ -495,6 +503,23 @@ export default function PressReleaseYearListing({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function PressReleaseSkeleton() {
+  return (
+    <div className="flex flex-col">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="border-b border-[#E1E1E1] py-4 flex flex-col gap-[6px]"
+        >
+          <div className="h-5 w-full max-w-[80%] bg-[#E1E1E1] rounded animate-pulse" />
+          <div className="h-5 w-full max-w-[50%] bg-[#E1E1E1] rounded animate-pulse" />
+          <div className="h-4 w-24 bg-[#E1E1E1] rounded animate-pulse mt-1" />
+        </div>
+      ))}
     </div>
   );
 }

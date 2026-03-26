@@ -9,13 +9,11 @@ import ContactBanner from "../components/ContactBanner";
 import DirectorsNcommittees from "../components/corporateGovernance/DirectorsNcommittees";
 import SEO from "../components/SEO";
 
-export const dynamic = "force-dynamic";
-
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/corporate-governance");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/corporate-governance"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
@@ -24,7 +22,7 @@ const page = async () => {
     section_five,
     section_six,
     section_seven,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

@@ -1,24 +1,24 @@
+import dynamic from "next/dynamic";
 import { getPageData } from "@/_lib/pageData.fetch";
-import ByUseSection from "./components/home/ByUseSection";
-import FrameworkForged from "./components/sections/FrameworkForged";
-import GlobalPartner from "./components/home/GlobalPartner";
-import HomeHero from "./components/home/HomeHero";
-import LatestAtAarti from "./components/home/LatestAtAarti";
-import ImageGallery from "./components/ImageGallery";
-import DetailsContainer from "./components/sections/DetailsContainer";
-import GloballyCertified from "./components/GloballyCertified";
 import { getData } from "@/_lib/getData.fetch";
+import HomeHero from "./components/home/HomeHero";
 import SEO from "./components/SEO";
-import HomeSections from "./components/home/HomeSections";
-import HomeExplore from "./components/home/HomeExplore";
 
-export const dynamic = "force-dynamic";
+const DetailsContainer = dynamic(() => import("./components/sections/DetailsContainer"));
+const GlobalPartner = dynamic(() => import("./components/home/GlobalPartner"));
+const HomeSections = dynamic(() => import("./components/home/HomeSections"));
+const ByUseSection = dynamic(() => import("./components/home/ByUseSection"));
+const ImageGallery = dynamic(() => import("./components/ImageGallery"));
+const FrameworkForged = dynamic(() => import("./components/sections/FrameworkForged"));
+const LatestAtAarti = dynamic(() => import("./components/home/LatestAtAarti"));
+const GloballyCertified = dynamic(() => import("./components/GloballyCertified"));
+const HomeExplore = dynamic(() => import("./components/home/HomeExplore"));
 
 export default async function Home() {
-  const data = await getPageData("/pages/by-slug/home-page");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/home-page"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     sectionOne,
     sectionTwo,
@@ -31,7 +31,7 @@ export default async function Home() {
     sectionNine,
     sectionTen,
     sectionFiveTitle,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

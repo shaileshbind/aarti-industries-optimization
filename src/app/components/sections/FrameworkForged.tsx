@@ -13,7 +13,6 @@ import { FadeInReveal } from "../ScrollReveal";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
-
 interface LayoutProps {
   layout?: "imgLeftContentRight" | "imgRightContentLeft";
 }
@@ -32,7 +31,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
-
+  const isDesktop = useMatchMedia("(min-width:1024px)");
   const handleSliderTouchStart = useCallback(
     (e: React.TouchEvent) => {
       touchStartRef.current = {
@@ -69,40 +68,28 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  // Intersection Observer for autoplay control
+  // Intersection Observer: start/stop autoplay by visibility. Read swiper from ref so it works after mount.
   useEffect(() => {
     const section = sectionRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Start autoplay when section enters viewport
-            if (swiper.autoplay && !swiper.autoplay.running) {
-              swiper.autoplay.start();
-            }
+            if (!swiper.autoplay.running) swiper.autoplay.start();
           } else {
-            // Stop autoplay when section leaves viewport
-            if (swiper.autoplay && swiper.autoplay.running) {
-              swiper.autoplay.stop();
-            }
+            if (swiper.autoplay.running) swiper.autoplay.stop();
           }
         });
       },
-      {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: "0px",
-      },
+      { threshold: 0.2, rootMargin: "0px" },
     );
 
     observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -374,8 +361,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                     card?.[currentImageIndex]?.image
                                       ?.alternativeText || "banner"
                                   }
-                                  fill
-                                  className="object-cover scale-110"
+                                  width={50}
+                                  height={54}
+                                  className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                                 />
                                 <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                                 <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
@@ -385,8 +373,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                       card?.[currentImageIndex]?.image
                                         ?.alternativeText || "banner"
                                     }
-                                    fill
-                                    className="object-cover scale-110"
+                                    width={500}
+                                    height={548}
+                                    className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                                   />
                                 </span>
                               </div>
@@ -406,12 +395,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
-                                  fill
-                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  width={50}
+                                  height={54}
                                   loading={
                                     index <= 1 ? "eager" : undefined
                                   }
-                                  className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg`}
+                                  className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
                               {items?.image?.url && (
@@ -421,12 +410,12 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   alt={
                                     items?.image?.alternativeText || "banner"
                                   }
-                                  fill
-                                  sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                                  width={500}
+                                  height={548}
                                   loading={
                                     index <= 1 ? "eager" : undefined
                                   }
-                                  className={`${secondaryImageClasses} ${mainStaticClasses}`}
+                                  className={`${secondaryImageClasses} ${mainStaticClasses} w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
                               <Image
@@ -510,6 +499,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
               </div>
             )}
           </div>
+          {isDesktop && (
           <div
             className={clsx(
               ` relative w-full overflow-hidden ${layout === "imgLeftContentRight"
@@ -532,8 +522,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       card?.[currentImageIndex]?.image?.alternativeText ||
                       "banner"
                     }
-                    fill
-                    className="object-cover scale-110"
+                    width={50}
+                    height={54}
+                    className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                   />
                   <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md"></i>
                   <span className="absolute bottom-2 left-2 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[90%] h-[90%]">
@@ -543,8 +534,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                         card?.[currentImageIndex]?.image?.alternativeText ||
                         "banner"
                       }
-                      fill
-                      className="object-cover scale-110"
+                      width={500}
+                      height={548}
+                      className="object-cover scale-110 w-full h-full top-0 left-0 absolute"
                     />
                   </span>
                 </div>
@@ -564,10 +556,10 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                       card?.[currentImageIndex]?.image?.alternativeText ||
                       "banner"
                     }
-                    fill
-                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
+                    width={50}
+                    height={54}
                     loading="eager"
-                    className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg`}
+                    className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                   />
                 )}
                 {card?.[currentImageIndex]?.image?.url && (
@@ -580,9 +572,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
-                    sizes="(max-width: 768px) 768px, (max-width: 1200px) 1200px, 1000px"
                     loading="eager"
-                    className={`${secondaryImageClasses} ${mainAnimationClasses}`}
+                    className={`${secondaryImageClasses} ${mainAnimationClasses} w-full h-full top-0 left-0 absolute`}
                   />
                 )}
                 <Image
@@ -606,6 +597,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
               </div>
             )}
           </div>
+          )}
         </div>
       </FadeInReveal>
     </div>

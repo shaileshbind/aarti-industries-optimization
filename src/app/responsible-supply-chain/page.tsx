@@ -11,13 +11,11 @@ import FrameworkForged from "../components/sections/FrameworkForged";
 import DrivingCrossFunctional from "../components/sections/DrivingCrossFunctional";
 import ContactBanner from "../components/ContactBanner";
 
-export const dynamic = "force-dynamic";
-
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/responsible-supply-chain");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/responsible-supply-chain"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,
@@ -28,7 +26,7 @@ export default async function page() {
     section_six,
     section_seven,
     section_eight,
-  } = data?.data;
+  } = data?.data ?? {};
 
   const seo = data?.seo;
 

@@ -12,14 +12,12 @@ const GRMaps = nextDynamic(
   { ssr: true },
 );
 
-export const dynamic = "force-dynamic";
-
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/global-reach");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
-  const { Section_one, section_two, section_three, section_four } = data?.data;
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/global-reach"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
+  const { Section_one, section_two, section_three, section_four } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <>

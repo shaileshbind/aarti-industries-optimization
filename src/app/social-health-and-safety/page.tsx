@@ -13,12 +13,11 @@ import SocialExplore from "../components/social-health-and-safety/SocialExplore"
 import StatsSection from "../components/social-health-and-safety/StatsSection";
 import SocialTestimonials from "../components/social-health-and-safety/SocialTestimonials";
 
-export const dynamic = "force-dynamic";
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/social-health-safety");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/social-health-safety"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
@@ -30,7 +29,7 @@ const page = async () => {
     section_eight,
     section_nine,
     testimonial_section,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

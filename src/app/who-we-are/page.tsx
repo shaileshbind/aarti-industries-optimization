@@ -12,13 +12,12 @@ import WhoExp from "../components/who-we-are/WhoExp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/who-we-are");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/who-we-are"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,
@@ -31,7 +30,7 @@ const page = async () => {
     section_eight,
     section_nine,
     section_ten,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

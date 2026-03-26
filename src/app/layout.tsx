@@ -64,8 +64,18 @@ export default async function RootLayout({
 }) {
   const data = await fetchHeaderFooterData();
 
+  const apiOrigin = new URL(process.env.NEXT_PUBLIC_BASE_URL!).origin;
+  const checkEnvironment = process.env.NEXT_PUBLIC_IS_PRODUCTION;
+  const cdnUrl = checkEnvironment === "true" ? "https://d9bnjb3uan3b2.cloudfront.net" : "https://d2sslj1veyp2s3.cloudfront.net";
+
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href={apiOrigin} />
+        <link rel="dns-prefetch" href={apiOrigin} />
+        <link rel="preconnect" href={cdnUrl} />
+        <link rel="dns-prefetch" href={cdnUrl} />
+      </head>
       <SEO />
       <body className={clsx(alteHansGrotesk.variable, roboto.variable, inter.variable)}>
         <AuthProvider>

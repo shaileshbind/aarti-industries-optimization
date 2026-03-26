@@ -19,6 +19,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
+  const [swiperReady, setSwiperReady] = useState(false);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
 
@@ -57,41 +58,27 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
     }
   }, [startLenis]);
 
-  // Intersection Observer for autoplay control
   useEffect(() => {
     const section = sectionRef.current;
-    const swiper = swiperRef.current;
-
-    if (!section || !swiper) return;
+    if (!section || !swiperReady) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Start autoplay when section enters viewport
-            if (swiper.autoplay && !swiper.autoplay.running) {
-              swiper.autoplay.start();
-            }
-          } else {
-            // Stop autoplay when section leaves viewport
-            if (swiper.autoplay && swiper.autoplay.running) {
-              swiper.autoplay.stop();
-            }
-          }
-        });
+      ([entry]) => {
+        const swiper = swiperRef.current;
+        if (!swiper?.autoplay || swiper.destroyed) return;
+
+        if (entry.isIntersecting) {
+          swiper.autoplay.start();
+        } else {
+          swiper.autoplay.stop();
+        }
       },
-      {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: "0px",
-      },
+      { threshold: 0.1 },
     );
 
     observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+    return () => observer.disconnect();
+  }, [swiperReady]);
 
   return (
     <section
@@ -147,7 +134,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                     autoplay={{
                       delay: 5000,
                       disableOnInteraction: false,
-                      pauseOnMouseEnter: true,
+                      pauseOnMouseEnter: false,
                     }}
                     navigation={{
                       prevEl: ".swiper-button-prev-useBySection",
@@ -161,10 +148,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                       swiperRef.current = swiper;
                       setIsBeginning(swiper.isBeginning);
                       setIsEnd(swiper.isEnd);
-                      // Don't start autoplay immediately - wait for viewport intersection
-                      if (swiper.autoplay) {
-                        swiper.autoplay.stop();
-                      }
+                      setSwiperReady(true);
                     }}
                     onSlideChange={(swiper) => {
                       setIsBeginning(swiper.isBeginning);
@@ -188,7 +172,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                         releaseOnEdges: true,
                       },
                     })}
-                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0"
+                    className="w-full !pr-5 lg:!pr-5 !pl-5 lg:!pl-0 catgoryProductsSwiper"
                   >
                     {card?.map((item, index) => (
                       <SwiperSlide key={`${index}`}>
@@ -198,6 +182,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ data }) => {
                             imageAlt={item?.image?.alternativeText}
                             title={item?.title}
                             description={item?.description}
+                            // className="h-[410px]"
                           />
                         </div>
                       </SwiperSlide>

@@ -6,16 +6,13 @@ import ContactBanner from "../components/ContactBanner";
 import SEO from "../components/SEO";
 import { getPageData } from "@/_lib/pageData.fetch";
 
-export const dynamic = "force-dynamic";
-
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/media-kit");
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/media-kit"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
-
-  const { section_one, section_two, section_three } = data?.data;
+  const { section_one, section_two, section_three } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

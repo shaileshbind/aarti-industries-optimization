@@ -7,20 +7,19 @@ import { getData } from "@/_lib/getData.fetch";
 import GlobalInnovation from "../components/sections/GlobalInnovation";
 import SEO from "../components/SEO";
 import OurExp from "../components/our-story/OurExp";
-export const dynamic = "force-dynamic";
 
 export default async function page() {
-  const data = await getPageData("/pages/by-slug/our-story");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/our-story"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
     section_three,
     section_four,
     section_five,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

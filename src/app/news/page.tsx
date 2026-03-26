@@ -5,15 +5,14 @@ import GloballyCertified from "../components/GloballyCertified";
 import ContactBanner from "../components/ContactBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/news");
-  const { section_one, section_two } = data?.data;
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/news"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
+  const { section_one, section_two } = data?.data ?? {};
   const seo = data?.seo;
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
   return (
     <div>
       <SEO

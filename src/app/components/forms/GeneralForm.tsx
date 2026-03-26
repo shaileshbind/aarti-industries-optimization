@@ -1,5 +1,11 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { MaterialInputStyle } from "../../../../utils/MaterialInputStyle";
 import PhoneInput from "react-phone-input-2";
 import { useForm, Controller } from "react-hook-form";
@@ -18,6 +24,7 @@ import { Countries } from "../../../../utils/Countries";
 import Button from "../Button";
 import clsx from "clsx";
 import clsxN from "../../../../utils/clsxN";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 
 type FormValues = {
   fullName: string;
@@ -83,6 +90,37 @@ export default function GeneralForm({
   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>("");
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleOpenSelect = useCallback(
+    (name: string) => () => setOpenSelect(name),
+    [],
+  );
+  const handleCloseSelect = useCallback(() => setOpenSelect(null), []);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target?.closest?.(".MuiMenu-paper")) return;
+      setOpenSelect(null);
+    };
+    const container = scrollContainerRef.current;
+    container?.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const selectMenuProps = {
+    disableScrollLock: true,
+    PaperProps: {
+      "data-lenis-prevent": true,
+      sx: { maxHeight: 300 },
+    },
+  };
 
   const {
     register,
@@ -398,205 +436,35 @@ export default function GeneralForm({
         </div>
       )}
       <form
-        data-lenis-prevent
         className="w-full popup"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div
-          className={clsxN(
-            `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
-            className,
-          )}
-        >
-          {/* Full Name */}
-          <TextField
-            label="Full Name *"
-            variant="outlined"
-            className="w-full"
-            sx={MaterialInputStyle(!!errors.fullName)}
-            {...register("fullName", {
-              required: "Full Name is required",
-              validate: (value) => {
-                const trimmed = value?.trim();
-                if (!trimmed || trimmed.length === 0) {
-                  return "Full Name cannot be empty";
-                }
-                return true;
-              },
-            })}
-            error={!!errors.fullName}
-            helperText={errors.fullName?.message}
-            onKeyDown={(e) => {
-              if (
-                e.key === "Backspace" ||
-                e.key === "Delete" ||
-                e.key === "ArrowLeft" ||
-                e.key === "ArrowRight" ||
-                e.key === "Tab" ||
-                e.ctrlKey ||
-                e.metaKey
-              ) {
-                return;
-              }
-
-              // Prevent numbers and special characters, allow only letters and space
-              if (!/^[a-zA-Z\s]$/.test(e.key)) {
-                e.preventDefault();
-              }
-            }}
-            onPaste={(e) => {
-              e.preventDefault();
-              const pastedText = e.clipboardData.getData("text");
-              // Filter out special characters and numbers, keep only letters and spaces
-              const sanitizedText = pastedText.replace(/[^a-zA-Z\s]/g, "");
-              const currentValue = watch("fullName") || "";
-              const input = e.target as HTMLInputElement;
-              const start = input.selectionStart || 0;
-              const end = input.selectionEnd || 0;
-              const newValue =
-                currentValue.slice(0, start) + sanitizedText + currentValue.slice(end);
-              setValue("fullName", newValue);
-              // Set cursor position after pasted content
-              setTimeout(() => {
-                input.setSelectionRange(start + sanitizedText.length, start + sanitizedText.length);
-              }, 0);
-            }}
-          />
-
-          {/* Email */}
-          <TextField
-            label="Email ID *"
-            variant="outlined"
-            className="w-full"
-            sx={MaterialInputStyle(!!errors.email)}
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/,
-                message: "Invalid email address",
-              },
-            })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-
-          {/* Phone Number */}
-          <Controller
-            name="phone"
-            control={control}
-            rules={{
-              required: "Phone number is required",
-              validate: (value) => {
-                if (!value) {
-                  return "Phone number is required";
-                }
-
-                // Must contain only digits (country code + phone number)
-                if (!/^\d+$/.test(value)) {
-                  return "Phone number must contain only digits";
-                }
-
-                // Check if India (+91) is selected or if value starts with 91
-                const isIndia = selectedCountryCode === "91" || value.startsWith("91");
-
-                if (isIndia) {
-                  // For India: exactly 10 digits after country code (total 12 digits)
-                  const phoneDigits = value.replace(/^91/, ""); // Remove country code
-                  if (phoneDigits.length !== 10) {
-                    return "Indian mobile number must be exactly 10 digits";
-                  }
-                  return true;
-                }
-
-                // For other countries: 7-15 digits total (E.164 standard allows up to 15 digits)
-                // Setting reasonable min of 8 to account for short country codes + phone digits
-                if (value.length < 8) {
-                  return "Please enter a valid phone number";
-                }
-                // Maximum length per E.164 standard
-                if (value.length > 15) {
-                  return "Phone number is too long";
-                }
-                return true;
-              },
-            }}
-            render={({ field }) => (
-              <div className="w-full phone_input">
-                <PhoneInput
-                  {...field}
-                  country={"us"}
-                  inputStyle={{
-                    width: "100%",
-                    padding: "30px 20px 30px 80px",
-                    borderRadius: "10px",
-                    border: errors.phone
-                      ? "1px solid red"
-                      : "2px solid #e8e6e6",
-                    outline: "none",
-                  }}
-                  dropdownClass="w-full"
-                  containerStyle={{ width: "100%" }}
-                  enableSearch
-                  searchPlaceholder="Search Country"
-                  disableSearchIcon
-                  buttonClass={`w-[60px] border-2 ${errors.phone && "!border-[#d32f2f]"
-                    }`}
-                  placeholder="Phone no *"
-                  onChange={(value, countryData) => {
-                    // Extract country code from the country object or value
-                    let countryCode = "";
-                    if (countryData && typeof countryData === 'object') {
-                      // react-phone-input-2 provides dialCode in the country object
-                      const countryObj = countryData as { dialCode?: string };
-                      countryCode = countryObj.dialCode || "";
-                    }
-                    // Fallback: extract from value if it starts with known country codes
-                    if (!countryCode && value) {
-                      if (value.startsWith("91")) {
-                        countryCode = "91";
-                      } else if (value.startsWith("1")) {
-                        countryCode = "1"; // US/Canada
-                      }
-                      // Add more country codes as needed
-                    }
-                    if (countryCode) {
-                      setSelectedCountryCode(countryCode);
-                    }
-                    field.onChange(value);
-                    // Trigger validation when country or value changes
-                    setTimeout(() => {
-                      trigger("phone");
-                    }, 0);
-                  }}
-                />
-                {errors.phone && (
-                  <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
+        <SmoothScrollContainer>
+          <div
+            ref={scrollContainerRef}
+            className={clsxN(
+              `flex flex-col gap-4 max-h-[68vh] overflow-y-scroll pt-7 pr-4 popup_container`,
+              className,
             )}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Job Role */}
+          >
+            {/* Full Name */}
             <TextField
-              label="Job Role *"
+              label="Full Name *"
               variant="outlined"
               className="w-full"
-              sx={MaterialInputStyle(!!errors.jobRole)}
-              {...register("jobRole", {
-                required: "Job Role is required",
+              sx={MaterialInputStyle(!!errors.fullName)}
+              {...register("fullName", {
+                required: "Full Name is required",
                 validate: (value) => {
                   const trimmed = value?.trim();
                   if (!trimmed || trimmed.length === 0) {
-                    return "Job Role cannot be empty";
+                    return "Full Name cannot be empty";
                   }
                   return true;
                 },
               })}
-              error={!!errors.jobRole}
-              helperText={errors.jobRole?.message}
+              error={!!errors.fullName}
+              helperText={errors.fullName?.message}
               onKeyDown={(e) => {
                 if (
                   e.key === "Backspace" ||
@@ -620,293 +488,486 @@ export default function GeneralForm({
                 const pastedText = e.clipboardData.getData("text");
                 // Filter out special characters and numbers, keep only letters and spaces
                 const sanitizedText = pastedText.replace(/[^a-zA-Z\s]/g, "");
-                const currentValue = watch("jobRole") || "";
+                const currentValue = watch("fullName") || "";
                 const input = e.target as HTMLInputElement;
                 const start = input.selectionStart || 0;
                 const end = input.selectionEnd || 0;
                 const newValue =
-                  currentValue.slice(0, start) + sanitizedText + currentValue.slice(end);
-                setValue("jobRole", newValue);
+                  currentValue.slice(0, start) +
+                  sanitizedText +
+                  currentValue.slice(end);
+                setValue("fullName", newValue);
                 // Set cursor position after pasted content
                 setTimeout(() => {
-                  input.setSelectionRange(start + sanitizedText.length, start + sanitizedText.length);
+                  input.setSelectionRange(
+                    start + sanitizedText.length,
+                    start + sanitizedText.length,
+                  );
                 }, 0);
               }}
             />
 
-            {/* Country */}
-            <FormControl fullWidth sx={MaterialInputStyle(false)}>
-              <InputLabel id="country">Country</InputLabel>
-              <Controller
-                name="country"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ""}
-                    labelId="country"
-                    IconComponent={KeyboardArrowDownIcon}
-                    MenuProps={{
-                      disableScrollLock: true,
-                      PaperProps: {
-                        "data-lenis-prevent": true,
-                        sx: {
-                          maxHeight: 300,
-                        },
-                      },
-                    }}
-                  >
-                    {Countries.map((country) => (
-                      <MenuItem key={country.code} value={country.name}>
-                        {country.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-            </FormControl>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Category */}
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.category)}
-              error={!!errors.category}
-            >
-              <InputLabel id="category">Category *</InputLabel>
-              <Controller
-                name="category"
-                control={control}
-                rules={{ required: "Category is required" }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ""}
-                    labelId="category"
-                    IconComponent={KeyboardArrowDownIcon}
-                  >
-                    {categorySubcategoryData?.map((item, index) => (
-                      <MenuItem key={index} value={item?.category}>
-                        {item?.category}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-              {errors.category && (
-                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                  {errors.category.message}
-                </p>
-              )}
-            </FormControl>
-
-            {/* Subcategory - MANDATORY */}
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.subCategory)}
-              error={!!errors.subCategory}
-              className={clsx(
-                availableSubcategories?.length > 0
-                  ? "opacity-100 pointer-events-auto"
-                  : "opacity-60 pointer-events-none",
-              )}
-            >
-              <InputLabel id="subCategory">Sub category *</InputLabel>
-              <Controller
-                name="subCategory"
-                control={control}
-                rules={{ required: "Sub category is required" }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    value={field.value || ""}
-                    labelId="subCategory"
-                    IconComponent={KeyboardArrowDownIcon}
-                    disabled={
-                      availableSubcategories.length !== 1 &&
-                      availableSubcategories.length === 0
-                    }
-                  >
-                    {availableSubcategories?.length > 0 &&
-                      availableSubcategories?.map((subCat, index) => (
-                        <MenuItem key={index} value={subCat}>
-                          {subCat}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                )}
-              />
-              {errors.subCategory && (
-                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                  {errors.subCategory.message}
-                </p>
-              )}
-            </FormControl>
-          </div>
-
-          {/* Product Autocomplete - Active Search */}
-          {selectedSubcategory === "Chemicals Products" && (
-            <FormControl
-              fullWidth
-              sx={MaterialInputStyle(!!errors.productName)}
-              error={!!errors.productName}
-            >
-              <Controller
-                name="productName"
-                control={control}
-                rules={{ required: "Product Name is required" }}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    openOnFocus
-                    options={productOptions}
-                    loading={productLoading}
-                    getOptionLabel={(option) => option}
-                    filterOptions={(x) => x} // Disable client-side filtering
-                    inputValue={searchInputValue}
-                    onInputChange={(_, value, reason) => {
-                      if (reason === "input") {
-                        setSearchInputValue(value);
-                      } else if (reason === "clear") {
-                        setSearchInputValue("");
-                        field.onChange(null);
-                      } else if (reason === "reset") {
-                        // When user selects, sync inputValue with selected value
-                        setSearchInputValue(value);
-                      }
-                    }}
-                    onChange={(_, value) => {
-                      field.onChange(value);
-                    }}
-                    value={field.value || null}
-                    PaperComponent={(props) => (
-                      <Paper {...props} sx={{ bgcolor: "#fffdf8" }} />
-                    )}
-                    PopperComponent={(props) => (
-                      <Popper {...props} data-lenis-prevent />
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Product Name *"
-                        error={!!errors.productName}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <>
-                              {productLoading ? (
-                                <CircularProgress color="inherit" size={20} />
-                              ) : null}
-                              {params.InputProps.endAdornment}
-                            </>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                )}
-              />
-              {errors.productName && (
-                <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
-                  {errors.productName.message}
-                </p>
-              )}
-            </FormControl>
-          )}
-
-          {/* Message */}
-          <div className="flex flex-col">
-            <textarea
-              id="message"
-              {...register("message", {
-                required: "Message is required",
+            {/* Email */}
+            <TextField
+              label="Email ID *"
+              variant="outlined"
+              className="w-full"
+              sx={MaterialInputStyle(!!errors.email)}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/,
+                  message: "Invalid email address",
+                },
               })}
-              rows={5}
-              cols={40}
-              placeholder="Write your message here *"
-              className={clsx(
-                "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]",
-              )}
-            ></textarea>
-            {errors.message && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.message.message}
-              </p>
-            )}
-          </div>
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
 
-          {/* Hear About AIL - MANDATORY */}
-          <FormControl
-            fullWidth
-            sx={MaterialInputStyle(!!errors.hearAboutAil)}
-            error={!!errors.hearAboutAil}
-          >
-            <InputLabel id="hearAboutAil">
-              How did you hear about AIL? *
-            </InputLabel>
+            {/* Phone Number */}
             <Controller
-              name="hearAboutAil"
+              name="phone"
               control={control}
-              rules={{ required: "Selection is required" }}
+              rules={{
+                required: "Phone number is required",
+                validate: (value) => {
+                  if (!value) {
+                    return "Phone number is required";
+                  }
+
+                  // Must contain only digits (country code + phone number)
+                  if (!/^\d+$/.test(value)) {
+                    return "Phone number must contain only digits";
+                  }
+
+                  // Check if India (+91) is selected or if value starts with 91
+                  const isIndia =
+                    selectedCountryCode === "91" || value.startsWith("91");
+
+                  if (isIndia) {
+                    // For India: exactly 10 digits after country code (total 12 digits)
+                    const phoneDigits = value.replace(/^91/, ""); // Remove country code
+                    if (phoneDigits.length !== 10) {
+                      return "Indian mobile number must be exactly 10 digits";
+                    }
+                    return true;
+                  }
+
+                  // For other countries: 7-15 digits total (E.164 standard allows up to 15 digits)
+                  // Setting reasonable min of 8 to account for short country codes + phone digits
+                  if (value.length < 8) {
+                    return "Please enter a valid phone number";
+                  }
+                  // Maximum length per E.164 standard
+                  if (value.length > 15) {
+                    return "Phone number is too long";
+                  }
+                  return true;
+                },
+              }}
               render={({ field }) => (
-                <Select
-                  {...field}
-                  value={field.value || ""}
-                  labelId="hearAboutAil"
-                  IconComponent={KeyboardArrowDownIcon}
-                >
-                  {[
-                    "Articles",
-                    "Events",
-                    "Search Engine",
-                    "Weblinks",
-                    "LinkedIn",
-                    "Recommendation",
-                    "Advertisement",
-                    "Industry Reports",
-                    "Employees",
-                    "Other",
-                  ].map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <div className="w-full phone_input">
+                  <PhoneInput
+                    {...field}
+                    country={"us"}
+                    inputStyle={{
+                      width: "100%",
+                      padding: "30px 20px 30px 80px",
+                      borderRadius: "10px",
+                      border: errors.phone
+                        ? "1px solid red"
+                        : "2px solid #e8e6e6",
+                      outline: "none",
+                    }}
+                    dropdownClass="w-full"
+                    containerStyle={{ width: "100%" }}
+                    enableSearch
+                    searchPlaceholder="Search Country"
+                    disableSearchIcon
+                    buttonClass={`w-[60px] border-2 ${
+                      errors.phone && "!border-[#d32f2f]"
+                    }`}
+                    placeholder="Phone no *"
+                    onChange={(value, countryData) => {
+                      // Extract country code from the country object or value
+                      let countryCode = "";
+                      if (countryData && typeof countryData === "object") {
+                        // react-phone-input-2 provides dialCode in the country object
+                        const countryObj = countryData as { dialCode?: string };
+                        countryCode = countryObj.dialCode || "";
+                      }
+                      // Fallback: extract from value if it starts with known country codes
+                      if (!countryCode && value) {
+                        if (value.startsWith("91")) {
+                          countryCode = "91";
+                        } else if (value.startsWith("1")) {
+                          countryCode = "1"; // US/Canada
+                        }
+                        // Add more country codes as needed
+                      }
+                      if (countryCode) {
+                        setSelectedCountryCode(countryCode);
+                      }
+                      field.onChange(value);
+                      // Trigger validation when country or value changes
+                      setTimeout(() => {
+                        trigger("phone");
+                      }, 0);
+                    }}
+                  />
+                  {errors.phone && (
+                    <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
               )}
             />
-            {errors.hearAboutAil && (
-              <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                {errors.hearAboutAil.message}
-              </p>
-            )}
-          </FormControl>
 
-          {/* Other - Msg Box */}
-          {selectedSubcategory === "Other" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Job Role */}
+              <TextField
+                label="Job Role *"
+                variant="outlined"
+                className="w-full"
+                sx={MaterialInputStyle(!!errors.jobRole)}
+                {...register("jobRole", {
+                  required: "Job Role is required",
+                  validate: (value) => {
+                    const trimmed = value?.trim();
+                    if (!trimmed || trimmed.length === 0) {
+                      return "Job Role cannot be empty";
+                    }
+                    return true;
+                  },
+                })}
+                error={!!errors.jobRole}
+                helperText={errors.jobRole?.message}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === "Backspace" ||
+                    e.key === "Delete" ||
+                    e.key === "ArrowLeft" ||
+                    e.key === "ArrowRight" ||
+                    e.key === "Tab" ||
+                    e.ctrlKey ||
+                    e.metaKey
+                  ) {
+                    return;
+                  }
+
+                  // Prevent numbers and special characters, allow only letters and space
+                  if (!/^[a-zA-Z\s]$/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const pastedText = e.clipboardData.getData("text");
+                  // Filter out special characters and numbers, keep only letters and spaces
+                  const sanitizedText = pastedText.replace(/[^a-zA-Z\s]/g, "");
+                  const currentValue = watch("jobRole") || "";
+                  const input = e.target as HTMLInputElement;
+                  const start = input.selectionStart || 0;
+                  const end = input.selectionEnd || 0;
+                  const newValue =
+                    currentValue.slice(0, start) +
+                    sanitizedText +
+                    currentValue.slice(end);
+                  setValue("jobRole", newValue);
+                  // Set cursor position after pasted content
+                  setTimeout(() => {
+                    input.setSelectionRange(
+                      start + sanitizedText.length,
+                      start + sanitizedText.length,
+                    );
+                  }, 0);
+                }}
+              />
+
+              {/* Country */}
+              <FormControl fullWidth sx={MaterialInputStyle(false)}>
+                <InputLabel id="country">Country</InputLabel>
+                <Controller
+                  name="country"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      value={field.value || ""}
+                      labelId="country"
+                      IconComponent={KeyboardArrowDownIcon}
+                      open={openSelect === "country"}
+                      onOpen={handleOpenSelect("country")}
+                      onClose={handleCloseSelect}
+                      MenuProps={selectMenuProps}
+                    >
+                      {Countries.map((country) => (
+                        <MenuItem key={country.code} value={country.name}>
+                          {country.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Category */}
+              <FormControl
+                fullWidth
+                sx={MaterialInputStyle(!!errors.category)}
+                error={!!errors.category}
+              >
+                <InputLabel id="category">Category *</InputLabel>
+                <Controller
+                  name="category"
+                  control={control}
+                  rules={{ required: "Category is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      value={field.value || ""}
+                      labelId="category"
+                      IconComponent={KeyboardArrowDownIcon}
+                      open={openSelect === "category"}
+                      onOpen={handleOpenSelect("category")}
+                      onClose={handleCloseSelect}
+                      MenuProps={selectMenuProps}
+                    >
+                      {categorySubcategoryData?.map((item, index) => (
+                        <MenuItem key={index} value={item?.category}>
+                          {item?.category}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                {errors.category && (
+                  <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                    {errors.category.message}
+                  </p>
+                )}
+              </FormControl>
+
+              {/* Subcategory - MANDATORY */}
+              <FormControl
+                fullWidth
+                sx={MaterialInputStyle(!!errors.subCategory)}
+                error={!!errors.subCategory}
+                className={clsx(
+                  availableSubcategories?.length > 0
+                    ? "opacity-100 pointer-events-auto"
+                    : "opacity-60 pointer-events-none",
+                )}
+              >
+                <InputLabel id="subCategory">Sub category *</InputLabel>
+                <Controller
+                  name="subCategory"
+                  control={control}
+                  rules={{ required: "Sub category is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      value={field.value || ""}
+                      labelId="subCategory"
+                      IconComponent={KeyboardArrowDownIcon}
+                      disabled={
+                        availableSubcategories.length !== 1 &&
+                        availableSubcategories.length === 0
+                      }
+                      open={openSelect === "subCategory"}
+                      onOpen={handleOpenSelect("subCategory")}
+                      onClose={handleCloseSelect}
+                      MenuProps={selectMenuProps}
+                    >
+                      {availableSubcategories?.length > 0 &&
+                        availableSubcategories?.map((subCat, index) => (
+                          <MenuItem key={index} value={subCat}>
+                            {subCat}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  )}
+                />
+                {errors.subCategory && (
+                  <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                    {errors.subCategory.message}
+                  </p>
+                )}
+              </FormControl>
+            </div>
+
+            {/* Product Autocomplete - Active Search */}
+            {selectedSubcategory === "Chemicals Products" && (
+              <FormControl
+                fullWidth
+                sx={MaterialInputStyle(!!errors.productName)}
+                error={!!errors.productName}
+              >
+                <Controller
+                  name="productName"
+                  control={control}
+                  rules={{ required: "Product Name is required" }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      openOnFocus
+                      options={productOptions}
+                      loading={productLoading}
+                      getOptionLabel={(option) => option}
+                      filterOptions={(x) => x} // Disable client-side filtering
+                      inputValue={searchInputValue}
+                      onInputChange={(_, value, reason) => {
+                        if (reason === "input") {
+                          setSearchInputValue(value);
+                        } else if (reason === "clear") {
+                          setSearchInputValue("");
+                          field.onChange(null);
+                        } else if (reason === "reset") {
+                          // When user selects, sync inputValue with selected value
+                          setSearchInputValue(value);
+                        }
+                      }}
+                      onChange={(_, value) => {
+                        field.onChange(value);
+                      }}
+                      value={field.value || null}
+                      PaperComponent={(props) => (
+                        <Paper {...props} sx={{ bgcolor: "#fffdf8" }} />
+                      )}
+                      PopperComponent={(props) => (
+                        <Popper {...props} data-lenis-prevent />
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Product Name *"
+                          error={!!errors.productName}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {productLoading ? (
+                                  <CircularProgress color="inherit" size={20} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </>
+                            ),
+                          }}
+                        />
+                      )}
+                    />
+                  )}
+                />
+                {errors.productName && (
+                  <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                    {errors.productName.message}
+                  </p>
+                )}
+              </FormControl>
+            )}
+
+            {/* Message */}
             <div className="flex flex-col">
               <textarea
-                id="otherEnquiry"
-                {...register("otherEnquiry", {
+                id="message"
+                {...register("message", {
                   required: "Message is required",
                 })}
                 rows={5}
                 cols={40}
-                placeholder="Other Enquiries *"
+                placeholder="Write your message here *"
                 className={clsx(
                   "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
-                  errors.otherEnquiry ? "border-[#ff0000]" : "border-[#e8e6e6]",
+                  errors.message ? "border-[#ff0000]" : "border-[#e8e6e6]",
                 )}
               ></textarea>
-              {errors.otherEnquiry && (
+              {errors.message && (
                 <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
-                  {errors.otherEnquiry.message}
+                  {errors.message.message}
                 </p>
               )}
             </div>
-          )}
-        </div>
+
+            {/* Hear About AIL - MANDATORY */}
+            <FormControl
+              fullWidth
+              sx={MaterialInputStyle(!!errors.hearAboutAil)}
+              error={!!errors.hearAboutAil}
+            >
+              <InputLabel id="hearAboutAil">
+                How did you hear about AIL? *
+              </InputLabel>
+              <Controller
+                name="hearAboutAil"
+                control={control}
+                rules={{ required: "Selection is required" }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    value={field.value || ""}
+                    labelId="hearAboutAil"
+                    IconComponent={KeyboardArrowDownIcon}
+                    open={openSelect === "hearAboutAil"}
+                    onOpen={handleOpenSelect("hearAboutAil")}
+                    onClose={handleCloseSelect}
+                    MenuProps={selectMenuProps}
+                  >
+                    {[
+                      "Articles",
+                      "Events",
+                      "Search Engine",
+                      "Weblinks",
+                      "LinkedIn",
+                      "Recommendation",
+                      "Advertisement",
+                      "Industry Reports",
+                      "Employees",
+                      "Other",
+                    ].map((item) => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              {errors.hearAboutAil && (
+                <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                  {errors.hearAboutAil.message}
+                </p>
+              )}
+            </FormControl>
+
+            {/* Other - Msg Box */}
+            {selectedSubcategory === "Other" && (
+              <div className="flex flex-col">
+                <textarea
+                  id="otherEnquiry"
+                  {...register("otherEnquiry", {
+                    required: "Message is required",
+                  })}
+                  rows={5}
+                  cols={40}
+                  placeholder="Other Enquiries *"
+                  className={clsx(
+                    "border-1 p-4 rounded-[10px] outline-none resize-none flex-shrink-0",
+                    errors.otherEnquiry
+                      ? "border-[#ff0000]"
+                      : "border-[#e8e6e6]",
+                  )}
+                ></textarea>
+                {errors.otherEnquiry && (
+                  <p className="text-[#ff0000] text-[13px] mt-1 pl-4">
+                    {errors.otherEnquiry.message}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </SmoothScrollContainer>
 
         {formSubmitted && (
           <p className="pt-4 text-[#F36633] font-medium">
@@ -915,9 +976,7 @@ export default function GeneralForm({
         )}
 
         {submitError && (
-          <p className="pt-4 text-[#ff0000] font-medium">
-            {submitError}
-          </p>
+          <p className="pt-4 text-[#ff0000] font-medium">{submitError}</p>
         )}
 
         <Button title={"Submit"} className="mt-6" />

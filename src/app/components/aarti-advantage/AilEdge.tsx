@@ -9,7 +9,7 @@ export default function AilEdge({ data }: AilEdgeProps) {
   return (
     <div
       className="relative fluid-container xl:flex items-start"
-      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : undefined }}
+      style={{ marginTop: marginBottom > 0 ? `${marginBottom}px` : '70px' }}
     >
       {heading && (
         <H2 className="xl:absolute xl:top-0 xl:max-w-[412px] pb-6 xl:pb-0">

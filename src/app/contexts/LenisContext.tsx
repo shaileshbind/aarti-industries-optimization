@@ -1,13 +1,11 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useCallback } from "react";
-// import { createPortal } from "react-dom";
-import Lenis from "lenis";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface LenisContextType {
   stopLenis: () => void;
   startLenis: () => void;
+  resizeLenis: () => void;
 }
 
 const LenisContext = createContext<LenisContextType | null>(null);
@@ -50,36 +48,55 @@ interface LenisProviderProps {
 }
 
 export const LenisProvider = ({ children }: LenisProviderProps) => {
-  const lenisRef = useRef<Lenis | null>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lenisRef = useRef<any>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
-
-    const lenis = new Lenis({
-      duration: 1.3,
-      syncTouch: true,
-      orientation: "vertical",
-      // Transform this div instead of <html>, so position:fixed elements
-      // outside this div are not affected by Lenis's syncTouch transform.
-      content: contentRef.current,
-    });
-    lenisRef.current = lenis;
-
-    // Keep ScrollTrigger in sync with Lenis scroll position
-    lenis.on("scroll", ScrollTrigger.update);
-
     let running = true;
-    function raf(time: number) {
-      if (!running) return;
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+
+    Promise.all([import("lenis"), import("gsap/ScrollTrigger")]).then(
+      ([lenisModule, stModule]) => {
+        if (!running) return;
+
+        const Lenis = lenisModule.default;
+        const { ScrollTrigger } = stModule;
+
+        const lenis = new Lenis({
+          duration: 1.3,
+          syncTouch: true,
+          orientation: "vertical",
+        });
+        lenisRef.current = lenis;
+
+        lenis.on("scroll", ScrollTrigger.update);
+
+        // Every time ScrollTrigger recalculates (e.g. after pin spacers
+        // change the document height), tell Lenis to re-measure its
+        // scroll limits so the scrollbar can reach the true bottom.
+        const onSTRefresh = () => lenis.resize();
+        ScrollTrigger.addEventListener("refresh", onSTRefresh);
+        cleanupRef.current = () => {
+          ScrollTrigger.removeEventListener("refresh", onSTRefresh);
+        };
+
+        requestAnimationFrame(() => {
+          if (running) ScrollTrigger.refresh();
+        });
+
+        function raf(time: number) {
+          if (!running) return;
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      },
+    );
 
     return () => {
       running = false;
-      lenis.destroy();
+      cleanupRef.current?.();
+      lenisRef.current?.destroy();
       lenisRef.current = null;
     };
   }, []);
@@ -92,11 +109,13 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
     lenisRef.current?.start();
   }, []);
 
+  const resizeLenis = useCallback(() => {
+    lenisRef.current?.resize();
+  }, []);
+
   return (
-    <LenisContext.Provider value={{ stopLenis, startLenis }}>
-      <div ref={contentRef}>
-        {children}
-      </div>
+    <LenisContext.Provider value={{ stopLenis, startLenis, resizeLenis }}>
+      {children}
     </LenisContext.Provider>
   );
 };

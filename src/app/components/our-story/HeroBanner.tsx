@@ -2,10 +2,10 @@
 import React, { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { FadeInRevealBlur } from "../ScrollReveal";
+import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
 import { BodyText2, H1, } from "../Typography2";
 import { OurStoryHeroProps } from "@/app/types/our.story.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import Button from "../Button";
 
 const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
@@ -13,7 +13,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
   const starRef = useRef<HTMLDivElement>(null);
   const lineVertical = useRef<HTMLDivElement>(null);
   const lineHorizontal = useRef<HTMLDivElement>(null);
-  const isTablet = useMediaQuery("(max-width:768px)");
+  const isTablet = useMatchMedia("(max-width:768px)");
   // Extract data safely
   const tag = data?.sectionTitle || "";
   const title = data?.title || "";
@@ -62,18 +62,18 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
       {/* Text Section */}
       <div className="fluid-container flex flex-col lg:items-center justify-center lg:text-center">
         {tag && (
-          <FadeInRevealBlur delay={0.1}>
+          <LetterReveal delay={0.1}>
             <BodyText2 className="text-orange-100 font-alte-hans">
               {tag}
             </BodyText2>
-          </FadeInRevealBlur>
+          </LetterReveal>
         )}
         {title && (
-          <FadeInRevealBlur delay={0.2}>
+          <LetterReveal delay={0.2}>
             <H1 className="mt-[12px] max-w-full lg:max-w-[480px] text-left lg:text-center text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]" applyTitleCase={true}>
               {title}
             </H1>
-          </FadeInRevealBlur>
+          </LetterReveal>
         )}
         {ctaButton && ctaButton.length > 0 && (
           <FadeInRevealBlur delay={0.3}>
@@ -123,6 +123,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             className="object-cover hidden md:block"
             priority
             fetchPriority="high"
+            sizes="100vw"
           />
         )}
         {mobImage && isTablet && (
@@ -133,6 +134,7 @@ const HeroBanner: React.FC<OurStoryHeroProps> = ({ data }) => {
             className="object-cover block md:hidden"
             priority
             fetchPriority="high"
+            sizes="500px"
           />
         )}
 

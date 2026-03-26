@@ -6,7 +6,7 @@ export async function getPageData(slug: string) {
     }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${slug}`, {
-      cache: "no-store",
+      next: { revalidate: 300 },
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_TOKEN}`,
@@ -31,9 +31,7 @@ export async function getPageData(slug: string) {
       pressData: data,
     };
   } catch (error: unknown) {
-    // Handle fetch error
-    if (error instanceof Error) {
-      throw new Error(`Failed to fetch page data: ${error?.message}`);
-    }
+    console.error("Error fetching page data:", error);
+    return null;
   }
 }

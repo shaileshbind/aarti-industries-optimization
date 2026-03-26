@@ -13,7 +13,7 @@ export async function fetchHeaderFooterData(): Promise<HeaderFooterData> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
-        next: { revalidate: 1 },
+        next: { revalidate: 300 },
       },
     );
 

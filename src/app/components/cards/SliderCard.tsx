@@ -59,6 +59,7 @@ const SliderCard: FC<SliderCardProps> = ({
                 src={imgSrc}
                 alt={imgAlt ? imgAlt : "img"}
                 fill
+                sizes="(max-width: 500px) 200px, (max-width: 1024px) 1024px, (max-width: 1200px) 400px, 600px"
                 className="object-cover scale-110"
               />
             )}
@@ -71,6 +72,7 @@ const SliderCard: FC<SliderCardProps> = ({
                   src={imgSrc}
                   alt={imgAlt ? imgAlt : "img"}
                   fill
+                  sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                   className="object-cover scale-110"
                 />
               )}
@@ -152,6 +154,7 @@ const SliderCard: FC<SliderCardProps> = ({
                   src={imgSrc}
                   alt={imgAlt ? imgAlt : "img"}
                   fill
+                  sizes="(max-width: 500px) 200px, (max-width: 1024px) 1024px, (max-width: 1200px) 400px, 600px"
                   className="object-cover scale-110"
                 />
               )}
@@ -165,6 +168,7 @@ const SliderCard: FC<SliderCardProps> = ({
                     alt={imgAlt ? imgAlt : "img"}
                     fill
                     className="object-cover scale-110"
+                    sizes="(max-width: 500px) 400px, (max-width: 1024px) 1024px, (max-width: 1200px) 600px, 600px"
                   />
                 )}
               </span>

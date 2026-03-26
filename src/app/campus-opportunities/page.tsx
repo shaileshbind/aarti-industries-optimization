@@ -7,20 +7,19 @@ import CampusBanner from "../components/campus/CampusBanner";
 import CampusExp from "../components/campus/CampusExp";
 import CampusFlagship from "../components/campus/CampusFlagship";
 import SEO from "../components/SEO";
-export const dynamic = "force-dynamic";
 
 const Page = async () => {
-  const data = await getPageData("/pages/by-slug/campus-opportunities");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/campus-opportunities"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
   const {
     section_one,
     section_two,
     section_three,
     section_four,
     section_five,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
   return (
     <div>

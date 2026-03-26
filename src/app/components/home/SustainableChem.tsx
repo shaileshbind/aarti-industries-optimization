@@ -11,12 +11,12 @@ import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
 import { useLenis } from "@/app/contexts/LenisContext";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ANIMATION_END_PROGRESS = 0.55;
 
 const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
-  const isTablet = useMediaQuery("(max-width:1023px)");
+  const isTablet = useMatchMedia("(max-width:1023px)");
   const { leftText, rightText, mainSection } = data;
   const triggerRef = useRef<HTMLDivElement>(null);
   const sliderContainerRef = useRef<HTMLDivElement>(null);
@@ -676,9 +676,14 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         if (firstEl && lastEl) {
           const firstTop = firstEl.getBoundingClientRect().top;
           const lastBottom = lastEl.getBoundingClientRect().bottom;
-          const enteredSection = firstTop <= window.innerHeight * 0.45;
-          const notPastSection = lastBottom > 160;
-          const shouldShowTabs = enteredSection && notPastSection;
+          const vh = window.innerHeight;
+          const enteredSection = firstTop <= vh * 0.5;
+          const stillInSection = lastBottom > 200;
+          const pastSection = lastBottom < 80;
+          const leftSection = firstTop > vh * 0.6;
+          const shouldShowTabs = showMobileTabsRef.current
+            ? !pastSection && !leftSection
+            : enteredSection && stillInSection;
 
           if (shouldShowTabs !== showMobileTabsRef.current) {
             showMobileTabsRef.current = shouldShowTabs;
@@ -771,7 +776,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                           alt={"icon"}
                           fill
                           priority
-                          sizes="100px"
+                          sizes="700px"
                           className="leafBigImg scale-110 object-cover"
                         />
                       </span>
@@ -954,9 +959,13 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className={`fixed top-[110px] w-full flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`} ref={tabBarContainerRef}>
+      <div
+        className={`fixed top-[110px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
+        ref={tabBarContainerRef}
+        aria-hidden={!showMobileTabs}
+      >
         {mainSection?.length > 0 && isTablet && (
-          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit max-w-[calc(100vw-32px)]">
             <div
               ref={containerRef}
               className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"

@@ -9,7 +9,7 @@ import Image from "next/image";
 import Button from "../Button";
 import GeneralPopup from "../Popups/GeneralPopup";
 import MainAccordion from "../Accordion";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
 
 interface StickyImageProps {
@@ -38,7 +38,7 @@ export default function ParallaxCardSection({
 
   const [expanded, setExpanded] = useState<number>(0);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   useLayoutEffect(() => {
     gsap.fromTo(
@@ -392,8 +392,9 @@ const StickyImage: React.FC<StickyImageProps> = ({
           <Image
             src={src}
             alt={"banner"}
-            fill
-            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] blur-[4px]"
+            width={50}
+            height={54}
+            className="absolute object-cover opacity-40 rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset] blur-[14px] w-full h-full top-0 left-0"
           />
 
           <Image

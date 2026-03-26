@@ -9,17 +9,15 @@ import { Autoplay, EffectFade, Mousewheel } from "swiper/modules";
 import { BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import gsap from "gsap";
-import { FadeInReveal } from "../ScrollReveal";
+import { FadeInReveal, LetterReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
-import { isMobile } from "react-device-detect";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
-
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
-  const isTablet = useMediaQuery("(max-width:768px)");
+  const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(pointer: coarse)");
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -216,15 +214,12 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -247,14 +242,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     }
   }, [startLenis]);
 
-
   return (
     <div
       ref={wrapperRef}
       className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
       onTouchStart={handleSliderTouchStart}
-                onTouchMove={handleSliderTouchMove}
-                onTouchEnd={handleSliderTouchEnd}
+      onTouchMove={handleSliderTouchMove}
+      onTouchEnd={handleSliderTouchEnd}
     >
       {/* Conditional overlay - lighter for video slides on desktop */}
       {(() => {
@@ -391,13 +385,17 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                       <div className="fluid-container">
                         {items?.card?.[0]?.title &&
                           (index === 0 ? (
-                            <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                              {items.card[0].title}
-                            </H1>
+                            <LetterReveal delay={0.1}>
+                              <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                                {items.card[0].title}
+                              </H1>
+                            </LetterReveal>
                           ) : (
-                            <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                              {items.card[0].title}
-                            </h2>
+                            <LetterReveal delay={0.1}>
+                              <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                                {items.card[0].title}
+                              </h2>
+                            </LetterReveal>
                           ))}
                         {items?.card?.[0]?.description && (
                           <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">

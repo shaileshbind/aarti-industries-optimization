@@ -18,8 +18,6 @@ import clsx from "clsx";
 import StickyShare from "@/app/components/blogs/StickyShare";
 import { FadeInReveal } from "@/app/components/ScrollReveal";
 
-export const dynamic = "force-dynamic";
-
 export default async function page({ params }: BlogInnerProps) {
   const { blogInner } = await params;
   const data = await getBlogsCasestudies(

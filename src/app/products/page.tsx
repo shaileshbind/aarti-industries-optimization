@@ -1,17 +1,17 @@
+import { Suspense } from "react";
 import { getPageData } from "@/_lib/pageData.fetch";
 import ProductWrapper from "../components/products/ProductWrapper";
 import { getData } from "@/_lib/getData.fetch";
 import GloballyCertified from "../components/GloballyCertified";
 import SEO from "../components/SEO";
 import ProductExplore from "../components/products/ProductExplore";
-export const dynamic = "force-dynamic";
 
 export default async function Product() {
-  const data = await getPageData("/pages/by-slug/product-listing");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
-  const { section_one, product_categories, exploreMore } = data?.data;
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/product-listing"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
+  const { section_one, product_categories, exploreMore } = data?.data ?? {};
   const seo = data?.seo;
 
   return (
@@ -36,10 +36,12 @@ export default async function Product() {
         schemaData={seo?.schemaData}
       />
 
-      <ProductWrapper
-        section_one={section_one}
-        product_categories={product_categories}
-      />
+      <Suspense>
+        <ProductWrapper
+          section_one={section_one}
+          product_categories={product_categories}
+        />
+      </Suspense>
 
       {globallyCertifiedData && (
         <div className="pt-[12px] lg:pt-[40px]">

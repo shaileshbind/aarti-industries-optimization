@@ -1059,3 +1059,83 @@ body {
 .animate-marquee {
   animation: globally-certified-marquee 80s linear infinite;
 }
+
+/* MeetMinds mobile only: popup */
+@media (max-width: 768px) {
+  .meetminds-popup {
+    border-radius: 16px;
+  }
+
+  .meetminds-popup .popup-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 7px !important;
+    right: 7px !important;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    background: #000 !important;
+    border-radius: 50%;
+    color: white;
+  }
+
+  .meetminds-popup .popup-close svg {
+    color: white !important;
+    fill: white !important;
+  }
+
+  /* Thin orange scrollbar – meetminds */
+  .meetminds-mobile-scroll {
+    scrollbar-color: #dc4c03 rgba(220, 76, 3, 0.25);
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .meetminds-mobile-scroll::-webkit-scrollbar {
+    width: 1px !important;
+  }
+
+  .meetminds-mobile-scroll::-webkit-scrollbar-button {
+    display: none !important;
+  }
+
+  .meetminds-mobile-scroll::-webkit-scrollbar-track,
+  .meetminds-mobile-scroll::-webkit-scrollbar-track-piece {
+    background: rgba(220, 76, 3, 0.25) !important;
+    border-radius: 20px;
+  }
+
+  .meetminds-mobile-scroll::-webkit-scrollbar-thumb {
+    background: #dc4c03 !important;
+    border-radius: 20px;
+  }
+
+  .meetminds-mobile-scroll::-webkit-scrollbar-thumb:hover {
+    background: #c24402 !important;
+  }
+}
+
+
+.catgoryProductsSwiper .swiper {
+  height: 100%;
+}
+
+.catgoryProductsSwiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.catgoryProductsSwiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.catgoryProductsSwiper .slide-content {
+  display: flex;
+  flex-direction: column;
+  
+}
+.catgoryProductsSwiper  .title-card-anim {
+  display: flex; width: 100%;
+} 

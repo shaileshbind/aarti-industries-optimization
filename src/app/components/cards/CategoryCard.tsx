@@ -1,3 +1,4 @@
+import clsxN from "../../../../utils/clsxN";
 import { BodyText2, SubH2 } from "../Typography2";
 import Image from "next/image";
 
@@ -6,6 +7,8 @@ type TitleCardProps = {
   imageAlt?: string;
   title?: string;
   description?: string;
+  className?: string;
+  imageClassName?: string;
 };
 
 const TitleCard = ({
@@ -13,16 +16,28 @@ const TitleCard = ({
   imageSrc,
   title,
   description,
+  className,
+  imageClassName,
 }: TitleCardProps) => {
   return (
-    <div className="relative rounded-[20px] w-full   bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden">
+    <div
+      className={clsxN(
+        "relative rounded-[20px] w-full   bg-[#EFF3F5] mr-5 lg:mr-0 overflow-hidden flex flex-col",
+        className,
+      )}
+    >
       <div className="flex flex-col gap-2 py-[24px] px-[26px] min-h-[175px]">
         {title && <SubH2 className="text-blue-200 ">{title}</SubH2>}
         {description && (
           <BodyText2 className="text-grey-400">{description}</BodyText2>
         )}
       </div>
-      <div className="relative bottom-0 w-full aspect-[312/180] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden">
+      <div
+        className={clsxN(
+          "relative bottom-0 w-full aspect-[312/180] rounded-tl-[20px] rounded-tr-[20px] overflow-hidden mt-auto",
+          imageClassName,
+        )}
+      >
         {imageSrc && (
           <Image
             src={imageSrc}

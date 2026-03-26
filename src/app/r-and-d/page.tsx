@@ -9,13 +9,11 @@ import ScrollableCardWithImage from "../components/ScrollableCardWithImage";
 import SEO from "../components/SEO";
 import RDSections from "../components/r-and-d/RDSections";
 
-export const dynamic = "force-dynamic";
-
 const page = async () => {
-  const data = await getPageData("/pages/by-slug/research-and-development");
-  const globallyCertifiedData = await getData(
-    "/globally-certified-datas?populate=*",
-  );
+  const [data, globallyCertifiedData] = await Promise.all([
+    getPageData("/pages/by-slug/research-and-development"),
+    getData("/globally-certified-datas?populate=*"),
+  ]);
 
   const {
     section_one,
@@ -28,7 +26,7 @@ const page = async () => {
     section_eight,
     section_nine,
     section_ten,
-  } = data?.data;
+  } = data?.data ?? {};
   const seo = data?.seo;
 
   return (

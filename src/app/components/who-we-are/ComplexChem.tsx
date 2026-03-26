@@ -7,7 +7,7 @@ import "swiper/css/effect-fade";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { FadeInReveal } from "../ScrollReveal";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
@@ -23,7 +23,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const activeRef = useRef(0);
   const contentLengthRef = useRef(content?.length || 1);
   const startProgressRef = useRef<((index: number) => void) | null>(null);
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   // Update refs when values change
   useEffect(() => {
@@ -190,6 +190,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
                               alt="img"
                               fill
                               className="object-cover object-top"
+                              sizes="360px"
                             />
                           )}
                         </div>

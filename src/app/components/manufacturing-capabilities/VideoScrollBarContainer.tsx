@@ -5,7 +5,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { ScaleInReveal } from "../ScrollReveal";
 import Button from "../Button";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import {
   VideoScrollBarContainerProps,
   WebinarApiItem,
@@ -45,7 +45,7 @@ export default function VideoScrollBarContainer({
     transformedPressData.length > 0 ? transformedPressData : originalCard;
 
   const [activeCard, setactiveCard] = useState<number>(0);
-  const isMobile = useMediaQuery("(max-width:820px)");
+  const isMobile = useMatchMedia("(max-width:820px)");
   const [showAll, setshowAll] = useState<boolean>(false);
 
   return (

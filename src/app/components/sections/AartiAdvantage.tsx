@@ -34,6 +34,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const { leftText, rightText } = data;
   const { details } = sliderData;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isTablet = useMatchMedia("(max-width:1024px)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -190,7 +191,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
             },
             {
               width: "100%",
-              height: "90vh",
+              height: "100vh",
               left: "50%",
               top: "50%",
               y: "-50%",
@@ -198,7 +199,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               duration: 1,
             },
             "<",
-          )
+          ).to(sustainInner.current, {y: "40px"}, "<")
           .to(titleSection.current, { opacity: 0, duration: 0.5 })
           .fromTo(
             envSlider.current,
@@ -209,7 +210,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
           .fromTo(
             ".sectionSpacing",
             { opacity: 0 },
-            { opacity: 1, duration: 5 },
+            { opacity: 1, duration: 1 },
             "<",
           );
       } else {
@@ -426,8 +427,9 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     alt={
                       details[active]?.title ? details[active]?.title : "img"
                     }
-                    fill
-                    className="object-cover"
+                    width={600}
+                    height={600}
+                    className="object-cover w-full h-full top-0 left-0 absolute"
                   />
                 </span>
               </div>
@@ -442,7 +444,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
         </div>
         <div
           ref={envSlider}
-          className="w-full opacity-0 absolute top-50% translate-y-[-47%] left-0 "
+          className="w-full opacity-0 absolute top-50% translate-y-[-50%] lg:translate-y-[-47%] left-0 "
         >
           <div
             ref={sliderContainerRef}
@@ -452,32 +454,39 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               ref={contentContainerRef}
               className=" mx-[20px] lg:mx-[unset] mb-[70px] md:mb-0 lg:mb-[unset] grid lg:grid-cols-[400px_1fr] xl:grid-cols-[600px_1fr] lg:gap-x-[80px] xl:gap-x-[100px]  md:items-center"
             >
+              {!isTablet && (
               <div className="relative w-full randdImageHeight pt-[100%] overflow-hidden rounded-[1rem] flex items-center justify-center">
                 {details[active]?.image?.url && (
                   <div className="absolute inset-0 overflow-hidden">
                     <Image
                       src={details[active]?.image?.url}
                       alt={details[active]?.title}
-                      fill
-                      className="object-cover scale-110"
+                      width={60}
+                      height={60}
+                      className="object-cover w-full h-full top-0 left-0 absolute"
                     />
                     <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-white/30"></i>
                     <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
                       <Image
                         src={details[active]?.image?.url}
                         alt={details[active]?.image?.url}
-                        fill
-                        className="object-cover scale-110"
+                        width={600}
+                        height={600}
+                        className="object-cover w-full h-full top-0 left-0 absolute"
                       />
                     </span>
                   </div>
                 )}
               </div>
+              )}
               <div className="w-full overflow-hidden">
+              {!isTablet && (
                 <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
+                  
                   <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
+                  
                   <div className="hidden lg:block">
                     <div className="flex gap-3">
                       <Image
@@ -505,6 +514,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     </div>
                   </div>
                 </div>
+                )}
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <div  onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
@@ -558,12 +568,42 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     {details?.map((slide, index) => (
                       <SwiperSlide key={slide?.id}>
                         <div
-                          className={`grid gap-12 pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
+                          className={`grid gap-3 lg:gap-12 lg:pr-10 items-center flex-shrink-0 rounded-lg transition-all duration-500 ${
                             active !== index
                               ? "lg:blur-sm lg:opacity-70"
                               : "lg:blur-0 lg:opacity-100"
                           }`}
                         >
+                          {isTablet && (
+                            <>
+                  <div className="relative w-full randdImageHeight pt-[100%] overflow-hidden rounded-[1rem] flex items-center justify-center">
+                   
+                    <div className="absolute inset-0 overflow-hidden">
+                      <Image
+                        src={slide.image?.url}
+                        alt={slide.title}
+                        width={60}
+                        height={60}
+                        className="object-cover w-full h-full top-0 left-0 absolute"
+                      />
+                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md bg-white/30"></i>
+                      <span className="absolute bottom-0 left-0 rounded-br-[300px] rounded-tl-[400px] rounded-tr-[400px] rounded-bl-[20px] overflow-hidden w-[100%] h-[100%]">
+                        <Image
+                          src={slide.image?.url}
+                          alt={slide.title}
+                          width={600}
+                          height={600}
+                          className="object-cover w-full h-full top-0 left-0 absolute"
+                        />
+                      </span>
+                    </div>
+                   
+                </div>
+                <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
+                    0{index + 1}-<span>0{details?.length}</span>
+                  </BodyText2>
+                </>
+                )}
                           <div>
                             {slide?.title && (
                               <SubH1 className="mt-[unset] lg:mt-[30px]">
