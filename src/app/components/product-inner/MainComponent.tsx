@@ -90,7 +90,14 @@ export default function ProductInnerPage({
                 </p>
               </div>
 
-              {product?.productName && <H1 className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]" applyTitleCase={true}>{product?.productName}</H1>}
+              {product?.productName && (
+                <H1
+                  className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]"
+                  applyTitleCase={true}
+                >
+                  {product?.productName}
+                </H1>
+              )}
 
               {product?.description && (
                 <BodyText1 className="mt-2">{product?.description}</BodyText1>
@@ -114,12 +121,7 @@ export default function ProductInnerPage({
                     }}
                   >
                     Product List
-                    <Image
-                      src="/images/download-icon-grey2.svg"
-                      alt="globe"
-                      width={20}
-                      height={20}
-                    />
+                    <DownloadIcon />
                   </div>
                 </div>
                 {/* company brochure */}
@@ -132,16 +134,19 @@ export default function ProductInnerPage({
                     }}
                   >
                     Company Brochure
-                    <Image
+                    {/* <Image
                       src="/images/download-icon-grey2.svg"
                       alt="globe"
                       width={20}
                       height={20}
-                    />
+                    /> */}
+                    <DownloadIcon />
                   </div>
                 </div>
                 {/* msds only - via cms */}
-                {(product?.productDetails?.documentSection?.documents ?? []).some(() => true) && (
+                {(
+                  product?.productDetails?.documentSection?.documents ?? []
+                ).some(() => true) && (
                   <div className="flex flex-col gap-[10px] mt-[10px]">
                     {product?.productDetails?.documentSection?.documents?.map(
                       (item, index) =>
@@ -159,12 +164,13 @@ export default function ProductInnerPage({
                             }}
                           >
                             {item?.documentName}
-                            <Image
+                            {/* <Image
                               src="/images/download-icon-grey2.svg"
                               alt="globe"
                               width={20}
                               height={20}
-                            />
+                            /> */}
+                            <DownloadIcon />
                           </div>
                         ),
                     )}
@@ -178,12 +184,13 @@ export default function ProductInnerPage({
                     href="https://d9bnjb3uan3b2.cloudfront.net/general_terms_and_conditions_for_supply_e8e0d286c3.pdf"
                   >
                     General T&C
-                    <Image
+                    {/* <Image
                       src="/images/download-icon-grey2.svg"
                       alt="globe"
                       width={20}
                       height={20}
-                    />
+                    /> */}
+                    <DownloadIcon />
                   </Link>
                 </div>
 
@@ -226,7 +233,10 @@ export default function ProductInnerPage({
                       </p>
                       <div className="flex flex-col gap-[10px]  ">
                         {descriptionData?.map((item, index) => (
-                          <div key={"desc_" + index} className="flex gap-4">
+                          <div
+                            key={"desc_" + index}
+                            className="grid grid-cols-2 gap-4"
+                          >
                             <p className="text-sm md:text-base shrink-0">
                               {item?.title} :
                             </p>
@@ -237,12 +247,16 @@ export default function ProductInnerPage({
                     </div>
                   )}
                 </div>
-                {(product?.productDetails?.application ?? []).some(() => true) && (
+                {(product?.productDetails?.application ?? []).some(
+                  () => true,
+                ) && (
                   <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
                 )}
                 {/* Applications */}
                 <div>
-                  {(product?.productDetails?.application ?? []).some(() => true) && (
+                  {(product?.productDetails?.application ?? []).some(
+                    () => true,
+                  ) && (
                     <div>
                       <p className="pb-4 text-[#002F50] text-base md:text-lg">
                         Applications :
@@ -256,8 +270,9 @@ export default function ProductInnerPage({
                             return (
                               <div
                                 key={"application" + index}
-                                className={`flex items-start gap-2 ${isLastItem && isOddCount ? "col-span-2" : ""
-                                  }`}
+                                className={`flex items-start gap-2 ${
+                                  isLastItem && isOddCount ? "col-span-2" : ""
+                                }`}
                               >
                                 {hasDesc && (
                                   <Image
@@ -290,8 +305,9 @@ export default function ProductInnerPage({
                     .map((item, index) => (
                       <div
                         key={index}
-                        className={`${index % 2 === 0 ? "" : "bg-[#F7F9FA]"
-                          } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
+                        className={`${
+                          index % 2 === 0 ? "" : "bg-[#F7F9FA]"
+                        } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
                       >
                         <BodyText2 className="text-[#002F50]">
                           {item.title + " :"}
@@ -346,3 +362,33 @@ export default function ProductInnerPage({
     </div>
   );
 }
+
+const DownloadIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <g stroke="#555" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {/* Base line */}
+        <path d="M6 17 V20 H18 V17" strokeWidth="2" />
+        {/* Animated arrow */}
+        <g>
+          <path d="M12 4 V14" />
+          <path d="M8 10 L12 14 L16 10" />
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            values="0 0; 0 2; 0 0"
+            dur="0.9s"
+            repeatCount="indefinite"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};

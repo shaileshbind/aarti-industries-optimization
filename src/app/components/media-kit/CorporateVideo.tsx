@@ -34,7 +34,7 @@ export default function CorporateVideo({ data }: CorporateVideoProps) {
             setIsPlaying(false);
             setShowControls(false);
           }}
-          className="w-full h-full rounded-[20px] object-cover"
+          className="w-full h-full object-cover"
         >
           <source src={sectionVideos?.[0]?.video?.url} type="video/mp4" />
           Your browser does not support the video tag.
