@@ -314,7 +314,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
           setshowPopup(false);
         }}
       >
-        <div className="meetminds-mobile-scroll max-h-[80vh] overflow-y-auto overflow-x-hidden lg:flex gap-10">
+        <div className="meetminds-mobile-scroll max-h-[80vh] overflow-y-auto md:overflow-y-hidden overflow-x-hidden lg:flex gap-10 pr-2">
           <div className="md:w-[60%] lg:w-[45%] h-[350px] md:h-[500px] rounded-[20px] overflow-hidden">
             <Image
               src={popupDetails?.image?.url || ""}
@@ -332,7 +332,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
               {popupDetails?.designation}{" "}
             </BodyText2>
 
-            <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto md:pr-2">
+            <p className="mt-2 md:mt-10 lg:mt-[66px] text-base md:text-lg text-[#17191E] lg:max-h-[50vh] lg:overflow-y-auto md:pr-2 scrollbar">
               {`${popupDetails?.bio}`}
             </p>
           </div>
