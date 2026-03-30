@@ -658,6 +658,25 @@ body {
   }
 }
 
+/* Product inner: download icon subtle hover nudge */
+@keyframes download-icon-nudge {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(2px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.group:hover .download-icon-arrow {
+  animation: download-icon-nudge 0.9s ease-in-out infinite;
+}
+
 @media (max-width: 1280px) {
   .potential-accordion:nth-child(2)::after {
     right: 5.8%;
