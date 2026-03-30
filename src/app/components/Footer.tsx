@@ -189,7 +189,7 @@ const Footer = ({ data }: FooterProps) => {
             © {new Date().getFullYear()} {Legal?.leftText}
           </p>
         )}
-        <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1 justify-between">
+        <div className="flex flex-nowrap  gap-x-[16px] lg:gap-x-[24px] order-0 lg:order-1  justify-center  lg:justify-between">
           {Legal?.data?.map((items) => {
             if (!items?.link) return null;
             return (

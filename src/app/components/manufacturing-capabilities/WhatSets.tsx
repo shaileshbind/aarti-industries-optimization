@@ -9,7 +9,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
   const { title, image, mobImage, ctaButton, cards } = data;
 
   return (
-    <div className="relative lg:h-[calc(100vh-70px)] ">
+    <div className="relative lg:min-h-[600px] xl:h-[calc(100vh-70px)] ">
       <div className="absolute inset-0 bg-black/60 z-[1] hidden lg:block" />
       {/* Desktop */}
       {image?.url && (
@@ -61,7 +61,7 @@ export default function WhatSets({ data }: WhatSetsProps) {
         </div>
 
         {cards?.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
             {cards?.map((item, index) => (
               <FadeInReveal
                 key={"card_" + index}

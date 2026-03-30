@@ -137,7 +137,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     };
   return (
     <div ref={sectionRef}>
-      <div className="hidden xl:block relative w-full h-[calc(100dvh-64px)] overflow-hidden bg-black mt-20 lg:mt-40">
+      <div className="hidden xl:block relative w-full h-screen 2xl:h-[calc(100dvh-64px)] overflow-hidden bg-black mt-20 lg:mt-40">
         {/* Background Images with Fade Effect */}
         <div className="absolute inset-0">
           {stories?.map((item, index) => (
