@@ -90,7 +90,14 @@ export default function ProductInnerPage({
                 </p>
               </div>
 
-              {product?.productName && <H1 className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]" applyTitleCase={true}>{product?.productName}</H1>}
+              {product?.productName && (
+                <H1
+                  className="text-[24px] md:text-[30px] xl:text-[36px] leading-[124%] md:leading-[140%]"
+                  applyTitleCase={true}
+                >
+                  {product?.productName}
+                </H1>
+              )}
 
               {product?.description && (
                 <BodyText1 className="mt-2">{product?.description}</BodyText1>
@@ -107,47 +114,49 @@ export default function ProductInnerPage({
                 {/* product list */}
                 <div className="flex flex-col gap-[10px] mt-[0]">
                   <div
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
                       setshowGeneralPopup(true);
                       setdocument("/reports/product-list.pdf");
                     }}
                   >
                     Product List
-                    <Image
-                      src="/images/download-icon-grey2.svg"
-                      alt="globe"
-                      width={20}
-                      height={20}
-                    />
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </div>
                 </div>
                 {/* company brochure */}
                 <div className="flex flex-col gap-[10px] mt-[10px]">
                   <div
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
                       setshowGeneralPopup(true);
                       setdocument("/reports/company-brochure.pdf");
                     }}
                   >
                     Company Brochure
-                    <Image
+                    {/* <Image
                       src="/images/download-icon-grey2.svg"
                       alt="globe"
                       width={20}
                       height={20}
-                    />
+                    /> */}
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </div>
                 </div>
                 {/* msds only - via cms */}
-                {(product?.productDetails?.documentSection?.documents ?? []).some(() => true) && (
+                {(
+                  product?.productDetails?.documentSection?.documents ?? []
+                ).some(() => true) && (
                   <div className="flex flex-col gap-[10px] mt-[10px]">
                     {product?.productDetails?.documentSection?.documents?.map(
                       (item, index) =>
                         item?.documentName && (
                           <div
-                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                            className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
                             onClick={() => {
                               if (index === 0) {
@@ -159,12 +168,15 @@ export default function ProductInnerPage({
                             }}
                           >
                             {item?.documentName}
-                            <Image
+                            {/* <Image
                               src="/images/download-icon-grey2.svg"
                               alt="globe"
                               width={20}
                               height={20}
-                            />
+                            /> */}
+                            <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                              <DownloadIcon />
+                            </span>
                           </div>
                         ),
                     )}
@@ -173,17 +185,20 @@ export default function ProductInnerPage({
                 {/* t&c cta - static */}
                 <div className="flex flex-col gap-[10px] mt-[10px]">
                   <Link
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     target="_blank"
                     href="https://d9bnjb3uan3b2.cloudfront.net/general_terms_and_conditions_for_supply_e8e0d286c3.pdf"
                   >
                     General T&C
-                    <Image
+                    {/* <Image
                       src="/images/download-icon-grey2.svg"
                       alt="globe"
                       width={20}
                       height={20}
-                    />
+                    /> */}
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </Link>
                 </div>
 
@@ -226,7 +241,10 @@ export default function ProductInnerPage({
                       </p>
                       <div className="flex flex-col gap-[10px]  ">
                         {descriptionData?.map((item, index) => (
-                          <div key={"desc_" + index} className="flex gap-4">
+                          <div
+                            key={"desc_" + index}
+                            className="grid grid-cols-2 gap-4"
+                          >
                             <p className="text-sm md:text-base shrink-0">
                               {item?.title} :
                             </p>
@@ -237,12 +255,16 @@ export default function ProductInnerPage({
                     </div>
                   )}
                 </div>
-                {(product?.productDetails?.application ?? []).some(() => true) && (
+                {(product?.productDetails?.application ?? []).some(
+                  () => true,
+                ) && (
                   <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
                 )}
                 {/* Applications */}
                 <div>
-                  {(product?.productDetails?.application ?? []).some(() => true) && (
+                  {(product?.productDetails?.application ?? []).some(
+                    () => true,
+                  ) && (
                     <div>
                       <p className="pb-4 text-[#002F50] text-base md:text-lg">
                         Applications :
@@ -256,8 +278,9 @@ export default function ProductInnerPage({
                             return (
                               <div
                                 key={"application" + index}
-                                className={`flex items-start gap-2 ${isLastItem && isOddCount ? "col-span-2" : ""
-                                  }`}
+                                className={`flex items-start gap-2 ${
+                                  isLastItem && isOddCount ? "col-span-2" : ""
+                                }`}
                               >
                                 {hasDesc && (
                                   <Image
@@ -290,8 +313,9 @@ export default function ProductInnerPage({
                     .map((item, index) => (
                       <div
                         key={index}
-                        className={`${index % 2 === 0 ? "" : "bg-[#F7F9FA]"
-                          } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
+                        className={`${
+                          index % 2 === 0 ? "" : "bg-[#F7F9FA]"
+                        } grid grid-cols-[40%_60%] gap-4 border-b border-gray-200 px-[20px] py-5`}
                       >
                         <BodyText2 className="text-[#002F50]">
                           {item.title + " :"}
@@ -346,3 +370,31 @@ export default function ProductInnerPage({
     </div>
   );
 }
+
+const DownloadIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <g
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {/* Base line */}
+        <path d="M6 17 V20 H18 V17" strokeWidth="1.6" />
+        {/* Animated arrow */}
+        <g className="download-icon-arrow">
+          <path d="M12 4 V14" />
+          <path d="M8 10 L12 14 L16 10" />
+        </g>
+      </g>
+    </svg>
+  );
+};

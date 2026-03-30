@@ -711,7 +711,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             {content?.[0]?.card?.[0]?.image?.url && (
               <div
                 ref={sustainbleLogo}
-                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-hidden absolute"
+                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] lg:overflow-hidden absolute"
               >
                 <span
                   ref={sustainInner}

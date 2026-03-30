@@ -22,26 +22,69 @@ const GloballyCertified = ({
   itemsData,
   className,
 }: GloballyCertifiedProps) => {
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [durationSec, setDurationSec] = useState<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTsRef = useRef<number>(0);
+  const singleSetWidthRef = useRef<number>(0);
+  const offsetRef = useRef<number>(0);
+  const lastPointerXRef = useRef<number>(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const applyTransform = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.style.transform = `translate3d(${offsetRef.current}px, 0, 0)`;
+  };
+
+  const normalizeOffset = () => {
+    const width = singleSetWidthRef.current;
+    if (!width) return;
+
+    while (offsetRef.current <= -width) offsetRef.current += width;
+    while (offsetRef.current > 0) offsetRef.current -= width;
+  };
 
   useEffect(() => {
     const el = trackRef.current;
-    if (!el) return;
+    if (!el || !itemsData?.length) return;
 
-    const updateDuration = () => {
-      const width = el.scrollWidth;
-      // We translate -50% per cycle (one copy width)
-      const distancePerCycle = width / 2;
-      const sec = distancePerCycle / MARQUEE_PX_PER_SEC;
-      setDurationSec(Math.max(20, sec));
+    const updateSizes = () => {
+      singleSetWidthRef.current = el.scrollWidth / 2;
+      normalizeOffset();
+      applyTransform();
     };
 
-    updateDuration();
-    const observer = new ResizeObserver(updateDuration);
+    updateSizes();
+    const observer = new ResizeObserver(updateSizes);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [itemsData?.length]);
+  }, [itemsData]);
+
+  useEffect(() => {
+    if (!itemsData?.length) return;
+
+    const tick = (ts: number) => {
+      if (!lastTsRef.current) lastTsRef.current = ts;
+      const dt = (ts - lastTsRef.current) / 1000;
+      lastTsRef.current = ts;
+
+      if (!isDragging && singleSetWidthRef.current > 0) {
+        offsetRef.current -= MARQUEE_PX_PER_SEC * dt;
+        normalizeOffset();
+        applyTransform();
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      lastTsRef.current = 0;
+    };
+  }, [isDragging, itemsData]);
 
   if (!itemsData?.length) return null;
 
@@ -52,15 +95,42 @@ const GloballyCertified = ({
           {title || "Globally Certified"}
         </H3>
       </div>
-      <div className="overflow-hidden relative mt-[24px] lg:mt-[35px]">
+      <div
+        ref={viewportRef}
+        className="overflow-hidden relative mt-[24px] lg:mt-[35px] cursor-grab active:cursor-grabbing"
+        onDragStart={(e) => e.preventDefault()}
+        onPointerDown={(e) => {
+          if (!trackRef.current) return;
+          e.currentTarget.setPointerCapture(e.pointerId);
+          setIsDragging(true);
+          lastPointerXRef.current = e.clientX;
+        }}
+        onPointerMove={(e) => {
+          if (!isDragging || !trackRef.current) return;
+          const delta = e.clientX - lastPointerXRef.current;
+          lastPointerXRef.current = e.clientX;
+          offsetRef.current += delta;
+          normalizeOffset();
+          applyTransform();
+        }}
+        onPointerUp={(e) => {
+          if (!isDragging) return;
+          e.currentTarget.releasePointerCapture(e.pointerId);
+          setIsDragging(false);
+          lastTsRef.current = performance.now();
+        }}
+        onPointerCancel={(e) => {
+          if (!isDragging) return;
+          e.currentTarget.releasePointerCapture(e.pointerId);
+          setIsDragging(false);
+          lastTsRef.current = performance.now();
+        }}
+      >
         <div
           ref={trackRef}
-          className="flex gap-x-[24px] whitespace-nowrap w-max animate-marquee hover:[animation-play-state:paused]"
+          className="flex gap-x-[24px] whitespace-nowrap w-max touch-pan-y select-none"
           style={{
             willChange: "transform",
-            ...(durationSec != null && {
-              animationDuration: `${durationSec}s`,
-            }),
           }}
         >
           {/* First set */}
@@ -82,7 +152,7 @@ const MarqueeItem = ({
 }: {
   item: GloballyCertifiedProps["itemsData"][number];
 }) => (
-  <div className="inline-block flex-shrink-0 w-[132px] md:w-[200px] group">
+  <div className="inline-block shrink-0 w-[132px] md:w-[200px] group">
     {item?.image?.url && (
       <div className="relative bg-grey-100 rounded-[10px] md:rounded-[12px] grid place-items-center h-[88px] md:h-[120px]">
         <Image
@@ -92,6 +162,7 @@ const MarqueeItem = ({
           width={160}
           sizes="(max-width: 767px) 112px, 160px"
           loading="lazy"
+          draggable={false}
           className="object-contain h-[68px] md:h-[80px] w-[112px] md:w-[160px] group-hover:scale-110 transition-transform duration-300"
         />
       </div>

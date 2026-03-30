@@ -62,7 +62,7 @@ export const GlobalCursor = () => {
       if (isDesktop) {
         setVisible(visible);
         setTitle(title || null);
-        document.body.style.cursor = visible ? "none" : "default";
+        document.body.style.cursor = visible ? "pointer" : "pointer";
       }
     };
   }, [isDesktop]);
@@ -74,10 +74,13 @@ export const GlobalCursor = () => {
 
   return (
     <div
-      className="fixed z-[9999] pointer-events-none"
+      className="fixed z-9999"
       style={{
-        left: position.x + 10,
-        top: position.y,
+        // Prevent this floating cursor from capturing pointer events,
+        // which can cause underlying elements to receive `mouseLeave`.
+        pointerEvents: "none",
+        left: position.x - 30,
+        top: position.y + 30,
       }}
     >
       {title && (
