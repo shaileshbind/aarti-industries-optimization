@@ -114,20 +114,22 @@ export default function ProductInnerPage({
                 {/* product list */}
                 <div className="flex flex-col gap-[10px] mt-[0]">
                   <div
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
                       setshowGeneralPopup(true);
                       setdocument("/reports/product-list.pdf");
                     }}
                   >
                     Product List
-                    <DownloadIcon />
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </div>
                 </div>
                 {/* company brochure */}
                 <div className="flex flex-col gap-[10px] mt-[10px]">
                   <div
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
                       setshowGeneralPopup(true);
                       setdocument("/reports/company-brochure.pdf");
@@ -140,7 +142,9 @@ export default function ProductInnerPage({
                       width={20}
                       height={20}
                     /> */}
-                    <DownloadIcon />
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </div>
                 </div>
                 {/* msds only - via cms */}
@@ -152,7 +156,7 @@ export default function ProductInnerPage({
                       (item, index) =>
                         item?.documentName && (
                           <div
-                            className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                            className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
                             onClick={() => {
                               if (index === 0) {
@@ -170,7 +174,9 @@ export default function ProductInnerPage({
                               width={20}
                               height={20}
                             /> */}
-                            <DownloadIcon />
+                            <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                              <DownloadIcon />
+                            </span>
                           </div>
                         ),
                     )}
@@ -179,7 +185,7 @@ export default function ProductInnerPage({
                 {/* t&c cta - static */}
                 <div className="flex flex-col gap-[10px] mt-[10px]">
                   <Link
-                    className="flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
+                    className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     target="_blank"
                     href="https://d9bnjb3uan3b2.cloudfront.net/general_terms_and_conditions_for_supply_e8e0d286c3.pdf"
                   >
@@ -190,7 +196,9 @@ export default function ProductInnerPage({
                       width={20}
                       height={20}
                     /> */}
-                    <DownloadIcon />
+                    <span className="text-[#687e8f] transition-colors group-hover:text-[#F36633]">
+                      <DownloadIcon />
+                    </span>
                   </Link>
                 </div>
 
@@ -373,20 +381,18 @@ const DownloadIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <g stroke="#555" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <g
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         {/* Base line */}
-        <path d="M6 17 V20 H18 V17" strokeWidth="2" />
+        <path d="M6 17 V20 H18 V17" strokeWidth="1.6" />
         {/* Animated arrow */}
-        <g>
+        <g className="download-icon-arrow">
           <path d="M12 4 V14" />
           <path d="M8 10 L12 14 L16 10" />
-          <animateTransform
-            attributeName="transform"
-            type="translate"
-            values="0 0; 0 2; 0 0"
-            dur="0.9s"
-            repeatCount="indefinite"
-          />
         </g>
       </g>
     </svg>
