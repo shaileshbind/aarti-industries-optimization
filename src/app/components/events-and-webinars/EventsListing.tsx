@@ -49,6 +49,7 @@ const formatDate = (dateString: string): string => {
 type DisplayEvent = {
   title: string;
   date: string;
+  end_date: string;
   location: string;
   description: string;
   image: { url: string; alternativeText: string };
@@ -107,6 +108,7 @@ const transformEventData = (event: UpcomingEventData): DisplayEvent => {
   return {
     title: event.title,
     date: formatDate(event.date),
+    end_date: event.end_date ? formatDate(event.end_date) : "",
     location: event.location,
     description: event.description,
     image,
@@ -156,9 +158,11 @@ const EventsListing = ({
       return transformedEvents;
     }
     // Transform legacy events to DisplayEvent format
+
     return (data?.events || []).map((event) => ({
       title: event.title,
       date: event.date || "",
+      end_date: event.end_date || "",
       location: event.location || "",
       description: event.description || "",
       image: event.image,
@@ -210,6 +214,7 @@ const EventsListing = ({
                     event={{
                       title: event.title,
                       date: event.date,
+                      end_date: event.end_date,
                       location: event.location,
                       description: event.description,
                       image: event.image,

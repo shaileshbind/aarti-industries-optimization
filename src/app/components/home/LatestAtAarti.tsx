@@ -22,6 +22,7 @@ type PostContent = {
   description?: string;
   newsDescription?: string;
   date?: string;
+  end_date?: string;
   link?: string;
   image?: ImageProps;
   mobImage?: ImageProps;
@@ -68,15 +69,12 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -168,35 +166,35 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cards: NormalizedCard[] = Array.isArray(card)
     ? (card as NormalizedCard[])
     : ([
-      card?.news && {
-        id: card.news.id ?? "news",
-        type: "news",
-        category: card.news.category ?? "News",
-        postContent: toArray(card.news.news).map((item) => ({
-          ...item,
-          description: item.newsDescription,
-          link: resolveLink(item.ctaButton),
-        })),
-        ctaButton: card.news.ctaButton,
-      },
-      reportPub && {
-        id: reportPubRoot?.id ?? "annualReports",
-        type: "annualReports",
-        category: reportPubRoot?.category ?? "Reports",
-        postContent: reportsPostContent,
-        ctaButton: reportPubRoot?.ctaButton,
-      },
-      card?.events && {
-        id: card.events.id ?? "events",
-        type: "events",
-        category: card.events.category ?? "Events",
-        postContent: toArray(card.events.events).map((item) => ({
-          ...item,
-          link: resolveLink(item.ctaButton),
-        })),
-        ctaButton: card.events.ctaButton,
-      },
-    ].filter(Boolean) as NormalizedCard[]);
+        card?.news && {
+          id: card.news.id ?? "news",
+          type: "news",
+          category: card.news.category ?? "News",
+          postContent: toArray(card.news.news).map((item) => ({
+            ...item,
+            description: item.newsDescription,
+            link: resolveLink(item.ctaButton),
+          })),
+          ctaButton: card.news.ctaButton,
+        },
+        reportPub && {
+          id: reportPubRoot?.id ?? "annualReports",
+          type: "annualReports",
+          category: reportPubRoot?.category ?? "Reports",
+          postContent: reportsPostContent,
+          ctaButton: reportPubRoot?.ctaButton,
+        },
+        card?.events && {
+          id: card.events.id ?? "events",
+          type: "events",
+          category: card.events.category ?? "Events",
+          postContent: toArray(card.events.events).map((item) => ({
+            ...item,
+            link: resolveLink(item.ctaButton),
+          })),
+          ctaButton: card.events.ctaButton,
+        },
+      ].filter(Boolean) as NormalizedCard[]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const latestAtAartiRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -541,10 +539,11 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                               }
                             }}
                             onClick={() => handleTabClick(index)}
-                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${activeTab === index
-                              ? "text-white"
-                              : "hover:bg-grey-200"
-                              }`}
+                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
+                              activeTab === index
+                                ? "text-white"
+                                : "hover:bg-grey-200"
+                            }`}
                           >
                             {item.category}
                           </div>
@@ -576,13 +575,14 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
         )}
         {postsCount > 0 && (
           <FadeInReveal>
-            <div className="mt-[52px]" ref={cardsWrapRef}
+            <div
+              className="mt-[52px]"
+              ref={cardsWrapRef}
               onTouchStart={handleSliderTouchStart}
               onTouchMove={handleSliderTouchMove}
               onTouchEnd={handleSliderTouchEnd}
             >
               <Swiper
-
                 key={`${activeTab}-${isDesktopPointer}`}
                 spaceBetween={24}
                 slidesPerView={1.5}
@@ -623,7 +623,13 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                     <div className="date-card-anim">
                       <DateCard
                         imageSrc={item?.image?.url}
-                        date={item?.date ? formatDate(item?.date) : ""}
+                        date={
+                          item?.end_date
+                            ? `${item?.date ? formatDate(item?.date) : ""} - ${formatDate(item?.end_date)}`
+                            : item?.date
+                              ? formatDate(item?.date)
+                              : ""
+                        }
                         desc={item?.description}
                         link={item?.link}
                         animate={Boolean(item?.link)}

@@ -14,6 +14,7 @@ const WhoBanner: React.FC<WhoBannerProps> = ({ data }) => {
       mobImage={mobImage?.url}
       alt={image?.alternativeText}
       mobAlt={mobImage?.alternativeText}
+      imageClassName="object-bottom"
     />
   );
 };
