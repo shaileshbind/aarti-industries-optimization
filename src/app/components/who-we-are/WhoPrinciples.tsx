@@ -77,6 +77,10 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
     }
   };
 
+  useEffect(() => {
+    setOpenIndex(active);
+  }, [active]);
+
   return (
     <section
       ref={sectionRef}
@@ -177,10 +181,15 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
           </div>
         )}
       </FadeInReveal>
+
       {/* Mobile Accordion */}
       {content?.length > 0 && (
         <FadeInReveal delay={0.6}>
-          <div className="md:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container">
+          <div
+            className="md:hidden mt-3 space-y-3 bg-[#F5F8FA] rounded-2xl fluid-container"
+            onTouchStart={() => setIsHovered(true)} // pause on touch
+            onTouchEnd={() => setIsHovered(false)}
+          >
             {content?.map((tab, index) => {
               const isOpen = openIndex === index;
               return (
@@ -200,7 +209,11 @@ const WhoPrinciples: React.FC<WhoPrinciplesProps> = ({ data }) => {
                           ? "bg-gradient-orange-1 text-white pt-5"
                           : "text-gray-700 hover:bg-gray-50",
                       )}
-                      onClick={() => setOpenIndex(isOpen ? null : index)}
+                      onClick={() => {
+                        const newIndex = isOpen ? null : index;
+                        setOpenIndex(newIndex);
+                        if (newIndex !== null) handleTabClick(newIndex);
+                      }}
                     >
                       <p
                         className={clsx(
