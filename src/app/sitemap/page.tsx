@@ -27,24 +27,23 @@ const page = async () => {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
+      <div className="bg-[#F5F8FA] w-full">
+        <HeroBanner
+          title={"Sitemap"}
+          image={"/images/cdmo/cdmo-driving-banner.png"}
+          mobImage={"/images/cdmo/cdmo-driving-banner.png"}
+          alt="Sitemap"
+          mobAlt="Sitemap"
+          fullBg
+          centerText
+        />
 
-      <HeroBanner
-        title={"Sitemap"}
-        image={"/images/cdmo/cdmo-driving-banner.png"}
-        mobImage={"/images/cdmo/cdmo-driving-banner.png"}
-        alt="Sitemap"
-        mobAlt="Sitemap"
-        fullBg
-        centerText
-      />
-
-      {menu && (
-        <div >
-          <SitemapMenu menu={menu} />
-        </div>
-      )}
-
-      <hr className="my-10 opacity-20 container"/>
+        {menu && (
+          <div>
+            <SitemapMenu menu={menu} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

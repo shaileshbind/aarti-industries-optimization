@@ -23,7 +23,7 @@ const page = async () => {
         keywords={seo?.keywords}
         canonical={
           seo?.canonical ??
-          "https://www.aarti-industries.com/sustainability-overview"
+          "https://www.aarti-industries.com/sustainability"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

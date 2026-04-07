@@ -10,7 +10,7 @@ const SitemapMenu = ({ menu }: SitemapMenuProps) => {
   if (!menu?.length) return null;
 
   return (
-    <div className="bg-white container !py-[50px] lg:!py-[120px]">
+    <div className="bg-transparent container !py-[50px] lg:!py-[120px]">
       <div className="grid lg:grid-cols-12 gap-[20px] gap-y-[36px]">
         {/* First category with special layout (like Company) */}
         <div className="lg:col-span-3">
