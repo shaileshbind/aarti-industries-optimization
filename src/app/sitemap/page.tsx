@@ -38,7 +38,13 @@ const page = async () => {
         centerText
       />
 
-      {menu && <SitemapMenu menu={menu} />}
+      {menu && (
+        <div >
+          <SitemapMenu menu={menu} />
+        </div>
+      )}
+
+      <hr className="my-10 opacity-20 container"/>
     </div>
   );
 };

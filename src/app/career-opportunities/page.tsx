@@ -30,7 +30,7 @@ const Page = async () => {
         keywords={seo?.keywords}
         canonical={
           seo?.canonical ??
-          "https://www.aarti-industries.com/campus-opportunities"
+          "https://www.aarti-industries.com/career-opportunities"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}
