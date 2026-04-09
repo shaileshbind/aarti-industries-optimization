@@ -1,34 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const EMPTY_RESPONSE = {
+  query: "",
+  suggestions: { pages: [], blogs: [], products: [] },
+};
+
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get("q");
-    const page = searchParams.get("page") || "1";
-    const limit = searchParams.get("limit") || "10";
+    const query = request.nextUrl.searchParams.get("q");
 
     if (!query?.trim()) {
-      return NextResponse.json({
-        data: {
-          hits: [],
-          page: 1,
-          totalPages: 0,
-          totalResults: 0,
-          limit: parseInt(limit),
-          hasNextPage: false,
-          hasPrevPage: false,
-          nextPage: null,
-          prevPage: null,
-          query: "",
-        },
-        error: null,
-      });
+      return NextResponse.json({ data: EMPTY_RESPONSE, error: null });
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/global-search?q=${encodeURIComponent(
-        query,
-      )}&page=${page}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/search/suggestions?q=${encodeURIComponent(query)}`,
       {
         cache: "no-store",
         headers: {
@@ -45,37 +31,14 @@ export async function GET(request: NextRequest) {
     const result = await response.json();
 
     return NextResponse.json({
-      data: result || {
-        hits: [],
-        page: parseInt(page),
-        totalPages: 0,
-        totalResults: 0,
-        limit: parseInt(limit),
-        hasNextPage: false,
-        hasPrevPage: false,
-        nextPage: null,
-        prevPage: null,
-        query: query,
-      },
+      data: result || EMPTY_RESPONSE,
       error: null,
     });
   } catch (error) {
     console.error("Search API error:", error);
-    const limit = request.nextUrl.searchParams.get("limit") || "10";
     return NextResponse.json(
       {
-        data: {
-          hits: [],
-          page: 1,
-          totalPages: 0,
-          totalResults: 0,
-          limit: parseInt(limit),
-          hasNextPage: false,
-          hasPrevPage: false,
-          nextPage: null,
-          prevPage: null,
-          query: "",
-        },
+        data: EMPTY_RESPONSE,
         error:
           error instanceof Error
             ? error.message
