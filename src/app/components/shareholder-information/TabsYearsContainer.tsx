@@ -134,6 +134,9 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
         );
         return <CkEditorListing reportLayout={ckEditorLayouts} />;
 
+      case "reports.contact-details":
+        return <ContactDetails dataNew={data[activeTab]} />;
+
       default:
         return null;
     }
@@ -168,7 +171,7 @@ export default function TabsYearsContainer({ data }: TabsYearsContainerProps) {
       </div>
 
       {/* Render appropriate template based on category */}
-      {activeTab === 3 ? <ContactDetails dataNew={data[activeTab]} /> : getTemplateComponent()}
+      {getTemplateComponent()}
     </div>
   );
 }
