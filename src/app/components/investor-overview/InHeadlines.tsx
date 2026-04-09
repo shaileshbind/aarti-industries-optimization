@@ -190,7 +190,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
             );
             if (release.href) {
               return (
-                <Link href={release.href} target="_blank" key={index}>
+                <Link href={`/press-releases/${release.href}`} target="_blank" key={index}>
                   {content}
                 </Link>
               );

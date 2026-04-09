@@ -62,7 +62,7 @@ export const GlobalCursor = () => {
       if (isDesktop) {
         setVisible(visible);
         setTitle(title || null);
-        document.body.style.cursor = visible ? "pointer" : "pointer";
+        document.body.style.cursor = visible ? "pointer" : "";
       }
     };
   }, [isDesktop]);

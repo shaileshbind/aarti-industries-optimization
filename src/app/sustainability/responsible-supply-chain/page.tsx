@@ -1,15 +1,15 @@
-import SustainabilityTransparancy from "../components/supply-chain/SustainabilityTransparancy";
-import KeyRawMaterials from "../components/supply-chain/KeyRawMaterials";
-import SupplyChainBanner from "../components/supply-chain/SupplyBanner";
+import SustainabilityTransparancy from "../../components/supply-chain/SustainabilityTransparancy";
+import KeyRawMaterials from "../../components/supply-chain/KeyRawMaterials";
+import SupplyChainBanner from "../../components/supply-chain/SupplyBanner";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import SEO from "../components/SEO";
-import DetailsContainer from "../components/sections/DetailsContainer";
-import RDInfo from "../components/sections/RDInfo";
-import GloballyCertified from "../components/GloballyCertified";
-import FrameworkForged from "../components/sections/FrameworkForged";
-import DrivingCrossFunctional from "../components/sections/DrivingCrossFunctional";
-import ContactBanner from "../components/ContactBanner";
+import SEO from "../../components/SEO";
+import DetailsContainer from "../../components/sections/DetailsContainer";
+import RDInfo from "../../components/sections/RDInfo";
+import GloballyCertified from "../../components/GloballyCertified";
+import FrameworkForged from "../../components/sections/FrameworkForged";
+import DrivingCrossFunctional from "../../components/sections/DrivingCrossFunctional";
+import ContactBanner from "../../components/ContactBanner";
 
 export default async function page() {
   const [data, globallyCertifiedData] = await Promise.all([
@@ -38,7 +38,7 @@ export default async function page() {
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
         canonical={
-          seo?.canonical ?? "https://www.aarti-industries.com/responsible-supply-chain"
+          seo?.canonical ?? "https://www.aarti-industries.com/sustainability/responsible-supply-chain"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

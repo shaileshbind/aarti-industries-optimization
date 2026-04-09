@@ -7,6 +7,7 @@ import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 import SEO from "./components/SEO";
 import AuthProvider from "./components/AuthProvider";
 import ConditionalLayout from "./components/ConditionalLayout";
+import SearchHighlighter from "./components/SearchHighlighter";
 import type { Metadata } from "next";
 import clsx from "clsx";
 import Script from "next/script";
@@ -82,7 +83,10 @@ export default async function RootLayout({
           <LenisProvider>
             <GSAPProvider>
               <ConditionalLayout headerData={data?.Header} footerData={data?.Footer}>
-                <main>{children}</main>
+                <main>
+                  <SearchHighlighter />
+                  {children}
+                </main>
               </ConditionalLayout>
             </GSAPProvider>
           </LenisProvider>

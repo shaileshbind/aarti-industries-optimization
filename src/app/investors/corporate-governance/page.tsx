@@ -1,13 +1,13 @@
-import OurPhilosophy from "../components/corporateGovernance/OurPhilosophy";
-import CorporateBanner from "../components/corporateGovernance/CorporateBanner";
-import GloballyCertified from "../components/GloballyCertified";
+import OurPhilosophy from "../../components/corporateGovernance/OurPhilosophy";
+import CorporateBanner from "../../components/corporateGovernance/CorporateBanner";
+import GloballyCertified from "../../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import OurCodeAndPolicies from "../components/corporateGovernance/OurCodeAndPolicies";
-import MeetMinds from "../components/sections/MeetMinds";
-import ContactBanner from "../components/ContactBanner";
-import DirectorsNcommittees from "../components/corporateGovernance/DirectorsNcommittees";
-import SEO from "../components/SEO";
+import OurCodeAndPolicies from "../../components/corporateGovernance/OurCodeAndPolicies";
+import MeetMinds from "../../components/sections/MeetMinds";
+import ContactBanner from "../../components/ContactBanner";
+import DirectorsNcommittees from "../../components/corporateGovernance/DirectorsNcommittees";
+import SEO from "../../components/SEO";
 
 const page = async () => {
   const [data, globallyCertifiedData] = await Promise.all([
@@ -33,7 +33,7 @@ const page = async () => {
         keywords={seo?.keywords}
         canonical={
           seo?.canonical ??
-          "https://www.aarti-industries.com/corporate-governance"
+          "https://www.aarti-industries.com/investors/corporate-governance"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

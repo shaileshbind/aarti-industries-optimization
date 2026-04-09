@@ -7,7 +7,7 @@ import SEO from "../../SEO";
 export default async function OrangeCardCategoryListingPage({
   template,
 }: OrangeCardCategoryListingPageProps) {
-  const categories = await getData("/disclosures-reports");
+  const categories = await getData("/disclosures-reports?populate=*");
   const data = await getDisclosureData(`/get-disclosure-report/${template}`);
   const seo = data?.seo;
 

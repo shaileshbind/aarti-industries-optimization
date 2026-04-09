@@ -9,6 +9,7 @@ type EventCardProps = {
   event: {
     title: string;
     date?: string;
+    end_date?: string;
     location?: string;
     description?: string;
     image: {
@@ -29,8 +30,16 @@ const EventCard = ({
   onButtonClick,
   pastEvent = false,
 }: EventCardProps) => {
-  const { title, date, location, description, image, mobImage, ctaButton } =
-    event;
+  const {
+    title,
+    date,
+    end_date,
+    location,
+    description,
+    image,
+    mobImage,
+    ctaButton,
+  } = event;
   const isMobile = useMatchMedia("(max-width: 768px)");
   return (
     <div className="group relative transition-all duration-300">
@@ -60,7 +69,10 @@ const EventCard = ({
       <div className="mt-[16px]">
         {/* Date */}
         {date && (
-          <BodyText3 className="text-grey-300 mb-[8px]">{date}</BodyText3>
+          <BodyText3 className="text-grey-300 mb-[8px]">
+            {" "}
+            {end_date ? `${date} - ${end_date}` : date}
+          </BodyText3>
         )}
 
         {/* Event Title */}

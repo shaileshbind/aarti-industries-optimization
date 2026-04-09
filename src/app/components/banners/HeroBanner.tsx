@@ -11,7 +11,7 @@ import clsxN from "../../../../utils/clsxN";
 
 const GeneralPopup = dynamic(
   () => import("../Popups/GeneralPopup").then((m) => m.default),
-  { ssr: false }
+  { ssr: false },
 );
 
 const SplitText = dynamic(() => import("../SplitText").then((m) => m.default), {
@@ -44,9 +44,13 @@ type HeroBannerProps = {
   popupButton?: boolean;
   popupButtonTitle?: string;
   useTargetBlank?: boolean;
+  mobImageClassName?: string;
+  imageClassName?: string;
 };
 const HeroBanner = ({
   centerText,
+  imageClassName,
+  mobImageClassName,
   leftDesc,
   title,
   tag,
@@ -81,7 +85,8 @@ const HeroBanner = ({
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
-  const [isMobImageLoading, setIsMobImageLoading] = useState<boolean>(!!mobImage);
+  const [isMobImageLoading, setIsMobImageLoading] =
+    useState<boolean>(!!mobImage);
   const isTablet = useMatchMedia("(max-width:768px)");
   // Call hooks unconditionally at the top level
   const titleCasedSecondaryBtnFormTitle = useTitleCase(
@@ -190,7 +195,7 @@ const HeroBanner = ({
                   fetchPriority="high"
                   className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
                     isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
-                  }`}
+                  } ${imageClassName}`}
                   onLoad={() => setIsImageLoading(false)}
                 />
               )}
@@ -203,8 +208,10 @@ const HeroBanner = ({
                   priority
                   fetchPriority="high"
                   className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
-                    isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
-                  }`}
+                    isMobImageLoading
+                      ? "blur-md opacity-50"
+                      : "blur-0 opacity-100"
+                  } ${mobImageClassName}`}
                   onLoad={() => setIsMobImageLoading(false)}
                 />
               )}
@@ -373,7 +380,10 @@ const HeroBanner = ({
             )}
             {title && (
               <LetterReveal delay={0.1}>
-                <H1 className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full" applyTitleCase={true}>
+                <H1
+                  className="text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] mt-[12px] max-w-full lg:max-w-[480px] 2xl:max-w-full"
+                  applyTitleCase={true}
+                >
                   {title}
                 </H1>
               </LetterReveal>
@@ -445,7 +455,9 @@ const HeroBanner = ({
                 priority
                 fetchPriority="high"
                 className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
-                  isMobImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  isMobImageLoading
+                    ? "blur-md opacity-50"
+                    : "blur-0 opacity-100"
                 }`}
                 onLoad={() => setIsMobImageLoading(false)}
               />

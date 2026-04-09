@@ -84,13 +84,24 @@ export type YearAndQuarterLayout = {
   }[];
 };
 
+// Contact Details Layout
+export type ContactDetailsLayout = {
+  __component: "reports.contact-details";
+  id?: number;
+  category?: string;
+  subCategory?: string;
+  contactDetails?: ContactDetailsRawEntry[];
+  address?: ContactDetailsRawEntry;
+};
+
 // Union type for all possible report layouts
 export type ReportLayout =
   | SubCategoryWithReportLayout
   | SubCategoryWithCkLayout
   | YearAndReportLayout
   | YearAndQuarterLayout
-  | SimpleListLayout;
+  | SimpleListLayout
+  | ContactDetailsLayout;
 
 /** Single contact entry from API (reports.contact-details) – tag, name, address, mobileNo, location */
 export type ContactDetailsRawEntry = {
