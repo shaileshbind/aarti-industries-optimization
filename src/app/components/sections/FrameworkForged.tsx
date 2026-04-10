@@ -271,7 +271,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             </div>
 
             {card?.length > 0 && (
-              <div ref={containerRef} className="w-full"
+              <div ref={containerRef} className="relative w-full"
                 onTouchStart={handleSliderTouchStart}
                 onTouchMove={handleSliderTouchMove}
                 onTouchEnd={handleSliderTouchEnd}
@@ -442,7 +442,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                         </div>
                         <div className="lg:hidden block mt-5">
                           <BodyText2 className="text-orange-200">
-                            0{index + 1}-<span>0{card?.length}</span>
+                            0{activeIndex + 1}-<span>0{card?.length}</span>
                           </BodyText2>
                         </div>
                         <SubH1 className={`text-blue-200 my-3`}>
@@ -497,6 +497,42 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     );
                   })}
                 </Swiper>
+              <div
+                className="pointer-events-none absolute right-0 z-30 flex items-center gap-2 lg:hidden"
+                style={{ top: "calc(100vw - 20px)" }}
+              >
+                <button
+                  type="button"
+                  aria-label="Previous"
+                  disabled={activeIndex === 0}
+                  onClick={() => swiperRef.current?.slidePrev()}
+                  className="pointer-events-auto cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt=""
+                    width={26}
+                    height={26}
+                    sizes="26px"
+                    className="rotate-180"
+                  />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next"
+                  disabled={activeIndex >= card?.length - 1}
+                  onClick={() => swiperRef.current?.slideNext()}
+                  className="pointer-events-auto cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt=""
+                    width={26}
+                    height={26}
+                    sizes="26px"
+                  />
+                </button>
+              </div>
               </div>
             )}
           </div>

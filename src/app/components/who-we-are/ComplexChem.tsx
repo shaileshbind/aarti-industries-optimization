@@ -9,6 +9,7 @@ import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { FadeInReveal } from "../ScrollReveal";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const { sectionTitle, content, description } = data;
@@ -24,6 +25,60 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
   const contentLengthRef = useRef(content?.length || 1);
   const startProgressRef = useRef<((index: number) => void) | null>(null);
   const isMobile = useMatchMedia("(max-width:820px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      setProgress(0);
+      setExpanded(false);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          activeRef.current = panelIndex;
+          setActive(panelIndex);
+          setExpanded(`panel${panelIndex}`);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
 
   // Update refs when values change
   useEffect(() => {
@@ -57,20 +112,25 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
       if (progressPercent < 100) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
-        // Only proceed to next if still in viewport
-        if (isInViewportRef.current && startProgressRef.current) {
+        if (isInViewportRef.current) {
           const nextIndex = (index + 1) % contentLengthRef.current;
-          activeRef.current = nextIndex;
-          setActive(nextIndex);
-          setExpanded(`panel${nextIndex}`);
-          swiperRef.current?.slideToLoop(nextIndex);
-          startProgressRef.current(nextIndex);
+          if (isMobile) {
+            mobileScrollAndExpand(nextIndex);
+          } else {
+            activeRef.current = nextIndex;
+            setActive(nextIndex);
+            setExpanded(`panel${nextIndex}`);
+            swiperRef.current?.slideToLoop(nextIndex);
+            if (startProgressRef.current) {
+              startProgressRef.current(nextIndex);
+            }
+          }
         }
       }
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, []);
+  }, [isMobile, mobileScrollAndExpand]);
 
   // Store startProgress in ref
   useEffect(() => {
@@ -120,16 +180,28 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
     };
   }, []);
 
+  // Restart progress after mobile scroll+expand animation completes
+  useEffect(() => {
+    if (!isMobile || isMobileAnimating || !isInViewportRef.current) return;
+    if (expanded === false) return;
+    if (startProgressRef.current) {
+      startProgressRef.current(activeRef.current);
+    }
+  }, [isMobile, isMobileAnimating, expanded]);
+
   const handleChange =
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
       const panelIndex = parseInt(panel.replace("panel", ""));
       if (isExpanded) {
-        activeRef.current = panelIndex;
-        setActive(panelIndex);
-        setExpanded(panel);
-        // Only start progress if in viewport
-        if (isInViewportRef.current && startProgressRef.current) {
-          startProgressRef.current(panelIndex);
+        if (isMobile) {
+          mobileScrollAndExpand(panelIndex);
+        } else {
+          activeRef.current = panelIndex;
+          setActive(panelIndex);
+          setExpanded(panel);
+          if (isInViewportRef.current && startProgressRef.current) {
+            startProgressRef.current(panelIndex);
+          }
         }
       }
     };
@@ -151,7 +223,7 @@ const ComplexChem: React.FC<ComplexChemProps> = ({ data }) => {
         <FadeInReveal delay={0.6}>
           <div className="mt-[30px] md:mt-[60px]">
             {content?.map((item, index) => (
-              <div key={index} className="relative complex-chemistry">
+              <div key={index} className="relative complex-chemistry" ref={(el) => { accordionRefs.current[index] = el; }}>
                 <FaqAccordion
                   faqTitle={
                     <div

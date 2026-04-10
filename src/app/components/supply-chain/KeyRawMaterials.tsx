@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BodyText2, H3, SubH2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import Image from "next/image";
 import { KeyRawMaterialsProps } from "@/app/types/supply-chain.type";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
   const { title, description, raw_materials } = data;
@@ -14,6 +15,50 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setexpanded(-1);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setexpanded(panelIndex);
+          expandTimerRef.current = null;
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
 
   useEffect(() => {
     if (!containerRef.current || !stickyRef.current) return;
@@ -51,10 +96,17 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
       {raw_materials?.length > 0 && (
         <div className="lg:w-1/2 mt-6 lg:mt-0">
           {raw_materials?.map((item, index) => (
+            <div key={"accordion_wrap_" + index} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
             <MainAccordion
               key={"accordion" + index}
               expanded={expanded === index}
-              onChange={() => setexpanded(index)}
+              onChange={() => {
+                if (isMobile) {
+                  mobileScrollAndExpand(index);
+                } else {
+                  setexpanded(index);
+                }
+              }}
               borderBottom={
                 index === raw_materials?.length - 1
                   ? "none"
@@ -97,6 +149,7 @@ export default function KeyRawMaterials({ data }: KeyRawMaterialsProps) {
                 </div>
               </div>
             </MainAccordion>
+            </div>
           ))}
         </div>
       )}

@@ -225,7 +225,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               0{activeIndex + 1}-<span>0{card?.length}</span>
             </BodyText2>
 
-            <div className="hidden lg:block">
+            <div>
               <div className="flex gap-3">
                 <Image
                   src="/images/home/chevron-right-orange.svg"

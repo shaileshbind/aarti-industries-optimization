@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH1, SubH2 } from "../Typography2";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -10,6 +10,8 @@ import clsxN from "../../../../utils/clsxN";
 import Button from "../Button";
 import { EnvRespChemProps } from "@/app/types/environment.type";
 import { FadeInReveal } from "../ScrollReveal";
+import { useLenis } from "@/app/contexts/LenisContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const EnvResp = ({ data }: EnvRespChemProps) => {
   const { cardWithCategory, title } = data;
@@ -19,16 +21,128 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showMore, setshowMore] = useState<boolean>(false);
   const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
   const pausedAtRef = useRef<number>(0);
+  const isMobile = useMatchMedia("(max-width: 1279px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const [mobileProgress, setMobileProgress] = useState(0);
+  const mobileRafRef = useRef<number | null>(null);
+  const mobileStartTimeRef = useRef<number>(0);
+  const [isMobileInViewport, setIsMobileInViewport] = useState(false);
 
-  const startProgress = (resumeFrom: number = 0) => {
-    // Cancel any existing animation
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
     }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
 
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      if (mobileRafRef.current) {
+        cancelAnimationFrame(mobileRafRef.current);
+      }
+      setMobileProgress(0);
+      setExpanded(false);
+      setshowMore(false);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, { offset: -offset, duration: 0.8 });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setActive(panelIndex);
+          setExpanded(`panel${panelIndex}`);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
+
+  // Mobile progress bar autoplay (15s, viewport-gated)
+  const startMobileProgress = useCallback(() => {
+    if (mobileRafRef.current) cancelAnimationFrame(mobileRafRef.current);
+    setMobileProgress(0);
+    mobileStartTimeRef.current = performance.now();
+    const duration = 15000;
+
+    const animate = (time: number) => {
+      if (!isMobileInViewport) return;
+      const elapsed = time - mobileStartTimeRef.current;
+      const percent = Math.min((elapsed / duration) * 100, 100);
+      setMobileProgress(percent);
+
+      if (percent < 100) {
+        mobileRafRef.current = requestAnimationFrame(animate);
+      } else {
+        const nextIndex = (active + 1) % (cardWithCategory?.length || 1);
+        mobileScrollAndExpand(nextIndex);
+      }
+    };
+    mobileRafRef.current = requestAnimationFrame(animate);
+  }, [active, cardWithCategory?.length, isMobileInViewport, mobileScrollAndExpand]);
+
+  // Mobile viewport observer
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsMobileInViewport(entry.isIntersecting);
+          if (!entry.isIntersecting && mobileRafRef.current) {
+            cancelAnimationFrame(mobileRafRef.current);
+            setMobileProgress(0);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // Kick off mobile progress when accordion is expanded + in viewport
+  useEffect(() => {
+    if (!isMobile || isMobileAnimating || !isMobileInViewport) return;
+    if (expanded === false) return;
+    startMobileProgress();
+    return () => {
+      if (mobileRafRef.current) cancelAnimationFrame(mobileRafRef.current);
+    };
+  }, [expanded, isMobile, isMobileAnimating, isMobileInViewport, startMobileProgress]);
+
+  // Desktop autoplay (unchanged, skipped on mobile)
+  const startProgress = (resumeFrom: number = 0) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     startTimeRef.current = performance.now();
     const duration = 10000;
 
@@ -43,7 +157,6 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       if (progressPercent < 100) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
-        // Move to next slide
         const nextIndex = (active + 1) % cardWithCategory.length;
         setActive(nextIndex);
         setExpanded(`panel${nextIndex}`);
@@ -69,7 +182,6 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     startProgress(pausedAtRef.current);
   };
 
-  // Handle hover state changes
   useEffect(() => {
     if (isHovered) {
       pauseProgress();
@@ -78,35 +190,24 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     }
   }, [isHovered]);
 
-  // Start autoplay on mount and when active changes
+  // Desktop-only autoplay restart
   useEffect(() => {
+    if (isMobile) return;
     pausedAtRef.current = 0;
     setProgress(0);
     startProgress(0);
-
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [active, cardWithCategory?.length]);
+  }, [active, cardWithCategory?.length, isMobile]);
 
-  // Handle tab click
   const handleTabClick = (index: number) => {
     if (index === active) return;
-
-    // Cancel current animation
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
     pausedAtRef.current = 0;
     setActive(index);
     setExpanded(`panel${index}`);
-    if (swiperRef.current) {
-      swiperRef.current.slideToLoop(index);
-    }
-
+    if (swiperRef.current) swiperRef.current.slideToLoop(index);
     setshowMore(false);
   };
 
@@ -114,17 +215,20 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
       const panelIndex = parseInt(panel.replace("panel", ""));
       if (isExpanded) {
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current);
+        if (isMobile) {
+          mobileScrollAndExpand(panelIndex);
+        } else {
+          if (rafRef.current) cancelAnimationFrame(rafRef.current);
+          pausedAtRef.current = 0;
+          setActive(panelIndex);
+          setExpanded(panel);
         }
-        pausedAtRef.current = 0;
-        setActive(panelIndex);
-        setExpanded(panel);
       }
     };
 
   return (
     <FadeInReveal className="my-[50px] lg:my-[100px] container mx-[auto]">
+      <div ref={sectionRef}>
       <H2 className="max-w-[760px] ">{title}</H2>
       {/* Desktop */}
       <div
@@ -340,7 +444,11 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
       {cardWithCategory?.length > 0 && (
         <div className="block xl:hidden w-full py-[30px]">
           {cardWithCategory?.map((item, index: number) => (
-            <div key={item.id} className="relative">
+            <div
+              key={item.id}
+              className="relative"
+              ref={(el) => { accordionRefs.current[index] = el; }}
+            >
               <FaqAccordion
                 faqTitle={
                   <SubH1
@@ -513,20 +621,25 @@ const EnvResp = ({ data }: EnvRespChemProps) => {
               />
               {/* Grey line */}
               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
-              {/* Orange progress bar only for active accordion */}
-              {index === active && (
-                <div
-                  className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
-                  style={{
-                    width: `${progress}%`,
-                    transition: "none",
-                  }}
-                />
-              )}
+              {/* Orange progress bar */}
+              {isMobile
+                ? expanded === `panel${index}` && (
+                    <div
+                      className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                      style={{ width: `${mobileProgress}%`, transition: "none" }}
+                    />
+                  )
+                : index === active && (
+                    <div
+                      className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                      style={{ width: `${progress}%`, transition: "none" }}
+                    />
+                  )}
             </div>
           ))}
         </div>
       )}
+      </div>
     </FadeInReveal>
   );
 };
