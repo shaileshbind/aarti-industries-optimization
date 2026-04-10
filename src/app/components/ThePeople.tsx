@@ -30,6 +30,7 @@ interface ThePeopleProps {
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -126,7 +127,7 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             Autoplay,
           ]}
             autoplay={{
-              delay: 15000,
+              delay: isMobile ? 10000 : 15000,
               disableOnInteraction: false,
             }}
             onSwiper={(swiper) => {

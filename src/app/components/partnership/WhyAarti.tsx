@@ -34,7 +34,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     }
 
     startTimeRef.current = Date.now();
-    const duration = 15000; // 5 seconds
+    const duration = isMobile ? 10000 : 15000;
     const updateInterval = 16; // ~60fps
 
     progressIntervalRef.current = setInterval(() => {
@@ -119,7 +119,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
         return nextIndex;
       });
-    }, 15000);
+    }, isMobile ? 10000 : 15000);
   };
 
   const stopAutoRotation = () => {

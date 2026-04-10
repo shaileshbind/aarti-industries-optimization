@@ -35,6 +35,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const { leftText, rightText } = data;
   const { details } = sliderData;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -517,7 +518,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       Autoplay,
                     ]}
                     autoplay={{
-                      delay: 15000,
+                      delay: isMobile ? 10000 : 15000,
                       disableOnInteraction: false,
                     }}
                     navigation={{

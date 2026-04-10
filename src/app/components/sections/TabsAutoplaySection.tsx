@@ -50,6 +50,7 @@ const TabsAutoplaySection = ({
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const imageSize = 20;
   const isTablet = useMatchMedia("(max-width:1280px)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   
   const startProgress = useCallback(() => {
     if (rafRef.current) {
@@ -59,7 +60,7 @@ const TabsAutoplaySection = ({
     const initialProgress = pausedProgressRef.current;
     setProgress(initialProgress);
     startTimeRef.current = performance.now();
-    const duration = 15000;
+    const duration = isMobile ? 10000 : 15000;
 
     const animate = (time: number) => {
       if (isPaused || !isInViewport) {

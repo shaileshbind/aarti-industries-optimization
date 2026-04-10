@@ -18,6 +18,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
 }) => {
   const { cards } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -302,7 +303,7 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
                   Autoplay,
                 ]}
                 autoplay={{
-                  delay: 15000,
+                  delay: isMobile ? 10000 : 15000,
                   disableOnInteraction: false,
                 }}
                 navigation={{

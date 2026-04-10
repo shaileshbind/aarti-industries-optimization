@@ -527,7 +527,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       Autoplay,
                     ]}
                     autoplay={{
-                      delay: 15000,
+                      delay: isTablet ? 10000 : 15000,
                       disableOnInteraction: false,
                     }}
                     navigation={{

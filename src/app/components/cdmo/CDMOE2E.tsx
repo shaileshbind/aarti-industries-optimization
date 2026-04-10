@@ -16,6 +16,7 @@ import { useLenis } from "@/app/contexts/LenisContext";
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [active, setActive] = useState(0);
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -136,7 +137,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                 Autoplay,
               ]}
               autoplay={{
-                delay: 15000,
+                delay: isMobile ? 10000 : 15000,
                 disableOnInteraction: false,
               }}
               navigation={{

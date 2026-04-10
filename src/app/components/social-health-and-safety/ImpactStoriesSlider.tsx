@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BodyText1, BodyText2, H3, SubH1, SubH2 } from "../Typography2";
 import { ImpactStoriesSliderProps } from "@/app/types/social-health-and-safety.type";
 import FaqAccordion from "../FaqAccordian";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const { title, stories = [] } = data || {};
@@ -17,8 +18,9 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const accordionProgressIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const AUTOPLAY_DURATION = 15000;
-  const ACCORDION_AUTOPLAY_DURATION = 15000;
+  const isMobile = useMatchMedia("(max-width:1023px)");
+  const AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
+  const ACCORDION_AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
 
   // Intersection Observer for viewport detection
   useEffect(() => {

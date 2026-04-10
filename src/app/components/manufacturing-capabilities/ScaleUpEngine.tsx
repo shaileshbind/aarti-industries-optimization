@@ -10,11 +10,13 @@ import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";
 import { Autoplay } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
 export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const { title, description, card } = data;
 
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -149,7 +151,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
               effect="fade"
               modules={[Autoplay]}
               autoplay={{
-                delay: 15000,
+                delay: isMobile ? 10000 : 15000,
                 disableOnInteraction: false,
               }}
               speed={800}
