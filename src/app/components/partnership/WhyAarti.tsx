@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { BodyText2, H2 } from "../Typography2";
 import MainAccordion from "../Accordion";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { WhyAartiProps } from "@/app/types/partnership.type";
 import { FadeInReveal } from "../ScrollReveal";
-
+import { useLenis } from "@/app/contexts/LenisContext";
 interface LayoutImageProps {
   src: string;
   imageFade?: boolean;
@@ -27,6 +27,68 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   const startTimeRef = useRef<number>(0);
   const pausedProgressRef = useRef<number>(0);
   const isMobile = useMatchMedia("(max-width:820px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const scrollExpandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollCollapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearScrollTimers = () => {
+    if (scrollExpandTimerRef.current) {
+      clearTimeout(scrollExpandTimerRef.current);
+      scrollExpandTimerRef.current = null;
+    }
+    if (scrollCollapseTimerRef.current) {
+      clearTimeout(scrollCollapseTimerRef.current);
+      scrollCollapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearScrollTimers();
+      setIsMobileAnimating(true);
+
+      // Stop autoplay and progress during animation
+      stopAutoRotation();
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      setProgressWidth(0);
+      pausedProgressRef.current = 0;
+      setExpanded(-1);
+
+      scrollCollapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        scrollExpandTimerRef.current = setTimeout(() => {
+          setExpanded(panelIndex);
+          setImageFade(false);
+          setTimeout(() => {
+            setactiveImage(content?.[panelIndex]?.image?.url);
+            setImageFade(true);
+          }, 300);
+          scrollExpandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        scrollCollapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo, content],
+  );
 
   const startProgressAnimation = (startFrom: number = 0) => {
     if (progressIntervalRef.current) {
@@ -34,7 +96,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     }
 
     startTimeRef.current = Date.now();
-    const duration = 15000; // 5 seconds
+    const duration = isMobile ? 10000 : 15000;
     const updateInterval = 16; // ~60fps
 
     progressIntervalRef.current = setInterval(() => {
@@ -63,6 +125,11 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   };
 
   const handleAccordion = (index: number) => {
+    if (isMobile) {
+      mobileScrollAndExpand(index);
+      return;
+    }
+
     setExpanded(index);
     setImageFade(false);
 
@@ -71,11 +138,9 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       setImageFade(true);
     }, 300);
 
-    // Reset progress
     setProgressWidth(0);
     pausedProgressRef.current = 0;
 
-    // Clear existing intervals
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -83,7 +148,6 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       clearInterval(progressIntervalRef.current);
     }
 
-    // Start auto rotation and progress if not hovered
     if (!isHovered) {
       startAutoRotation();
       startProgressAnimation(0);
@@ -99,19 +163,20 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       setExpanded((prevExpanded) => {
         const nextIndex = (prevExpanded + 1) % content.length;
 
-        // Fade out image
-        setImageFade(false);
+        if (isMobile) {
+          mobileScrollAndExpand(nextIndex);
+          return prevExpanded;
+        }
 
+        setImageFade(false);
         setTimeout(() => {
           setactiveImage(content[nextIndex]?.image?.url);
           setImageFade(true);
         }, 300);
 
-        // Reset progress
         setProgressWidth(0);
         pausedProgressRef.current = 0;
 
-        // Start new progress animation
         if (progressIntervalRef.current) {
           clearInterval(progressIntervalRef.current);
         }
@@ -119,7 +184,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
 
         return nextIndex;
       });
-    }, 15000);
+    }, isMobile ? 10000 : 15000);
   };
 
   const stopAutoRotation = () => {
@@ -144,6 +209,14 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       }
     }
   }, [isHovered]);
+
+  // Restart autoplay after mobile scroll+expand completes
+  useEffect(() => {
+    if (!isMobile || isMobileAnimating) return;
+    if (expanded < 0) return;
+    startAutoRotation();
+    startProgressAnimation(0);
+  }, [isMobile, isMobileAnimating, expanded]);
 
   // Initial setup
   useEffect(() => {
@@ -176,6 +249,7 @@ export default function WhyAarti({ data }: WhyAartiProps) {
               <div
                 key={`accordion-${index}`}
                 className="relative"
+                ref={(el) => { accordionRefs.current[index] = el; }}
                 onMouseEnter={() => !isMobile && setIsHovered(true)}
                 onMouseLeave={() => !isMobile && setIsHovered(false)}
               >

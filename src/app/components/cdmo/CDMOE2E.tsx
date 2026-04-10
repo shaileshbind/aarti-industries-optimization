@@ -16,6 +16,7 @@ import { useLenis } from "@/app/contexts/LenisContext";
 const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
   const { title, content, description } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [active, setActive] = useState(0);
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -136,7 +137,7 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                 Autoplay,
               ]}
               autoplay={{
-                delay: 15000,
+                delay: isMobile ? 10000 : 15000,
                 disableOnInteraction: false,
               }}
               navigation={{
@@ -221,6 +222,18 @@ const CDMOE2E: React.FC<CDMOE2EProps> = ({ data }) => {
                   </SwiperSlide>
                 ))}
             </Swiper>
+            {/* Mobile arrows only*/}
+            <div
+              className="lg:hidden absolute right-0 z-10 flex items-center gap-2"
+              style={{ top: "calc(100vw - 22px)" }}
+            >
+              <button className="swiper-button-prev-useBySection transition-opacity cursor-pointer touch-manipulation">
+                <Image src="/images/home/chevron-right-orange.svg" alt="Previous" width={26} height={26} className="rotate-180" />
+              </button>
+              <button className="swiper-button-next-useBySection transition-opacity cursor-pointer touch-manipulation">
+                <Image src="/images/home/chevron-right-orange.svg" alt="Next" width={26} height={26} />
+              </button>
+            </div>
 
             {/* Swiper Navigation */}
             <div className="absolute top-0 right-0 py-2 z-10 hidden lg:block bg-white">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SearchBar from "../SearchBar";
 import { BodyText1, H1, SubH1 } from "../Typography2";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,6 +9,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import clsxN from "../../../../utils/clsxN";
+import SmoothScrollContainer from "../SmoothScrollContainer";
 
 interface SuggestionItem {
   id: string;
@@ -201,6 +202,11 @@ export default function SearchResults() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
+  const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const allResults = useMemo(() => {
     if (!searchedData?.suggestions) return [];
     return Object.entries(searchedData.suggestions).flatMap(
@@ -216,8 +222,64 @@ export default function SearchResults() {
     currentPage * ITEMS_PER_PAGE,
   );
 
+  const fetchAutocomplete = useCallback(async (query: string) => {
+    if (!query.trim() || query.trim().length < 2) {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/search/autocomplete?q=${encodeURIComponent(query)}`,
+      );
+      const json = await response.json();
+      const result = json?.data;
+      const words: string[] = Array.isArray(result?.words) ? result.words : [];
+      setAutocompleteResults(words);
+      setShowAutocomplete(words.length > 0);
+    } catch {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    }
+  }, []);
+
+  const debouncedAutocomplete = useCallback(
+    (query: string) => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = setTimeout(() => fetchAutocomplete(query), 300);
+    },
+    [fetchAutocomplete],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(e.target as Node)) {
+        setShowAutocomplete(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleAutocompleteSelect = (word: string) => {
+    setSearchValue(word);
+    setShowAutocomplete(false);
+    setAutocompleteResults([]);
+    router.push(
+      `/search-results?search=${encodeURIComponent(word.trim())}&page=1`,
+    );
+  };
+
   const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
+    setShowAutocomplete(false);
     if (!searchValue.trim()) {
       setSearchedData(null);
       setHasSearched(false);
@@ -247,6 +309,10 @@ export default function SearchResults() {
     if (!value.trim()) {
       setSearchedData(null);
       setHasSearched(false);
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    } else {
+      debouncedAutocomplete(value);
     }
   };
 
@@ -295,17 +361,34 @@ export default function SearchResults() {
   return (
     <>
       <div className="flex flex-col gap-4 py-10 md:pb-20 md:pt-30">
-        <SubH1 className="text-blue-200 font-medium lg:!text-[30px]">
+        <SubH1 className="text-blue-200 font-medium lg:text-[30px]!">
           Search
         </SubH1>
-        <SearchBar
-          value={searchValue}
-          onChange={handleChange}
-          handleSearch={handleSearch}
-          placeholder="Find products, reports & more"
-          headerSearch={true}
-          className="border-[2px] border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
-        />
+        <div ref={autocompleteRef} className="relative max-w-full md:max-w-[560px]">
+          <SearchBar
+            value={searchValue}
+            onChange={handleChange}
+            handleSearch={handleSearch}
+            placeholder="Find products, reports & more"
+            headerSearch={true}
+            className="border-2 border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
+          />
+          {showAutocomplete && autocompleteResults.length > 0 && (
+            <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto scrollbar">
+              <ul>
+                {autocompleteResults.map((word, idx) => (
+                  <li
+                    key={`${word}-${idx}`}
+                    className="px-4 py-2.5 text-sm text-gray-700 cursor-pointer hover:bg-[#FFF3ED] hover:text-[#F36633] transition-colors"
+                    onMouseDown={() => handleAutocompleteSelect(word)}
+                  >
+                    {word}
+                  </li>
+                ))}
+              </ul>
+            </SmoothScrollContainer>
+          )}
+        </div>
 
         {hasResults && !isLoading && (
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -319,7 +402,21 @@ export default function SearchResults() {
 
       <div className="flex flex-col gap-4 pb-20">
         {isLoading && (
-          <SubH1 className="text-center w-full py-10">Searching...</SubH1>
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between border-b border-gray-200 py-4 lg:px-4 animate-pulse"
+              >
+                <div className="flex flex-col gap-2 flex-1 min-w-0">
+                  <div className="h-5 w-2/5 bg-gray-200 rounded" />
+                  <div className="h-3.5 w-4/5 bg-gray-100 rounded" />
+                  <div className="h-3.5 w-3/5 bg-gray-100 rounded" />
+                </div>
+                <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0" />
+              </div>
+            ))}
+          </div>
         )}
 
         {!isLoading &&
@@ -335,7 +432,6 @@ export default function SearchResults() {
         {!isLoading && hasSearched && !hasResults && (
           <H1
             className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]"
-            applyTitleCase={true}
           >
             No results found for &apos;{searchValue}&apos;.
           </H1>
