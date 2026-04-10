@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useLayoutEffect, useState, RefObject } from "react";
+import React, { useRef, useLayoutEffect, useState, useCallback, RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FadeInReveal } from "../ScrollReveal";
@@ -11,6 +11,7 @@ import GeneralPopup from "../Popups/GeneralPopup";
 import MainAccordion from "../Accordion";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 interface StickyImageProps {
   stickyImageRef?: RefObject<HTMLDivElement>;
@@ -39,6 +40,51 @@ export default function ParallaxCardSection({
   const [expanded, setExpanded] = useState<number>(0);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const isMobile = useMatchMedia("(max-width:820px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setExpanded(-1);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setExpanded(panelIndex);
+          expandTimerRef.current = null;
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
 
   useLayoutEffect(() => {
     gsap.fromTo(
@@ -254,10 +300,12 @@ export default function ParallaxCardSection({
               <StickyImage className="block lg:hidden" src={mobImage?.url} />
             )}
           </FadeInReveal>
-
+ 
+          {/* Mobile - scroll top  */}
           {accordion?.length > 0 && (
             <FadeInReveal className="pt-6 xl:pt-10 accordionWidth">
               {accordion?.map((item, index) => (
+                <div key={`accordion_wrap_${index}`} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
                 <MainAccordion
                   key={`accordion-${index}`}
                   borderBottom={
@@ -266,7 +314,13 @@ export default function ParallaxCardSection({
                       : "1px solid #D9D9D9"
                   }
                   expanded={expanded === index}
-                  onChange={() => setExpanded(index)}
+                  onChange={() => {
+                    if (isMobile) {
+                      mobileScrollAndExpand(index);
+                    } else {
+                      setExpanded(index);
+                    }
+                  }}
                   icon={
                     isMobile && (
                       <Image
@@ -353,6 +407,7 @@ export default function ParallaxCardSection({
                       )}
                   </div>
                 </MainAccordion>
+                </div>
               ))}
             </FadeInReveal>
           )}

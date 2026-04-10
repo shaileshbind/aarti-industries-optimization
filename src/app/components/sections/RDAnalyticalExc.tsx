@@ -38,6 +38,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const isMobile = useMatchMedia("(max-width:1023px)");
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [active, setActive] = useState(0);
+  const [navEdges, setNavEdges] = useState({ isBeginning: true, isEnd: false });
   const triggerRef = useRef<HTMLDivElement>(null);
   const headinLeft = useRef<HTMLSpanElement>(null);
   const headinRight = useRef<HTMLSpanElement>(null);
@@ -53,6 +54,9 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
   const { setMarginBottom } = useMargin();
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const syncNavEdges = useCallback((swiper: SwiperType) => {
+    setNavEdges({ isBeginning: swiper.isBeginning, isEnd: swiper.isEnd });
+  }, []);
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -505,6 +509,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 {/* Swiper section */}
                 {details?.length > 0 && (
                   <div
+                    className="relative"
                     onTouchStart={handleSliderTouchStart}
                     onTouchMove={handleSliderTouchMove}
                     onTouchEnd={handleSliderTouchEnd}
@@ -527,12 +532,16 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                     }}
                     onSwiper={(swiper) => {
                       swiperRef.current = swiper;
+                      syncNavEdges(swiper);
                       // Don't start autoplay immediately - wait for viewport intersection
                       if (swiper.autoplay) {
                         swiper.autoplay.stop();
                       }
                     }}
-                    onSlideChange={(swiper) => setActive(swiper.activeIndex)}
+                    onSlideChange={(swiper) => {
+                      setActive(swiper.activeIndex);
+                      syncNavEdges(swiper);
+                    }}
                     breakpoints={{
                       0: {
                         slidesPerView: 1,
@@ -592,7 +601,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                    
                 </div>
                 <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
-                    0{index + 1}-<span>0{details?.length}</span>
+                    0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
                 </>
                 )}
@@ -647,6 +656,40 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                  {isTablet && (
+                    <div
+                      className="pointer-events-none absolute right-0 z-30 flex items-center gap-2"
+                      style={{ top: "calc(100vw - 12px)" }}
+                    >
+                      <button
+                        type="button"
+                        disabled={navEdges.isBeginning}
+                        onClick={() => swiperRef.current?.slidePrev()}
+                        className="swiper-button-prev-analytical pointer-events-auto relative z-30 cursor-pointer touch-manipulation transition-opacity disabled:pointer-events-none disabled:opacity-30"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Previous"
+                          width={26}
+                          height={26}
+                          className="rotate-180"
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={navEdges.isEnd}
+                        onClick={() => swiperRef.current?.slideNext()}
+                        className="swiper-button-next-analytical pointer-events-auto relative z-30 cursor-pointer touch-manipulation transition-opacity disabled:pointer-events-none disabled:opacity-30"
+                      >
+                        <Image
+                          src="/images/home/chevron-right-orange.svg"
+                          alt="Next"
+                          width={26}
+                          height={26}
+                        />
+                      </button>
+                    </div>
+                  )}
                   </div>
                 )}
                 {/* Mobile progress bar */}

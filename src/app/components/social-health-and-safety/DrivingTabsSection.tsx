@@ -13,6 +13,7 @@ import clsxN from "../../../../utils/clsxN";
 import { DrivingTabsSectionProps as DrivingTabsSectionPropsType } from "@/app/types/social-health-and-safety.type";
 import { FadeInReveal } from "../ScrollReveal";
 import { useLenis } from "@/app/contexts/LenisContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 type DrivingTabsSectionProps = {
   data: DrivingTabsSectionPropsType[];
@@ -38,8 +39,13 @@ const DrivingTabsSection = ({
   const pausedProgressRef = useRef<number>(0);
   const pauseTimeRef = useRef<number>(0);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const isTablet = useMatchMedia("(max-width:1280px)");
 
-  const { stopLenis, startLenis } = useLenis();
+  const { stopLenis, startLenis, scrollTo: lenisScrollTo } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
@@ -74,6 +80,54 @@ const DrivingTabsSection = ({
     }
   }, [startLenis]);
 
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      pausedProgressRef.current = 0;
+      setProgress(0);
+      setExpanded(false);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setExpanded(`panel${panelIndex}`);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
+
   const startProgress = useCallback(() => {
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
@@ -100,19 +154,22 @@ const DrivingTabsSection = ({
       if (progressPercent < 100) {
         rafRef.current = requestAnimationFrame(animate);
       } else {
-        // Move to next slide
-        pausedProgressRef.current = 0;
         const nextIndex = (active + 1) % data.length;
         setActive(nextIndex);
-        setExpanded(`panel${nextIndex}`);
-        if (swiperRef.current) {
-          swiperRef.current.slideToLoop(nextIndex);
+        if (isTablet) {
+          mobileScrollAndExpand(nextIndex);
+        } else {
+          pausedProgressRef.current = 0;
+          setExpanded(`panel${nextIndex}`);
+          if (swiperRef.current) {
+            swiperRef.current.slideToLoop(nextIndex);
+          }
         }
       }
     };
 
     rafRef.current = requestAnimationFrame(animate);
-  }, [active, data.length, isPaused, isInViewport]);
+  }, [active, data.length, isPaused, isInViewport, isTablet, mobileScrollAndExpand]);
 
   // Intersection Observer to detect when section enters viewport
   useEffect(() => {
@@ -151,10 +208,10 @@ const DrivingTabsSection = ({
   }, []);
 
   useEffect(() => {
+    if (isMobileAnimating) return;
     if (isInViewport && !isPaused) {
       startProgress();
     } else {
-      // Pause animation when not in viewport or paused
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
@@ -165,7 +222,7 @@ const DrivingTabsSection = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [active, startProgress, isPaused, isInViewport]);
+  }, [active, startProgress, isPaused, isInViewport, isMobileAnimating]);
 
   const handleMouseEnter = () => {
     setIsPaused(true);
@@ -210,12 +267,16 @@ const DrivingTabsSection = ({
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
       const panelIndex = parseInt(panel.replace("panel", ""));
       if (isExpanded) {
-        if (rafRef.current) {
-          cancelAnimationFrame(rafRef.current);
-        }
-        pausedProgressRef.current = 0;
         setActive(panelIndex);
-        setExpanded(panel);
+        if (isTablet) {
+          mobileScrollAndExpand(panelIndex);
+        } else {
+          if (rafRef.current) {
+            cancelAnimationFrame(rafRef.current);
+          }
+          pausedProgressRef.current = 0;
+          setExpanded(panel);
+        }
       }
     };
   return (
@@ -405,7 +466,7 @@ const DrivingTabsSection = ({
         {data?.length > 0 && (
           <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
             {data?.map((item, index) => (
-              <div key={item.id} className="relative">
+              <div key={item.id} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
                 <FaqAccordion
                   faqTitle={
                     <SubH1

@@ -482,7 +482,6 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
               <div className="w-full overflow-hidden">
               {!isTablet && (
                 <div className="mb-[10px] items-center lg:mb-[17px] flex justify-between max-w-[100%] lg:max-w-[464px] xl:max-w-[664px] ">
-                  
                   <BodyText2 className="text-orange-200 mt-[18px] lg:mt-[unset]">
                     0{active + 1}-<span>0{details?.length}</span>
                   </BodyText2>
@@ -517,7 +516,7 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                 )}
                 {/* Swiper section */}
                 {details?.length > 0 && (
-                  <div  onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
+                  <div className="relative" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
                   <Swiper
                     key={`aarti-advantage-${isDesktopPointer}`}
                     modules={[
@@ -655,6 +654,43 @@ const RDAnalyticalExc: React.FC<RDAnalyticalExcProps> = ({
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                  {/* Mobile nav arrows */}
+                  <div
+                    className="pointer-events-none absolute right-0 z-30 flex items-center gap-2 lg:hidden"
+                    style={{ top: "calc(100vw - 12px)" }}
+                  >
+                    <button
+                      type="button"
+                      aria-label="Previous"
+                      disabled={active === 0}
+                      onClick={() => swiperRef.current?.slidePrev()}
+                      className="pointer-events-auto cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                    >
+                      <Image
+                        src="/images/home/chevron-right-orange.svg"
+                        alt=""
+                        width={26}
+                        height={26}
+                        sizes="26px"
+                        className="rotate-180"
+                      />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Next"
+                      disabled={active >= details?.length - 1}
+                      onClick={() => swiperRef.current?.slideNext()}
+                      className="pointer-events-auto cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                    >
+                      <Image
+                        src="/images/home/chevron-right-orange.svg"
+                        alt=""
+                        width={26}
+                        height={26}
+                        sizes="26px"
+                      />
+                    </button>
+                  </div>
                   </div>
                 )}
                 {/* Mobile progress bar */}

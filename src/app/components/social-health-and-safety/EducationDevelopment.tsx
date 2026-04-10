@@ -256,6 +256,40 @@ const EducationDevelopment: React.FC<EducationDevelopmentProps> = ({
             <BodyText2 className="text-orange-200">
               0{activeIndex + 1}-<span>0{cards?.length}</span>
             </BodyText2>
+            <div className="md:hidden">
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  aria-label="Previous"
+                  disabled={activeIndex === 0}
+                  onClick={() => swiperRef.current?.slidePrev()}
+                  className="cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt=""
+                    width={26}
+                    height={26}
+                    className="rotate-180"
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Next"
+                  disabled={activeIndex >= cards?.length - 1}
+                  onClick={() => swiperRef.current?.slideNext()}
+                  className="cursor-pointer touch-manipulation disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt=""
+                    width={26}
+                    height={26}
+                  />
+                </button>
+              </div>
+            </div>
 
             <div className="hidden md:block">
               <div className="flex gap-3">

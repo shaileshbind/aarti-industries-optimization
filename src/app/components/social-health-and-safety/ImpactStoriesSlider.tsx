@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H3, SubH1, SubH2 } from "../Typography2";
 import { ImpactStoriesSliderProps } from "@/app/types/social-health-and-safety.type";
 import FaqAccordion from "../FaqAccordian";
+import { useLenis } from "@/app/contexts/LenisContext";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
@@ -18,9 +19,61 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const accordionProgressIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isMobile = useMatchMedia("(max-width:1023px)");
+   const isMobile = useMatchMedia("(max-width:1023px)");
   const AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
   const ACCORDION_AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
+  const isTablet = useMatchMedia("(max-width:1280px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
+      setAccordionProgress(0);
+      setExpanded(false);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setActive(panelIndex);
+          setExpanded(`panel${panelIndex}`);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
 
   // Intersection Observer for viewport detection
   useEffect(() => {
@@ -86,8 +139,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
   }, [activeIndex, stories, isInViewport]);
 
   useEffect(() => {
-    if (!stories || stories.length === 0 || !isInViewport) {
-      // Clear interval when out of viewport
+    if (!stories || stories.length === 0 || !isInViewport || isMobileAnimating) {
       if (accordionProgressIntervalRef.current) {
         clearInterval(accordionProgressIntervalRef.current);
         accordionProgressIntervalRef.current = null;
@@ -99,11 +151,14 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     accordionProgressIntervalRef.current = setInterval(() => {
       setAccordionProgress((prev) => {
         if (prev >= 100) {
-          // Move to next accordion when progress completes
           const nextIndex = (active + 1) % stories.length;
-          setActive(nextIndex);
-          setExpanded(`panel${nextIndex}`);
-          return 0; // Reset progress
+          if (isTablet) {
+            mobileScrollAndExpand(nextIndex);
+          } else {
+            setActive(nextIndex);
+            setExpanded(`panel${nextIndex}`);
+          }
+          return 0;
         }
         return prev + 100 / (ACCORDION_AUTOPLAY_DURATION / 50);
       });
@@ -115,7 +170,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
         accordionProgressIntervalRef.current = null;
       }
     };
-  }, [active, stories, isInViewport]);
+  }, [active, stories, isInViewport, isMobileAnimating, isTablet, mobileScrollAndExpand]);
 
   // Early return if no stories (after hooks)
   if (!stories || stories.length === 0) {
@@ -132,9 +187,13 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
     (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
       const panelIndex = parseInt(panel.replace("panel", ""));
       if (isExpanded) {
-        setActive(panelIndex);
-        setExpanded(panel);
-        setAccordionProgress(0); // Reset progress when user manually changes accordion
+        if (isTablet) {
+          mobileScrollAndExpand(panelIndex);
+        } else {
+          setActive(panelIndex);
+          setExpanded(panel);
+          setAccordionProgress(0);
+        }
       }
     };
   return (
@@ -264,7 +323,7 @@ const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
         <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
           <H3 className="my-5">{title}</H3>
           {stories?.map((item, index) => (
-            <div key={item.id} className="relative">
+            <div key={item.id} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
               <FaqAccordion
                 imageClassName="min-w-[28px]"
                 faqTitle={
