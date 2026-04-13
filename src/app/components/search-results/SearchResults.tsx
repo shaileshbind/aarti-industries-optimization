@@ -10,6 +10,7 @@ import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import clsxN from "../../../../utils/clsxN";
 import SmoothScrollContainer from "../SmoothScrollContainer";
+import { useLenis } from "@/app/contexts/LenisContext";
 
 interface SuggestionItem {
   id: string;
@@ -192,6 +193,7 @@ function SearchResultCard({
 export default function SearchResults() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { scrollTo } = useLenis();
   const urlSearchValue = searchParams.get("search") || "";
   const urlPage = parseInt(searchParams.get("page") || "1");
 
@@ -320,7 +322,7 @@ export default function SearchResults() {
     router.push(
       `/search-results?search=${encodeURIComponent(searchValue)}&page=${page}`,
     );
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollTo(0, { duration: 0.8 });
   };
 
   const getSearchedData = async (query: string) => {
@@ -350,11 +352,12 @@ export default function SearchResults() {
     if (urlSearchValue) {
       setSearchValue(urlSearchValue);
       getSearchedData(urlSearchValue);
+      scrollTo(0, { immediate: true });
     } else {
       setSearchedData(null);
       setHasSearched(false);
     }
-  }, [urlSearchValue]);
+  }, [urlSearchValue, scrollTo]);
 
   const hasResults = totalResults > 0;
 

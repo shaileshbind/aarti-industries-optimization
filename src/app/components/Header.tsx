@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Typography from "@/app/components/typography";
@@ -12,6 +12,7 @@ import { BodyText3, SubH1 } from "./Typography2";
 import SearchBar from "./SearchBar";
 import { HeaderProps } from "../types/header-footer.type";
 import SplitText from "./SplitText";
+import SmoothScrollContainer from "./SmoothScrollContainer";
 
 const Header = ({ data }: HeaderProps) => {
   const { Logo, menu } = data || {};
@@ -28,6 +29,8 @@ const Header = ({ data }: HeaderProps) => {
     number | null
   >(null);
   const [searchedValue, setsearchedValue] = useState<string>("");
+  const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -39,6 +42,8 @@ const Header = ({ data }: HeaderProps) => {
   const searchBackdropRef = useRef<HTMLDivElement>(null);
   const prevPathnameRef = useRef<string>(pathname);
   const desktopNavRef = useRef<HTMLElement>(null);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const closeMobileMenu = () => {
@@ -149,6 +154,10 @@ const Header = ({ data }: HeaderProps) => {
   };
 
   const handleSearchToggle = () => {
+    if (isSearchOpen) {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    }
     setIsSearchOpen(!isSearchOpen);
     if (isMenuOpen) {
       setIsMenuOpen(false);
@@ -213,9 +222,9 @@ const Header = ({ data }: HeaderProps) => {
     const checkTouchDevice = () => {
       setIsTouchDevice(
         "ontouchstart" in window ||
-        navigator.maxTouchPoints > 0 ||
-        // @ts-expect-error - msMaxTouchPoints is a legacy IE property
-        navigator.msMaxTouchPoints > 0,
+          navigator.maxTouchPoints > 0 ||
+          // @ts-expect-error - msMaxTouchPoints is a legacy IE property
+          navigator.msMaxTouchPoints > 0,
       );
     };
     checkTouchDevice();
@@ -512,9 +521,83 @@ const Header = ({ data }: HeaderProps) => {
     }
   }, [isSearchOpen]);
 
+  const fetchAutocomplete = useCallback(async (query: string) => {
+    if (!query.trim() || query.trim().length < 2) {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `/api/search/autocomplete?q=${encodeURIComponent(query)}`,
+      );
+      const json = await response.json();
+      const words: string[] = Array.isArray(json?.data?.words)
+        ? json.data.words
+        : [];
+      setAutocompleteResults(words);
+      setShowAutocomplete(words.length > 0);
+    } catch {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    }
+  }, []);
+
+  const debouncedAutocomplete = useCallback(
+    (query: string) => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = setTimeout(
+        () => fetchAutocomplete(query),
+        300,
+      );
+    },
+    [fetchAutocomplete],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        autocompleteRef.current &&
+        !autocompleteRef.current.contains(e.target as Node)
+      ) {
+        setShowAutocomplete(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setsearchedValue(value);
+    if (!value.trim()) {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    } else {
+      debouncedAutocomplete(value);
+    }
+  };
+
+  const handleAutocompleteSelect = (word: string) => {
+    setsearchedValue("");
+    setShowAutocomplete(false);
+    setAutocompleteResults([]);
+    setIsSearchOpen(false);
+    router.push(
+      `/search-results?search=${encodeURIComponent(word.trim())}&page=1`,
+    );
+  };
+
   const handleSearch = (e?: React.FormEvent | React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
+    setShowAutocomplete(false);
 
     if (searchedValue.trim()) {
       router.push(
@@ -527,7 +610,6 @@ const Header = ({ data }: HeaderProps) => {
 
   return (
     <>
-
       {/* Fixed Header Container */}
       <div
         className={clsx(
@@ -595,17 +677,18 @@ const Header = ({ data }: HeaderProps) => {
                             handleDropdownToggle(index);
                           }
                         }}
-                        className={`flex items-center transition-colors hover:text-orange-200 ${isMenuActive
-                          ? "text-[#DC4C03] font-medium"
-                          : "text-gray-700"
-                          }`}
+                        className={`flex items-center transition-colors hover:text-orange-200 ${
+                          isMenuActive
+                            ? "text-[#DC4C03] font-medium"
+                            : "text-gray-700"
+                        }`}
                       >
                         <AnimateTextOnHover
                           staggered
                           activeHover={isActive(
                             item.subMenu?.[0]?.item?.[0]?.cta_link?.link ||
-                            item.subMenu?.[0]?.item?.[0]?.externalLink ||
-                            "",
+                              item.subMenu?.[0]?.item?.[0]?.externalLink ||
+                              "",
                           )}
                           className="text-sm font-medium"
                         >
@@ -613,8 +696,9 @@ const Header = ({ data }: HeaderProps) => {
                         </AnimateTextOnHover>
                         {item.subMenu && item.subMenu.length > 0 && (
                           <svg
-                            className={`ml-1 h-4 w-4 transition-transform duration-200 ${openDropdown === index ? "rotate-180" : ""
-                              }`}
+                            className={`ml-1 h-4 w-4 transition-transform duration-200 ${
+                              openDropdown === index ? "rotate-180" : ""
+                            }`}
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -947,18 +1031,21 @@ const Header = ({ data }: HeaderProps) => {
                 <div className="w-6 h-6 relative">
                   {/* Animated Hamburger Lines */}
                   <span
-                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
-                      }`}
+                    className={`absolute left-0 top-1 h-0.5 w-full bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
+                      isMenuOpen ? "rotate-45 top-1/2 -translate-y-1/2" : ""
+                    }`}
                   />
                   <span
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${isMenuOpen ? "opacity-0" : "opacity-100"
-                      }`}
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-[80%] bg-blue-900 transition-all duration-200 ease-in-out rounded-[2px] ${
+                      isMenuOpen ? "opacity-0" : "opacity-100"
+                    }`}
                   />
                   <span
-                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${isMenuOpen
-                      ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
-                      : ""
-                      }`}
+                    className={`absolute left-0 bottom-1 h-0.5 w-[60%] bg-blue-900 transform transition-all duration-300 ease-in-out rounded-[2px] ${
+                      isMenuOpen
+                        ? "-rotate-45 bottom-1/2 translate-y-1/2 w-full"
+                        : ""
+                    }`}
                   />
                 </div>
               </button>
@@ -1021,14 +1108,15 @@ const Header = ({ data }: HeaderProps) => {
             <span className="block lgx:hidden">
               {/* <SplitText text="Contact" /> */}
               Contact
-
             </span>
           </Link>
 
           <div
             className={clsx(
-              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 overflow-hidden z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
-              isSearchOpen ? "!max-h-[320]" : "",
+              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
+              isSearchOpen
+                ? "!max-h-[320] overflow-visible"
+                : "overflow-hidden",
             )}
           >
             <div className="container relative">
@@ -1039,13 +1127,30 @@ const Header = ({ data }: HeaderProps) => {
                 )}
               >
                 <SubH1 className="text-blue-200 font-medium">Search</SubH1>
-                <SearchBar
-                  value={searchedValue}
-                  onChange={(e) => setsearchedValue(e.target.value)}
-                  handleSearch={handleSearch}
-                  placeholder="Find products, reports & more"
-                  headerSearch={true}
-                />
+                <div ref={autocompleteRef} className="relative">
+                  <SearchBar
+                    value={searchedValue}
+                    onChange={handleSearchInputChange}
+                    handleSearch={handleSearch}
+                    placeholder="Find products, reports & more"
+                    headerSearch={true}
+                  />
+                  {showAutocomplete && autocompleteResults.length > 0 && (
+                    <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto max-w-[90%] lg:max-w-[760px] scrollbar">
+                      <ul>
+                        {autocompleteResults.map((word, idx) => (
+                          <li
+                            key={`${word}-${idx}`}
+                            className="px-4 py-2.5 text-sm text-gray-700 cursor-pointer hover:bg-[#FFF3ED] hover:text-[#F36633] transition-colors"
+                            onMouseDown={() => handleAutocompleteSelect(word)}
+                          >
+                            {word}
+                          </li>
+                        ))}
+                      </ul>
+                    </SmoothScrollContainer>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -1086,10 +1191,11 @@ const Header = ({ data }: HeaderProps) => {
                   {hasDropdown ? (
                     <button
                       onClick={() => toggleMobileMenu(index)}
-                      className={`flex-1 text-left transition-all duration-200 py-3 ${isMenuActive
-                        ? "text-orange-200 font-medium"
-                        : "text-gray-700"
-                        }`}
+                      className={`flex-1 text-left transition-all duration-200 py-3 ${
+                        isMenuActive
+                          ? "text-orange-200 font-medium"
+                          : "text-gray-700"
+                      }`}
                     >
                       <Typography variant="body-l">{item.menuTitle}</Typography>
                     </button>
@@ -1100,10 +1206,11 @@ const Header = ({ data }: HeaderProps) => {
                         item.subMenu?.[0]?.item?.[0]?.externalLink ||
                         "#"
                       }
-                      className={`flex-1 transition-all duration-200 py-3 ${isMenuActive
-                        ? "text-orange-200 font-medium"
-                        : "text-gray-700"
-                        }`}
+                      className={`flex-1 transition-all duration-200 py-3 ${
+                        isMenuActive
+                          ? "text-orange-200 font-medium"
+                          : "text-gray-700"
+                      }`}
                       onClick={closeMobileMenu}
                     >
                       <Typography variant="body-l">{item.menuTitle}</Typography>
