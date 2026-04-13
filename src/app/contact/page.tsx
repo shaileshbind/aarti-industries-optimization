@@ -6,6 +6,7 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import ContactExp from "../components/Contact/ContactExp";
 import ContactMap from "../components/Contact/ContactMap";
 import SEO from "../components/SEO";
+import Script from "next/script";
 
 const Page = async () => {
   const [data, whereWeOperateData, globallyCertifiedData] = await Promise.all([
@@ -43,6 +44,26 @@ const Page = async () => {
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
       {section_two && <ContactExp data={section_two} />}
+
+      {process.env.NEXT_PUBLIC_IS_PRODUCTION === "true" && (
+        <Script id="google-ads-conversion" strategy="afterInteractive">
+          {`
+            function gtag_report_conversion(url) {
+              var callback = function () {
+                if (typeof(url) != 'undefined') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'conversion', {
+                'send_to': 'AW-662876443/phxMCPasmJkcEJviirwC',
+                'value': 1.0,
+                'event_callback': callback
+              });
+              return false;
+            }
+          `}
+        </Script>
+      )}
     </div>
   );
 };

@@ -125,20 +125,26 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
               delay: isMobile ? 0 : 0.05,
               ease: "power1.inOut",
             },
-            onUpdate: (self) => {
-              const p = self.progress;
-              let activeIndex = 0;
+            onUpdate: () => {
+              const starY = gsap.getProperty(star, "y") as number;
+              const minGap = positions.length > 1
+                ? Math.min(...positions.slice(1).map((p, i) => Math.abs(p - positions[i])))
+                : 1;
+              const threshold = minGap * 0.15;
 
-              for (let i = totalItems - 1; i >= 0; i--) {
-                if (p >= snapPoints[i] - 0.01) {
-                  activeIndex = i;
-                  break;
+              let nearestIndex = 0;
+              let nearestDist = Math.abs(starY - positions[0]);
+              for (let i = 1; i < totalItems; i++) {
+                const d = Math.abs(starY - positions[i]);
+                if (d < nearestDist) {
+                  nearestDist = d;
+                  nearestIndex = i;
                 }
               }
 
-              if (activeIndex !== prevIndexRef.current) {
-                setActive(activeIndex);
-                animateImageTransition(activeIndex);
+              if (nearestDist < threshold && nearestIndex !== prevIndexRef.current) {
+                setActive(nearestIndex);
+                animateImageTransition(nearestIndex);
               }
             },
           },

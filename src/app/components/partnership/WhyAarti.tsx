@@ -32,11 +32,13 @@ export default function WhyAarti({ data }: WhyAartiProps) {
   const scrollExpandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollCollapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const isInViewportRef = useRef(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const getHeaderOffset = () => {
-    const val = getComputedStyle(document.documentElement)
-      .getPropertyValue("--header-height");
-    return (parseInt(val, 10) || 80) + 5;
+  const getFixedTop = () => {
+    const header = document.querySelector("header");
+    return (header ? header.offsetHeight : 80) + 10;
   };
 
   const clearScrollTimers = () => {
@@ -55,7 +57,6 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       clearScrollTimers();
       setIsMobileAnimating(true);
 
-      // Stop autoplay and progress during animation
       stopAutoRotation();
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
@@ -68,22 +69,20 @@ export default function WhyAarti({ data }: WhyAartiProps) {
       scrollCollapseTimerRef.current = setTimeout(() => {
         const el = accordionRefs.current[panelIndex];
         if (el) {
-          const offset = getHeaderOffset();
-          lenisScrollTo(el, {
-            offset: -offset,
+          const fixedTop = getFixedTop();
+          const elTop = el.getBoundingClientRect().top + window.scrollY;
+          lenisScrollTo(elTop - fixedTop, {
             duration: 0.8,
           });
         }
         scrollExpandTimerRef.current = setTimeout(() => {
           setExpanded(panelIndex);
-          setImageFade(false);
-          setTimeout(() => {
-            setactiveImage(content?.[panelIndex]?.image?.url);
-            setImageFade(true);
-          }, 300);
+          setactiveImage(content?.[panelIndex]?.image?.url);
           scrollExpandTimerRef.current = null;
-          setIsMobileAnimating(false);
         }, 100);
+        setTimeout(() => {
+          setIsMobileAnimating(false);
+        }, 850);
         scrollCollapseTimerRef.current = null;
       }, 350);
     },
@@ -154,36 +153,40 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     }
   };
 
+  const expandedRef = useRef<number>(0);
+  useEffect(() => {
+    expandedRef.current = expanded;
+  }, [expanded]);
+
   const startAutoRotation = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
 
     intervalRef.current = setInterval(() => {
-      setExpanded((prevExpanded) => {
-        const nextIndex = (prevExpanded + 1) % content.length;
+      if (isMobileAnimating || !isInViewportRef.current) return;
 
-        if (isMobile) {
-          mobileScrollAndExpand(nextIndex);
-          return prevExpanded;
-        }
+      const nextIndex = (expandedRef.current + 1) % content.length;
 
-        setImageFade(false);
-        setTimeout(() => {
-          setactiveImage(content[nextIndex]?.image?.url);
-          setImageFade(true);
-        }, 300);
+      if (isMobile) {
+        mobileScrollAndExpand(nextIndex);
+        return;
+      }
 
-        setProgressWidth(0);
-        pausedProgressRef.current = 0;
+      setExpanded(nextIndex);
+      setImageFade(false);
+      setTimeout(() => {
+        setactiveImage(content[nextIndex]?.image?.url);
+        setImageFade(true);
+      }, 300);
 
-        if (progressIntervalRef.current) {
-          clearInterval(progressIntervalRef.current);
-        }
-        startProgressAnimation(0);
+      setProgressWidth(0);
+      pausedProgressRef.current = 0;
 
-        return nextIndex;
-      });
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+      startProgressAnimation(0);
     }, isMobile ? 10000 : 15000);
   };
 
@@ -194,13 +197,41 @@ export default function WhyAarti({ data }: WhyAartiProps) {
     }
   };
 
-  // Handle hover state
+  // Intersection Observer — only run autoplay/progress when section is visible
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isInViewportRef.current = entry.isIntersecting;
+          setIsInViewport(entry.isIntersecting);
+          if (!entry.isIntersecting) {
+            stopAutoRotation();
+            if (progressIntervalRef.current) {
+              clearInterval(progressIntervalRef.current);
+              progressIntervalRef.current = null;
+            }
+            setProgressWidth(0);
+            pausedProgressRef.current = 0;
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    const el = sectionRef.current;
+    if (el) observer.observe(el);
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, []);
+
+  // Handle hover state (desktop only)
+  useEffect(() => {
+    if (isMobile || !isInViewport) return;
     if (isHovered) {
       stopAutoRotation();
       stopProgressAnimation();
     } else {
-      // Resume when not hovered
       startAutoRotation();
       if (pausedProgressRef.current > 0) {
         resumeProgressAnimation();
@@ -208,130 +239,130 @@ export default function WhyAarti({ data }: WhyAartiProps) {
         startProgressAnimation(0);
       }
     }
-  }, [isHovered]);
+  }, [isHovered, isMobile, isInViewport]);
 
-  // Restart autoplay after mobile scroll+expand completes
+  // Start/restart autoplay when section enters viewport or mobile animation completes
   useEffect(() => {
-    if (!isMobile || isMobileAnimating) return;
-    if (expanded < 0) return;
+    if (!isInViewport || isMobileAnimating) {
+      return;
+    }
+    if (isMobile && expanded < 0) return;
+
+    stopAutoRotation();
     startAutoRotation();
     startProgressAnimation(0);
-  }, [isMobile, isMobileAnimating, expanded]);
+  }, [isInViewport, isMobile, isMobileAnimating, expanded]);
 
-  // Initial setup
+  // Cleanup on unmount
   useEffect(() => {
-    startProgressAnimation(0);
-    startAutoRotation();
-
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      clearScrollTimers();
     };
   }, []);
 
   return (
-    <FadeInReveal className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">
-      {/* Desktop */}
-      <div className="hidden lg:block">
-        <LayoutImage src={activeImage} imageFade={imageFade} />
-      </div>
+    <div ref={sectionRef}>
+      <FadeInReveal className="fluid-container grid grid-cols-1 lg:grid-cols-2 gap-[60px] xl:gap-[100px] pb-[72px] lg:pb-[110px]">
+        {/* Desktop */}
+        <div className="hidden lg:block">
+          <LayoutImage src={activeImage} imageFade={imageFade} />
+        </div>
 
-      <div className="xl:w-[80%] relative">
-        {title && <H2>{title}</H2>}
+        <div className="xl:w-[80%] relative">
+          {title && <H2>{title}</H2>}
 
-        {content?.length > 0 && (
-          <div className="pt-[14px] xl:pt-[62px]">
-            {content?.map((item, index) => (
-              <div
-                key={`accordion-${index}`}
-                className="relative"
-                ref={(el) => { accordionRefs.current[index] = el; }}
-                onMouseEnter={() => !isMobile && setIsHovered(true)}
-                onMouseLeave={() => !isMobile && setIsHovered(false)}
-              >
-                <MainAccordion
-                  expanded={expanded === index}
-                  showIcon={isMobile ? true : false}
-                  onChange={() => handleAccordion(index)}
-                  icon={
-                    isMobile && (
-                      <Image
-                        src="/images/accordian-down.svg"
-                        alt="arrow"
-                        width={34}
-                        height={34}
-                        className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
-                      />
-                    )
-                  }
-                  title={
-                    <h2
-                      className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
-                        expanded === index && "opacity-100"
-                      }`}
-                    >
-                      {item?.title}
-                    </h2>
-                  }
+          {content?.length > 0 && (
+            <div className="pt-[14px] xl:pt-[62px]">
+              {content?.map((item, index) => (
+                <div
+                  key={`accordion-${index}`}
+                  className="relative"
+                  ref={(el) => { accordionRefs.current[index] = el; }}
+                  onMouseEnter={() => !isMobile && setIsHovered(true)}
+                  onMouseLeave={() => !isMobile && setIsHovered(false)}
                 >
-                  <div>
-                    {/* Mobile */}
-                    {item?.mobImage?.url && (
-                      <div className="block lg:hidden mb-4">
-                        <LayoutImage
-                          src={item?.mobImage?.url}
-                          imageFade={imageFade}
+                  <MainAccordion
+                    expanded={expanded === index}
+                    showIcon={isMobile ? true : false}
+                    onChange={() => handleAccordion(index)}
+                    icon={
+                      isMobile && (
+                        <Image
+                          src="/images/accordian-down.svg"
+                          alt="arrow"
+                          width={34}
+                          height={34}
+                          className="rotate-180 w-5 h-5 md:w-[34px] md:h-[34px]"
                         />
-                      </div>
-                    )}
+                      )
+                    }
+                    title={
+                      <h2
+                        className={`text-lg md:text-2xl text-[#002F50] opacity-40 ${
+                          expanded === index && "opacity-100"
+                        }`}
+                      >
+                        {item?.title}
+                      </h2>
+                    }
+                  >
+                    <div>
+                      {/* Mobile */}
+                      {item?.mobImage?.url && (
+                        <div className="block lg:hidden mb-4">
+                          <LayoutImage
+                            src={item?.mobImage?.url}
+                            imageFade={imageFade}
+                          />
+                        </div>
+                      )}
 
-                    {item?.description && (
-                      <BodyText2 className="pb-4 ">
-                        {item?.description}
-                      </BodyText2>
-                    )}
+                      {item?.description && (
+                        <BodyText2 className="pb-4 ">
+                          {item?.description}
+                        </BodyText2>
+                      )}
 
-                    {item?.BulletPoints?.length > 0 && (
-                      <div className="flex flex-col gap-2">
-                        {item?.BulletPoints?.map(
-                          (listItem, listIndex) =>
-                            listItem?.title && (
-                              <div
-                                key={"list_" + listIndex}
-                                className="flex gap-2 items-start"
-                              >
-                                <Image
-                                  src={"/images/star-orange.svg"}
-                                  alt="banner"
-                                  width={20}
-                                  height={20}
-                                  className="w-[14px] h-[14px] mt-1 md:w-5 md:h-5 md:mt-0"
-                                />
-                                <BodyText2>{listItem?.title}</BodyText2>
-                              </div>
-                            ),
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </MainAccordion>
+                      {item?.BulletPoints?.length > 0 && (
+                        <div className="flex flex-col gap-2">
+                          {item?.BulletPoints?.map(
+                            (listItem, listIndex) =>
+                              listItem?.title && (
+                                <div
+                                  key={"list_" + listIndex}
+                                  className="flex gap-2 items-start"
+                                >
+                                  <Image
+                                    src={"/images/star-orange.svg"}
+                                    alt="banner"
+                                    width={20}
+                                    height={20}
+                                    className="w-[14px] h-[14px] mt-1 md:w-5 md:h-5 md:mt-0"
+                                  />
+                                  <BodyText2>{listItem?.title}</BodyText2>
+                                </div>
+                              ),
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </MainAccordion>
 
-                {expanded === index && (
-                  <div
-                    className="h-[2px] bg-[#DC4C03] absolute bottom-0 transition-none"
-                    style={{ width: `${progressWidth}%` }}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </FadeInReveal>
+                  {expanded === index && (
+                    <div
+                      className="h-[2px] bg-[#DC4C03] absolute bottom-0 transition-none"
+                      style={{ width: `${progressWidth}%` }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </FadeInReveal>
+    </div>
   );
 }
 
