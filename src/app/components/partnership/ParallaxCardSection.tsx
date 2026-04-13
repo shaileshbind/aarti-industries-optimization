@@ -45,10 +45,9 @@ export default function ParallaxCardSection({
   const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const getHeaderOffset = () => {
-    const val = getComputedStyle(document.documentElement)
-      .getPropertyValue("--header-height");
-    return (parseInt(val, 10) || 80) + 5;
+  const getFixedTop = () => {
+    const header = document.querySelector("header");
+    return (header ? header.offsetHeight : 80) + 10;
   };
 
   const clearPendingTimers = () => {
@@ -70,9 +69,9 @@ export default function ParallaxCardSection({
       collapseTimerRef.current = setTimeout(() => {
         const el = accordionRefs.current[panelIndex];
         if (el) {
-          const offset = getHeaderOffset();
-          lenisScrollTo(el, {
-            offset: -offset,
+          const fixedTop = getFixedTop();
+          const elTop = el.getBoundingClientRect().top + window.scrollY;
+          lenisScrollTo(elTop - fixedTop, {
             duration: 0.8,
           });
         }
@@ -333,7 +332,7 @@ export default function ParallaxCardSection({
                     )
                   }
                   title={
-                    <h2 className="text-base md:text-xl text-[#002F50]">
+                    <h2 className="text-base md:text-xl text-[#002F50] min-h-[38px] flex items-center">
                       {item?.title}
                     </h2>
                   }
