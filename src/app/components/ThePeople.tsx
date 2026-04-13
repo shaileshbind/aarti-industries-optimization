@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -30,8 +30,20 @@ interface ThePeopleProps {
 const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
   const { title, testimonials } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [navEdges, setNavEdges] = useState({
+    isBeginning: true,
+    isEnd: testimonials.length <= 1,
+  });
+
+  const syncNavEdges = useCallback((swiper: SwiperType) => {
+    setNavEdges({
+      isBeginning: swiper.isBeginning,
+      isEnd: swiper.isEnd,
+    });
+  }, []);
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -112,6 +124,37 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
       {title && <H2 className="container lg:text-center mb-11">{title}</H2>}
       {testimonials?.length > 0 && (
         <div className="container !max-w-[90%] lg:!max-w-[900px] relative md:mb-10" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
+          <div className="mb-3 flex w-full items-center justify-end gap-3 lg:hidden">
+            <button
+              type="button"
+              aria-label="Previous testimonial"
+              disabled={navEdges.isBeginning}
+              onClick={() => swiperRef.current?.slidePrev()}
+              className="flex min-h-[70px] cursor-pointer items-center justify-center touch-manipulation disabled:pointer-events-none disabled:opacity-35"
+            >
+              <Image
+                src="/images/home/chevron-right-orange.svg"
+                alt=""
+                width={34}
+                height={34}
+                className="rotate-180"
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="Next testimonial"
+              disabled={navEdges.isEnd}
+              onClick={() => swiperRef.current?.slideNext()}
+              className="flex min-h-[70px] cursor-pointer items-center justify-center touch-manipulation disabled:pointer-events-none disabled:opacity-35"
+            >
+              <Image
+                src="/images/home/chevron-right-orange.svg"
+                alt=""
+                width={34}
+                height={34}
+              />
+            </button>
+          </div>
           <Swiper
             key={`the-people-${isDesktopPointer}`}
             spaceBetween={15}
@@ -126,11 +169,13 @@ const ThePeople: React.FC<ThePeopleProps> = ({ data }) => {
             Autoplay,
           ]}
             autoplay={{
-              delay: 15000,
+              delay: isMobile ? 10000 : 15000,
               disableOnInteraction: false,
             }}
+            onSlideChange={(swiper) => syncNavEdges(swiper)}
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
+              syncNavEdges(swiper);
               // Don't start autoplay immediately - wait for viewport intersection
               if (swiper.autoplay) {
                 swiper.autoplay.stop();

@@ -1,6 +1,11 @@
 import { ReportItemProps } from "./annual-reports.type";
 import { ImageProps } from "./global.type";
-import { YearAndQuarterLayout } from "./shareholder.type";
+import {
+  YearAndQuarterLayout,
+  YearAndReportLayout,
+  SubCategoryWithCkLayout,
+  SubCategoryWithReportLayout,
+} from "./shareholder.type";
 
 export type OrangeCardCategoryListingPageProps = {
   template: string;
@@ -42,6 +47,42 @@ export type StockExchangeContainerProps = {
     category: string;
     slug: string;
   }[];
+};
+
+export type DisclosureBanner = {
+  title: string;
+  description: string;
+  image: ImageProps;
+  mobImage: ImageProps;
+};
+
+export type DisclosureCategories = {
+  category: string;
+  slug: string;
+}[];
+
+export type YearAndReportContainerProps = {
+  data: {
+    banner: DisclosureBanner;
+    reportLayout?: YearAndReportLayout[];
+  };
+  categories: DisclosureCategories;
+};
+
+export type SubCategoryReportContainerProps = {
+  data: {
+    banner: DisclosureBanner;
+    reportLayout?: SubCategoryWithReportLayout[];
+  };
+  categories: DisclosureCategories;
+};
+
+export type RichTextContainerProps = {
+  data: {
+    banner: DisclosureBanner;
+    reportLayout?: SubCategoryWithCkLayout[];
+  };
+  categories: DisclosureCategories;
 };
 
 export type DisclosureTabsProps = {

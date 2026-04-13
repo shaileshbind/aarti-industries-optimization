@@ -275,17 +275,17 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
 
       if (isTablet) {
         mainTl
-          .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 6 })
+          .fromTo(headinLeft.current, { x: 0, y: 0 }, { y: -150, duration: 2 })
           .fromTo(
             headinRight.current,
             { x: 0, y: 0 },
-            { y: 150, duration: 6 },
+            { y: 150, duration: 2 },
             "<",
           )
           .fromTo(
             sustainbleLogo.current,
             { height: "0px" },
-            { height: "205px", duration: 6 },
+            { height: "205px", duration: 2 },
             "<",
           )
           .fromTo(
@@ -295,11 +295,11 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
               opacity: 1,
               scale: 1,
               transformOrigin: "center center",
-              duration: 1,
-              stagger: 0.1,
+              duration: 0.6,
+              stagger: 0.06,
               ease: "power4.inOut",
             },
-            "<4",
+            "<1",
           )
           .fromTo(
             susLogotl.current,

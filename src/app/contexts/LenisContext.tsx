@@ -6,6 +6,7 @@ interface LenisContextType {
   stopLenis: () => void;
   startLenis: () => void;
   resizeLenis: () => void;
+  scrollTo: (target: number | string | HTMLElement, options?: { offset?: number; duration?: number; immediate?: boolean }) => void;
 }
 
 const LenisContext = createContext<LenisContextType | null>(null);
@@ -113,8 +114,15 @@ export const LenisProvider = ({ children }: LenisProviderProps) => {
     lenisRef.current?.resize();
   }, []);
 
+  const scrollTo = useCallback(
+    (target: number | string | HTMLElement, options?: { offset?: number; duration?: number; immediate?: boolean }) => {
+      lenisRef.current?.scrollTo(target, options);
+    },
+    [],
+  );
+
   return (
-    <LenisContext.Provider value={{ stopLenis, startLenis, resizeLenis }}>
+    <LenisContext.Provider value={{ stopLenis, startLenis, resizeLenis, scrollTo }}>
       {children}
     </LenisContext.Provider>
   );

@@ -386,6 +386,13 @@ export default function GeneralForm({
         setformSubmitted(true);
         setSubmitError("");
 
+        if (
+          window.location.pathname === "/contact" &&
+          typeof (window as typeof window & { gtag_report_conversion?: (url?: string) => boolean }).gtag_report_conversion === "function"
+        ) {
+          (window as typeof window & { gtag_report_conversion: (url?: string) => boolean }).gtag_report_conversion();
+        }
+
         setTimeout(() => {
           setshowGeneralPopup?.(false);
           setformSubmitted(false);

@@ -10,19 +10,76 @@ import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";
 import { Autoplay } from "swiper/modules";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
 export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
   const { title, description, card } = data;
 
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState<number>(0);
 
-  const { stopLenis, startLenis } = useLenis();
+  const { stopLenis, startLenis, scrollTo: lenisScrollTo } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const [mobileProgress, setMobileProgress] = useState(0);
+  const mobileRafRef = useRef<number | null>(null);
+  const mobileStartTimeRef = useRef<number>(0);
+  const [isMobileInViewport, setIsMobileInViewport] = useState(false);
+
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+      if (mobileRafRef.current) {
+        cancelAnimationFrame(mobileRafRef.current);
+      }
+      setMobileProgress(0);
+      setExpanded(-1);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setExpanded(panelIndex);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
 
   const handleSliderTouchStart = useCallback(
     (e: React.TouchEvent) => {
@@ -91,6 +148,68 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
     };
   }, []);
 
+  // Mobile viewport observer
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsMobileInViewport(entry.isIntersecting);
+          if (!entry.isIntersecting && mobileRafRef.current) {
+            cancelAnimationFrame(mobileRafRef.current);
+            setMobileProgress(0);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // Mobile progress bar autoplay
+  const startMobileProgress = useCallback(() => {
+    if (mobileRafRef.current) {
+      cancelAnimationFrame(mobileRafRef.current);
+    }
+    setMobileProgress(0);
+    mobileStartTimeRef.current = performance.now();
+    const duration = 15000;
+
+    const animate = (time: number) => {
+      if (!isMobileInViewport) return;
+
+      const elapsed = time - mobileStartTimeRef.current;
+      const percent = Math.min((elapsed / duration) * 100, 100);
+      setMobileProgress(percent);
+
+      if (percent < 100) {
+        mobileRafRef.current = requestAnimationFrame(animate);
+      } else {
+        const nextIndex = (expanded + 1) % card.length;
+        mobileScrollAndExpand(nextIndex);
+      }
+    };
+
+    mobileRafRef.current = requestAnimationFrame(animate);
+  }, [expanded, card.length, isMobileInViewport, mobileScrollAndExpand]);
+
+  useEffect(() => {
+    if (!isMobile || isMobileAnimating || !isMobileInViewport) return;
+    if (expanded < 0) return;
+
+    startMobileProgress();
+
+    return () => {
+      if (mobileRafRef.current) {
+        cancelAnimationFrame(mobileRafRef.current);
+      }
+    };
+  }, [expanded, isMobile, isMobileAnimating, isMobileInViewport, startMobileProgress]);
+
   return (
     <div ref={sectionRef} className="fluid-container lg:!mr-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-[60px]">
@@ -149,7 +268,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
               effect="fade"
               modules={[Autoplay]}
               autoplay={{
-                delay: 15000,
+                delay: isMobile ? 10000 : 15000,
                 disableOnInteraction: false,
               }}
               speed={800}
@@ -274,6 +393,7 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
       {card?.length > 0 && (
         <div className="block lg:hidden mt-[14px]">
           {card?.map((item, index) => (
+            <div key={"accordion_wrap_" + index} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
             <MainAccordion
               key={"MainAccordion" + index}
               expanded={expanded === index}
@@ -294,7 +414,13 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                   />
                 )
               }
-              onChange={() => setExpanded(index)}
+              onChange={() => {
+                if (isMobile) {
+                  mobileScrollAndExpand(index);
+                } else {
+                  setExpanded(index);
+                }
+              }}
               showIcon
               title={
                 <h2
@@ -393,6 +519,17 @@ export default function ScaleUpEngine({ data }: ScaleUpEngineProps) {
                 </div>
               </div>
             </MainAccordion>
+              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200 flex" />
+              {expanded === index && (
+                <div
+                  className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                  style={{
+                    width: `${mobileProgress}%`,
+                    transition: "none",
+                  }}
+                />
+              )}
+            </div>
           ))}
         </div>
       )}

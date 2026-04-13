@@ -139,23 +139,23 @@ export default function MainTimeline({
             <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300 -translate-y-1/2" />
 
             {phases[activePhase].years.map((year) => (
-              <div key={year} className="relative flex-1 min-w-0">
+              <div key={year} className="relative flex-1 min-w-0"  onClick={() => handleYearClick(year)}>
                 <div
                   ref={(el) => {
                     if (el) dotRefs.current.set(year, el);
                   }}
-                  onClick={() => handleYearClick(year)}
+                 
                   className="relative mx-auto transition-all duration-300 z-10 w-1.5 h-1.5 rounded-full cursor-pointer bg-gray-200"
                 >
                   <div
                     className={`absolute inset-0 h-4 w-4 top-[-13px] !z-50 -left-[12px] transform translate-x-1/2 translate-y-1/2 rounded-full bg-center bg-cover transition-opacity duration-300
                       ${activeYear === year ? "opacity-100 bg-white/0" : "opacity-0"}
-                    `}
+                    `}  
                     style={{ backgroundImage: "url('/images/star-orange.svg')" }}
                   ></div>
                 </div>
                 <BodyText3
-                  className={`pointer-events-none absolute top-6 left-1/2 w-full -translate-x-1/2 px-1 text-center !text-xs leading-tight whitespace-normal transition-all duration-300 ${
+                  className={`absolute top-6 left-1/2 w-full -translate-x-1/2 px-1 text-center !text-xs leading-tight whitespace-normal transition-all duration-300 ${
                     activeYear === year
                       ? "text-orange-600 font-medium scale-120"
                       : "text-gray-600"

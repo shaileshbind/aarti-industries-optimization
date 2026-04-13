@@ -35,6 +35,7 @@ const CustomCursorTrigger: React.FC<CustomCursorTriggerProps> = ({
     <div
       className={className}
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {children}

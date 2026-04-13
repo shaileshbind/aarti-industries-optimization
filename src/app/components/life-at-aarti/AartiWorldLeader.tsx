@@ -15,6 +15,7 @@ import { useLenis } from "@/app/contexts/LenisContext";
 const AartiWorldLeader = ({ data }: LAAWorldProps) => {
   const { title, leadersCard } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [active, setActive] = useState(0);
   const [swiperReady, setSwiperReady] = useState(false);
   const [inView, setInView] = useState(false);
@@ -199,7 +200,7 @@ const AartiWorldLeader = ({ data }: LAAWorldProps) => {
                   nextEl: ".swiper-button-next-aartiWorld",
                 }}
                 autoplay={{
-                  delay: 15000,
+                  delay: isMobile ? 10000 : 15000,
                   disableOnInteraction: false,
                 }}
                 onSwiper={(swiper) => {

@@ -24,6 +24,7 @@ export type UpcomingEventData = {
   title: string;
   slug: string;
   date: string;
+  end_date?: string
   location: string;
   description: string;
   globalTeamCtaTitle: string;
@@ -55,18 +56,19 @@ export type UpcomingEventsResponse = {
 export type EventsListingProps = {
   pastEvent?: boolean;
   upcomingEventsData:
-    | UpcomingEventData[]
-    | UpcomingEventsResponse
-    | {
-        pressData?: UpcomingEventsResponse["pressData"];
-        data?: UpcomingEventData[];
-      }
-    | null;
+  | UpcomingEventData[]
+  | UpcomingEventsResponse
+  | {
+    pressData?: UpcomingEventsResponse["pressData"];
+    data?: UpcomingEventData[];
+  }
+  | null;
   data: {
     title: string;
     events: {
       title: string;
       date?: string;
+      end_date?: string
       location?: string;
       description?: string;
       image: ImageProps;

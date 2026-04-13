@@ -24,6 +24,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
 }) => {
   const { card, partnerWithUsCta, sectionTitle } = data;
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isMobile = useMatchMedia("(max-width:1023px)");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offsetAfter, setOffsetAfter] = useState(0);
@@ -224,7 +225,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
               0{activeIndex + 1}-<span>0{card?.length}</span>
             </BodyText2>
 
-            <div className="hidden lg:block">
+            <div>
               <div className="flex gap-3">
                 <Image
                   src="/images/home/chevron-right-orange.svg"
@@ -270,7 +271,7 @@ const CampusFlagship: React.FC<CampusFlagshipProps & LayoutProps> = ({
                   Autoplay,
                 ]}
                 autoplay={{
-                  delay: 15000,
+                  delay: isMobile ? 10000 : 15000,
                   disableOnInteraction: false,
                 }}
                 navigation={{

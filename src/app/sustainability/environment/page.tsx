@@ -1,14 +1,14 @@
-import EnvBanner from "../components/environment/EnvBanner";
-import EnvInfo from "../components/environment/EnvInfo";
-import EnvCards from "../components/environment/EnvCards";
-import EnvStrong from "../components/environment/EnvStrong";
-import EnvLatest from "../components/environment/EnvLatest";
-import GloballyCertified from "../components/GloballyCertified";
-import EnvExp from "../components/environment/EnvExp";
-import EnvResp from "../components/environment/EnvResp";
+import EnvBanner from "../../components/environment/EnvBanner";
+import EnvInfo from "../../components/environment/EnvInfo";
+import EnvCards from "../../components/environment/EnvCards";
+import EnvStrong from "../../components/environment/EnvStrong";
+import EnvLatest from "../../components/environment/EnvLatest";
+import GloballyCertified from "../../components/GloballyCertified";
+import EnvExp from "../../components/environment/EnvExp";
+import EnvResp from "../../components/environment/EnvResp";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
-import SEO from "../components/SEO";
+import SEO from "../../components/SEO";
 
 const page = async () => {
   const [data, globallyCertifiedData] = await Promise.all([
@@ -33,7 +33,7 @@ const page = async () => {
         metaDescription={seo?.metaDescription}
         keywords={seo?.keywords}
         canonical={
-          seo?.canonical ?? "https://www.aarti-industries.com/environment"
+          seo?.canonical ?? "https://www.aarti-industries.com/sustainability/environment"
         }
         robots={seo?.robots ?? "index, follow"}
         ogURL={seo?.ogURL}

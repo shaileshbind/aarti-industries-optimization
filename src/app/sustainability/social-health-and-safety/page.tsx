@@ -1,17 +1,17 @@
-import SocialHealthAndSafetyBanner from "../components/social-health-and-safety/SocialHealthAndSafetyBanner";
-import GloballyCertified from "../components/GloballyCertified";
+import SocialHealthAndSafetyBanner from "../../components/social-health-and-safety/SocialHealthAndSafetyBanner";
+import GloballyCertified from "../../components/GloballyCertified";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import SEO from "@/app/components/SEO";
-import WhoCards from "../components/who-we-are/WhoCards";
-import OurResponsibility from "../components/social-health-and-safety/OurResponsibility";
-import DrivingEmpowerment from "../components/social-health-and-safety/DrivingEmpowerment";
-import GridCardsSocial from "../components/social-health-and-safety/GridCardsSocial";
-import EducationDevelopment from "../components/social-health-and-safety/EducationDevelopment";
-import ImpactStoriesSlider from "../components/social-health-and-safety/ImpactStoriesSlider";
-import SocialExplore from "../components/social-health-and-safety/SocialExplore";
-import StatsSection from "../components/social-health-and-safety/StatsSection";
-import SocialTestimonials from "../components/social-health-and-safety/SocialTestimonials";
+import WhoCards from "../../components/who-we-are/WhoCards";
+import OurResponsibility from "../../components/social-health-and-safety/OurResponsibility";
+import DrivingEmpowerment from "../../components/social-health-and-safety/DrivingEmpowerment";
+import GridCardsSocial from "../../components/social-health-and-safety/GridCardsSocial";
+import EducationDevelopment from "../../components/social-health-and-safety/EducationDevelopment";
+import ImpactStoriesSlider from "../../components/social-health-and-safety/ImpactStoriesSlider";
+import SocialExplore from "../../components/social-health-and-safety/SocialExplore";
+import StatsSection from "../../components/social-health-and-safety/StatsSection";
+import SocialTestimonials from "../../components/social-health-and-safety/SocialTestimonials";
 
 const page = async () => {
   const [data, globallyCertifiedData] = await Promise.all([

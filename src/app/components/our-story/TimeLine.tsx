@@ -57,8 +57,7 @@ export default function TimeLine({ data }: TimelineData) {
   // Autoplay timer ref and section visibility
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [, setIsSectionVisible] = useState(false);
-  const [shouldAutoplay, setShouldAutoplay] = useState(false);
+  const [isSectionVisible, setIsSectionVisible] = useState(false);
 
   const content = yearContent?.[currentYear] || {
     title: "",
@@ -83,14 +82,10 @@ export default function TimeLine({ data }: TimelineData) {
       (entries) => {
         entries.forEach((entry) => {
           setIsSectionVisible(entry.isIntersecting);
-          // Start autoplay once section becomes visible for the first time
-          if (entry.isIntersecting && !shouldAutoplay) {
-            setShouldAutoplay(true);
-          }
         });
       },
       {
-        threshold: 0.2, // Trigger when 20% of the section is visible
+        threshold: 0.2,
         rootMargin: "0px",
       }
     );
@@ -102,13 +97,10 @@ export default function TimeLine({ data }: TimelineData) {
         observer.unobserve(sectionRef.current);
       }
     };
-  }, [shouldAutoplay]);
+  }, []);
 
-  // Autoplay functionality - advances through years and phases every 3 seconds
-  // Starts once section becomes visible, then continues indefinitely
   useEffect(() => {
-    if (phases.length === 0 || !shouldAutoplay) {
-      // Clear interval if autoplay shouldn't run
+    if (phases.length === 0 || !isSectionVisible) {
       if (autoplayIntervalRef.current) {
         clearInterval(autoplayIntervalRef.current);
         autoplayIntervalRef.current = null;
@@ -149,7 +141,7 @@ export default function TimeLine({ data }: TimelineData) {
         autoplayIntervalRef.current = null;
       }
     };
-  }, [currentPhase, currentYear, phases, shouldAutoplay]);
+  }, [currentPhase, currentYear, phases, isSectionVisible]);
 
   // Animation for images
   useEffect(() => {

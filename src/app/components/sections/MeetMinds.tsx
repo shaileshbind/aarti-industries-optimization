@@ -15,6 +15,7 @@ import {
   MeetMindsProps,
 } from "@/app/types/who-we-are.type";
 import CustomCursorTrigger from "@/app/CustomCursorTrigger";
+import { useCustomCursor } from "@/app/GlobalCursor";
 import Popup from "../Popup";
 import clsx from "clsx";
 import { FadeInReveal } from "../ScrollReveal";
@@ -41,6 +42,7 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
   const [isInViewport, setIsInViewport] = useState(false);
 
   const { stopLenis, startLenis } = useLenis();
+  const cursor = useCustomCursor();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
@@ -186,9 +188,10 @@ const MeetMinds: React.FC<MeetMindsProps> = ({
               >
                 {management_boards?.map((item, index) => (
                   <SwiperSlide key={item?.id}>
-                    <CustomCursorTrigger title="Read Bio">
+                    <CustomCursorTrigger title="Read Bio" className="cursor-pointer">
                       <div
                         onClick={() => {
+                          cursor.hide();
                           setshowPopup(true);
                           setpopupDetails(item);
                         }}

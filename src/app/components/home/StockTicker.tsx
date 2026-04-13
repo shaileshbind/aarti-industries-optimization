@@ -10,7 +10,9 @@ type TickerItem = {
   date?: string | null;
 };
 
-function flattenPressReleases(data: Record<string, { items?: unknown[] }> | null): TickerItem[] {
+function flattenPressReleases(
+  data: Record<string, { items?: unknown[] }> | null,
+): TickerItem[] {
   if (!data || typeof data !== "object") return [];
   const flat: TickerItem[] = [];
   const years = Object.keys(data).sort((a, b) => Number(b) - Number(a)); // newest first
@@ -45,7 +47,10 @@ function flattenPressReleases(data: Record<string, { items?: unknown[] }> | null
   return flat;
 }
 
-function getLatestYearTop3(flat: TickerItem[]): { latestYear: number | null; entries: TickerItem[] } {
+function getLatestYearTop3(flat: TickerItem[]): {
+  latestYear: number | null;
+  entries: TickerItem[];
+} {
   const withDate = flat.filter((e) => e?.date);
   if (withDate.length === 0) return { latestYear: null, entries: [] };
   const latestYear = Math.max(
@@ -76,7 +81,9 @@ export default function StockTicker() {
 
   const signalRef = useRef<AbortController>(new AbortController());
   const firstRequest = useRef(true);
-  const promiseStateRef = useRef<"pending" | "fulfilled" | "rejected">("pending");
+  const promiseStateRef = useRef<"pending" | "fulfilled" | "rejected">(
+    "pending",
+  );
 
   useEffect(() => {
     const loadNews = async () => {
@@ -131,7 +138,11 @@ export default function StockTicker() {
           // Strategy 1: Check rawData first - it often contains the actual previous close
           if (stock.rawData) {
             const rawClose = stock.rawData.closePrice;
-            if (rawClose && typeof rawClose === "number" && rawClose !== stock.ltp) {
+            if (
+              rawClose &&
+              typeof rawClose === "number" &&
+              rawClose !== stock.ltp
+            ) {
               previousClose = rawClose;
             } else if (
               stock.rawData.indicativeClosePrice &&
@@ -143,7 +154,11 @@ export default function StockTicker() {
           }
 
           // Strategy 2: Use top-level closePrice if it's different from ltp
-          if (previousClose === null && stock.closePrice && stock.closePrice !== stock.ltp) {
+          if (
+            previousClose === null &&
+            stock.closePrice &&
+            stock.closePrice !== stock.ltp
+          ) {
             previousClose = stock.closePrice;
           }
 
@@ -160,7 +175,9 @@ export default function StockTicker() {
           // Calculate change and changePercent from previous close using latest ltp
           const change = previousClose !== null ? stock.ltp - previousClose : 0;
           const changePercent =
-            previousClose !== null && previousClose !== 0 ? (change / previousClose) * 100 : 0;
+            previousClose !== null && previousClose !== 0
+              ? (change / previousClose) * 100
+              : 0;
 
           // Determine direction
           const changeDirection: "up" | "down" | "neutral" =
@@ -215,7 +232,9 @@ export default function StockTicker() {
     };
   }, []);
 
-  const hasPressItems = pressReleases.some((item) => item?.heading && item?.link);
+  const hasPressItems = pressReleases.some(
+    (item) => item?.heading && item?.link,
+  );
   const hasMarqueeContent = Boolean(nseStock) || hasPressItems;
   const marqueeRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
@@ -268,14 +287,21 @@ export default function StockTicker() {
             if (!item?.heading || !item?.link) return null;
             return (
               <a
-                href={item.link}
+                href={`/press-releases/${item.link}`}
                 className="text-sm text-[#FFF] flex-shrink-0 whitespace-nowrap inline-flex items-center"
-                key={isDuplicate ? `dup-${item.link + (item.date ?? "")}` : item.link + (item.date ?? "")}
+                key={
+                  isDuplicate
+                    ? `dup-${item.link + (item.date ?? "")}`
+                    : item.link + (item.date ?? "")
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {item.heading}
-                <ArrowForwardIcon className="rotate-325 ml-1 shrink-0" fontSize="small" />
+                <ArrowForwardIcon
+                  className="rotate-325 ml-1 shrink-0"
+                  fontSize="small"
+                />
               </a>
             );
           })}
@@ -329,11 +355,20 @@ export default function StockTicker() {
           ref={rowRef}
           className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px]  pt-[4px] lg:pt-[0px]"
         >
-          <MarqueeRow nseStock={nseStock} pressReleases={pressReleases} renderStock={renderStock} />
+          <MarqueeRow
+            nseStock={nseStock}
+            pressReleases={pressReleases}
+            renderStock={renderStock}
+          />
         </div>
         {/* Second copy */}
         <div className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px] pt-[4px] lg:pt-[0px]">
-          <MarqueeRow nseStock={nseStock} pressReleases={pressReleases} renderStock={renderStock} isDuplicate />
+          <MarqueeRow
+            nseStock={nseStock}
+            pressReleases={pressReleases}
+            renderStock={renderStock}
+            isDuplicate
+          />
         </div>
       </div>
     </div>
