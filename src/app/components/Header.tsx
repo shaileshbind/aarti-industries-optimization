@@ -31,6 +31,7 @@ const Header = ({ data }: HeaderProps) => {
   const [searchedValue, setsearchedValue] = useState<string>("");
   const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -44,6 +45,7 @@ const Header = ({ data }: HeaderProps) => {
   const desktopNavRef = useRef<HTMLElement>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listItemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const closeMobileMenu = () => {
@@ -584,14 +586,53 @@ const Header = ({ data }: HeaderProps) => {
     }
   };
 
+  useEffect(() => {
+    setHighlightedIndex(-1);
+    listItemsRef.current = [];
+  }, [autocompleteResults]);
+
   const handleAutocompleteSelect = (word: string) => {
     setsearchedValue("");
     setShowAutocomplete(false);
     setAutocompleteResults([]);
+    setHighlightedIndex(-1);
     setIsSearchOpen(false);
     router.push(
       `/search-results?search=${encodeURIComponent(word.trim())}&page=1`,
     );
+  };
+
+  const handleAutocompleteKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showAutocomplete || autocompleteResults.length === 0) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev < autocompleteResults.length - 1 ? prev + 1 : 0;
+          listItemsRef.current[next]?.scrollIntoView({ block: "nearest" });
+          return next;
+        });
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev > 0 ? prev - 1 : autocompleteResults.length - 1;
+          listItemsRef.current[next]?.scrollIntoView({ block: "nearest" });
+          return next;
+        });
+        break;
+      case "Enter":
+        if (highlightedIndex >= 0) {
+          e.preventDefault();
+          handleAutocompleteSelect(autocompleteResults[highlightedIndex]);
+        }
+        break;
+      case "Escape":
+        setShowAutocomplete(false);
+        setHighlightedIndex(-1);
+        break;
+    }
   };
 
   const handleSearch = (e?: React.FormEvent | React.MouseEvent) => {
@@ -724,7 +765,7 @@ const Header = ({ data }: HeaderProps) => {
                                 desktopDropdownRefs.current.delete(index);
                               }
                             }}
-                            className="absolute top-full -left-10 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
+                            className="absolute top-full -left-24 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                           >
                             <div className="grid grid-cols-2   gap-2">
                               <div className="max-h-[500px] overflow-y-auto col-span-1">
@@ -1132,17 +1173,28 @@ const Header = ({ data }: HeaderProps) => {
                     value={searchedValue}
                     onChange={handleSearchInputChange}
                     handleSearch={handleSearch}
+                    onKeyDown={handleAutocompleteKeyDown}
                     placeholder="Find products, reports & more"
                     headerSearch={true}
                   />
                   {showAutocomplete && autocompleteResults.length > 0 && (
                     <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto max-w-[90%] lg:max-w-[760px] scrollbar">
-                      <ul>
+                      <ul role="listbox">
                         {autocompleteResults.map((word, idx) => (
                           <li
                             key={`${word}-${idx}`}
-                            className="px-4 py-2.5 text-sm text-gray-700 cursor-pointer hover:bg-[#FFF3ED] hover:text-[#F36633] transition-colors"
+                            ref={(el) => { listItemsRef.current[idx] = el; }}
+                            role="option"
+                            aria-selected={idx === highlightedIndex}
+                            className={clsx(
+                              "px-4 py-2.5 text-sm cursor-pointer transition-colors",
+                              idx === highlightedIndex
+                                ? "bg-[#FFF3ED] text-[#F36633]"
+                                : "text-gray-700 hover:bg-[#FFF3ED] hover:text-[#F36633]",
+                            )}
                             onMouseDown={() => handleAutocompleteSelect(word)}
+                            onMouseEnter={() => setHighlightedIndex(idx)}
+                            onMouseLeave={() => setHighlightedIndex(-1)}
                           >
                             {word}
                           </li>

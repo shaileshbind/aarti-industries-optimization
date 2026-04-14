@@ -9,6 +9,7 @@ type SearchBarProps = {
   placeholder?: string;
   headerSearch?: boolean;
   className?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 export default function SearchBar({
@@ -18,6 +19,7 @@ export default function SearchBar({
   handleSearch,
   headerSearch,
   className,
+  onKeyDown,
 }: SearchBarProps) {
   return (
     <form
@@ -35,6 +37,7 @@ export default function SearchBar({
         placeholder={placeholder || "Search by Document Name..."}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         className={clsx(
           `flex-1 px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none`,
         )}
