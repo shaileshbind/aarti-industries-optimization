@@ -16,17 +16,34 @@ type DateCardProps = {
 const getDateStatusLabel = (eventDate?: string) => {
   if (!eventDate) return null;
 
-  const parsedEventDate = new Date(eventDate);
-  if (Number.isNaN(parsedEventDate.getTime())) return null;
+  let startDate: Date;
+  let endDate: Date;
+
+  if (eventDate.includes(" - ")) {
+    const [startStr, endStr] = eventDate.split(" - ");
+    startDate = new Date(startStr.trim());
+    endDate = new Date(endStr.trim());
+    if (Number.isNaN(startDate.getTime()) && !Number.isNaN(endDate.getTime())) {
+      startDate = endDate;
+    }
+  } else {
+    startDate = new Date(eventDate);
+    endDate = startDate;
+  }
+
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) return null;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const eventDay = new Date(parsedEventDate);
-  eventDay.setHours(0, 0, 0, 0);
+  const start = new Date(startDate);
+  start.setHours(0, 0, 0, 0);
 
-  if (today.getTime() > eventDay.getTime()) return "Past";
-  if (today.getTime() < eventDay.getTime()) return "Upcoming";
+  const end = new Date(endDate);
+  end.setHours(0, 0, 0, 0);
+
+  if (today.getTime() > end.getTime()) return "Past";
+  if (today.getTime() < start.getTime()) return "Upcoming";
   return "Today";
 };
 

@@ -91,11 +91,11 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
           return rect.top - containerTop;
         });
 
-        gsap.set(star, { y: 0 });
-        gsap.set(line, { height: 0 });
-
         const totalItems = positions.length;
         if (totalItems < 2) return;
+
+        gsap.set(star, { y: positions[0] });
+        gsap.set(line, { height: positions[0] });
 
         const scrollPerGap = isMobile ? 500 : 1000;
         const totalScroll = (totalItems - 1) * scrollPerGap;
@@ -112,7 +112,6 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
             trigger: wrapper,
             start: "top top",
             end: `+=${totalScroll}`,
-            // `scrub: true` adds smoothing (~1s) which can feel like a delay on mobile.
             scrub: isMobile ? 0.3 : true,
             pin: true,
             pinSpacing: true,
@@ -150,11 +149,11 @@ const AILRoadmap = ({ data }: AILRoadmapData) => {
           },
         });
 
-        positions.forEach((pos, index) => {
-          const time = index * snapIncrement;
-          tl.to(star, { y: pos, ease: "none" }, time);
-          tl.to(line, { height: pos, ease: "none" }, time);
-        });
+        for (let i = 1; i < totalItems; i++) {
+          const startTime = (i - 1) * snapIncrement;
+          tl.to(star, { y: positions[i], duration: snapIncrement, ease: "none" }, startTime);
+          tl.to(line, { height: positions[i], duration: snapIncrement, ease: "none" }, startTime);
+        }
       });
     });
 
