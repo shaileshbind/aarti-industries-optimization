@@ -137,7 +137,6 @@ export default function PressReleaseYearListing({
     const load = async () => {
       try {
         const data = await fetchNews("/api/press");
-        console.log("data", data)
         const { latestTwo, yearAndPressReleases } = buildFromApiResponse(data);
         setApiLatestTwo(latestTwo);
         setApiYearAndPressReleases(yearAndPressReleases);
