@@ -206,8 +206,10 @@ export default function SearchResults() {
 
   const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const autocompleteRef = useRef<HTMLDivElement>(null);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listItemsRef = useRef<(HTMLLIElement | null)[]>([]);
 
   const allResults = useMemo(() => {
     if (!searchedData?.suggestions) return [];
@@ -270,13 +272,52 @@ export default function SearchResults() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    setHighlightedIndex(-1);
+    listItemsRef.current = [];
+  }, [autocompleteResults]);
+
   const handleAutocompleteSelect = (word: string) => {
     setSearchValue(word);
     setShowAutocomplete(false);
     setAutocompleteResults([]);
+    setHighlightedIndex(-1);
     router.push(
       `/search-results?search=${encodeURIComponent(word.trim())}&page=1`,
     );
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showAutocomplete || autocompleteResults.length === 0) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev < autocompleteResults.length - 1 ? prev + 1 : 0;
+          listItemsRef.current[next]?.scrollIntoView({ block: "nearest" });
+          return next;
+        });
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setHighlightedIndex((prev) => {
+          const next = prev > 0 ? prev - 1 : autocompleteResults.length - 1;
+          listItemsRef.current[next]?.scrollIntoView({ block: "nearest" });
+          return next;
+        });
+        break;
+      case "Enter":
+        if (highlightedIndex >= 0) {
+          e.preventDefault();
+          handleAutocompleteSelect(autocompleteResults[highlightedIndex]);
+        }
+        break;
+      case "Escape":
+        setShowAutocomplete(false);
+        setHighlightedIndex(-1);
+        break;
+    }
   };
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -372,18 +413,29 @@ export default function SearchResults() {
             value={searchValue}
             onChange={handleChange}
             handleSearch={handleSearch}
+            onKeyDown={handleKeyDown}
             placeholder="Find products, reports & more"
             headerSearch={true}
             className="border-2 border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
           />
           {showAutocomplete && autocompleteResults.length > 0 && (
             <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto scrollbar">
-              <ul>
+              <ul role="listbox">
                 {autocompleteResults.map((word, idx) => (
                   <li
                     key={`${word}-${idx}`}
-                    className="px-4 py-2.5 text-sm text-gray-700 cursor-pointer hover:bg-[#FFF3ED] hover:text-[#F36633] transition-colors"
+                    ref={(el) => { listItemsRef.current[idx] = el; }}
+                    role="option"
+                    aria-selected={idx === highlightedIndex}
+                    className={clsxN(
+                      "px-4 py-2.5 text-sm cursor-pointer transition-colors",
+                      idx === highlightedIndex
+                        ? "bg-[#FFF3ED] text-[#F36633]"
+                        : "text-gray-700 hover:bg-[#FFF3ED] hover:text-[#F36633]",
+                    )}
                     onMouseDown={() => handleAutocompleteSelect(word)}
+                    onMouseEnter={() => setHighlightedIndex(idx)}
+                    onMouseLeave={() => setHighlightedIndex(-1)}
                   >
                     {word}
                   </li>
