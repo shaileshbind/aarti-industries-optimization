@@ -53,7 +53,7 @@ function flattenPressHeadlines(
             file?: { url?: string };
           };
           if (!e?.heading) continue;
-          const href = e?.file?.url ?? e?.link ?? null;
+          const href = e?.link ?? null;
           flat.push({
             heading: e.heading,
             date: e?.date ?? null,
@@ -175,6 +175,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
+
           {headlines.slice(0, 4).map((release, index) => {
             const content = (
               <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
