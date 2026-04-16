@@ -116,6 +116,7 @@ export default function GeneralForm({
 
   const selectMenuProps = {
     disableScrollLock: true,
+    style: { zIndex: 9999 },
     PaperProps: {
       "data-lenis-prevent": true,
       sx: { maxHeight: 300 },
@@ -845,7 +846,12 @@ export default function GeneralForm({
                         <Paper {...props} sx={{ bgcolor: "#fffdf8" }} />
                       )}
                       PopperComponent={(props) => (
-                        <Popper {...props} data-lenis-prevent />
+                        <Popper
+                          {...props}
+                          data-lenis-prevent
+                          style={{ zIndex: 9999, width: props.anchorEl instanceof HTMLElement ? props.anchorEl.clientWidth : undefined }}
+                          placement="bottom-start"
+                        />
                       )}
                       renderInput={(params) => (
                         <TextField
