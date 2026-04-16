@@ -147,7 +147,7 @@ export default function ProductInnerPage({
                     </span>
                   </div>
                 </div>
-                {/* msds only - via cms */}
+                {/* msds and GPS only - via cms */}
                 {(
                   product?.productDetails?.documentSection?.documents ?? []
                 ).some(() => true) && (
@@ -159,11 +159,11 @@ export default function ProductInnerPage({
                             className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                             key={"index_" + index}
                             onClick={() => {
-                              if (index === 0) {
-                                setshowMSDSPopup(true);
-                              } else {
-                                setshowGeneralPopup(true);
-                              }
+                              // if (index === 0) {
+                              setshowMSDSPopup(true);
+                              // } else {
+                              //   setshowGeneralPopup(true);
+                              // }
                               setdocument(item?.file?.url);
                             }}
                           >
