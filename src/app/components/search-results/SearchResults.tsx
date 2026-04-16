@@ -1,5 +1,11 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import SearchBar from "../SearchBar";
 import { BodyText1, H1, SubH1 } from "../Typography2";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -113,6 +119,8 @@ function SearchResultCard({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const cleanSnippet = item.snippet ? cleanSnippetHtml(item.snippet) : "";
+  const displayTitle =
+    item._category === "press_releases" ? "Press Releases" : item.title;
 
   return (
     <Link
@@ -127,21 +135,23 @@ function SearchResultCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        {item.title && (
+        {displayTitle && (
           <BodyText1
             className={clsxN(
               "text-sm lg:text-lg font-medium pr-4 capitalize",
               isHovered ? "text-white" : "text-blue-200",
             )}
           >
-            {item.title}
+            {displayTitle}
           </BodyText1>
         )}
         {cleanSnippet && (
           <p
             className={clsxN(
               "text-xs lg:text-sm line-clamp-2 pr-4 [&_mark]:bg-[#F36633] [&_mark]:text-white [&_mark]:rounded-sm",
-              isHovered ? "text-white/80 [&_mark]:bg-white/20" : "text-gray-500",
+              isHovered
+                ? "text-white/80 [&_mark]:bg-white/20"
+                : "text-gray-500",
             )}
             dangerouslySetInnerHTML={{ __html: cleanSnippet }}
           />
@@ -214,7 +224,8 @@ export default function SearchResults() {
   const allResults = useMemo(() => {
     if (!searchedData?.suggestions) return [];
     return Object.entries(searchedData.suggestions).flatMap(
-      ([category, items]) => items.map((item) => ({ ...item, _category: category })),
+      ([category, items]) =>
+        items.map((item) => ({ ...item, _category: category })),
     );
   }, [searchedData]);
 
@@ -251,7 +262,10 @@ export default function SearchResults() {
   const debouncedAutocomplete = useCallback(
     (query: string) => {
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = setTimeout(() => fetchAutocomplete(query), 300);
+      debounceTimerRef.current = setTimeout(
+        () => fetchAutocomplete(query),
+        300,
+      );
     },
     [fetchAutocomplete],
   );
@@ -264,7 +278,10 @@ export default function SearchResults() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (autocompleteRef.current && !autocompleteRef.current.contains(e.target as Node)) {
+      if (
+        autocompleteRef.current &&
+        !autocompleteRef.current.contains(e.target as Node)
+      ) {
         setShowAutocomplete(false);
       }
     };
@@ -340,6 +357,13 @@ export default function SearchResults() {
     let path = rawUrl.startsWith("/") ? rawUrl : `/${rawUrl}`;
     if (item._category === "blogs" && !path.startsWith("/blogs")) {
       path = `/blogs${path}`;
+    } else if (item._category === "news" && !path.startsWith("/news")) {
+      path = `/news${path}`;
+    } else if (
+      item._category === "press_releases" &&
+      !path.startsWith("/press-releases")
+    ) {
+      path = `/press-releases${path}`;
     }
     const query = searchedData?.query || urlSearchValue;
     return query ? `${path}?highlight=${encodeURIComponent(query)}` : path;
@@ -408,7 +432,10 @@ export default function SearchResults() {
         <SubH1 className="text-blue-200 font-medium lg:text-[30px]!">
           Search
         </SubH1>
-        <div ref={autocompleteRef} className="relative max-w-full md:max-w-[560px]">
+        <div
+          ref={autocompleteRef}
+          className="relative max-w-full md:max-w-[560px]"
+        >
           <SearchBar
             value={searchValue}
             onChange={handleChange}
@@ -424,7 +451,9 @@ export default function SearchResults() {
                 {autocompleteResults.map((word, idx) => (
                   <li
                     key={`${word}-${idx}`}
-                    ref={(el) => { listItemsRef.current[idx] = el; }}
+                    ref={(el) => {
+                      listItemsRef.current[idx] = el;
+                    }}
                     role="option"
                     aria-selected={idx === highlightedIndex}
                     className={clsxN(
@@ -477,17 +506,11 @@ export default function SearchResults() {
         {!isLoading &&
           hasResults &&
           paginatedResults.map((item) => (
-            <SearchResultCard
-              key={item.id}
-              item={item}
-              link={getUrl(item)}
-            />
+            <SearchResultCard key={item.id} item={item} link={getUrl(item)} />
           ))}
 
         {!isLoading && hasSearched && !hasResults && (
-          <H1
-            className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]"
-          >
+          <H1 className="text-center w-full py-10 text-[20px] md:text-[24px] xl:text-[30px] leading-[140%]">
             No results found for &apos;{searchValue}&apos;.
           </H1>
         )}

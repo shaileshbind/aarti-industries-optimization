@@ -232,6 +232,7 @@ export default function MSDSForm({
                     IconComponent={KeyboardArrowDownIcon}
                     MenuProps={{
                       disableScrollLock: true,
+                      style: { zIndex: 9999 },
                       PaperProps: {
                         "data-lenis-prevent": true,
                         sx: {
@@ -263,6 +264,14 @@ export default function MSDSForm({
                     value={field.value || ""}
                     labelId="businessCategory"
                     IconComponent={KeyboardArrowDownIcon}
+                    MenuProps={{
+                      disableScrollLock: true,
+                      style: { zIndex: 9999 },
+                      PaperProps: {
+                        "data-lenis-prevent": true,
+                        sx: { maxHeight: 300 },
+                      },
+                    }}
                   >
                     {businessCategories.map((item) => (
                       <MenuItem key={item} value={item}>

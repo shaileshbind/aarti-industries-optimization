@@ -765,7 +765,7 @@ const Header = ({ data }: HeaderProps) => {
                                 desktopDropdownRefs.current.delete(index);
                               }
                             }}
-                            className="absolute top-full -left-24 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
+                            className="absolute top-full -left-30 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
                           >
                             <div className="grid grid-cols-2   gap-2">
                               <div className="max-h-[500px] overflow-y-auto col-span-1">
