@@ -120,7 +120,11 @@ function SearchResultCard({
   const [isHovered, setIsHovered] = useState(false);
   const cleanSnippet = item.snippet ? cleanSnippetHtml(item.snippet) : "";
   const displayTitle =
-    item._category === "press_releases" ? "Press Releases" : item.title;
+    item._category === "press_releases"
+      ? "Press Releases"
+      : item._category === "products" && !item.title
+        ? "Products"
+        : item.title;
 
   return (
     <Link
@@ -354,7 +358,9 @@ export default function SearchResults() {
   const getUrl = (item: SuggestionItem) => {
     const rawUrl = item.searchUrl || item.url || "";
     if (!rawUrl) return "/";
+
     let path = rawUrl.startsWith("/") ? rawUrl : `/${rawUrl}`;
+
     if (item._category === "blogs" && !path.startsWith("/blogs")) {
       path = `/blogs${path}`;
     } else if (item._category === "news" && !path.startsWith("/news")) {
@@ -364,7 +370,14 @@ export default function SearchResults() {
       !path.startsWith("/press-releases")
     ) {
       path = `/press-releases${path}`;
+    } else if (item._category === "events") {
+      path = "/events-and-webinars";
+    } else if (item._category === "reports") {
+      path = `/investors${path}`;
+    } else if (item._category === "products" && !item.title) {
+      path = `/products${path}`;
     }
+
     const query = searchedData?.query || urlSearchValue;
     return query ? `${path}?highlight=${encodeURIComponent(query)}` : path;
   };
