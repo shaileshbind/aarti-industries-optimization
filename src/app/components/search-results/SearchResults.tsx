@@ -119,12 +119,20 @@ function SearchResultCard({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const cleanSnippet = item.snippet ? cleanSnippetHtml(item.snippet) : "";
+  const categoryLabelMap: Record<string, string> = {
+    press_releases: "Press Releases",
+    products: "Products",
+    blogs: "Blogs",
+    news: "News",
+    events: "Events and Webinars",
+    reports: "Disclosure",
+  };
+
   const displayTitle =
-    item._category === "press_releases"
-      ? "Press Releases"
-      : item._category === "products" && !item.title
-        ? "Products"
-        : item.title;
+    item.title ||
+    categoryLabelMap[item._category ?? ""] ||
+    item._category ||
+    "";
 
   return (
     <Link
