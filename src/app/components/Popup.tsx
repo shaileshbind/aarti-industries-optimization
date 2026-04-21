@@ -122,7 +122,7 @@ export default function Popup({
   return (
     <div
       data-lenis-prevent
-      className="fixed w-full h-full top-0 left-0 flex justify-center items-center z-[9999]"
+      className="fixed w-full h-full top-0 left-0 flex justify-center items-center z-9999"
     >
       <div
         ref={overlayRef}
@@ -132,11 +132,11 @@ export default function Popup({
       <div
         ref={popupRef}
         className={clsx(
-          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-[20px] md:p-[30px] z-[60] relative`,
+          `bg-white w-[90%] md:w-[70%] lg:w-[55%] xl:w-[40%] rounded-[20px] p-[20px] md:p-[30px] z-60 relative`,
           className,
         )}
       >
-        <div className="popup-close absolute right-4 top-6 md:right-8 md:top-8 cursor-pointer hover:rotate-[90deg] transition-all duration-300 z-10">
+        <div className="popup-close absolute right-4 top-6 md:right-8 md:top-8 cursor-pointer hover:rotate-90 transition-all duration-300 z-10">
           <CloseIcon onClick={onOverlayClick} />
         </div>
         {children}

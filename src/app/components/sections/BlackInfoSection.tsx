@@ -53,7 +53,7 @@ const BlackInfoSection = ({
             <ParallaxImage
               src={image}
               alt={alt ? alt : "banner"}
-              className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-[0px]"
+              className="hidden lg:block w-full h-full object-cover z-0 px-[20px] lg:px-0 rounded-[50px] lg:rounded-none"
             />
             <div
               className={clsx(

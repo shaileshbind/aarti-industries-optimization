@@ -147,7 +147,7 @@ export default function MediaContainer({ data }: MediaContainerProps) {
 
         {/* Cards container */}
         <FadeInReveal>
-          <div className="mt-[0px] lg:mt-[12px]" ref={cardsWrapRef}>
+          <div className="mt-0 lg:mt-[12px]" ref={cardsWrapRef}>
             {renderContent()}
           </div>
         </FadeInReveal>

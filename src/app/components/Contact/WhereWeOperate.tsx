@@ -282,7 +282,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     >
       <H2 className="text-blue-200 text-center">Where We Operate</H2>
       <div className="mt-[18px] md:mt-[30px] w-full ">
-        <div className="max-w-[100%]  fluid-container ">
+        <div className="max-w-full  fluid-container ">
           <Tabs
             tabs={card as unknown as Parameters<typeof Tabs>[0]["tabs"]}
             activeId={active}
@@ -375,7 +375,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                       releaseOnEdges: true,
                     },
                   })}
-                  className="w-full !px-[20px] lg:!px-[60px] where-we-operate-swiper"
+                  className="w-full px-[20px]! lg:px-[60px]! where-we-operate-swiper"
                 >
                   {card[activeIndex]?.post_category?.address?.map(
                     (item: AddressCardItem, index: number) => (
@@ -402,8 +402,8 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
               </div>
               {showProgressBar && (
                 <div className="flex justify-between items-center px-[20px] lg:px-[60px] mt-[30px]">
-                  <div className="relative h-[1px] mx-[20px] lg:mr-[60px]  flex w-full">
-                    <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+                  <div className="relative h-px mx-[20px] lg:mr-[60px]  flex w-full">
+                    <div className="home-latest-at-swiper pb-0! absolute inset-0 h-[1.5px]!" />
                   </div>
                   <div className="flex gap-3">
                     <Image
