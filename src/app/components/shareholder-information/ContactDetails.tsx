@@ -156,7 +156,7 @@ export default function ContactDetails({
         </FormControl>
       </div>
 
-      <div className="lg:p-10 !pt-4 lg:w-[75%] w-full">
+      <div className="lg:p-10 pt-4! lg:w-[75%] w-full">
         <div className="p-8 bg-[#EFF3F5] lg:w-1/2 rounded-[20px]">
           {activeData?.tag && (
             <BodyText2 className="pb-2">{activeData.tag}</BodyText2>

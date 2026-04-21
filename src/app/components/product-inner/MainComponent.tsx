@@ -112,7 +112,7 @@ export default function ProductInnerPage({
                 )}
 
                 {/* product list */}
-                <div className="flex flex-col gap-[10px] mt-[0]">
+                <div className="flex flex-col gap-[10px] mt-0">
                   <div
                     className="group flex justify-between text-[#4C5861] text-sm md:text-base cursor-pointer"
                     onClick={() => {
@@ -210,7 +210,7 @@ export default function ProductInnerPage({
                   }}
                 >
                   Enquire Now
-                  <div className="w-[90px] h-[1px] mt-[0.4px] bg-[#DC4C03] transition-all duration-300 origin-left group-hover:w-0" />
+                  <div className="w-[90px] h-px mt-[0.4px] bg-[#DC4C03] transition-all duration-300 origin-left group-hover:w-0" />
                 </button>
               </div>
 
@@ -258,7 +258,7 @@ export default function ProductInnerPage({
                 {(product?.productDetails?.application ?? []).some(
                   () => true,
                 ) && (
-                  <div className="w-full h-[1px] xl:w-[1px] xl:h-[100%] bg-[#002F5047] my-6 xl:my-0" />
+                  <div className="w-full h-px xl:w-px xl:h-full bg-[#002F5047] my-6 xl:my-0" />
                 )}
                 {/* Applications */}
                 <div>

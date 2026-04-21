@@ -119,8 +119,20 @@ function SearchResultCard({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const cleanSnippet = item.snippet ? cleanSnippetHtml(item.snippet) : "";
+  const categoryLabelMap: Record<string, string> = {
+    press_releases: "Press Releases",
+    products: "Products",
+    blogs: "Blogs",
+    news: "News",
+    events: "Events and Webinars",
+    reports: "Disclosure",
+  };
+
   const displayTitle =
-    item._category === "press_releases" ? "Press Releases" : item.title;
+    item.title ||
+    categoryLabelMap[item._category ?? ""] ||
+    item._category ||
+    "";
 
   return (
     <Link
@@ -128,7 +140,7 @@ function SearchResultCard({
       className={clsxN(
         "duration-800 flex relative items-center justify-between border-b-2 py-4 lg:px-4 border-transparent min-w-full w-full md:w-auto cursor-pointer",
         isHovered
-          ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2"
+          ? "bg-linear-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2"
           : "bg-white border-gray-200",
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -354,7 +366,9 @@ export default function SearchResults() {
   const getUrl = (item: SuggestionItem) => {
     const rawUrl = item.searchUrl || item.url || "";
     if (!rawUrl) return "/";
+
     let path = rawUrl.startsWith("/") ? rawUrl : `/${rawUrl}`;
+
     if (item._category === "blogs" && !path.startsWith("/blogs")) {
       path = `/blogs${path}`;
     } else if (item._category === "news" && !path.startsWith("/news")) {
@@ -364,7 +378,14 @@ export default function SearchResults() {
       !path.startsWith("/press-releases")
     ) {
       path = `/press-releases${path}`;
+    } else if (item._category === "events") {
+      path = "/events-and-webinars";
+    } else if (item._category === "reports") {
+      path = `/investors${path}`;
+    } else if (item._category === "products" && !item.title) {
+      path = `/products${path}`;
     }
+
     const query = searchedData?.query || urlSearchValue;
     return query ? `${path}?highlight=${encodeURIComponent(query)}` : path;
   };
@@ -443,7 +464,7 @@ export default function SearchResults() {
             onKeyDown={handleKeyDown}
             placeholder="Find products, reports & more"
             headerSearch={true}
-            className="border-2 border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
+            className="border-2 border-[#E1E1E1] shadow-none! max-w-full md:max-w-[560px]"
           />
           {showAutocomplete && autocompleteResults.length > 0 && (
             <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto scrollbar">

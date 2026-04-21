@@ -183,7 +183,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                   <BodyText2>{release.heading}</BodyText2>
                 )}
                 {release?.date && (
-                  <BodyText2 className="!text-grey-300 !text-[12px] lg:!text-[14px]">
+                  <BodyText2 className="text-grey-300! text-[12px]! lg:text-[14px]!">
                     {formatDate(release.date)}
                   </BodyText2>
                 )}
@@ -220,7 +220,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
         <div className=" overflow-hidden">
           <div className="flex justify-between mx-[20px] lg:mx-[unset]">
             {mediaCoverage?.title && (
-              <H2 className="!text-[20px] lg:!text-[24px] ">
+              <H2 className="text-[20px]! lg:text-[24px]! ">
                 {mediaCoverage?.title}
               </H2>
             )}
@@ -284,7 +284,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                   spaceBetween: 15,
                 },
               }}
-              className="!px-[20px] lg:!px-[0px]"
+              className="px-[20px]! lg:px-0!"
             >
               {mediaItems.map((news, index) => (
                 <SwiperSlide key={news?.id ?? index}>
@@ -300,7 +300,7 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
           </div>
           <div className="w-full pt-[24px] lg:hidden">
             <div className="mx-[20px] relative h-[2px]">
-              <div className="in-headlines-section-progressbar !static !w-full h-full" />
+              <div className="in-headlines-section-progressbar static! w-full! h-full" />
             </div>
           </div>
         </div>
