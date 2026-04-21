@@ -52,7 +52,6 @@ function extractDesktopMapSvg() {
   svg = svg.replace(/\s*\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "");
 
   fs.writeFileSync(path.join(OUT_DIR, "desktop-map.svg"), svg, "utf8");
-  console.log("Wrote public/maps/desktop-map.svg");
 }
 
 function extractStateMapSvg() {
@@ -81,7 +80,6 @@ function extractStateMapSvg() {
   svg = svg.replace(/\s*\{\s*\/\*[\s\S]*?\*\/\s*\}/g, "");
 
   fs.writeFileSync(path.join(OUT_DIR, "state-map.svg"), svg, "utf8");
-  console.log("Wrote public/maps/state-map.svg");
 }
 
 if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });

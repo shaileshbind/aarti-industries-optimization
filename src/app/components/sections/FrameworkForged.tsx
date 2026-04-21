@@ -384,7 +384,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                           ) : (
                             <div
                               className={clsx(
-                                "absolute right-0 top-0 md:pt-[unset] pt-[100%] md:min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
+                                "absolute right-0 top-0 md:pt-[unset] pt-[100%] md:min-h-[317px] lg:min-h-[640px] w-full lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
                                 gpuLayerClasses,
                               )}
                             >
@@ -435,8 +435,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                 sizes="(max-width: 1023px) 42px, 72px"
                                 className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                               />
-                              <div className="absolute min-h-screen bg-white w-[1px] right-[69px] lg:right-[206.5px] top-0" />
-                              <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
+                              <div className="absolute min-h-screen bg-white w-px right-[69px] lg:right-[206.5px] top-0" />
+                              <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-px" />
                             </div>
                           )}
                         </div>
@@ -581,7 +581,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
             ) : (
               <div
                 className={clsx(
-                  "absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-[100%] lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
+                  "absolute right-0 top-0 min-h-[317px] lg:min-h-[640px] w-full lg:w-full rounded-[20px] overflow-hidden lg:rounded-l-[30px] lg:rounded-r-[unset]",
                   gpuLayerClasses,
                 )}
               >
@@ -629,8 +629,8 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                   sizes="(max-width: 1023px) 42px, 72px"
                   className="absolute bottom-[20px] lg:bottom-[55px] z-10 right-[48px] lg:right-[171px] w-[42px] lg:w-[72px]"
                 />
-                <div className="absolute min-h-screen bg-white w-[1px] right-[68.5px] lg:right-[206.5px]" />
-                <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-[1px]" />
+                <div className="absolute min-h-screen bg-white w-px right-[68.5px] lg:right-[206.5px]" />
+                <div className="absolute w-full bg-white bottom-[40px] lg:bottom-[90.5px] h-px" />
               </div>
             )}
           </div>

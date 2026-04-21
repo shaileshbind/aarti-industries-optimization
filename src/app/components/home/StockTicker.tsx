@@ -275,20 +275,20 @@ export default function StockTicker() {
     renderStock: (s: StockData, exchange: string) => React.ReactNode;
     isDuplicate?: boolean;
   }) => (
-    <div className="flex items-center gap-[110px] flex-shrink-0 w-max">
+    <div className="flex items-center gap-[110px] shrink-0 w-max">
       {nseStock && (
-        <div className="flex gap-[60px] flex-shrink-0">
+        <div className="flex gap-[60px] shrink-0">
           {renderStock(nseStock, "NSE")}
         </div>
       )}
       {pressReleases.some((item) => item?.heading && item?.link) && (
-        <div className="flex gap-[110px] items-center flex-shrink-0 flex-nowrap">
+        <div className="flex gap-[110px] items-center shrink-0 flex-nowrap">
           {pressReleases.slice(0, 3).map((item) => {
             if (!item?.heading || !item?.link) return null;
             return (
               <a
                 href={`/press-releases/${item.link}`}
-                className="text-sm text-[#FFF] flex-shrink-0 whitespace-nowrap inline-flex items-center"
+                className="text-sm text-[#FFF] shrink-0 whitespace-nowrap inline-flex items-center"
                 key={
                   isDuplicate
                     ? `dup-${item.link + (item.date ?? "")}`
@@ -329,7 +329,7 @@ export default function StockTicker() {
     const percentSign = stock?.changePercent > 0 ? "+" : "";
 
     return (
-      <div className="flex gap-4 flex-shrink-0 whitespace-nowrap">
+      <div className="flex gap-4 shrink-0 whitespace-nowrap">
         <p className="text-[#FFFFFF] text-sm font-roboto">
           {exchange}: {stock?.symbol}
         </p>
@@ -353,7 +353,7 @@ export default function StockTicker() {
       >
         <div
           ref={rowRef}
-          className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px]  pt-[4px] lg:pt-[0px]"
+          className="stock-ticker-row flex items-center gap-[110px] shrink-0 w-max pr-[110px] min-h-[45px]  pt-[4px] lg:pt-0"
         >
           <MarqueeRow
             nseStock={nseStock}
@@ -362,7 +362,7 @@ export default function StockTicker() {
           />
         </div>
         {/* Second copy */}
-        <div className="stock-ticker-row flex items-center gap-[110px] flex-shrink-0 w-max pr-[110px] min-h-[45px] pt-[4px] lg:pt-[0px]">
+        <div className="stock-ticker-row flex items-center gap-[110px] shrink-0 w-max pr-[110px] min-h-[45px] pt-[4px] lg:pt-0">
           <MarqueeRow
             nseStock={nseStock}
             pressReleases={pressReleases}

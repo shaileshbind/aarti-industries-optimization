@@ -179,7 +179,7 @@ export default function WriteToUs({ document }: { document?: string }) {
               rows={5}
               cols={40}
               placeholder="Write your message here"
-              className="border-[#e8e6e6] border-2 p-4 w-full h-[110px] rounded-[10px] outline-none resize-none flex-shrink-0"
+              className="border-[#e8e6e6] border-2 p-4 w-full h-[110px] rounded-[10px] outline-none resize-none shrink-0"
             ></textarea>
           </div>
 

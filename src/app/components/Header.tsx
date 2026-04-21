@@ -602,7 +602,9 @@ const Header = ({ data }: HeaderProps) => {
     );
   };
 
-  const handleAutocompleteKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleAutocompleteKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (!showAutocomplete || autocompleteResults.length === 0) return;
 
     switch (e.key) {
@@ -661,7 +663,7 @@ const Header = ({ data }: HeaderProps) => {
         {pathname === "/" && <StockTicker />}
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
-          <div className="ml-[0px] lgx:ml-[60px] w-full h-auto relative z-10">
+          <div className="ml-0 lgx:ml-[60px] w-full h-auto relative z-10">
             <div className="flex items-center justify-start lgx:justify-between h-16 lgx:h-18 pr-[24px] relative">
               {/* Logo desktop */}
               {Logo?.Logo?.url && (
@@ -681,7 +683,7 @@ const Header = ({ data }: HeaderProps) => {
               {/* Desktop Navigation - Hidden on tablets and below */}
               <nav
                 ref={desktopNavRef}
-                className="hidden lgx:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-[100%] items-center   "
+                className="hidden lgx:flex gap-5 xl:gap-8 absolute right-[212px] pr-[24px] h-full items-center   "
                 onMouseLeave={closeAllDropdowns}
               >
                 {menu?.map((item, index) => {
@@ -700,7 +702,7 @@ const Header = ({ data }: HeaderProps) => {
                   return (
                     <div
                       key={item.id}
-                      className="relative group h-[100%] grid "
+                      className="relative group h-full grid "
                       onMouseEnter={() => {
                         if (!isTouchDevice && hasDropdown) {
                           setOpenDropdown(index);
@@ -765,7 +767,12 @@ const Header = ({ data }: HeaderProps) => {
                                 desktopDropdownRefs.current.delete(index);
                               }
                             }}
-                            className="absolute top-full -left-30 translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-[60] after:content-[''] after:absolute after:bottom-[100%] after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden"
+                            className={clsx(
+                              "absolute top-full translate-x-[-30%] mt-2 w-[630px] p-7 bg-white rounded-[14px] shadow-lg border border-gray-100 z-60 after:content-[''] after:absolute after:bottom-full after:left-0 after:w-full after:h-[10px] after:z-[-1] opacity-0 visibility-hidden",
+                              pathname === "/search-results"
+                                ? "-left-30"
+                                : "-left-10",
+                            )}
                           >
                             <div className="grid grid-cols-2   gap-2">
                               <div className="max-h-[500px] overflow-y-auto col-span-1">
@@ -1013,7 +1020,7 @@ const Header = ({ data }: HeaderProps) => {
                                         fill
                                         className="object-cover scale-110 w-full h-full "
                                       />
-                                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md !rounded-[10px] overflow-hidden"></i>
+                                      <i className="absolute top-0 left-0 w-full h-full backdrop-blur-md rounded-[10px]! overflow-hidden"></i>
                                       <span className="absolute rounded-full rounded-br-[28px] overflow-hidden w-full h-full">
                                         <Image
                                           src={item.image.url}
@@ -1038,7 +1045,7 @@ const Header = ({ data }: HeaderProps) => {
                 {/* Desktop Search Icon */}
 
                 {pathname !== "/search-results" && (
-                  <div className="flex items-center cursor-pointer h-[100%]">
+                  <div className="flex items-center cursor-pointer h-full">
                     <div
                       className="w-[52px] h-[72px] relative flex items-center justify-center"
                       onClick={handleSearchToggle}
@@ -1109,7 +1116,7 @@ const Header = ({ data }: HeaderProps) => {
               {/* Mobile Search */}
               {pathname !== "/search-results" && (
                 <div
-                  className="h-[100%] lgx:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
+                  className="h-full lgx:hidden  absolute  right-[100px] md:right-[120px] flex items-center justify-center "
                   onClick={handleSearchToggle}
                 >
                   <div className="w-[20px] mx-3 h-[20px] relative">
@@ -1141,7 +1148,7 @@ const Header = ({ data }: HeaderProps) => {
           <Link
             href="/contact"
             data-lenis-prevent
-            className="group absolute top-0 right-0 z-[11] w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
+            className="group absolute top-0 right-0 z-11 w-[88px] lgx:w-[212px] cursor-pointer text-[14px] lgx:text-[16px] text-white font-medium bg-gradient-orange-1 grid place-items-center rounded-tl-[10px] h-16 lgx:h-18"
           >
             <span className="hidden lgx:flex">
               <SplitText text="Get In Touch" />
@@ -1154,9 +1161,9 @@ const Header = ({ data }: HeaderProps) => {
 
           <div
             className={clsx(
-              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 z-[1] after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-[1px] after:bg-black/10",
+              "absolute top-0 left-0 w-full bg-[#DFE0E1] transition-all duration-1000 h-[318px] max-h-0 z-1 after:content-[''] after:absolute after:top-[70px] after:left-0 after:w-full after:h-px after:bg-black/10",
               isSearchOpen
-                ? "!max-h-[320] overflow-visible"
+                ? "max-h-[320]! overflow-visible"
                 : "overflow-hidden",
             )}
           >
@@ -1183,7 +1190,9 @@ const Header = ({ data }: HeaderProps) => {
                         {autocompleteResults.map((word, idx) => (
                           <li
                             key={`${word}-${idx}`}
-                            ref={(el) => { listItemsRef.current[idx] = el; }}
+                            ref={(el) => {
+                              listItemsRef.current[idx] = el;
+                            }}
                             role="option"
                             aria-selected={idx === highlightedIndex}
                             className={clsx(
@@ -1212,7 +1221,7 @@ const Header = ({ data }: HeaderProps) => {
       {/* Mobile/Tablet Navigation Menu - Fixed positioning */}
       <div
         ref={mobileNavRef}
-        className={`lgx:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden top-[-100%] `}
+        className={`lgx:hidden fixed inset-x-0 bg-[#F4F5F6] border-t border-gray-100 h-full shadow-lg z-40 overflow-hidden -top-full `}
         style={{ paddingTop: `${pathname === "/" ? `99px` : `63px`}` }}
       >
         {/* Mobile/Tablet Navigation Links */}
@@ -1488,7 +1497,7 @@ const Header = ({ data }: HeaderProps) => {
 
       <div
         ref={searchBackdropRef}
-        className="bg-black/50 fixed w-full h-full top-0 left-0 z-[10] opacity-0 pointer-events-none"
+        className="bg-black/50 fixed w-full h-full top-0 left-0 z-10 opacity-0 pointer-events-none"
         style={{ pointerEvents: isSearchOpen ? "auto" : "none" }}
         onClick={() => {
           setIsSearchOpen(false);
