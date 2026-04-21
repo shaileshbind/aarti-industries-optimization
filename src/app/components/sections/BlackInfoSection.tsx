@@ -31,9 +31,8 @@ const BlackInfoSection = ({
   ctaLink,
   overlayClassName,
 }: BlackInfoSectionProps) => {
-
   const isTablet = useMatchMedia("(max-width:1024px)");
-  console.log(isTablet);
+
   return (
     <>
       {mobImage && isTablet && (

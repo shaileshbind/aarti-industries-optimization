@@ -30,21 +30,15 @@ export default async function page({ params }: PageProps) {
     return notFound();
   }
 
-  console.log(categories)
-
   const seo = data?.seo;
   const componentType: string = data?.reportLayout?.[0]?.__component ?? "";
 
   const renderTemplate = () => {
     switch (componentType) {
       case "reports.sub-year-and-quarter":
-        return (
-          <StockExchangeContainer data={data} categories={categories} />
-        );
+        return <StockExchangeContainer data={data} categories={categories} />;
       case "reports.sub-year-and-report":
-        return (
-          <YearAndReportContainer data={data} categories={categories} />
-        );
+        return <YearAndReportContainer data={data} categories={categories} />;
       case "reports.sub-category-with-report":
         return (
           <SubCategoryReportContainer data={data} categories={categories} />

@@ -6,7 +6,7 @@ import {
 
 // Initialize the Secrets Manager client
 const region = process.env.AWS_REGION || "us-east-1";
-console.log(`[AWS Secrets Manager] Initializing client with region: ${region}`);
+// console.log(`[AWS Secrets Manager] Initializing client with region: ${region}`);
 const client = new SecretsManagerClient({
   region,
 });
@@ -19,7 +19,7 @@ const client = new SecretsManagerClient({
 export async function getSecret(
   secretName: string,
 ): Promise<Record<string, unknown>> {
-  console.log(`[AWS Secrets Manager] Fetching secret: ${secretName}`);
+  // console.log(`[AWS Secrets Manager] Fetching secret: ${secretName}`);
   try {
     const response = await client.send(
       new GetSecretValueCommand({
@@ -27,15 +27,8 @@ export async function getSecret(
       }),
     );
 
-    console.log(
-      `[AWS Secrets Manager] Successfully retrieved secret: ${secretName}`,
-    );
-
     if (response.SecretString) {
       const parsedSecret = JSON.parse(response.SecretString);
-      console.log(
-        `[AWS Secrets Manager] Successfully parsed secret: ${secretName}`,
-      );
       return parsedSecret;
     } else {
       console.error(

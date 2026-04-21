@@ -496,7 +496,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       <FadeInReveal>
         <div className="flex justify-between gap-6 items-center px-[20px] lg:px-[60px]">
           {sectionTitle && (
-            <div className="max-w-[100%] md:max-w-fit">
+            <div className="max-w-full md:max-w-fit">
               <H2 className="text-blue-200">{sectionTitle}</H2>
             </div>
           )}
@@ -508,7 +508,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
           <FadeInReveal>
             <div className="px-[20px] lg:px-[60px]">
               <div className="flex items-center justify-between gap-6">
-                <div className="max-w-[100%] md:max-w-fit overflow-x-auto">
+                <div className="max-w-full md:max-w-fit overflow-x-auto">
                   <div className=" w-full ">
                     <div className="relative bg-grey-100 rounded-[40px] p-[4px]  whitespace-nowrap w-fit">
                       <div
@@ -616,7 +616,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                   el: ".home-latest-at-swiper",
                   type: "progressbar",
                 }}
-                className=" w-full !px-[20px] lg:!px-[60px]"
+                className=" w-full px-[20px]! lg:px-[60px]!"
               >
                 {postsContent.map((item, index) => (
                   <SwiperSlide key={item?.id || index}>
@@ -640,8 +640,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 ))}
               </Swiper>
             </div>
-            <div className="relative h-[1px] mx-[20px] lg:mx-[60px] mt-[30px]">
-              <div className="home-latest-at-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+            <div className="relative h-px mx-[20px] lg:mx-[60px] mt-[30px]">
+              <div className="home-latest-at-swiper pb-0! absolute inset-0 h-[1.5px]!" />
             </div>
           </FadeInReveal>
         )}

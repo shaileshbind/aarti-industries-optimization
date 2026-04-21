@@ -140,7 +140,7 @@ function SearchResultCard({
       className={clsxN(
         "duration-800 flex relative items-center justify-between border-b-2 py-4 lg:px-4 border-transparent min-w-full w-full md:w-auto cursor-pointer",
         isHovered
-          ? "bg-gradient-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2"
+          ? "bg-linear-to-bl from-[#FA8129] to-[#DC4C03] text-white rounded-lg px-2"
           : "bg-white border-gray-200",
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -464,7 +464,7 @@ export default function SearchResults() {
             onKeyDown={handleKeyDown}
             placeholder="Find products, reports & more"
             headerSearch={true}
-            className="border-2 border-[#E1E1E1] !shadow-none max-w-full md:max-w-[560px]"
+            className="border-2 border-[#E1E1E1] shadow-none! max-w-full md:max-w-[560px]"
           />
           {showAutocomplete && autocompleteResults.length > 0 && (
             <SmoothScrollContainer className="absolute left-0 right-0 top-full mt-1 bg-white border border-[#E1E1E1] rounded-lg shadow-lg z-50 max-h-[240px] overflow-y-auto scrollbar">

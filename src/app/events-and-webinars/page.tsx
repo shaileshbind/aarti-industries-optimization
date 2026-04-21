@@ -69,8 +69,7 @@ export default async function page() {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-      {console.log(upcomingEventsData)}
-      {console.log("pastEventsData", pastEventsData)}
+
       {section_one && <EventsBanner data={section_one} />}
       {section_two && (
         <EventsListing
