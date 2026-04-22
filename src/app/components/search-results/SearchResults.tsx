@@ -307,13 +307,19 @@ export default function SearchResults() {
   }, [autocompleteResults]);
 
   const handleAutocompleteSelect = (word: string) => {
+    const trimmed = word.trim();
     setSearchValue(word);
     setShowAutocomplete(false);
     setAutocompleteResults([]);
     setHighlightedIndex(-1);
-    router.push(
-      `/search-results?search=${encodeURIComponent(word.trim())}&page=1`,
-    );
+    if (trimmed === urlSearchValue) {
+      getSearchedData(trimmed);
+      scrollTo(0, { duration: 0.8 });
+    } else {
+      router.push(
+        `/search-results?search=${encodeURIComponent(trimmed)}&page=1`,
+      );
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -352,15 +358,21 @@ export default function SearchResults() {
   const handleSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     setShowAutocomplete(false);
-    if (!searchValue.trim()) {
+    const trimmed = searchValue.trim();
+    if (!trimmed) {
       setSearchedData(null);
       setHasSearched(false);
       router.push("/search-results");
       return;
     }
-    router.push(
-      `/search-results?search=${encodeURIComponent(searchValue.trim())}&page=1`,
-    );
+    if (trimmed === urlSearchValue) {
+      getSearchedData(trimmed);
+      scrollTo(0, { duration: 0.8 });
+    } else {
+      router.push(
+        `/search-results?search=${encodeURIComponent(trimmed)}&page=1`,
+      );
+    }
   };
 
   const getUrl = (item: SuggestionItem) => {
