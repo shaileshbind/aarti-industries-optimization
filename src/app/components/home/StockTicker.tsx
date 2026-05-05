@@ -8,6 +8,7 @@ type TickerItem = {
   heading?: string;
   link?: string | null;
   date?: string | null;
+  file?: string | null;
 };
 
 function flattenPressReleases(
@@ -33,12 +34,13 @@ function flattenPressReleases(
             date?: string | null;
             file?: { url?: string };
           };
-          const link = e?.link ?? e?.file?.url ?? null;
+          const link = e?.link ?? null;
           if (e?.heading)
             flat.push({
               heading: e.heading,
               link: link ?? null,
               date: e?.date ?? null,
+              file: e?.file?.url ?? null,
             });
         }
       }
@@ -284,10 +286,12 @@ export default function StockTicker() {
       {pressReleases.some((item) => item?.heading && item?.link) && (
         <div className="flex gap-[110px] items-center shrink-0 flex-nowrap">
           {pressReleases.slice(0, 3).map((item) => {
-            if (!item?.heading || !item?.link) return null;
+            if (!item?.heading) return null;
             return (
               <a
-                href={`/press-releases/${item.link}`}
+                href={
+                  item.link ? `/press-releases/${item.link}` : item.file || "#"
+                }
                 className="text-sm text-[#FFF] shrink-0 whitespace-nowrap inline-flex items-center"
                 key={
                   isDuplicate
