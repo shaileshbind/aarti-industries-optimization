@@ -19,6 +19,7 @@ type HeadlineItem = {
   heading?: string;
   date?: string | null;
   href?: string | null;
+  file?: string | null;
 };
 
 type MediaCardItem = {
@@ -30,7 +31,7 @@ type MediaCardItem = {
 };
 
 function flattenPressHeadlines(
-  data: Record<string, { items?: unknown[] }> | null
+  data: Record<string, { items?: unknown[] }> | null,
 ): HeadlineItem[] {
   if (!data || typeof data !== "object") return [];
   const flat: HeadlineItem[] = [];
@@ -58,6 +59,7 @@ function flattenPressHeadlines(
             heading: e.heading,
             date: e?.date ?? null,
             href: href ?? null,
+            file: e?.file?.url,
           });
         }
       }
@@ -71,7 +73,7 @@ function flattenPressHeadlines(
 }
 
 function cmsNewsToMediaCards(
-  news: NonNullable<InvestorHeadlines["data"]["mediaCoverage"]>["news"]
+  news: NonNullable<InvestorHeadlines["data"]["mediaCoverage"]>["news"],
 ): MediaCardItem[] {
   if (!Array.isArray(news)) return [];
   return news.slice(0, 3).map((n) => ({
@@ -84,7 +86,13 @@ function cmsNewsToMediaCards(
 }
 
 function apiResultsToMediaCards(
-  results: { id?: number; image?: { url?: string }; date?: string; newsDescription?: string; ctaButton?: { externalLink?: string } }[]
+  results: {
+    id?: number;
+    image?: { url?: string };
+    date?: string;
+    newsDescription?: string;
+    ctaButton?: { externalLink?: string };
+  }[],
 ): MediaCardItem[] {
   if (!Array.isArray(results)) return [];
   return results.slice(0, 3).map((r) => ({
@@ -106,15 +114,12 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -153,7 +158,9 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
         const apiData = await fetchNews("/api/news?_limit=3&_page=1");
         if (cancelled) return;
         const results = (apiData as { results?: unknown[] })?.results ?? [];
-        const fromApi = apiResultsToMediaCards(results as Parameters<typeof apiResultsToMediaCards>[0]);
+        const fromApi = apiResultsToMediaCards(
+          results as Parameters<typeof apiResultsToMediaCards>[0],
+        );
         setMediaItems(fromApi.length > 0 ? fromApi : cmsFallback);
       } catch {
         if (!cancelled) setMediaItems(cmsFallback);
@@ -175,13 +182,11 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
               {pressRelease?.title}
             </SubH2>
           )}
-
+        
           {headlines.slice(0, 4).map((release, index) => {
             const content = (
               <div className="pb-[14px] border-b border-grey-200 mb-[14px]">
-                {release?.heading && (
-                  <BodyText2>{release.heading}</BodyText2>
-                )}
+                {release?.heading && <BodyText2>{release.heading}</BodyText2>}
                 {release?.date && (
                   <BodyText2 className="text-grey-300! text-[12px]! lg:text-[14px]!">
                     {formatDate(release.date)}
@@ -189,14 +194,20 @@ const InHeadlines = ({ data }: InvestorHeadlines) => {
                 )}
               </div>
             );
-            if (release.href) {
-              return (
-                <Link href={`/press-releases/${release.href}`} target="_blank" key={index}>
-                  {content}
-                </Link>
-              );
-            }
-            return <div key={index}>{content}</div>;
+            return (
+              <Link
+                href={
+                  release.href
+                    ? `/press-releases/${release.href}`
+                    : release?.file || "#"
+                }
+                target="_blank"
+                key={index}
+              >
+                {content}
+              </Link>
+            );
+            // return <div key={index}>{content}</div>;
           })}
           {pressRelease?.ctaButton?.title &&
             (pressRelease?.ctaButton?.hasExternalLink == "true"
