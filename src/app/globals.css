@@ -1153,8 +1153,17 @@ body {
 .catgoryProductsSwiper .slide-content {
   display: flex;
   flex-direction: column;
-  
+
 }
-.catgoryProductsSwiper  .title-card-anim {
-  display: flex; width: 100%;
-} 
+
+.catgoryProductsSwiper .title-card-anim {
+  display: flex;
+  width: 100%;
+}
+
+.investor table td,
+.investor table th,
+.investor table tr {
+  font-family: var(--font-alte-hans), sans-serif;
+  font-size: 14px;
+}

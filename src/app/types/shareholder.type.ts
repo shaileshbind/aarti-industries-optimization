@@ -14,6 +14,7 @@ export type Report = {
   id: string | number;
   heading: string;
   link: string;
+  date?: string;
   file?: { url: string };
 };
 
