@@ -56,6 +56,7 @@ function buildPressReleasesYearAndQuarter(
             heading?: string;
             slug?: string | null;
             link?: string | null;
+            date?: string;
             file?: { url?: string };
           };
           const link = entry?.file?.url ?? entry?.link ?? "";
@@ -63,6 +64,7 @@ function buildPressReleasesYearAndQuarter(
             id: entry.id ?? entry.heading ?? 0,
             heading: entry.heading ?? "",
             link,
+            date: entry?.date,
             ...(entry?.file?.url && { file: { url: entry.file.url } }),
           };
         });
@@ -125,9 +127,7 @@ export default function YearQuarterListing({
       try {
         const data = await fetchNews("/api/press");
         if (cancelled) return;
-        setPressReleasesYearAndQuarter(
-          buildPressReleasesYearAndQuarter(data),
-        );
+        setPressReleasesYearAndQuarter(buildPressReleasesYearAndQuarter(data));
       } finally {
         if (!cancelled) setIsPressReleasesLoading(false);
       }
@@ -251,9 +251,18 @@ export default function YearQuarterListing({
     (item) => item.year === activeYear,
   );
   const quarters = currentYearData?.quarter
-    ? [...currentYearData.quarter].sort(
-        (a, b) => quarterSortOrder(b) - quarterSortOrder(a),
-      )
+    ? [...currentYearData.quarter]
+        .sort((a, b) => quarterSortOrder(b) - quarterSortOrder(a))
+        .map((q) => ({
+          ...q,
+          report: q.report
+            ? [...q.report].sort((a, b) => {
+                const dateA = a.date ? new Date(a.date).getTime() : 0;
+                const dateB = b.date ? new Date(b.date).getTime() : 0;
+                return dateB - dateA; // latest date first
+              })
+            : q.report,
+        }))
     : [];
 
   // Handler for Archive year dropdown
@@ -467,9 +476,7 @@ export default function YearQuarterListing({
           </div>
 
           {/* Report list - All quarters displayed in reverse order */}
-          <SmoothScrollContainer
-            className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4"
-          >
+          <SmoothScrollContainer className="mt-6 lg:mt-10 lg:max-h-[60vh] overflow-x-hidden lg:overflow-y-auto scrollbar lg:pr-4">
             {isPressReleasesSubCategory(activeSubCategory) &&
             isPressReleasesLoading ? (
               <PressReleaseSkeleton />

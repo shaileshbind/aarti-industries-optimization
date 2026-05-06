@@ -10,7 +10,7 @@ export default async function ShareholderInformation() {
   const seo = data?.seo;
 
   return (
-    <div>
+    <div className="investor">
       <SEO
         title={seo?.title ?? "Shareholder Information"}
         metaTitle={seo?.metaTitle}
