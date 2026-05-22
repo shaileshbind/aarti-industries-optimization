@@ -49,7 +49,7 @@ export default function MSDSForm({
     },
   });
   const [formSubmitted, setformSubmitted] = useState<boolean>(false);
-
+  const htmlTagPattern = /<\/?[a-z][\w-]*\s*[^>]*>/i;
   const businessCategories = [
     "Chemical",
     "Sustainability",
@@ -285,14 +285,31 @@ export default function MSDSForm({
           )}
 
           {/* Message */}
-          <textarea
-            id="message"
-            {...register("message")}
-            rows={5}
-            cols={40}
-            placeholder="Write your message here"
-            className="border-[#e8e6e6] border-2 p-4 rounded-[10px] outline-none resize-none flex-shrink-0"
-          ></textarea>
+          <div className="flex flex-col">
+            <textarea
+              id="message"
+              {...register("message", {
+                validate: (value) => {
+                  if (value && htmlTagPattern.test(value)) {
+                    return "HTML tags are not allowed";
+                  }
+                  return true;
+                },
+              })}
+              rows={5}
+              cols={40}
+              placeholder="Write your message here"
+              className={`border p-4 rounded-[10px] outline-none resize-none flex-shrink-0 ${
+                errors.message ? "border-[#d32f2f]" : "border-[#e8e6e6]"
+              }`}
+            ></textarea>
+
+            {errors.message && (
+              <p className="text-[#d32f2f] text-[13px] mt-1 pl-4">
+                {errors.message.message}
+              </p>
+            )}
+          </div>
         </div>
 
         {formSubmitted && (
