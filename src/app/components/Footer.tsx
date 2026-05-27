@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Tags from "./Tags";
 import Link from "next/link";

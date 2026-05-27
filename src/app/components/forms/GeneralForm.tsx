@@ -92,6 +92,7 @@ export default function GeneralForm({
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>("");
   const [openSelect, setOpenSelect] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const htmlTagPattern = /<\/?[a-z][\w-]*\s*[^>]*>/i;
 
   const handleOpenSelect = useCallback(
     (name: string) => () => setOpenSelect(name),
@@ -888,6 +889,12 @@ export default function GeneralForm({
                 id="message"
                 {...register("message", {
                   required: "Message is required",
+                  validate: (value) => {
+                    if (htmlTagPattern.test(value)) {
+                      return "HTML tags are not allowed";
+                    }
+                    return true;
+                  },
                 })}
                 rows={5}
                 cols={40}
@@ -961,6 +968,12 @@ export default function GeneralForm({
                   id="otherEnquiry"
                   {...register("otherEnquiry", {
                     required: "Message is required",
+                    validate: (value) => {
+                      if (htmlTagPattern.test(value)) {
+                        return "HTML tags are not allowed";
+                      }
+                      return true;
+                    },
                   })}
                   rows={5}
                   cols={40}

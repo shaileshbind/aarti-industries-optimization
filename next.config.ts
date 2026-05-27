@@ -15,6 +15,8 @@ const nextConfig = async () => {
   }
 
   const nextConfigObject: Partial<NextConfig> = {
+    poweredByHeader: false,
+    productionBrowserSourceMaps: false,
     turbopack: {
       root: process.cwd(),
     },
