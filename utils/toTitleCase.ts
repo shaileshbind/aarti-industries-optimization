@@ -219,7 +219,7 @@ export function toTitleCase(text: string): string {
   // (?:[\u0027\u2018\u2019]+[a-zA-Z]+)? optionally matches apostrophe(s) followed by letters
   // \u0027 = straight apostrophe, \u2018 = left single quote, \u2019 = right single quote (curly apostrophe)
   const tokenPattern =
-    /([a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*(?:[\u0027\u2018\u2019]+[a-zA-Z]+)?)|([\s\-/&.,:;!?]+)/g;
+  /([a-zA-Z0-9%]+(?:-[a-zA-Z0-9%]+)*(?:[\u0027\u2018\u2019]+[a-zA-Z]+)?)|([\s\-/&.,:;!?]+)/g;
   const tokens: Array<{ type: "word" | "separator"; value: string }> = [];
   let match;
 
