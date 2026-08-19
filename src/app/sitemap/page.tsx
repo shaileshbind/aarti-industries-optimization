@@ -30,8 +30,8 @@ const page = async () => {
       <div className="bg-[#F5F8FA] w-full">
         <HeroBanner
           title={"Sitemap"}
-          image={"/images/cdmo/cdmo-driving-banner.png"}
-          mobImage={"/images/cdmo/cdmo-driving-banner.png"}
+          image={"/images/cdmo/cdmo-driving-banner.jpg"}
+          mobImage={"/images/cdmo/cdmo-driving-banner.jpg"}
           alt="Sitemap"
           mobAlt="Sitemap"
           fullBg

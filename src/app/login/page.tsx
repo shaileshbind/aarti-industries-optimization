@@ -61,7 +61,7 @@ function LoginForm() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/global-reach/gr-banner.png')" }}
+      style={{ backgroundImage: "url('/images/global-reach/gr-banner.webp')" }}
     >
       <form
         onSubmit={onSubmit}

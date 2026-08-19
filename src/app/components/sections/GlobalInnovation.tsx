@@ -24,7 +24,7 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   } = data;
 
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
-  const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.png";
+  const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.jpg";
   const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (

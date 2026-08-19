@@ -44,7 +44,7 @@ export default async function Product() {
       </Suspense>
 
       {globallyCertifiedData && (
-        <div className="pt-[12px] lg:pt-[40px]">
+        <div className="pt-3 lg:pt-10">
           <GloballyCertified itemsData={globallyCertifiedData} />
         </div>
       )}
