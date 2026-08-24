@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import HeroBanner from "../banners/HeroBanner";
 import { ImageProps } from "@/app/types/global.type";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 export type FinancialBannerProps = {
   data: {
@@ -13,20 +15,15 @@ export type FinancialBannerProps = {
 
 const FinancialBanner: React.FC<FinancialBannerProps> = ({ data }) => {
   const { title, description, image, mobImage } = data;
+  const isMobile = useMatchMedia("(max-width:820px)");
 
   return (
     <HeroBanner
       title={title}
       desc={description}
       fullBg
-      // Was `leftDesc={isMobile} centerText={!isMobile}` driven by
-      // useMatchMedia("(max-width:820px)"). That hook returns false during SSR,
-      // so the server rendered the centered 360px variant and mobile clients
-      // snapped to the 490px left-aligned variant after hydration - resizing the
-      // hero image, which is this page's LCP element. `responsiveCenter` encodes
-      // the same left-below-md / centered-above-md layout in CSS, so the first
-      // paint is already correct for the viewport.
-      responsiveCenter
+      leftDesc={isMobile}
+      centerText={!isMobile}
       image={image?.url}
       mobImage={mobImage?.url}
       alt={image?.alternativeText}

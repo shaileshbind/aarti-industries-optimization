@@ -5,6 +5,7 @@ import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
 import Image from "next/image";
 import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
+import { useMatchMedia } from "../../hooks/useMatchMedia";
 import { useTitleCase } from "../../../../utils/toTitleCase";
 import clsxN from "../../../../utils/clsxN";
 
@@ -19,7 +20,6 @@ const SplitText = dynamic(() => import("../SplitText").then((m) => m.default), {
 
 type HeroBannerProps = {
   centerText?: boolean;
-  responsiveCenter?: boolean;
   leftDesc?: boolean;
   tag?: string;
   title?: string;
@@ -49,7 +49,6 @@ type HeroBannerProps = {
 };
 const HeroBanner = ({
   centerText,
-  responsiveCenter,
   imageClassName,
   mobImageClassName,
   leftDesc,
@@ -88,6 +87,7 @@ const HeroBanner = ({
   const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
   const [isMobImageLoading, setIsMobImageLoading] =
     useState<boolean>(!!mobImage);
+  const isTablet = useMatchMedia("(max-width:768px)");
   // Call hooks unconditionally at the top level
   const titleCasedSecondaryBtnFormTitle = useTitleCase(
     secondaryBtnFormTitle || "",
@@ -95,12 +95,8 @@ const HeroBanner = ({
   const titleCasedPopupButtonTitle = useTitleCase(popupButtonTitle || "");
   useEffect(() => setHasMounted(true), []);
 
-  const didMountRef = useRef(false);
+  // Reset loading states when image sources change
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      return;
-    }
     setIsImageLoading(true);
     setIsMobImageLoading(true);
   }, [image, mobImage]);
@@ -181,52 +177,50 @@ const HeroBanner = ({
           <div className={` w-full relative overflow-hidden `}>
             <div
               ref={wrapperRef}
-              className={`hero-reveal relative overflow-hidden ${
-                responsiveCenter
-                  ? "h-[490px] md:h-[440px]"
-                  : centerText
-                    ? "h-[360px] md:h-[440px]"
-                    : "h-[490px] lg:h-[640px]"
+              className={`relative overflow-hidden opacity-0 scale-[0.95] ${
+                centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
-              {/* Skeleton loader. Sits at z-0, behind the image at z-1. */}
-              {((image && isImageLoading) ||
-                (mobImage && isMobImageLoading)) && (
+              {/* Skeleton loader with blur effect */}
+              {((image && !isTablet && isImageLoading) ||
+                (mobImage && isTablet && isMobImageLoading)) && (
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
               )}
-              {image && (
+              {image && !isTablet && (
                 <Image
                   src={image}
-                  alt={alt ? alt : "image"}
+                  alt={alt ? alt : "img"}
                   fill
                   priority
                   fetchPriority="high"
-                  sizes="(min-width: 769px) 100vw, 0px"
-                  className={`object-cover hidden md:block z-[1] ${imageClassName}`}
+                  className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                    isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                  } ${imageClassName}`}
                   onLoad={() => setIsImageLoading(false)}
                 />
               )}
 
-              {mobImage && (
+              {mobImage && isTablet && (
                 <Image
                   src={mobImage}
-                  alt={mobAlt ? mobAlt : "image"}
+                  alt={mobAlt ? mobAlt : "img"}
                   fill
                   priority
                   fetchPriority="high"
-                  sizes="(max-width: 768px) 100vw, 0px"
-                  className={`object-cover block md:hidden z-[1] ${mobImageClassName}`}
+                  className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                    isMobImageLoading
+                      ? "blur-md opacity-50"
+                      : "blur-0 opacity-100"
+                  } ${mobImageClassName}`}
                   onLoad={() => setIsMobImageLoading(false)}
                 />
               )}
               <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)] z-[2]" />
               <div
                 className={`w-full h-full absolute z-[3] ${
-                  responsiveCenter
-                    ? "pt-[54px] md:pt-0 flex flex-col items-start md:items-center md:justify-center md:text-center lg:!pt-[50px]"
-                    : centerText
-                      ? "flex flex-col items-center justify-center !pt-0 lg:!pt-[50px] text-center"
-                      : "pt-[54px] md:pt-0 flex flex-col md:justify-center items-start"
+                  centerText
+                    ? "flex flex-col items-center justify-center !pt-0 lg:!pt-[50px] text-center"
+                    : "pt-[54px] md:pt-0 flex flex-col md:justify-center items-start"
                 }`}
               >
                 {tag && (
@@ -242,7 +236,6 @@ const HeroBanner = ({
                       className={clsxN(
                         `text-[28px] md:text-[36px] xl:text-[44px] leading-[124%] text-white mt-[12px] pr-[70px] md:pr-[unset] md:max-w-[480px] lg:max-w-[580px] fluid-container`,
                         centerText && "pr-0 lg:pr-[0]",
-                        responsiveCenter && "md:pr-0",
                         centerTitleClassName,
                       )}
                       applyTitleCase={true}
@@ -261,13 +254,6 @@ const HeroBanner = ({
                 {desc && centerText && (
                   <FadeInRevealBlur delay={0.1}>
                     <BodyText1 className="text-white mt-3 md:mt-[20px] max-w-[260px] md:max-w-[480px]">
-                      {desc}
-                    </BodyText1>
-                  </FadeInRevealBlur>
-                )}
-                {desc && responsiveCenter && (
-                  <FadeInRevealBlur delay={0.1}>
-                    <BodyText1 className="text-white mt-[12px] md:mt-[20px] pr-[70px] md:pr-[unset] md:max-w-[480px] fluid-container">
                       {desc}
                     </BodyText1>
                   </FadeInRevealBlur>
@@ -441,33 +427,38 @@ const HeroBanner = ({
           </div>
           <div
             ref={wrapperRef}
-            className="hero-reveal relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full"
+            className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full opacity-0 scale-[0.95]"
           >
-            {/* Skeleton loader. Sits at z-0, behind the image at z-1. */}
-            {((image && isImageLoading) || (mobImage && isMobImageLoading)) && (
+            {/* Skeleton loader with blur effect */}
+            {((image && !isTablet && isImageLoading) ||
+              (mobImage && isTablet && isMobImageLoading)) && (
               <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
             )}
-            {image && (
+            {image && !isTablet && (
               <Image
                 src={image}
-                alt={alt ? alt : "image"}
+                alt={alt ? alt : "img"}
                 fill
                 priority
                 fetchPriority="high"
-                sizes="100%"
-                className="object-cover hidden md:block z-[1]"
+                className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
+                  isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
+                }`}
                 onLoad={() => setIsImageLoading(false)}
               />
             )}
-            {mobImage && (
+            {mobImage && isTablet && (
               <Image
                 src={mobImage}
-                alt={mobAlt ? mobAlt : "image"}
+                alt={mobAlt ? mobAlt : "img"}
                 fill
                 priority
                 fetchPriority="high"
-                sizes="(max-width: 768px) calc(100vw - 40px), 0px"
-                className="object-cover block md:hidden z-[1]"
+                className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
+                  isMobImageLoading
+                    ? "blur-md opacity-50"
+                    : "blur-0 opacity-100"
+                }`}
                 onLoad={() => setIsMobImageLoading(false)}
               />
             )}

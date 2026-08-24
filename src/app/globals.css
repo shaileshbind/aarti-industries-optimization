@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   /* Base colors */
   --background: #ffffff;
@@ -19,11 +20,9 @@
   --grey-400: #4c5861;
 
   /* Gradients */
-  --gradient-orange-1: linear-gradient(
-    202deg,
-    #fa8129 -22.05%,
-    #dc4c03 114.72%
-  );
+  --gradient-orange-1: linear-gradient(202deg,
+      #fa8129 -22.05%,
+      #dc4c03 114.72%);
   --gradient-orange-2: linear-gradient(201deg, #fa8129 -42.93%, #dc4c03 95.27%);
   --gradient-orange-3: linear-gradient(142deg, #fa8129 22.06%, #dc4c03 147.93%);
 }
@@ -394,6 +393,7 @@ body {
 }
 
 @media (min-width: 1024px) {
+
   /* Hide scrollbar on desktop */
   .framework-forged-swiper .swiper-scrollbar {
     display: none !important;
@@ -442,6 +442,7 @@ body {
 }
 
 @media (min-width: 1024px) {
+
   /* Hide progress bar on desktop */
   .whoweare-chem-creates-swiper .swiper-pagination-progressbar {
     display: none !important;
@@ -613,29 +614,6 @@ body {
   pointer-events: none;
 }
 
-
-.hero-reveal {
-  animation: hero-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes hero-reveal {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-reveal {
-    animation: none;
-  }
-}
-
 .active-card {
   animation: toggleWidth 5s ease-out;
 }
@@ -668,6 +646,7 @@ body {
 .marquee--active {
   animation-play-state: running;
 }
+
 
 @keyframes marquee {
   0% {
@@ -1084,6 +1063,7 @@ body {
   visibility: visible;
 }
 
+
 /* Globally Certified Section Marquee */
 @keyframes globally-certified-marquee {
   0% {
@@ -1156,6 +1136,7 @@ body {
   }
 }
 
+
 .catgoryProductsSwiper .swiper {
   height: 100%;
 }
@@ -1172,6 +1153,7 @@ body {
 .catgoryProductsSwiper .slide-content {
   display: flex;
   flex-direction: column;
+
 }
 
 .catgoryProductsSwiper .title-card-anim {

@@ -398,6 +398,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   }
                                   width={50}
                                   height={54}
+                                  loading={
+                                    index <= 1 ? "eager" : undefined
+                                  }
                                   className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
@@ -410,6 +413,9 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   }
                                   width={500}
                                   height={548}
+                                  loading={
+                                    index <= 1 ? "eager" : undefined
+                                  }
                                   className={`${secondaryImageClasses} ${mainStaticClasses} w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
@@ -589,6 +595,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={50}
                     height={54}
+                    loading="eager"
                     className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                   />
                 )}
@@ -602,6 +609,7 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
+                    loading="eager"
                     className={`${secondaryImageClasses} ${mainAnimationClasses} w-full h-full top-0 left-0 absolute`}
                   />
                 )}
