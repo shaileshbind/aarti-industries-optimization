@@ -24,8 +24,11 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                 <div className="relative h-[240px] w-full overflow-hidden rounded-tl-[20px] rounded-tr-[20px]">
                   <Image
                     src={data.office.image.url}
-                    alt={data.office.image.alternativeText || "banner"}
+                    alt={data.office.image.alternativeText || "office image"}
                     fill
+                    priority
+                    fetchPriority="high"
+                    sizes="(min-width: 1024px) 550px, 100vw"
                     className="object-cover"
                   />
                 </div>

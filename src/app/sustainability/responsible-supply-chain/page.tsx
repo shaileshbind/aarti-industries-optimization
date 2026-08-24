@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import SustainabilityTransparancy from "../../components/supply-chain/SustainabilityTransparancy";
 import KeyRawMaterials from "../../components/supply-chain/KeyRawMaterials";
 import SupplyChainBanner from "../../components/supply-chain/SupplyBanner";
@@ -11,11 +12,24 @@ import FrameworkForged from "../../components/sections/FrameworkForged";
 import DrivingCrossFunctional from "../../components/sections/DrivingCrossFunctional";
 import ContactBanner from "../../components/ContactBanner";
 
+/**
+ * Fetches its own data behind Suspense. Previously this was awaited alongside
+ * the page fetch in the same Promise.all, which meant the hero could not render
+ * until BOTH resolved - so a request for a logo strip at the very bottom of the
+ * page gated the LCP element. Parallel is not the same as non-blocking.
+ */
+async function GloballyCertifiedSection() {
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*",
+  );
+
+  if (!globallyCertifiedData) return null;
+
+  return <GloballyCertified itemsData={globallyCertifiedData} />;
+}
+
 export default async function page() {
-  const [data, globallyCertifiedData] = await Promise.all([
-    getPageData("/pages/by-slug/responsible-supply-chain"),
-    getData("/globally-certified-datas?populate=*"),
-  ]);
+  const data = await getPageData("/pages/by-slug/responsible-supply-chain");
 
   const {
     section_one,
@@ -80,9 +94,9 @@ export default async function page() {
         </div>
       )}
 
-      {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
-      )}
+      <Suspense fallback={null}>
+        <GloballyCertifiedSection />
+      </Suspense>
 
       {section_eight && <ContactBanner data={section_eight} />}
     </div>

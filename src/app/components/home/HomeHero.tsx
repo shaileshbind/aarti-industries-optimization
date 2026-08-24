@@ -14,10 +14,25 @@ import { HomeHeroProps } from "@/app/types/home.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
+/**
+ * Applied to BOTH the hero wrapper and each slide so the two can never disagree.
+ *
+ * The slide needs a definite height of its own: the <Swiper> element carries no
+ * height class, so `.swiper` computes to `height: auto`, and Swiper's own
+ * `.swiper-wrapper { height: 100% }` / `.swiper-slide { height: 100% }` resolve
+ * against that auto height. A percentage or `h-full` on the slide therefore
+ * collapses to zero and the hero disappears. Keeping the same expression on both
+ * gives the slide an intrinsic height without reintroducing the old mismatch,
+ * where the wrapper was calc(100dvh - 64px) but the slide was min-h-screen
+ * (100vh) - taller than its own container by the header plus toolbar height.
+ */
+const HERO_HEIGHT = "h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen";
+
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
-  const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const isMobile = useMatchMedia("(pointer: coarse)");
+  const [hasMounted, setHasMounted] = useState(false);
+  const [deferredMedia, setDeferredMedia] = useState(false);
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -32,6 +47,29 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const orangeScroll = useRef<HTMLDivElement>(null);
   const navTitles = useRef<HTMLDivElement>(null);
+
+  useEffect(() => setHasMounted(true), []);
+
+  useEffect(() => {
+    type IdleWindow = Window & {
+      requestIdleCallback?: (
+        cb: () => void,
+        opts?: { timeout: number },
+      ) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const w = window as IdleWindow;
+
+    if (typeof w.requestIdleCallback === "function") {
+      const handle = w.requestIdleCallback(() => setDeferredMedia(true), {
+        timeout: 3000,
+      });
+      return () => w.cancelIdleCallback?.(handle);
+    }
+
+    const timer = setTimeout(() => setDeferredMedia(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (
@@ -245,7 +283,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   return (
     <div
       ref={wrapperRef}
-      className="h-[calc(100dvh-64px)] md:h-[80vh] lg:min-h-screen w-full relative overflow-hidden"
+      className={`${HERO_HEIGHT} w-full relative overflow-hidden`}
       onTouchStart={handleSliderTouchStart}
       onTouchMove={handleSliderTouchMove}
       onTouchEnd={handleSliderTouchEnd}
@@ -326,37 +364,40 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         >
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
-              <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
-                {/* Desktop banner - only rendered when !isTablet (md and up), so not loaded on mobile */}
-                {items?.card?.[0]?.image?.url && !isTablet && (
-                  <Image
-                    src={items?.card?.[0]?.image?.url}
-                    alt={items?.card?.[0]?.image?.alternativeText || "banner"}
-                    fill
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(min-width: 769px) 100vw, 0px"
-                    quality={index === 0 ? 70 : 80}
-                    className="hidden md:block object-cover"
-                  />
-                )}
+              <div
+                className={`w-full ${HERO_HEIGHT} relative overflow-hidden`}
+              >
+                {items?.card?.[0]?.image?.url &&
+                  (index === 0 || deferredMedia) && (
+                    <Image
+                      src={items?.card?.[0]?.image?.url}
+                      alt={items?.card?.[0]?.image?.alternativeText || ""}
+                      fill
+                      priority={index === 0}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      sizes="(min-width: 769px) 100vw, 0px"
+                      quality={index === 0 ? 70 : 80}
+                      className="hidden md:block object-cover"
+                    />
+                  )}
 
-                {/* Mobile banner - only rendered when isTablet (≤768px), so not loaded on desktop */}
-                {items?.card?.[0]?.mobImage?.url && isTablet && (
-                  <Image
-                    src={items?.card?.[0]?.mobImage?.url}
-                    alt={
-                      items?.card?.[0]?.mobImage?.alternativeText || "banner"
-                    }
-                    fill
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(max-width: 768px) 100vw, 0px"
-                    quality={index === 0 ? 70 : 80}
-                    className="block md:hidden object-cover"
-                  />
-                )}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile && (
+                {items?.card?.[0]?.mobImage?.url &&
+                  (index === 0 || deferredMedia) && (
+                    <Image
+                      src={items?.card?.[0]?.mobImage?.url}
+                      alt={items?.card?.[0]?.mobImage?.alternativeText || ""}
+                      fill
+                      priority={index === 0}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      sizes="(max-width: 768px) 100vw, 0px"
+                      quality={index === 0 ? 70 : 80}
+                      className="block md:hidden object-cover"
+                    />
+                  )}
+
+                {hasMounted &&
+                  items?.card?.[0]?.bannerVideo?.url &&
+                  !isMobile && (
                   <video
                     ref={(el) => {
                       videoRefs.current[index] = el;
@@ -370,14 +411,18 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     className="object-cover w-full h-full absolute top-0 left-0"
                   />
                 )}
-                {/* Lighter gradient overlay for video slides on desktop */}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+
+                {items?.card?.[0]?.bannerVideo?.url &&
+                hasMounted &&
+                !isMobile ? (
                   <></>
                 ) : (
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0.35)_50%,rgba(0,0,0,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
                 )}
                 {/* Content box */}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                {items?.card?.[0]?.bannerVideo?.url &&
+                hasMounted &&
+                !isMobile ? (
                   <></>
                 ) : (
                   <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">

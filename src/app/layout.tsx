@@ -51,11 +51,19 @@ const roboto = Roboto({
   display: "swap",
 });
 
+// `preload: false` because next/font/google preloads by default, which was
+// emitting a highest-priority <link rel="preload" as="font"> for Inter 400 on
+// EVERY route. Inter is referenced in exactly one component
+// (components/our-story/TimeLine.tsx) and only at font-bold, so the 400 weight
+// was never painted anywhere and the 48KB fetch competed with each page's LCP
+// image for bandwidth. The face still loads on demand via font-family, and
+// display: "swap" keeps text visible while it does.
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-inter",
   display: "swap",
+  preload: false,
 });
 
 export default async function RootLayout({
