@@ -37,9 +37,7 @@ const Page = async () => {
       />
       {leftSection && <ContactBanner data={leftSection} />}
       {whereWeOperateData && <WhereWeOperate data={whereWeOperateData} />}
-      {mapSection && (
-        <ContactMap data={mapSection} />
-      )}
+      {mapSection && <ContactMap data={mapSection} />}
       {globallyCertifiedData && (
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}

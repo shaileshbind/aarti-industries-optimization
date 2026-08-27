@@ -2,12 +2,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { BodyText1, BodyText2, H2 } from "../Typography2";
 import Image from "next/image";
-import "swiper/css/effect-fade";
+// import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+// import "swiper/css";
+// import "swiper/css/pagination";
+// import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import { IndustryAccoladesProps } from "@/app/types/who-we-are.type";
 import gsap from "gsap";
@@ -35,15 +35,12 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -320,7 +317,13 @@ const IndustryAccolades: React.FC<IndustryAccoladesProps> = ({ data }) => {
       )}
       {/* Swiper */}
       {awards?.[active]?.card?.length > 0 && (
-        <div ref={cardsWrapRef} className="mt-[36px] lg:mt-[40px]" onTouchStart={handleSliderTouchStart} onTouchMove={handleSliderTouchMove} onTouchEnd={handleSliderTouchEnd}>
+        <div
+          ref={cardsWrapRef}
+          className="mt-[36px] lg:mt-[40px]"
+          onTouchStart={handleSliderTouchStart}
+          onTouchMove={handleSliderTouchMove}
+          onTouchEnd={handleSliderTouchEnd}
+        >
           <Swiper
             key={`industry-accolades-${isDesktopPointer}`}
             onSwiper={(swiper) => {

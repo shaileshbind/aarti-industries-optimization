@@ -1,12 +1,21 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 
 interface LenisContextType {
   stopLenis: () => void;
   startLenis: () => void;
   resizeLenis: () => void;
-  scrollTo: (target: number | string | HTMLElement, options?: { offset?: number; duration?: number; immediate?: boolean }) => void;
+  scrollTo: (
+    target: number | string | HTMLElement,
+    options?: { offset?: number; duration?: number; immediate?: boolean },
+  ) => void;
 }
 
 const LenisContext = createContext<LenisContextType | null>(null);

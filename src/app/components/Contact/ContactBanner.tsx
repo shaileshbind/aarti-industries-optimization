@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Image from "next/image";
 import { BodyText1, BodyText2, H1, SubH2 } from "../Typography2";
@@ -12,9 +11,12 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
     <section className="w-full ">
       <div className="container">
         <LetterReveal delay={0.1} className="w-full text-center">
-        <H1 className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]" applyTitleCase={true}>
-          {data?.sectionTitle}
-        </H1>
+          <H1
+            className="mb-[40px] mt-[50px] lg:mt-[145px] lg:text-center font-normal text-[28px] md:text-[36px] xl:text-[44px] leading-[124%]"
+            applyTitleCase={true}
+          >
+            {data?.sectionTitle}
+          </H1>
         </LetterReveal>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-4 gap-y-[50px] w-full">
           <div className="lg:col-span-5">
@@ -24,8 +26,11 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                 <div className="relative h-[240px] w-full overflow-hidden rounded-tl-[20px] rounded-tr-[20px]">
                   <Image
                     src={data.office.image.url}
-                    alt={data.office.image.alternativeText || "banner"}
+                    alt={data.office.image.alternativeText || "office"}
                     fill
+                    priority
+                    quality={65}
+                    sizes="(max-width: 1023px) 100vw, 45vw"
                     className="object-cover"
                   />
                 </div>
@@ -99,8 +104,8 @@ const ContactBanner: React.FC<ContactBannerProps> = ({ data }) => {
                 </div>
 
                 {/* View on Map */}
-                <div className="flex items-center gap-[8px]">
-                  <div className="w-[28px] h-[28px] flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 flex items-center justify-center shrink-0">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="21"

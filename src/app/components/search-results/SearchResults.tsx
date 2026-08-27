@@ -110,7 +110,7 @@ function cleanSnippetHtml(snippet: string) {
     .trim();
 }
 
-function SearchResultCard({
+const SearchResultCard = React.memo(function SearchResultCard({
   item,
   link,
 }: {
@@ -210,7 +210,7 @@ function SearchResultCard({
       </div>
     </Link>
   );
-}
+});
 
 export default function SearchResults() {
   const searchParams = useSearchParams();

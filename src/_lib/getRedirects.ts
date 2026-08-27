@@ -78,14 +78,19 @@ export async function getRedirects(): Promise<RedirectMapping[]> {
       Authorization: `Bearer ${apiToken}`,
     };
 
-    const fetchPage = async (page: number): Promise<{ items: RedirectItem[]; meta?: any }> => {
+    const fetchPage = async (
+      page: number,
+    ): Promise<{ items: RedirectItem[]; meta?: any }> => {
       const endpoint =
         `${baseUrl}/redirects?populate=*` +
         `&pagination[withCount]=true` +
         `&pagination[page]=${page}` +
         `&pagination[pageSize]=100` +
         `&sort=id:asc`;
-      const response = await fetch(endpoint, { next: { revalidate: 300 }, headers });
+      const response = await fetch(endpoint, {
+        next: { revalidate: 600 }, // increasing revalidate 300 to 600 (10mins)
+        headers,
+      });
       if (!response.ok) return { items: [] };
       const data = await response.json();
 

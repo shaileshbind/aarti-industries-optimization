@@ -96,7 +96,14 @@ const HeroBanner = ({
   useEffect(() => setHasMounted(true), []);
 
   // Reset loading states when image sources change
+
+  const didMountRef = useRef(false);
+
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
     setIsImageLoading(true);
     setIsMobImageLoading(true);
   }, [image, mobImage]);
@@ -207,6 +214,7 @@ const HeroBanner = ({
                   fill
                   priority
                   fetchPriority="high"
+                  sizes="100%"
                   className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
                     isMobImageLoading
                       ? "blur-md opacity-50"

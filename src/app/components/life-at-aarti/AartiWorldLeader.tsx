@@ -2,9 +2,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH2, SubH3 } from "../Typography2";
 import Image from "next/image";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Mousewheel, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { LAAWorldProps } from "@/app/types/life-at-aarti.type";

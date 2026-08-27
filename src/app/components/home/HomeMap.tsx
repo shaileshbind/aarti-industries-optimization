@@ -36,7 +36,11 @@ const HomeMap = () => {
       },
     });
 
-    tl.fromTo(els, { opacity: 1, y: 0 }, { opacity: 0, y: -100, duration: 0.4 });
+    tl.fromTo(
+      els,
+      { opacity: 1, y: 0 },
+      { opacity: 0, y: -100, duration: 0.4 },
+    );
 
     return () => {
       tl.scrollTrigger?.kill();
@@ -48,7 +52,9 @@ const HomeMap = () => {
     <div
       ref={sectionRef}
       className="w-full relative z-10 bg-white pt-20"
-      style={{ marginTop: marginBottom > 0 ? `${marginBottom + 100}px` : undefined }}
+      style={{
+        marginTop: marginBottom > 0 ? `${marginBottom + 100}px` : undefined,
+      }}
     >
       <div className="container pt-[70px] pb-[70px] lg:pt-[100px] lg:pb-[100px] h-full overflow-hidden">
         <H2 className="max-w-[unset] lg:max-w-[550px] text-center mx-auto mb-[30px] lg:mb-[60px]">
@@ -79,7 +85,7 @@ const HomeMap = () => {
           </div>
           <Image
             src="/images/global-reach/gr-map-m.svg"
-            alt="img"
+            alt="map img"
             fill
             sizes="(max-width: 1023px) 100vw, 0px"
             className="object-contain block lg:hidden"

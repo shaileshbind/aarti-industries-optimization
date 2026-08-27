@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import { BodyText1, BodyText2, H2 } from "./Typography2";
 import Image from "next/image";
 import { ImageProps } from "../types/global.type";

@@ -856,6 +856,16 @@ body {
   border: 1px solid #cecece;
 }
 
+/* contact page css */
+.where-we-operate-swiper .swiper-slide {
+  height: auto !important;
+  display: flex;
+}
+.where-we-operate-swiper .swiper-slide > div {
+  width: 100%;
+}
+
+
 @media (max-width: 1024px) {
   .potential-accordion:nth-child(2)::after {
     right: 5.5%;

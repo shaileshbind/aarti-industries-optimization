@@ -1,11 +1,18 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import Image from "next/image";
 import { H2 } from "../Typography2";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
-import "swiper/css/grid";
+// import "swiper/css/pagination";
+// import "swiper/css/grid";
 import {
   Mousewheel,
   Pagination,
@@ -26,84 +33,105 @@ import {
 import type { Swiper as SwiperType } from "swiper";
 import { useLenis } from "@/app/contexts/LenisContext";
 
+// module scope — outside the component
+const toAddressCard = (item: WhereWeOperateDataItem): AddressCardItem => ({
+  location: item.locationName || "",
+  company: item.companyName || "",
+  address: item.address || "",
+  phone: item.mobileNo || "",
+  url: item.googleMapLink || "",
+  registeredOffice: item.officeLabel === "REGISTERED OFFICE",
+  type: item.officeLabel || "",
+});
+
 const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   // Transform API data to group by regionName and map to AddressCard format
   // Preserve the original order from API response
-  const apiData = data || [];
+  // const apiData = data || [];
 
   // Group data by regionName while preserving API order
   // Use order field if available, otherwise maintain original array order
-  const indiaData: AddressCardItem[] = apiData
-    .map((item: WhereWeOperateDataItem, index: number) => ({
-      item,
-      originalIndex: index,
-      order: item.order ?? index,
-    }))
-    .filter(({ item }) => item.regionName === "India")
-    .sort((a, b) => {
-      // Sort by order field if available, otherwise by original index
-      if (a.item.order !== null && b.item.order !== null) {
-        return a.item.order - b.item.order;
-      }
-      return a.originalIndex - b.originalIndex;
-    })
-    .map(({ item }) => ({
-      location: item.locationName || "",
-      company: item.companyName || "",
-      address: item.address || "",
-      phone: item.mobileNo || "",
-      url: item.googleMapLink || "",
-      registeredOffice: item.officeLabel === "REGISTERED OFFICE",
-      type: item.officeLabel || "",
-    }));
+  // const indiaData: AddressCardItem[] = apiData
+  //   .map((item: WhereWeOperateDataItem, index: number) => ({
+  //     item,
+  //     originalIndex: index,
+  //     order: item.order ?? index,
+  //   }))
+  //   .filter(({ item }) => item.regionName === "India")
+  //   .sort((a, b) => {
+  //     // Sort by order field if available, otherwise by original index
+  //     if (a.item.order !== null && b.item.order !== null) {
+  //       return a.item.order - b.item.order;
+  //     }
+  //     return a.originalIndex - b.originalIndex;
+  //   })
+  //   .map(({ item }) => ({
+  //     location: item.locationName || "",
+  //     company: item.companyName || "",
+  //     address: item.address || "",
+  //     phone: item.mobileNo || "",
+  //     url: item.googleMapLink || "",
+  //     registeredOffice: item.officeLabel === "REGISTERED OFFICE",
+  //     type: item.officeLabel || "",
+  //   }));
 
-  const internationalData: AddressCardItem[] = apiData
-    .map((item: WhereWeOperateDataItem, index: number) => ({
-      item,
-      originalIndex: index,
-      order: item.order ?? index,
-    }))
-    .filter(({ item }) => item.regionName === "International")
-    .sort((a, b) => {
-      // Sort by order field if available, otherwise by original index
-      if (a.item.order !== null && b.item.order !== null) {
-        return a.item.order - b.item.order;
-      }
-      return a.originalIndex - b.originalIndex;
-    })
-    .map(({ item }) => ({
-      location: item.locationName || "",
-      company: item.companyName || "",
-      address: item.address || "",
-      phone: item.mobileNo || "",
-      url: item.googleMapLink || "",
-      registeredOffice: item.officeLabel === "REGISTERED OFFICE",
-      type: item.officeLabel || "",
-    }));
+  // const internationalData: AddressCardItem[] = apiData
+  //   .map((item: WhereWeOperateDataItem, index: number) => ({
+  //     item,
+  //     originalIndex: index,
+  //     order: item.order ?? index,
+  //   }))
+  //   .filter(({ item }) => item.regionName === "International")
+  //   .sort((a, b) => {
+  //     // Sort by order field if available, otherwise by original index
+  //     if (a.item.order !== null && b.item.order !== null) {
+  //       return a.item.order - b.item.order;
+  //     }
+  //     return a.originalIndex - b.originalIndex;
+  //   })
+  //   .map(({ item }) => ({
+  //     location: item.locationName || "",
+  //     company: item.companyName || "",
+  //     address: item.address || "",
+  //     phone: item.mobileNo || "",
+  //     url: item.googleMapLink || "",
+  //     registeredOffice: item.officeLabel === "REGISTERED OFFICE",
+  //     type: item.officeLabel || "",
+  //   }));
 
-  const card: WhereWeOperateTab[] = [
-    {
-      id: 1,
-      category: "India",
-      post_category: {
+  const card = useMemo<WhereWeOperateTab[]>(() => {
+    const byRegion = (region: string) =>
+      (data ?? [])
+        .map((item, i) => ({ item, sortKey: item.order ?? i }))
+        .filter(({ item }) => item.regionName === region)
+        .sort((a, b) => a.sortKey - b.sortKey)
+        .map(({ item }) => toAddressCard(item));
+
+    return [
+      {
         id: 1,
-        name: "India",
-        slug: "india",
-        address: indiaData,
+        category: "India",
+        post_category: {
+          id: 1,
+          name: "India",
+          slug: "india",
+          address: byRegion("India"),
+        },
       },
-    },
-    {
-      id: 2,
-      category: "International",
-      post_category: {
+      {
         id: 2,
-        name: "International",
-        slug: "international",
-        address: internationalData,
+        category: "International",
+        post_category: {
+          id: 2,
+          name: "International",
+          slug: "international",
+          address: byRegion("International"),
+        },
       },
-    },
-  ];
+    ];
+  }, [data]);
+
   const [active, setActive] = useState<string>(
     card?.[0]?.post_category?.slug || "india",
   );
@@ -114,21 +142,19 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  // const [isMobile, setIsMobile] = useState<boolean>(false);
+  const isMobile = useMatchMedia("(max-width: 1023px)");
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -151,12 +177,12 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     }
   }, [startLenis]);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => setIsMobile(window.innerWidth < 1024);
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   // Intersection Observer for autoplay control
   useEffect(() => {
@@ -255,7 +281,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
     switchAnimRef.current = tl;
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!cardsWrapRef.current) return;
     const cards = cardsWrapRef.current.querySelectorAll(".address-card-anim");
     if (!cards || cards.length === 0) return;
@@ -363,9 +389,9 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
                   pagination={
                     showProgressBar
                       ? {
-                        el: ".home-latest-at-swiper",
-                        type: "progressbar",
-                      }
+                          el: ".home-latest-at-swiper",
+                          type: "progressbar",
+                        }
                       : undefined
                   }
                   {...(isDesktopPointer && {
@@ -461,7 +487,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
           </>
         )}
       </div>
-      <style jsx global>{`
+      {/* <style jsx global>{`
         .where-we-operate-swiper .swiper-slide {
           height: auto !important;
           display: flex;
@@ -469,7 +495,7 @@ const WhereWeOperate: React.FC<WhereWeOperateProps> = ({ data }) => {
         .where-we-operate-swiper .swiper-slide > div {
           width: 100%;
         }
-      `}</style>
+      `}</style> */}
     </div>
   );
 };

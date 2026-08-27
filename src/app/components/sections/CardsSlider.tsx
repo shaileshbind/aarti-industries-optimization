@@ -1,9 +1,9 @@
 "use client";
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";

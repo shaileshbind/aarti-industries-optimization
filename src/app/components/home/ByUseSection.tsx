@@ -2,9 +2,9 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay, Mousewheel } from "swiper/modules";
 import Button from "../Button";
 import gsap from "gsap";
@@ -28,15 +28,12 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -373,11 +370,11 @@ const ByUseSection: React.FC<ByUseSectionProps> = ({
           </div>
           {/* Right Swiper */}
           <div className="flex-1 min-w-0 mt-[8px] lg:mt-[0px]">
-            <div className="relative"
-            
-            onTouchStart={handleSliderTouchStart}
-                onTouchMove={handleSliderTouchMove}
-                onTouchEnd={handleSliderTouchEnd}
+            <div
+              className="relative"
+              onTouchStart={handleSliderTouchStart}
+              onTouchMove={handleSliderTouchMove}
+              onTouchEnd={handleSliderTouchEnd}
             >
               {data?.[active]?.card?.length > 0 && (
                 <div ref={cardsWrapRef}>

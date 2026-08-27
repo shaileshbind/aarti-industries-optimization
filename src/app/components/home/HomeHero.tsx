@@ -1,8 +1,8 @@
 "use client";
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import "swiper/css";
-import "swiper/css/effect-fade";
+// import "swiper/css";
+// import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Mousewheel } from "swiper/modules";
@@ -18,6 +18,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const isMobile = useMatchMedia("(pointer: coarse)");
+  const isMobileView = isTablet || isMobile;
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const navTitles = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isMobileView) return;
     if (
       !wrapperRef.current ||
       !starRef.current ||
@@ -45,8 +47,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       !navTitles.current
     )
       return;
-
-    const isMobileView = window.innerWidth <= 768;
 
     const raf1 = requestAnimationFrame(() => {
       const raf2 = requestAnimationFrame(() => {
@@ -103,7 +103,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     });
 
     return () => cancelAnimationFrame(raf1);
-  }, []);
+  }, [isMobileView]);
 
   const handleTabClick = (index: number) => {
     if (swiperRef.current) {
@@ -295,7 +295,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           onSlideChangeTransitionEnd={() => {
             startProgressBar();
           }}
-          key={`home-hero-${isDesktopPointer}`}
           slidesPerView={1}
           modules={[
             Autoplay,
@@ -336,7 +335,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     sizes="(min-width: 769px) 100vw, 0px"
-                    quality={index === 0 ? 70 : 80}
+                    quality={index === 0 ? 60 : 75}
                     className="hidden md:block object-cover"
                   />
                 )}
@@ -352,7 +351,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     sizes="(max-width: 768px) 100vw, 0px"
-                    quality={index === 0 ? 70 : 80}
+                    quality={index === 0 ? 60 : 75}
                     className="block md:hidden object-cover"
                   />
                 )}
@@ -362,6 +361,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                       videoRefs.current[index] = el;
                     }}
                     playsInline
+                    preload="none"
                     width={1000}
                     height={1000}
                     src={items?.card?.[0]?.bannerVideo?.url}

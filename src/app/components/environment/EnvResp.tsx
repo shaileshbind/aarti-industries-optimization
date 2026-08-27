@@ -1,8 +1,8 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BodyText2, H2, SubH1, SubH2 } from "../Typography2";
-import "swiper/css";
-import "swiper/css/effect-fade";
+// import "swiper/css";
+// import "swiper/css/effect-fade";
 import type { Swiper as SwiperType } from "swiper";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";

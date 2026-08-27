@@ -2,9 +2,9 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { BodyText2, H2, SubH2 } from "../Typography2";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Navigation, Pagination, Mousewheel, Autoplay } from "swiper/modules";
 import SwipeImage from "./SwipeImage";
 import { WordReveal } from "../ScrollReveal";

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { BodyText2, SubH1 } from "../Typography2";
 import Button from "../Button";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Scrollbar } from "swiper/modules";
 import { EducationDevelopmentProps } from "@/app/types/social-health-and-safety.type";

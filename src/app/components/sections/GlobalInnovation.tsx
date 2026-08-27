@@ -24,8 +24,8 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   } = data;
 
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
-  const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.jpg";
-  const displayAlt = image?.alternativeText || "innovation-banner";
+  // const displayImage = image?.url || "/images/cdmo/cdmo-driving-banner.jpg";
+  // const displayAlt = image?.alternativeText || "innovation-banner";
 
   return (
     <>
@@ -46,8 +46,8 @@ const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
             <div className="relative w-full pt-[100%]">
               <div className="absolute right-0 top-0 w-[100%] lg:w-full rounded-[20px] h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px]">
                 <Image
-                  src={displayImage}
-                  alt={displayAlt}
+                  src={ image?.url || ""}
+                  alt={image?.alternativeText || "innovation-banner"}
                   width={600}
                   height={600}
                   className="absolute object-cover rounded-[20px] w-full h-full top-0 left-0"

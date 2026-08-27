@@ -4,8 +4,8 @@ import Image from "next/image";
 import { BodyText1, SubH1 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/free-mode";
+// import "swiper/css";
+// import "swiper/css/free-mode";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useRef, useEffect } from "react";
+import React, { ReactNode, useRef, useEffect, useLayoutEffect } from "react";
 import { useScrollReveal, ScrollRevealConfig } from "../hooks/useScrollReveal";
 import { gsap } from "gsap";
 import SplitType from "split-type";
@@ -665,7 +665,7 @@ export const LetterReveal = ({
   const isInitializedRef = useRef(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!textRef.current || !trigger || isInitializedRef.current) return;
 
     const text = textRef.current;

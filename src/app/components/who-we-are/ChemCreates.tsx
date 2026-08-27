@@ -2,9 +2,9 @@
 import React, { useCallback, useRef, useState } from "react";
 import { H2 } from "../Typography2";
 import DateCard from "../cards/DateCard";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import type { Swiper as SwiperType } from "swiper";
 import { Mousewheel, Pagination } from "swiper/modules";
 import { ChemCreatesProps } from "@/app/types/who-we-are.type";

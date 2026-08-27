@@ -1,9 +1,15 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { H2 } from "../Typography2";
-import "swiper/css";
+// import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import DateCard from "../cards/DateCard";
@@ -61,6 +67,53 @@ type NormalizedCard = {
   postContent?: PostContent[];
   ctaButton?: ButtonProps;
 };
+
+const TabButton = React.memo(function TabButton({
+  active,
+  label,
+  onClick,
+  tabRef,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+  tabRef?: (node: HTMLDivElement | null) => void;
+}) {
+  return (
+    <div
+      ref={tabRef}
+      onClick={onClick}
+      className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
+        active ? "text-white" : "hover:bg-grey-200"
+      }`}
+    >
+      {label}
+    </div>
+  );
+});
+
+const SliderCard = React.memo(function SliderCard({
+  item,
+  currentCardType,
+  dateText,
+}: {
+  item: PostContent;
+  currentCardType?: NormalizedCard["type"];
+  dateText: string;
+}) {
+  return (
+    <div className="date-card-anim">
+      <DateCard
+        imageSrc={item?.image?.url}
+        date={dateText}
+        desc={item?.description}
+        link={item?.link}
+        animate={Boolean(item?.link)}
+        showStatusTag={currentCardType === "events"}
+      />
+    </div>
+  );
+});
 
 const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const { sectionTitle, card } = data;
@@ -200,7 +253,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
-  const [, setIsMobile] = useState<boolean>(false);
+  // const [, setIsMobile] = useState<boolean>(false);
   const [eventsFeedData, setEventsFeedData] = useState<unknown>(null);
   const hasFetchedEventsFeed = useRef(false);
   const [indicator, setIndicator] = useState({
@@ -211,13 +264,19 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const missingTabs = {
-    news: toArray(card?.news?.news).length === 0,
-    reports: reportsPostContent.length === 0,
-    events: toArray(card?.events?.events).length === 0,
-  };
-  const shouldFetchEventsFeed =
-    !card || missingTabs.news || missingTabs.reports || missingTabs.events;
+  const missingTabs = useMemo(
+    () => ({
+      news: toArray(card?.news?.news).length === 0,
+      reports: reportsPostContent.length === 0,
+      events: toArray(card?.events?.events).length === 0,
+    }),
+    [card, reportsPostContent.length],
+  );
+  const shouldFetchEventsFeed = useMemo(
+    () =>
+      !card || missingTabs.news || missingTabs.reports || missingTabs.events,
+    [card, missingTabs],
+  );
 
   const getFallbackPostContent = (
     feedData: unknown,
@@ -283,11 +342,12 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     ].filter(Boolean) as NormalizedCard[];
   };
 
-  const fallbackCards = eventsFeedData
-    ? buildFallbackCards(eventsFeedData)
-    : [];
+  const fallbackCards = useMemo(
+    () => (eventsFeedData ? buildFallbackCards(eventsFeedData) : []),
+    [eventsFeedData],
+  );
 
-  const displayCards = (() => {
+  const displayCards = useMemo(() => {
     if (cards.length === 0) return fallbackCards;
 
     const updated = cards.map((item) => {
@@ -318,7 +378,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     });
 
     return updated;
-  })();
+  }, [cards, fallbackCards, eventsFeedData, missingTabs]);
 
   const measureIndicator = useCallback(() => {
     const activeButton = tabRefs.current[activeTab];
@@ -346,12 +406,12 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     }
   }, [activeTab, displayCards.length]);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => setIsMobile(window.innerWidth < 1024);
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   useEffect(() => {
     if (
@@ -437,7 +497,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     return () => cancelAnimationFrame(id);
   }, [activeTab, startAutoplayIfInView]);
 
-  const handleTabClick = (index: number) => {
+  const handleTabClick = useCallback((index: number) => {
     if (!cardsWrapRef.current) {
       setActiveTab(index);
       return;
@@ -463,7 +523,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     });
     tl.to(cards, { translateY: "100%", duration: 0.2, stagger: 0.05 });
     switchAnimRef.current = tl;
-  };
+  }, []);
 
   useEffect(() => {
     if (!cardsWrapRef.current) return;
@@ -483,12 +543,16 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   if (!sectionTitle && !hasCards) {
     return null;
   }
-  const currentCard = displayCards[activeTab];
-  const postsContent: PostContent[] = Array.isArray(currentCard?.postContent)
-    ? currentCard.postContent
-    : currentCard?.postContent
-      ? [currentCard.postContent]
-      : [];
+  const currentCard = useMemo(
+    () => displayCards[activeTab],
+    [activeTab, displayCards],
+  );
+  const postsContent = useMemo<PostContent[]>(() => {
+    if (Array.isArray(currentCard?.postContent)) {
+      return currentCard.postContent;
+    }
+    return currentCard?.postContent ? [currentCard.postContent] : [];
+  }, [currentCard]);
   const postsCount = postsContent.length;
 
   return (
@@ -531,22 +595,15 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                           }}
                         />
                         {displayCards.map((item, index) => (
-                          <div
+                          <TabButton
                             key={`${item.id ?? item.category ?? "tab"}-${index}`}
-                            ref={(el) => {
-                              if (el) {
-                                tabRefs.current[index] = el;
-                              }
-                            }}
+                            active={activeTab === index}
+                            label={item.category ?? ""}
                             onClick={() => handleTabClick(index)}
-                            className={`text-grey-400 cursor-pointer  md:text-[14px] text-[12px] font-alte-hans py-[10px]  md:px-[24px] px-[12px] rounded-[40px] relative z-10 transition-all ${
-                              activeTab === index
-                                ? "text-white"
-                                : "hover:bg-grey-200"
-                            }`}
-                          >
-                            {item.category}
-                          </div>
+                            tabRef={(el) => {
+                              tabRefs.current[index] = el;
+                            }}
+                          />
                         ))}
                       </div>
                     </div>
@@ -618,26 +675,23 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                 }}
                 className=" w-full px-[20px]! lg:px-[60px]!"
               >
-                {postsContent.map((item, index) => (
-                  <SwiperSlide key={item?.id || index}>
-                    <div className="date-card-anim">
-                      <DateCard
-                        imageSrc={item?.image?.url}
-                        date={
-                          item?.end_date
-                            ? `${item?.date ? formatDate(item?.date) : ""} - ${formatDate(item?.end_date)}`
-                            : item?.date
-                              ? formatDate(item?.date)
-                              : ""
-                        }
-                        desc={item?.description}
-                        link={item?.link}
-                        animate={Boolean(item?.link)}
-                        showStatusTag={currentCard?.type === "events"}
+                {postsContent.map((item, index) => {
+                  const dateText = item?.end_date
+                    ? `${item?.date ? formatDate(item?.date) : ""} - ${formatDate(item?.end_date)}`
+                    : item?.date
+                      ? formatDate(item?.date)
+                      : "";
+
+                  return (
+                    <SwiperSlide key={item?.id || index}>
+                      <SliderCard
+                        item={item}
+                        currentCardType={currentCard?.type}
+                        dateText={dateText}
                       />
-                    </div>
-                  </SwiperSlide>
-                ))}
+                    </SwiperSlide>
+                  );
+                })}
               </Swiper>
             </div>
             <div className="relative h-px mx-[20px] lg:mx-[60px] mt-[30px]">

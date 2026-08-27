@@ -1,11 +1,11 @@
 "use client";
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { BodyText1, BodyText2, H2, SubH3 } from "../Typography2";
-import "swiper/css/effect-fade";
+// import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+// import "swiper/css";
+// import "swiper/css/pagination";
+// import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";

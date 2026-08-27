@@ -214,9 +214,14 @@ const ImageGallery = ({ data, imgArr }: FosteringSafeProps) => {
     return slides;
   };
 
-  const baseSlides = isDesktop
-    ? generateSwiperSlides(imgArr?.images)
-    : generateMobileSwiperSlides(imgArr?.images);
+  const imageArray = imgArr?.images;
+  const baseSlides = useMemo(
+    () =>
+      isDesktop
+        ? generateSwiperSlides(imageArray)
+        : generateMobileSwiperSlides(imageArray),
+    [imageArray, isDesktop],
+  );
 
   // Single set of slides; we render it twice in the DOM for seamless loop with translateX(-50%)
   const slidesToRender = useMemo(() => {

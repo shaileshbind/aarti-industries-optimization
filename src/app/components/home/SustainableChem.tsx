@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import gsap from "gsap";
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
-import "swiper/css";
+// import "swiper/css";
 import { SustainableChemProps } from "@/app/types/home.type";
 import SliderCard from "../cards/SliderCard";
 import { useMargin } from "@/app/contexts/MarginContext";
@@ -51,21 +57,20 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
   const imageWrapperRef = useRef<HTMLDivElement | null>(null);
   const slideWidthRef = useRef(0);
   const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => { setHasMounted(true); }, []);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const { stopLenis, startLenis } = useLenis();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -672,7 +677,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
         // }
 
         const firstEl = document.getElementById("tabsustain-0");
-        const lastEl = document.getElementById(`tabsustain-${mainSection.length - 1}`);
+        const lastEl = document.getElementById(
+          `tabsustain-${mainSection.length - 1}`,
+        );
         if (firstEl && lastEl) {
           const firstTop = firstEl.getBoundingClientRect().top;
           const lastBottom = lastEl.getBoundingClientRect().bottom;
@@ -742,7 +749,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         src={mainSection?.[0]?.image?.url}
                         alt={"icon"}
                         fill
-                        priority
                         sizes="100px"
                         className=" scale-110 object-cover"
                       />
@@ -762,7 +768,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                           src={mainSection?.[0]?.image?.url}
                           alt={"icon"}
                           fill
-                          priority
                           sizes="100px"
                           className=" object-cover blur scale-110"
                         />
@@ -775,7 +780,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                           src={mainSection?.[0]?.image?.url}
                           alt={"icon"}
                           fill
-                          priority
                           sizes="700px"
                           className="leafBigImg scale-110 object-cover"
                         />
@@ -791,7 +795,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         src={mainSection?.[0]?.image?.url}
                         alt={"icon"}
                         fill
-                        priority
                         sizes="100px"
                         className="scale-110 object-cover"
                       />
@@ -806,7 +809,6 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         src={mainSection?.[0]?.image?.url}
                         alt={"icon"}
                         fill
-                        priority
                         sizes="100px"
                         className="scale-110 object-cover"
                       />
@@ -907,10 +909,11 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                                   tabRefs.current[index] = element;
                                 }}
                                 onClick={() => handleTabClick(index)}
-                                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${activeTab === index
+                                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 text-sm ${
+                                  activeTab === index
                                     ? "text-white"
                                     : "hover:bg-grey-200"
-                                  }`}
+                                }`}
                               >
                                 {items?.category}
                               </div>
@@ -929,8 +932,7 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
           ref={mobileSliderContainerRef}
           className="block lg:hidden container absolute top-1/2 -translate-y-1/2  left-0 w-full h-[100vh]"
         >
-          <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]" >
-
+          <div className="flex flex-col gap-y-[16px] relative overflow-hidden pt-[155px]">
             <div className="mt-[16px] lg:mt-[32px]" ref={sliderContainerRef}>
               <div className="grid items-center">
                 {isTablet && (
@@ -997,10 +999,9 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         tabRefs.current[index] = element;
                       }}
                       onClick={() => handlMobileTabClick(index)}
-                      className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${activeTab === index
-                          ? "text-white"
-                          : "hover:bg-grey-200"
-                        }`}
+                      className={`text-grey-400 text-[12px] md:text-base z-10 lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                        activeTab === index ? "text-white" : "hover:bg-grey-200"
+                      }`}
                     >
                       {items?.category}
                     </div>

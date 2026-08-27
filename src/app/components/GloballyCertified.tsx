@@ -30,6 +30,7 @@ const GloballyCertified = ({
   const offsetRef = useRef<number>(0);
   const lastPointerXRef = useRef<number>(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isInView, setIsInView] = useState(false);
 
   const applyTransform = () => {
     const el = trackRef.current;
@@ -62,7 +63,20 @@ const GloballyCertified = ({
   }, [itemsData]);
 
   useEffect(() => {
-    if (!itemsData?.length) return;
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: "200px 0px" },
+    );
+
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!itemsData?.length || !isInView) return;
 
     const tick = (ts: number) => {
       if (!lastTsRef.current) lastTsRef.current = ts;
@@ -84,7 +98,7 @@ const GloballyCertified = ({
       rafRef.current = null;
       lastTsRef.current = 0;
     };
-  }, [isDragging, itemsData]);
+  }, [isDragging, isInView, itemsData]);
 
   if (!itemsData?.length) return null;
 
@@ -161,7 +175,6 @@ const MarqueeItem = ({
           height={80}
           width={160}
           sizes="(max-width: 767px) 112px, 160px"
-          loading="lazy"
           draggable={false}
           className="object-contain h-[68px] md:h-[80px] w-[112px] md:w-[160px] group-hover:scale-110 transition-transform duration-300"
         />

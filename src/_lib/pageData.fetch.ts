@@ -6,7 +6,7 @@ export async function getPageData(slug: string) {
     }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${slug}`, {
-      next: { revalidate: 300 },
+      next: { revalidate: 600 }, // increasing revalidate 300 to 600 (10mins)
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.API_TOKEN}`,
@@ -24,7 +24,7 @@ export async function getPageData(slug: string) {
     }
 
     const data = await response.json();
-   //console.log("data", data?.layout?.[0]);
+    //console.log("data", data?.layout?.[0]);
     return {
       data: data?.layout?.[0],
       seo: data?.seo,

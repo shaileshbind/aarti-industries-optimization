@@ -8,7 +8,7 @@ import Image from "next/image";
 import { H2 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
-import "swiper/css";
+// import "swiper/css";
 import SliderCard from "../cards/SliderCard";
 import { RespGrowthProps } from "@/app/types/sustainability.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";

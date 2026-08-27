@@ -3,22 +3,36 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import HomeHero from "./components/home/HomeHero";
 import SEO from "./components/SEO";
+import { Suspense } from "react";
 
-const DetailsContainer = dynamic(() => import("./components/sections/DetailsContainer"));
+const DetailsContainer = dynamic(
+  () => import("./components/sections/DetailsContainer"),
+);
 const GlobalPartner = dynamic(() => import("./components/home/GlobalPartner"));
 const HomeSections = dynamic(() => import("./components/home/HomeSections"));
 const ByUseSection = dynamic(() => import("./components/home/ByUseSection"));
 const ImageGallery = dynamic(() => import("./components/ImageGallery"));
-const FrameworkForged = dynamic(() => import("./components/sections/FrameworkForged"));
+const FrameworkForged = dynamic(
+  () => import("./components/sections/FrameworkForged"),
+);
 const LatestAtAarti = dynamic(() => import("./components/home/LatestAtAarti"));
-const GloballyCertified = dynamic(() => import("./components/GloballyCertified"));
+const GloballyCertified = dynamic(
+  () => import("./components/GloballyCertified"),
+);
 const HomeExplore = dynamic(() => import("./components/home/HomeExplore"));
 
+async function GloballyCertifiedSection() {
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*",
+  );
+
+  if (!globallyCertifiedData) return null;
+
+  return <GloballyCertified itemsData={globallyCertifiedData} />;
+}
+
 export default async function Home() {
-  const [data, globallyCertifiedData] = await Promise.all([
-    getPageData("/pages/by-slug/home-page"),
-    getData("/globally-certified-datas?populate=*"),
-  ]);
+  const data = await getPageData("/pages/by-slug/home-page");
   const {
     sectionOne,
     sectionTwo,
@@ -62,9 +76,9 @@ export default async function Home() {
       {sectionSix && <ImageGallery data={sectionSix} imgArr={sectionSeven} />}
       {sectionEight && <FrameworkForged data={sectionEight} />}
       {sectionNine && <LatestAtAarti data={sectionNine} />}
-      {globallyCertifiedData && (
-        <GloballyCertified itemsData={globallyCertifiedData} />
-      )}
+      <Suspense fallback={<div>loading...</div>}>
+        <GloballyCertifiedSection />
+      </Suspense>
       {sectionTen && <HomeExplore data={sectionTen} />}
     </div>
   );

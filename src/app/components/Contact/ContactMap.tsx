@@ -1,7 +1,8 @@
 import { BodyText2, H2, SubH3 } from "../Typography2";
 import Image from "next/image";
 import { ContactMapProps } from "@/app/types/contact.type";
-import ContactMapSvg from "./ContactMapSvg";
+import ContactMapInteractive from "./ContactMapInteractive";
+import { MAP_BOX_HEIGHT } from "./mapPins";
 
 const ContactMap = ({ data }: ContactMapProps) => {
   const { title, image, address } = data;
@@ -23,11 +24,16 @@ const ContactMap = ({ data }: ContactMapProps) => {
           />
         )}
       </div>
-      <div className="relative w-full hidden lg:block h-[80vh]">
-        <div className="w-[100%] h-full mx-auto relative ">
-          <ContactMapSvg />
-        </div>
+
+      {/* 80vh box with the artwork centred inside it, matching the geometry of
+          the old inline SVG (width:100% height:100%, xMidYMid meet). */}
+      <div
+        className="relative w-full hidden lg:flex items-center justify-center"
+        style={{ height: MAP_BOX_HEIGHT }}
+      >
+        <ContactMapInteractive />
       </div>
+
       <div className="block lg:hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[42px] gap-y-[42px] mt-[50px] container">
           {address?.map((items, index) => {

@@ -5,7 +5,7 @@ import { FadeInReveal } from "../ScrollReveal";
 import Image from "next/image";
 import Button from "../Button";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+// import "swiper/css";
 import type { Swiper as SwiperType } from "swiper";
 import MainAccordion from "../Accordion";
 import { ScaleUpEngineProps } from "@/app/types/digital-transformation.type";

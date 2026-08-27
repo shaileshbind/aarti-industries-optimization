@@ -2,8 +2,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { BodyText1, BodyText2, BodyText3, H2, SubH2 } from "../Typography2";
 import type { Swiper as SwiperType } from "swiper";
-import "swiper/css";
-import "swiper/css/effect-fade";
+// import "swiper/css";
+// import "swiper/css/effect-fade";
 import Image from "next/image";
 import FaqAccordion from "../FaqAccordian";
 import { ComplexChemProps } from "@/app/types/who-we-are.type";
