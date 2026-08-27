@@ -1,0 +1,175 @@
+"use client";
+import React, { useCallback, useRef, useState } from "react";
+import { H2 } from "../Typography2";
+import DateCard from "../cards/DateCard";
+// import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css/pagination";
+import type { Swiper as SwiperType } from "swiper";
+import { Mousewheel, Pagination } from "swiper/modules";
+import { ChemCreatesProps } from "@/app/types/who-we-are.type";
+import Image from "next/image";
+import { formatDate } from "../../../../utils/formatDate";
+import { FadeInReveal } from "../ScrollReveal";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+import { useLenis } from "@/app/contexts/LenisContext";
+
+const ChemCreates: React.FC<ChemCreatesProps> = ({ data }) => {
+  const { sectionTitle, blog_case_studies } = data;
+  const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const swiperRef = useRef<SwiperType | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { stopLenis, startLenis } = useLenis();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lenisStoppedRef = useRef(false);
+
+  const handleSliderTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    },
+    [],
+  );
+
+  const handleSliderTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current || lenisStoppedRef.current) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartRef.current.x);
+      const dy = Math.abs(e.touches[0].clientY - touchStartRef.current.y);
+      if (dx > dy && dx > 10) {
+        stopLenis();
+        lenisStoppedRef.current = true;
+      }
+    },
+    [stopLenis],
+  );
+
+  const handleSliderTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    if (lenisStoppedRef.current) {
+      startLenis();
+      lenisStoppedRef.current = false;
+    }
+  }, [startLenis]);
+
+  const getSlidesPerView = (): number => {
+    const slidesPerView = swiperRef.current?.params.slidesPerView;
+    return typeof slidesPerView === "number" ? Math.floor(slidesPerView) : 1;
+  };
+  const totalSlides = blog_case_studies?.length ?? 0;
+  const isAtEnd = activeIndex >= totalSlides - getSlidesPerView();
+
+  return (
+    <div className="mt-[0] mb-[72px] lg:mb-[100px] lg:mt-0">
+      {sectionTitle && (
+        <FadeInReveal delay={0.6}>
+          <H2 className="mx-[20px] lg:mx-[60px]">{sectionTitle}</H2>
+        </FadeInReveal>
+      )}
+
+      {blog_case_studies && blog_case_studies.length > 0 && (
+        <FadeInReveal delay={0.6}>
+          <div
+            className="mt-[36px] lg:mt-[40px]"
+            onTouchStart={handleSliderTouchStart}
+            onTouchMove={handleSliderTouchMove}
+            onTouchEnd={handleSliderTouchEnd}
+          >
+            <Swiper
+              key={`chem-creates-${isDesktopPointer}`}
+              slidesPerView={1.2}
+              spaceBetween={24}
+              breakpoints={{
+                500: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+              }}
+              modules={[Pagination, ...(isDesktopPointer ? [Mousewheel] : [])]}
+              direction="horizontal"
+              {...(isDesktopPointer && {
+                mousewheel: {
+                  forceToAxis: true,
+                  sensitivity: 1,
+                  releaseOnEdges: true,
+                },
+              })}
+              pagination={{
+                el: ".whoweare-chem-creates-swiper",
+                type: "progressbar",
+              }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+              onSwiper={(swiper) => (swiperRef.current = swiper)}
+              className="w-full !px-[20px] lg:!px-[60px] "
+            >
+              {blog_case_studies?.map((item) => {
+                return (
+                  <SwiperSlide key={item?.id}>
+                    <DateCard
+                      imageSrc={item?.thumbnailImageDesktop?.url}
+                      date={formatDate(item?.date || "")}
+                      desc={item?.title}
+                      link={`/case-studies/${item?.slug}`}
+                      animate
+                    />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
+          {/* Progress + Navigation Flex Below Swiper */}
+          <div className="mt-[16px] flex items-center gap-x-[12px] mx-[20px] lg:mx-[60px]">
+            {/* Progress Bar */}
+            <div className="flex-1 relative h-[1px]">
+              <div className="whoweare-chem-creates-swiper !pb-0 absolute inset-0 !h-[1.5px]" />
+            </div>
+            {/* Navigation Buttons */}
+            {blog_case_studies?.length > 4 && (
+              <div className="hidden lg:flex gap-x-[12px] flex-shrink-0">
+                <button
+                  className={`transition-opacity ${
+                    activeIndex === 0
+                      ? "pointer-events-none opacity-30"
+                      : "cursor-pointer opacity-100"
+                  }`}
+                  aria-label="Previous slide"
+                  aria-disabled={activeIndex === 0}
+                  onClick={() => swiperRef.current?.slidePrev()}
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="Previous"
+                    width={34}
+                    height={34}
+                    className="rotate-180"
+                  />
+                </button>
+                <button
+                  className={`transition-opacity ${
+                    isAtEnd
+                      ? "pointer-events-none opacity-30"
+                      : "cursor-pointer opacity-100"
+                  }`}
+                  aria-label="Next slide"
+                  aria-disabled={isAtEnd}
+                  onClick={() => swiperRef.current?.slideNext()}
+                >
+                  <Image
+                    src="/images/home/chevron-right-orange.svg"
+                    alt="Next"
+                    width={34}
+                    height={34}
+                  />
+                </button>
+              </div>
+            )}
+          </div>
+        </FadeInReveal>
+      )}
+    </div>
+  );
+};
+
+export default ChemCreates;

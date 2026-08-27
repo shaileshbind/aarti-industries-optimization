@@ -1,0 +1,22 @@
+import { getData } from "@/_lib/getData.fetch";
+import GloballyCertified from "@/app/components/GloballyCertified";
+import OrangeCardListingPage from "@/app/components/investor-templates/OranegCardListingPage";
+
+export default async function CompliancePage() {
+  const globallyCertifiedData = await getData(
+    "/globally-certified-datas?populate=*",
+  );
+
+  return (
+    <div>
+      <OrangeCardListingPage params="sustainability-compliance" />
+
+      {globallyCertifiedData && (
+        <div className="mt-[30px] md:mt-[70px] -mb-8 lg:mb-0">
+          <GloballyCertified itemsData={globallyCertifiedData} />
+        </div>
+      )}
+      
+    </div>
+  );
+}

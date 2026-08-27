@@ -1,0 +1,402 @@
+"use client";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
+import { BodyText1, BodyText2, H3, SubH1, SubH2 } from "../Typography2";
+import { ImpactStoriesSliderProps } from "@/app/types/social-health-and-safety.type";
+import FaqAccordion from "../FaqAccordian";
+import { useLenis } from "@/app/contexts/LenisContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
+
+const ImpactStoriesSlider = ({ data }: ImpactStoriesSliderProps) => {
+  const { title, stories = [] } = data || {};
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [expanded, setExpanded] = useState<string | false>("panel0");
+  const [active, setActive] = useState(0);
+  const [accordionProgress, setAccordionProgress] = useState(0);
+  const [isInViewport, setIsInViewport] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const accordionProgressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+   const isMobile = useMatchMedia("(max-width:1023px)");
+  const AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
+  const ACCORDION_AUTOPLAY_DURATION = isMobile ? 10000 : 15000;
+  const isTablet = useMatchMedia("(max-width:1280px)");
+  const { scrollTo: lenisScrollTo } = useLenis();
+  const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMobileAnimating, setIsMobileAnimating] = useState(false);
+  const getHeaderOffset = () => {
+    const val = getComputedStyle(document.documentElement)
+      .getPropertyValue("--header-height");
+    return (parseInt(val, 10) || 80) + 5;
+  };
+  const clearPendingTimers = () => {
+    if (expandTimerRef.current) {
+      clearTimeout(expandTimerRef.current);
+      expandTimerRef.current = null;
+    }
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  };
+  const mobileScrollAndExpand = useCallback(
+    (panelIndex: number) => {
+      clearPendingTimers();
+      setIsMobileAnimating(true);
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
+      setAccordionProgress(0);
+      setExpanded(false);
+
+      collapseTimerRef.current = setTimeout(() => {
+        const el = accordionRefs.current[panelIndex];
+        if (el) {
+          const offset = getHeaderOffset();
+          lenisScrollTo(el, {
+            offset: -offset,
+            duration: 0.8,
+          });
+        }
+        expandTimerRef.current = setTimeout(() => {
+          setActive(panelIndex);
+          setExpanded(`panel${panelIndex}`);
+          expandTimerRef.current = null;
+          setIsMobileAnimating(false);
+        }, 100);
+        collapseTimerRef.current = null;
+      }, 350);
+    },
+    [lenisScrollTo],
+  );
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInViewport(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of section is visible
+        rootMargin: "0px",
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // Desktop slider progress
+  useEffect(() => {
+    if (!stories || stories.length === 0 || !isInViewport) {
+      // Clear intervals when out of viewport
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      if (autoplayTimeoutRef.current) {
+        clearTimeout(autoplayTimeoutRef.current);
+        autoplayTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    setProgress(0);
+    progressIntervalRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 100;
+        return prev + 100 / (AUTOPLAY_DURATION / 50);
+      });
+    }, 50);
+
+    autoplayTimeoutRef.current = setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % stories.length);
+    }, AUTOPLAY_DURATION);
+
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      if (autoplayTimeoutRef.current) {
+        clearTimeout(autoplayTimeoutRef.current);
+        autoplayTimeoutRef.current = null;
+      }
+    };
+  }, [activeIndex, stories, isInViewport]);
+
+  useEffect(() => {
+    if (!stories || stories.length === 0 || !isInViewport || isMobileAnimating) {
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
+      return;
+    }
+
+    setAccordionProgress(0);
+    accordionProgressIntervalRef.current = setInterval(() => {
+      setAccordionProgress((prev) => {
+        if (prev >= 100) {
+          const nextIndex = (active + 1) % stories.length;
+          if (isTablet) {
+            mobileScrollAndExpand(nextIndex);
+          } else {
+            setActive(nextIndex);
+            setExpanded(`panel${nextIndex}`);
+          }
+          return 0;
+        }
+        return prev + 100 / (ACCORDION_AUTOPLAY_DURATION / 50);
+      });
+    }, 50);
+
+    return () => {
+      if (accordionProgressIntervalRef.current) {
+        clearInterval(accordionProgressIntervalRef.current);
+        accordionProgressIntervalRef.current = null;
+      }
+    };
+  }, [active, stories, isInViewport, isMobileAnimating, isTablet, mobileScrollAndExpand]);
+
+  // Early return if no stories (after hooks)
+  if (!stories || stories.length === 0) {
+    return null;
+  }
+
+  const handleSlideClick = (index: number) => {
+    if (index !== activeIndex) {
+      setActiveIndex(index);
+    }
+  };
+
+  const handleChange =
+    (panel: string) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
+      const panelIndex = parseInt(panel.replace("panel", ""));
+      if (isExpanded) {
+        if (isTablet) {
+          mobileScrollAndExpand(panelIndex);
+        } else {
+          setActive(panelIndex);
+          setExpanded(panel);
+          setAccordionProgress(0);
+        }
+      }
+    };
+  return (
+    <div ref={sectionRef}>
+      <div className="hidden xl:block relative w-full h-screen 2xl:h-[calc(100dvh-64px)] overflow-hidden bg-black mt-20 lg:mt-40">
+        {/* Background Images with Fade Effect */}
+        <div className="absolute inset-0">
+          {stories?.map((item, index) => (
+            <div
+              key={`bg-${item.id}`}
+              className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+              style={{
+                opacity: index === activeIndex ? 1 : 0,
+                backgroundImage: item.image?.url
+                  ? `url(${item.image.url})`
+                  : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/60" />
+            </div>
+          ))}
+        </div>
+        {/* Slider Container */}
+        <div className="relative h-full flex ">
+          <div className="w-full">
+            {/* Decorative Header */}
+            <div className="absolute top-0 left-0 px-20 py-10 z-10">
+              <H3 className="text-white">{title}</H3>
+            </div>
+            {/* Slides Grid */}
+            <div className="flex h-full">
+              {stories?.map((story, index) => {
+                const isActive = index === activeIndex;
+                const slideProgress = isActive ? progress : 0;
+                return (
+                  <div
+                    key={story.id}
+                    onClick={() => handleSlideClick(index)}
+                    className={`
+                    relative cursor-pointer group
+                    transition-all duration-700 ease-out
+                    ${isActive ? "w-[40%]" : "w-[20%]"}
+                  `}
+                  >
+                    {/* Slide Card */}
+                    <div
+                      className={`
+                      h-full  relative overflow-hidden transition-all duration-700 ease-out`}
+                    >
+                      {/* Content */}
+                      <div className="relative h-full p-8 flex flex-col justify-between pt-[19vh]">
+                        <div
+                          className={`flex flex-col ${isActive ? "px-10" : ""}`}
+                        >
+                          <div
+                            className={`text-white text-xs tracking-widest ${
+                              isActive ? "opacity-100" : "opacity-60"
+                            }`}
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </div>
+                          <SubH2
+                            className={`text-white mt-5 mb-4 ${
+                              isActive ? "opacity-100" : "opacity-60"
+                            }`}
+                          >
+                            {story.title}
+                          </SubH2>
+
+                          <div
+                            className={`
+                            transition-all duration-700 overflow-hidden
+                            ${
+                              isActive
+                                ? "max-h-none opacity-100"
+                                : "max-h-0 opacity-0"
+                            }
+                          `}
+                          >
+                            <p className="text-white/80 leading-relaxed text-sm mb-6">
+                              {story.description}
+                            </p>
+                            {story.items?.map((item) => (
+                              <div key={item.id}>
+                                <BodyText1 className="text-white">
+                                  {item.title}
+                                </BodyText1>
+                                <BodyText2 className="text-white/80 leading-relaxed text-sm mb-6 mt-2">
+                                  {item.description}
+                                </BodyText2>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        {/* Slide Number for Inactive */}
+                      </div>
+                      {/* Vertical Progress Bar */}
+                      <div className="absolute right-0 top-0 bottom-0 w-[1px]">
+                        {/* Background track */}
+                        <div className="absolute inset-0 bg-white/10 rounded-full" />
+
+                        {/* Active progress */}
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-white/80 rounded-full  shadow-lg shadow-white/50"
+                          style={{
+                            height: `${slideProgress}%`,
+                            opacity: isActive ? 1 : 0,
+                          }}
+                        />
+                      </div>
+                      {/* Hover Glow Effect */}
+                      {!isActive && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {stories?.length > 0 && (
+        <div className="block xl:hidden w-full px-[20px] pt-[0px] pb-[50px] lg:py-[70px]">
+          <H3 className="my-5">{title}</H3>
+          {stories?.map((item, index) => (
+            <div key={item.id} className="relative" ref={(el) => { accordionRefs.current[index] = el; }}>
+              <FaqAccordion
+                imageClassName="min-w-[28px]"
+                faqTitle={
+                  <SubH1
+                    className={
+                      expanded === `panel${index}`
+                        ? "text-orange-100"
+                        : "text-gray-300"
+                    }
+                  >
+                    {item.title}
+                  </SubH1>
+                }
+                faqContent={
+                  <div className="mt-[20px] mb-[30px]">
+                    <div className="relative w-full h-[190px] md:h-[500px] xl:h-[400px] rounded-[14px] overflow-hidden">
+                      {item?.image?.url && (
+                        <>
+                          <Image
+                            src={item.image.url}
+                            alt={item.image.alternativeText || "img"}
+                            fill
+                            className="object-cover object-top"
+                          />
+                        </>
+                      )}
+                    </div>
+                    {item?.description && (
+                      <BodyText1 className="mt-[10px]">
+                        {item.description}
+                      </BodyText1>
+                    )}
+                    <div className="flex flex-col gap-2 mt-5">
+                      {item.items?.length > 0 &&
+                        item.items?.map((item, index2) => (
+                          <div
+                            className="flex gap-2 flex-col"
+                            key={"pointerss_" + index2}
+                          >
+                            <SubH2 className=" text-blue-200">
+                              {item.title}
+                            </SubH2>
+                            <BodyText1 className="text-[#4C5861] text-sm">
+                              {item.description}
+                            </BodyText1>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                }
+                showIcon
+                expanded={expanded === `panel${index}`}
+                handleChange={handleChange(`panel${index}`)}
+                className="!mb-0"
+              />
+              {/* Grey line */}
+              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-200" />
+              {/* Orange progress bar only for active accordion */}
+              {index === active && (
+                <div
+                  className="absolute bottom-0 left-0 h-[2px] bg-orange-200 z-10"
+                  style={{
+                    width: `${accordionProgress}%`,
+                    transition: "none",
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ImpactStoriesSlider;

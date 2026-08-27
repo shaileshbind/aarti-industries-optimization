@@ -1,0 +1,35 @@
+import { ImageProps } from "./global.type";
+
+export type AnnualRBannerProps = {
+  data: {
+    title: string;
+    description: string;
+    image: ImageProps;
+    mobImage: ImageProps;
+  };
+};
+
+export type ReportItemProps = {
+  id?: string | number;
+  heading?: string;
+  link?: string;
+  file?: { url: string };
+};
+
+export type ReportsProps = {
+  id?: string | number;
+  reportLayout?: {
+    id?: string | number;
+    reports?: ReportItemProps[];
+  }[];
+};
+
+export type DynamicReportsData = {
+  [key: string]: ReportsProps[];
+};
+
+export type AnnualRProps = {
+  data: {
+    annual_reports?: ReportsProps[];
+  };
+};

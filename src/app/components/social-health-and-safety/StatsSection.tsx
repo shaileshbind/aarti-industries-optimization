@@ -1,0 +1,126 @@
+"use client";
+import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { H3 } from "../Typography2";
+import NumberCard from "../cards/NumberCard";
+import { FadeInReveal } from "../ScrollReveal";
+import { StatsSectionProps } from "@/app/types/social-health-and-safety.type";
+
+const StatsSection: React.FC<StatsSectionProps> = ({ data }) => {
+  const { leftText, rightSection } = data;
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    // Clear any existing ScrollTrigger instances for this element
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === wrapper) {
+        trigger.kill();
+      }
+    });
+    // Small delay to ensure DOM is ready and scroll position is settled
+    const timer = setTimeout(() => {
+      // Refresh ScrollTrigger to recalculate positions
+      ScrollTrigger.refresh();
+      // Get all stat-box elements within this component
+      const statBoxes = wrapper.querySelectorAll(".stat-box");
+      // Reset elements to initial state
+      gsap.set(statBoxes, {
+        y: 80,
+        opacity: 0,
+      });
+      // Create the animation
+      animationRef.current = gsap.to(statBoxes, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: {
+          each: 0.2,
+          from: "random",
+        },
+        scrollTrigger: {
+          trigger: wrapper,
+          start: "top 85%",
+          end: "top -50%",
+          toggleActions: "play none none reset",
+        },
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (animationRef.current) {
+        animationRef.current.scrollTrigger?.kill();
+        animationRef.current.kill();
+        animationRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <div className="container mx-auto mb-[72px] lg:mb-[140px] !max-w-[1160px]">
+      <div
+        ref={wrapperRef}
+        className="w-full min-h-[unset] lgx:min-h-[350px] h-auto grid lgx:grid-cols-[312px_1fr] gap-[6px]"
+      >
+        <FadeInReveal
+          delay={0.6}
+          className="bg-gradient-orange-1 relative rounded-[14px] lg:rounded-[20px] py-[38px] px-[24px] min-h-[136px] lgx:min-h-[350px] overflow-hidden"
+        >
+          {leftText && (
+            <H3 className="text-white max-w-[230px] md:max-w-fit">
+              {leftText}
+            </H3>
+          )}
+
+          <Image
+            src="/images/home/flower-t.svg"
+            alt="img"
+            width={295}
+            height={295}
+            className="absolute bottom-[30px] md:bottom-[-86px] right-[-40px] md:right-[-90px] w-[151px] h-[151px] md:w-[295px] md:h-[295px]"
+          />
+        </FadeInReveal>
+        <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
+          <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px] relative z-[1]">
+            {rightSection?.slice(0, 3)?.map((items) => {
+              return (
+                <NumberCard
+                  key={items?.id}
+                  title={items?.value}
+                  desc={items?.description}
+                  bottomText={items?.bottomText}
+                  imageSrc={items?.image?.url}
+                  imageAlt={items?.image?.alternativeText}
+                  className="stat-box"
+                />
+              );
+            })}
+          </div>
+          <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-[6px] relative z-[1]">
+            {rightSection?.slice(3, 6)?.map((items) => {
+              return (
+                <NumberCard
+                  key={items?.id}
+                  title={items?.value}
+                  desc={items?.description}
+                  bottomText={items?.bottomText}
+                  imageSrc={items?.image?.url}
+                  imageAlt={items?.image?.alternativeText}
+                  className="stat-box"
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StatsSection;

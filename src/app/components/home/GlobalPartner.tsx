@@ -1,0 +1,109 @@
+"use client";
+import React, { useEffect, useRef } from "react";
+import Image from "next/image";
+import gsap from "gsap";
+import { H3 } from "../Typography2";
+import NumberCard from "../cards/NumberCard";
+import { GlobalPartnerProps } from "@/app/types/home.type";
+import { FadeInReveal } from "../ScrollReveal";
+
+const GlobalPartner: React.FC<GlobalPartnerProps> = ({ data }) => {
+  const { leftTitle, righSection } = data;
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const ctx = gsap.context(() => {
+      const statBoxes = wrapper.querySelectorAll(".stat-box");
+
+      gsap.set(statBoxes, { y: 80, opacity: 0 });
+
+      gsap.to(statBoxes, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: { each: 0.2, from: "random" },
+        scrollTrigger: {
+          trigger: wrapper,
+          start: "top 85%",
+          end: "top -50%",
+          toggleActions: "play none none reset",
+        },
+      });
+    }, wrapper);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="container mx-auto lg:my-[100px] mt-[100px]">
+      <div
+        ref={wrapperRef}
+        className="w-full min-h-[unset] lgx:min-h-[350px] h-auto grid lgx:grid-cols-[312px_1fr] gap-[6px]"
+      >
+        <FadeInReveal
+          delay={0.6}
+          className="bg-gradient-orange-1 relative rounded-[14px] lg:rounded-[20px] py-[38px] px-[24px] min-h-[136px] lgx:min-h-[350px] overflow-hidden"
+        >
+          {leftTitle && (
+            <H3 className="text-white max-w-[230px] md:max-w-fit">
+              {leftTitle}
+            </H3>
+          )}
+
+          <Image
+            src="/images/home/flower-t.svg"
+            alt="img"
+            width={295}
+            height={295}
+            sizes="(max-width: 767px) 151px, 295px"
+            className="absolute bottom-[30px] md:bottom-[-86px] right-[-40px] md:right-[-90px] w-[151px] h-[151px] md:w-[295px] md:h-[295px]"
+          />
+        </FadeInReveal>
+        <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-none lg:grid-rows-[1fr_1fr] gap-[6px]">
+          {righSection?.length > 0 && (
+            <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px] relative z-[1]">
+              {righSection?.slice(0, 4)?.map((items) => {
+                return (
+                  <NumberCard
+                    key={items?.id}
+                    title={items?.value}
+                    desc={items?.description}
+                    bottomText={items?.bottomText}
+                    imageSrc={items?.image?.url}
+                    imageAlt={items?.image?.alternativeText}
+                    className="stat-box"
+                  />
+                );
+              })}
+            </div>
+          )}
+
+          {righSection?.length > 0 && (
+            <div className="grid grid-rows-4 lg:grid-rows-none lg:grid-cols-4 gap-[6px] relative z-[1]">
+              {righSection?.slice(4, 8)?.map((items) => {
+                return (
+                  <NumberCard
+                    key={items?.id}
+                    title={items?.value}
+                    desc={items?.description}
+                    bottomText={items?.bottomText}
+                    imageSrc={items?.image?.url}
+                    imageAlt={items?.image?.alternativeText}
+                    className="stat-box"
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GlobalPartner;
