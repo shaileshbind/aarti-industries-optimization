@@ -13,13 +13,14 @@ import { FadeInReveal, LetterReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
+import { isMobile, isTablet } from "react-device-detect";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
-  console.log("data:", JSON.stringify(data, null, 2));
-  const isTablet = useMatchMedia("(max-width:768px)");
+  // console.log("data:", JSON.stringify(data, null, 2));
+  // const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
-  const isMobile = useMatchMedia("(pointer: coarse)");
-  const isMobileView = isTablet || isMobile;
+  // const isMobile = useMatchMedia("(pointer: coarse)");
+  // const isMobileView = isTablet || isMobile;
   const [active, setActive] = useState(0);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const navTitles = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isMobileView) return;
+    if (isMobile) return;
     if (
       !wrapperRef.current ||
       !starRef.current ||
@@ -60,7 +61,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         const orangeBar = orangeScroll.current!;
         const navTitle = navTitles.current!;
 
-        if (!isMobileView) {
+        if (!isMobile) {
           gsap.set(wrapperRef.current, { opacity: 0, scale: 0.95 });
         }
 
@@ -74,7 +75,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         const tl = gsap.timeline();
 
         // Animate wrapper ONLY on desktop
-        if (!isMobileView) {
+        if (!isMobile) {
           tl.to(wrapperRef.current, {
             opacity: 1,
             scale: 1,
@@ -104,7 +105,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     });
 
     return () => cancelAnimationFrame(raf1);
-  }, [isMobileView]);
+  }, [isMobile]);
 
   const handleTabClick = (index: number) => {
     if (swiperRef.current) {
@@ -330,23 +331,20 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
-                {/* Breakpoint is enforced by CSS (hidden md:block) so both sources are
-                    server-rendered and the preload scanner can pick the right one. */}
-                {items?.card?.[0]?.image?.url && (
+                {!isTablet && items?.card?.[0]?.image?.url && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(min-width: 769px) 100vw, 0px"
+                    sizes="100vw"
                     quality={index === 0 ? 60 : 75}
-                    className="hidden md:block object-cover"
+                    className="object-cover"
                   />
                 )}
 
-                {/* Breakpoint enforced by CSS (block md:hidden). */}
-                {items?.card?.[0]?.mobImage?.url && (
+                {isTablet && items?.card?.[0]?.mobImage?.url && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
                     alt={
@@ -355,12 +353,12 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                     fill
                     priority={index === 0}
                     fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="(max-width: 768px) 100vw, 0px"
+                    sizes="100vw"
                     quality={index === 0 ? 60 : 75}
-                    className="block md:hidden object-cover"
+                    className="object-cover"
                   />
                 )}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile && (
+                {items?.card?.[0]?.bannerVideo?.url && !isTablet && (
                   <video
                     ref={(el) => {
                       videoRefs.current[index] = el;
@@ -376,13 +374,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                   />
                 )}
                 {/* Lighter gradient overlay for video slides on desktop */}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                {items?.card?.[0]?.bannerVideo?.url && !isTablet ? (
                   <></>
                 ) : (
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0.35)_50%,rgba(0,0,0,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
                 )}
                 {/* Content box */}
-                {items?.card?.[0]?.bannerVideo?.url && !isMobile ? (
+                {items?.card?.[0]?.bannerVideo?.url && !isTablet ? (
                   <></>
                 ) : (
                   <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">

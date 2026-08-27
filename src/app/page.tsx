@@ -1,4 +1,6 @@
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
+import { getSelectorsByUserAgent } from "react-device-detect";
 import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import HomeHero from "./components/home/HomeHero";
@@ -32,6 +34,15 @@ async function GloballyCertifiedSection() {
 }
 
 export default async function Home() {
+  // Device is resolved server-side so the correct banner is in the HTML for the
+  // preload scanner. isMobileOnly = phones; tablets keep the desktop banner,
+  // matching the md: breakpoint this replaces (isMobile is true for iPads).
+  // getSelectorsByUserAgent returns undefined (and warns) on an empty UA.
+  const ua = (await headers()).get("user-agent") ?? "";
+  const isMobileDevice = ua
+    ? Boolean(getSelectorsByUserAgent(ua)?.isMobileOnly)
+    : false;
+
   const data = await getPageData("/pages/by-slug/home-page");
   const {
     sectionOne,
@@ -66,7 +77,9 @@ export default async function Home() {
         twtDesc={seo?.twtDesc}
         schemaData={seo?.schemaData}
       />
-      {sectionOne && <HomeHero data={sectionOne} />}
+      {sectionOne && (
+        <HomeHero data={sectionOne} isMobileDevice={isMobileDevice} />
+      )}
       {sectionTwo && <DetailsContainer data={sectionTwo} />}
       {sectionThree && <GlobalPartner data={sectionThree} />}
       <HomeSections sustainableChemData={sectionFour} />
