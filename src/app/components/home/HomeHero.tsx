@@ -15,6 +15,7 @@ import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
+  console.log("data:", JSON.stringify(data, null, 2));
   const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
   const isMobile = useMatchMedia("(pointer: coarse)");
@@ -161,6 +162,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     bar.style.transform = "scaleX(1)";
   };
 
+  useEffect(() => {
+    startProgressBar();
+  }, []);
+
   const controlVideos = (activeIndex: number) => {
     videoRefs.current.forEach((video, index) => {
       if (video) {
@@ -267,7 +272,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           onSwiper={(swiper: SwiperType) => {
             swiperRef.current = swiper;
             controlVideos(activeIndexRef.current);
-            startProgressBar();
           }}
           onSlideChangeTransitionStart={(swiper) => {
             const realIndex =
@@ -326,8 +330,9 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           {data?.banner?.map((items, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
-                {/* Desktop banner - only rendered when !isTablet (md and up), so not loaded on mobile */}
-                {items?.card?.[0]?.image?.url && !isTablet && (
+                {/* Breakpoint is enforced by CSS (hidden md:block) so both sources are
+                    server-rendered and the preload scanner can pick the right one. */}
+                {items?.card?.[0]?.image?.url && (
                   <Image
                     src={items?.card?.[0]?.image?.url}
                     alt={items?.card?.[0]?.image?.alternativeText || "banner"}
@@ -340,8 +345,8 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                   />
                 )}
 
-                {/* Mobile banner - only rendered when isTablet (≤768px), so not loaded on desktop */}
-                {items?.card?.[0]?.mobImage?.url && isTablet && (
+                {/* Breakpoint enforced by CSS (block md:hidden). */}
+                {items?.card?.[0]?.mobImage?.url && (
                   <Image
                     src={items?.card?.[0]?.mobImage?.url}
                     alt={
