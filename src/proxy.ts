@@ -24,9 +24,13 @@ function safePathnameFromUrl(value: string): string {
   return value.startsWith("/") ? value : `/${value}`;
 }
 
-function getRedirectStatus(mapping: RedirectMapping): 301 | 302 | 303 | 307 | 308 {
+function getRedirectStatus(
+  mapping: RedirectMapping,
+): 301 | 302 | 303 | 307 | 308 {
   const s = mapping.redirectionType;
-  return s === 301 || s === 302 || s === 303 || s === 307 || s === 308 ? s : 301;
+  return s === 301 || s === 302 || s === 303 || s === 307 || s === 308
+    ? s
+    : 301;
 }
 
 export async function proxy(request: NextRequest) {
@@ -36,7 +40,10 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/favicon.ico") ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)$/)
+    //  pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)$/)
+    pathname.match(
+      /\.(ico|png|jpg|jpeg|svg|gif|webp|avif|woff|woff2|ttf|eot|js|css|json|txt|xml|mp4|webm|pdf)$/,
+    )
   ) {
     return NextResponse.next();
   }
@@ -126,6 +133,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public files (images, fonts, etc.)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)).*)",
+    // "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot)).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:ico|png|jpg|jpeg|svg|gif|webp|avif|woff|woff2|ttf|eot|js|css|json|txt|xml|mp4|webm|pdf)).*)",
   ],
 };
