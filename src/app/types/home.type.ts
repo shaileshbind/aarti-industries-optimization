@@ -27,7 +27,6 @@ export type HomeHeroProps = {
       category: string;
     }[];
   };
-  isMobileDevice?: boolean;
 };
 
 export type FourtyYearsProps = {
