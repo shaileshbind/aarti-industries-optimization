@@ -3,9 +3,12 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { getRedirects, type RedirectMapping } from "./_lib/getRedirects";
 
+<<<<<<< HEAD
 /** Testing: set to false to re-enable the proxy (redirects + auth gate). */
 const PROXY_DISABLED = true;
 
+=======
+>>>>>>> eca5df97797d445cef8ffed78796df306159c43c
 /** When false (or unset), redirect unauthenticated users to /login. Prod (true) = no gate. */
 const REQUIRE_LOGIN = process.env.NEXT_PUBLIC_IS_PRODUCTION !== "true";
 
@@ -37,8 +40,11 @@ function getRedirectStatus(
 }
 
 export async function proxy(request: NextRequest) {
+<<<<<<< HEAD
   if (PROXY_DISABLED) return NextResponse.next();
 
+=======
+>>>>>>> eca5df97797d445cef8ffed78796df306159c43c
   const { pathname, search } = request.nextUrl;
   // Skip redirect check for API routes, static files, and Next.js internals
   if (
