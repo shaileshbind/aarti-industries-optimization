@@ -1,6 +1,13 @@
 "use client";
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import Image, { getImageProps } from "next/image";
+import ReactDOM from "react-dom";
 // import "swiper/css";
 // import "swiper/css/effect-fade";
 import { Swiper as SwiperType } from "swiper";
@@ -13,12 +20,13 @@ import { FadeInReveal, LetterReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
-import { isMobile, isTablet } from "react-device-detect";
+import { isMobile } from "react-device-detect";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   // console.log("data:", JSON.stringify(data, null, 2));
   // const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  const isDesktop = useMatchMedia("(min-width: 768px)");
   // const isMobile = useMatchMedia("(pointer: coarse)");
   // const isMobileView = isTablet || isMobile;
   const [active, setActive] = useState(0);
@@ -180,6 +188,12 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     });
   };
 
+  // Videos are only mounted at md+ and isDesktop resolves after mount, so the
+  // onSwiper call to controlVideos ran before the elements existed.
+  useEffect(() => {
+    if (isDesktop) controlVideos(activeIndexRef.current);
+  }, [isDesktop]);
+
   useEffect(() => {
     const section = wrapperRef.current;
     if (!section) return;
@@ -248,6 +262,159 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     }
   }, [startLenis]);
 
+  // Slides depend only on `data`, never on the active index, so they are built
+  // once. This also keeps the video ref callbacks stable, which stops React
+  // detaching/reattaching every videoRefs entry on each slide change.
+  const slides = useMemo(
+    () =>
+      data?.banner?.map((items, index) => (
+        <SwiperSlide key={index} className="h-full">
+          <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
+            {(() => {
+              // Art direction has to be resolved in the HTML. The device flags
+              // from react-device-detect are false during SSR, so a JS check
+              // ships the desktop banner to every device and then swaps it
+              // after hydration: a mismatch plus a second download. <source
+              // media> lets the preload scanner pick one file, with no JS.
+              // getImageProps keeps the Next optimizer (avif/webp, deviceSizes).
+              const card = items?.card?.[0];
+              const desktopUrl = card?.image?.url;
+              const mobileUrl = card?.mobImage?.url;
+              const shared = {
+                alt:
+                  card?.image?.alternativeText ||
+                  card?.mobImage?.alternativeText ||
+                  "banner",
+                fill: true,
+                sizes: "100vw",
+                // 70/75 are the configured images.qualities; 60 was silently
+                // snapped to 70 by findClosestQuality anyway.
+                quality: index === 0 ? 70 : 75,
+                priority: index === 0,
+                fetchPriority: (index === 0 ? "high" : "auto") as
+                  | "high"
+                  | "auto",
+                className: "object-cover",
+              };
+              const desktop = desktopUrl
+                ? getImageProps({ ...shared, src: desktopUrl }).props
+                : null;
+              const mobile = mobileUrl
+                ? getImageProps({ ...shared, src: mobileUrl }).props
+                : null;
+              const fallback = mobile ?? desktop;
+              if (!fallback) return null;
+
+              if (index === 0) {
+                // The hero <picture> sits ~40KB into the body, well past
+                // </head>, so give the preload scanner media-scoped hints the
+                // way next/image does for `priority`. Only the matching one is
+                // fetched, so mobile never pulls the desktop banner.
+                const hints =
+                  desktop && mobile
+                    ? [
+                        { img: desktop, media: "(min-width: 768px)" },
+                        { img: mobile, media: "(max-width: 767px)" },
+                      ]
+                    : [{ img: fallback, media: undefined }];
+                for (const { img, media } of hints) {
+                  if (!img.src) continue;
+                  ReactDOM.preload(img.src, {
+                    as: "image",
+                    imageSrcSet: img.srcSet,
+                    imageSizes: img.sizes,
+                    fetchPriority: "high",
+                    ...(media ? { media } : {}),
+                  });
+                }
+              }
+
+              return (
+                <picture>
+                  {desktop && mobile && (
+                    <source
+                      media="(min-width: 768px)"
+                      srcSet={desktop.srcSet}
+                      sizes={desktop.sizes}
+                    />
+                  )}
+                  <img {...fallback} alt={shared.alt} />
+                </picture>
+              );
+            })()}
+            {items?.card?.[0]?.bannerVideo?.url && isDesktop && (
+              <video
+                ref={(el) => {
+                  videoRefs.current[index] = el;
+                }}
+                playsInline
+                preload="none"
+                width={1000}
+                height={1000}
+                src={items?.card?.[0]?.bannerVideo?.url}
+                muted
+                loop
+                className="object-cover w-full h-full absolute top-0 left-0"
+              />
+            )}
+            {/* Video slides drop the gradient and the copy at md+, where the
+                video plays. Done in CSS so SSR and hydration agree. */}
+            <div
+              className={`absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0.35)_50%,rgba(0,0,0,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)] ${
+                items?.card?.[0]?.bannerVideo?.url ? "md:hidden" : ""
+              }`}
+            />
+            {/* Content box */}
+            <div
+              className={`absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10 ${
+                items?.card?.[0]?.bannerVideo?.url ? "md:hidden" : ""
+              }`}
+            >
+              <FadeInReveal delay={0.5}>
+                <div className="fluid-container">
+                  {items?.card?.[0]?.title &&
+                    (index === 0 ? (
+                      <LetterReveal delay={0.1}>
+                        <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                          {items.card[0].title}
+                        </H1>
+                      </LetterReveal>
+                    ) : (
+                      <LetterReveal delay={0.1}>
+                        <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
+                          {items.card[0].title}
+                        </h2>
+                      </LetterReveal>
+                    ))}
+                  {items?.card?.[0]?.description && (
+                    <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
+                      {items?.card?.[0]?.description}
+                    </BodyText2>
+                  )}
+                  {items?.card?.[0]?.ctaButton?.title &&
+                    (items?.card?.[0]?.ctaButton?.hasExternalLink == "true"
+                      ? items?.card?.[0]?.ctaButton?.externalLink
+                      : items?.card?.[0]?.ctaButton?.link?.link) && (
+                      <Button
+                        href={
+                          items?.card?.[0]?.ctaButton?.hasExternalLink == "true"
+                            ? items?.card?.[0]?.ctaButton?.externalLink
+                            : items?.card?.[0]?.ctaButton?.link?.link
+                        }
+                        title={items?.card?.[0]?.ctaButton?.title}
+                        useTargetBlank={
+                          items?.card?.[0]?.ctaButton?.hasExternalLink == "true"
+                        }
+                      />
+                    )}
+                </div>
+              </FadeInReveal>
+            </div>
+          </div>
+        </SwiperSlide>
+      )),
+    [data, isDesktop],
+  );
   return (
     <div
       ref={wrapperRef}
@@ -258,12 +425,13 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     >
       {/* Conditional overlay - lighter for video slides on desktop */}
       {(() => {
-        const currentSlide = data?.banner?.[active];
-        const hasVideo = currentSlide?.card?.[0]?.bannerVideo?.url && !isMobile;
+        const hasVideo = Boolean(
+          data?.banner?.[active]?.card?.[0]?.bannerVideo?.url,
+        );
         return (
           <div
             className={`absolute inset-0 z-[1] transition-opacity duration-500 ${
-              hasVideo ? "bg-black/5" : "bg-black/20"
+              hasVideo ? "bg-black/20 md:bg-black/5" : "bg-black/20"
             }`}
           />
         );
@@ -328,109 +496,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             },
           })}
         >
-          {data?.banner?.map((items, index) => (
-            <SwiperSlide key={index} className="h-full">
-              <div className="w-full min-h-screen md:min-h-[80vh] h-full lg:min-h-screen relative overflow-hidden">
-                {!isTablet && items?.card?.[0]?.image?.url && (
-                  <Image
-                    src={items?.card?.[0]?.image?.url}
-                    alt={items?.card?.[0]?.image?.alternativeText || "banner"}
-                    fill
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="100vw"
-                    quality={index === 0 ? 60 : 75}
-                    className="object-cover"
-                  />
-                )}
-
-                {isTablet && items?.card?.[0]?.mobImage?.url && (
-                  <Image
-                    src={items?.card?.[0]?.mobImage?.url}
-                    alt={
-                      items?.card?.[0]?.mobImage?.alternativeText || "banner"
-                    }
-                    fill
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    sizes="100vw"
-                    quality={index === 0 ? 60 : 75}
-                    className="object-cover"
-                  />
-                )}
-                {items?.card?.[0]?.bannerVideo?.url && !isTablet && (
-                  <video
-                    ref={(el) => {
-                      videoRefs.current[index] = el;
-                    }}
-                    playsInline
-                    preload="none"
-                    width={1000}
-                    height={1000}
-                    src={items?.card?.[0]?.bannerVideo?.url}
-                    muted
-                    loop
-                    className="object-cover w-full h-full absolute top-0 left-0"
-                  />
-                )}
-                {/* Lighter gradient overlay for video slides on desktop */}
-                {items?.card?.[0]?.bannerVideo?.url && !isTablet ? (
-                  <></>
-                ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.80)_0%,rgba(0,0,0,0.35)_50%,rgba(0,0,0,0)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0)_80%)]" />
-                )}
-                {/* Content box */}
-                {items?.card?.[0]?.bannerVideo?.url && !isTablet ? (
-                  <></>
-                ) : (
-                  <div className="absolute top-[45%] md:top-1/2 -translate-y-1/2 w-full z-10">
-                    <FadeInReveal delay={0.5}>
-                      <div className="fluid-container">
-                        {items?.card?.[0]?.title &&
-                          (index === 0 ? (
-                            <LetterReveal delay={0.1}>
-                              <H1 className="text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                                {items.card[0].title}
-                              </H1>
-                            </LetterReveal>
-                          ) : (
-                            <LetterReveal delay={0.1}>
-                              <h2 className="font-normal text-[36px] md:text-[44px] xl:text-[54px] leading-[120%] font-alte-hans text-white max-w-[276px] md:max-w-[550px] lg:max-w-[750px]">
-                                {items.card[0].title}
-                              </h2>
-                            </LetterReveal>
-                          ))}
-                        {items?.card?.[0]?.description && (
-                          <BodyText2 className="mb-[38px] text-grey-200 mt-[18px] lg:mt-[10px] max-w-[230px] md:max-w-[450px]">
-                            {items?.card?.[0]?.description}
-                          </BodyText2>
-                        )}
-                        {items?.card?.[0]?.ctaButton?.title &&
-                          (items?.card?.[0]?.ctaButton?.hasExternalLink ==
-                          "true"
-                            ? items?.card?.[0]?.ctaButton?.externalLink
-                            : items?.card?.[0]?.ctaButton?.link?.link) && (
-                            <Button
-                              href={
-                                items?.card?.[0]?.ctaButton?.hasExternalLink ==
-                                "true"
-                                  ? items?.card?.[0]?.ctaButton?.externalLink
-                                  : items?.card?.[0]?.ctaButton?.link?.link
-                              }
-                              title={items?.card?.[0]?.ctaButton?.title}
-                              useTargetBlank={
-                                items?.card?.[0]?.ctaButton?.hasExternalLink ==
-                                "true"
-                              }
-                            />
-                          )}
-                      </div>
-                    </FadeInReveal>
-                  </div>
-                )}
-              </div>
-            </SwiperSlide>
-          ))}
+          {slides}
         </Swiper>
       )}
 
@@ -509,7 +575,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
                 key={index}
                 onClick={() => handleTabClick(index)}
                 className={`cursor-pointer text-white  transition-opacity duration-200 font-alte-hans font-normal  ${
-                  activeIndexRef.current === index
+                  active === index
                     ? "opacity-100"
                     : "opacity-40 hover:opacity-100"
                 }`}
@@ -523,15 +589,15 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         {/* mobile */}
         <div className="block md:hidden fluid-container w-full mx-auto">
           <p className="text-white font-alte-hans font-normal">
-            0{activeIndexRef.current + 1}/
+            0{active + 1}/
             <span className="text-white opacity-40 font-alte-hans font-normal">
               0{data?.banner?.length}
             </span>
           </p>
 
-          {data?.banner[activeIndexRef.current]?.category && (
+          {data?.banner[active]?.category && (
             <p className="text-white font-alte-hans font-normal">
-              {data?.banner[activeIndexRef.current]?.category}
+              {data?.banner[active]?.category}
             </p>
           )}
         </div>
