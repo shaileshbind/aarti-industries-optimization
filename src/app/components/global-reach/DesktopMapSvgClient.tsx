@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import MapBlip from "../MapBlip";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const SVG_URL = "/maps/desktop-map.svg";
 const FILL_IDS = [
@@ -72,6 +73,12 @@ export default function DesktopMapSvgClient({
   isActive4,
   isActive5,
 }: DesktopMapSvgClientProps) {
+  // Every call site mounts this inside a `hidden lg:block` wrapper, so on
+  // phones the component used to fetch a 145KB SVG it never paints -- at
+  // fetch()'s default High priority, right inside the LCP window. Gate on the
+  // same breakpoint the wrapper uses so the request only happens where the map
+  // is actually visible, and still fires if the viewport is resized up.
+  const isDesktopMap = useMatchMedia("(min-width: 1024px)");
   const containerRef = useRef<HTMLDivElement>(null);
   const svgContentRef = useRef<string | null>(null);
   const listenersRef = useRef<Array<{ el: Element; event: string; fn: () => void }>>([]);
@@ -129,6 +136,7 @@ export default function DesktopMapSvgClient({
   }, []);
 
   useEffect(() => {
+    if (!isDesktopMap) return;
     let cancelled = false;
     const container = containerRef.current;
     if (!container) return;
@@ -160,8 +168,8 @@ export default function DesktopMapSvgClient({
       cancelled = true;
       cleanup();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- bind once on mount
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- bind once the map is on screen
+  }, [isDesktopMap]);
 
   useEffect(() => {
     const svg = containerRef.current?.querySelector("svg");

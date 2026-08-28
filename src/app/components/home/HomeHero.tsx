@@ -69,10 +69,10 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         const orangeBar = orangeScroll.current!;
         const navTitle = navTitles.current!;
 
-        if (!isMobile) {
-          gsap.set(wrapperRef.current, { opacity: 0, scale: 0.95 });
-        }
-
+        // The wrapper holds the LCP banner. Hiding it here used to push LCP
+        // out to whenever hydration finished (2.1s of pure render delay on
+        // desktop), so the wrapper now stays painted and only the decorative
+        // overlay elements animate in.
         // Safe to hide decorative elements
         gsap.set(stars, { opacity: 0, scale: 0 });
         gsap.set(vLine, { scaleY: 0, transformOrigin: "top center" });
@@ -81,16 +81,6 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
         gsap.set(navTitle, { opacity: 0, y: 20 });
 
         const tl = gsap.timeline();
-
-        // Animate wrapper ONLY on desktop
-        if (!isMobile) {
-          tl.to(wrapperRef.current, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.5,
-            ease: "power3.out",
-          });
-        }
 
         tl.to(vLine, { scaleY: 1, duration: 0.8, ease: "power2.out" }, "<")
           .to(hLine, { scaleX: 1, duration: 0.8, ease: "power2.out" }, "<")

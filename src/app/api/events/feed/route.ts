@@ -1,6 +1,8 @@
+import { jsonResponse } from "@/_lib/jsonResponse";
+
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
   const base = process.env.NEXT_PUBLIC_BASE_URL;
   const token = process.env.API_TOKEN;
 
@@ -33,10 +35,7 @@ export async function GET() {
     }
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse(req, data);
   } catch (_error) {
     return new Response(
       JSON.stringify({ error: "Server error while fetching events feed" }),

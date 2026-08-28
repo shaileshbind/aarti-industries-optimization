@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import { jsonResponse } from "@/_lib/jsonResponse";
 
-export async function GET() {
+export async function GET(req: Request) {
   const base = process.env.NEXT_PUBLIC_BASE_URL;
   const token = process.env.API_TOKEN;
 
@@ -30,7 +31,7 @@ export async function GET() {
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    return jsonResponse(req, data);
   } catch (error) {
     console.error("Press releases fetch error:", error);
 

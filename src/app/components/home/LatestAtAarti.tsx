@@ -427,7 +427,15 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       const data = await fetchNews(eventsFeedUrl);
       setEventsFeedData(data);
     };
-    fetchEventsFeed();
+    // This section sits far below the fold, but the fetch fired during
+    // hydration and pulled ~148KB at High priority while the hero was still
+    // painting. Defer to an idle slot.
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(() => fetchEventsFeed(), { timeout: 3000 });
+      return () => window.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(fetchEventsFeed, 1500);
+    return () => clearTimeout(t);
   }, [shouldFetchEventsFeed, eventsFeedData, missingTabs]);
 
   useEffect(() => {

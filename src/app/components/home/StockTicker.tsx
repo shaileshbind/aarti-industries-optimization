@@ -94,7 +94,15 @@ export default function StockTicker() {
       const { entries } = getLatestYearTop3(flat);
       setPressReleases(entries);
     };
-    loadNews();
+    // fetch() defaults to High priority, so firing this on mount put a ~128KB
+    // response straight into the LCP window. The ticker is not first paint,
+    // so wait for an idle slot instead.
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(() => loadNews(), { timeout: 3000 });
+      return () => window.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(loadNews, 1500);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {

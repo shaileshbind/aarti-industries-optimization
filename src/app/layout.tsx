@@ -50,6 +50,11 @@ const alteHansGrotesk = localFont({
   preload: true,
 });
 
+// Tried preload:false on these two (they are not used above the fold) to get
+// ~85KB of woff2 off the critical path. It did make the banner load 20x faster,
+// but mobile LCP got *worse* across 3 runs (3.4s -> 6.6s): unpreloaded, the
+// font is discovered by CSS and refetched at VeryHigh priority mid-load. Left
+// preloaded until the Swiper-init cost below it is addressed.
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
