@@ -1,6 +1,12 @@
 /* eslint-disable */
 "use client";
-import React, { useLayoutEffect, useEffect, useRef, useState, useCallback } from "react";
+import React, {
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
@@ -65,15 +71,12 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -96,18 +99,33 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     }
   }, [startLenis]);
 
+  // Slide-width measurement: rAF-batched getBoundingClientRect for the
+  // window-resize / initial-mount path, and the ResizeObserver's own
+  // contentRect for the observer callback (avoids a second DOM read
+  // inside the callback on every resize entry).
   useLayoutEffect(() => {
+    const rafIdRef = { current: null as number | null };
+
     const measureSlideWidth = () => {
-      if (imageWrapperRef.current) {
-        const width = imageWrapperRef.current.offsetWidth;
+      const el = imageWrapperRef.current;
+      if (!el) return;
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        rafIdRef.current = null;
+        const width = el.getBoundingClientRect().width;
         if (width > 0) setSlideWidth(width);
-      }
+      });
     };
 
     const timeoutId = setTimeout(measureSlideWidth, 0);
     window.addEventListener("resize", measureSlideWidth);
 
-    const resizeObserver = new ResizeObserver(measureSlideWidth);
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        if (width > 0) setSlideWidth(width);
+      }
+    });
 
     if (imageWrapperRef.current) {
       resizeObserver.observe(imageWrapperRef.current);
@@ -121,6 +139,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       });
       return () => {
         cancelAnimationFrame(rafId);
+        if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
         clearTimeout(timeoutId);
         window.removeEventListener("resize", measureSlideWidth);
         resizeObserver.disconnect();
@@ -128,13 +147,15 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     }
 
     return () => {
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       clearTimeout(timeoutId);
       window.removeEventListener("resize", measureSlideWidth);
       resizeObserver.disconnect();
     };
   }, [mainSection.length]);
 
-  const indicatorColor = "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
+  const indicatorColor =
+    "linear-gradient(142deg, #FA8129 22.06%, #DC4C03 147.93%)";
   const indicatorTransition =
     "left 280ms cubic-bezier(0.4,0,0.2,1), width 280ms cubic-bezier(0.4,0,0.2,1)";
 
@@ -144,15 +165,28 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     return tabBarRect.bottom + 8;
   }, []);
 
-  const measureIndicator = useCallback(() => {
+  // Cache of measured tab geometry, keyed by index (tabRefs is index-aligned
+  // with mainSection). `left` is stored relative to the container — scroll
+  // invariant, since button and container shift together when an ancestor
+  // scrolls — so it does NOT need to be re-measured on scroll, only on
+  // resize / tab-list changes.
+  const rectsCacheRef = useRef<Map<number, { left: number; width: number }>>(
+    new Map(),
+  );
+  const indicatorRafIdRef = useRef<number | null>(null);
+
+  // WRITE phase: looks up cached geometry, reads only the live scrollLeft
+  // of the correct scroll container (a single cheap property read, not a
+  // full layout query), and writes state. Safe to call on every scroll
+  // tick / tab change without forcing a reflow.
+  const applyIndicatorFromCache = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Use activeTabMob for mobile, activeTab for desktop
     const currentActiveTab = isTablet ? activeTabMob : activeTab;
-    const activeButton = tabRefs.current[currentActiveTab] ?? null;
+    const cached = rectsCacheRef.current.get(currentActiveTab);
 
-    if (!activeButton) {
+    if (!cached) {
       setIndicator((prev) =>
         prev.visible ? { ...prev, visible: false } : prev,
       );
@@ -162,14 +196,57 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     // On mobile, the scrollable element is the outer wrapper (overflow-x-auto), not the inner flex
     const scrollContainer = isTablet ? container.parentElement : container;
     const scrollLeft = scrollContainer?.scrollLeft ?? 0;
-    const left = activeButton.offsetLeft - scrollLeft;
-    const width = activeButton.offsetWidth;
+    const left = cached.left - scrollLeft;
+    const width = cached.width;
+
     setIndicator((prev) => {
       if (prev.left === left && prev.width === width && prev.visible)
         return prev;
       return { left, width, visible: true };
     });
   }, [activeTab, activeTabMob, isTablet]);
+
+  // Keep a ref to the latest applyIndicatorFromCache so the scroll listener
+  // (attached in a separate, more stable effect) never runs a stale closure
+  // without needing that effect to re-run on every tab change.
+  const applyIndicatorRef = useRef(applyIndicatorFromCache);
+  useLayoutEffect(() => {
+    applyIndicatorRef.current = applyIndicatorFromCache;
+  }, [applyIndicatorFromCache]);
+
+  // READ phase: batched into a single rAF and a single getBoundingClientRect
+  // per element (instead of separate offsetLeft / offsetWidth reads), so it
+  // runs after layout has settled for the frame rather than forcing a
+  // synchronous reflow mid-effect. Stores geometry relative to the
+  // container (scroll-invariant); the live scroll offset is applied later
+  // in applyIndicatorFromCache.
+  const recomputeRects = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (indicatorRafIdRef.current !== null) {
+      cancelAnimationFrame(indicatorRafIdRef.current);
+    }
+
+    indicatorRafIdRef.current = requestAnimationFrame(() => {
+      indicatorRafIdRef.current = null;
+
+      const containerRect = container.getBoundingClientRect();
+      const nextCache = new Map<number, { left: number; width: number }>();
+
+      tabRefs.current.forEach((button, index) => {
+        if (!button) return;
+        const rect = button.getBoundingClientRect();
+        nextCache.set(index, {
+          left: rect.left - containerRect.left,
+          width: rect.width,
+        });
+      });
+
+      rectsCacheRef.current = nextCache;
+      applyIndicatorRef.current();
+    });
+  }, []);
 
   const handleTabClick = (index: number) => {
     const st = scrollTriggerRef.current;
@@ -367,7 +444,7 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
               width: window.innerWidth - 30,
-              height:  window.innerWidth - 30,
+              height: window.innerWidth - 30,
               right: 15,
               top: "135px",
               duration: 1,
@@ -562,10 +639,16 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     };
   }, [mainSection.length, slideWidth, isTablet]);
 
+  // Recompute geometry only when layout-affecting things change (tab list,
+  // resize, tablet/desktop switch) — NOT on every activeTab/activeTabMob
+  // flip. Scroll updates go through applyIndicatorFromCache (via the ref),
+  // which only reads scrollLeft — no offsetLeft/offsetWidth reads at all.
   useLayoutEffect(() => {
-    measureIndicator();
+    recomputeRects();
 
-    const resizeObserver = new ResizeObserver(measureIndicator);
+    const resizeObserver = new ResizeObserver(() => {
+      recomputeRects();
+    });
 
     const container = containerRef.current;
     if (container) {
@@ -575,21 +658,34 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       });
     }
 
-    // On mobile, tab bar scrolls horizontally; keep indicator in sync
-    const scrollContainer = isTablet ? container?.parentElement : null;
+    // On mobile, tab bar scrolls horizontally; keep indicator in sync.
+    // Scroll only needs the cheap scrollLeft-based write, not a full
+    // geometry recompute.
+    const scrollContainer = isTablet ? container?.parentElement : container;
+    const handleScroll = () => applyIndicatorRef.current();
     if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", measureIndicator);
+      scrollContainer.addEventListener("scroll", handleScroll);
     }
 
-    const handleResize = () => measureIndicator();
+    const handleResize = () => recomputeRects();
     window.addEventListener("resize", handleResize);
 
     return () => {
       resizeObserver.disconnect();
-      scrollContainer?.removeEventListener("scroll", measureIndicator);
+      scrollContainer?.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
+      if (indicatorRafIdRef.current !== null) {
+        cancelAnimationFrame(indicatorRafIdRef.current);
+        indicatorRafIdRef.current = null;
+      }
     };
-  }, [activeTab, activeTabMob, mainSection.length, measureIndicator, isTablet]);
+  }, [mainSection.length, recomputeRects, isTablet]);
+
+  // activeTab / activeTabMob changes just re-apply from the cache — no
+  // DOM geometry read, so switching tabs never forces a reflow.
+  useLayoutEffect(() => {
+    applyIndicatorFromCache();
+  }, [activeTab, activeTabMob, applyIndicatorFromCache]);
 
   // Mobile-only: reserve enough document height so order is last slide → GloballyCertified → footer; gap = marginTop on next section.
   useLayoutEffect(() => {
@@ -734,223 +830,260 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
 
   return (
     <>
-    <div
-      ref={triggerRef}
-      className="w-full relative min-h-[100vh] lg:min-h-[40vh] mt-[0px] lg:mt-[unset]"
-      style={isTablet ? { minHeight: "100vh" } : undefined}
-    >
-      {/* Match SustainableChem: hero and slider both centered so morphing happens in the same place. */}
       <div
-        ref={titleSection}
-        className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-[30] lg:z-20 bg-white"
+        ref={triggerRef}
+        className="w-full relative min-h-[100vh] lg:min-h-[40vh] mt-[0px] lg:mt-[unset]"
+        style={isTablet ? { minHeight: "100vh" } : undefined}
       >
-        <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
-          {leftText && (
-            <span ref={headinLeft}>
-              <H2>{leftText}</H2>
-            </span>
-          )}
-
-          {mainSection?.[0]?.image?.url && (
-            <div
-              ref={sustainbleLogo}
-              className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-visible lg:overflow-hidden absolute"
-            >
-              <span
-                ref={sustainInner}
-                className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
-              >
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotl}
-                    className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="99px"
-                      quality={70}
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogotr}
-                    className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
-                  >
-                    <span
-                      ref={susLogoinnerblurtr}
-                      className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="(max-width: 1023px) 100vw, 50vw"
-                        quality={70}
-                        className="leafBigImg object-cover blur"
-                      />
-                    </span>
-                    <span
-                      ref={leafBigImg}
-                      className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
-                    >
-                      <Image
-                        src={mainSection?.[0]?.image?.url}
-                        alt={"icon"}
-                        fill
-                        priority
-                        sizes="(max-width: 1023px) 100vw, 50vw"
-                        quality={75}
-                        className="leafBigImg scale-110 object-cover "
-                      />
-                    </span>
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobr}
-                    className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="99px"
-                      quality={70}
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-                {mainSection?.[0]?.image?.url && (
-                  <i
-                    ref={susLogobl}
-                    className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
-                  >
-                    <Image
-                      src={mainSection?.[0]?.image?.url}
-                      alt={"icon"}
-                      fill
-                      priority
-                      sizes="99px"
-                      quality={70}
-                      className="scale-110 object-cover"
-                    />
-                  </i>
-                )}
-              </span>
-            </div>
-          )}
-          {rightText && (
-            <span ref={headinRight}>
-              <H2>{rightText}</H2>
-            </span>
-          )}
-        </div>
+        {/* Match SustainableChem: hero and slider both centered so morphing happens in the same place. */}
         <div
-          ref={envSlider}
-          className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          ref={titleSection}
+          className="absolute top-1/2 -translate-y-1/2 lg:top-0 w-full flex justify-center items-center z-[30] lg:z-20 bg-white"
         >
-          <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
-            {mainSection?.length > 0 && !isTablet && (
+          <div className="flex-col lg:flex-row flex items-center gap-2 w-[100%] lg:w-[unset]">
+            {leftText && (
+              <span ref={headinLeft}>
+                <H2>{leftText}</H2>
+              </span>
+            )}
+
+            {mainSection?.[0]?.image?.url && (
               <div
-                onTouchStart={handleSliderTouchStart}
-                onTouchMove={handleSliderTouchMove}
-                onTouchEnd={handleSliderTouchEnd}
+                ref={sustainbleLogo}
+                className="flex w-[206px] lg:w-[0px] h-0 lg:h-[206px] overflow-visible lg:overflow-hidden absolute"
               >
-                <Swiper
-                  slidesPerView={1.2}
-                  spaceBetween={32}
-                  loop={false}
-                  allowTouchMove={false}
-                  speed={600}
-                  watchSlidesProgress={true}
-                  updateOnWindowResize={true}
-                  className="w-full h-auto"
-                  onSwiper={(swiper) => {
-                    swiperRef.current = swiper;
-                    swiper.on("resize", () => {
-                      swiper.updateSize();
-                      swiper.updateSlides();
-                      swiper.updateProgress();
-                      swiper.updateSlidesClasses();
-                    });
-                  }}
-                  onSlideChange={(swiper) => {
-                    setActiveTab(swiper.activeIndex);
-                  }}
+                <span
+                  ref={sustainInner}
+                  className="flex flex-wrap w-full h-full min-w-[206px] min-h-[206px] absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
                 >
-                  {mainSection.map((slide, index) => (
-                    <SwiperSlide key={slide.id}>
-                      <SliderCard
-                        imgSrc={slide?.image?.url}
-                        imgAlt={slide?.image?.alternativeText || "banner"}
-                        title={slide?.category}
-                        description={slide?.description}
-                        values={slide?.values}
-                        ctaButton={slide?.ctaButton}
-                        imageWrapperRef={
-                          imageWrapperRef as React.RefObject<HTMLDivElement>
-                        }
-                        index={index}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotl}
+                      className="leafStag absolute top-0 left-1 w-[99px] h-[101px] rounded-tl-[50px] rounded-tr-[50px] rounded-bl-[50px] rounded-br-[20px] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="99px"
+                        quality={70}
+                        className="scale-110 object-cover"
                       />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                    </i>
+                  )}
+
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogotr}
+                      className="leafStag absolute top-0 right-[2px] w-[99px] h-[101px] rounded-[1rem] overflow-hidden z-[1]"
+                    >
+                      <span
+                        ref={susLogoinnerblurtr}
+                        className="susLogotrBlurSpan rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden w-full h-full absolute top-0 left-0"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="(max-width: 1023px) 100vw, 50vw"
+                          quality={70}
+                          className="leafBigImg object-cover blur"
+                        />
+                      </span>
+                      <span
+                        ref={leafBigImg}
+                        className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
+                      >
+                        <Image
+                          src={mainSection?.[0]?.image?.url}
+                          alt={"icon"}
+                          fill
+                          priority
+                          sizes="(max-width: 1023px) 100vw, 50vw"
+                          quality={75}
+                          className="leafBigImg scale-110 object-cover "
+                        />
+                      </span>
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobr}
+                      className="leafStag absolute bottom-[3px] right-[2px] w-[99px] h-[101px] rounded-tl-[10%] rounded-tr-[50%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="99px"
+                        quality={70}
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                  {mainSection?.[0]?.image?.url && (
+                    <i
+                      ref={susLogobl}
+                      className="leafStag absolute bottom-[3px] left-1 w-[99px] h-[101px] rounded-tl-[50%] rounded-tr-[10%] rounded-bl-[50%] rounded-br-[50%] overflow-hidden"
+                    >
+                      <Image
+                        src={mainSection?.[0]?.image?.url}
+                        alt={"icon"}
+                        fill
+                        priority
+                        sizes="99px"
+                        quality={70}
+                        className="scale-110 object-cover"
+                      />
+                    </i>
+                  )}
+                </span>
               </div>
             )}
-            <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
-              <div className="w-fit mx-auto">
-                {mainSection?.length > 0 && !isTablet && (
-                  <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
-                    <div
-                      ref={containerRef}
-                      className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-                    >
-                      {/* Animated Indicator */}
+            {rightText && (
+              <span ref={headinRight}>
+                <H2>{rightText}</H2>
+              </span>
+            )}
+          </div>
+          <div
+            ref={envSlider}
+            className="w-full max-h-[100vh] bg-white opacity-0 absolute top-0%  left-0"
+          >
+            <div className="hidden lg:flex w-full h-screen relative flex-col justify-center ">
+              {mainSection?.length > 0 && !isTablet && (
+                <div
+                  onTouchStart={handleSliderTouchStart}
+                  onTouchMove={handleSliderTouchMove}
+                  onTouchEnd={handleSliderTouchEnd}
+                >
+                  <Swiper
+                    slidesPerView={1.2}
+                    spaceBetween={32}
+                    loop={false}
+                    allowTouchMove={false}
+                    speed={600}
+                    watchSlidesProgress={true}
+                    updateOnWindowResize={true}
+                    className="w-full h-auto"
+                    onSwiper={(swiper) => {
+                      swiperRef.current = swiper;
+                      swiper.on("resize", () => {
+                        swiper.updateSize();
+                        swiper.updateSlides();
+                        swiper.updateProgress();
+                        swiper.updateSlidesClasses();
+                      });
+                    }}
+                    onSlideChange={(swiper) => {
+                      setActiveTab(swiper.activeIndex);
+                    }}
+                  >
+                    {mainSection.map((slide, index) => (
+                      <SwiperSlide key={slide.id}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              )}
+              <div ref={tabsRef} className="absolute py-4 w-full bottom-0">
+                <div className="w-fit mx-auto">
+                  {mainSection?.length > 0 && !isTablet && (
+                    <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit">
                       <div
-                        aria-hidden="true"
-                        style={{
-                          position: "absolute",
-                          left: indicator.visible ? indicator.left : 0,
-                          top: 0,
-                          height: "100%",
-                          borderRadius: 9999,
-                          background: indicatorColor,
-                          width: indicator.visible ? indicator.width : 0,
-                          transition: indicatorTransition,
-                          zIndex: 0,
-                          pointerEvents: "none",
-                        }}
-                      />
+                        ref={containerRef}
+                        className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+                      >
+                        {/* Animated Indicator */}
+                        <div
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            left: indicator.visible ? indicator.left : 0,
+                            top: 0,
+                            height: "100%",
+                            borderRadius: 9999,
+                            background: indicatorColor,
+                            width: indicator.visible ? indicator.width : 0,
+                            transition: indicatorTransition,
+                            zIndex: 0,
+                            pointerEvents: "none",
+                          }}
+                        />
 
-                      {/* Tab Buttons */}
-                      {mainSection?.map(
-                        (items, index) =>
-                          items?.category && (
-                            <div
-                              key={index}
-                              ref={(element) => {
-                                tabRefs.current[index] = element;
-                              }}
-                              onClick={() => handleTabClick(index)}
-                              className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
-                                activeTab === index
-                                  ? "text-white"
-                                  : "hover:bg-grey-200"
-                              }`}
-                            >
-                              {items?.category}
-                            </div>
-                          ),
-                      )}
+                        {/* Tab Buttons */}
+                        {mainSection?.map(
+                          (items, index) =>
+                            items?.category && (
+                              <div
+                                key={index}
+                                ref={(element) => {
+                                  tabRefs.current[index] = element;
+                                }}
+                                onClick={() => handleTabClick(index)}
+                                className={`text-grey-400 font-alte-hans leading-[136%] cursor-pointer py-[10px] lg:py-[12px] px-[12px] lg:px-[24px] rounded-[40px] transition-all duration-300 relative z-10 ${
+                                  activeTab === index
+                                    ? "text-white"
+                                    : "hover:bg-grey-200"
+                                }`}
+                              >
+                                {items?.category}
+                              </div>
+                            ),
+                        )}
+                      </div>
                     </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Mobile: same position as hero (top-1/2 -translate-y-1/2) so slider appears in place when leaf morph completes. */}
+        <div
+          ref={mobileSliderContainerRef}
+          className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh]"
+        >
+          <div className="relative" ref={contentContainerRef}>
+            <div className="w-full pt-[120px] pb-[100px]">
+              <div
+                className="grid items-center gap-6 mt-4"
+                ref={sliderContainerRef}
+              >
+                {isTablet && (
+                  <div className="flex flex-col gap-y-[40px]">
+                    {mainSection.map((slide, index) => (
+                      <div key={slide.id} id={`tabrespgrowth-${index}`}>
+                        <SliderCard
+                          imgSrc={slide?.image?.url}
+                          imgAlt={slide?.image?.alternativeText || "banner"}
+                          title={slide?.category}
+                          description={slide?.description}
+                          values={slide?.values}
+                          ctaButton={slide?.ctaButton}
+                          imageWrapperRef={
+                            imageWrapperRef as React.RefObject<HTMLDivElement>
+                          }
+                          index={index}
+                          slideForHomePage={true}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -958,99 +1091,65 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
           </div>
         </div>
       </div>
-      {/* Mobile: same position as hero (top-1/2 -translate-y-1/2) so slider appears in place when leaf morph completes. */}
+      {/* Mobile: spacer reserves only the overflow beyond first viewport to avoid overlap and large gap. */}
+      {isTablet && extraHeight > 0 && (
+        <div
+          aria-hidden="true"
+          className="block lg:hidden w-full shrink-0 bg-white"
+          style={{ height: `${extraHeight}px` }}
+        />
+      )}
       <div
-        ref={mobileSliderContainerRef}
-        className="block lg:hidden container absolute top-1/2 -translate-y-1/2 left-0 w-full !h-[100%] min-h-[100vh]"
+        ref={(element) => {
+          mobileTabBarRef.current = element;
+          tabBarContainerRef.current = element;
+        }}
+        className={`fixed top-[90px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
+        aria-hidden={!showMobileTabs}
       >
-        <div className="relative" ref={contentContainerRef}>
-          <div className="w-full pt-[120px] pb-[100px]">
-            <div className="grid items-center gap-6 mt-4" ref={sliderContainerRef}>
-              {isTablet && (
-                <div className="flex flex-col gap-y-[40px]">
-                  {mainSection.map((slide, index) => (
-                    <div key={slide.id} id={`tabrespgrowth-${index}`}>
-                      <SliderCard
-                        imgSrc={slide?.image?.url}
-                        imgAlt={slide?.image?.alternativeText || "banner"}
-                        title={slide?.category}
-                        description={slide?.description}
-                        values={slide?.values}
-                        ctaButton={slide?.ctaButton}
-                        imageWrapperRef={
-                          imageWrapperRef as React.RefObject<HTMLDivElement>
-                        }
-                        index={index}
-                        slideForHomePage={true}
-                      />
+        {mainSection?.length > 0 && isTablet && (
+          <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit max-w-[calc(100vw-32px)]">
+            <div
+              ref={containerRef}
+              className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
+            >
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: indicator.visible ? indicator.left : 0,
+                  top: 0,
+                  height: "100%",
+                  borderRadius: 9999,
+                  background: indicatorColor,
+                  width: indicator.visible ? indicator.width : 0,
+                  transition: indicatorTransition,
+                  zIndex: 0,
+                  pointerEvents: "none",
+                }}
+              />
+
+              {mainSection?.map(
+                (items, index) =>
+                  items?.category && (
+                    <div
+                      key={index}
+                      ref={(element) => {
+                        tabRefs.current[index] = element;
+                      }}
+                      onClick={() => handlMobileTabClick(index)}
+                      className={`relative z-10 text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
+                        activeTab === index ? "text-white" : "hover:bg-grey-200"
+                      }`}
+                    >
+                      {items?.category}
                     </div>
-                  ))}
-                </div>
+                  ),
               )}
             </div>
           </div>
-        </div>
+        )}
       </div>
-    </div>
-    {/* Mobile: spacer reserves only the overflow beyond first viewport to avoid overlap and large gap. */}
-    {isTablet && extraHeight > 0 && (
-      <div
-        aria-hidden="true"
-        className="block lg:hidden w-full shrink-0 bg-white"
-        style={{ height: `${extraHeight}px` }}
-      />
-    )}
-    <div
-      ref={(element) => {
-        mobileTabBarRef.current = element;
-        tabBarContainerRef.current = element;
-      }}
-      className={`fixed top-[90px] left-0 right-0 z-30 flex justify-center items-center hideinnextsection transition-opacity duration-200 ${showMobileTabs ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
-      aria-hidden={!showMobileTabs}
-    >
-      {mainSection?.length > 0 && isTablet && (
-        <div className="relative bg-grey-100 rounded-[40px] p-[4px] overflow-x-auto whitespace-nowrap w-fit max-w-[calc(100vw-32px)]">
-          <div
-            ref={containerRef}
-            className="relative flex gap-x-[unset] lg:gap-x-[14px] z-10 px-1 w-max"
-          >
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                left: indicator.visible ? indicator.left : 0,
-                top: 0,
-                height: "100%",
-                borderRadius: 9999,
-                background: indicatorColor,
-                width: indicator.visible ? indicator.width : 0,
-                transition: indicatorTransition,
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-            />
-
-            {mainSection?.map(
-              (items, index) =>
-                items?.category && (
-                  <div
-                    key={index}
-                    ref={(element) => {
-                      tabRefs.current[index] = element;
-                    }}
-                    onClick={() => handlMobileTabClick(index)}
-                    className={`relative z-10 text-grey-400 text-[11px] md:text-base lg:text-[12px] font-alte-hans leading-[136%] cursor-pointer py-[10px] px-[8px] md:px-4 lg:px-[12px] rounded-[40px] transition-all duration-300 ${
-                      activeTab === index ? "text-white" : "hover:bg-grey-200"
-                    }`}
-                  >
-                    {items?.category}
-                  </div>
-                ),
-            )}
-          </div>
-        </div>
-      )}
-    </div>
     </>
   );
 };

@@ -1,5 +1,11 @@
 "use client";
-import React, { useLayoutEffect, useEffect, useRef, useState, useCallback } from "react";
+import React, {
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import gsap from "gsap";
 import ScrollTriggerModule from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -19,9 +25,7 @@ const ScrollTrigger = ScrollTriggerModule;
 type ContentSection = NonNullable<
   NonNullable<LAAVisionProps["data"]>["content"]
 >[number];
-type ContentCard = NonNullable<
-  NonNullable<ContentSection["card"]>[number]
->;
+type ContentCard = NonNullable<NonNullable<ContentSection["card"]>[number]>;
 
 const PeopleVision = ({ data }: LAAVisionProps) => {
   const isTablet = useMatchMedia("(max-width:1023px)");
@@ -50,7 +54,9 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const desktopTabsVisibleRef = useRef(false);
   const desktopScrollTweenRef = useRef<gsap.core.Tween | null>(null);
   const isClickScrolling = useRef(false);
-  const clickScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clickScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -63,15 +69,12 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lenisStoppedRef = useRef(false);
 
-  const handleSliderTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-      };
-    },
-    [],
-  );
+  const handleSliderTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+  }, []);
 
   const handleSliderTouchMove = useCallback(
     (e: React.TouchEvent) => {
@@ -94,14 +97,22 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     }
   }, [startLenis]);
 
+  // Slide-width measurement: rAF-batched getBoundingClientRect for the
+  // window-resize / initial-mount path, and the ResizeObserver's own
+  // contentRect for the observer callback (avoids a second DOM read
+  // inside the callback on every resize entry).
   useLayoutEffect(() => {
+    const rafIdRef = { current: null as number | null };
+
     const measureSlideWidth = () => {
-      if (imageWrapperRef.current) {
-        const width = imageWrapperRef.current.offsetWidth;
-        if (width > 0) {
-          setSlideWidth(width);
-        }
-      }
+      const el = imageWrapperRef.current;
+      if (!el) return;
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(() => {
+        rafIdRef.current = null;
+        const width = el.getBoundingClientRect().width;
+        if (width > 0) setSlideWidth(width);
+      });
     };
 
     const timeoutId = setTimeout(() => {
@@ -110,8 +121,11 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
     window.addEventListener("resize", measureSlideWidth);
 
-    const resizeObserver = new ResizeObserver(() => {
-      measureSlideWidth();
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        if (width > 0) setSlideWidth(width);
+      }
     });
 
     if (imageWrapperRef.current) {
@@ -129,6 +143,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
 
     return () => {
       clearTimeout(timeoutId);
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       window.removeEventListener("resize", measureSlideWidth);
       resizeObserver.disconnect();
     };
@@ -152,29 +167,69 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     return tabBarRect.bottom + 8;
   }, []);
 
-  const measureIndicator = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  // Cache of measured tab geometry, keyed by index (tabRefs is already
+  // index-aligned with `content`).
+  const rectsCacheRef = useRef<Map<number, { left: number; width: number }>>(
+    new Map(),
+  );
+  const indicatorRafIdRef = useRef<number | null>(null);
 
+  // WRITE phase only: reads from the cache, never touches the DOM.
+  // Safe to run on every activeTab/activeTabMob change without a reflow.
+  const applyIndicatorFromCache = useCallback(() => {
     const currentActiveTab = isTablet ? activeTabMob : activeTab;
-    const activeButton = tabRefs.current[currentActiveTab] ?? null;
+    const cached = rectsCacheRef.current.get(currentActiveTab);
 
-    if (!activeButton) {
+    if (!cached) {
       setIndicator((prev) =>
         prev.visible ? { ...prev, visible: false } : prev,
       );
       return;
     }
 
-    const left = activeButton.offsetLeft - (container.scrollLeft || 0);
-    const width = activeButton.offsetWidth;
-
     setIndicator((prev) => {
-      if (prev.left === left && prev.width === width && prev.visible)
+      if (
+        prev.left === cached.left &&
+        prev.width === cached.width &&
+        prev.visible
+      )
         return prev;
-      return { left, width, visible: true };
+      return { left: cached.left, width: cached.width, visible: true };
     });
   }, [activeTab, activeTabMob, isTablet]);
+
+  // READ phase: batched into a single rAF and a single getBoundingClientRect
+  // per element (instead of separate offsetLeft / offsetWidth / scrollLeft
+  // reads), so it runs after layout has settled for the frame rather than
+  // forcing a synchronous reflow mid-effect.
+  const recomputeRects = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (indicatorRafIdRef.current !== null) {
+      cancelAnimationFrame(indicatorRafIdRef.current);
+    }
+
+    indicatorRafIdRef.current = requestAnimationFrame(() => {
+      indicatorRafIdRef.current = null;
+
+      const containerRect = container.getBoundingClientRect();
+      const scrollLeft = container.scrollLeft || 0;
+      const nextCache = new Map<number, { left: number; width: number }>();
+
+      tabRefs.current.forEach((button, index) => {
+        if (!button) return;
+        const rect = button.getBoundingClientRect();
+        nextCache.set(index, {
+          left: rect.left - containerRect.left + scrollLeft,
+          width: rect.width,
+        });
+      });
+
+      rectsCacheRef.current = nextCache;
+      applyIndicatorFromCache();
+    });
+  }, [applyIndicatorFromCache]);
 
   const handleTabClick = useCallback(
     (index: number, e?: React.MouseEvent) => {
@@ -376,7 +431,7 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
             { width: "100px", height: "100px", right: 0, top: 0 },
             {
               width: window.innerWidth - 30,
-              height: window.innerWidth - 30,  
+              height: window.innerWidth - 30,
               right: 15,
               top: "140px",
               duration: 1,
@@ -523,10 +578,14 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
     };
   }, [content?.length, slideWidth, isTablet]);
 
+  // Recompute tab geometry only when layout-affecting things change
+  // (tab list/content, resize) — not on every activeTab flip.
   useLayoutEffect(() => {
-    measureIndicator();
+    recomputeRects();
 
-    const resizeObserver = new ResizeObserver(measureIndicator);
+    const resizeObserver = new ResizeObserver(() => {
+      recomputeRects();
+    });
 
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
@@ -535,14 +594,24 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
       });
     }
 
-    const handleResize = () => measureIndicator();
+    const handleResize = () => recomputeRects();
     window.addEventListener("resize", handleResize);
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
+      if (indicatorRafIdRef.current !== null) {
+        cancelAnimationFrame(indicatorRafIdRef.current);
+        indicatorRafIdRef.current = null;
+      }
     };
-  }, [activeTab, content, measureIndicator]);
+  }, [content, recomputeRects]);
+
+  // activeTab / activeTabMob / isTablet changes just re-apply from the
+  // cache — no DOM read, so switching tabs never forces a reflow.
+  useLayoutEffect(() => {
+    applyIndicatorFromCache();
+  }, [activeTab, activeTabMob, isTablet, applyIndicatorFromCache]);
 
   useLayoutEffect(() => {
     const calculateMarginBottom = () => {
@@ -909,30 +978,39 @@ const PeopleVision = ({ data }: LAAVisionProps) => {
                   <div className="pt-[10px]" ref={tabBarContainerRef} />
                   <div className="grid items-center gap-6 mt-4">
                     {isTablet &&
-                      content?.map((section: ContentSection, sectionIndex: number) => (
-                        <div key={sectionIndex} id={`tabpeoplevision-${sectionIndex}`}>
-                          <div className="flex flex-col gap-y-[40px]">
-                            {section?.card?.map((slide: ContentCard, index: number) => (
-                              <SliderCard
-                                key={slide?.id}
-                                imgSrc={slide?.image?.url}
-                                imgAlt={slide?.image?.alternativeText || "banner"}
-                                title={section?.category}
-                                description={slide?.description}
-                                values={slide?.values}
-                                ctaButton={slide?.ctaButton}
-                                heading={slide?.title}
-                                bullets={slide?.BulletPoints}
-                                imageWrapperRef={
-                                  imageWrapperRef as React.RefObject<HTMLDivElement>
-                                }
-                                index={index}
-                                slideForHomePage={true}
-                              />
-                            ))}
+                      content?.map(
+                        (section: ContentSection, sectionIndex: number) => (
+                          <div
+                            key={sectionIndex}
+                            id={`tabpeoplevision-${sectionIndex}`}
+                          >
+                            <div className="flex flex-col gap-y-[40px]">
+                              {section?.card?.map(
+                                (slide: ContentCard, index: number) => (
+                                  <SliderCard
+                                    key={slide?.id}
+                                    imgSrc={slide?.image?.url}
+                                    imgAlt={
+                                      slide?.image?.alternativeText || "banner"
+                                    }
+                                    title={section?.category}
+                                    description={slide?.description}
+                                    values={slide?.values}
+                                    ctaButton={slide?.ctaButton}
+                                    heading={slide?.title}
+                                    bullets={slide?.BulletPoints}
+                                    imageWrapperRef={
+                                      imageWrapperRef as React.RefObject<HTMLDivElement>
+                                    }
+                                    index={index}
+                                    slideForHomePage={true}
+                                  />
+                                ),
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ),
+                      )}
                   </div>
                 </div>
               </div>

@@ -40,39 +40,103 @@ const ProductTabs: React.FC<ProductTabsProps> = ({
     visible: false,
   });
 
-  const measure = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  // Cache of measured geometry, keyed by "all" or tab.slug — matches
+  // the `key` props used below, so it stays correct across reorders.
+  const rectsCacheRef = useRef<Map<string, { left: number; width: number }>>(
+    new Map(),
+  );
+  const rafIdRef = useRef<number | null>(null);
 
-    // Adjust index because first tab is hardcoded "all"
-    const idx =
-      activeTab === "all" ? 0 : tabs.findIndex((t) => t.slug === activeTab) + 1;
-    const btn = tabRefs.current[idx] ?? null;
+  // WRITE phase only: reads from the cache, never touches the DOM.
+  // Safe to run on every activeTab change without causing a reflow.
+  const applyIndicatorFromCache = useCallback(() => {
+    const cached = rectsCacheRef.current.get(activeTab);
 
-    if (!btn) {
-      setIndicator((s) => ({ ...s, visible: false }));
+    if (!cached) {
+      setIndicator((s) => (s.visible ? { ...s, visible: false } : s));
       return;
     }
 
-    const left = btn.offsetLeft - (container.scrollLeft || 0);
-    const width = btn.offsetWidth;
-    setIndicator({ left, width, visible: true });
-  }, [activeTab, tabs]);
+    setIndicator({ left: cached.left, width: cached.width, visible: true });
+  }, [activeTab]);
 
-  useLayoutEffect(() => {
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (containerRef.current) {
-      ro.observe(containerRef.current);
-      tabRefs.current.forEach((b) => b && ro.observe(b));
+  // READ phase: batched into a single rAF and a single getBoundingClientRect
+  // per button (instead of separate offsetLeft / offsetWidth / scrollLeft
+  // reads), so it runs after layout has settled for the frame rather than
+  // forcing a synchronous reflow mid-effect.
+  const recomputeRects = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (rafIdRef.current !== null) {
+      cancelAnimationFrame(rafIdRef.current);
     }
-    const onResize = () => measure();
+
+    rafIdRef.current = requestAnimationFrame(() => {
+      rafIdRef.current = null;
+
+      const containerRect = container.getBoundingClientRect();
+      const scrollLeft = container.scrollLeft || 0;
+      const nextCache = new Map<string, { left: number; width: number }>();
+
+      // Hardcoded "all" tab lives at index 0
+      const allBtn = tabRefs.current[0];
+      if (allBtn) {
+        const rect = allBtn.getBoundingClientRect();
+        nextCache.set("all", {
+          left: rect.left - containerRect.left + scrollLeft,
+          width: rect.width,
+        });
+      }
+
+      // Dynamic tabs start at index 1
+      tabs.forEach((tab, idx) => {
+        const btn = tabRefs.current[idx + 1];
+        if (!btn) return;
+        const rect = btn.getBoundingClientRect();
+        nextCache.set(tab.slug, {
+          left: rect.left - containerRect.left + scrollLeft,
+          width: rect.width,
+        });
+      });
+
+      rectsCacheRef.current = nextCache;
+      applyIndicatorFromCache();
+    });
+  }, [tabs, applyIndicatorFromCache]);
+
+  // Recompute geometry only when layout-affecting things change
+  // (tab list length/content, resize) — not on every activeTab flip.
+  useLayoutEffect(() => {
+    recomputeRects();
+
+    const resizeObserver = new ResizeObserver(() => {
+      recomputeRects();
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+      tabRefs.current.forEach((b) => b && resizeObserver.observe(b));
+    }
+
+    const onResize = () => recomputeRects();
     window.addEventListener("resize", onResize);
+
     return () => {
-      ro.disconnect();
+      resizeObserver.disconnect();
       window.removeEventListener("resize", onResize);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
     };
-  }, [activeTab, tabs.length, measure]);
+  }, [tabs.length, recomputeRects]);
+
+  // Activation changes just re-apply from the cache — no DOM read,
+  // so switching tabs never triggers a forced reflow.
+  useLayoutEffect(() => {
+    applyIndicatorFromCache();
+  }, [activeTab, applyIndicatorFromCache]);
 
   return (
     <div
