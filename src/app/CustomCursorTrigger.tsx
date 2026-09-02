@@ -27,14 +27,19 @@ const CustomCursorTrigger: React.FC<CustomCursorTriggerProps> = ({
     if (customCursor) cursor.hide();
   };
 
-  useEffect(() => {
-    return () => handleMouseLeave();
-  }, []);
+  // Hide on unmount so a slide/card disappearing from under the pointer cannot
+  // leave the label stuck on screen. cursor.hide is a stable identity, so this
+  // is not a stale closure.
+  useEffect(() => cursor.hide, [cursor]);
 
   return (
     <div
       className={className}
       onMouseEnter={handleMouseEnter}
+      // onMouseMove is intentional: after an onClick calls cursor.hide() (see
+      // MeetMinds), onMouseEnter will not fire again until the pointer leaves
+      // and re-enters, so the label would stay hidden. setGlobalCursor is
+      // idempotent now, so repeat calls with the same title do no work.
       onMouseMove={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

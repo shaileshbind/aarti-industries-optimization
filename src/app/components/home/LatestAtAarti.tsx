@@ -264,15 +264,6 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Cache of measured geometry, keyed by the same stable key used for
-  // each TabButton (`item.id ?? item.category ?? index`), so it never
-  // goes stale across reorders and doesn't need a DOM read on every
-  // tab click.
-  const rectsCacheRef = useRef<Map<string, { left: number; width: number }>>(
-    new Map(),
-  );
-  const rafIdRef = useRef<number | null>(null);
-
   const missingTabs = useMemo(
     () => ({
       news: toArray(card?.news?.news).length === 0,
@@ -389,100 +380,25 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
     return updated;
   }, [cards, fallbackCards, eventsFeedData, missingTabs]);
 
-  // Stable key per tab, matching the `key` used on <TabButton> below.
-  const tabKey = useCallback(
-    (item: NormalizedCard, index: number) =>
-      `${item.id ?? item.category ?? "tab"}-${index}`,
-    [],
-  );
-
-  // WRITE phase only: reads from the cache, never touches the DOM.
-  // Safe to run on every activeTab change without causing a reflow.
-  const applyIndicatorFromCache = useCallback(() => {
-    const activeItem = displayCards[activeTab];
-    const key = activeItem ? tabKey(activeItem, activeTab) : null;
-    const cached = key ? rectsCacheRef.current.get(key) : null;
-
-    if (!cached) {
+  const measureIndicator = useCallback(() => {
+    const activeButton = tabRefs.current[activeTab];
+    if (!activeButton || !containerRef.current) {
       setIndicator((prev) =>
         prev.visible ? { ...prev, visible: false } : prev,
       );
       return;
     }
+    const left =
+      activeButton.offsetLeft - (containerRef.current.scrollLeft || 0);
+    const width = activeButton.offsetWidth;
+    setIndicator({ left, width, visible: true });
+  }, [activeTab]);
 
-    setIndicator({ left: cached.left, width: cached.width, visible: true });
-  }, [activeTab, displayCards, tabKey]);
-
-  // READ phase: batched into a single rAF and a single getBoundingClientRect
-  // per element (instead of separate offsetLeft / offsetWidth / scrollLeft
-  // reads), so it runs after layout has settled for the frame rather than
-  // forcing a synchronous reflow mid-effect.
-  const recomputeRects = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    if (rafIdRef.current !== null) {
-      cancelAnimationFrame(rafIdRef.current);
-    }
-
-    rafIdRef.current = requestAnimationFrame(() => {
-      rafIdRef.current = null;
-
-      const containerRect = container.getBoundingClientRect();
-      const scrollLeft = container.scrollLeft || 0;
-      const nextCache = new Map<string, { left: number; width: number }>();
-
-      displayCards.forEach((item, index) => {
-        const button = tabRefs.current[index];
-        if (!button) return;
-
-        const rect = button.getBoundingClientRect();
-        nextCache.set(tabKey(item, index), {
-          left: rect.left - containerRect.left + scrollLeft,
-          width: rect.width,
-        });
-      });
-
-      rectsCacheRef.current = nextCache;
-      applyIndicatorFromCache();
-    });
-  }, [displayCards, tabKey, applyIndicatorFromCache]);
-
-  // Recompute geometry only when layout-affecting things change
-  // (tab list changes, container/button resize) — not on every
-  // activeTab flip.
   useEffect(() => {
-    recomputeRects();
-
-    const resizeObserver = new ResizeObserver(() => {
-      recomputeRects();
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-      tabRefs.current.forEach((button) => {
-        if (button) resizeObserver.observe(button);
-      });
-    }
-
-    const handleResize = () => recomputeRects();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", handleResize);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-    };
-  }, [displayCards.length, recomputeRects]);
-
-  // Activation changes just re-apply from the cache — no DOM read,
-  // so switching tabs never triggers a forced reflow.
-  useEffect(() => {
-    applyIndicatorFromCache();
-  }, [activeTab, applyIndicatorFromCache]);
+    measureIndicator();
+    window.addEventListener("resize", measureIndicator);
+    return () => window.removeEventListener("resize", measureIndicator);
+  }, [measureIndicator]);
 
   useEffect(() => {
     if (activeTab >= displayCards.length && displayCards.length > 0) {
@@ -511,15 +427,11 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
       const data = await fetchNews(eventsFeedUrl);
       setEventsFeedData(data);
     };
-    // fetchEventsFeed();
-
     // This section sits far below the fold, but the fetch fired during
     // hydration and pulled ~148KB at High priority while the hero was still
     // painting. Defer to an idle slot.
     if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(() => fetchEventsFeed(), {
-        timeout: 3000,
-      });
+      const id = window.requestIdleCallback(() => fetchEventsFeed(), { timeout: 3000 });
       return () => window.cancelIdleCallback?.(id);
     }
     const t = setTimeout(fetchEventsFeed, 1500);
@@ -692,7 +604,7 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
                         />
                         {displayCards.map((item, index) => (
                           <TabButton
-                            key={tabKey(item, index)}
+                            key={`${item.id ?? item.category ?? "tab"}-${index}`}
                             active={activeTab === index}
                             label={item.category ?? ""}
                             onClick={() => handleTabClick(index)}

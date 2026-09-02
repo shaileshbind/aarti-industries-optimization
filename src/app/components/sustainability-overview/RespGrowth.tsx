@@ -99,33 +99,18 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     }
   }, [startLenis]);
 
-  // Slide-width measurement: rAF-batched getBoundingClientRect for the
-  // window-resize / initial-mount path, and the ResizeObserver's own
-  // contentRect for the observer callback (avoids a second DOM read
-  // inside the callback on every resize entry).
   useLayoutEffect(() => {
-    const rafIdRef = { current: null as number | null };
-
     const measureSlideWidth = () => {
-      const el = imageWrapperRef.current;
-      if (!el) return;
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(() => {
-        rafIdRef.current = null;
-        const width = el.getBoundingClientRect().width;
+      if (imageWrapperRef.current) {
+        const width = imageWrapperRef.current.offsetWidth;
         if (width > 0) setSlideWidth(width);
-      });
+      }
     };
 
     const timeoutId = setTimeout(measureSlideWidth, 0);
     window.addEventListener("resize", measureSlideWidth);
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.contentRect.width;
-        if (width > 0) setSlideWidth(width);
-      }
-    });
+    const resizeObserver = new ResizeObserver(measureSlideWidth);
 
     if (imageWrapperRef.current) {
       resizeObserver.observe(imageWrapperRef.current);
@@ -139,7 +124,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       });
       return () => {
         cancelAnimationFrame(rafId);
-        if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
         clearTimeout(timeoutId);
         window.removeEventListener("resize", measureSlideWidth);
         resizeObserver.disconnect();
@@ -147,7 +131,6 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     }
 
     return () => {
-      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       clearTimeout(timeoutId);
       window.removeEventListener("resize", measureSlideWidth);
       resizeObserver.disconnect();
@@ -165,28 +148,15 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     return tabBarRect.bottom + 8;
   }, []);
 
-  // Cache of measured tab geometry, keyed by index (tabRefs is index-aligned
-  // with mainSection). `left` is stored relative to the container — scroll
-  // invariant, since button and container shift together when an ancestor
-  // scrolls — so it does NOT need to be re-measured on scroll, only on
-  // resize / tab-list changes.
-  const rectsCacheRef = useRef<Map<number, { left: number; width: number }>>(
-    new Map(),
-  );
-  const indicatorRafIdRef = useRef<number | null>(null);
-
-  // WRITE phase: looks up cached geometry, reads only the live scrollLeft
-  // of the correct scroll container (a single cheap property read, not a
-  // full layout query), and writes state. Safe to call on every scroll
-  // tick / tab change without forcing a reflow.
-  const applyIndicatorFromCache = useCallback(() => {
+  const measureIndicator = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    // Use activeTabMob for mobile, activeTab for desktop
     const currentActiveTab = isTablet ? activeTabMob : activeTab;
-    const cached = rectsCacheRef.current.get(currentActiveTab);
+    const activeButton = tabRefs.current[currentActiveTab] ?? null;
 
-    if (!cached) {
+    if (!activeButton) {
       setIndicator((prev) =>
         prev.visible ? { ...prev, visible: false } : prev,
       );
@@ -196,57 +166,14 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     // On mobile, the scrollable element is the outer wrapper (overflow-x-auto), not the inner flex
     const scrollContainer = isTablet ? container.parentElement : container;
     const scrollLeft = scrollContainer?.scrollLeft ?? 0;
-    const left = cached.left - scrollLeft;
-    const width = cached.width;
-
+    const left = activeButton.offsetLeft - scrollLeft;
+    const width = activeButton.offsetWidth;
     setIndicator((prev) => {
       if (prev.left === left && prev.width === width && prev.visible)
         return prev;
       return { left, width, visible: true };
     });
   }, [activeTab, activeTabMob, isTablet]);
-
-  // Keep a ref to the latest applyIndicatorFromCache so the scroll listener
-  // (attached in a separate, more stable effect) never runs a stale closure
-  // without needing that effect to re-run on every tab change.
-  const applyIndicatorRef = useRef(applyIndicatorFromCache);
-  useLayoutEffect(() => {
-    applyIndicatorRef.current = applyIndicatorFromCache;
-  }, [applyIndicatorFromCache]);
-
-  // READ phase: batched into a single rAF and a single getBoundingClientRect
-  // per element (instead of separate offsetLeft / offsetWidth reads), so it
-  // runs after layout has settled for the frame rather than forcing a
-  // synchronous reflow mid-effect. Stores geometry relative to the
-  // container (scroll-invariant); the live scroll offset is applied later
-  // in applyIndicatorFromCache.
-  const recomputeRects = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    if (indicatorRafIdRef.current !== null) {
-      cancelAnimationFrame(indicatorRafIdRef.current);
-    }
-
-    indicatorRafIdRef.current = requestAnimationFrame(() => {
-      indicatorRafIdRef.current = null;
-
-      const containerRect = container.getBoundingClientRect();
-      const nextCache = new Map<number, { left: number; width: number }>();
-
-      tabRefs.current.forEach((button, index) => {
-        if (!button) return;
-        const rect = button.getBoundingClientRect();
-        nextCache.set(index, {
-          left: rect.left - containerRect.left,
-          width: rect.width,
-        });
-      });
-
-      rectsCacheRef.current = nextCache;
-      applyIndicatorRef.current();
-    });
-  }, []);
 
   const handleTabClick = (index: number) => {
     const st = scrollTriggerRef.current;
@@ -639,16 +566,10 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
     };
   }, [mainSection.length, slideWidth, isTablet]);
 
-  // Recompute geometry only when layout-affecting things change (tab list,
-  // resize, tablet/desktop switch) — NOT on every activeTab/activeTabMob
-  // flip. Scroll updates go through applyIndicatorFromCache (via the ref),
-  // which only reads scrollLeft — no offsetLeft/offsetWidth reads at all.
   useLayoutEffect(() => {
-    recomputeRects();
+    measureIndicator();
 
-    const resizeObserver = new ResizeObserver(() => {
-      recomputeRects();
-    });
+    const resizeObserver = new ResizeObserver(measureIndicator);
 
     const container = containerRef.current;
     if (container) {
@@ -658,34 +579,21 @@ const SustainableChem = ({ data }: RespGrowthProps) => {
       });
     }
 
-    // On mobile, tab bar scrolls horizontally; keep indicator in sync.
-    // Scroll only needs the cheap scrollLeft-based write, not a full
-    // geometry recompute.
-    const scrollContainer = isTablet ? container?.parentElement : container;
-    const handleScroll = () => applyIndicatorRef.current();
+    // On mobile, tab bar scrolls horizontally; keep indicator in sync
+    const scrollContainer = isTablet ? container?.parentElement : null;
     if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", handleScroll);
+      scrollContainer.addEventListener("scroll", measureIndicator);
     }
 
-    const handleResize = () => recomputeRects();
+    const handleResize = () => measureIndicator();
     window.addEventListener("resize", handleResize);
 
     return () => {
       resizeObserver.disconnect();
-      scrollContainer?.removeEventListener("scroll", handleScroll);
+      scrollContainer?.removeEventListener("scroll", measureIndicator);
       window.removeEventListener("resize", handleResize);
-      if (indicatorRafIdRef.current !== null) {
-        cancelAnimationFrame(indicatorRafIdRef.current);
-        indicatorRafIdRef.current = null;
-      }
     };
-  }, [mainSection.length, recomputeRects, isTablet]);
-
-  // activeTab / activeTabMob changes just re-apply from the cache — no
-  // DOM geometry read, so switching tabs never forces a reflow.
-  useLayoutEffect(() => {
-    applyIndicatorFromCache();
-  }, [activeTab, activeTabMob, applyIndicatorFromCache]);
+  }, [activeTab, activeTabMob, mainSection.length, measureIndicator, isTablet]);
 
   // Mobile-only: reserve enough document height so order is last slide → GloballyCertified → footer; gap = marginTop on next section.
   useLayoutEffect(() => {

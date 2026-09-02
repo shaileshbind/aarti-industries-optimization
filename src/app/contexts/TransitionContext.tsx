@@ -7,7 +7,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 
 interface TransitionContextType {
@@ -18,7 +18,8 @@ const TransitionContext = createContext<TransitionContextType | null>(null);
 
 export const useTransition = () => {
   const ctx = useContext(TransitionContext);
-  if (!ctx) throw new Error("useTransition must be used within TransitionProvider");
+  if (!ctx)
+    throw new Error("useTransition must be used within TransitionProvider");
   return ctx;
 };
 
@@ -27,13 +28,16 @@ const MIN_OPACITY = 0.08;
 const LEAVE_DURATION = 0.55;
 const ENTER_DURATION = 0.65;
 
-export function TransitionProvider({ children }: { children: React.ReactNode }) {
+export function TransitionProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const contentRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const router = useRouter();
   const prevPathname = useRef(pathname);
   const isFirstRender = useRef(true);
-  const isTransitioning = useRef(false);
+  const recoverTimer = useRef<number | null>(null);
   const proxy = useRef({ blur: 0, opacity: 1 });
   const activeTween = useRef<gsap.core.Tween | null>(null);
 
@@ -89,51 +93,78 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
   // When pathname changes, the new page has mounted -- start unblurring
   useEffect(() => {
+    if (recoverTimer.current) {
+      window.clearTimeout(recoverTimer.current);
+      recoverTimer.current = null;
+    }
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
     if (pathname !== prevPathname.current) {
       prevPathname.current = pathname;
-      isTransitioning.current = false;
       // Double rAF: first frame lets React commit the DOM, second starts the animation
       requestAnimationFrame(() => requestAnimationFrame(() => playEnter()));
     }
   }, [pathname, playEnter]);
 
-  // Global click interceptor for internal <a> links
+  // Kick off the leave animation for internal link clicks.
+  //
+  // This deliberately does NOT preventDefault. It used to, and then drove the
+  // navigation itself via `playLeave().then(() => router.push(href))`, which
+  // meant next/link saw defaultPrevented and skipped its own navigation: every
+  // internal link waited on a GSAP tween before the URL changed, and a click
+  // landing mid-transition fell through to next/link while the pending push
+  // later yanked the user back to the earlier href. Letting next/link navigate
+  // and animating alongside it keeps the two independent.
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
       const anchor = (e.target as HTMLElement).closest("a");
-      if (!anchor) return;
+      if (!anchor || anchor.target === "_blank") return;
+      if (anchor.hasAttribute("download")) return;
 
       const href = anchor.getAttribute("href");
       if (!href) return;
-
       if (
         href.startsWith("http") ||
         href.startsWith("mailto:") ||
         href.startsWith("tel:") ||
-        href === "#" ||
-        anchor.target === "_blank" ||
-        e.metaKey ||
-        e.ctrlKey ||
-        e.shiftKey
+        href.startsWith("#")
       ) {
         return;
       }
 
-      if (href === pathname || isTransitioning.current) return;
+      // Compare pathnames, so a query string, hash or trailing slash is not
+      // mistaken for a different page.
+      let target: string;
+      try {
+        target = new URL(href, window.location.origin).pathname;
+      } catch {
+        return;
+      }
+      const strip = (v: string) =>
+        v.length > 1 && v.endsWith("/") ? v.slice(0, -1) : v;
+      if (strip(target) === strip(pathname)) return;
 
-      e.preventDefault();
-      isTransitioning.current = true;
+      // playLeave kills any in-flight tween, so a rapid second click is safe.
+      playLeave();
 
-      playLeave().then(() => router.push(href));
+      // Safety net: if the navigation never happens the pathname effect never
+      // fires, which would strand the page blurred at 8% opacity.
+      if (recoverTimer.current) window.clearTimeout(recoverTimer.current);
+      recoverTimer.current = window.setTimeout(() => {
+        recoverTimer.current = null;
+        if (pathname === prevPathname.current) playEnter();
+      }, 1500);
     };
 
     document.addEventListener("click", handleClick, { capture: true });
-    return () => document.removeEventListener("click", handleClick, { capture: true });
-  }, [pathname, playLeave, router]);
+    return () =>
+      document.removeEventListener("click", handleClick, { capture: true });
+  }, [pathname, playLeave, playEnter]);
 
   return (
     <TransitionContext.Provider value={{ contentRef }}>

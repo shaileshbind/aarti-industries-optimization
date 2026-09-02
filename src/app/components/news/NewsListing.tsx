@@ -242,7 +242,7 @@ const NewsListing = () => {
     });
   };
 
-  // --- Indicator logic ---
+  // --- Indicator logic unchanged ---
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
@@ -250,101 +250,25 @@ const NewsListing = () => {
   });
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Cache of measured tab geometry, keyed by index (tabs is a static
-  // array here, so index alignment is safe).
-  const rectsCacheRef = useRef<Map<number, { left: number; width: number }>>(
-    new Map(),
-  );
-  const indicatorRafIdRef = useRef<number | null>(null);
-
-  // WRITE phase only: reads from the cache, never touches the DOM.
-  // Safe to run on every activeTab change without causing a reflow.
-  const applyIndicatorFromCache = useCallback(() => {
-    const cached = rectsCacheRef.current.get(activeTab);
-    if (!cached) {
+  const measureIndicator = useCallback(() => {
+    const activeButton = tabRefs.current[activeTab];
+    if (!activeButton || !containerRef.current) {
       setIndicator((prev) =>
         prev.visible ? { ...prev, visible: false } : prev,
       );
       return;
     }
-    setIndicator((prev) => {
-      if (
-        prev.left === cached.left &&
-        prev.width === cached.width &&
-        prev.visible
-      )
-        return prev;
-      return { left: cached.left, width: cached.width, visible: true };
-    });
+    const left =
+      activeButton.offsetLeft - (containerRef.current.scrollLeft || 0);
+    const width = activeButton.offsetWidth;
+    setIndicator({ left, width, visible: true });
   }, [activeTab]);
 
-  // READ phase: batched into a single rAF, single getBoundingClientRect
-  // per button (instead of separate offsetLeft / offsetWidth / scrollLeft
-  // reads), so it runs after layout has settled rather than forcing a
-  // synchronous reflow mid-effect.
-  const recomputeRects = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    if (indicatorRafIdRef.current !== null) {
-      cancelAnimationFrame(indicatorRafIdRef.current);
-    }
-
-    indicatorRafIdRef.current = requestAnimationFrame(() => {
-      indicatorRafIdRef.current = null;
-
-      const containerRect = container.getBoundingClientRect();
-      const scrollLeft = container.scrollLeft || 0;
-      const nextCache = new Map<number, { left: number; width: number }>();
-
-      tabRefs.current.forEach((button, index) => {
-        if (!button) return;
-        const rect = button.getBoundingClientRect();
-        nextCache.set(index, {
-          left: rect.left - containerRect.left + scrollLeft,
-          width: rect.width,
-        });
-      });
-
-      rectsCacheRef.current = nextCache;
-      applyIndicatorFromCache();
-    });
-  }, [applyIndicatorFromCache]);
-
-  // Recompute geometry on mount/resize only — not on every activeTab flip.
   useEffect(() => {
-    recomputeRects();
-
-    const resizeObserver = new ResizeObserver(() => {
-      recomputeRects();
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-      tabRefs.current.forEach((button) => {
-        if (button) resizeObserver.observe(button);
-      });
-    }
-
-    const handleResize = () => recomputeRects();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", handleResize);
-      if (indicatorRafIdRef.current !== null) {
-        cancelAnimationFrame(indicatorRafIdRef.current);
-        indicatorRafIdRef.current = null;
-      }
-    };
-  }, [recomputeRects]);
-
-  // activeTab changes just re-apply from the cache — no DOM read,
-  // so switching tabs never triggers a forced reflow.
-  useEffect(() => {
-    applyIndicatorFromCache();
-  }, [activeTab, applyIndicatorFromCache]);
+    measureIndicator();
+    window.addEventListener("resize", measureIndicator);
+    return () => window.removeEventListener("resize", measureIndicator);
+  }, [measureIndicator]);
 
   useEffect(() => {
     return () => {

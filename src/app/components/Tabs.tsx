@@ -53,80 +53,35 @@ const Tabs: React.FC<TabsProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
-
-  // Cache of measured geometry, keyed by category slug so reordering or
-  // adding/removing tabs never leaves a stale index -> rect mapping.
-  const rectsCacheRef = useRef<Map<string, { left: number; width: number }>>(
-    new Map(),
-  );
-  const rafIdRef = useRef<number | null>(null);
-
   const [indicator, setIndicator] = useState({
     left: 0,
     width: 0,
     visible: false,
   });
 
-  // WRITE phase only: reads from the cache, never touches the DOM.
-  // Safe to run on every activeId change without causing a reflow.
-  const applyIndicatorFromCache = useCallback(() => {
-    const activeTab = tabs.find((tab) => tab?.post_category?.slug === activeId);
-    const slug = activeTab?.post_category?.slug;
-    const cached = slug ? rectsCacheRef.current.get(slug) : null;
+  const measureIndicator = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-    if (!cached) {
+    const activeIndex = tabs.findIndex(
+      (tab) => tab?.post_category?.slug === activeId,
+    );
+    const activeButton = tabRefs.current[activeIndex] ?? null;
+
+    if (!activeButton) {
       setIndicator((prev) => ({ ...prev, visible: false }));
       return;
     }
 
-    setIndicator({ left: cached.left, width: cached.width, visible: true });
+    const left = activeButton.offsetLeft - (container.scrollLeft || 0);
+    const width = activeButton.offsetWidth;
+    setIndicator({ left, width, visible: true });
   }, [activeId, tabs]);
 
-  // READ phase: batched into a single rAF and a single getBoundingClientRect
-  // per element (instead of separate offsetLeft / offsetWidth / scrollLeft
-  // reads), so it runs after layout has settled for the frame rather than
-  // forcing a synchronous reflow mid-effect.
-  const recomputeRects = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    if (rafIdRef.current !== null) {
-      cancelAnimationFrame(rafIdRef.current);
-    }
-
-    rafIdRef.current = requestAnimationFrame(() => {
-      rafIdRef.current = null;
-
-      const containerRect = container.getBoundingClientRect();
-      const scrollLeft = container.scrollLeft || 0;
-      const nextCache = new Map<string, { left: number; width: number }>();
-
-      tabs.forEach((tab, index) => {
-        const button = tabRefs.current[index];
-        const slug = tab?.post_category?.slug;
-        if (!button || !slug) return;
-
-        const rect = button.getBoundingClientRect();
-        nextCache.set(slug, {
-          left: rect.left - containerRect.left + scrollLeft,
-          width: rect.width,
-        });
-      });
-
-      rectsCacheRef.current = nextCache;
-      applyIndicatorFromCache();
-    });
-  }, [tabs, applyIndicatorFromCache]);
-
-  // Recompute geometry only when layout-affecting things change
-  // (tab list length/content, container/button resize) — not on
-  // every activeId flip.
   useLayoutEffect(() => {
-    recomputeRects();
+    measureIndicator();
 
-    const resizeObserver = new ResizeObserver(() => {
-      recomputeRects();
-    });
+    const resizeObserver = new ResizeObserver(measureIndicator);
 
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
@@ -135,25 +90,20 @@ const Tabs: React.FC<TabsProps> = ({
       });
     }
 
-    const handleResize = () => recomputeRects();
+    const handleResize = () => measureIndicator();
     window.addEventListener("resize", handleResize);
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
-      if (rafIdRef.current !== null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs.length, indicatorColor, indicatorTransition, recomputeRects]);
-
-  // Activation changes just re-apply from the cache — no DOM read,
-  // so switching tabs never triggers a forced reflow.
-  useLayoutEffect(() => {
-    applyIndicatorFromCache();
-  }, [activeId, applyIndicatorFromCache]);
+  }, [
+    activeId,
+    tabs.length,
+    indicatorColor,
+    indicatorTransition,
+    measureIndicator,
+  ]);
 
   const renderTabContent = (label: string, isActive: boolean) => {
     const textClassName = `transition-colors duration-200 ${
