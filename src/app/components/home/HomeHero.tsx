@@ -20,12 +20,17 @@ import { FadeInReveal, LetterReveal } from "../ScrollReveal";
 import { HomeHeroProps } from "@/app/types/home.type";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
-import { isMobile } from "react-device-detect";
 
 const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   // console.log("data:", JSON.stringify(data, null, 2));
   // const isTablet = useMatchMedia("(max-width:768px)");
   const isDesktopPointer = useMatchMedia("(pointer: fine)");
+  // Replaces `isMobile` from react-device-detect, which was this repo's only
+  // usage of that package. It parses the User-Agent, so it was false during SSR
+  // and shipped a UA database to the client purely to answer "is this a phone".
+  // Every `isDesktop` here really meant "is the banner video mounted", and the
+  // video is gated on this same md+ query -- so this is the more accurate check
+  // as well as the cheaper one.
   const isDesktop = useMatchMedia("(min-width: 768px)");
   // const isMobile = useMatchMedia("(pointer: coarse)");
   // const isMobileView = isTablet || isMobile;
@@ -45,7 +50,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   const navTitles = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (!isDesktop) return;
     if (
       !wrapperRef.current ||
       !starRef.current ||
@@ -103,7 +108,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     });
 
     return () => cancelAnimationFrame(raf1);
-  }, [isMobile]);
+  }, [isDesktop]);
 
   const handleTabClick = (index: number) => {
     if (swiperRef.current) {
@@ -117,7 +122,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
       const delay =
         index === 0 &&
         data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
-        !isMobile
+        isDesktop
           ? 30000
           : 5000;
       if (
@@ -154,7 +159,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
     const delay =
       activeIndexRef.current === 0 &&
       data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
-      !isMobile
+      isDesktop
         ? 30000
         : 5000;
     bar.style.transition = `transform ${delay}ms linear`;
@@ -445,7 +450,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
             const delay =
               realIndex === 0 &&
               data?.banner?.[0]?.card?.[0]?.bannerVideo?.url &&
-              !isMobile
+              isDesktop
                 ? 30000
                 : 5000;
             if (
@@ -470,7 +475,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           speed={800}
           autoplay={{
             delay:
-              data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && !isMobile
+              data?.banner?.[0]?.card?.[0]?.bannerVideo?.url && isDesktop
                 ? 30000
                 : 5000,
             disableOnInteraction: false,

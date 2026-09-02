@@ -6,7 +6,22 @@ import { getPageData } from "@/_lib/pageData.fetch";
 import { getData } from "@/_lib/getData.fetch";
 import GlobalInnovation from "../components/sections/GlobalInnovation";
 import SEO from "../components/SEO";
+import { Inter } from "next/font/google";
+
 import OurExp from "../components/our-story/OurExp";
+
+// Only TimeLine on this route uses `font-inter`. Loading it here instead of in
+// the root layout keeps 40KB of High-priority woff2 off every other page.
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-inter",
+  display: "swap",
+  // Next still folds this @font-face into a shared CSS chunk, so without this
+  // the homepage was emitting a High-priority <link rel=preload as=font> for a
+  // 48KB file it never renders. Inter is one decorative number on this route.
+  preload: false,
+});
 
 export default async function page() {
   const [data, globallyCertifiedData] = await Promise.all([
@@ -23,7 +38,7 @@ export default async function page() {
   const seo = data?.seo;
 
   return (
-    <>
+    <div className={inter.variable}>
       <SEO
         title={seo?.title ?? "Our Story"}
         metaTitle={seo?.metaTitle}
@@ -53,6 +68,6 @@ export default async function page() {
         <GloballyCertified itemsData={globallyCertifiedData} />
       )}
       {section_five && <OurExp data={section_five} />}
-    </>
+    </div>
   );
 }

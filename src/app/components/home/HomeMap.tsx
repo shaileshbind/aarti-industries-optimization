@@ -6,11 +6,27 @@ import { BodyText2, H2 } from "../Typography2";
 import DesktopMapSvgClient from "../global-reach/DesktopMapSvgClient";
 import Image from "next/image";
 import { useMargin } from "@/app/contexts/MarginContext";
+import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 
 const HomeMap = () => {
   const [activeBlip, setActiveBlip] = useState(4);
   const { marginBottom } = useMargin();
   const sectionRef = useRef<HTMLDivElement>(null);
+  // gr-map-m.svg is 430KB over the wire (1.1MB raw) and next/image does not
+  // optimize SVGs, so it passes straight through. It is the single largest
+  // asset on the homepage -- 23% of total bytes -- for a below-the-fold map
+  // that only renders under lg. `loading="lazy"` did not help: Chrome's lazy
+  // threshold on a slow connection is thousands of px, so it was fetched
+  // inside the LCP window anyway.
+  //
+  // The observer watches sectionRef, not the image's own wrapper: that wrapper
+  // is `lg:hidden`, so at desktop widths it is display:none and an observer on
+  // it cannot fire reliably. Pairing an always-rendered target with the same
+  // breakpoint the wrapper uses keeps the two independent -- and it means the
+  // desktop build never mounts the mobile image at all, rather than relying on
+  // CSS to hide something already downloaded.
+  const isMobileMap = useMatchMedia("(max-width: 1023px)");
+  const [mapNear, setMapNear] = useState(false);
   const mobileStatsData = [
     { id: 0, percent: "46%", title: "India" },
     { id: 1, percent: "23%", title: "Middle East" },
@@ -48,6 +64,33 @@ const HomeMap = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || !isMobileMap || mapNear) return;
+
+    const reveal = () => setMapNear(true);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) reveal();
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+
+    // Belt and braces. The observer is the desirable path -- a visitor who
+    // never scrolls this far never pays for the map at all -- but if it were
+    // ever not to fire, the section would render empty, and a missing map is a
+    // far worse outcome than a late one. This fallback keeps the image out of
+    // the LCP window either way, which is the whole point of the change.
+    const t = setTimeout(reveal, 4000);
+
+    return () => {
+      io.disconnect();
+      clearTimeout(t);
+    };
+  }, [isMobileMap, mapNear]);
+
   return (
     <div
       ref={sectionRef}
@@ -83,13 +126,15 @@ const HomeMap = () => {
               isActive5={activeBlip === 5}
             />
           </div>
-          <Image
-            src="/images/global-reach/gr-map-m.svg"
-            alt="map img"
-            fill
-            sizes="(max-width: 1023px) 100vw, 0px"
-            className="object-contain block lg:hidden"
-          />
+          {isMobileMap && mapNear && (
+            <Image
+              src="/images/global-reach/gr-map-m.svg"
+              alt="map img"
+              fill
+              sizes="(max-width: 1023px) 100vw, 0px"
+              className="object-contain block lg:hidden"
+            />
+          )}
           <p className="text-[#002F50] text-xs text-left mt-4 lg:mt-0 md:mb-[52px] lg:block hidden">
             *% indicate revenue breakup by market share.
           </p>

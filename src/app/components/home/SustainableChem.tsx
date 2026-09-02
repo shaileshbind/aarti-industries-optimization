@@ -776,11 +776,15 @@ const SustainableChem: React.FC<SustainableChemProps> = ({ data }) => {
                         ref={leafBigImg}
                         className="w-full h-full absolute top-0 left-0 rounded-tl-[50%] rounded-tr-[50%] rounded-bl-[10%] rounded-br-[50%] overflow-hidden"
                       >
+                        {/* "700px" was viewport-independent, so at the mobile
+                            DPR it resolved to ~1225px and pulled the 1920w
+                            variant (69KB) onto phones, where this box is
+                            nowhere near 700px wide. */}
                         <Image
                           src={mainSection?.[0]?.image?.url}
                           alt={"icon"}
                           fill
-                          sizes="700px"
+                          sizes="(max-width: 767px) 90vw, 700px"
                           className="leafBigImg scale-110 object-cover"
                         />
                       </span>

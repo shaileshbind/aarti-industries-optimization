@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Inter, Roboto } from "next/font/google";
+import { Roboto } from "next/font/google";
 import localFont from "next/font/local";
 import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { LenisProvider } from "@/app/contexts/LenisContext";
@@ -50,24 +50,23 @@ const alteHansGrotesk = localFont({
   preload: true,
 });
 
-// Tried preload:false on these two (they are not used above the fold) to get
-// ~85KB of woff2 off the critical path. It did make the banner load 20x faster,
-// but mobile LCP got *worse* across 3 runs (3.4s -> 6.6s): unpreloaded, the
-// font is discovered by CSS and refetched at VeryHigh priority mid-load. Left
-// preloaded until the Swiper-init cost below it is addressed.
+// Roboto stays preloaded: StockTicker renders it in the header, above the fold.
+// preload:false was tried here and made mobile LCP worse across 3 runs -- the
+// font is then discovered by CSS and refetched at VeryHigh priority mid-load.
+// (Inter used to sit alongside this and is now loaded only by /our-story, the
+// one route that uses it, saving 40KB of High-priority font on every page.)
+// Declaring weight: ["400","700"] shipped two static woff2 files (~88KB) and
+// preloaded both at High priority, ahead of the LCP banner -- while no class in
+// the repo ever pairs font-roboto with font-bold/semibold, so the 700 file was
+// never rendered. Dropping `weight` makes next/font use Roboto's variable
+// font: one file, every weight still available, so nothing can regress
+// visually if a bold Roboto is ever inherited.
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "700"],
   variable: "--font-roboto",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export default async function RootLayout({
   children,
@@ -89,7 +88,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href={cdnUrl} />
       </head>
       <SEO />
-      <body className={clsx(alteHansGrotesk.variable, roboto.variable, inter.variable)}>
+      <body className={clsx(alteHansGrotesk.variable, roboto.variable)}>
         <AuthProvider>
           <LenisProvider>
             <GSAPProvider>

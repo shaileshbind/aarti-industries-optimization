@@ -1,8 +1,40 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { fetchNews } from "@/_lib/fetchNews";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+
+// These were @mui/icons-material/ArrowForward and /PlayArrow. Each MUI icon
+// pulls in @mui/material/SvgIcon, which drags the MUI theme + emotion runtime
+// into the bundle. StockTicker renders in the Header on "/", so those two
+// icons were the only reason ~83KB of MUI/emotion sat on the homepage's
+// critical path -- and most of it was never executed. Same 24x24 paths, same
+// currentColor inheritance, same default sizes (1.5rem, 1.25rem for "small").
+const ArrowForwardIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    width="1.25rem"
+    height="1.25rem"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+  </svg>
+);
+
+const PlayArrowIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    width="1.5rem"
+    height="1.5rem"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M8 5v14l11-7z" />
+  </svg>
+);
 
 type TickerItem = {
   heading?: string;
@@ -310,10 +342,7 @@ export default function StockTicker() {
                 rel="noopener noreferrer"
               >
                 {item.heading}
-                <ArrowForwardIcon
-                  className="rotate-325 ml-1 shrink-0"
-                  fontSize="small"
-                />
+                <ArrowForwardIcon className="rotate-325 ml-1 shrink-0 inline-block align-middle" />
               </a>
             );
           })}
@@ -348,7 +377,7 @@ export default function StockTicker() {
 
         <p style={{ color: changeColor }} className="text-sm font-roboto">
           {stock?.ltp?.toFixed(2)}
-          <PlayArrowIcon className={arrowRotation} />
+          <PlayArrowIcon className={`${arrowRotation} inline-block align-middle`} />
           {changeSign}
           {stock?.change?.toFixed(2)} ({percentSign}
           {stock?.changePercent.toFixed(2)}%)
