@@ -52,6 +52,11 @@ const sortProductNames = (a: ProductData, b: ProductData): number => {
   return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: "base" });
 };
 
+// Module scope: declared inside the component this produced a new component
+// type on every render, so React remounted the whole list (and re-ran its
+// effects) on each state change -- the source of the 0.9 CLS on /products.
+const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
+
 const ProductFilterList: React.FC<ProductFilterListProps> = ({
   catagoriesData,
   searchQuery = "",
@@ -59,7 +64,6 @@ const ProductFilterList: React.FC<ProductFilterListProps> = ({
   setActiveTab,
   clearSearch,
 }) => {
-  const ProductList = dynamic(() => import("./ProdutList"), { ssr: false });
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

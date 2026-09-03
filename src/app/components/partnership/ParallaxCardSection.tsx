@@ -7,11 +7,16 @@ import { BodyText2, H3, SubH2 } from "../Typography2";
 import AnimatedText from "../AnimatedText";
 import Image from "next/image";
 import Button from "../Button";
-import GeneralPopup from "../Popups/GeneralPopup";
 import MainAccordion from "../Accordion";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { ParallaxCardSectionProps } from "@/app/types/partnership.type";
 import { useLenis } from "@/app/contexts/LenisContext";
+import dynamic from "next/dynamic";
+
+// The form only exists after a click; keep MUI/react-hook-form off the page graph.
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 interface StickyImageProps {
   stickyImageRef?: RefObject<HTMLDivElement>;

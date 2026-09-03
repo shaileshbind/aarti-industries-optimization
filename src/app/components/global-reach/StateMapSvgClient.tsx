@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 const SVG_URL = "/maps/state-map.svg";
 const REGION_ORDER = ["bhachau", "dahej", "jhagadia", "tarapur", "navi-mumbai", "vapi"] as const;
@@ -99,7 +99,27 @@ export default function StateMapSvgClient({
     listenersRef.current = [];
   }, []);
 
+  // state-map.svg is 1.1MB gzipped. Fetch it only when this instance is near
+  // the viewport: the desktop and mobile instances live in breakpoint-hidden
+  // wrappers, so the hidden one never fetches at all, and the visible one no
+  // longer competes with the hero image during page load.
+  const outerRef = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
   useEffect(() => {
+    const el = outerRef.current;
+    if (!el || near) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setNear(true);
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near]);
+
+  useEffect(() => {
+    if (!near) return;
     let cancelled = false;
     const container = containerRef.current;
     if (!container) return;
@@ -134,7 +154,8 @@ export default function StateMapSvgClient({
       cancelled = true;
       cleanup();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [near]);
 
   useEffect(() => {
     const svg = containerRef.current?.querySelector("svg");
@@ -143,6 +164,11 @@ export default function StateMapSvgClient({
 
   return (
     <div
+      ref={outerRef}
+      // Reserve the SVG's height while it is deferred so nothing below shifts.
+      style={{
+        minHeight: /^\d+$/.test(String(height)) ? Number(height) : undefined,
+      }}
       className="w-full h-full [&_svg]:w-full [&_svg]:h-full [&_[data-region]]:cursor-pointer"
       role="img"
       aria-label="Map of India showing manufacturing and R&D locations"

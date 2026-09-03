@@ -1,4 +1,5 @@
 import { getBlogsCasestudies } from "@/_lib/getBlogsCaseStudies.fetch";
+import { lazyMedia } from "@/_lib/lazyMedia";
 import { getData } from "@/_lib/getData.fetch";
 import CopyLink from "@/app/components/blogs/CopyLink";
 import Share from "@/app/components/blogs/Share";
@@ -86,6 +87,10 @@ export default async function page({ params }: BlogInnerProps) {
                   width={872}
                   height={406}
                   alt={bannerImageDesktop?.all || "banner"}
+                  // This is the page's LCP element; the default lazy loading
+                  // delayed it by 1.5-3.5s.
+                  priority
+                  sizes="(max-width: 1023px) 92vw, 872px"
                   className="w-full h-full object-cover"
                 />
               </FadeInReveal>
@@ -116,7 +121,7 @@ export default async function page({ params }: BlogInnerProps) {
               <div className="blogInner">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: contentSections?.[0]?.description,
+                    __html: lazyMedia(contentSections?.[0]?.description),
                   }}
                 />
               </div>

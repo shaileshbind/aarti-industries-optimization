@@ -4,7 +4,14 @@ import Image from "next/image";
 import { Cta, SubH2 } from "../Typography2";
 import Link from "next/link";
 import { ButtonProps } from "@/app/types/global.type";
-import GeneralPopup from "../Popups/GeneralPopup";
+import dynamic from "next/dynamic";
+
+// The form (MUI, react-hook-form, phone input, country list) only exists after
+// a click; a static import put ~80KB of JS and a render-blocking stylesheet on
+// every page that renders this card.
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 type ExploreCardProps = {
   title?: string;

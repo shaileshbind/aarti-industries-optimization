@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { BodyText2, H2, SubH1 } from "../Typography2";
 import Button from "../Button";
 // import "swiper/css";
@@ -130,9 +130,27 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
-  // Preload adjacent slide images to avoid flicker on slide change (desktop synced panel + mobile)
+  // Warm adjacent slide images to avoid flicker on slide change -- but only once
+  // the section is near the viewport (it sits below the fold, and this used to
+  // fire during hydration), and using the URLs <Image> will actually request.
+  // The previous version warmed the raw CMS URL, which <Image> never uses, so it
+  // was a pure extra download per tab.
+  const [nearViewport, setNearViewport] = useState(false);
   useEffect(() => {
-    if (!card?.length) return;
+    const el = containerRef.current;
+    if (!el || nearViewport) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setNearViewport(true);
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [nearViewport]);
+
+  useEffect(() => {
+    if (!nearViewport || !card?.length) return;
     const indices = [
       activeIndex,
       Math.min(activeIndex + 1, card.length - 1),
@@ -144,11 +162,18 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
       seen.add(i);
       const url = card[i]?.image?.url;
       if (url) {
+        const { props } = getImageProps({
+          src: url,
+          alt: "",
+          width: 500,
+          height: 548,
+        });
         const img = new window.Image();
-        img.src = url;
+        if (props.srcSet) img.srcset = props.srcSet;
+        img.src = props.src;
       }
     });
-  }, [activeIndex, card]);
+  }, [nearViewport, activeIndex, card]);
 
   const baseImageClasses =
     "absolute object-cover rounded-[20px] lg:rounded-l-[30px] lg:rounded-r-[unset]";
@@ -398,9 +423,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   }
                                   width={50}
                                   height={54}
-                                  loading={
-                                    index <= 1 ? "eager" : undefined
-                                  }
                                   className={`${baseImageClasses} ${backgroundStaticClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
@@ -413,9 +435,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                                   }
                                   width={500}
                                   height={548}
-                                  loading={
-                                    index <= 1 ? "eager" : undefined
-                                  }
                                   className={`${secondaryImageClasses} ${mainStaticClasses} w-full h-full top-0 left-0 absolute`}
                                 />
                               )}
@@ -595,7 +614,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={50}
                     height={54}
-                    loading="eager"
                     className={`${baseImageClasses} ${backgroundAnimationClasses} blur-lg w-full h-full top-0 left-0 absolute`}
                   />
                 )}
@@ -609,7 +627,6 @@ const FrameworkForged: React.FC<FrameworkForgedProps & LayoutProps> = ({
                     }
                     width={500}
                     height={548}
-                    loading="eager"
                     className={`${secondaryImageClasses} ${mainAnimationClasses} w-full h-full top-0 left-0 absolute`}
                   />
                 )}

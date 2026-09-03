@@ -16,7 +16,6 @@ const Footer = ({ data }: FooterProps) => {
                 alt="logo"
                 width={190}
                 height={73}
-                priority
                 className="w-[124px] md:w-[190px] h-12 md:h-[74px]"
               />
             )}

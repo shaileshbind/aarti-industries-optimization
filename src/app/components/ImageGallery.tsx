@@ -11,7 +11,10 @@ import { FadeInReveal } from "./ScrollReveal";
 import { BodyText1, H2 } from "./Typography2";
 import Button from "./Button";
 import { ButtonProps, ImageProps } from "../types/global.type";
-import ImagePopup from "./ImagePopup";
+import dynamic from "next/dynamic";
+
+// Only mounted when a gallery image is opened.
+const ImagePopup = dynamic(() => import("./ImagePopup"), { ssr: false });
 
 type FosteringSafeProps = {
   data?: {

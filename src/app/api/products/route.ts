@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { jsonResponse } from "@/_lib/jsonResponse";
 
 export async function GET(req: Request) {
   try {
@@ -46,7 +47,8 @@ export async function GET(req: Request) {
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    // 559KB of JSON went out uncompressed; jsonResponse gzips it (~10x smaller).
+    return jsonResponse(req, data);
   } catch (error) {
     console.error("Error fetching product data:", error);
     return NextResponse.json(

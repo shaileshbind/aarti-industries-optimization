@@ -22,6 +22,25 @@ const GRMaps = ({ data }: GRMapsProps) => {
   const [jhagadiaZoneMob, setJhagadiaZoneMob] = useState(0);
   const totalCities = 6;
 
+  // gr-map-m.svg is 430KB over the wire and next/image passes SVGs through
+  // untouched, so it competed with the LCP image on mobile. Same approach as
+  // HomeMap: mount it only when the (fixed-height) container is near the
+  // viewport, so nothing shifts when it arrives.
+  const mobileMapRef = useRef<HTMLDivElement>(null);
+  const [mapNear, setMapNear] = useState(false);
+  useEffect(() => {
+    const el = mobileMapRef.current;
+    if (!el || mapNear) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setMapNear(true);
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [mapNear]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveMob((prev) => (prev + 1) % totalCities);
@@ -129,7 +148,10 @@ const GRMaps = ({ data }: GRMapsProps) => {
               </H2>
             </FadeInRevealBlur>
           )}
-          <div className="relative w-full h-[180px] lg:h-[550px]">
+          <div
+            ref={mobileMapRef}
+            className="relative w-full h-[180px] lg:h-[550px]"
+          >
             <div className="w-[100%] h-full mx-auto hidden lg:block relative ">
               <FadeInRevealBlur className="w-full">
                 <DesktopMapSvgClient
@@ -154,12 +176,15 @@ const GRMaps = ({ data }: GRMapsProps) => {
                 />
               </FadeInRevealBlur>
             </div>
-            <Image
-              src="/images/global-reach/gr-map-m.svg"
-              alt="img"
-              fill
-              className="object-contain block lg:hidden"
-            />
+            {mapNear && (
+              <Image
+                src="/images/global-reach/gr-map-m.svg"
+                alt="img"
+                fill
+                sizes="(max-width: 1023px) 100vw, 0px"
+                className="object-contain block lg:hidden"
+              />
+            )}
           </div>
           <div className="lg:hidden mt-[40px] grid grid-cols-2 gap-y-[16px] gap-x-[20px] mx-[20px]">
             {mobileStatsData?.map((items, index) => {

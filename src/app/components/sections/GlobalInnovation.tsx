@@ -6,7 +6,12 @@ import Image from "next/image";
 import { GlobalInnovationProps } from "@/app/types/our.story.type";
 import Button from "../Button";
 import { FadeInReveal } from "../ScrollReveal";
-import GeneralPopup from "../Popups/GeneralPopup";
+import dynamic from "next/dynamic";
+
+// The form only exists after a click; keep MUI/react-hook-form off the page graph.
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 const GlobalInnovation: React.FC<GlobalInnovationProps> = ({
   data,

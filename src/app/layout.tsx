@@ -5,8 +5,8 @@ import { GSAPProvider } from "@/app/contexts/GSAPContext";
 import { LenisProvider } from "@/app/contexts/LenisContext";
 import { fetchHeaderFooterData } from "@/_lib/fetchHeaderFooterData";
 import SEO from "./components/SEO";
-import AuthProvider from "./components/AuthProvider";
 import ConditionalLayout from "./components/ConditionalLayout";
+import { getPressTickerItems } from "@/_lib/pressTicker";
 import SearchHighlighter from "./components/SearchHighlighter";
 import type { Metadata } from "next";
 import clsx from "clsx";
@@ -73,7 +73,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const data = await fetchHeaderFooterData();
+  const [data, pressItems] = await Promise.all([
+    fetchHeaderFooterData(),
+    getPressTickerItems(),
+  ]);
 
   const apiOrigin = new URL(process.env.NEXT_PUBLIC_BASE_URL!).origin;
   const checkEnvironment = process.env.NEXT_PUBLIC_IS_PRODUCTION;
@@ -89,18 +92,23 @@ export default async function RootLayout({
       </head>
       <SEO />
       <body className={clsx(alteHansGrotesk.variable, roboto.variable)}>
-        <AuthProvider>
-          <LenisProvider>
-            <GSAPProvider>
-              <ConditionalLayout headerData={data?.Header} footerData={data?.Footer}>
-                <main>
-                  <SearchHighlighter />
-                  {children}
-                </main>
-              </ConditionalLayout>
-            </GSAPProvider>
-          </LenisProvider>
-        </AuthProvider>
+        {/* SessionProvider (next-auth) now lives in login/layout.tsx -- the only
+            route that uses useSession/signIn -- so other pages no longer ship
+            it or call /api/auth/session on load. */}
+        <LenisProvider>
+          <GSAPProvider>
+            <ConditionalLayout
+              headerData={data?.Header}
+              footerData={data?.Footer}
+              pressItems={pressItems}
+            >
+              <main>
+                <SearchHighlighter />
+                {children}
+              </main>
+            </ConditionalLayout>
+          </GSAPProvider>
+        </LenisProvider>
         <Script src="/js/investor-notice.js" strategy="afterInteractive" />
       </body>
     </html>

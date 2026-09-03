@@ -9,10 +9,16 @@ import {
   ProductData,
   RelatedProduct,
 } from "@/app/types/product.inner.type";
-import MSDSPopup from "../Popups/MSDSPopup";
 import { useEffect, useState } from "react";
-import GeneralPopup from "../Popups/GeneralPopup";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+// Both popups only exist after a click; keep MUI/react-hook-form/phone-input
+// off the product page graph.
+const MSDSPopup = dynamic(() => import("../Popups/MSDSPopup"), { ssr: false });
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 interface ProductInnerPageProps {
   data?: ProductData;

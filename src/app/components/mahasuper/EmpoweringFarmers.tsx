@@ -4,8 +4,13 @@ import React, { useState } from "react";
 import { BodyText2, H2, H3, BodyText3, BodyText1 } from "../Typography2";
 import { EmpoweringFarmersProps } from "@/app/types/mahasuper.type";
 import clsx from "clsx";
-import GeneralPopup from "../Popups/GeneralPopup";
 import { FadeInReveal } from "../ScrollReveal";
+import dynamic from "next/dynamic";
+
+// The form only exists after a click; keep MUI/react-hook-form off the page graph.
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 const EmpoweringFarmers: React.FC<EmpoweringFarmersProps> = ({ data }) => {
   const {

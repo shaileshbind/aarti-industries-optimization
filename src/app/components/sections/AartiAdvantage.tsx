@@ -9,12 +9,17 @@ import { BodyText2, H2, SubH1 } from "../Typography2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Mousewheel, Autoplay, Scrollbar } from "swiper/modules";
 import { RDAnalyticalExcProps } from "@/app/types/r-and-d.type";
-import GeneralPopup from "../Popups/GeneralPopup";
 import clsx from "clsx";
 import { useMargin } from "@/app/contexts/MarginContext";
 import type { Swiper as SwiperType } from "swiper";
 import { useMatchMedia } from "@/app/hooks/useMatchMedia";
 import { useLenis } from "@/app/contexts/LenisContext";
+import dynamic from "next/dynamic";
+
+// The form only exists after a click; keep MUI/react-hook-form off the page graph.
+const GeneralPopup = dynamic(() => import("../Popups/GeneralPopup"), {
+  ssr: false,
+});
 
 const ScrollTrigger = ScrollTriggerModule;
 gsap.registerPlugin(ScrollToPlugin);

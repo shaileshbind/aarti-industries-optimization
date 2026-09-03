@@ -3,9 +3,9 @@ import { useLayoutEffect, useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { BodyText1, BodyText2, H1 } from "../Typography2";
 import Button from "../Button";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
+import ReactDOM from "react-dom";
 import { FadeInRevealBlur, LetterReveal } from "../ScrollReveal";
-import { useMatchMedia } from "../../hooks/useMatchMedia";
 import { useTitleCase } from "../../../../utils/toTitleCase";
 import clsxN from "../../../../utils/clsxN";
 
@@ -84,10 +84,9 @@ const HeroBanner = ({
   const lineHorizontal = useRef<HTMLDivElement>(null);
   const [showGeneralPopup, setshowGeneralPopup] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(!!image);
-  const [isMobImageLoading, setIsMobImageLoading] =
-    useState<boolean>(!!mobImage);
-  const isTablet = useMatchMedia("(max-width:768px)");
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(
+    !!(image || mobImage),
+  );
   // Call hooks unconditionally at the top level
   const titleCasedSecondaryBtnFormTitle = useTitleCase(
     secondaryBtnFormTitle || "",
@@ -105,7 +104,6 @@ const HeroBanner = ({
       return;
     }
     setIsImageLoading(true);
-    setIsMobImageLoading(true);
   }, [image, mobImage]);
 
   useLayoutEffect(() => {
@@ -177,6 +175,79 @@ const HeroBanner = ({
     });
   }, [showStar2, showStar3]);
 
+  // Both breakpoints' images are in the server HTML: <source media> lets the
+  // preload scanner pick one and ReactDOM.preload gives it a media-scoped hint
+  // (the pattern HomeHero uses). Previously the choice was made with
+  // useMatchMedia, which is false during SSR, so phones downloaded the desktop
+  // image and only requested their own after hydration -- a 3-5s LCP delay on
+  // every page built on this banner.
+  const bannerPicture = (() => {
+    if (!image && !mobImage) return null;
+    const shared = {
+      fill: true,
+      sizes: "100vw",
+      priority: true,
+      fetchPriority: "high" as const,
+    };
+    const desktop = image
+      ? getImageProps({ ...shared, src: image, alt: alt || "img" }).props
+      : null;
+    const mobile = mobImage
+      ? getImageProps({ ...shared, src: mobImage, alt: mobAlt || alt || "img" })
+          .props
+      : null;
+    const fallback = (mobile ?? desktop)!;
+    const hints =
+      desktop && mobile
+        ? [
+            { img: desktop, media: "(min-width: 769px)" },
+            { img: mobile, media: "(max-width: 768px)" },
+          ]
+        : [{ img: fallback, media: undefined }];
+    for (const { img, media } of hints) {
+      if (!img.src) continue;
+      ReactDOM.preload(img.src, {
+        as: "image",
+        imageSrcSet: img.srcSet,
+        imageSizes: img.sizes,
+        fetchPriority: "high",
+        ...(media ? { media } : {}),
+      });
+    }
+    return (
+      <>
+        {isImageLoading && (
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
+        )}
+        <picture>
+          {desktop && mobile && (
+            <source
+              media="(min-width: 769px)"
+              srcSet={desktop.srcSet}
+              sizes={desktop.sizes}
+            />
+          )}
+          <img
+            {...fallback}
+            alt={fallback.alt}
+            // A cached image can be complete before React attaches onLoad.
+            ref={(el) => {
+              if (el && el.complete && el.naturalWidth > 0)
+                setIsImageLoading(false);
+            }}
+            onLoad={() => setIsImageLoading(false)}
+            className={clsxN(
+              "object-cover transition-all duration-500 z-[1]",
+              isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100",
+              imageClassName,
+              mobImageClassName,
+            )}
+          />
+        </picture>
+      </>
+    );
+  })();
+
   return (
     <>
       {fullBg ? (
@@ -188,41 +259,7 @@ const HeroBanner = ({
                 centerText ? "h-[360px] md:h-[440px]" : "h-[490px] lg:h-[640px]"
               } w-full`}
             >
-              {/* Skeleton loader with blur effect */}
-              {((image && !isTablet && isImageLoading) ||
-                (mobImage && isTablet && isMobImageLoading)) && (
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
-              )}
-              {image && !isTablet && (
-                <Image
-                  src={image}
-                  alt={alt ? alt : "img"}
-                  fill
-                  priority
-                  fetchPriority="high"
-                  className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
-                    isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
-                  } ${imageClassName}`}
-                  onLoad={() => setIsImageLoading(false)}
-                />
-              )}
-
-              {mobImage && isTablet && (
-                <Image
-                  src={mobImage}
-                  alt={mobAlt ? mobAlt : "img"}
-                  fill
-                  priority
-                  fetchPriority="high"
-                  sizes="100%"
-                  className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
-                    isMobImageLoading
-                      ? "blur-md opacity-50"
-                      : "blur-0 opacity-100"
-                  } ${mobImageClassName}`}
-                  onLoad={() => setIsMobImageLoading(false)}
-                />
-              )}
+              {bannerPicture}
               <div className="absolute inset-0 bg-black/40 lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_70%)] z-[2]" />
               <div
                 className={`w-full h-full absolute z-[3] ${
@@ -437,39 +474,7 @@ const HeroBanner = ({
             ref={wrapperRef}
             className="relative mx-[20px] lg:mx-[unset] rounded-[14px] lg:rounded-[unset] lg:rounded-l-[20px] overflow-hidden h-[280px] lg:h-full opacity-0 scale-[0.95]"
           >
-            {/* Skeleton loader with blur effect */}
-            {((image && !isTablet && isImageLoading) ||
-              (mobImage && isTablet && isMobImageLoading)) && (
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse blur-sm z-[0]" />
-            )}
-            {image && !isTablet && (
-              <Image
-                src={image}
-                alt={alt ? alt : "img"}
-                fill
-                priority
-                fetchPriority="high"
-                className={`object-cover hidden md:block transition-all duration-500 z-[1] ${
-                  isImageLoading ? "blur-md opacity-50" : "blur-0 opacity-100"
-                }`}
-                onLoad={() => setIsImageLoading(false)}
-              />
-            )}
-            {mobImage && isTablet && (
-              <Image
-                src={mobImage}
-                alt={mobAlt ? mobAlt : "img"}
-                fill
-                priority
-                fetchPriority="high"
-                className={`object-cover block md:hidden transition-all duration-500 z-[1] ${
-                  isMobImageLoading
-                    ? "blur-md opacity-50"
-                    : "blur-0 opacity-100"
-                }`}
-                onLoad={() => setIsMobImageLoading(false)}
-              />
-            )}
+            {bannerPicture}
             {/* starts & lines */}
             <div
               ref={lineVertical}

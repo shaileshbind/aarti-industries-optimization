@@ -1,7 +1,7 @@
 import { BodyText2, H2, SubH3 } from "../Typography2";
-import Image from "next/image";
 import { ContactMapProps } from "@/app/types/contact.type";
 import ContactMapInteractive from "./ContactMapInteractive";
+import ContactMapMobile from "./ContactMapMobile";
 import { MAP_BOX_HEIGHT } from "./mapPins";
 
 const ContactMap = ({ data }: ContactMapProps) => {
@@ -14,15 +14,7 @@ const ContactMap = ({ data }: ContactMapProps) => {
         </H2>
       )}
       <div className="relative container mx-auto w-full block lg:hidden">
-        {image?.url && (
-          <Image
-            src={image?.url}
-            alt="img"
-            width={1265}
-            height={623}
-            className="w-full h-auto"
-          />
-        )}
+        {image?.url && <ContactMapMobile src={image.url} />}
       </div>
 
       {/* 80vh box with the artwork centred inside it, matching the geometry of

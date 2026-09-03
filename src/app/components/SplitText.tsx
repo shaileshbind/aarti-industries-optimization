@@ -7,25 +7,7 @@ type SplitTextProps = {
 const SplitText: React.FC<SplitTextProps> = ({ text, className }) => {
   return (
     <>
-      <style>{`
-        .split-mask {
-          -webkit-mask-image: linear-gradient(
-            to bottom,
-            transparent 0%,
-            black 5%,
-            black 95%,
-            transparent 100%
-          );
-          mask-image: linear-gradient(
-            to bottom,
-            transparent 0%,
-            black 5%,
-            black 95%,
-            transparent 100%
-          );
-        }
-      `}</style>
-
+      {/* .split-mask lives in globals.css; an inline <style> here was emitted once per Button (14 copies on the homepage). */}
       <span
         className={`relative inline-flex items-baseline overflow-hidden split-mask leading-none ${className ?? ""}`}
         style={{ height: "1.2em" }}

@@ -72,7 +72,7 @@ const SliderCard: FC<SliderCardProps> = ({
                   src={imgSrc}
                   alt={imgAlt ? imgAlt : "img"}
                   fill
-                  sizes="(max-width: 500px) 500px, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
+                  sizes="(max-width: 500px) 92vw, (max-width: 1024px) 1024px, (max-width: 1200px) 900px, 900px"
                   className="object-cover scale-110"
                 />
               )}

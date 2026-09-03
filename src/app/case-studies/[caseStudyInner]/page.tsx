@@ -1,4 +1,5 @@
 import { getBlogsCasestudies } from "@/_lib/getBlogsCaseStudies.fetch";
+import { lazyMedia } from "@/_lib/lazyMedia";
 import { getData } from "@/_lib/getData.fetch";
 import CopyLink from "@/app/components/blogs/CopyLink";
 import Share from "@/app/components/blogs/Share";
@@ -85,6 +86,9 @@ export default async function page({ params }: CaseStuydInnerProps) {
                   width={872}
                   height={406}
                   alt={bannerImageDesktop?.all || "banner"}
+                  // LCP element; default lazy loading delayed it.
+                  priority
+                  sizes="(max-width: 1023px) 92vw, 872px"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -111,7 +115,7 @@ export default async function page({ params }: CaseStuydInnerProps) {
               <div className="blogInner">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: contentSections?.[0]?.description,
+                    __html: lazyMedia(contentSections?.[0]?.description),
                   }}
                 />
               </div>

@@ -254,6 +254,8 @@ const LatestAtAarti: React.FC<LatestAtAartiProps> = ({ data }) => {
   const cardsWrapRef = useRef<HTMLDivElement>(null);
   const switchAnimRef = useRef<gsap.core.Timeline | null>(null);
   // const [, setIsMobile] = useState<boolean>(false);
+  // Deliberately fetched client-side at idle: embedding this feed in the RSC
+  // payload was tried and added +14KB gzipped to the critical HTML.
   const [eventsFeedData, setEventsFeedData] = useState<unknown>(null);
   const hasFetchedEventsFeed = useRef(false);
   const [indicator, setIndicator] = useState({

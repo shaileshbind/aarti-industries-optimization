@@ -35,6 +35,15 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
   // const isMobile = useMatchMedia("(pointer: coarse)");
   // const isMobileView = isTablet || isMobile;
   const [active, setActive] = useState(0);
+  // Fade-effect slides are stacked in the viewport, so the browser treats all
+  // five slide images as visible and downloaded them together with the LCP
+  // image (~120KB in the critical window). Only slide 0 is in the HTML; the
+  // others are added 1.5s after mount, well before the 5s autoplay switch.
+  const [laterSlidesReady, setLaterSlidesReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setLaterSlidesReady(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
   const swiperRef = useRef<SwiperType | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
@@ -273,6 +282,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
               // media> lets the preload scanner pick one file, with no JS.
               // getImageProps keeps the Next optimizer (avif/webp, deviceSizes).
               const card = items?.card?.[0];
+              if (index > 0 && !laterSlidesReady) return null;
               const desktopUrl = card?.image?.url;
               const mobileUrl = card?.mobImage?.url;
               const shared = {
@@ -408,7 +418,7 @@ const HomeHero: React.FC<HomeHeroProps> = ({ data }) => {
           </div>
         </SwiperSlide>
       )),
-    [data, isDesktop],
+    [data, isDesktop, laterSlidesReady],
   );
   return (
     <div

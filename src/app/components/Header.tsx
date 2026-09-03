@@ -8,13 +8,17 @@ import AnimateTextOnHover from "./ui/AnimateTextOnHover";
 import gsap from "gsap";
 import clsx from "clsx";
 import StockTicker from "./home/StockTicker";
+import type { TickerItem } from "@/_lib/pressTicker";
 import { BodyText3, SubH1 } from "./Typography2";
 import SearchBar from "./SearchBar";
 import { HeaderProps } from "../types/header-footer.type";
 import SplitText from "./SplitText";
 import SmoothScrollContainer from "./SmoothScrollContainer";
 
-const Header = ({ data }: HeaderProps) => {
+const Header = ({
+  data,
+  pressItems,
+}: HeaderProps & { pressItems?: TickerItem[] }) => {
   const { Logo, menu } = data || {};
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -660,7 +664,7 @@ const Header = ({ data }: HeaderProps) => {
           pathname === "/" ? `top-9 lgx:top-11` : `top-0`,
         )}
       >
-        {pathname === "/" && <StockTicker />}
+        {pathname === "/" && <StockTicker initialPress={pressItems} />}
         {/* Main Header */}
         <header className="bg-[rgba(255,255,255,0.8)] border-b border-grey-100 flex justify-between backdrop-blur-md">
           <div className="ml-0 lgx:ml-[60px] w-full h-auto relative z-10">
@@ -676,6 +680,7 @@ const Header = ({ data }: HeaderProps) => {
                     alt={Logo?.Logo?.alternativeText || "logo"}
                     width={112}
                     height={46}
+                    loading="eager"
                     className="w-[112px] object-center"
                   />
                 </Link>
@@ -1109,6 +1114,7 @@ const Header = ({ data }: HeaderProps) => {
                     alt={Logo?.Logo?.alternativeText || "logo"}
                     width={112}
                     height={46}
+                    loading="eager"
                     className="w-[112px] object-center"
                   />
                 </Link>

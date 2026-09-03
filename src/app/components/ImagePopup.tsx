@@ -1,7 +1,20 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import CloseIcon from "@mui/icons-material/Close";
+// Was @mui/icons-material/Close (see Popup.tsx).
+const CloseIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    width="1.5rem"
+    height="1.5rem"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+  </svg>
+);
 import clsx from "clsx";
 import { useLenis } from "../contexts/LenisContext";
 

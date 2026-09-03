@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { fetchNews } from "@/_lib/fetchNews";
+import {
+  flattenPressReleases,
+  getLatestYearTop3,
+  type TickerItem,
+} from "@/_lib/pressTicker";
 
 // These were @mui/icons-material/ArrowForward and /PlayArrow. Each MUI icon
 // pulls in @mui/material/SvgIcon, which drags the MUI theme + emotion runtime
@@ -36,68 +41,6 @@ const PlayArrowIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-type TickerItem = {
-  heading?: string;
-  link?: string | null;
-  date?: string | null;
-  file?: string | null;
-};
-
-function flattenPressReleases(
-  data: Record<string, { items?: unknown[] }> | null,
-): TickerItem[] {
-  if (!data || typeof data !== "object") return [];
-  const flat: TickerItem[] = [];
-  const years = Object.keys(data).sort((a, b) => Number(b) - Number(a)); // newest first
-  for (const year of years) {
-    const yearData = data[year];
-    const items = yearData?.items;
-    if (!Array.isArray(items)) continue;
-    for (const item of items) {
-      const report = (item as { report?: unknown[] })?.report;
-      if (!Array.isArray(report)) continue;
-      for (const quarter of report) {
-        const entries = (quarter as { report?: unknown[] })?.report;
-        if (!Array.isArray(entries)) continue;
-        for (const entry of entries) {
-          const e = entry as {
-            heading?: string;
-            link?: string | null;
-            date?: string | null;
-            file?: { url?: string };
-          };
-          const link = e?.link ?? null;
-          if (e?.heading)
-            flat.push({
-              heading: e.heading,
-              link: link ?? null,
-              date: e?.date ?? null,
-              file: e?.file?.url ?? null,
-            });
-        }
-      }
-    }
-  }
-  return flat;
-}
-
-function getLatestYearTop3(flat: TickerItem[]): {
-  latestYear: number | null;
-  entries: TickerItem[];
-} {
-  const withDate = flat.filter((e) => e?.date);
-  if (withDate.length === 0) return { latestYear: null, entries: [] };
-  const latestYear = Math.max(
-    ...withDate.map((e) => new Date(e.date!).getFullYear()),
-  );
-  const sortedByDate = [...withDate].sort((a, b) => {
-    const tA = new Date(a.date!).getTime();
-    const tB = new Date(b.date!).getTime();
-    return tB - tA;
-  });
-  return { latestYear, entries: sortedByDate.slice(0, 3) };
-}
-
 type StockData = {
   id: number;
   symbol: string;
@@ -107,8 +50,16 @@ type StockData = {
   changeDirection: "up" | "down" | "neutral";
 };
 
-export default function StockTicker() {
-  const [pressReleases, setPressReleases] = useState<TickerItem[]>([]);
+export default function StockTicker({
+  initialPress,
+}: {
+  // Headlines resolved on the server (layout.tsx); the client fetch below is
+  // only a fallback for when that lookup returned nothing.
+  initialPress?: TickerItem[];
+}) {
+  const [pressReleases, setPressReleases] = useState<TickerItem[]>(
+    initialPress ?? [],
+  );
   const [nseStock, setNseStock] = useState<StockData | null>(null);
   // const [bseStock, setBseStock] = useState<StockData | null>(null);
   const isProductionEnv = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
@@ -120,6 +71,7 @@ export default function StockTicker() {
   );
 
   useEffect(() => {
+    if (initialPress?.length) return;
     const loadNews = async () => {
       const data = await fetchNews("/api/press");
       const flat = flattenPressReleases(data);
@@ -135,7 +87,7 @@ export default function StockTicker() {
     }
     const t = setTimeout(loadNews, 1500);
     return () => clearTimeout(t);
-  }, []);
+  }, [initialPress]);
 
   useEffect(() => {
     if (!isProductionEnv) return;
